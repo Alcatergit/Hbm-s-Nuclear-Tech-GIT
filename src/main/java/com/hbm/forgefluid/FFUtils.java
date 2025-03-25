@@ -437,6 +437,18 @@ public class FFUtils {
 			return true;
 		}
 
+		// Fluid Tank override
+		if(in.getItem() == ModItems.fluid_tank_lead_full && tank.fill(FluidUtil.getFluidContained(in), false) == 1000 && ((ItemFluidTank.isEmptyTankLead(out) && out.getCount() < 64) || out.isEmpty())) {
+			tank.fill(FluidUtil.getFluidContained(in), true);
+			in.shrink(1);
+			if(out.isEmpty()) {
+				slots.setStackInSlot(slot2, new ItemStack(ModItems.fluid_tank_lead_full));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+
 		// Fluid barrel override
 		if(in.getItem() == ModItems.fluid_barrel_full && tank.fill(FluidUtil.getFluidContained(in), false) == 16000 && ((ItemFluidTank.isEmptyBarrel(out) && out.getCount() < 64) || out.isEmpty())) {
 			tank.fill(FluidUtil.getFluidContained(in), true);
@@ -646,6 +658,21 @@ public class FFUtils {
 
 			if(out.isEmpty()) {
 				slots.setStackInSlot(slot2, ItemFluidTank.getFullTank(f.getFluid()));
+			} else {
+				out.grow(1);
+			}
+			return true;
+		}
+
+		// Fluid Tank override
+		if(tank.getFluid() != null && in.getItem() == ModItems.fluid_tank_lead_full && tank.drain(1000, false) != null && tank.drain(1000, false).amount == 1000 && ItemFluidTank.isEmptyTankLead(in1) && ((ItemFluidTank.isFullTankLead(out, tank.getFluid().getFluid()) && out.getCount() < 64) || out.isEmpty())) {
+			FluidStack f = tank.drain(1000, true);
+			if(f == null)
+				return false;
+			in.shrink(1);
+
+			if(out.isEmpty()) {
+				slots.setStackInSlot(slot2, ItemFluidTank.getFullTankLead(f.getFluid()));
 			} else {
 				out.grow(1);
 			}

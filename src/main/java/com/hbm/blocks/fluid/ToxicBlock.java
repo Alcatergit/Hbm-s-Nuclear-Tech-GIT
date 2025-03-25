@@ -84,7 +84,6 @@ public class ToxicBlock extends BlockFluidClassic {
 
 	private IBlockState getRandomSellafite(World world){
 		int n = world.rand.nextInt(100);
-		if(n < 2) return ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4));
 		if(n < 20) return ModBlocks.sellafield_4.getStateFromMeta(world.rand.nextInt(4));
 		if(n < 60) return ModBlocks.sellafield_3.getStateFromMeta(world.rand.nextInt(4));
 		return ModBlocks.sellafield_2.getStateFromMeta(world.rand.nextInt(4));
@@ -96,6 +95,7 @@ public class ToxicBlock extends BlockFluidClassic {
 			IBlockState state = world.getBlockState(pos);
 			if(state.getMaterial().isLiquid()) return true;
 			if(state.getBlock() instanceof BlockStone) return true;
+			if(state.getBlock() == ModBlocks.sellafield_slaked || state.getBlock() == ModBlocks.sellafield_0 || state.getBlock() == ModBlocks.sellafield_1) return true;
 		}
 		return false;
 	}

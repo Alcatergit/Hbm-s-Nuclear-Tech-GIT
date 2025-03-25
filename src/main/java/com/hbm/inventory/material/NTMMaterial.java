@@ -1,6 +1,13 @@
 package com.hbm.inventory.material;
 
+import java.util.HashSet;
+import java.util.Locale;
+import java.util.Set;
+
 import com.hbm.inventory.OreDictManager.DictFrame;
+
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 
 /**
  * Encapsulates most materials that are currently listed as DictFrames, even vanilla ones.
@@ -11,18 +18,19 @@ public class NTMMaterial {
 
 	public final int id;
 	public String[] names;
-	public MaterialShapes[] shapes = new MaterialShapes[0];
-	public boolean omitItemGen = false;
+	public Set<MaterialShapes> shapes = new HashSet();
 	public SmeltingBehavior smeltable = SmeltingBehavior.NOT_SMELTABLE;
-	public int solidColor = 0xFF4A00; //TODO
+	public int solidColorLight = 0xFF4A00;
+	public int solidColorDark = 0x802000;
 	public int moltenColor = 0xFF4A00;
 	
 	public NTMMaterial smeltsInto;
 	public int convIn;
 	public int convOut;
+	public DictFrame dict;
 	
 	public NTMMaterial(int id, DictFrame dict) {
-		
+		this.dict = dict;
 		this.names = dict.mats;
 		this.id = id;
 		
@@ -39,7 +47,7 @@ public class NTMMaterial {
 	}
 	
 	public String getUnlocalizedName() {
-		return "hbmmat." + this.names[0].toLowerCase();
+		return "hbmmat." + this.names[0].toLowerCase(Locale.US);
 	}
 	
 	public NTMMaterial setConversion(NTMMaterial mat, int in, int out) {
@@ -51,13 +59,7 @@ public class NTMMaterial {
 	
 	/** Shapes for autogen */
 	public NTMMaterial setShapes(MaterialShapes... shapes) {
-		this.shapes = shapes;
-		return this;
-	}
-	
-	/** Turn off autogen for this material, use this for vanilla stuff */
-	public NTMMaterial omitAutoGen() {
-		this.omitItemGen = true;
+		for(MaterialShapes shape : shapes) this.shapes.add(shape);
 		return this;
 	}
 	
@@ -67,9 +69,23 @@ public class NTMMaterial {
 		return this;
 	}
 	
+	public NTMMaterial setSolidColor(int colorLight, int colorDark) {
+		this.solidColorLight = colorLight;
+		this.solidColorDark = colorDark;
+		return this;
+	}
+	
 	public NTMMaterial setMoltenColor(int color) {
 		this.moltenColor = color;
 		return this;
+	}
+	
+	public ItemStack make(Item item, int amount) {
+		return new ItemStack(item, amount, this.id);
+	}
+	
+	public ItemStack make(Item item) {
+		return make(item, 1);
 	}
 	
 	public static enum SmeltingBehavior {

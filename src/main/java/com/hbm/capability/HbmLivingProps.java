@@ -3,7 +3,6 @@ package com.hbm.capability;
 import java.util.List;
 import java.util.UUID;
 
-import com.hbm.interfaces.IItemHazard;
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
 import com.hbm.lib.ModDamageSource;
@@ -97,9 +96,12 @@ public class HbmLivingProps {
 		}
 
 		attributeinstance.applyModifier(new AttributeModifier(digamma_UUID, "digamma", healthMod, 2));
-
-		if(entity.getHealth() > entity.getMaxHealth()) {
-			entity.setHealth(entity.getMaxHealth());
+		int s = (int)(digamma * 6);
+		if(s > 1){
+			NBTTagCompound shake = new NBTTagCompound();
+			shake.setString("type", "justTilt");
+			shake.setInteger("time", s);
+			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(shake, 0, 0, 0), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 50));
 		}
 
 		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {

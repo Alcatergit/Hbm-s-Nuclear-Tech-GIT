@@ -46,6 +46,7 @@ import com.hbm.handler.MissileStruct;
 import com.hbm.handler.RadiationWorldHandler;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
+import com.hbm.hazard.HazardSystem;
 import com.hbm.interfaces.IBomb;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.IEquipReceiver;
@@ -715,6 +716,10 @@ public class ModEventHandler {
 				}
 			}
 			/// BETA HEALTH END ///
+
+			/// NEW ITEM SYS START ///
+			HazardSystem.updatePlayerInventory(player);
+			/// NEW ITEM SYS END ///
 		}
 		if(!player.world.isRemote && event.phase == Phase.START){
 			ItemDigammaDiagnostic.playVoices(player.world, player);
@@ -959,6 +964,7 @@ public class ModEventHandler {
 					
 					if(mod != null && mod.getItem() instanceof ItemArmorMod) {
 						((ItemArmorMod)mod.getItem()).modUpdate(event.getEntityLiving(), armor);
+						HazardSystem.applyHazards(mod, event.getEntityLiving());
 						
 						if(reapply) {
 							
@@ -973,6 +979,9 @@ public class ModEventHandler {
 		}
 		
 		EntityEffectHandler.onUpdate(event.getEntityLiving());
+		if(!event.getEntityLiving().world.isRemote && !(event.getEntityLiving() instanceof EntityPlayer)) {
+			HazardSystem.updateLivingInventory(event.getEntityLiving());
+		}
 	}
 
 	@SubscribeEvent

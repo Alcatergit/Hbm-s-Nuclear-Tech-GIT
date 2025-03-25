@@ -26,6 +26,9 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
+import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats;
+import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemFluidTank;
@@ -1035,6 +1038,12 @@ public class AssemblerRecipes {
 		
 		/// HIDDEN ///
 		hidden.add(new ComparableStack(ModBlocks.machine_radgen, 1));
+
+		for(NTMMaterial mat : Mats.orderedList) {
+			if(mat.shapes.contains(MaterialShapes.CASTPLATE) && mat.shapes.contains(MaterialShapes.HEAVY_COMPONENT)) {
+				makeRecipe(new ComparableStack(ModItems.heavy_component, 1, mat.id), new AStack[] { new OreDictStack(MaterialShapes.CASTPLATE.name() + mat.names[0], 64), new OreDictStack(MaterialShapes.CASTPLATE.name() + mat.names[0], 64), new OreDictStack(MaterialShapes.CASTPLATE.name() + mat.names[0], 64), new OreDictStack(MaterialShapes.CASTPLATE.name() + mat.names[0], 64) }, 12_000);
+			}
+		}
 	}
 
 	public static void addTantalium(ComparableStack out, int amount) {

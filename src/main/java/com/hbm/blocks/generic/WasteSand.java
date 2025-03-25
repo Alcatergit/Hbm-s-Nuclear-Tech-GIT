@@ -9,8 +9,6 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.items.ModItems;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.interfaces.IItemHazard;
-import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
@@ -35,10 +33,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WasteSand extends BlockFalling implements IItemHazard {
+public class WasteSand extends BlockFalling {
 
 	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
-	ItemHazardModule module;
 	
 	public WasteSand(Material materialIn, String s) {
 		super(materialIn);
@@ -47,7 +44,6 @@ public class WasteSand extends BlockFalling implements IItemHazard {
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
 		this.setHarvestLevel("shovel", 0);
-		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -55,11 +51,6 @@ public class WasteSand extends BlockFalling implements IItemHazard {
 	public WasteSand(Material materialIn, SoundType type, String s) {
 		this(materialIn, s);
 		setSoundType(type);
-	}
-
-	@Override
-	public ItemHazardModule getModule() {
-		return module;
 	}
 	
 	@Override

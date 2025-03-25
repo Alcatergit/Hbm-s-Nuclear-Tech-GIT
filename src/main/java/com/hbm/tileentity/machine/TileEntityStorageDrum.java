@@ -5,9 +5,9 @@ import java.util.List;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.StorageDrumRecipes;
-import com.hbm.interfaces.IItemHazard;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
+import com.hbm.hazard.HazardSystem;
 
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -71,10 +71,10 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 				
 				if(!inventory.getStackInSlot(i).isEmpty()) {
 					
-					Item item = inventory.getStackInSlot(i).getItem();
+					ItemStack itemStack = inventory.getStackInSlot(i);
 					
-					if(item instanceof IItemHazard && world.getTotalWorldTime() % 20 == 0) {
-						rad += ((IItemHazard)item).getModule().radiation;
+					if(world.getTotalWorldTime() % 20 == 0) {
+						rad += HazardSystem.getRawRadsFromStack(itemStack);
 					}
 
 					int[] wasteData = StorageDrumRecipes.getWaste(inventory.getStackInSlot(i));

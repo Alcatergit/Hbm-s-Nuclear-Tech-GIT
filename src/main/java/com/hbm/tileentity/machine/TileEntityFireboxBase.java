@@ -54,13 +54,11 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 						if(fuel > 0) {
 							this.maxBurnTime = this.burnTime = fuel;
 							this.burnHeat = getModule().getBurnHeat(getBaseHeat(),inventory.getStackInSlot(i));
+							ItemStack copy = inventory.getStackInSlot(i).copy();
 							inventory.getStackInSlot(i).shrink(1);
 
-							if(inventory.getStackInSlot(i).getCount() == 0) {
-								ItemStack copy = inventory.getStackInSlot(0).copy();
-								if(copy.getItem().getContainerItem() != null)
-									inventory.setStackInSlot(i, new ItemStack(copy.getItem().getContainerItem()));
-							}
+							if(inventory.getStackInSlot(i).isEmpty())
+								inventory.setStackInSlot(i, copy.getItem().getContainerItem(copy));
 
 							this.wasOn = true;
 							break;
@@ -183,7 +181,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 					pos.getY(),
 					pos.getZ() - 1,
 					pos.getX() + 2,
-					pos.getY()+ 1,
+					pos.getY() + 1,
 					pos.getZ() + 2
 					);
 		}

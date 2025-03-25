@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.hazard.HazardModifier;
+import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.I18nUtil;
@@ -14,7 +14,6 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 
 public class HazardTypeAsbestos extends HazardTypeBase {
 
@@ -32,6 +31,6 @@ public class HazardTypeAsbestos extends HazardTypeBase {
 
 	@Override
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-		list.add(TextFormatting.WHITE + "[" + I18nUtil.resolveKey("trait.asbestos") + "]");
+		list.add("§f[" + I18nUtil.resolveKey("trait.asbestos") + "]");
 	}
 }

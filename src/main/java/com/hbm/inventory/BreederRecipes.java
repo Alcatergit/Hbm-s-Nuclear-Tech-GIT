@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.util.I18nUtil;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 
@@ -13,6 +14,8 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.client.util.ITooltipFlag;
 
 public class BreederRecipes {
 
@@ -237,6 +240,16 @@ public class BreederRecipes {
 		public BreederRecipe(ItemStack output, int heat) {
 			this.output = output;
 			this.heat = heat;
+		}
+	}
+
+	public static void addBreedingTips(ItemStack stack, EntityPlayer player, List<String> list, ITooltipFlag flagIn){
+		int[] breeder = getFuelValue(stack);
+		
+		if(breeder != null) {
+			list.add(getHEATString("[" + I18nUtil.resolveKey("trait.heat", breeder[0]) + "]", breeder[0]));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.breeding", breeder[1]));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.furnace", (breeder[0] * breeder[1] * 5)));
 		}
 	}
 }

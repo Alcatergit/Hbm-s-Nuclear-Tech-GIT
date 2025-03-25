@@ -7,10 +7,15 @@ import com.hbm.items.ModItems;
 
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.SoundType;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
 public class BlockCap extends BlockRotatablePillar {
+
+	public BlockCap(Material materialIn, String s, SoundType sound) {
+		super(materialIn, s, sound);
+	}
 
 	public BlockCap(Material materialIn, String s) {
 		super(materialIn, s);

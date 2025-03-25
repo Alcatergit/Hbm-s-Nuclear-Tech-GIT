@@ -1053,8 +1053,15 @@ public class JeiRecipes {
 		fluidEquivalences = new ArrayList<FluidRecipe>();
 		
 		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
+			if(f == ModForgeFluids.hydrogen){
+				fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), new ItemStack(ModItems.particle_hydrogen)));
+				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), new ItemStack(ModItems.particle_hydrogen)));
+			}
 			fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTank(f)));
 			fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTank(f)));
+			
+			fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTankLead(f)));
+			fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidTank.getFullTankLead(f)));
 
 			fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), ItemFluidTank.getFullBarrel(f)));
 			fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemFluidTank.getFullBarrel(f)));
@@ -1072,6 +1079,7 @@ public class JeiRecipes {
 				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), ItemCell.getFullCell(f)));
 			}
 		}
+		
 		
 		return fluidEquivalences;
 	}

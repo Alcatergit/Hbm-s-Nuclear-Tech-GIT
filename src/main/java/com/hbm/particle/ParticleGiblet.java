@@ -61,7 +61,7 @@ public class ParticleGiblet extends Particle {
 	}
 	
 	@Override
-	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ){
+	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ){
 		GL11.glPushMatrix();
 		GlStateManager.disableLighting();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);

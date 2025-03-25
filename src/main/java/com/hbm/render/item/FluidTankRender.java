@@ -24,10 +24,6 @@ public class FluidTankRender extends TileEntityItemStackRenderer {
 	public TransformType type;
 	public IBakedModel itemModel;
 
-	public FluidTankRender() {
-
-	}
-
 	@Override
 	public void renderByItem(ItemStack stack) {
 		GL11.glPushMatrix();

@@ -145,6 +145,25 @@ public class Library {
 		superuser.add(Alcater);
 	}
 
+	public static String getColor(long a, long b){
+		float fraction = 100F * a/b;
+		if(fraction > 75)
+			return "§a";
+		if(fraction > 25)
+			return "§e";
+		return "§c";
+	}
+
+	public static String getColoredMbPercent(long a, long b){
+		String color = getColor(a, b);
+		return color+a+" §2/ "+b+" mB "+color+"("+getPercentage(a/(double)b)+"%)";
+	}
+
+	public static String getColoredDurabilityPercent(long a, long b){
+		String color = getColor(a, b);
+		return "Durability: "+color+a+" §2/ "+b+" "+color+"("+getPercentage(a/(double)b)+"%)";
+	}
+
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
 		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
 	}

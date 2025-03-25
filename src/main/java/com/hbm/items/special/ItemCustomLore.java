@@ -206,14 +206,6 @@ public class ItemCustomLore extends Item {
 				list.add("Explore the other side.");
 			}
 		}
-		if(this == ModItems.crystal_energy) {
-			list.add("Densely packed energy powder.");
-			list.add("Not edible.");
-		}
-		if(this == ModItems.pellet_coolant) {
-			list.add("Required for cyclotron operation.");
-			list.add("Do NOT operate cyclotron without it!");
-		}
 		if(this == ModItems.fuse) {
 			list.add("This item is needed for every large");
 			list.add("nuclear reactor, as it allows the");

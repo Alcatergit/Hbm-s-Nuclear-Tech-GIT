@@ -3,7 +3,7 @@ package com.hbm.hazard.type;
 import java.util.List;
 
 import com.hbm.config.GeneralConfig;
-import com.hbm.hazard.HazardModifier;
+import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.util.ContaminationUtil;
@@ -15,7 +15,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -47,14 +46,34 @@ public class HazardTypeRadiation extends HazardTypeBase {
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
 		
 		level = HazardModifier.evalAllModifiers(stack, player, level, modifiers);
-		
-		list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
-		String rad = "" + (Math.floor(level* 1000) / 1000);
-		list.add(TextFormatting.YELLOW + rad + " " + I18nUtil.resolveKey("desc.rads"));
-		
+		if(level == 0) return;
+		list.add("§a[" + I18nUtil.resolveKey("trait.radioactive") + "]");
+		list.add(" §e" + (Library.roundFloat(getNewValue(level), 3)+ getSuffix(level) + " " + I18nUtil.resolveKey("desc.rads")));
+			
 		if(stack.getCount() > 1) {
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.stack")+" " + (Math.floor(level * 1000 * stack.getCount()) / 1000) + " " + I18nUtil.resolveKey("desc.rads"));
+			float stackRad = level * stack.getCount();
+			list.add(" §e" + I18nUtil.resolveKey("desc.stack")+" " + Library.roundFloat(getNewValue(stackRad), 3) + getSuffix(stackRad) + " " + I18nUtil.resolveKey("desc.rads"));
 		}
 	}
 
+
+	public static float getNewValue(float radiation){
+		if(radiation < 1000000){
+			return radiation;
+		} else if(radiation < 1000000000){
+			return radiation * 0.000001F;
+		} else{
+			return radiation * 0.000000001F;
+		}
+	}
+
+	public static String getSuffix(float radiation){
+		if(radiation < 1000000){
+			return "";
+		} else if(radiation < 1000000000){
+			return I18nUtil.resolveKey("desc.mil");
+		} else{
+			return I18nUtil.resolveKey("desc.bil");
+		}
+	}
 }

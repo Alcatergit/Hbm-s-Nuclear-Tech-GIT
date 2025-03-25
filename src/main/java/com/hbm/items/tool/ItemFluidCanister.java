@@ -9,6 +9,7 @@ import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import com.hbm.util.I18nUtil;
@@ -69,10 +70,10 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
-		if (this == ModItems.canister_generic && f != null && f.getFluid() == ModForgeFluids.diesel) {
+		if(this == ModItems.canister_generic && f != null && f.getFluid() == ModForgeFluids.diesel) {
 			tooltip.add(I18nUtil.resolveKey("desc.canisterdiesel"));
 		}
-		String s = (f == null ? "0" : f.amount) + "/" + cap + " mB";
+		String s = Library.getColoredMbPercent(f == null ? 0 : f.amount, cap);
 		if(stack.getCount() > 1)
 			s = stack.getCount() + "x " + s;
 		tooltip.add(s);

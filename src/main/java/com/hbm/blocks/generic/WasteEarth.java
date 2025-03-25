@@ -9,8 +9,6 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.items.ModItems;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.interfaces.IItemHazard;
-import com.hbm.modules.ItemHazardModule;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockMushroom;
@@ -34,10 +32,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class WasteEarth extends Block implements IItemHazard {
+public class WasteEarth extends Block {
 
 	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
-	ItemHazardModule module;
 	
 	public WasteEarth(Material materialIn, boolean tick, String s) {
 		super(materialIn);
@@ -46,7 +43,6 @@ public class WasteEarth extends Block implements IItemHazard {
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(tick);
 		this.setHarvestLevel("shovel", 0);
-		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -69,11 +65,6 @@ public class WasteEarth extends Block implements IItemHazard {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(META, meta);
-	}
-
-	@Override
-	public ItemHazardModule getModule() {
-		return module;
 	}
 	
 	@Override

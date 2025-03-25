@@ -2,7 +2,6 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
-import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -25,7 +24,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemChemistryTemplate extends Item implements IHasCustomModel {
+public class ItemChemistryTemplate extends Item {
 
 	public static final ModelResourceLocation chemModel = new ModelResourceLocation(RefStrings.MODID + ":chemistry_template", "inventory");
 	
@@ -122,10 +121,5 @@ public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 	    		list.add("###INVALID###");
 	    		list.add("0x334077-0x6A298F-0xDF3795-0x334077");
 	    	}
-	}
-
-	@Override
-	public ModelResourceLocation getResourceLocation() {
-		return chemModel;
 	}
 }

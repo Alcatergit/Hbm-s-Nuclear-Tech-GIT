@@ -66,6 +66,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 					GL11.glTranslated(1, 0, 1);
 					if(!(stack.getItem() instanceof ItemBlock)) {
 						GL11.glRotatef(-90, 1F, 0F, 0F);
+						GL11.glRotatef(-180, 0F, 1F, 0F);
 					} else {
 						GL11.glScaled(0.5, 0.5, 0.5);
 						GL11.glTranslated(0, -0.875, -2);

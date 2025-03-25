@@ -139,6 +139,9 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 					data.setString("f", "None");
 				}
 			}
+
+			if(!uuMixer && power > getMaxPower()) power = getMaxPower();
+
 			data.setLong("power", power);
 			data.setInteger("processTime", processTime);
 			data.setInteger("progress", progress);
@@ -147,7 +150,6 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			data.setTag("tanks", FFUtils.serializeTankArray(tanks));
 			
 			this.networkPack(data, 50);
-			if(!uuMixer && power > getMaxPower()) power = getMaxPower();
 			
 		} else {
 			

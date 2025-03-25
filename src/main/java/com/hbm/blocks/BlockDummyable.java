@@ -92,6 +92,13 @@ public abstract class BlockDummyable extends BlockContainer {
     		world.setBlockToAir(pos);
     	}
 	}
+
+	public BlockPos findCore(IBlockAccess world, BlockPos pos) {
+    	positions.clear();
+    	int[] p = findCoreRec(world, pos.getX(), pos.getY(), pos.getZ());
+    	if(p == null) return null;
+    	return new BlockPos(p[0], p[1], p[2]);
+    }
 	
 	public int[] findCore(IBlockAccess world, int x, int y, int z) {
     	positions.clear();

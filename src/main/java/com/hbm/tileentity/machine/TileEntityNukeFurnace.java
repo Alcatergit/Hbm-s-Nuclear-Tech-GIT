@@ -2,7 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineNukeFurnace;
 import com.hbm.inventory.BreederRecipes;
-import com.hbm.util.ContaminationUtil;
+import com.hbm.hazard.HazardSystem;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -73,7 +73,7 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 			int[] power = BreederRecipes.getFuelValue(stack);
 
 			if(power == null){
-				return (int)(Math.max(0, Math.sqrt(ContaminationUtil.getStackRads(stack))-7));
+				return (int)(Math.max(0, Math.sqrt(HazardSystem.getTotalRadsFromStack(stack))-7));
 			}
 
 			return power[0] * power[1] * 5;

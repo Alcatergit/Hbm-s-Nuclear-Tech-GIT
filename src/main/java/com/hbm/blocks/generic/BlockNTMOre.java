@@ -7,8 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
-import com.hbm.interfaces.IItemHazard;
-import com.hbm.modules.ItemHazardModule;
+import com.hbm.hazard.HazardSystem;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
@@ -34,9 +33,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockNTMOre extends BlockOre implements IItemHazard {
+public class BlockNTMOre extends BlockOre {
 	
-	ItemHazardModule module;
 	public static int xp;
 
 	public BlockNTMOre(String name, int harvestLvl, int xp) {
@@ -47,7 +45,6 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
 		this.setHarvestLevel("pickaxe", harvestLvl);
-		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -58,11 +55,6 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 	public BlockNTMOre(SoundType sound, String name, int harvestLvl){
 		this(name, harvestLvl);
 		super.setSoundType(sound);
-	}
-
-	@Override
-	public ItemHazardModule getModule() {
-		return module;
 	}
 
 	@Override
@@ -250,13 +242,13 @@ public class BlockNTMOre extends BlockOre implements IItemHazard {
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
 		if(entity instanceof EntityLivingBase)
-			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
+			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
 	}
 
 	@Override
 	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
-			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
+			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
 	}
 
 	@Override

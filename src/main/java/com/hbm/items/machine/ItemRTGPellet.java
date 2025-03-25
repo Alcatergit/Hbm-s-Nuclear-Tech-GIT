@@ -4,10 +4,9 @@ import java.util.List;
 
 import javax.annotation.CheckForNull;
 
-import com.hbm.items.ModItems;
+import com.hbm.items.ItemBase;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
-import com.hbm.items.special.ItemHazard;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,7 +20,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemRTGPellet extends ItemHazard {
+public class ItemRTGPellet extends ItemBase {
 	
 	private short heat = 0;
 	private boolean doesDecay = false;
@@ -29,12 +28,10 @@ public class ItemRTGPellet extends ItemHazard {
 	private long halflife = 0;
 	private long lifespan = 0;
 	
-	public ItemRTGPellet(int heatIn, float radiation, String s) {
-		super(radiation, s);
-		this.heat = (short) heatIn;
+	public ItemRTGPellet(int heatIn, String s) {
+		super(s);
+		this.heat = (short)heatIn;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
-		//ModItems.ALL_ITEMS.add(this);
 	}
 	
 	private static final String[] facts = new String[] {
@@ -153,7 +150,6 @@ public class ItemRTGPellet extends ItemHazard {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
-		super.addInformation(stack, world, list, flagIn);
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
 		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {

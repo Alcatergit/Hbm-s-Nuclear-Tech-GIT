@@ -144,7 +144,7 @@ mods.ntm.IrradiationChannel.removeRecipe(IItemStack input);<br>
  - 7: 9mm,  
  - 8: .50mm
 
-mods.ntm.Press.addRecipe(IItemStack input, IIngredient output, int type);<br>
+mods.ntm.Press.addRecipe(IItemStack output, IIngredient input, int type);<br>
 ``mods.ntm.Press.addRecipe(<minecraft:cooked_beef>, <minecraft:beef>);``
 
 

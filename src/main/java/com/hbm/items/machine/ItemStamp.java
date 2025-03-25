@@ -47,5 +47,6 @@ public class ItemStamp extends Item {
 				this == ModItems.stamp_stone_plate ||
 				this == ModItems.stamp_stone_wire)
 			tooltip.add("§e" + I18nUtil.resolveKey("info.templatefolder"));
+			if(stack.getMaxDamage() > 0 && stack.getItemDamage() == 0) tooltip.add("Durability: "+ stack.getMaxDamage() + " / " + stack.getMaxDamage());
 	}
 }

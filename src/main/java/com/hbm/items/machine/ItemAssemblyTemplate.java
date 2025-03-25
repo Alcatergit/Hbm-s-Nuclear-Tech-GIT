@@ -27,18 +27,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
-
-	public static final ModelResourceLocation location = new ModelResourceLocation(
-			RefStrings.MODID + ":assembly_template", "inventory");
+public class ItemAssemblyTemplate extends Item {
 	
-	//private static IForgeRegistry<Item> itemRegistry;
-	//private static IForgeRegistry<Block> blockRegistry;
-
-
-	//public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
-	//public static List<AssemblerRecipe> recipesBackup = null;
-	
+	public static final ModelResourceLocation location = new ModelResourceLocation(RefStrings.MODID + ":assembly_template", "inventory");
 
 	public ItemAssemblyTemplate(String s) {
 		this.setUnlocalizedName(s);
@@ -56,7 +47,7 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
 		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
 		int damage = getTagWithRecipeNumber(stack).getInteger("type");
 		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : ItemStack.EMPTY;
-		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getUnlocalizedName() : "") + ".name")).trim();
+		String s1 = out!=null ? out.getDisplayName() : "ERROR";
 
 		if (s1 != null) {
 			s = s + " " + s1;
@@ -163,11 +154,6 @@ public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
     	else
     		return 100;
 
-	}
-
-	@Override
-	public ModelResourceLocation getResourceLocation() {
-		return location;
 	}
 	
 	public static int getRecipeIndex(ItemStack stack){

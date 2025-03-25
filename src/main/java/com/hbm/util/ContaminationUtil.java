@@ -22,9 +22,7 @@ import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.HazmatRegistry;
 import com.hbm.interfaces.IRadiationImmune;
-import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.ModItems;
-import com.hbm.blocks.items.ItemBlockHazard;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -32,6 +30,8 @@ import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.BobMathUtil;
 import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
+import com.hbm.hazard.HazardSystem;
+import com.hbm.hazard.type.HazardTypeRadiation;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -59,6 +59,7 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.World;
 
 public class ContaminationUtil {
@@ -248,35 +249,6 @@ public class ContaminationUtil {
 		}
 	}
 
-	public static double getStackRads(ItemStack stack) {
-		if(stack == null)
-			return 0;
-		
-		Item item = stack.getItem();
-
-		double rads = 0;
-		
-		if(item instanceof IItemHazard){
-			rads += ((IItemHazard)item).getModule().radiation;
-		}
-
-		if(item instanceof ItemBlockHazard){
-			rads += ((ItemBlockHazard)item).getModule().radiation;
-		}
-
-		if(stack.hasTagCompound()){
-			NBTTagCompound stackNBT = stack.getTagCompound();
-			if(stackNBT.hasKey(NTM_NEUTRON_NBT_KEY)){
-				rads += stackNBT.getFloat(NTM_NEUTRON_NBT_KEY);
-			}
-		}
-
-		if(rads > 1)
-			return rads;
-		else
-			return 0;
-	}
-
 	public static double getActualPlayerRads(EntityLivingBase entity) {
 		return getPlayerRads(entity) * (double)(ContaminationUtil.calculateRadiationMod(entity));
 	}
@@ -307,11 +279,7 @@ public class ContaminationUtil {
 		if(stack == null)
 			return false;
 
-		if(stack.getItem() instanceof IItemHazard && ((IItemHazard)stack.getItem()).isRadioactive()){
-			return true;
-		}
-
-		if(stack.getItem() instanceof ItemBlockHazard && ((ItemBlockHazard)stack.getItem()).getModule().radiation > 0){
+		if(HazardSystem.getRawRadsFromStack(stack) > 0){
 			return true;
 		}
 
@@ -330,6 +298,19 @@ public class ContaminationUtil {
 		return 0F;
 	}
 
+	public static void addNeutronRadInfo(ItemStack stack, EntityPlayer player, List<String> list, ITooltipFlag flagIn){
+		float activationRads = getNeutronRads(stack);
+		if(activationRads > 0) {
+			list.add("§a[" + I18nUtil.resolveKey("trait.radioactive") + "]");
+			float stackRad = activationRads / stack.getCount();
+			list.add(" §e" + Library.roundFloat(HazardTypeRadiation.getNewValue(stackRad), 3) + HazardTypeRadiation.getSuffix(stackRad) + " RAD/s");
+			
+			if(stack.getCount() > 1) {
+				list.add(" §eStack: " + Library.roundFloat(HazardTypeRadiation.getNewValue(activationRads), 3) + HazardTypeRadiation.getSuffix(activationRads) + " RAD/s");
+			}
+		}
+	}
+
 	public static void neutronActivateInventory(EntityPlayer player, float rad, float decay){
 		for(int slotI = 0; slotI < player.inventory.getSizeInventory()-1; slotI++){
 			if(slotI != player.inventory.currentItem)
@@ -341,9 +322,7 @@ public class ContaminationUtil {
 	}
 
 	public static void neutronActivateItem(ItemStack stack, float rad, float decay){
-		if(stack != null && !stack.isEmpty() && !isRadItem(stack)){
-			if(stack.getCount() > 1)
-				return;
+		if(stack != null && !stack.isEmpty() && stack.getCount() == 1 && !isRadItem(stack)){
 
 			NBTTagCompound nbt;
 			if(stack.hasTagCompound()){

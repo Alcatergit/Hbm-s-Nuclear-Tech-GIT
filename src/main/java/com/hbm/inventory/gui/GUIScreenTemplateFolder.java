@@ -11,6 +11,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.CrucibleRecipes;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.lib.RefStrings;
@@ -103,8 +104,6 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 			allStacks.add(ItemForgeFluidIdentifier.getStackFromFluid(fluid));
     	}
     	//Assembly Templates
-    	//for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++)
-    	//	stacks.add(new ItemStack(ModItems.assembly_template, 1, i));
     	for (int i = 0; i < AssemblerRecipes.recipeList.size(); ++i) {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("type", i);
@@ -115,6 +114,10 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     	//Chemistry Templates
     	for (int i: ChemplantRecipes.recipeNames.keySet()){
 			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
+		}
+		//Crucible Templates
+    	for (int i: CrucibleRecipes.recipes.keySet()){
+			allStacks.add(new ItemStack(ModItems.crucible_template, 1, i));
 		}
 		search(null);
     }
@@ -275,6 +278,8 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 						itemRender.renderItemAndEffectIntoGUI(player, AssemblerRecipes.getOutputFromTempate(stack), xPos + 1, yPos + 1);
 					else if(stack.getItem() == ModItems.chemistry_template)
 						itemRender.renderItemAndEffectIntoGUI(player, new ItemStack(ModItems.chemistry_icon, 1, stack.getItemDamage()), xPos + 1, yPos + 1);
+					else if(stack.getItem() == ModItems.crucible_template)
+						itemRender.renderItemAndEffectIntoGUI(player, CrucibleRecipes.getIcon(stack), xPos + 1, yPos + 1);
 					else
 						itemRender.renderItemAndEffectIntoGUI(player, stack, xPos + 1, yPos + 1);
 				}
@@ -311,7 +316,5 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 				updateButtons();
 			}
 		}
-		
 	}
-
 }

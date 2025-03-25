@@ -3,7 +3,7 @@ package com.hbm.items.bomb;
 import java.util.List;
 
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemHazard;
+import com.hbm.items.ItemBase;
 import com.hbm.main.MainRegistry;
 
 import com.hbm.util.I18nUtil;
@@ -11,10 +11,10 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemGadget extends ItemHazard {
+public class ItemGadget extends ItemBase {
 
-	public ItemGadget(float radiation, String s) {
-		super(radiation, s);
+	public ItemGadget(String s) {
+		super(s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 	

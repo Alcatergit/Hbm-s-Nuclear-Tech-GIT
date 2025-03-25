@@ -55,6 +55,10 @@ public enum ForgeDirection {
         flag = 1 << ordinal();
     }
 
+    public static ForgeDirection getOrientation(EnumFacing e){
+        return getOrientation(e.ordinal());
+    }
+
     public static ForgeDirection getOrientation(int id)
     {
         if (id >= 0 && id < VALID_DIRECTIONS.length)

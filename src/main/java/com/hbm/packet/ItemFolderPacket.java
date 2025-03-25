@@ -6,6 +6,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemCrucibleTemplate;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.Library;
 import io.netty.buffer.ByteBuf;
@@ -92,6 +93,14 @@ public class ItemFolderPacket implements IMessage {
 					}
 				}
 				if(stack.getItem() instanceof ItemChemistryTemplate) {
+					if(Library.hasInventoryItem(p.inventory, Items.PAPER) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
+						Library.consumeInventoryItem(p.inventory, Items.PAPER);
+						Library.consumeInventoryItem(p.inventory, Items.DYE);
+						if(!p.inventory.addItemStackToInventory(stack.copy()))
+							p.dropItem(stack, true);
+					}
+				}
+				if(stack.getItem() instanceof ItemCrucibleTemplate) {
 					if(Library.hasInventoryItem(p.inventory, Items.PAPER) && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, Items.PAPER);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);

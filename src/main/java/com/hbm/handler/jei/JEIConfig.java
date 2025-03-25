@@ -348,6 +348,10 @@ public class JEIConfig implements IModPlugin {
 			FluidStack fluid = FluidUtil.getFluidContained(stack);
 			return ModItems.fluid_barrel_full.getUnlocalizedName() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);
 		});
+		subtypeRegistry.registerSubtypeInterpreter(ModItems.fluid_tank_lead_full, (ItemStack stack) -> {
+			FluidStack fluid = FluidUtil.getFluidContained(stack);
+			return ModItems.fluid_tank_lead_full.getUnlocalizedName() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);
+		});
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.fluid_tank_full, (ItemStack stack) -> {
 			FluidStack fluid = FluidUtil.getFluidContained(stack);
 			return ModItems.fluid_tank_full.getUnlocalizedName() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);

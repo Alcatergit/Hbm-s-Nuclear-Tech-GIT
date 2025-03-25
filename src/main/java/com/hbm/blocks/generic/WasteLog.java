@@ -4,8 +4,6 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.interfaces.IItemHazard;
-import com.hbm.modules.ItemHazardModule;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.Block;
@@ -23,9 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class WasteLog extends BlockRotatedPillar implements IItemHazard {
-
-	ItemHazardModule module;
+public class WasteLog extends BlockRotatedPillar {
 	
 	public WasteLog(Material mat, SoundType type, String s) {
 		super(mat);
@@ -34,13 +30,7 @@ public class WasteLog extends BlockRotatedPillar implements IItemHazard {
 		this.setHarvestLevel("axe", 0);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setSoundType(type);
-		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
-	}
-
-	@Override
-	public ItemHazardModule getModule() {
-		return module;
 	}
 	
 	@Override

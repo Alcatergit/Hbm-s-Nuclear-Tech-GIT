@@ -41,6 +41,7 @@ import com.hbm.handler.JetpackHandler;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.interfaces.ICustomSelectionBox;
 import com.hbm.interfaces.IHasCustomModel;
+import com.hbm.interfaces.IHasCustomMetaModels;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
 import com.hbm.interfaces.IPostRender;
@@ -50,6 +51,7 @@ import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.gui.GUIArmorTable;
+import com.hbm.inventory.material.Mats;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ItemArmorMod;
 import com.hbm.items.armor.JetpackBase;
@@ -58,6 +60,7 @@ import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemCrucibleTemplate;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemRBMKPellet;
@@ -73,7 +76,6 @@ import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.items.weapon.ItemGunShotty;
 import com.hbm.items.weapon.ItemSwordCutter;
-import com.hbm.modules.ItemHazardModule;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.RecoilHandler;
@@ -100,12 +102,16 @@ import com.hbm.render.item.BakedModelCustom;
 import com.hbm.render.item.BakedModelNoGui;
 import com.hbm.render.item.ChemTemplateBakedModel;
 import com.hbm.render.item.ChemTemplateRender;
+import com.hbm.render.item.CrucibleTemplateBakedModel;
+import com.hbm.render.item.CrucibleTemplateRender;
 import com.hbm.render.item.FFIdentifierModel;
 import com.hbm.render.item.FFIdentifierRender;
 import com.hbm.render.item.FluidBarrelBakedModel;
 import com.hbm.render.item.FluidBarrelRender;
 import com.hbm.render.item.FluidCanisterBakedModel;
 import com.hbm.render.item.FluidCanisterRender;
+import com.hbm.render.item.FluidTankLeadBakedModel;
+import com.hbm.render.item.FluidTankLeadRender;
 import com.hbm.render.item.FluidTankBakedModel;
 import com.hbm.render.item.FluidTankRender;
 import com.hbm.render.item.ItemRenderBase;
@@ -139,11 +145,15 @@ import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.CrucibleRecipes;
+import com.hbm.inventory.BreederRecipes;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
+import com.hbm.util.ItemStackUtil;
+import com.hbm.hazard.HazardSystem;
 
 import glmath.glm.vec._2.Vec2;
 import net.minecraft.block.Block;
@@ -287,8 +297,7 @@ public class ModEventHandlerClient {
 	}
 
 	public static void registerBedrockOreModels(){
-		ResourceLocation[] list = new ResourceLocation[300];
-		for(int i = 0; i < list.length; i++) {
+		for(int i = 0; i < 300; i++) {
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock, i, new ModelResourceLocation(ModItems.ore_bedrock.getRegistryName(), "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock_centrifuged, i, new ModelResourceLocation(ModItems.ore_bedrock_centrifuged.getRegistryName(), "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock_cleaned, i, new ModelResourceLocation(ModItems.ore_bedrock_cleaned.getRegistryName(), "inventory"));
@@ -313,16 +322,19 @@ public class ModEventHandlerClient {
 			return;
 
 		//Drillgon200: I hate myself for making this
-		if(item == ModItems.chemistry_template){
-			ChemplantRecipes.registerRecipes();
-		}
 
 		if(item == ModItems.chemistry_icon) {
 			for(int i: ChemplantRecipes.recipeNames.keySet()){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + ChemplantRecipes.getName(i).toLowerCase(), "inventory"));
 			}
 		} else if(item == ModItems.chemistry_template) {
+			ChemplantRecipes.registerRecipes();
 			for(int i: ChemplantRecipes.recipeNames.keySet()){
+				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+			}
+		} else if(item == ModItems.crucible_template) {
+			CrucibleRecipes.registerDefaults();
+			for(int i: CrucibleRecipes.recipes.keySet()) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
 		} else if(item == ModItems.siren_track) {
@@ -373,6 +385,10 @@ public class ModEventHandlerClient {
 			}
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, meta, ((IHasCustomModel) item).getResourceLocation());
+		} else if(item instanceof IHasCustomMetaModels) {
+			for(Integer i: ((IHasCustomMetaModels) item).getMetaValues()){
+				ModelLoader.setCustomModelResourceLocation(item, (int)i, ((IHasCustomMetaModels) item).getResourceLocation((int)i));
+			}
 		} else {
 			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
@@ -426,6 +442,12 @@ public class ModEventHandlerClient {
 			FluidTankRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankModel, new FluidTankBakedModel());
 		}
+		Object object444 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankLeadModel);
+		if(object444 instanceof IBakedModel) {
+			IBakedModel model = (IBakedModel) object444;
+			FluidTankLeadRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankLeadModel, new FluidTankLeadBakedModel());
+		}
 		Object object5 = evt.getModelRegistry().getObject(ItemFluidTank.fluidBarrelModel);
 		if(object5 instanceof IBakedModel) {
 			IBakedModel model = (IBakedModel) object5;
@@ -449,6 +471,12 @@ public class ModEventHandlerClient {
 			IBakedModel model = (IBakedModel) object8;
 			FFIdentifierRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
+		}
+		Object object9 = evt.getModelRegistry().getObject(ItemCrucibleTemplate.cruciModel);
+		if(object9 instanceof IBakedModel) {
+			IBakedModel model = (IBakedModel) object9;
+			CrucibleTemplateRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(ItemCrucibleTemplate.cruciModel, new CrucibleTemplateBakedModel());
 		}
 
 		IRegistry<ModelResourceLocation, IBakedModel> reg = evt.getModelRegistry();
@@ -2036,6 +2064,26 @@ public class ModEventHandlerClient {
 			}
 		}
 
+		/// NEUTRON RADS ///
+		ContaminationUtil.addNeutronRadInfo(stack, event.getEntityPlayer(), list, event.getFlags());
+
+		/// HAZARDS ///
+		HazardSystem.addHazardInfo(stack, event.getEntityPlayer(), list, event.getFlags());
+		
+		/// BREEDING ///
+		BreederRecipes.addBreedingTips(stack, event.getEntityPlayer(), list, event.getFlags());
+		
+		//MKU
+		if(stack.hasTagCompound()){
+			if(stack.getTagCompound().getBoolean("ntmContagion"))
+				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");
+		}
+
+		//Foundry
+		if(event.getFlags().isAdvanced()) {
+			Mats.drawFoundryTips(stack, list, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT));
+		}
+
 		/// CUSTOM NUKE ///
 		ComparableStack comp = new NbtComparableStack(stack).makeSingular();
 		CustomNukeEntry entry = TileEntityNukeCustom.entries.get(comp);
@@ -2052,22 +2100,15 @@ public class ModEventHandlerClient {
 				list.add(TextFormatting.GOLD + "Adds multiplier " + entry.value + " to the custom nuke stage " + entry.type);
 		}
 
-		/// NEUTRON RADS ///
-		float activationRads = ContaminationUtil.getNeutronRads(stack);
-		if(activationRads > 0) {
-			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait.radioactive") + "]");
-			float stackRad = activationRads / stack.getCount();
-			list.add(TextFormatting.YELLOW + (Library.roundFloat(ItemHazardModule.getNewValue(stackRad), 3) + ItemHazardModule.getSuffix(stackRad) + " RAD/s"));
+		if(event.getFlags().isAdvanced()) {
+			List<String> names = ItemStackUtil.getOreDictNames(stack);
 			
-			if(stack.getCount() > 1) {
-				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(ItemHazardModule.getNewValue(activationRads), 3) + ItemHazardModule.getSuffix(activationRads) + " RAD/s"));
+			if(names.size() > 0) {
+				list.add("§bOre Dict:");
+				for(String s : names) {
+					list.add("§3 - " + s);
+				}
 			}
-		}
-
-		//MKU
-		if(stack.hasTagCompound()){
-			if(stack.getTagCompound().getBoolean("ntmContagion"))
-				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");
 		}
 	}
 	

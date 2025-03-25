@@ -8,6 +8,7 @@ import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.config.GeneralConfig;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.forgefluid.FluidTypeHandler;
 
@@ -32,6 +33,8 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 
 	public static final ModelResourceLocation fluidTankModel = new ModelResourceLocation(
 			RefStrings.MODID + ":fluid_tank_full", "inventory");
+	public static final ModelResourceLocation fluidTankLeadModel = new ModelResourceLocation(
+			RefStrings.MODID + ":fluid_tank_lead_full", "inventory");
 	
 	public static final ModelResourceLocation fluidBarrelModel = new ModelResourceLocation(
 			RefStrings.MODID + ":fluid_barrel_full", "inventory");
@@ -66,8 +69,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 					if(FluidTypeHandler.noContainer(entry.getValue())) continue;
 					ItemStack stack = new ItemStack(this, 1, 0);
 					stack.setTagCompound(new NBTTagCompound());
-					stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY,
-							new FluidStack(entry.getValue(), cap).writeToNBT(new NBTTagCompound()));
+					stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY, new FluidStack(entry.getValue(), cap).writeToNBT(new NBTTagCompound()));
 					items.add(stack);
 				}
 			}
@@ -86,6 +88,8 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 		} else {
 			if(this == ModItems.fluid_tank_full)
 				return "Empty Universal Fluid Tank";
+			else if(this == ModItems.fluid_tank_lead_full)
+				return "Empty Hazard Fluid Tank";
 			else if(this == ModItems.fluid_barrel_full)
 				return "Empty Fluid Barrel";
 		}
@@ -108,6 +112,8 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public ModelResourceLocation getResourceLocation() {
 		if(this == ModItems.fluid_tank_full)
 			return fluidTankModel;
+		else if(this == ModItems.fluid_tank_lead_full)
+			return fluidTankLeadModel;
 		else if(this == ModItems.fluid_barrel_full)
 			return fluidBarrelModel;
 		return null;
@@ -117,7 +123,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		
 		FluidStack f = FluidUtil.getFluidContained(stack);
-		String s = (f == null ? "0" : f.amount) + "/" + cap + " mB";
+		String s = Library.getColoredMbPercent(f == null ? 0 : f.amount, cap);
 		if(stack.getCount() > 1)
 			s = stack.getCount() + "x " + s;
 		list.add(s);
@@ -145,6 +151,17 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static ItemStack getFullTank(Fluid f){
 		return getFullTank(f, 1);
 	}
+
+	public static ItemStack getFullTankLead(Fluid f, int amount){
+		ItemStack stack = new ItemStack(ModItems.fluid_tank_lead_full, amount, 0);
+		stack.setTagCompound(new NBTTagCompound());
+		stack.getTagCompound().setTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
+		return stack;
+	}
+	
+	public static ItemStack getFullTankLead(Fluid f){
+		return getFullTankLead(f, 1);
+	}
 	
 	public static boolean isFullOrEmpty(ItemStack stack){
 		if(stack.hasTagCompound() && stack.getItem() == ModItems.fluid_barrel_full){
@@ -152,7 +169,11 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 			if(f == null)
 				return true;
 			return f.amount == 16000 || f.amount == 0;
-			
+		} else if(stack.hasTagCompound() && stack.getItem() == ModItems.fluid_tank_lead_full){
+			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
+			if(f == null)
+				return true;
+			return f.amount == 1000 || f.amount == 0;
 		} else if(stack.hasTagCompound() && stack.getItem() == ModItems.fluid_tank_full){
 			FluidStack f = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerItemStack.FLUID_NBT_KEY));
 			if(f == null)
@@ -173,6 +194,19 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static boolean isFullTank(ItemStack stack, Fluid fluid) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
 		if(stack.getItem() == ModItems.fluid_tank_full && f != null && f.getFluid() == fluid && f.amount == 1000)
+			return true;
+		return false;
+	}
+
+	public static boolean isEmptyTankLead(ItemStack out) {
+		if(out.getItem() == ModItems.fluid_tank_lead_full && FluidUtil.getFluidContained(out) == null)
+			return true;
+		return false;
+	}
+
+	public static boolean isFullTankLead(ItemStack stack, Fluid fluid) {
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if(stack.getItem() == ModItems.fluid_tank_lead_full && f != null && f.getFluid() == fluid && f.amount == 1000)
 			return true;
 		return false;
 	}

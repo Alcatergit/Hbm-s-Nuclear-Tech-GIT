@@ -16,6 +16,7 @@ import com.hbm.tileentity.machine.TileEntityCrateSteel;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
 import com.hbm.tileentity.machine.TileEntityCrateDesh;
 import com.hbm.tileentity.machine.TileEntitySafe;
+import com.hbm.hazard.HazardSystem;
 
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -105,7 +106,7 @@ public class BlockStorageCrate extends BlockContainer {
 			TileEntity te = world.getTileEntity(pos);
 			
 			NBTTagCompound nbt = new NBTTagCompound();
-			
+			float rads = 0;
 			if(te != null) {
 				IItemHandler inventory;
 				if(te instanceof TileEntitySafe){
@@ -121,11 +122,15 @@ public class BlockStorageCrate extends BlockContainer {
 					ItemStack stack = inventory.getStackInSlot(i);
 					if(stack.isEmpty())
 						continue;
-					
+					rads += HazardSystem.getTotalRadsFromStack(stack) * stack.getCount();
 					NBTTagCompound slot = new NBTTagCompound();
 					stack.writeToNBT(slot);
 					nbt.setTag("slot" + i, slot);
 				}
+			}
+
+			if(rads > 0){
+				nbt.setFloat("cRads", rads);
 			}
 			
 			if(te instanceof TileEntityLockableBase) {

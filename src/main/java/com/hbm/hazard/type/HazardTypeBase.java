@@ -2,7 +2,7 @@ package com.hbm.hazard.type;
 
 import java.util.List;
 
-import com.hbm.hazard.HazardModifier;
+import com.hbm.hazard.modifier.HazardModifier;
 
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;

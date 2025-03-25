@@ -66,13 +66,17 @@ public class TileEntityFurnaceIron extends TileEntityMachineBase implements IGUI
 				
 				for(int i = 1; i < 3; i++) {
 					ItemStack input = inventory.getStackInSlot(i);
-					if(input != null) {
+					if(input != null && !input.isEmpty()) {
 						
 						int fuel = burnModule.getBurnTime(input);
 						
 						if(fuel > 0) {
 							this.maxBurnTime = this.burnTime = fuel;
+							
+							ItemStack copy = input.copy();
 							input.shrink(1);
+
+							if(input.isEmpty()) inventory.setStackInSlot(i, copy.getItem().getContainerItem(copy));
 							break;
 						}
 					}

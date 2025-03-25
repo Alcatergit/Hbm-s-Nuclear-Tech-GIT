@@ -4,7 +4,7 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 
-import com.hbm.util.ContaminationUtil;
+import com.hbm.hazard.HazardSystem;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
@@ -105,7 +105,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	}
 
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i == 0 && ContaminationUtil.getStackRads(stack) > 0;
+		return i == 0 && HazardSystem.getTotalRadsFromStack(stack) > 0;
 	}
 	
 	@Override
@@ -113,7 +113,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 		if (!world.isRemote) {
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			sendRADGenPower();
-			int r = (int)Math.sqrt(ContaminationUtil.getStackRads(inventory.getStackInSlot(0)));
+			int r = (int)Math.sqrt(HazardSystem.getTotalRadsFromStack(inventory.getStackInSlot(0)));
 			if(r > 0) {
 				if(inventory.getStackInSlot(0).getItem().hasContainerItem(inventory.getStackInSlot(0))) {
 					if(inventory.getStackInSlot(1).isEmpty()) {

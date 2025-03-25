@@ -1,7 +1,7 @@
 package com.hbm.blocks.machine.pile;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockHazardFuel;
+import com.hbm.blocks.generic.BlockFuel;
 import com.hbm.items.ModItems;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
@@ -21,7 +21,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class BlockGraphite extends BlockHazardFuel implements IToolable {
+public class BlockGraphite extends BlockFuel implements IToolable {
 
 	
 	

@@ -7,8 +7,8 @@ import java.util.List;
 import com.hbm.config.BombConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockModDoor;
-import com.hbm.blocks.items.ItemBlockHazard;
-import com.hbm.blocks.items.ItemBlockScrap;
+import com.hbm.blocks.generic.BlockFuel;
+import com.hbm.blocks.items.ItemFuelBlock;
 import com.hbm.blocks.machine.ItemSelfcharger;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ToolAbility;
@@ -33,7 +33,6 @@ import com.hbm.handler.guncfg.GunGaussFactory;
 import com.hbm.handler.guncfg.GunGrenadeFactory;
 import com.hbm.handler.guncfg.GunOSIPRFactory;
 import com.hbm.handler.guncfg.GunRocketFactory;
-import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.armor.ArmorAJR;
 import com.hbm.items.armor.ArmorAJRO;
 import com.hbm.items.armor.ArmorRPA;
@@ -81,13 +80,11 @@ import com.hbm.items.bomb.ItemManMike;
 import com.hbm.items.bomb.ItemMike;
 import com.hbm.items.bomb.ItemN2;
 import com.hbm.items.bomb.ItemSolinium;
-import com.hbm.items.bomb.ItemTsar;
 import com.hbm.items.food.ItemAppleEuphemium;
 import com.hbm.items.food.ItemCanteen;
 import com.hbm.items.food.ItemEnergy;
 import com.hbm.items.food.ItemFoodBase;
-import com.hbm.items.food.ItemFoodHazard;
-import com.hbm.items.food.ItemHazardSoup;
+import com.hbm.items.food.ItemFoodSoup;
 import com.hbm.items.food.ItemLemon;
 import com.hbm.items.food.ItemNugget;
 import com.hbm.items.food.ItemPancake;
@@ -121,12 +118,14 @@ import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemCatalyst;
 import com.hbm.items.machine.ItemChemistryIcon;
 import com.hbm.items.machine.ItemChemistryTemplate;
+import com.hbm.items.machine.ItemCrucibleTemplate;
 import com.hbm.items.machine.ItemFFFluidDuct;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.items.machine.ItemLens;
+import com.hbm.items.machine.ItemMold;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
@@ -147,7 +146,9 @@ import com.hbm.items.machine.ItemStamp;
 import com.hbm.items.machine.ItemTemplateFolder;
 import com.hbm.items.machine.ItemTurretBiometry;
 import com.hbm.items.machine.ItemTurretChip;
+import com.hbm.items.machine.ItemScraps;
 import com.hbm.items.special.ItemSimpleConsumable;
+import com.hbm.items.special.ItemAutogen;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.items.special.ItemBook;
 import com.hbm.items.special.ItemBedrockOre;
@@ -159,11 +160,8 @@ import com.hbm.items.special.ItemDigamma;
 import com.hbm.items.special.ItemDoorSkin;
 import com.hbm.items.special.ItemDrop;
 import com.hbm.items.special.ItemFuel;
-import com.hbm.items.special.ItemFuelHazard;
 import com.hbm.items.special.ItemFusionShield;
 import com.hbm.items.special.ItemGlitch;
-import com.hbm.items.special.ItemHazard;
-import com.hbm.items.special.ItemContaminating;
 import com.hbm.items.special.ItemRag;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.special.ItemHotDusted;
@@ -274,6 +272,7 @@ import com.hbm.items.weapon.ItemMissileStandard;
 import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.items.weapon.ItemTurretAmmo;
 import com.hbm.items.weapon.WeaponizedCell;
+import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.util.EnchantmentUtil;
@@ -404,7 +403,7 @@ public class ModItems {
 	public static final Item gun_kit_1 = new ItemSyringe("gun_kit_1").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gun_kit_2 = new ItemSyringe("gun_kit_2").setMaxStackSize(16).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item euphemium_kit = new ItemStarterKit("euphemium_kit").setMaxStackSize(1).setCreativeTab(null);
-	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item cbt_device = new ItemSyringe("cbt_device").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gas_mask_filter_rag = new ItemFilter("gas_mask_filter_rag", 4000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gas_mask_filter_piss = new ItemFilter("gas_mask_filter_piss", 4000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item gas_mask_filter_mono = new ItemFilter("gas_mask_filter_mono", 12000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -436,7 +435,7 @@ public class ModItems {
 	public static final Item insert_steel = new ItemModInsert(1000, 1F, 0.95F, 0.75F, 0.95F, "insert_steel").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_du = new ItemModInsert(1500, 0.9F, 0.85F, 0.5F, 0.9F, "insert_du").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_ferrouranium = new ItemModInsert(2000, 1F, 0.9F, 0.9F, 1F, "insert_ferrouranium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item insert_polonium = new ItemModInsert(500, 0.9F, 1F, 0.25F, 0.9F, "insert_polonium").addRadiation(100F).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item insert_polonium = new ItemModInsert(500, 0.9F, 1F, 0.25F, 0.9F, "insert_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_ghiorsium = new ItemModInsert(2000, 0.8F, 0.75F, 0.35F, 0.9F, "insert_ghiorsium").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_era = new ItemModInsert(25, 0.5F, 1F, 0.25F, 1F, "insert_era").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item insert_di = new ItemModInsert(4000, 1F, 0.01F, 0.01F, 0.01F, "insert_di").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -486,10 +485,6 @@ public class ModItems {
 	public static final Item stamp_iron_plate = new ItemStamp("stamp_iron_plate", 64);
 	public static final Item stamp_iron_wire = new ItemStamp("stamp_iron_wire", 64);
 	public static final Item stamp_iron_circuit = new ItemStamp("stamp_iron_circuit", 128);
-	public static final Item stamp_steel_flat = new ItemStamp("stamp_steel_flat", 128);
-	public static final Item stamp_steel_plate = new ItemStamp("stamp_steel_plate", 128);
-	public static final Item stamp_steel_wire = new ItemStamp("stamp_steel_wire", 128);
-	public static final Item stamp_steel_circuit = new ItemStamp("stamp_steel_circuit", 128);
 	public static final Item stamp_titanium_flat = new ItemStamp("stamp_titanium_flat", 96);
 	public static final Item stamp_titanium_plate = new ItemStamp("stamp_titanium_plate", 96);
 	public static final Item stamp_titanium_wire = new ItemStamp("stamp_titanium_wire", 96);
@@ -498,6 +493,10 @@ public class ModItems {
 	public static final Item stamp_obsidian_plate = new ItemStamp("stamp_obsidian_plate", 128);
 	public static final Item stamp_obsidian_wire = new ItemStamp("stamp_obsidian_wire", 128);
 	public static final Item stamp_obsidian_circuit = new ItemStamp("stamp_obsidian_circuit", 128);
+	public static final Item stamp_steel_flat = new ItemStamp("stamp_steel_flat", 256);
+	public static final Item stamp_steel_plate = new ItemStamp("stamp_steel_plate", 256);
+	public static final Item stamp_steel_wire = new ItemStamp("stamp_steel_wire", 256);
+	public static final Item stamp_steel_circuit = new ItemStamp("stamp_steel_circuit", 128);
 	public static final Item stamp_schrabidium_flat = new ItemStamp("stamp_schrabidium_flat", 4096);
 	public static final Item stamp_schrabidium_plate = new ItemStamp("stamp_schrabidium_plate", 4096);
 	public static final Item stamp_schrabidium_wire = new ItemStamp("stamp_schrabidium_wire", 4096);
@@ -522,9 +521,9 @@ public class ModItems {
 	public static final Item blades_titanium = new ItemBlades("blades_titanium", 96);
 	public static final Item blades_advanced_alloy = new ItemBlades("blades_advanced_alloy", 256);
 	public static final Item blades_combine_steel = new ItemBlades("blades_combine_steel", 1024);
-	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 4096).addRadiation(ItemHazard.sa326 * 3F).toItem();
-	public static final Item blades_desh = new ItemBlades("blades_desh", 0).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	
+	public static final Item blades_schrabidium = new ItemBlades("blades_schrabidium", 4096);
+	public static final Item blades_desh = new ItemBlades("blades_desh", 0);
+		
 	public static final Item fuse = new ItemCustomLore("fuse").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	public static final Item redcoil_capacitor = new ItemCapacitor(10, "redcoil_capacitor").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item euphemium_capacitor = new ItemCustomLore("euphemium_capacitor").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -536,11 +535,11 @@ public class ModItems {
 	public static final Item piston_selenium = new ItemBase("piston_selenium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	public static final Item thermo_element = new ItemBase("thermo_element").setMaxStackSize(16).setCreativeTab(MainRegistry.controlTab);
 	public static final Item antiknock = new ItemBase("antiknock").setCreativeTab(MainRegistry.controlTab);
-	public static final Item part_lithium = new ItemHazard("part_lithium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.controlTab);
+	public static final Item part_lithium = new ItemBase("part_lithium").setCreativeTab(MainRegistry.controlTab);
 	public static final Item part_beryllium = new ItemBase("part_beryllium").setCreativeTab(MainRegistry.controlTab);
-	public static final Item part_carbon = new ItemHazard("part_carbon").addCoal(3).toItem().setCreativeTab(MainRegistry.controlTab);
+	public static final Item part_carbon = new ItemBase("part_carbon").setCreativeTab(MainRegistry.controlTab);
 	public static final Item part_copper = new ItemBase("part_copper").setCreativeTab(MainRegistry.controlTab);
-	public static final Item part_plutonium = new ItemHazard(ItemHazard.pu, "part_plutonium").setCreativeTab(MainRegistry.controlTab);
+	public static final Item part_plutonium = new ItemBase("part_plutonium").setCreativeTab(MainRegistry.controlTab);
 	
 	
 	//Reactor Blanket
@@ -660,6 +659,7 @@ public class ModItems {
 	public static final Item gas_canister = new ItemGasCanister("gas_empty", 4000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item cell = new ItemCell("cell").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_tank_full = new ItemFluidTank("fluid_tank_full", 1000).setCreativeTab(MainRegistry.controlTab);
+	public static final Item fluid_tank_lead_full = new ItemFluidTank("fluid_tank_lead_full", 1000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_barrel_full = new ItemFluidTank("fluid_barrel_full", 16000).setCreativeTab(MainRegistry.controlTab);
 	public static final Item fluid_barrel_infinite = new ItemFluidContainerInfinite(50, "fluid_barrel_infinite").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	public static final Item inf_water = new ItemFluidContainerInfinite(50, "inf_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -960,7 +960,7 @@ public class ModItems {
 	public static final Item jetpack_break = new JetpackBreak(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.kerosene, 12000, "jetpack_break").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 	public static final Item jetpack_vector = new JetpackVectorized(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.kerosene, 16000, "jetpack_vector").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 	public static final Item jetpack_boost = new JetpackBooster(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, ModForgeFluids.balefire, 32000, "jetpack_boost").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
-	public static final Item jetpack_glider = new JetpackGlider(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, 20000, "jetpack_glider").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	public static final Item jetpack_glider = new JetpackGlider(MainRegistry.enumArmorMaterialSteel, -1, EntityEquipmentSlot.CHEST, 20000, "jetpack_glider").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
 	public static final Item wings_murk = new WingsMurk(MainRegistry.aMatCobalt, "wings_murk").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 	public static final Item wings_limp = new WingsMurk(MainRegistry.aMatCobalt, "wings_limp").setCreativeTab(CreativeTabs.COMBAT).setMaxStackSize(1);
 	
@@ -968,38 +968,10 @@ public class ModItems {
 	public static final Item cape_gasmask = new ArmorModel(ArmorMaterial.CHAIN, -1, EntityEquipmentSlot.CHEST, "cape_gasmask").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
 	public static final Item cape_schrabidium = new ArmorModel(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.CHEST, "cape_schrabidium").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
 	
-	public static final Item schrabidium_hammer = new WeaponSpecial(MainRegistry.enumToolMaterialHammer, "schrabidium_hammer").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item shimmer_sledge = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_sledge").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item shimmer_axe = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_axe").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
+	
 	public static final Item ullapool_caber = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "ullapool_caber").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item euphemium_stopper = new ItemSyringe("euphemium_stopper").setMaxStackSize(1).setFull3D().setCreativeTab(null);
-	public static final Item matchstick = new ItemMatch("matchstick").setCreativeTab(CreativeTabs.TOOLS).setFull3D().setCreativeTab(MainRegistry.weaponTab);
-	public static final Item balefire_and_steel = new ItemBalefireMatch("balefire_and_steel").setFull3D().setCreativeTab(MainRegistry.weaponTab);
-	public static final Item wrench = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "wrench").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item wrench_flipped = new WeaponSpecial(MainRegistry.enumToolMaterialElec, "wrench_flipped").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item memespoon = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "memespoon").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item wood_gavel = new WeaponSpecial(ToolMaterial.WOOD, "wood_gavel").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item lead_gavel = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "lead_gavel").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final Item diamond_gavel = new WeaponSpecial(ToolMaterial.DIAMOND, "diamond_gavel").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	public static final ToolMaterial matMeseGavel = EnumHelper.addToolMaterial("HBM_MESEGAVEL", 4, 0, 50F, 0.0F, 200).setRepairItem(new ItemStack(ModItems.plate_paa));
-	public static final Item mese_gavel = new ItemSwordAbility(250, 1.5, matMeseGavel, "mese_gavel")
-			.addHitAbility(new WeaponAbility.PhosphorusAbility(60))
-			.addHitAbility(new WeaponAbility.RadiationAbility(500))
-			.addHitAbility(new WeaponAbility.StunAbility(10))
-			.addHitAbility(new WeaponAbility.VampireAbility(50))
-			.addHitAbility(new WeaponAbility.BeheaderAbility()).setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
-	
-	public static final Item multitool_hit = new ItemMultitoolPassive("multitool_hit").setCreativeTab(null);
-	public static final Item multitool_dig = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, Collections.emptySet(), "multitool_dig").setFull3D().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item multitool_silk = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, Collections.emptySet(), "multitool_silk").setFull3D().setCreativeTab(null);
-	public static final Item multitool_ext = new ItemMultitoolPassive("multitool_ext").setCreativeTab(null);
-	public static final Item multitool_miner = new ItemMultitoolPassive("multitool_miner").setCreativeTab(null);
-	public static final Item multitool_beam = new ItemMultitoolPassive("multitool_beam").setCreativeTab(null);
-	public static final Item multitool_sky = new ItemMultitoolPassive("multitool_sky").setCreativeTab(null);
-	public static final Item multitool_mega = new ItemMultitoolPassive("multitool_mega").setCreativeTab(null);
-	public static final Item multitool_joule = new ItemMultitoolPassive("multitool_joule").setCreativeTab(null);
-	public static final Item multitool_decon = new ItemMultitoolPassive("multitool_decon").setCreativeTab(null);
-	
+		
 	//Guns
 	public static final Item gun_b92 = new GunB92("gun_b92").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_b93 = new GunB93("gun_b93").setCreativeTab(MainRegistry.weaponTab);
@@ -1106,13 +1078,13 @@ public class ModItems {
 	public static final Item ingot_tungsten = new ItemBase("ingot_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_aluminium = new ItemBase("ingot_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_beryllium = new ItemBase("ingot_beryllium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_lead = new ItemHazard("ingot_lead").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_asbestos = new ItemHazard("ingot_asbestos").addAsbestos(6).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_magnetized_tungsten = new ItemHazard(ItemHazard.magt, "ingot_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_lead = new ItemBase("ingot_lead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_asbestos = new ItemBase("ingot_asbestos").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_magnetized_tungsten = new ItemBase("ingot_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_combine_steel = new ItemCustomLore("ingot_combine_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_dura_steel = new ItemCustomLore("ingot_dura_steel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_technetium = new ItemHazard("ingot_technetium").addRadiation(ItemHazard.tc99 * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_tcalloy = new ItemHazard(0.07F, "ingot_tcalloy").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_technetium = new ItemBase("ingot_technetium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_tcalloy = new ItemBase("ingot_tcalloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_cdalloy = new ItemBase("ingot_cdalloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_polymer = new ItemCustomLore("ingot_polymer").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_bakelite = new ItemCustomLore("ingot_bakelite").setCreativeTab(MainRegistry.partsTab);
@@ -1120,49 +1092,49 @@ public class ModItems {
 	public static final Item ingot_biorubber = new ItemCustomLore("ingot_biorubber").setCreativeTab(MainRegistry.partsTab);	
 	public static final Item ingot_desh = new ItemCustomLore("ingot_desh").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_saturnite = new ItemCustomLore("ingot_saturnite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_ferrouranium = new ItemHazard("ingot_ferrouranium").addRadiation(ItemHazard.u * 0.5F).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_ferrouranium = new ItemBase("ingot_ferrouranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_starmetal = new ItemCustomLore("ingot_starmetal").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_osmiridium = new ItemHazard("ingot_osmiridium").addDigamma(0.040F).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_osmiridium = new ItemCustomLore("ingot_osmiridium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_euphemium = new ItemCustomLore("ingot_euphemium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_dineutronium = new ItemCustomLore("ingot_dineutronium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_cadmium = new ItemBase("ingot_cadmium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_bismuth = new ItemCustomLore("ingot_bismuth").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_arsenic = new ItemHazard("ingot_arsenic").addToxic(16).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_arsenic = new ItemCustomLore("ingot_arsenic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_zirconium = new ItemBase("ingot_zirconium").setCreativeTab(MainRegistry.partsTab);
 
-	public static final Item ingot_th232 = new ItemHazard(ItemHazard.th232, "ingot_th232").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_uranium = new ItemHazard(ItemHazard.u, "ingot_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_u233 = new ItemHazard(ItemHazard.u233, "ingot_u233").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_u235 = new ItemHazard(ItemHazard.u235, "ingot_u235").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_u238 = new ItemHazard(ItemHazard.u238, "ingot_u238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_u238m2 = new ItemUnstable(350, 200, "ingot_u238m2").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_plutonium = new ItemHazard(ItemHazard.pu, "ingot_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu238 = new ItemHazard(ItemHazard.pu238, true, false, "ingot_pu238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu239 = new ItemHazard(ItemHazard.pu239, "ingot_pu239").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu240 = new ItemHazard(ItemHazard.pu240, "ingot_pu240").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu241 = new ItemHazard("ingot_pu241").addRadiation(ItemHazard.pu241 * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pu_mix = new ItemHazard(ItemHazard.purg * ItemHazard.ingot, "ingot_pu_mix").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_am241 = new ItemHazard("ingot_am241").addRadiation(ItemHazard.am241 * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_am242 = new ItemHazard("ingot_am242").addRadiation(ItemHazard.am242 * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_am_mix = new ItemHazard("ingot_am_mix").addRadiation(ItemHazard.amrg * ItemHazard.ingot).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_schraranium = new ItemHazard(ItemHazard.sr, false, true, "ingot_schraranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_schrabidium = new ItemHazard(ItemHazard.sa326, false, true, "ingot_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_schrabidate = new ItemHazard(ItemHazard.sb, false, true, "ingot_schrabidate").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_solinium = new ItemHazard(ItemHazard.sa327, false, true, "ingot_solinium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_th232 = new ItemCustomLore("ingot_th232").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_uranium = new ItemCustomLore("ingot_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_u233 = new ItemCustomLore("ingot_u233").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_u235 = new ItemCustomLore("ingot_u235").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_u238 = new ItemCustomLore("ingot_u238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_u238m2 = new ItemUnstable("ingot_u238m2").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_plutonium = new ItemCustomLore("ingot_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu238 = new ItemCustomLore("ingot_pu238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu239 = new ItemCustomLore("ingot_pu239").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu240 = new ItemCustomLore("ingot_pu240").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu241 = new ItemCustomLore("ingot_pu241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pu_mix = new ItemCustomLore("ingot_pu_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_am241 = new ItemCustomLore("ingot_am241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_am242 = new ItemCustomLore("ingot_am242").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_am_mix = new ItemCustomLore("ingot_am_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_schraranium = new ItemCustomLore("ingot_schraranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_schrabidium = new ItemCustomLore("ingot_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_schrabidate = new ItemCustomLore("ingot_schrabidate").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_solinium = new ItemCustomLore("ingot_solinium").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item ingot_thorium_fuel = new ItemHazard(ItemHazard.thf, "ingot_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_uranium_fuel = new ItemHazard(ItemHazard.uf, "ingot_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_mox_fuel = new ItemHazard(ItemHazard.mox, "ingot_mox_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_plutonium_fuel = new ItemHazard(ItemHazard.puf, "ingot_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_neptunium_fuel = new ItemHazard(ItemHazard.npf, true, "ingot_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_americium_fuel = new ItemHazard(ItemHazard.amf, "ingot_americium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_les = new ItemHazard(ItemHazard.les, false, true, "ingot_les").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_schrabidium_fuel = new ItemHazard(ItemHazard.saf, false, true, "ingot_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_hes = new ItemHazard(ItemHazard.hes, false, true, "ingot_hes").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_neptunium = new ItemHazard(ItemHazard.np237, true, "ingot_neptunium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_tennessine = new ItemHazard(120F, "ingot_tennessine").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_polonium = new ItemHazard(ItemHazard.po210, true, "ingot_polonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_phosphorus = new ItemHazard(0F, true, "ingot_phosphorus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_thorium_fuel = new ItemCustomLore("ingot_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_uranium_fuel = new ItemCustomLore("ingot_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_mox_fuel = new ItemCustomLore("ingot_mox_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_plutonium_fuel = new ItemCustomLore("ingot_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_neptunium_fuel = new ItemCustomLore("ingot_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_americium_fuel = new ItemCustomLore("ingot_americium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_les = new ItemCustomLore("ingot_les").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_schrabidium_fuel = new ItemCustomLore("ingot_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_hes = new ItemCustomLore("ingot_hes").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_neptunium = new ItemCustomLore("ingot_neptunium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_tennessine = new ItemCustomLore("ingot_tennessine").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_polonium = new ItemCustomLore("ingot_polonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_phosphorus = new ItemCustomLore("ingot_phosphorus").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_boron = new ItemBase("ingot_boron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_graphite = new ItemFuel("ingot_graphite", 1600).setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_fiberglass = new ItemCustomLore("ingot_fiberglass").setCreativeTab(MainRegistry.partsTab);
@@ -1171,7 +1143,7 @@ public class ModItems {
 	public static final Item ingot_actinium = new ItemCustomLore("ingot_actinium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_neodymium = new ItemCustomLore("ingot_neodymium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_bromine = new ItemCustomLore("ingot_bromine").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_caesium = new ItemHazard(0.0F, true, "ingot_caesium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_caesium = new ItemCustomLore("ingot_caesium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_cerium = new ItemCustomLore("ingot_cerium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_lanthanium = new ItemCustomLore("ingot_lanthanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_tantalium = new ItemCustomLore("ingot_tantalium").setCreativeTab(MainRegistry.partsTab);
@@ -1179,19 +1151,19 @@ public class ModItems {
 	public static final Item ingot_firebrick = new ItemBase("ingot_firebrick").setCreativeTab(MainRegistry.partsTab);
 
 	public static final Item ingot_cobalt = new ItemCustomLore("ingot_cobalt").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_co60 = new ItemHazard(ItemHazard.co60, "ingot_co60").addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_strontium = new ItemHazard("ingot_strontium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_sr90 = new ItemHazard(ItemHazard.sr90, true, "ingot_sr90").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_co60 = new ItemCustomLore("ingot_co60").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_strontium = new ItemCustomLore("ingot_strontium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_sr90 = new ItemCustomLore("ingot_sr90").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_iodine = new ItemCustomLore("ingot_iodine").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_i131 = new ItemHazard(ItemHazard.i131, "ingot_i131").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_au198 = new ItemHazard("ingot_au198").addRadiation(ItemHazard.au198 * ItemHazard.ingot).addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_pb209 = new ItemHazard(ItemHazard.pb209, true, true, "ingot_pb209").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_ra226 = new ItemHazard(ItemHazard.ra226, "ingot_ra226").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_ac227 = new ItemHazard(ItemHazard.ac227, "ingot_ac227").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_gh336 = new ItemHazard(ItemHazard.gh336, "ingot_gh336").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ingot_radspice = new ItemHazard(ItemHazard.radspice, "ingot_radspice").addFire(15).addToxic(2).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_i131 = new ItemCustomLore("ingot_i131").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_au198 = new ItemCustomLore("ingot_au198").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_pb209 = new ItemCustomLore("ingot_pb209").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_ra226 = new ItemCustomLore("ingot_ra226").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_ac227 = new ItemCustomLore("ingot_ac227").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_gh336 = new ItemCustomLore("ingot_gh336").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_radspice = new ItemCustomLore("ingot_radspice").setCreativeTab(MainRegistry.partsTab);
 
-	public static final Item ingot_electronium = new ItemUnstable(30, 6000, "ingot_electronium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_electronium = new ItemUnstable("ingot_electronium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_reiium = new ItemCustomLore("ingot_reiium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_weidanium = new ItemCustomLore("ingot_weidanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_australium = new ItemCustomLore("ingot_australium").setCreativeTab(MainRegistry.partsTab);
@@ -1204,116 +1176,116 @@ public class ModItems {
 	public static final Item ingot_meteorite_forged = new ItemHot(200, "ingot_meteorite_forged").setCreativeTab(MainRegistry.partsTab);
 	public static final Item blade_meteorite = new ItemHot(200, "blade_meteorite").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item billet_th232 = new ItemHazard(ItemHazard.th232 * ItemHazard.billet, "billet_th232").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_uranium = new ItemHazard(ItemHazard.u * ItemHazard.billet, "billet_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_u233 = new ItemHazard(ItemHazard.u233 * ItemHazard.billet, "billet_u233").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_u235 = new ItemHazard(ItemHazard.u235 * ItemHazard.billet, "billet_u235").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_u238 = new ItemHazard(ItemHazard.u238 * ItemHazard.billet, "billet_u238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.billet, "billet_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu238 = new ItemHazard(ItemHazard.pu238 * ItemHazard.billet, true, "billet_pu238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu239 = new ItemHazard(ItemHazard.pu239 * ItemHazard.billet, "billet_pu239").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu240 = new ItemHazard(ItemHazard.pu240 * ItemHazard.billet, "billet_pu240").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu241 = new ItemHazard(ItemHazard.pu241 * ItemHazard.billet, "billet_pu241").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu_mix = new ItemHazard(ItemHazard.purg * ItemHazard.billet, "billet_pu_mix").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_am241 = new ItemHazard(ItemHazard.am241 * ItemHazard.billet, "billet_am241").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_am242 = new ItemHazard(ItemHazard.am242 * ItemHazard.billet, "billet_am242").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_am_mix = new ItemHazard(ItemHazard.amrg * ItemHazard.billet, "billet_am_mix").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_neptunium = new ItemHazard(ItemHazard.np237 * ItemHazard.billet, true, "billet_neptunium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_polonium = new ItemHazard(ItemHazard.po210 * ItemHazard.billet, true, "billet_polonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_technetium = new ItemHazard(ItemHazard.tc99 * ItemHazard.billet, "billet_technetium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_co60 = new ItemHazard(ItemHazard.co60 * ItemHazard.billet, "billet_co60").addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_sr90 = new ItemHazard(ItemHazard.sr90 * ItemHazard.billet, "billet_sr90").addHydroReactivity().addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_au198 = new ItemHazard(ItemHazard.au198 * ItemHazard.billet, "billet_au198").addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pb209 = new ItemHazard(ItemHazard.pb209 * ItemHazard.billet, true, true, "billet_pb209").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_ra226 = new ItemHazard(ItemHazard.ra226 * ItemHazard.billet, "billet_ra226").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_ac227 = new ItemHazard(ItemHazard.ac227 * ItemHazard.billet, "billet_ac227").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_gh336 = new ItemHazard(ItemHazard.gh336 * ItemHazard.billet, "billet_gh336").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_th232 = new ItemCustomLore("billet_th232").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_uranium = new ItemCustomLore("billet_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_u233 = new ItemCustomLore("billet_u233").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_u235 = new ItemCustomLore("billet_u235").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_u238 = new ItemCustomLore("billet_u238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_plutonium = new ItemCustomLore("billet_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu238 = new ItemCustomLore("billet_pu238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu239 = new ItemCustomLore("billet_pu239").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu240 = new ItemCustomLore("billet_pu240").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu241 = new ItemCustomLore("billet_pu241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu_mix = new ItemCustomLore("billet_pu_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_am241 = new ItemCustomLore("billet_am241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_am242 = new ItemCustomLore("billet_am242").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_am_mix = new ItemCustomLore("billet_am_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_neptunium = new ItemCustomLore("billet_neptunium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_polonium = new ItemCustomLore("billet_polonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_technetium = new ItemCustomLore("billet_technetium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_co60 = new ItemCustomLore("billet_co60").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_sr90 = new ItemCustomLore("billet_sr90").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_au198 = new ItemCustomLore("billet_au198").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pb209 = new ItemCustomLore("billet_pb209").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_ra226 = new ItemCustomLore("billet_ra226").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_ac227 = new ItemCustomLore("billet_ac227").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_gh336 = new ItemCustomLore("billet_gh336").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_beryllium = new ItemBase("billet_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_bismuth = new ItemBase("billet_bismuth").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_zirconium = new ItemBase("billet_zirconium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_zfb_bismuth = new ItemHazard(ItemHazard.zfb_bi * ItemHazard.billet, "billet_zfb_bismuth").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_zfb_pu241 = new ItemHazard(ItemHazard.zfb_pu241 * ItemHazard.billet, "billet_zfb_pu241").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_zfb_am_mix = new ItemHazard(ItemHazard.zfb_am_mix * ItemHazard.billet, "billet_zfb_am_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_zfb_bismuth = new ItemCustomLore("billet_zfb_bismuth").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_zfb_pu241 = new ItemCustomLore("billet_zfb_pu241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_zfb_am_mix = new ItemCustomLore("billet_zfb_am_mix").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item billet_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.billet, false, true, "billet_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_solinium = new ItemHazard(ItemHazard.sa327 * ItemHazard.billet, false, true, "billet_solinium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_thorium_fuel = new ItemHazard(ItemHazard.thf * ItemHazard.billet, "billet_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_uranium_fuel = new ItemHazard(ItemHazard.uf * ItemHazard.billet, "billet_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_mox_fuel = new ItemHazard(ItemHazard.mox * ItemHazard.billet, "billet_mox_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_plutonium_fuel = new ItemHazard(ItemHazard.puf * ItemHazard.billet, "billet_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_neptunium_fuel = new ItemHazard(ItemHazard.npf * ItemHazard.billet, true, "billet_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_americium_fuel = new ItemHazard(ItemHazard.amf * ItemHazard.billet, "billet_americium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_les = new ItemHazard(ItemHazard.les * ItemHazard.billet, "billet_les").addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_schrabidium_fuel = new ItemHazard(ItemHazard.saf * ItemHazard.billet, false, true, "billet_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_hes = new ItemHazard(ItemHazard.hes * ItemHazard.billet, "billet_hes").addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_po210be = new ItemHazard(ItemHazard.pobe, "billet_po210be").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_ra226be = new ItemHazard(ItemHazard.rabe, "billet_ra226be").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_pu238be = new ItemHazard(ItemHazard.pube, "billet_pu238be").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_schrabidium = new ItemCustomLore("billet_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_solinium = new ItemCustomLore("billet_solinium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_thorium_fuel = new ItemCustomLore("billet_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_uranium_fuel = new ItemCustomLore("billet_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_mox_fuel = new ItemCustomLore("billet_mox_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_plutonium_fuel = new ItemCustomLore("billet_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_neptunium_fuel = new ItemCustomLore("billet_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_americium_fuel = new ItemCustomLore("billet_americium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_les = new ItemCustomLore("billet_les").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_schrabidium_fuel = new ItemCustomLore("billet_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_hes = new ItemCustomLore("billet_hes").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_po210be = new ItemCustomLore("billet_po210be").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_ra226be = new ItemCustomLore("billet_ra226be").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_pu238be = new ItemCustomLore("billet_pu238be").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_australium = new ItemCustomLore("billet_australium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_australium_lesser = new ItemCustomLore("billet_australium_lesser").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_australium_greater = new ItemCustomLore("billet_australium_greater").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_unobtainium = new ItemHazard(ItemHazard.unof * ItemHazard.billet, "billet_unobtainium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_unobtainium = new ItemCustomLore("billet_unobtainium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_yharonite = new ItemBase("billet_yharonite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_balefire_gold = new ItemHazard(ItemHazard.au198 * ItemHazard.billet, true, "billet_balefire_gold").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_flashlead = new ItemHazard(ItemHazard.aupb * ItemHazard.billet, true, true, "billet_flashlead").setCreativeTab(MainRegistry.partsTab);
-	public static final Item billet_nuclear_waste = new ItemContaminating(ItemHazard.wst * ItemHazard.billet, "billet_nuclear_waste").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_balefire_gold = new ItemCustomLore("billet_balefire_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_flashlead = new ItemCustomLore("billet_flashlead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_nuclear_waste = new ItemCustomLore("billet_nuclear_waste").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item bio_wafer = new ItemLemon(8, 8, false, "bio_wafer").setCreativeTab(MainRegistry.partsTab);
 		
 	
-	public static final Item nugget_uranium = new ItemHazard(ItemHazard.u * ItemHazard.nugget, "nugget_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_u233 = new ItemHazard(ItemHazard.u233 * ItemHazard.nugget, "nugget_u233").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_u235 = new ItemHazard(ItemHazard.u235 * ItemHazard.nugget, "nugget_u235").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_u238 = new ItemHazard(ItemHazard.u238 * ItemHazard.nugget, "nugget_u238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_u238m2 = new ItemUnstable(60, 2000, "nugget_u238m2").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.nugget, "nugget_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pu238 = new ItemHazard(ItemHazard.pu238 * ItemHazard.nugget, true, "nugget_pu238").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pu239 = new ItemHazard(ItemHazard.pu239 * ItemHazard.nugget, "nugget_pu239").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pu240 = new ItemHazard(ItemHazard.pu240 * ItemHazard.nugget, "nugget_pu240").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_th232 = new ItemHazard(ItemHazard.th232 * ItemHazard.nugget, "nugget_th232").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pu241 = new ItemHazard(ItemHazard.pu241 * ItemHazard.nugget, "nugget_pu241").addFire(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pu_mix = new ItemHazard(ItemHazard.purg * ItemHazard.nugget, "nugget_pu_mix").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_am241 = new ItemHazard(ItemHazard.am241 * ItemHazard.nugget, "nugget_am241").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_am242 = new ItemHazard(ItemHazard.am242 * ItemHazard.nugget, "nugget_am242").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_am_mix = new ItemHazard(ItemHazard.amrg * ItemHazard.nugget, "nugget_am_mix").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_technetium = new ItemHazard(ItemHazard.tc99 * ItemHazard.nugget, "nugget_technetium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_neptunium = new ItemHazard(ItemHazard.np237 * ItemHazard.nugget, true, "nugget_neptunium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_polonium = new ItemHazard(ItemHazard.po210 * ItemHazard.nugget, true, "nugget_polonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_thorium_fuel = new ItemHazard(ItemHazard.thf * ItemHazard.nugget, "nugget_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_uranium_fuel = new ItemHazard(ItemHazard.uf * ItemHazard.nugget, "nugget_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_mox_fuel = new ItemHazard(ItemHazard.mox * ItemHazard.nugget, "nugget_mox_fuel").setCreativeTab(MainRegistry.partsTab).setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_plutonium_fuel = new ItemHazard(ItemHazard.puf * ItemHazard.nugget, "nugget_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_neptunium_fuel = new ItemHazard(ItemHazard.npf * ItemHazard.nugget, true, "nugget_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_americium_fuel = new ItemHazard(ItemHazard.amf * ItemHazard.nugget, "nugget_americium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_les = new ItemHazard(ItemHazard.les * ItemHazard.nugget, false, true, "nugget_les").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_schrabidium_fuel = new ItemHazard(ItemHazard.saf * ItemHazard.nugget, "nugget_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_hes = new ItemHazard(ItemHazard.hes * ItemHazard.nugget, false, true, "nugget_hes").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_lead = new ItemHazard("nugget_lead").addToxic(1).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_uranium = new ItemCustomLore("nugget_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_u233 = new ItemCustomLore("nugget_u233").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_u235 = new ItemCustomLore("nugget_u235").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_u238 = new ItemCustomLore("nugget_u238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_u238m2 = new ItemUnstable("nugget_u238m2").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_plutonium = new ItemCustomLore("nugget_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pu238 = new ItemCustomLore("nugget_pu238").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pu239 = new ItemCustomLore("nugget_pu239").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pu240 = new ItemCustomLore("nugget_pu240").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_th232 = new ItemCustomLore("nugget_th232").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pu241 = new ItemCustomLore("nugget_pu241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pu_mix = new ItemCustomLore("nugget_pu_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_am241 = new ItemCustomLore("nugget_am241").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_am242 = new ItemCustomLore("nugget_am242").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_am_mix = new ItemCustomLore("nugget_am_mix").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_technetium = new ItemCustomLore("nugget_technetium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_neptunium = new ItemCustomLore("nugget_neptunium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_polonium = new ItemCustomLore("nugget_polonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_thorium_fuel = new ItemCustomLore("nugget_thorium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_uranium_fuel = new ItemCustomLore("nugget_uranium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_mox_fuel = new ItemCustomLore("nugget_mox_fuel").setCreativeTab(MainRegistry.partsTab).setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_plutonium_fuel = new ItemCustomLore("nugget_plutonium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_neptunium_fuel = new ItemCustomLore("nugget_neptunium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_americium_fuel = new ItemCustomLore("nugget_americium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_les = new ItemCustomLore("nugget_les").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_schrabidium_fuel = new ItemCustomLore("nugget_schrabidium_fuel").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_hes = new ItemCustomLore("nugget_hes").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_lead = new ItemCustomLore("nugget_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_beryllium = new ItemBase("nugget_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_cadmium = new ItemBase("nugget_cadmium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_bismuth = new ItemBase("nugget_bismuth").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_arsenic = new ItemHazard("nugget_arsenic").addToxic(3).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_arsenic = new ItemCustomLore("nugget_arsenic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_zirconium = new ItemCustomLore("nugget_zirconium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_tantalium = new ItemCustomLore("nugget_tantalium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_desh = new ItemCustomLore("nugget_desh").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_osmiridium = new ItemHazard("nugget_osmiridium").addDigamma(0.004F).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.nugget, false, true, "nugget_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_solinium = new ItemHazard(ItemHazard.sa327 * ItemHazard.nugget, false, true, "nugget_solinium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_osmiridium = new ItemCustomLore("nugget_osmiridium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_schrabidium = new ItemCustomLore("nugget_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_solinium = new ItemCustomLore("nugget_solinium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_euphemium = new ItemCustomLore("nugget_euphemium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_dineutronium = new ItemCustomLore("nugget_dineutronium").setCreativeTab(MainRegistry.partsTab);
 	
 	public static final Item nugget_actinium = new ItemBase("nugget_actinium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_ac227 = new ItemHazard(ItemHazard.ac227 * ItemHazard.nugget, "nugget_ac227").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_ac227 = new ItemCustomLore("nugget_ac227").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_cobalt = new ItemCustomLore("nugget_cobalt").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_co60 = new ItemHazard("nugget_co60").addRadiation(ItemHazard.co60 * ItemHazard.nugget).addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_strontium = new ItemHazard("nugget_strontium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_sr90 = new ItemHazard(ItemHazard.sr90 * ItemHazard.nugget, true, "nugget_sr90").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_pb209 = new ItemHazard(ItemHazard.pb209 * ItemHazard.nugget, true, true, "nugget_pb209").addToxic(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_gh336 = new ItemHazard(ItemHazard.gh336 * ItemHazard.nugget, "nugget_gh336").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_au198 = new ItemHazard(ItemHazard.au198 * ItemHazard.nugget, "nugget_au198").addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_ra226 = new ItemHazard(ItemHazard.ra226 * ItemHazard.nugget, "nugget_ra226").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_co60 = new ItemCustomLore("nugget_co60").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_strontium = new ItemCustomLore("nugget_strontium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_sr90 = new ItemCustomLore("nugget_sr90").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_pb209 = new ItemCustomLore("nugget_pb209").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_gh336 = new ItemCustomLore("nugget_gh336").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_au198 = new ItemCustomLore("nugget_au198").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_ra226 = new ItemCustomLore("nugget_ra226").setCreativeTab(MainRegistry.partsTab);
 
-	public static final Item nugget_radspice = new ItemHazard(ItemHazard.radspice * ItemHazard.nugget, "nugget_radspice").addFire(15).addToxic(1).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_radspice = new ItemCustomLore("nugget_radspice").setCreativeTab(MainRegistry.partsTab);
 
 	public static final Item nugget_reiium = new ItemCustomLore("nugget_reiium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_weidanium = new ItemCustomLore("nugget_weidanium").setCreativeTab(MainRegistry.partsTab);
@@ -1323,11 +1295,11 @@ public class ModItems {
 	public static final Item nugget_verticium = new ItemCustomLore("nugget_verticium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_unobtainium = new ItemCustomLore("nugget_unobtainium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_unobtainium_lesser = new ItemCustomLore("nugget_unobtainium_lesser").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nugget_unobtainium_greater = new ItemHazard(1000, "nugget_unobtainium_greater").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_unobtainium_greater = new ItemCustomLore("nugget_unobtainium_greater").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_daffergon = new ItemCustomLore("nugget_daffergon").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item nugget_mercury = new ItemHazard("nugget_mercury").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item bottle_mercury = new ItemHazard("bottle_mercury").addToxic(6).toItem().setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_mercury = new ItemCustomLore("nugget_mercury").setCreativeTab(MainRegistry.partsTab);
+	public static final Item bottle_mercury = new ItemCustomLore("bottle_mercury").setContainerItem(Items.GLASS_BOTTLE).setCreativeTab(MainRegistry.partsTab);
 
 	
 	
@@ -1342,18 +1314,18 @@ public class ModItems {
 	public static final Item powder_copper = new ItemBase("powder_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_beryllium = new ItemBase("powder_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_aluminium = new ItemBase("powder_aluminium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_lead = new ItemHazard("powder_lead").addToxic(4).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_lead = new ItemCustomLore("powder_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_advanced_alloy = new ItemBase("powder_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_combine_steel = new ItemBase("powder_combine_steel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_tcalloy = new ItemContaminating(0.07F * ItemHazard.powder, "powder_tcalloy").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_tcalloy = new ItemCustomLore("powder_tcalloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cdalloy = new ItemBase("powder_cdalloy").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_magnetized_tungsten = new ItemHazard(ItemHazard.magt * ItemHazard.powder, "powder_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_magnetized_tungsten = new ItemCustomLore("powder_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_chlorophyte = new ItemBase("powder_chlorophyte").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_red_copper = new ItemBase("powder_red_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_steel = new ItemBase("powder_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_steel_tiny = new ItemBase("powder_steel_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_lithium = new ItemHazard("powder_lithium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_lithium_tiny = new ItemHazard("powder_lithium_tiny").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_lithium = new ItemCustomLore("powder_lithium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_lithium_tiny = new ItemCustomLore("powder_lithium_tiny").setCreativeTab(MainRegistry.partsTab);
 	public static final Item redstone_depleted = new ItemBase("redstone_depleted").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_quartz = new ItemBase("powder_quartz").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_borax = new ItemBase("powder_borax").setCreativeTab(MainRegistry.partsTab);
@@ -1369,20 +1341,20 @@ public class ModItems {
 	public static final Item powder_semtex_mix = new ItemBase("powder_semtex_mix").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_desh = new ItemBase("powder_desh").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_zirconium = new ItemBase("powder_zirconium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_lignite = new ItemFuelHazard("powder_lignite", 1200, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_asbestos = new ItemHazard("powder_asbestos").addAsbestos(18).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_lignite = new ItemFuel("powder_lignite", 1200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_asbestos = new ItemCustomLore("powder_asbestos").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cadmium = new ItemBase("powder_cadmium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_bismuth = new ItemBase("powder_bismuth").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_coal = new ItemFuelHazard("powder_coal", 1600, false).addCoal(3).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_coal_tiny = new ItemFuelHazard("powder_coal_tiny", 160, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_yellowcake = new ItemContaminating(ItemHazard.yc * ItemHazard.powder, "powder_yellowcake").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_thorium = new ItemContaminating(ItemHazard.th232 * ItemHazard.powder, "powder_thorium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_uranium = new ItemContaminating(ItemHazard.u * ItemHazard.powder, "powder_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_plutonium = new ItemContaminating(ItemHazard.pu * ItemHazard.powder, true, "powder_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_neptunium = new ItemContaminating(ItemHazard.np237 * ItemHazard.powder, true, "powder_neptunium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_polonium = new ItemContaminating(ItemHazard.po210 * ItemHazard.powder, true, "powder_polonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_schrabidium = new ItemContaminating(ItemHazard.sa326 * ItemHazard.powder, true, true, "powder_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_schrabidate = new ItemContaminating(ItemHazard.sb * ItemHazard.powder, true, true, "powder_schrabidate").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_coal = new ItemFuel("powder_coal", 1600).setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_coal_tiny = new ItemFuel("powder_coal_tiny", 160).setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_yellowcake = new ItemCustomLore("powder_yellowcake").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_thorium = new ItemCustomLore("powder_thorium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_uranium = new ItemCustomLore("powder_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_plutonium = new ItemCustomLore("powder_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_neptunium = new ItemCustomLore("powder_neptunium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_polonium = new ItemCustomLore("powder_polonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_schrabidium = new ItemCustomLore("powder_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_schrabidate = new ItemCustomLore("powder_schrabidate").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_euphemium = new ItemCustomLore("powder_euphemium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_dineutronium = new ItemCustomLore("powder_dineutronium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_iodine = new ItemCustomLore("powder_iodine").setCreativeTab(MainRegistry.partsTab);
@@ -1390,24 +1362,24 @@ public class ModItems {
 	public static final Item powder_astatine = new ItemCustomLore("powder_astatine").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_neodymium = new ItemCustomLore("powder_neodymium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_neodymium_tiny = new ItemCustomLore("powder_neodymium_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_caesium = new ItemHazard(0.0F, true, "powder_caesium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_caesium = new ItemCustomLore("powder_caesium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_reiium = new ItemCustomLore("powder_reiium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_weidanium = new ItemCustomLore("powder_weidanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_australium = new ItemCustomLore("powder_australium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_verticium = new ItemCustomLore("powder_verticium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_unobtainium = new ItemCustomLore("powder_unobtainium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_daffergon = new ItemCustomLore("powder_daffergon").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_strontium = new ItemHazard("powder_strontium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_strontium = new ItemCustomLore("powder_strontium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cobalt = new ItemCustomLore("powder_cobalt").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cobalt_tiny = new ItemCustomLore("powder_cobalt_tiny").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_bromine = new ItemCustomLore("powder_bromine").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_niobium = new ItemCustomLore("powder_niobium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_niobium_tiny = new ItemCustomLore("powder_niobium_tiny").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_tantalium = new ItemCustomLore("powder_tantalium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_tennessine = new ItemContaminating(120F * ItemHazard.powder, "powder_tennessine").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_tennessine = new ItemCustomLore("powder_tennessine").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cerium = new ItemCustomLore("powder_cerium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_cerium_tiny = new ItemCustomLore("powder_cerium_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_ice = new ItemHazard("powder_ice").addCryogenic(5).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_ice = new ItemCustomLore("powder_ice").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_desh_mix = new ItemBase("powder_desh_mix").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_desh_ready = new ItemBase("powder_desh_ready").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_nitan_mix = new ItemCustomLore("powder_nitan_mix").setCreativeTab(MainRegistry.partsTab);
@@ -1418,84 +1390,85 @@ public class ModItems {
 
 	//Osmiridium
 	public static final Item powder_tektite = new ItemCustomLore("powder_tektite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_paleogenite_tiny = new ItemHazard("powder_paleogenite_tiny").addDigamma(0.0005F).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_paleogenite = new ItemHazard("powder_paleogenite").addDigamma(0.005F).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_impure_osmiridium = new ItemHazard("powder_impure_osmiridium").addDigamma(0.010F).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_osmiridium = new ItemHazard("powder_osmiridium").addDigamma(0.120F).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_paleogenite_tiny = new ItemCustomLore("powder_paleogenite_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_paleogenite = new ItemCustomLore("powder_paleogenite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_impure_osmiridium = new ItemCustomLore("powder_impure_osmiridium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_osmiridium = new ItemCustomLore("powder_osmiridium").setCreativeTab(MainRegistry.partsTab);
 
+	public static final Item powder_flux = new ItemBase("powder_flux").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_magic = new ItemCustomLore("powder_magic").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_cloud = new ItemHazard("powder_cloud").addToxic(14).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_balefire = new ItemContaminating(ItemHazard.bf * ItemHazard.powder, true, "powder_balefire").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_coltan_ore = new ItemHazard("powder_coltan_ore").addAsbestos(3).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_cloud = new ItemCustomLore("powder_cloud").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_balefire = new ItemCustomLore("powder_balefire").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_coltan_ore = new ItemCustomLore("powder_coltan_ore").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_coltan = new ItemBase("powder_coltan").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_poison = new ItemHazard("powder_poison").addToxic(30).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_poison = new ItemCustomLore("powder_poison").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_thermite = new ItemCustomLore("powder_thermite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_power = new ItemCustomLore("powder_power").setCreativeTab(MainRegistry.partsTab);
 
-	public static final Item powder_co60 = new ItemContaminating(ItemHazard.co60 * ItemHazard.powder, true, "powder_co60").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_co60_tiny = new ItemContaminating(ItemHazard.co60 * ItemHazard.powder_tiny, true, "powder_co60_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_sr90 = new ItemContaminating(ItemHazard.sr90 * ItemHazard.powder, true, "powder_sr90").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_sr90_tiny = new ItemContaminating(ItemHazard.sr90 * ItemHazard.powder_tiny, true, "powder_sr90_tiny").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_at209 = new ItemContaminating(ItemHazard.at209 * ItemHazard.powder, "powder_at209").addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_at209_tiny = new ItemContaminating(ItemHazard.at209 * ItemHazard.powder_tiny, "powder_at209_tiny").addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_pb209 = new ItemContaminating(ItemHazard.pb209 * ItemHazard.powder, "powder_pb209").addToxic(4).addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_pb209_tiny = new ItemContaminating(ItemHazard.pb209 * ItemHazard.powder_tiny, "powder_pb209_tiny").addToxic(4).addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_i131 = new ItemContaminating(ItemHazard.i131 * ItemHazard.powder, "powder_i131").addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_i131_tiny = new ItemContaminating(ItemHazard.i131 * ItemHazard.powder_tiny, true, "powder_i131_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_cs137 = new ItemContaminating(ItemHazard.cs137 * ItemHazard.powder, "powder_cs137").addHydroReactivity().addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_cs137_tiny = new ItemContaminating(ItemHazard.cs137 * ItemHazard.powder_tiny, "powder_cs137_tiny").addHydroReactivity().addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_xe135 = new ItemContaminating(ItemHazard.xe135 * ItemHazard.powder, "powder_xe135").addCryogenic(6).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_xe135_tiny = new ItemContaminating(ItemHazard.xe135 * ItemHazard.powder_tiny, "powder_xe135_tiny").addCryogenic(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_au198 = new ItemContaminating(ItemHazard.au198 * ItemHazard.powder, "powder_au198").addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_au198_tiny = new ItemContaminating(ItemHazard.au198 * ItemHazard.powder_tiny, "powder_au198_tiny").addFire(15).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_ra226 = new ItemContaminating(ItemHazard.ra226 * ItemHazard.powder, "powder_ra226").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_ac227 = new ItemContaminating(ItemHazard.ac227 * ItemHazard.powder, "powder_ac227").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_ac227_tiny = new ItemContaminating(ItemHazard.ac227 * ItemHazard.powder_tiny, "powder_ac227_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_radspice = new ItemContaminating(ItemHazard.radspice * ItemHazard.powder, "powder_radspice").addFire(15).addToxic(3).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item powder_radspice_tiny = new ItemContaminating(ItemHazard.radspice * ItemHazard.powder_tiny, "powder_radspice_tiny").addFire(15).addToxic(1).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_co60 = new ItemCustomLore("powder_co60").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_co60_tiny = new ItemCustomLore("powder_co60_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_sr90 = new ItemCustomLore("powder_sr90").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_sr90_tiny = new ItemCustomLore("powder_sr90_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_at209 = new ItemCustomLore("powder_at209").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_at209_tiny = new ItemCustomLore("powder_at209_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_pb209 = new ItemCustomLore("powder_pb209").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_pb209_tiny = new ItemCustomLore("powder_pb209_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_i131 = new ItemCustomLore("powder_i131").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_i131_tiny = new ItemCustomLore("powder_i131_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_cs137 = new ItemCustomLore("powder_cs137").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_cs137_tiny = new ItemCustomLore("powder_cs137_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_xe135 = new ItemCustomLore("powder_xe135").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_xe135_tiny = new ItemCustomLore("powder_xe135_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_au198 = new ItemCustomLore("powder_au198").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_au198_tiny = new ItemCustomLore("powder_au198_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_ra226 = new ItemCustomLore("powder_ra226").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_ac227 = new ItemCustomLore("powder_ac227").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_ac227_tiny = new ItemCustomLore("powder_ac227_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_radspice = new ItemCustomLore("powder_radspice").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_radspice_tiny = new ItemCustomLore("powder_radspice_tiny").setCreativeTab(MainRegistry.partsTab);
 
 	public static final Item sulfur = new ItemBase("sulfur").setCreativeTab(MainRegistry.partsTab);
 	public static final Item niter = new ItemBase("niter").setCreativeTab(MainRegistry.partsTab);
 	public static final Item fluorite = new ItemBase("fluorite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item lithium = new ItemHazard("lithium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item lithium = new ItemCustomLore("lithium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_semtex = new ItemLemon(4, 5, true, "ingot_semtex").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_c4 = new ItemFuel("ingot_c4", 1600).setCreativeTab(MainRegistry.partsTab);
-	public static final Item trinitite = new ItemHazard(5F, "trinitite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item trinitite = new ItemCustomLore("trinitite").setCreativeTab(MainRegistry.partsTab);
 
-	public static final Item nuclear_waste_long = new ItemWasteLong(50F, "nuclear_waste_long").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_long_tiny = new ItemWasteLong(5F, "nuclear_waste_long_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_short = new ItemWasteShort(300F, "nuclear_waste_short").addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_short_tiny = new ItemWasteShort(30F, "nuclear_waste_short_tiny").addFire(5).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_long_depleted = new ItemWasteLong(5F, "nuclear_waste_long_depleted").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_long_depleted_tiny = new ItemWasteLong(0.5F, "nuclear_waste_long_depleted_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_short_depleted = new ItemWasteShort(30F, "nuclear_waste_short_depleted").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_short_depleted_tiny = new ItemWasteShort(3F, "nuclear_waste_short_depleted_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste = new ItemContaminating(ItemHazard.wst * ItemHazard.powder, "nuclear_waste").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_tiny = new ItemContaminating(ItemHazard.wst * ItemHazard.powder_tiny, "nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_vitrified = new ItemContaminating(ItemHazard.wstv * ItemHazard.powder, "nuclear_waste_vitrified").setCreativeTab(MainRegistry.partsTab);
-	public static final Item nuclear_waste_vitrified_tiny = new ItemContaminating(ItemHazard.wstv * ItemHazard.powder_tiny, "nuclear_waste_vitrified_tiny").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_uranium = new ItemContaminating(15F, "waste_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_thorium = new ItemContaminating(10F, "waste_thorium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_plutonium = new ItemContaminating(15F, "waste_plutonium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_mox = new ItemContaminating(15F, "waste_mox").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_schrabidium = new ItemContaminating(40F, false, true, "waste_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_uranium_hot = new ItemContaminating(15F, true, "waste_uranium_hot").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_thorium_hot = new ItemContaminating(10F, true, "waste_thorium_hot").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_plutonium_hot = new ItemContaminating(15F, true, "waste_plutonium_hot").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_mox_hot = new ItemContaminating(15F, true, "waste_mox_hot").setCreativeTab(MainRegistry.partsTab);
-	public static final Item waste_schrabidium_hot = new ItemContaminating(40F, true, true, "waste_schrabidium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_long = new ItemWasteLong("nuclear_waste_long").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_long_tiny = new ItemWasteLong("nuclear_waste_long_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_short = new ItemWasteShort("nuclear_waste_short").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_short_tiny = new ItemWasteShort("nuclear_waste_short_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_long_depleted = new ItemWasteLong("nuclear_waste_long_depleted").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_long_depleted_tiny = new ItemWasteLong("nuclear_waste_long_depleted_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_short_depleted = new ItemWasteShort("nuclear_waste_short_depleted").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_short_depleted_tiny = new ItemWasteShort("nuclear_waste_short_depleted_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste = new ItemCustomLore("nuclear_waste").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_tiny = new ItemCustomLore("nuclear_waste_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_vitrified = new ItemCustomLore("nuclear_waste_vitrified").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nuclear_waste_vitrified_tiny = new ItemCustomLore("nuclear_waste_vitrified_tiny").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_uranium = new ItemCustomLore("waste_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_thorium = new ItemCustomLore("waste_thorium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_plutonium = new ItemCustomLore("waste_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_mox = new ItemCustomLore("waste_mox").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_schrabidium = new ItemCustomLore("waste_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_uranium_hot = new ItemCustomLore("waste_uranium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_thorium_hot = new ItemCustomLore("waste_thorium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_plutonium_hot = new ItemCustomLore("waste_plutonium_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_mox_hot = new ItemCustomLore("waste_mox_hot").setCreativeTab(MainRegistry.partsTab);
+	public static final Item waste_schrabidium_hot = new ItemCustomLore("waste_schrabidium_hot").setCreativeTab(MainRegistry.partsTab);
 	public static final Item scrap = new ItemBase("scrap").setCreativeTab(MainRegistry.partsTab);
 	public static final Item scrap_oil = new ItemBase("scrap_oil").setCreativeTab(MainRegistry.partsTab);
 	public static final Item dust = new ItemBase("dust").setCreativeTab(MainRegistry.partsTab);
-	public static final Item fallout = new ItemHazard(ItemHazard.fo, "falloutitem").setCreativeTab(MainRegistry.partsTab);
+	public static final Item fallout = new ItemCustomLore("falloutitem").setCreativeTab(MainRegistry.partsTab);
 	public static final Item containment_box = new ItemLeadBox("containment_box").setCreativeTab(null);
 	
 	
 	public static final Item tritium_deuterium_cake = new ItemCustomLore("tritium_deuterium_cake").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
-	public static final Item pile_rod_uranium = new ItemPileRod(ItemHazard.billet * 3 * ItemHazard.u, "pile_rod_uranium").setCreativeTab(MainRegistry.controlTab);
-	public static final Item pile_rod_plutonium = new ItemPileRod(ItemHazard.billet * 3 * ItemHazard.pu, "pile_rod_plutonium").setCreativeTab(MainRegistry.controlTab);
-	public static final Item pile_rod_source = new ItemPileRod(3 * ItemHazard.rabe, "pile_rod_source").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_uranium = new ItemPileRod("pile_rod_uranium").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_plutonium = new ItemPileRod("pile_rod_plutonium").setCreativeTab(MainRegistry.controlTab);
+	public static final Item pile_rod_source = new ItemPileRod("pile_rod_source").setCreativeTab(MainRegistry.controlTab);
 	public static final Item pile_rod_boron = new ItemPileRod("pile_rod_boron").setCreativeTab(MainRegistry.controlTab);
 
 	//That's a lot of rods
@@ -1504,150 +1477,150 @@ public class ModItems {
 	public static final Item rod_quad_empty = new ItemBase("rod_quad_empty").setCreativeTab(MainRegistry.controlTab);
 
 	
-	public static final Item rod_th232 = new ItemHazard(ItemHazard.th232 * ItemHazard.rod, "rod_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_th232 = new ItemHazard(ItemHazard.th232 * ItemHazard.rod_dual, "rod_dual_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_th232 = new ItemHazard(ItemHazard.th232 * ItemHazard.rod_quad, "rod_quad_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_th232 = new ItemCustomLore("rod_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_th232 = new ItemCustomLore("rod_dual_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_th232 = new ItemCustomLore("rod_quad_th232").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_uranium = new ItemHazard(ItemHazard.u * ItemHazard.rod, "rod_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_uranium = new ItemHazard(ItemHazard.u * ItemHazard.rod_dual, "rod_dual_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_uranium = new ItemHazard(ItemHazard.th232 * ItemHazard.rod_quad, "rod_quad_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_uranium = new ItemCustomLore("rod_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_uranium = new ItemCustomLore("rod_dual_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_uranium = new ItemCustomLore("rod_quad_uranium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_u233 = new ItemHazard(ItemHazard.u233 * ItemHazard.rod, "rod_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_u233 = new ItemHazard(ItemHazard.u233 * ItemHazard.rod_dual, "rod_dual_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_u233 = new ItemHazard(ItemHazard.u233 * ItemHazard.rod_quad, "rod_quad_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_u233 = new ItemCustomLore("rod_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_u233 = new ItemCustomLore("rod_dual_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_u233 = new ItemCustomLore("rod_quad_u233").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_u235 = new ItemHazard(ItemHazard.u235 * ItemHazard.rod, "rod_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_u235 = new ItemHazard(ItemHazard.u235 * ItemHazard.rod_dual, "rod_dual_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_u235 = new ItemHazard(ItemHazard.u235 * ItemHazard.rod_quad, "rod_quad_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_u235 = new ItemCustomLore("rod_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_u235 = new ItemCustomLore("rod_dual_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_u235 = new ItemCustomLore("rod_quad_u235").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_u238 = new ItemHazard(ItemHazard.u238 * ItemHazard.rod, "rod_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_u238 = new ItemHazard(ItemHazard.u238 * ItemHazard.rod_dual, "rod_dual_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_u238 = new ItemHazard(ItemHazard.u238 * ItemHazard.rod_quad, "rod_quad_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_u238 = new ItemCustomLore("rod_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_u238 = new ItemCustomLore("rod_dual_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_u238 = new ItemCustomLore("rod_quad_u238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.rod, "rod_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.rod_dual, "rod_dual_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.rod_quad, "rod_quad_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_plutonium = new ItemCustomLore("rod_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_plutonium = new ItemCustomLore("rod_dual_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_plutonium = new ItemCustomLore("rod_quad_plutonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_pu238 = new ItemHazard(ItemHazard.pu238 * ItemHazard.rod, "rod_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_pu238 = new ItemHazard(ItemHazard.pu238 * ItemHazard.rod_dual, "rod_dual_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_pu238 = new ItemHazard(ItemHazard.pu238 * ItemHazard.rod_quad, "rod_quad_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_pu238 = new ItemCustomLore("rod_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_pu238 = new ItemCustomLore("rod_dual_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_pu238 = new ItemCustomLore("rod_quad_pu238").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_pu239 = new ItemHazard(ItemHazard.pu239 * ItemHazard.rod, "rod_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_pu239 = new ItemHazard(ItemHazard.pu239 * ItemHazard.rod_dual, "rod_dual_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_pu239 = new ItemHazard(ItemHazard.pu239 * ItemHazard.rod_quad, "rod_quad_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_pu239 = new ItemCustomLore("rod_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_pu239 = new ItemCustomLore("rod_dual_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_pu239 = new ItemCustomLore("rod_quad_pu239").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_pu240 = new ItemHazard(ItemHazard.pu240 * ItemHazard.rod, "rod_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_pu240 = new ItemHazard(ItemHazard.pu240 * ItemHazard.rod_dual, "rod_dual_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_pu240 = new ItemHazard(ItemHazard.pu240 * ItemHazard.rod_quad, "rod_quad_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_pu240 = new ItemCustomLore("rod_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_pu240 = new ItemCustomLore("rod_dual_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_pu240 = new ItemCustomLore("rod_quad_pu240").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_rgp = new ItemHazard(ItemHazard.purg * ItemHazard.rod, "rod_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_rgp = new ItemHazard(ItemHazard.purg * ItemHazard.rod_dual, "rod_dual_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_rgp = new ItemHazard(ItemHazard.purg * ItemHazard.rod_quad, "rod_quad_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_rgp = new ItemCustomLore("rod_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_rgp = new ItemCustomLore("rod_dual_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_rgp = new ItemCustomLore("rod_quad_rgp").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_neptunium = new ItemHazard(ItemHazard.np237 * ItemHazard.rod, "rod_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_neptunium = new ItemHazard(ItemHazard.np237 * ItemHazard.rod_dual, "rod_dual_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_neptunium = new ItemHazard(ItemHazard.np237 * ItemHazard.rod_quad, "rod_quad_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_neptunium = new ItemCustomLore("rod_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_neptunium = new ItemCustomLore("rod_dual_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_neptunium = new ItemCustomLore("rod_quad_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_polonium = new ItemHazard(ItemHazard.po210 * ItemHazard.rod, "rod_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_polonium = new ItemHazard(ItemHazard.po210 * ItemHazard.rod_dual, "rod_dual_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_polonium = new ItemHazard(ItemHazard.po210 * ItemHazard.rod_quad, "rod_quad_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_polonium = new ItemCustomLore("rod_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_polonium = new ItemCustomLore("rod_dual_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_polonium = new ItemCustomLore("rod_quad_polonium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
 	public static final Item rod_lead = new ItemBase("rod_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_dual_lead = new ItemBase("rod_dual_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_quad_lead = new ItemBase("rod_quad_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.rod, false, true, "rod_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.rod_dual, false, true, "rod_dual_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.rod_quad, false, true, "rod_quad_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_schrabidium = new ItemCustomLore("rod_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_schrabidium = new ItemCustomLore("rod_dual_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_schrabidium = new ItemCustomLore("rod_quad_schrabidium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_solinium = new ItemHazard(ItemHazard.sa327 * ItemHazard.rod, false, true, "rod_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_solinium = new ItemHazard(ItemHazard.sa327 * ItemHazard.rod_dual, false, true, "rod_dual_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_solinium = new ItemHazard(ItemHazard.sa327 * ItemHazard.rod_quad, false, true, "rod_quad_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_solinium = new ItemCustomLore("rod_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_solinium = new ItemCustomLore("rod_dual_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_solinium = new ItemCustomLore("rod_quad_solinium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_balefire = new ItemHazard(ItemHazard.bf * ItemHazard.rod, "rod_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_balefire = new ItemHazard(ItemHazard.bf * ItemHazard.rod_dual, "rod_dual_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_balefire = new ItemHazard(ItemHazard.bf * ItemHazard.rod_quad, "rod_quad_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_balefire = new ItemCustomLore("rod_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_balefire = new ItemCustomLore("rod_dual_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_balefire = new ItemCustomLore("rod_quad_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_balefire_blazing = new ItemHazard(ItemHazard.bf * ItemHazard.rod * 2, true, "rod_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_balefire_blazing = new ItemHazard(ItemHazard.bf * ItemHazard.rod_dual * 2, true, "rod_dual_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_balefire_blazing = new ItemHazard(ItemHazard.bf * ItemHazard.rod_quad * 2, true, "rod_quad_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_balefire_blazing = new ItemCustomLore("rod_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_balefire_blazing = new ItemCustomLore("rod_dual_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_balefire_blazing = new ItemCustomLore("rod_quad_balefire_blazing").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
 
-	public static final Item rod_thorium_fuel = new ItemFuelRod(ItemHazard.thf * ItemHazard.rod, false, 400000, 15, "rod_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_thorium_fuel = new ItemFuelRod(ItemHazard.thf * ItemHazard.rod_dual, false, 400000, 30, "rod_dual_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_thorium_fuel = new ItemFuelRod(ItemHazard.thf * ItemHazard.rod_quad, false, 400000, 60, "rod_quad_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_thorium_fuel = new ItemFuelRod(400000, 15, "rod_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_thorium_fuel = new ItemFuelRod(400000, 30, "rod_dual_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_thorium_fuel = new ItemFuelRod(400000, 60, "rod_quad_thorium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
-	public static final Item rod_uranium_fuel = new ItemFuelRod(ItemHazard.uf * ItemHazard.rod, false, 250000, 30, "rod_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_uranium_fuel = new ItemFuelRod(ItemHazard.uf * ItemHazard.rod_dual, false, 250000, 60, "rod_dual_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_uranium_fuel = new ItemFuelRod(ItemHazard.uf * ItemHazard.rod_quad, false, 250000, 120, "rod_quad_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_uranium_fuel = new ItemFuelRod(250000, 30, "rod_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_uranium_fuel = new ItemFuelRod(250000, 60, "rod_dual_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_uranium_fuel = new ItemFuelRod(250000, 120, "rod_quad_uranium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
-	public static final Item rod_plutonium_fuel = new ItemFuelRod(ItemHazard.puf * ItemHazard.rod, false, 150000, 40, "rod_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_plutonium_fuel = new ItemFuelRod(ItemHazard.puf * ItemHazard.rod_dual, false, 150000, 80, "rod_dual_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_plutonium_fuel = new ItemFuelRod(ItemHazard.puf * ItemHazard.rod_quad, false, 150000, 160, "rod_quad_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_plutonium_fuel = new ItemFuelRod(150000, 40, "rod_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_plutonium_fuel = new ItemFuelRod(150000, 80, "rod_dual_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_plutonium_fuel = new ItemFuelRod(150000, 160, "rod_quad_plutonium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
-	public static final Item rod_mox_fuel = new ItemFuelRod(ItemHazard.mox * ItemHazard.rod, false, 300000, 20, "rod_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_mox_fuel = new ItemFuelRod(ItemHazard.mox * ItemHazard.rod_dual, false, 300000, 40, "rod_dual_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_mox_fuel = new ItemFuelRod(ItemHazard.mox * ItemHazard.rod_quad, false, 300000, 80, "rod_quad_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_mox_fuel = new ItemFuelRod(300000, 20, "rod_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_mox_fuel = new ItemFuelRod(300000, 40, "rod_dual_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_mox_fuel = new ItemFuelRod(300000, 80, "rod_quad_mox_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
-	public static final Item rod_schrabidium_fuel = new ItemFuelRod(ItemHazard.sa326 * ItemHazard.rod, true, 100000, 125, "rod_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_schrabidium_fuel = new ItemFuelRod(ItemHazard.sa326 * ItemHazard.rod_dual, true, 100000, 250, "rod_dual_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_schrabidium_fuel = new ItemFuelRod(ItemHazard.sa326 * ItemHazard.rod_quad, true, 100000, 500, "rod_quad_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_schrabidium_fuel = new ItemFuelRod(100000, 125, "rod_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_schrabidium_fuel = new ItemFuelRod(100000, 250, "rod_dual_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_schrabidium_fuel = new ItemFuelRod(100000, 500, "rod_quad_schrabidium_fuel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 	
-	public static final Item rod_thorium_fuel_depleted = new ItemHazard(10F, true, "rod_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_thorium_fuel_depleted = new ItemHazard(20F, true, "rod_dual_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_thorium_fuel_depleted = new ItemHazard(40F, true, "rod_quad_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_thorium_fuel_depleted = new ItemCustomLore("rod_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_thorium_fuel_depleted = new ItemCustomLore("rod_dual_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_thorium_fuel_depleted = new ItemCustomLore("rod_quad_thorium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_uranium_fuel_depleted = new ItemHazard(15F, true, "rod_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_uranium_fuel_depleted = new ItemHazard(30F, true, "rod_dual_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_uranium_fuel_depleted = new ItemHazard(60F, true, "rod_quad_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_uranium_fuel_depleted = new ItemCustomLore("rod_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_uranium_fuel_depleted = new ItemCustomLore("rod_dual_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_uranium_fuel_depleted = new ItemCustomLore("rod_quad_uranium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_plutonium_fuel_depleted = new ItemHazard(15F, true, "rod_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_plutonium_fuel_depleted = new ItemHazard(30F, true, "rod_dual_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_plutonium_fuel_depleted = new ItemHazard(60F, true, "rod_quad_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_plutonium_fuel_depleted = new ItemCustomLore("rod_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_plutonium_fuel_depleted = new ItemCustomLore("rod_dual_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_plutonium_fuel_depleted = new ItemCustomLore("rod_quad_plutonium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_mox_fuel_depleted = new ItemHazard(15F, true, "rod_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_mox_fuel_depleted = new ItemHazard(30F, true, "rod_dual_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_mox_fuel_depleted = new ItemHazard(60F, true, "rod_quad_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_mox_fuel_depleted = new ItemCustomLore("rod_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_mox_fuel_depleted = new ItemCustomLore("rod_dual_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_mox_fuel_depleted = new ItemCustomLore("rod_quad_mox_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_schrabidium_fuel_depleted = new ItemHazard(40F, true, "rod_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_schrabidium_fuel_depleted = new ItemHazard(80F, true, "rod_dual_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_schrabidium_fuel_depleted = new ItemHazard(160F, true, "rod_quad_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_schrabidium_fuel_depleted = new ItemCustomLore("rod_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_schrabidium_fuel_depleted = new ItemCustomLore("rod_dual_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_schrabidium_fuel_depleted = new ItemCustomLore("rod_quad_schrabidium_fuel_depleted").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_waste = new ItemHazard(ItemHazard.wst * ItemHazard.rod, "rod_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_waste = new ItemHazard(30F, "rod_dual_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_waste = new ItemHazard(60F, "rod_quad_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_waste = new ItemCustomLore("rod_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_waste = new ItemCustomLore("rod_dual_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_waste = new ItemCustomLore("rod_quad_waste").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
 	public static final Item rod_water = new ItemCustomLore("rod_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_dual_water = new ItemCustomLore("rod_dual_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_quad_water = new ItemCustomLore("rod_quad_water").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_coolant = new ItemHazard("rod_coolant").addCryogenic(1).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_coolant = new ItemHazard("rod_dual_coolant").addCryogenic(2).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_coolant = new ItemHazard("rod_quad_coolant").addCryogenic(4).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_coolant = new ItemCustomLore("rod_coolant").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_coolant = new ItemCustomLore("rod_dual_coolant").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_coolant = new ItemCustomLore("rod_quad_coolant").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
 	public static final Item rod_lithium = new ItemCustomLore("rod_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_dual_lithium = new ItemCustomLore("rod_dual_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_quad_lithium = new ItemCustomLore("rod_quad_lithium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_tritium = new ItemHazard(0.5F, "rod_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_tritium = new ItemHazard(1F, "rod_dual_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_tritium = new ItemHazard(2F, "rod_quad_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_tritium = new ItemCustomLore("rod_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_tritium = new ItemCustomLore("rod_dual_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_tritium = new ItemCustomLore("rod_quad_tritium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_ac227 = new ItemHazard(ItemHazard.ac227 * ItemHazard.rod, "rod_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_ac227 = new ItemHazard(ItemHazard.ac227 * ItemHazard.rod_dual, "rod_dual_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_ac227 = new ItemHazard(ItemHazard.ac227 * ItemHazard.rod_quad, "rod_quad_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_ac227 = new ItemCustomLore("rod_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_ac227 = new ItemCustomLore("rod_dual_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_ac227 = new ItemCustomLore("rod_quad_ac227").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
 	public static final Item rod_cobalt = new ItemBase("rod_cobalt").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 	public static final Item rod_dual_cobalt = new ItemBase("rod_dual_cobalt").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
 	public static final Item rod_quad_cobalt = new ItemBase("rod_quad_cobalt").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_co60 = new ItemHazard(ItemHazard.co60 * ItemHazard.rod, "rod_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_co60 = new ItemHazard(ItemHazard.co60 * ItemHazard.rod_dual, "rod_dual_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_co60 = new ItemHazard(ItemHazard.co60 * ItemHazard.rod_quad, "rod_quad_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_co60 = new ItemCustomLore("rod_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_co60 = new ItemCustomLore("rod_dual_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_co60 = new ItemCustomLore("rod_quad_co60").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
-	public static final Item rod_ra226 = new ItemHazard(ItemHazard.ra226 * ItemHazard.rod, "rod_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
-	public static final Item rod_dual_ra226 = new ItemHazard(ItemHazard.ra226 * ItemHazard.rod_dual, "rod_dual_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
-	public static final Item rod_quad_ra226 = new ItemHazard(ItemHazard.ra226 * ItemHazard.rod_quad, "rod_quad_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
+	public static final Item rod_ra226 = new ItemCustomLore("rod_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
+	public static final Item rod_dual_ra226 = new ItemCustomLore("rod_dual_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_dual_empty);
+	public static final Item rod_quad_ra226 = new ItemCustomLore("rod_quad_ra226").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_quad_empty);
 
 	public static final Item rod_quad_euphemium = new ItemCustomLore("rod_quad_euphemium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1).setContainerItem(ModItems.rod_quad_empty);
 	public static final Item rod_euphemium = new ItemCustomLore("rod_euphemium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
@@ -1660,23 +1633,23 @@ public class ModItems {
 	public static final Item rod_daffergon = new ItemCustomLore("rod_daffergon").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.rod_empty);
 
 	//RTG
-	public static final Item pellet_rtg_depleted_bismuth = new ItemHazard(1F, "pellet_rtg_depleted_bismuth").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_lead = new ItemHazard(0.5F, "pellet_rtg_depleted_lead").addToxic(2).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_mercury = new ItemHazard(4.25F, "pellet_rtg_depleted_mercury").addToxic(4).toItem().setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_neptunium = new ItemHazard(3.75F, true, "pellet_rtg_depleted_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_depleted_zirconium = new ItemHazard(2F, "pellet_rtg_depleted_zirconium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_bismuth = new ItemCustomLore("pellet_rtg_depleted_bismuth").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_lead = new ItemCustomLore("pellet_rtg_depleted_lead").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_mercury = new ItemCustomLore("pellet_rtg_depleted_mercury").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_neptunium = new ItemCustomLore("pellet_rtg_depleted_neptunium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_depleted_zirconium = new ItemCustomLore("pellet_rtg_depleted_zirconium").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 	
-	public static final Item pellet_rtg_radium = new ItemRTGPellet(3, ItemHazard.ra226 * ItemHazard.rtg, "pellet_rtg_radium").setDecays(ModItems.pellet_rtg_depleted_lead, 14016000000L, 1).addHydroReactivity().toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_weak = new ItemRTGPellet(5, ItemHazard.u238 * ItemHazard.rtg, "pellet_rtg_weak").setDecays(ModItems.pellet_rtg_depleted_lead, 876000000L, 2).setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg = new ItemRTGPellet(10, ItemHazard.pu238 * ItemHazard.rtg, "pellet_rtg").setDecays(ModItems.pellet_rtg_depleted_lead, 768252000L, 2).addFire(5).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_strontium = new ItemRTGPellet(12, ItemHazard.sr90 * ItemHazard.rtg, "pellet_rtg_strontium").setDecays(ModItems.pellet_rtg_depleted_zirconium, 252200400L, 2).addFire(5).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_cobalt = new ItemRTGPellet(16, ItemHazard.co60 * ItemHazard.rtg, "pellet_rtg_cobalt").setDecays(ModItems.pellet_rtg_depleted_zirconium, 46176588L, 2).addFire(5).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_actinium = new ItemRTGPellet(20, ItemHazard.ac227 * ItemHazard.rtg, "pellet_rtg_actinium").setDecays(ModItems.pellet_rtg_depleted_lead, 190705200L, 2).addFire(5).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_americium = new ItemRTGPellet(25, ItemHazard.am241 * ItemHazard.rtg, "pellet_rtg_americium").setDecays(ModItems.pellet_rtg_depleted_neptunium, 3786072000L, 2).addFire(10).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_polonium = new ItemRTGPellet(50, ItemHazard.po210 * ItemHazard.rtg, "pellet_rtg_polonium").setDecays(ModItems.pellet_rtg_depleted_lead, 3321024L, 3).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_gold = new ItemRTGPellet(200, ItemHazard.au198 * ItemHazard.rtg, "pellet_rtg_gold").setDecays(ModItems.pellet_rtg_depleted_mercury, 64728L, 4).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_lead = new ItemRTGPellet(600, ItemHazard.pb209 * ItemHazard.rtg, "pellet_rtg_lead").setDecays(ModItems.pellet_rtg_depleted_bismuth, 3253L, 6).addToxic(4).addFire(15).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, 2 * ItemHazard.bf * ItemHazard.rtg, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_neptunium, 1000L, 12).addFire(150).addBlinding().toItem().setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_radium = new ItemRTGPellet(3, "pellet_rtg_radium").setDecays(ModItems.pellet_rtg_depleted_lead, 14016000000L, 1).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_weak = new ItemRTGPellet(5, "pellet_rtg_weak").setDecays(ModItems.pellet_rtg_depleted_lead, 876000000L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg = new ItemRTGPellet(10, "pellet_rtg").setDecays(ModItems.pellet_rtg_depleted_lead, 768252000L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_strontium = new ItemRTGPellet(12, "pellet_rtg_strontium").setDecays(ModItems.pellet_rtg_depleted_zirconium, 252200400L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_cobalt = new ItemRTGPellet(16, "pellet_rtg_cobalt").setDecays(ModItems.pellet_rtg_depleted_zirconium, 46176588L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_actinium = new ItemRTGPellet(20, "pellet_rtg_actinium").setDecays(ModItems.pellet_rtg_depleted_lead, 190705200L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_americium = new ItemRTGPellet(25, "pellet_rtg_americium").setDecays(ModItems.pellet_rtg_depleted_neptunium, 3786072000L, 2).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_polonium = new ItemRTGPellet(50, "pellet_rtg_polonium").setDecays(ModItems.pellet_rtg_depleted_lead, 3321024L, 3).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_gold = new ItemRTGPellet(200, "pellet_rtg_gold").setDecays(ModItems.pellet_rtg_depleted_mercury, 64728L, 4).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_lead = new ItemRTGPellet(600, "pellet_rtg_lead").setDecays(ModItems.pellet_rtg_depleted_bismuth, 3253L, 6).setCreativeTab(MainRegistry.controlTab);
+	public static final Item pellet_rtg_balefire = new ItemRTGPellet(6000, "pellet_rtg_balefire").setDecays(ModItems.pellet_rtg_depleted_neptunium, 1000L, 12).setCreativeTab(MainRegistry.controlTab);
 	
 	//Drill Bits
 	public static final Item drillbit_steel = new ItemDrillbit(EnumDrillType.STEEL, "drillbit_steel").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -1693,7 +1666,7 @@ public class ModItems {
 	public static final Item drillbit_dnt_diamond = new ItemDrillbit(EnumDrillType.DNT_DIAMOND, "drillbit_dnt_diamond").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
 
 	//Generic Items
-	public static final Item pellet_coal = new ItemFuelHazard("pellet_coal", 320, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item pellet_coal = new ItemFuel("pellet_coal", 320).setCreativeTab(MainRegistry.partsTab);
 	public static final Item chlorine_pinwheel = new ItemBase("chlorine_pinwheel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ring_starmetal = new ItemBase("ring_starmetal").setCreativeTab(MainRegistry.partsTab);
 	public static final Item flywheel_beryllium = new ItemBase("flywheel_beryllium").setCreativeTab(MainRegistry.partsTab);
@@ -1702,10 +1675,10 @@ public class ModItems {
 	public static final Item biomass = new ItemFuel("biomass", 20).setCreativeTab(MainRegistry.partsTab);
 	public static final Item biomass_compressed = new ItemFuel("biomass_compressed", 800).setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_resin = new ItemFuel("ball_resin", 80).setCreativeTab(MainRegistry.partsTab);
-	public static final Item cordite = new ItemHazard("cordite").addExplosive(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ballistite = new ItemHazard("ballistite").addExplosive(1).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ball_dynamite = new ItemHazard("ball_dynamite").addExplosive(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item ball_tnt = new ItemHazard("ball_tnt").addExplosive(3).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item cordite = new ItemCustomLore("cordite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ballistite = new ItemCustomLore("ballistite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ball_dynamite = new ItemCustomLore("ball_dynamite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ball_tnt = new ItemCustomLore("ball_tnt").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ball_fireclay = new ItemBase("ball_fireclay").setCreativeTab(MainRegistry.partsTab);
 	public static final Item piston_pneumatic = new ItemBase("piston_pneumatic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item piston_hydraulic = new ItemBase("piston_hydraulic").setCreativeTab(MainRegistry.partsTab);
@@ -1728,24 +1701,24 @@ public class ModItems {
 	public static final Item neutron_reflector = new ItemBase("neutron_reflector").setCreativeTab(MainRegistry.partsTab);
 	public static final Item rtg_unit = new ItemBase("rtg_unit").setCreativeTab(MainRegistry.partsTab);
 	public static final Item thermo_unit_empty = new ItemBase("thermo_unit_empty").setCreativeTab(MainRegistry.partsTab);
-	public static final Item thermo_unit_endo = new ItemHazard("thermo_unit_endo").addCryogenic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item thermo_unit_exo = new ItemHazard("thermo_unit_exo").addFire(10).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item thermo_unit_endo = new ItemCustomLore("thermo_unit_endo").setCreativeTab(MainRegistry.partsTab);
+	public static final Item thermo_unit_exo = new ItemCustomLore("thermo_unit_exo").setCreativeTab(MainRegistry.partsTab);
 	public static final Item levitation_unit = new ItemBase("levitation_unit").setCreativeTab(MainRegistry.partsTab);
 	public static final Item magnetron = new ItemCustomLore("magnetron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_buckshot = new ItemBase("pellet_buckshot").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_flechette = new ItemBase("pellet_flechette").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_chlorophyte = new ItemBase("pellet_chlorophyte").setCreativeTab(MainRegistry.partsTab);
-	public static final Item pellet_mercury = new ItemHazard("pellet_mercury").addToxic(25).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item pellet_mercury = new ItemCustomLore("pellet_mercury").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_meteorite = new ItemBase("pellet_meteorite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_canister = new ItemBase("pellet_canister").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_claws = new ItemBase("pellet_claws").setCreativeTab(MainRegistry.partsTab);
-	public static final Item pellet_charged = new ItemHazard(420F, "pellet_charged").setCreativeTab(MainRegistry.partsTab);
+	public static final Item pellet_charged = new ItemCustomLore("pellet_charged").setCreativeTab(MainRegistry.partsTab);
 	
 	//Powders
 	public static final Item pellet_cluster = new ItemCustomLore("pellet_cluster").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pellet_gas = new ItemCustomLore("pellet_gas").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item coal_infernal = new ItemFuelHazard("coal_infernal", 4800, true).addCoal(10).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item coal_infernal = new ItemFuel("coal_infernal", 4800).setCreativeTab(MainRegistry.partsTab);
 	public static final Item cinnebar = new ItemBase("cinnebar").setCreativeTab(MainRegistry.partsTab);
 	
 	//Misc/crafting items
@@ -1776,11 +1749,8 @@ public class ModItems {
 	public static final Item rag_piss = new ItemBase("rag_piss").setCreativeTab(MainRegistry.partsTab);
 	public static final Item filter_coal = new ItemBase("filter_coal").setCreativeTab(MainRegistry.partsTab);
 	
-	public static final Item magnet_dee = new ItemBase("magnet_dee").setCreativeTab(null);
 	public static final Item magnet_circular = new ItemBase("magnet_circular").setCreativeTab(MainRegistry.partsTab);
-	public static final Item cyclotron_tower = new ItemBase("cyclotron_tower").setCreativeTab(null);
 	public static final Item centrifuge_element = new ItemBase("centrifuge_element").setCreativeTab(MainRegistry.partsTab);
-	public static final Item centrifuge_tower = new ItemBase("centrifuge_tower").setCreativeTab(null);
 	public static final Item reactor_core = new ItemBase("reactor_core").setCreativeTab(MainRegistry.partsTab);
 	
 	
@@ -1791,9 +1761,9 @@ public class ModItems {
 	public static final Item solid_fuel_presto = new ItemFuel("solid_fuel_presto", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto_triplet = new ItemFuel("solid_fuel_presto_triplet", 19200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item rocket_fuel = new ItemFuel("rocket_fuel", 6400).setCreativeTab(MainRegistry.partsTab);
-	public static final Item briquette_lignite = new ItemFuelHazard("briquette_lignite", 1600, false).addCoal(3).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item coke = new ItemFuelHazard("coke", 3200, false).addCoal(4).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item lignite = new ItemFuelHazard("lignite", 1200, false).addCoal(1).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item briquette_lignite = new ItemFuel("briquette_lignite", 1600).setCreativeTab(MainRegistry.partsTab);
+	public static final Item coke = new ItemFuel("coke", 3200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item lignite = new ItemFuel("lignite", 1200).setCreativeTab(MainRegistry.partsTab);
 	
 	//Fragments
 	public static final Item rare_earth_chunk = new ItemBase("rare_earth_chunk").setCreativeTab(MainRegistry.partsTab);
@@ -1808,8 +1778,8 @@ public class ModItems {
 	public static final Item fragment_coltan = new ItemBase("fragment_coltan").setCreativeTab(MainRegistry.partsTab);
 	
 	
-	public static final Item demon_core_open = new ItemDemonCore("demon_core_open").addRadiation(5.0F).toItem().setCreativeTab(MainRegistry.nukeTab);
-	public static final Item demon_core_closed = new ItemHazard("demon_core_closed").addRadiation(10000000F).addFire(25).toItem().setCreativeTab(MainRegistry.nukeTab);
+	public static final Item demon_core_open = new ItemDemonCore("demon_core_open").setCreativeTab(MainRegistry.nukeTab);
+	public static final Item demon_core_closed = new ItemCustomLore("demon_core_closed").setCreativeTab(MainRegistry.nukeTab);
 	
 	//Consume
 	public static final Item bottle_opener = new WeaponSpecial(MainRegistry.enumToolMaterialBottleOpener, "bottle_opener").setCreativeTab(MainRegistry.consumableTab).setMaxStackSize(1);
@@ -1839,21 +1809,21 @@ public class ModItems {
 	public static final Item ring_pull = new ItemBase("ring_pull").setCreativeTab(MainRegistry.consumableTab);
 	
 	
-	public static final Item bomb_waffle = new ItemFoodHazard(20, 0, true, "bomb_waffle").addRadiation(5F).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item schnitzel_vegan = new ItemFoodHazard(3, 6, true, "schnitzel_vegan").addRadiation(ItemHazard.wst*4F).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item cotton_candy = new ItemFoodHazard(5, 0, true, "cotton_candy").addRadiation(ItemHazard.pu238 * ItemHazard.nugget).toItem().setCreativeTab(MainRegistry.consumableTab).setFull3D();
-	public static final Item apple_lead = new ItemFoodHazard(3, 0, true, "apple_lead").addToxic(2).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item apple_lead1 = new ItemFoodHazard(5, 0, true, "apple_lead1").addToxic(4).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item apple_lead2 = new ItemFoodHazard(10, 0, true, "apple_lead2").addToxic(8).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item apple_schrabidium = new ItemFoodHazard(5, 25, true, "apple_schrabidium").addRadiation(ItemHazard.sa326 * ItemHazard.nugget * 8F).addBlinding().toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item apple_schrabidium1 = new ItemFoodHazard(10, 50, true, "apple_schrabidium1").addRadiation(ItemHazard.sa326 * ItemHazard.ingot * 8F).addBlinding().toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item apple_schrabidium2 = new ItemFoodHazard(20, 100, true, "apple_schrabidium2").addRadiation(ItemHazard.sa326 * ItemHazard.block * 8F).addBlinding().toItem().setCreativeTab(MainRegistry.consumableTab);
+	public static final Item bomb_waffle = new ItemFoodBase(20, 0, true, "bomb_waffle").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item schnitzel_vegan = new ItemFoodBase(3, 6, true, "schnitzel_vegan").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item cotton_candy = new ItemFoodBase(5, 0, true, "cotton_candy").setCreativeTab(MainRegistry.consumableTab).setFull3D();
+	public static final Item apple_lead = new ItemFoodBase(3, 0, true, "apple_lead").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item apple_lead1 = new ItemFoodBase(5, 0, true, "apple_lead1").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item apple_lead2 = new ItemFoodBase(10, 0, true, "apple_lead2").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item apple_schrabidium = new ItemFoodBase(5, 25, true, "apple_schrabidium").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item apple_schrabidium1 = new ItemFoodBase(10, 50, true, "apple_schrabidium1").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item apple_schrabidium2 = new ItemFoodBase(20, 100, true, "apple_schrabidium2").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item tem_flakes = new ItemTemFlakes(0, 0, false, "tem_flakes").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item tem_flakes1 = new ItemTemFlakes(0, 0, false, "tem_flakes1").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item tem_flakes2 = new ItemTemFlakes(0, 0, false, "tem_flakes2").setCreativeTab(MainRegistry.consumableTab);
-	public static final Item glowing_stew = new ItemHazardSoup(6, "glowing_stew").addRadiation(2F).toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item balefire_scrambled = new ItemHazardSoup(30, "balefire_scrambled").addRadiation(ItemHazard.radspice * ItemHazard.powder + ItemHazard.bf).addFire(6).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.consumableTab);
-	public static final Item balefire_and_ham = new ItemHazardSoup(60, "balefire_and_ham").addRadiation(2 * ItemHazard.radspice * ItemHazard.powder + ItemHazard.bf).addFire(30).addBlinding().addHydroReactivity().toItem().setCreativeTab(MainRegistry.consumableTab);
+	public static final Item glowing_stew = new ItemFoodSoup(6, "glowing_stew").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item balefire_scrambled = new ItemFoodSoup(30, "balefire_scrambled").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item balefire_and_ham = new ItemFoodSoup(60, "balefire_and_ham").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item lemon = new ItemLemon(3, 5, false, "lemon").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item definitelyfood = new ItemLemon(2, 5, false, "definitelyfood").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item med_ipecac = new ItemLemon(0, 0, false, "med_ipecac").setCreativeTab(MainRegistry.consumableTab);
@@ -2205,6 +2175,37 @@ public class ModItems {
 			.addBreakAbility(new ToolAbility.ShredderAbility())
 			.setRarity(EnumRarity.RARE);
 
+	public static final Item schrabidium_hammer = new WeaponSpecial(MainRegistry.enumToolMaterialHammer, "schrabidium_hammer").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item wrench = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "wrench").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item wrench_flipped = new WeaponSpecial(MainRegistry.enumToolMaterialElec, "wrench_flipped").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item memespoon = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "memespoon").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item wood_gavel = new WeaponSpecial(ToolMaterial.WOOD, "wood_gavel").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item lead_gavel = new WeaponSpecial(MainRegistry.enumToolMaterialSteel, "lead_gavel").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final Item diamond_gavel = new WeaponSpecial(ToolMaterial.DIAMOND, "diamond_gavel").setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	public static final ToolMaterial matMeseGavel = EnumHelper.addToolMaterial("HBM_MESEGAVEL", 4, 0, 50F, 0.0F, 200).setRepairItem(new ItemStack(ModItems.plate_paa));
+	public static final Item mese_gavel = new ItemSwordAbility(250, 1.5, matMeseGavel, "mese_gavel")
+			.addHitAbility(new WeaponAbility.PhosphorusAbility(60))
+			.addHitAbility(new WeaponAbility.RadiationAbility(500))
+			.addHitAbility(new WeaponAbility.StunAbility(10))
+			.addHitAbility(new WeaponAbility.VampireAbility(50))
+			.addHitAbility(new WeaponAbility.BeheaderAbility()).setMaxStackSize(1).setCreativeTab(CreativeTabs.COMBAT);
+	
+	public static final Item shimmer_sledge = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_sledge").setMaxStackSize(1).setCreativeTab(CreativeTabs.TOOLS);
+	public static final Item shimmer_axe = new WeaponSpecial(MainRegistry.enumToolMaterialSledge, "shimmer_axe").setMaxStackSize(1).setCreativeTab(CreativeTabs.TOOLS);
+	
+	public static final Item multitool_hit = new ItemMultitoolPassive("multitool_hit").setCreativeTab(null);
+	public static final Item multitool_dig = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, Collections.emptySet(), "multitool_dig").setFull3D().setCreativeTab(CreativeTabs.TOOLS);
+	public static final Item multitool_silk = new ItemMultitoolTool(4.0F, MainRegistry.enumToolMaterialMultitool, Collections.emptySet(), "multitool_silk").setFull3D().setCreativeTab(null);
+	public static final Item multitool_ext = new ItemMultitoolPassive("multitool_ext").setCreativeTab(null);
+	public static final Item multitool_miner = new ItemMultitoolPassive("multitool_miner").setCreativeTab(null);
+	public static final Item multitool_beam = new ItemMultitoolPassive("multitool_beam").setCreativeTab(null);
+	public static final Item multitool_sky = new ItemMultitoolPassive("multitool_sky").setCreativeTab(null);
+	public static final Item multitool_mega = new ItemMultitoolPassive("multitool_mega").setCreativeTab(null);
+	public static final Item multitool_joule = new ItemMultitoolPassive("multitool_joule").setCreativeTab(null);
+	public static final Item multitool_decon = new ItemMultitoolPassive("multitool_decon").setCreativeTab(null);
+	public static final Item matchstick = new ItemMatch("matchstick").setCreativeTab(CreativeTabs.TOOLS).setFull3D().setCreativeTab(CreativeTabs.TOOLS);
+	public static final Item balefire_and_steel = new ItemBalefireMatch("balefire_and_steel").setFull3D().setCreativeTab(CreativeTabs.TOOLS);
+	
 	public static final Item crowbar = new ModSword(MainRegistry.enumToolMaterialSteel, "crowbar").setCreativeTab(CreativeTabs.TOOLS);
 	
 	public static final Item saw = new ModSword(MainRegistry.enumToolMaterialSaw, "weapon_saw").setFull3D().setCreativeTab(CreativeTabs.TOOLS);
@@ -2248,6 +2249,7 @@ public class ModItems {
 	public static final Item siren_track = new ItemCassette("siren_track").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item assembly_template = new ItemAssemblyTemplate("assembly_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item chemistry_template = new ItemChemistryTemplate("chemistry_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
+	public static final Item crucible_template = new ItemCrucibleTemplate("crucible_template").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item chemistry_icon = new ItemChemistryIcon("chemistry_icon").setMaxStackSize(1).setCreativeTab(null);
 	public static final Item forge_fluid_identifier = new ItemForgeFluidIdentifier("forge_fluid_identifier").setMaxStackSize(1).setCreativeTab(MainRegistry.templateTab);
 	public static final Item ff_fluid_duct = new ItemFFFluidDuct("ff_fluid_duct").setCreativeTab(MainRegistry.templateTab);
@@ -2258,13 +2260,13 @@ public class ModItems {
 	public static final Item plate_titanium = new ItemBase("plate_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_aluminium = new ItemBase("plate_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_gold = new ItemBase("plate_gold").setCreativeTab(MainRegistry.partsTab);
-	public static final Item plate_lead = new ItemHazard("plate_lead").addToxic(2).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item plate_lead = new ItemCustomLore("plate_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_steel = new ItemBase("plate_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_advanced_alloy = new ItemBase("plate_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_combine_steel = new ItemBase("plate_combine_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_paa = new ItemCustomLore("plate_paa").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_saturnite = new ItemBase("plate_saturnite").setCreativeTab(MainRegistry.partsTab);
-	public static final Item plate_schrabidium = new ItemHazard(7.5F, false, true, "plate_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item plate_schrabidium = new ItemCustomLore("plate_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_dalekanium = new ItemBase("plate_dalekanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_mixed = new ItemBase("plate_mixed").setCreativeTab(MainRegistry.partsTab);
 	public static final Item plate_kevlar = new ItemBase("plate_kevlar").setCreativeTab(MainRegistry.partsTab);
@@ -2281,15 +2283,15 @@ public class ModItems {
 
 	
 	//Crystals
-	public static final Item crystal_coal = new ItemFuelHazard("crystal_coal", 6400, false).addCoal(5).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_coal = new ItemFuel("crystal_coal", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_iron = new ItemBase("crystal_iron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_gold = new ItemBase("crystal_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_redstone = new ItemBase("crystal_redstone").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_lapis = new ItemBase("crystal_lapis").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_diamond = new ItemBase("crystal_diamond").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_uranium = new ItemHazard(ItemHazard.u * ItemHazard.crystal, "crystal_uranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_thorium = new ItemHazard(ItemHazard.th232 * ItemHazard.crystal, "crystal_thorium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_plutonium = new ItemHazard(ItemHazard.pu * ItemHazard.crystal, "crystal_plutonium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_uranium = new ItemCustomLore("crystal_uranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_thorium = new ItemCustomLore("crystal_thorium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_plutonium = new ItemCustomLore("crystal_plutonium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_titanium = new ItemBase("crystal_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_sulfur = new ItemBase("crystal_sulfur").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_niter = new ItemBase("crystal_niter").setCreativeTab(MainRegistry.partsTab);
@@ -2298,18 +2300,18 @@ public class ModItems {
 	public static final Item crystal_aluminium = new ItemBase("crystal_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_fluorite = new ItemBase("crystal_fluorite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_beryllium = new ItemBase("crystal_beryllium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_lead = new ItemHazard("crystal_lead").addToxic(12).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_asbestos = new ItemHazard("crystal_asbestos").addAsbestos(18).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_schraranium = new ItemHazard(ItemHazard.sr * ItemHazard.crystal, false, true, "crystal_schraranium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_schrabidium = new ItemHazard(ItemHazard.sa326 * ItemHazard.crystal, false, true, "crystal_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_lead = new ItemCustomLore("crystal_lead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_asbestos = new ItemCustomLore("crystal_asbestos").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_schraranium = new ItemCustomLore("crystal_schraranium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_schrabidium = new ItemCustomLore("crystal_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_rare = new ItemBase("crystal_rare").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_phosphorus = new ItemHazard(0.0F, true, "crystal_phosphorus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_lithium = new ItemHazard("crystal_lithium").addHydroReactivity().toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_phosphorus = new ItemCustomLore("crystal_phosphorus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_lithium = new ItemCustomLore("crystal_lithium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_cinnebar = new ItemBase("crystal_cinnebar").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_cobalt = new ItemBase("crystal_cobalt").setCreativeTab(MainRegistry.partsTab);
 	public static final Item crystal_starmetal = new ItemBase("crystal_starmetal").setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_trixite = new ItemHazard(10.0F, "crystal_trixite").addCryogenic(2).toItem().setCreativeTab(MainRegistry.partsTab);
-	public static final Item crystal_osmiridium = new ItemHazard("crystal_osmiridium").addDigamma(0.020F).toItem().setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_trixite = new ItemCustomLore("crystal_trixite").setCreativeTab(MainRegistry.partsTab);
+	public static final Item crystal_osmiridium = new ItemCustomLore("crystal_osmiridium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item gem_tantalium = new ItemCustomLore("gem_tantalium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item gem_volcanic = new ItemCustomLore("gem_volcanic").setRarity(EnumRarity.UNCOMMON).setCreativeTab(MainRegistry.partsTab);
 	
@@ -2352,6 +2354,18 @@ public class ModItems {
 	public static final Item casing_50 = new ItemBase("casing_50").setCreativeTab(MainRegistry.partsTab);
 	public static final Item casing_buckshot = new ItemBase("casing_buckshot").setCreativeTab(MainRegistry.partsTab);
 	
+	public static final Item mold_base = new ItemBase("mold_base").setCreativeTab(MainRegistry.controlTab);
+	public static final Item mold = new ItemMold("mold").setCreativeTab(MainRegistry.controlTab);
+	
+	public static final Item plate_cast = new ItemAutogen("plate_cast", MaterialShapes.CASTPLATE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item plate_welded = new ItemAutogen("plate_welded", MaterialShapes.WELDEDPLATE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item heavy_component = new ItemAutogen("heavy_component", MaterialShapes.HEAVY_COMPONENT).setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_dense = new ItemAutogen("wire_dense", MaterialShapes.DENSEWIRE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item shell = new ItemAutogen("shell", MaterialShapes.SHELL).setCreativeTab(MainRegistry.partsTab);
+	public static final Item pipe = new ItemAutogen("pipe", MaterialShapes.PIPE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item bolt = new ItemAutogen("bolt", MaterialShapes.BOLT).setCreativeTab(MainRegistry.partsTab);
+	public static final Item scraps = new ItemScraps("scraps").setCreativeTab(MainRegistry.partsTab);
+		
 	//Wires and things
 	public static final Item wire_advanced_alloy = new ItemBase("wire_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_advanced_alloy = new ItemBase("coil_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
@@ -2366,9 +2380,9 @@ public class ModItems {
 	public static final Item wire_copper = new ItemBase("wire_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper = new ItemBase("coil_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper_torus = new ItemBase("coil_copper_torus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_schrabidium = new ItemHazard(1.5F, false, true, "wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_magnetized_tungsten = new ItemHazard(ItemHazard.magt * ItemHazard.wire, "wire_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_magnetized_tungsten = new ItemHazard(ItemHazard.magt, "coil_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_schrabidium = new ItemCustomLore("wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire_magnetized_tungsten = new ItemCustomLore("wire_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_magnetized_tungsten = new ItemCustomLore("coil_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	
 	
 	
@@ -2376,7 +2390,7 @@ public class ModItems {
 	//Gun ammo assemblies and ammo
 	public static final Item assembly_iron = new ItemBase("assembly_iron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_steel = new ItemBase("assembly_steel").setCreativeTab(MainRegistry.partsTab);
-	public static final Item assembly_lead = new ItemHazard(0.1F, "assembly_lead").setCreativeTab(MainRegistry.partsTab);
+	public static final Item assembly_lead = new ItemCustomLore("assembly_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_gold = new ItemBase("assembly_gold").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_schrabidium = new ItemBase("assembly_schrabidium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_nightmare = new ItemBase("assembly_nightmare").setCreativeTab(MainRegistry.partsTab);
@@ -2391,17 +2405,14 @@ public class ModItems {
 	public static final Item assembly_nuke = new ItemBase("assembly_nuke").setCreativeTab(MainRegistry.partsTab);
 	public static final Item gun_revolver_iron_ammo = new ItemBase("gun_revolver_iron_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_ammo = new ItemBase("gun_revolver_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_revolver_lead_ammo = new ItemHazard(0.1F, "gun_revolver_lead_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_lead_ammo = new ItemCustomLore("gun_revolver_lead_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_gold_ammo = new ItemBase("gun_revolver_gold_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_revolver_schrabidium_ammo = new ItemHazard(1.5F, "gun_revolver_schrabidium_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_revolver_schrabidium_ammo = new ItemCustomLore("gun_revolver_schrabidium_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_nightmare_ammo = new ItemCustomLore("gun_revolver_nightmare_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_nightmare2_ammo = new ItemCustomLore("gun_revolver_nightmare2_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item ammo_357_desh = new ItemAmmo("ammo_357_desh").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_revolver_cursed_ammo = new ItemCustomLore("gun_revolver_cursed_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_revolver_pip_ammo = new ItemCustomLore("gun_revolver_pip_ammo").setCreativeTab(null);
-	public static final Item gun_revolver_nopip_ammo = new ItemBase("gun_revolver_nopip_ammo").setCreativeTab(null);
 	public static final Item ammo_566_gold = new ItemCustomLore("gun_mp_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_rpg_ammo = new ItemBase("gun_rpg_ammo").setCreativeTab(null);
 	public static final Item gun_spark_ammo = new ItemBase("gun_spark_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_euthanasia_ammo = new ItemBase("gun_euthanasia_ammo").setCreativeTab(MainRegistry.weaponTab);
 	
@@ -2559,7 +2570,7 @@ public class ModItems {
 	public static final Item gun_b92_ammo = new GunB92Cell("gun_b92_ammo").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_bf_ammo = new ItemBase("gun_bf_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
-	public static final Item gun_xvl1456_ammo = new ItemHazard(0.25F, "gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
+	public static final Item gun_xvl1456_ammo = new ItemCustomLore("gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_hp_ammo = new ItemBase("gun_hp_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_dash_ammo = new ItemBase("gun_dash_ammo").setCreativeTab(null);
 	public static final Item gun_defabricator_ammo = new ItemBase("gun_defabricator_ammo").setCreativeTab(MainRegistry.weaponTab);
@@ -2576,13 +2587,6 @@ public class ModItems {
 	public static final Item folly_bullet = new ItemBase("folly_bullet").setCreativeTab(MainRegistry.partsTab);
 	public static final Item folly_bullet_nuclear = new ItemBase("folly_bullet_nuclear").setCreativeTab(MainRegistry.partsTab);
 	public static final Item folly_bullet_du = new ItemBase("folly_bullet_du").setCreativeTab(MainRegistry.partsTab);
-	public static final Item gun_calamity_ammo = new ItemCustomLore("gun_calamity_ammo").setCreativeTab(null);
-	public static final Item gun_lacunae_ammo = new ItemCustomLore("gun_lacunae_ammo").setCreativeTab(null);
-	public static final Item gun_mp40_ammo = new ItemBase("gun_mp40_ammo").setCreativeTab(null);
-	public static final Item gun_uzi_ammo = new ItemBase("gun_uzi_ammo").setCreativeTab(null);
-	public static final Item gun_uboinik_ammo = new ItemBase("gun_uboinik_ammo").setCreativeTab(null);
-	public static final Item gun_lever_action_ammo = new ItemBase("gun_lever_action_ammo").setCreativeTab(null);
-	public static final Item gun_bolt_action_ammo = new ItemBase("gun_bolt_action_ammo").setCreativeTab(null);
 	
 	public static final Item energy_ball = new ItemBase("energy_ball").setCreativeTab(null);
 	public static final Item charge_railgun = new ItemCustomLore("charge_railgun").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
@@ -2692,43 +2696,43 @@ public class ModItems {
 	public static final Item rbmk_lid = new ItemRBMKLid("rbmk_lid").setCreativeTab(MainRegistry.machineTab);
 	public static final Item rbmk_lid_glass = new ItemRBMKLid("rbmk_lid_glass").setCreativeTab(MainRegistry.machineTab);
 	
-	public static final Item debris_graphite = new ItemHazard("debris_graphite").addRadiation(700F).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item debris_metal = new ItemHazard("debris_metal").addRadiation(50F).toItem().setCreativeTab(MainRegistry.controlTab);
-	public static final Item debris_fuel = new ItemHazard("debris_fuel").addRadiation(150000F).addFire(15).toItem().setCreativeTab(MainRegistry.controlTab);
+	public static final Item debris_graphite = new ItemCustomLore("debris_graphite").setCreativeTab(MainRegistry.controlTab);
+	public static final Item debris_metal = new ItemCustomLore("debris_metal").setCreativeTab(MainRegistry.controlTab);
+	public static final Item debris_fuel = new ItemCustomLore("debris_fuel").setCreativeTab(MainRegistry.controlTab);
 	
-	public static final ItemRBMKPellet rbmk_pellet_zfb_bismuth = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - LEU/HEP-241 -> Bi", "rbmk_pellet_zfb_bismuth").addRadiation(ItemHazard.zfb_bi * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_zfb_pu241 = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - HEU-235/HEP-240 -> Pu241", "rbmk_pellet_zfb_pu241").addRadiation(ItemHazard.zfb_pu241 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_zfb_am_mix = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - HEP-241 -> HEA", "rbmk_pellet_zfb_am_mix").addRadiation(ItemHazard.zfb_am_mix * ItemHazard.billet).toItem();
+	public static final ItemRBMKPellet rbmk_pellet_zfb_bismuth = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - LEU/HEP-241 -> Bi", "rbmk_pellet_zfb_bismuth");
+	public static final ItemRBMKPellet rbmk_pellet_zfb_pu241 = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - HEU-235/HEP-240 -> Pu241", "rbmk_pellet_zfb_pu241");
+	public static final ItemRBMKPellet rbmk_pellet_zfb_am_mix = (ItemRBMKPellet) new ItemRBMKPellet("Zirconium Fast Breeder - HEP-241 -> HEA", "rbmk_pellet_zfb_am_mix");
 
-	public static final ItemRBMKPellet rbmk_pellet_ueu = (ItemRBMKPellet) new ItemRBMKPellet("Unenriched Uranium", "rbmk_pellet_ueu").addRadiation(ItemHazard.u * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_meu = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Uranium-235", "rbmk_pellet_meu").addRadiation(ItemHazard.uf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_heu233 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Uranium-233", "rbmk_pellet_heu233").addRadiation(ItemHazard.u233 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_heu235 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Uranium-235", "rbmk_pellet_heu235").addRadiation(ItemHazard.uf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_thmeu = (ItemRBMKPellet) new ItemRBMKPellet("Thorium with MEU Driver Fuel", "rbmk_pellet_thmeu").addRadiation(ItemHazard.thf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_lep = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Plutonium-239", "rbmk_pellet_lep").addRadiation(ItemHazard.puf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_mep = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Plutonium-239", "rbmk_pellet_mep").addRadiation(ItemHazard.npf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hep239 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Plutonium-239", "rbmk_pellet_hep239").addRadiation(ItemHazard.pu239 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hep241 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Plutonium-241", "rbmk_pellet_hep241").addRadiation(ItemHazard.pu241 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_lea = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Americium-242", "rbmk_pellet_lea").addRadiation(ItemHazard.amf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_mea = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Americium-242", "rbmk_pellet_mea").addRadiation(ItemHazard.amrg * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hea241 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Americium-241", "rbmk_pellet_hea241").addRadiation(ItemHazard.am241 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hea242 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Americium-242", "rbmk_pellet_hea242").addRadiation(ItemHazard.am242 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_men = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Neptunium-237", "rbmk_pellet_men").addRadiation(ItemHazard.npf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hen = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Neptunium-237", "rbmk_pellet_hen").addRadiation(ItemHazard.np237 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_mox = (ItemRBMKPellet) new ItemRBMKPellet("Mixed LEU & LEP Oxide", "rbmk_pellet_mox").addRadiation(ItemHazard.mox * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_les = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Schrabidium-326", "rbmk_pellet_les").addRadiation(ItemHazard.saf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_mes = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Schrabidium-326", "rbmk_pellet_mes").addRadiation(ItemHazard.saf * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_hes = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Schrabidium-326", "rbmk_pellet_hes").addRadiation(ItemHazard.saf * ItemHazard.billet).toItem();
+	public static final ItemRBMKPellet rbmk_pellet_ueu = (ItemRBMKPellet) new ItemRBMKPellet("Unenriched Uranium", "rbmk_pellet_ueu");
+	public static final ItemRBMKPellet rbmk_pellet_meu = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Uranium-235", "rbmk_pellet_meu");
+	public static final ItemRBMKPellet rbmk_pellet_heu233 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Uranium-233", "rbmk_pellet_heu233");
+	public static final ItemRBMKPellet rbmk_pellet_heu235 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Uranium-235", "rbmk_pellet_heu235");
+	public static final ItemRBMKPellet rbmk_pellet_thmeu = (ItemRBMKPellet) new ItemRBMKPellet("Thorium with MEU Driver Fuel", "rbmk_pellet_thmeu");
+	public static final ItemRBMKPellet rbmk_pellet_lep = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Plutonium-239", "rbmk_pellet_lep");
+	public static final ItemRBMKPellet rbmk_pellet_mep = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Plutonium-239", "rbmk_pellet_mep");
+	public static final ItemRBMKPellet rbmk_pellet_hep239 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Plutonium-239", "rbmk_pellet_hep239");
+	public static final ItemRBMKPellet rbmk_pellet_hep241 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Plutonium-241", "rbmk_pellet_hep241");
+	public static final ItemRBMKPellet rbmk_pellet_lea = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Americium-242", "rbmk_pellet_lea");
+	public static final ItemRBMKPellet rbmk_pellet_mea = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Americium-242", "rbmk_pellet_mea");
+	public static final ItemRBMKPellet rbmk_pellet_hea241 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Americium-241", "rbmk_pellet_hea241");
+	public static final ItemRBMKPellet rbmk_pellet_hea242 = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Americium-242", "rbmk_pellet_hea242");
+	public static final ItemRBMKPellet rbmk_pellet_men = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Neptunium-237", "rbmk_pellet_men");
+	public static final ItemRBMKPellet rbmk_pellet_hen = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Neptunium-237", "rbmk_pellet_hen");
+	public static final ItemRBMKPellet rbmk_pellet_mox = (ItemRBMKPellet) new ItemRBMKPellet("Mixed LEU & LEP Oxide", "rbmk_pellet_mox");
+	public static final ItemRBMKPellet rbmk_pellet_les = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Schrabidium-326", "rbmk_pellet_les");
+	public static final ItemRBMKPellet rbmk_pellet_mes = (ItemRBMKPellet) new ItemRBMKPellet("Medium Enriched Schrabidium-326", "rbmk_pellet_mes");
+	public static final ItemRBMKPellet rbmk_pellet_hes = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Schrabidium-326", "rbmk_pellet_hes");
 	public static final ItemRBMKPellet rbmk_pellet_leaus = (ItemRBMKPellet) new ItemRBMKPellet("Low Enriched Australium (Tasmanite)", "rbmk_pellet_leaus");
 	public static final ItemRBMKPellet rbmk_pellet_heaus = (ItemRBMKPellet) new ItemRBMKPellet("Highly Enriched Australium (Ayerite)", "rbmk_pellet_heaus");
 	public static final ItemRBMKPellet rbmk_pellet_unobtainium = (ItemRBMKPellet) new ItemRBMKPellet("The Strongest Manmade Neutron Emitter", "rbmk_pellet_unobtainium");
-	public static final ItemRBMKPellet rbmk_pellet_po210be = (ItemRBMKPellet) new ItemRBMKPellet("Polonium-210 & Beryllium Neutron Source", "rbmk_pellet_po210be").addRadiation(ItemHazard.pobe * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_ra226be = (ItemRBMKPellet) new ItemRBMKPellet("Radium-226 & Beryllium Neutron Source", "rbmk_pellet_ra226be").addRadiation(ItemHazard.rabe * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_pu238be = (ItemRBMKPellet) new ItemRBMKPellet("Plutonium-238 & Beryllium Neutron Source", "rbmk_pellet_pu238be").addRadiation(ItemHazard.pube * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_balefire_gold = (ItemRBMKPellet) new ItemRBMKPellet("Antihydrogen in a Magnetized Gold-198 Lattice", "rbmk_pellet_balefire_gold").addRadiation(ItemHazard.au198 * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_flashlead = (ItemRBMKPellet) new ItemRBMKPellet("Antihydrogen confined by a Magnetized Gold-198 & Lead-209 Lattice", "rbmk_pellet_flashlead").addRadiation(ItemHazard.aupb * ItemHazard.billet).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_balefire = (ItemRBMKPellet) new ItemRBMKPellet("Draconic Flames", "rbmk_pellet_balefire").addRadiation(ItemHazard.bf).toItem();
-	public static final ItemRBMKPellet rbmk_pellet_drx = (ItemRBMKPellet) new ItemRBMKPellet(TextFormatting.OBFUSCATED + "can't you hear, can't you hear the thunder?", "rbmk_pellet_drx").addRadiation(12500).addDigamma(0.0125F).toItem();
+	public static final ItemRBMKPellet rbmk_pellet_po210be = (ItemRBMKPellet) new ItemRBMKPellet("Polonium-210 & Beryllium Neutron Source", "rbmk_pellet_po210be");
+	public static final ItemRBMKPellet rbmk_pellet_ra226be = (ItemRBMKPellet) new ItemRBMKPellet("Radium-226 & Beryllium Neutron Source", "rbmk_pellet_ra226be");
+	public static final ItemRBMKPellet rbmk_pellet_pu238be = (ItemRBMKPellet) new ItemRBMKPellet("Plutonium-238 & Beryllium Neutron Source", "rbmk_pellet_pu238be");
+	public static final ItemRBMKPellet rbmk_pellet_balefire_gold = (ItemRBMKPellet) new ItemRBMKPellet("Antihydrogen in a Magnetized Gold-198 Lattice", "rbmk_pellet_balefire_gold");
+	public static final ItemRBMKPellet rbmk_pellet_flashlead = (ItemRBMKPellet) new ItemRBMKPellet("Antihydrogen confined by a Magnetized Gold-198 & Lead-209 Lattice", "rbmk_pellet_flashlead");
+	public static final ItemRBMKPellet rbmk_pellet_balefire = (ItemRBMKPellet) new ItemRBMKPellet("Draconic Flames", "rbmk_pellet_balefire");
+	public static final ItemRBMKPellet rbmk_pellet_drx = (ItemRBMKPellet) new ItemRBMKPellet(TextFormatting.OBFUSCATED + "can't you hear, can't you hear the thunder?", "rbmk_pellet_drx");
 
 	
 	public static final Item rbmk_fuel_empty = new ItemBase("rbmk_fuel_empty").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
@@ -2740,7 +2744,6 @@ public class ModItems {
 			.setHeat(0.65) //0.5 is too much of a nerf in heat; pu239 buildup justifies it being on par with MEU ig
 			.setMeltingPoint(2865)
 			.setFuelColor(0.513F, 0.541F, 0.498F)
-			.addRadiation(ItemHazard.u * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_meu = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_meu, "rbmk_fuel_meu")
 			.setYield(100000000D)
@@ -2750,7 +2753,6 @@ public class ModItems {
 			.setHeat(0.65) //0.75 was a bit too much...
 			.setMeltingPoint(2865)
 			.setFuelColor(0.513F, 0.541F, 0.498F)
-			.addRadiation(ItemHazard.uf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_heu233 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heu233, "rbmk_fuel_heu233")
 			.setYield(100000000D)
@@ -2759,7 +2761,6 @@ public class ModItems {
 			.setHeat(1.25D)
 			.setMeltingPoint(2865)
 			.setFuelColor(0.513F, 0.541F, 0.498F)
-			.addRadiation(ItemHazard.u233 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_heu235 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_heu235, "rbmk_fuel_heu235")
 			.setYield(100000000D)
@@ -2767,7 +2768,6 @@ public class ModItems {
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2865)
 			.setFuelColor(0.513F, 0.541F, 0.498F)
-			.addRadiation(ItemHazard.u233 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_thmeu = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_thmeu, "rbmk_fuel_thmeu")
 			.setYield(100000000D)
@@ -2777,7 +2777,6 @@ public class ModItems {
 			.setHeat(0.65D) //Consistency with MEU
 			.setMeltingPoint(3350)
 			.setFuelColor(0.360F, 0.259F, 0.212F)
-			.addRadiation(ItemHazard.thf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_lep = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_lep, "rbmk_fuel_lep")
 			.setYield(100000000D)
@@ -2787,7 +2786,6 @@ public class ModItems {
 			.setHeat(0.75D)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.314F, 0.349F, 0.337F)
-			.addRadiation(ItemHazard.puf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_mep = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mep, "rbmk_fuel_mep")
 			.setYield(100000000D)
@@ -2795,7 +2793,6 @@ public class ModItems {
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.314F, 0.349F, 0.337F)
-			.addRadiation(ItemHazard.purg * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hep239 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hep239, "rbmk_fuel_hep")
 			.setYield(100000000D)
@@ -2804,7 +2801,6 @@ public class ModItems {
 			.setHeat(1.25D)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.314F, 0.349F, 0.337F)
-			.addRadiation(ItemHazard.pu239 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hep241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hep241, "rbmk_fuel_hep241")
 			.setYield(100000000D)
@@ -2813,7 +2809,6 @@ public class ModItems {
 			.setHeat(1.75D)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.314F, 0.349F, 0.337F)
-			.addRadiation(ItemHazard.pu241 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_lea = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_lea, "rbmk_fuel_lea")
 			.setYield(100000000D)
@@ -2823,7 +2818,6 @@ public class ModItems {
 			.setHeat(1.5D)
 			.setMeltingPoint(3986)
 			.setFuelColor(0.514F, 0.467F, 0.455F)
-			.addRadiation(ItemHazard.amf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_mea = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mea, "rbmk_fuel_mea")
 			.setYield(100000000D)
@@ -2833,7 +2827,6 @@ public class ModItems {
 			.setHeat(1.6D)
 			.setMeltingPoint(3986)
 			.setFuelColor(0.545F, 0.424F, 0.443F)
-			.addRadiation(ItemHazard.amrg * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hea241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hea241, "rbmk_fuel_hea241")
 			.setYield(100000000D)
@@ -2843,7 +2836,6 @@ public class ModItems {
 			.setMeltingPoint(3986)
 			.setNeutronTypes(NType.FAST, NType.FAST)
 			.setFuelColor(0.545F, 0.424F, 0.443F)
-			.addRadiation(ItemHazard.am241 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hea242 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hea242, "rbmk_fuel_hea242")
 			.setYield(100000000D)
@@ -2852,7 +2844,6 @@ public class ModItems {
 			.setHeat(2D)
 			.setMeltingPoint(3386)
 			.setFuelColor(0.545F, 0.424F, 0.443F)
-			.addRadiation(ItemHazard.am242 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_men = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_men, "rbmk_fuel_men")
 			.setYield(100000000D)
@@ -2863,7 +2854,6 @@ public class ModItems {
 			.setMeltingPoint(2800)
 			.setNeutronTypes(NType.ANY, NType.FAST)
 			.setFuelColor(0.447F, 0.482F, 0.439F)
-			.addRadiation(ItemHazard.npf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hen = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hen, "rbmk_fuel_hen")
 			.setYield(100000000D)
@@ -2872,7 +2862,6 @@ public class ModItems {
 			.setMeltingPoint(2800)
 			.setNeutronTypes(NType.FAST, NType.FAST)
 			.setFuelColor(0.376F, 0.423F, 0.376F)
-			.addRadiation(ItemHazard.np237 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_mox = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mox, "rbmk_fuel_mox")
 			.setYield(100000000D)
@@ -2881,7 +2870,6 @@ public class ModItems {
 			.setDepletionFunction(EnumDepleteFunc.RAISING_SLOPE)
 			.setMeltingPoint(2815)
 			.setFuelColor(0.423F, 0.455F, 0.427F)
-			.addRadiation(ItemHazard.mox * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_les = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_les, "rbmk_fuel_les")
 			.setYield(100000000D)
@@ -2891,7 +2879,6 @@ public class ModItems {
 			.setMeltingPoint(2500)
 			.setNeutronTypes(NType.SLOW, NType.SLOW) //Beryllium Moderation
 			.setFuelColor(0.498F, 0.596F, 0.620F)
-			.addRadiation(ItemHazard.saf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_mes = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_mes, "rbmk_fuel_mes")
 			.setYield(100000000D)
@@ -2900,7 +2887,6 @@ public class ModItems {
 			.setHeat(1.5D)
 			.setMeltingPoint(2750)
 			.setFuelColor(0.408F, 0.651F, 0.710F)
-			.addRadiation(ItemHazard.saf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_hes = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_hes, "rbmk_fuel_hes")
 			.setYield(100000000D)
@@ -2910,7 +2896,6 @@ public class ModItems {
 			.setHeat(1.75D)
 			.setMeltingPoint(3000)
 			.setFuelColor(0F, 0.580F, 0.651F)
-			.addRadiation(ItemHazard.saf * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_leaus = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_leaus, "rbmk_fuel_leaus")
 			.setYield(100000000D)
@@ -2942,7 +2927,6 @@ public class ModItems {
 			.setDiffusion(0.2D)
 			.setMeltingPoint(6000)
 			.setFuelColor(0F, 0.373F, 0.565F)
-			.addRadiation(ItemHazard.unof * ItemHazard.rod_rbmk)
 			;
 	public static final ItemRBMKRod rbmk_fuel_ra226be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_ra226be, "rbmk_fuel_ra226be")
 			.setYield(100000000D)
@@ -2955,7 +2939,6 @@ public class ModItems {
 			.setMeltingPoint(700)
 			.setNeutronTypes(NType.SLOW, NType.SLOW) //Beryllium Moderation
 			.setFuelColor(0.710F, 0.722F, 0.686F)
-			.addRadiation(ItemHazard.rabe * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_po210be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_po210be, "rbmk_fuel_po210be")
 			.setYield(25000000D)
@@ -2968,7 +2951,6 @@ public class ModItems {
 			.setMeltingPoint(1287)
 			.setNeutronTypes(NType.SLOW, NType.SLOW) //Beryllium Moderation
 			.setFuelColor(0.463F, 0.392F, 0.318F)
-			.addRadiation(ItemHazard.pobe * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_pu238be = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_pu238be, "rbmk_fuel_pu238be")
 			.setYield(50000000D)
@@ -2979,7 +2961,6 @@ public class ModItems {
 			.setMeltingPoint(1287)
 			.setNeutronTypes(NType.SLOW, NType.SLOW) //Beryllium Moderation
 			.setFuelColor(0.459F, 0.475F, 0.443F)
-			.addRadiation(ItemHazard.pube * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_balefire_gold = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_balefire_gold, "rbmk_fuel_balefire_gold")
 			.setYield(100000000D)
@@ -2990,7 +2971,6 @@ public class ModItems {
 			.setMeltingPoint(5000)
 			.setFuelColor(0.902F, 0.714F, 0.227F)
 			.setCherenkovColor(0.6F, 0F, 1F)
-			.addRadiation(ItemHazard.au198 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_flashlead = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_flashlead, "rbmk_fuel_flashlead")
 			.setYield(250000000D)
@@ -3001,7 +2981,6 @@ public class ModItems {
 			.setMeltingPoint(5050)
 			.setFuelColor(0.682F, 0.521F, 0.125F)
 			.setCherenkovColor(0.6F, 0F, 1F)
-			.addRadiation(ItemHazard.aupb * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_bismuth = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_bismuth, "rbmk_fuel_zfb_bismuth")
 			.setYield(50000000D)
@@ -3010,7 +2989,6 @@ public class ModItems {
 			.setHeat(1.75D)
 			.setMeltingPoint(2744)
 			.setFuelColor(0.643F, 0.620F, 0.643F)
-			.addRadiation(ItemHazard.zfb_bi * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_pu241 = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_pu241, "rbmk_fuel_zfb_pu241")
 			.setYield(50000000D)
@@ -3018,7 +2996,6 @@ public class ModItems {
 			.setFunction(EnumBurnFunc.SQUARE_ROOT)
 			.setMeltingPoint(2865)
 			.setFuelColor(0.462F, 0.459F, 0.384F)
-			.addRadiation(ItemHazard.zfb_pu241 * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_zfb_am_mix = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_zfb_am_mix, "rbmk_fuel_zfb_am_mix")
 			.setYield(50000000D)
@@ -3027,7 +3004,6 @@ public class ModItems {
 			.setHeat(1.75D)
 			.setMeltingPoint(3744)
 			.setFuelColor(0.600F, 0.565F, 0.525F)
-			.addRadiation(ItemHazard.zfb_am_mix * ItemHazard.rod_rbmk).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_balefire = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_balefire, "rbmk_fuel_balefire")
 			.setYield(100000000D)
@@ -3038,7 +3014,6 @@ public class ModItems {
 			.setMeltingPoint(8652)
 			.setFuelColor(0.369F, 0.878F, 0F)
 			.setCherenkovColor(0.25F, 1F, 0F)
-			.addRadiation(800000F).toItem()
 			;
 	public static final ItemRBMKRod rbmk_fuel_drx = (ItemRBMKRod) new ItemRBMKRod(rbmk_pellet_drx, "rbmk_fuel_drx")
 			.setYield(100000000D)
@@ -3048,17 +3023,16 @@ public class ModItems {
 			.setMeltingPoint(100000)
 			.setFuelColor(0.733F, 0F, 0F)
 			.setCherenkovColor(1F, 0.25F, 0F)
-			.addRadiation(1200000F)
-			.addDigamma(0.1F).toItem();
+			;
 
-	public static final Item pellet_schrabidium = new WatzFuel(ItemHazard.sa326 * 5F, true, 50000, 1400000, 0.975F, 200, 1.05F, 1.05F, "pellet_schrabidium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_hes = new WatzFuel(ItemHazard.hes * 5F, true, 108000, 650000, 1F, 85, 1, 1.025F, "pellet_hes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_mes = new WatzFuel(ItemHazard.mes * 5F, true, 216000, 230000, 1.025F, 50, 1, 1F, "pellet_mes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_les = new WatzFuel(ItemHazard.les * 5F, true, 432000, 70000, 1.05F, 15, 1, 0.975F, "pellet_les").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_beryllium = new WatzFuel(0F, false, 864000, 500, 1.05F, 0, 0.95F, 1.025F, "pellet_beryllium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_neptunium = new WatzFuel(ItemHazard.np237 * 5F, false, 216000, 30000, 1.1F, 25, 1.1F, 1.005F, "pellet_neptunium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_lead = new WatzFuel(0F, false, 1728000, 0, 0.95F, 0, 0.95F, 0.95F, "pellet_lead").addToxic(7).toItem().setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
-	public static final Item pellet_advanced = new WatzFuel(0F, false, 216000, 1000, 1.1F, 0, 0.995F, 0.99F, "pellet_advanced").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_schrabidium = new WatzFuel(50000, 1400000, 0.975F, 200, 1.05F, 1.05F, "pellet_schrabidium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_hes = new WatzFuel(108000, 650000, 1F, 85, 1, 1.025F, "pellet_hes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_mes = new WatzFuel(216000, 230000, 1.025F, 50, 1, 1F, "pellet_mes").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_les = new WatzFuel(432000, 70000, 1.05F, 15, 1, 0.975F, "pellet_les").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_beryllium = new WatzFuel(864000, 500, 1.05F, 0, 0.95F, 1.025F, "pellet_beryllium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_neptunium = new WatzFuel(216000, 30000, 1.1F, 25, 1.1F, 1.005F, "pellet_neptunium").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_lead = new WatzFuel(1728000, 0, 0.95F, 0, 0.95F, 0.95F, "pellet_lead").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
+	public static final Item pellet_advanced = new WatzFuel(216000, 1000, 1.1F, 0, 0.995F, 0.99F, "pellet_advanced").setCreativeTab(MainRegistry.controlTab).setMaxStackSize(1);
 	
 	public static final Item particle_empty = new ItemBase("particle_empty").setCreativeTab(MainRegistry.controlTab);
 	public static final Item particle_hydrogen = new ItemBase("particle_hydrogen").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
@@ -3074,7 +3048,7 @@ public class ModItems {
 	public static final Item particle_dark = new ItemBase("particle_dark").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
 	public static final Item particle_strange = new ItemBase("particle_strange").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
 	public static final Item particle_sparkticle = new ItemBase("particle_sparkticle").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
-	public static final Item particle_digamma = new ItemDigamma(100F, 60, "particle_digamma").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
+	public static final Item particle_digamma = new ItemDigamma(60, "particle_digamma").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.particle_empty);
 	
 		
 	public static final Item capsule_empty = new ItemBase("capsule_empty").setCreativeTab(MainRegistry.controlTab);
@@ -3093,9 +3067,6 @@ public class ModItems {
 	public static final Item singularity_spark = new ItemFWatzCore("singularity_spark", 100000000000L, 500, 500, 1280, 320, 5).setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.capsule_empty);
 	public static final Item pellet_antimatter = new ItemDrop("pellet_antimatter").setCreativeTab(MainRegistry.controlTab).setContainerItem(ModItems.cell);
 	public static final Item crystal_xen = new ItemDrop("crystal_xen").setMaxStackSize(1).setCreativeTab(MainRegistry.controlTab);
-	
-	public static final Item crystal_energy = new ItemCustomLore("crystal_energy").setCreativeTab(null).setMaxStackSize(1);
-	public static final Item pellet_coolant = new ItemHazard("pellet_coolant").addCryogenic(4).toItem().setMaxDamage(41400).setCreativeTab(null).setMaxStackSize(1);
 	
 	//Keys + locks
 	public static final Item key = new ItemKey("key").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -3146,39 +3117,37 @@ public class ModItems {
 	
 	//Nuke parts
 	public static final Item gadget_explosive = new ItemBase("gadget_explosive").setCreativeTab(MainRegistry.nukeTab);
-	public static final Item gadget_explosive8 = new ItemGadget(0F, "gadget_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item gadget_wireing = new ItemGadget(0F, "gadget_wireing").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item gadget_core = new ItemGadget(5F, "gadget_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item gadget_explosive8 = new ItemGadget("gadget_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item gadget_wireing = new ItemGadget("gadget_wireing").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item gadget_core = new ItemGadget("gadget_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item boy_shielding = new ItemBoy(0F, "boy_shielding").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item boy_target = new ItemBoy(5F, "boy_target").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item boy_bullet = new ItemBoy(1.5F, "boy_bullet").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item boy_propellant = new ItemBoy(0F, "boy_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item boy_igniter = new ItemBoy(0F, "boy_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item boy_shielding = new ItemBoy("boy_shielding").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item boy_target = new ItemBoy("boy_target").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item boy_bullet = new ItemBoy("boy_bullet").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item boy_propellant = new ItemBoy("boy_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item boy_igniter = new ItemBoy("boy_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item man_core = new ItemManMike(5F, "man_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item man_core = new ItemManMike("man_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item man_explosive = new ItemBase("man_explosive").setCreativeTab(MainRegistry.nukeTab);
-	public static final Item man_explosive8 = new ItemManMike(0F, "man_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item man_explosive8 = new ItemManMike("man_explosive8").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item man_igniter = new ItemMan("man_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item mike_core = new ItemMike(2.5F, "mike_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item mike_deut = new ItemMike(0F, "mike_deut").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab).setContainerItem(ModItems.tank_steel);
-	public static final Item mike_cooling_unit = new ItemMike(0F, "mike_cooling_unit").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item mike_core = new ItemMike("mike_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item mike_deut = new ItemMike("mike_deut").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab).setContainerItem(ModItems.tank_steel);
+	public static final Item mike_cooling_unit = new ItemMike("mike_cooling_unit").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item tsar_core = new ItemTsar(10F, "tsar_core").setMaxStackSize(1).setCreativeTab(null);
+	public static final Item fleija_igniter = new ItemFleija("fleija_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item fleija_propellant = new ItemFleija("fleija_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item fleija_core = new ItemFleija("fleija_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item fleija_igniter = new ItemFleija(0F, false, "fleija_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item fleija_propellant = new ItemFleija(15F, true, "fleija_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item fleija_core = new ItemFleija(10F, false, "fleija_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	
-	public static final Item solinium_core = new ItemSolinium(15F, true, "solinium_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item solinium_igniter = new ItemSolinium(0F, false, "solinium_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item solinium_propellant = new ItemSolinium(0F, false, "solinium_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item solinium_core = new ItemSolinium("solinium_core").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item solinium_igniter = new ItemSolinium("solinium_igniter").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item solinium_propellant = new ItemSolinium("solinium_propellant").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item n2_charge = new ItemN2("n2_charge").setMaxStackSize(12).setCreativeTab(MainRegistry.nukeTab);
 	
-	public static final Item egg_balefire_shard = new ItemHazard(ItemHazard.bf * ItemHazard.nugget, true, "egg_balefire_shard").setMaxStackSize(16).setCreativeTab(MainRegistry.nukeTab);
-	public static final Item egg_balefire = new ItemHazard(ItemHazard.bf, true, "egg_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item egg_balefire_shard = new ItemCustomLore("egg_balefire_shard").setMaxStackSize(16).setCreativeTab(MainRegistry.nukeTab);
+	public static final Item egg_balefire = new ItemCustomLore("egg_balefire").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	
 	public static final Item custom_tnt = new ItemCustomLore("custom_tnt").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
 	public static final Item custom_nuke = new ItemCustomLore("custom_nuke").setMaxStackSize(1).setCreativeTab(MainRegistry.nukeTab);
@@ -3679,10 +3648,8 @@ public class ModItems {
 		}
 		
 		for(Block block : ModBlocks.ALL_BLOCKS){
-			if(block instanceof IItemHazard){
-				ForgeRegistries.ITEMS.register(new ItemBlockHazard(block).setRegistryName(block.getRegistryName()));
-			} else if(block == ModBlocks.block_scrap){
-				ForgeRegistries.ITEMS.register(new ItemBlockScrap(block).setRegistryName(block.getRegistryName()));
+			if(block instanceof BlockFuel){
+				ForgeRegistries.ITEMS.register(new ItemFuelBlock(block).setRegistryName(block.getRegistryName()));
 			} else if(block instanceof BlockModDoor){
 			} else {
 				ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));

@@ -132,7 +132,6 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
 		
 		int[] conX = new int[connected.size()];
 		int[] conY = new int[connected.size()];
@@ -147,7 +146,7 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 		nbt.setIntArray("conX", conX);
 		nbt.setIntArray("conY", conY);
 		nbt.setIntArray("conZ", conZ);
-		return nbt;
+		return super.writeToNBT(nbt);
 	}
 	
 	@Override
