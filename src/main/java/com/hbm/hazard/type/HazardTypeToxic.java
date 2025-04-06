@@ -1,73 +1,99 @@
 package com.hbm.hazard.type;
 
-import java.util.List;
 
-import com.hbm.hazard.modifier.HazardModifier;
+import com.hbm.config.RadiationConfig;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.hazard.helper.HazardHelper;
+import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.util.ArmorRegistry;
-import com.hbm.util.ArmorRegistry.HazardClass;
-import com.hbm.util.I18nUtil;
-
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
+import com.hbm.util.I18nUtil;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+
+import static com.hbm.hazard.helper.HazardHelper.applyPotionEffect;
 
 public class HazardTypeToxic extends HazardTypeBase {
-
 	@Override
-	public void onUpdate(EntityLivingBase livingTEntity, float level, ItemStack stack) {
+	public void onUpdate(final EntityLivingBase target, final float level, final ItemStack stack) {
+
+		if (RadiationConfig.disableToxic) return;
+
+		final boolean reacher = HazardHelper.isHoldingReacher(target);
 		boolean hasToxFilter = false;
 		boolean hasHazmat = false;
-		if(livingTEntity instanceof EntityPlayer){
-			if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
-				ArmorUtil.damageGasMaskFilter(livingTEntity, 1);
-				hasToxFilter = true;
+
+		if (target instanceof EntityPlayer player) {
+            hasToxFilter = ArmorRegistry.hasProtection(player, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.NERVE_AGENT);
+
+			if (hasToxFilter) {
+				ArmorUtil.damageGasMaskFilter(player, 1);
 			}
-			hasHazmat = ArmorUtil.checkForHazmat((EntityPlayer)livingTEntity);
+
+			hasHazmat = ArmorUtil.checkForHazmat(player);
 		}
 
-		if(!hasToxFilter && !hasHazmat){
-			livingTEntity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 110, (int)level-1));
-			
-			if(level > 2)
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 110, Math.min(4, (int)level-1)));
-			if(level > 4)
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 110, (int)level));
-			if(level > 6){
-				if(livingTEntity.world.rand.nextInt((int)(2000/level)) == 0){
-					livingTEntity.addPotionEffect(new PotionEffect(MobEffects.POISON, 110, (int)level-4));
-				}
+		final boolean isUnprotected = !(hasToxFilter || hasHazmat || reacher);
+
+		if (isUnprotected) {
+			applyPotionEffect(target, MobEffects.WEAKNESS, 110, (int) (level - 1));
+
+			if (level > 2) {
+				applyPotionEffect(target, MobEffects.SLOWNESS, 110, (int) Math.min(4, level - 4));
+			}
+
+			if (level > 4) {
+				applyPotionEffect(target, MobEffects.HUNGER, 110, (int) level);
+			}
+
+			if (level > 6 && target.world.rand.nextInt((int) (2000 / level)) == 0) {
+				applyPotionEffect(target, MobEffects.POISON, 110, (int) (level - 4));
 			}
 		}
-		if(!(hasHazmat && hasToxFilter)){
-			if(level > 8)
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 110, (int)level-6));
-			if(level > 16)
-				livingTEntity.addPotionEffect(new PotionEffect(MobEffects.INSTANT_DAMAGE, 110, (int)level-16));
+
+		if (!hasHazmat || !hasToxFilter || !reacher) {
+			if (level > 8) {
+				applyPotionEffect(target, MobEffects.MINING_FATIGUE, 110, (int) (level - 8));
+			}
+
+			if (level > 16) {
+				applyPotionEffect(target, MobEffects.INSTANT_DAMAGE, 110, (int) (level - 16));
+			}
 		}
 	}
 
-	@Override
-	public void updateEntity(EntityItem item, float level) {
-	}
 
-	@Override
-	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-		if(level > 16)
-			list.add("§a[" + I18nUtil.resolveKey("adjective.extreme") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
-		else if(level > 8)
-			list.add("§a[" + I18nUtil.resolveKey("adjective.veryhigh") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
-		else if(level > 4)
-			list.add("§a[" + I18nUtil.resolveKey("adjective.high") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
-		else if(level > 2)
-			list.add("§a[" + I18nUtil.resolveKey("adjective.medium") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
-		else
-			list.add("§a[" + I18nUtil.resolveKey("adjective.little") + " " + I18nUtil.resolveKey("trait.toxic") + "]");
-	}
+
+
+
+    @Override
+    public void updateEntity(final EntityItem item, final float level) { }
+
+    @Override
+	@SideOnly(Side.CLIENT)
+    public void addHazardInformation(final EntityPlayer player, final List list, final float level, final ItemStack stack, final List<HazardModifier> modifiers) {
+		final String adjectiveKey;
+
+		if (level > 16) {
+			adjectiveKey = "adjective.extreme";
+		} else if (level > 8) {
+			adjectiveKey = "adjective.veryhigh";
+		} else if (level > 4) {
+			adjectiveKey = "adjective.high";
+		} else if (level > 2) {
+			adjectiveKey = "adjective.medium";
+		} else {
+			adjectiveKey = "adjective.little";
+		}
+
+		list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey(adjectiveKey) + " " + I18nUtil.resolveKey("trait.toxic") + "]");
+    }
 }

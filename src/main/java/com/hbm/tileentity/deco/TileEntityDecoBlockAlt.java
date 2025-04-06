@@ -1,9 +1,6 @@
 package com.hbm.tileentity.deco;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
@@ -14,6 +11,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityDecoBlockAlt extends TileEntity implements ITickable {
 	

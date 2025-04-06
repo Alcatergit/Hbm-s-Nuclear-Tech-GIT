@@ -3,7 +3,7 @@ package com.hbm.particle;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.explosion.ExplosionChaos;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -114,7 +114,7 @@ public class ParticleCloudFX extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX,
 			float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		RenderHelper.bindTexture(getEntityTexture());
+		NTMRenderHelper.bindTexture(getEntityTexture());
 		this.particleTexture = tex;
 		super.renderParticle(buffer, entityIn, partialTicks, rotationX, rotationZ, rotationYZ, rotationXY, rotationXZ);
 	}

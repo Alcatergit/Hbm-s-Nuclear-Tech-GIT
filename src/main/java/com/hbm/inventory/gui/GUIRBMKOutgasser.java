@@ -1,16 +1,13 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerRBMKOutgasser;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutgasser;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIRBMKOutgasser extends GuiInfoContainer {
 	
@@ -28,8 +25,8 @@ public class GUIRBMKOutgasser extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
-		
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 23, 14, 58, rod.gas);
+
+		rod.gas.renderTankInfo(this, mouseX, mouseY, guiLeft + 112, guiTop + 21, 16, 48);
 		
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -69,7 +66,7 @@ public class GUIRBMKOutgasser extends GuiInfoContainer {
 		int progress = (int) (rod.progress * 45 / rod.duration);
 		drawTexturedModalRect(guiLeft + 66, guiTop + 58, 190, 0, progress, 6);
 		
-		int gas = (int) (rod.gas.getFluidAmount() * 58 / rod.gas.getCapacity());
+		int gas = (int) (rod.gas.getFill() * 58 / rod.gas.getMaxFill());
 		drawTexturedModalRect(guiLeft + 143, guiTop + 82 - gas, 176, 58 - gas, 14, gas);
 	}
 }

@@ -6,7 +6,7 @@ import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -58,7 +58,7 @@ public class ParticleDecalFlow extends Particle {
 		for(int i = 0; i < 2; i ++){
 			GLCompat.bindFramebuffer(GLCompat.GL_FRAMEBUFFER, data[pong ? 3 : 1]);
 			GlStateManager.bindTexture(data[pong ? 2 : 4]);
-			RenderHelper.renderFullscreenTriangle();
+			NTMRenderHelper.renderFullscreenTriangle();
 			pong = !pong;
 		}
 		GlStateManager.disableLighting();

@@ -1,37 +1,30 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-
+import api.hbm.fluid.IFluidConductor;
+import api.hbm.fluid.IFluidConnector;
+import api.hbm.fluid.IPipeNet;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
+import com.hbm.config.MachineConfig;
 import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.projectile.EntityRBMKDebris;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
-import com.hbm.items.machine.ItemRBMKRod;
-import com.hbm.config.MachineConfig;
+import com.hbm.inventory.control_panel.ControlEventSystem;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.main.AdvancementManager;
-import com.hbm.inventory.control_panel.IControllable;
-import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.tileentity.INBTPacketReceiver;
+import com.hbm.tileentity.IOverpressurable;
+import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -54,8 +47,11 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
-public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacketReceiver, ITickable, IControllable {
+import java.util.*;
+
+public abstract class TileEntityRBMKBase extends TileEntityLoadedBase implements INBTPacketReceiver, ITickable, IControllable {
 
 	public static int rbmkHeight = 4;
 	
@@ -353,8 +349,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			mc.fontRenderer.drawString(title, pX + 1, pZ - 19, 0x006000);
 			mc.fontRenderer.drawString(title, pX, pZ - 20, 0x00FF00);
 
-			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getUnlocalizedName() + ".name"), pX + 1, pZ - 9, 0x606000);
-			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getUnlocalizedName() + ".name"), pX, pZ - 10, 0xffff00);
+			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), pX + 1, pZ - 9, 0x606000);
+			mc.fontRenderer.drawString(I18nUtil.resolveKey(rbmk.getTranslationKey() + ".name"), pX, pZ - 10, 0xffff00);
 			
 			String[] ents = new String[keys.size()];
 			keys.toArray(ents);
@@ -434,6 +430,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 	
 	public static HashSet<TileEntityRBMKBase> columns = new HashSet<>();
+	public static HashSet<IPipeNet> pipes = new HashSet();
 	
 	//assumes that !world.isRemote
 	public void meltdown() {
@@ -441,6 +438,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		RBMKBase.dropLids = false;
 		
 		columns.clear();
+		pipes.clear();
 		getFF(pos.getX(), pos.getY(), pos.getZ());
 		
 		int minX = pos.getX();
@@ -493,6 +491,45 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 									world.setBlockState(new BlockPos(x, y, z), ModBlocks.pribris_radiating.getDefaultState());
 							}
 						}
+					}
+				}
+			}
+		}
+
+		/* Hanlde overpressure event */
+		if(RBMKDials.getOverpressure(world) && !pipes.isEmpty()) {
+			HashSet<IFluidConductor> pipeBlocks = new HashSet();
+			HashSet<IFluidConnector> pipeReceivers = new HashSet();
+
+			//unify all parts into single sets to prevent redundancy
+			pipes.forEach(x -> {
+				pipeBlocks.addAll(x.getLinks());
+				pipeReceivers.addAll(x.getSubscribers());
+			});
+
+			int count = 0;
+			int max = Math.min(pipeBlocks.size() / 5, 100);
+			Iterator<IFluidConductor>  itPipes = pipeBlocks.iterator();
+			Iterator<IFluidConnector>  itReceivers = pipeReceivers.iterator();
+
+			while(itPipes.hasNext() && count < max) {
+				IFluidConductor pipe = itPipes.next();
+				if(pipe instanceof TileEntity) {
+					TileEntity tile = (TileEntity) pipe;
+					world.setBlockToAir(tile.getPos());
+				}
+				count++;
+			}
+
+			while(itReceivers.hasNext()) {
+				IFluidConnector con = itReceivers.next();
+				if(con instanceof TileEntity) {
+					TileEntity tile = (TileEntity) con;
+					if(con instanceof IOverpressurable) {
+						((IOverpressurable) con).explode(world, tile.getPos().getX(), tile.getPos().getY(), tile.getPos().getZ());
+					} else {
+						world.setBlockToAir(tile.getPos());
+						world.newExplosion(null, tile.getPos().getX() + 0.5, tile.getPos().getY() + 0.5, tile.getPos().getZ() + 0.5, 5F, false, false);
 					}
 				}
 			}

@@ -1,31 +1,29 @@
 package com.hbm.render.entity.missile;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.entity.missile.EntityMissileTaint;
+import com.hbm.entity.missile.EntityMissileTier0;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
-public class RenderMissileTaint extends Render<EntityMissileTaint> {
+public class RenderMissileTaint extends Render<EntityMissileTier0.EntityMissileTaint> {
 
-	public static final IRenderFactory<EntityMissileTaint> FACTORY = (RenderManager man) -> {return new RenderMissileTaint(man);};
+	public static final IRenderFactory<EntityMissileTier0.EntityMissileTaint> FACTORY = (RenderManager man) -> {return new RenderMissileTaint(man);};
 	
 	protected RenderMissileTaint(RenderManager renderManager) {
 		super(renderManager);
 	}
 
 	@Override
-	public void doRender(EntityMissileTaint missile, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityMissileTier0.EntityMissileTaint missile, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GlStateManager.enableLighting();
-		double[] renderPos = RenderHelper.getRenderPosFromMissile(missile, partialTicks);
+		double[] renderPos = NTMRenderHelper.getRenderPosFromMissile(missile, partialTicks);
 		x = renderPos[0];
 		y = renderPos[1];
 		z = renderPos[2];
@@ -43,7 +41,7 @@ public class RenderMissileTaint extends Render<EntityMissileTaint> {
 	}
 	
 	@Override
-	protected ResourceLocation getEntityTexture(EntityMissileTaint entity) {
+	protected ResourceLocation getEntityTexture(EntityMissileTier0.EntityMissileTaint entity) {
 		return ResourceManager.missileTaint_tex;
 	}
 

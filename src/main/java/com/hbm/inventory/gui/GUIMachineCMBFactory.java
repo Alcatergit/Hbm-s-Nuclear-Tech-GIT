@@ -1,16 +1,14 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineCMBFactory;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachineCMBFactory;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIMachineCMBFactory extends GuiInfoContainer {
 	

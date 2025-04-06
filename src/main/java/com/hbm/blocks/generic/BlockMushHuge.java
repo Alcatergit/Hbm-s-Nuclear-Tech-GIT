@@ -1,10 +1,7 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -16,18 +13,19 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockMushHuge extends Block {
+import java.util.Random;
 
+public class BlockMushHuge extends Block {
 
 	public BlockMushHuge(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setSoundType(SoundType.PLANT);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-	
+
 	@Override
 	public int quantityDropped(IBlockState state, int fortune, Random rand) {
 		int i = rand.nextInt(10) - 7;
@@ -36,16 +34,16 @@ public class BlockMushHuge extends Block {
 		}
 		return i;
 	}
-	
+
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Item.getItemFromBlock(ModBlocks.mush);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public ItemStack getItem(World worldIn, BlockPos pos, IBlockState state) {
 		return new ItemStack(Item.getItemFromBlock(ModBlocks.mush), 1, 0);
 	}
-	
+
 }

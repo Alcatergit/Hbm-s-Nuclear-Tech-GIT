@@ -1,18 +1,16 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.turret.TileEntityTurretRichard;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 public class RenderTurretRichard extends RenderTurretBase<TileEntityTurretRichard> {
 
 	@Override
 	public void render(TileEntityTurretRichard turret, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
-		Vec3d pos = turret.getHorizontalOffset();
+		Vec3d pos = turret.byHorizontalIndexOffset();
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + pos.x, y, z + pos.z);

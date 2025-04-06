@@ -1,9 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.lib.Library;
@@ -14,16 +10,10 @@ import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunFXPacket;
 import com.hbm.packet.GunFXPacket.FXType;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.particle.vortex.ParticleVortexBeam;
-import com.hbm.particle.vortex.ParticleVortexCircle;
-import com.hbm.particle.vortex.ParticleVortexFireFlash;
-import com.hbm.particle.vortex.ParticleVortexGlow;
-import com.hbm.particle.vortex.ParticleVortexHit;
-import com.hbm.particle.vortex.ParticleVortexParticle;
-import com.hbm.render.RenderHelper;
+import com.hbm.particle.vortex.*;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -49,6 +39,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class ItemGunVortex extends ItemGunBase {
 
@@ -100,7 +93,7 @@ public class ItemGunVortex extends ItemGunBase {
 			pos = new Vec3d(0.16, -0.20, 1).rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYawHead));
 		}
 		pos = pos.add(player.getPositionEyes(1F));
-		Vec3d view = BobMathUtil.getVectorFromAngle(BobMathUtil.getEulerAngles(player.getLookVec()).addVector(0, 3, 0));
+		Vec3d view = BobMathUtil.getVectorFromAngle(BobMathUtil.getEulerAngles(player.getLookVec()).add(0, 3, 0));
 		Vec3d hitPos = null;
 		Vec3d hitNormal = null;
 		RayTraceResult r = Library.rayTraceIncludeEntities(player, 100, MainRegistry.proxy.partialTicks());
@@ -108,7 +101,7 @@ public class ItemGunVortex extends ItemGunBase {
 			hitPos = player.getLook(MainRegistry.proxy.partialTicks()).scale(100).add(pos);
 		} else {
 			hitPos = r.hitVec;
-			hitNormal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
+			hitNormal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
 		}
 		
 		tag.setString("type", "spark");
@@ -142,7 +135,7 @@ public class ItemGunVortex extends ItemGunBase {
 		Minecraft.getMinecraft().effectRenderer.addEffect(flash);
 		
 		Vec3d line = hitPos.subtract(pos);
-		int circleParticles = (int) line.lengthVector();
+		int circleParticles = (int) line.length();
 		for(int i = 0; i < circleParticles; i ++){
 			Vec3d circlePos = line.scale(i/(float)circleParticles).add(pos);
 			ParticleVortexCircle c = new ParticleVortexCircle(player.world, circlePos.x, circlePos.y, circlePos.z, 0.5F+player.world.rand.nextFloat()*0.3F);
@@ -151,7 +144,7 @@ public class ItemGunVortex extends ItemGunBase {
 			Minecraft.getMinecraft().effectRenderer.addEffect(c);
 		}
 		
-		int extraParticles = (int) line.lengthVector();
+		int extraParticles = (int) line.length();
 		for(int i = 0; i < extraParticles; i ++){
 			Vec3d circlePos = line.scale((i/(float)circleParticles)*0.25).add(pos);
 			float randX = (float) (player.world.rand.nextGaussian()-0.5) * 0.01F;
@@ -235,7 +228,7 @@ public class ItemGunVortex extends ItemGunBase {
 		GlStateManager.color(0.4F, 0.9F, 0.9F, 1.0F);
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE, SourceFactor.ONE, DestFactor.ZERO);
-		RenderHelper.drawGuiRect(x - 11F, y - 11F, 0, 0, 22, 22, 1, 1);
+		NTMRenderHelper.drawGuiRect(x - 11F, y - 11F, 0, 0, 22, 22, 1, 1);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.vortex_hud_circle);
 		
 		//Running off of system time gives less wonky results than relying on server updating the nbt tag.

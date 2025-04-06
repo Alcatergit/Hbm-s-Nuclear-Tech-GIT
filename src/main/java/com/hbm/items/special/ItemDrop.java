@@ -1,9 +1,5 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.WeaponConfig;
 import com.hbm.entity.effect.EntityBlackHole;
@@ -16,7 +12,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -31,11 +26,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
+
+import java.util.List;
 
 public class ItemDrop extends Item {
 
 	public ItemDrop(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);

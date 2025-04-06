@@ -1,62 +1,47 @@
 package com.hbm.blocks.generic;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
 import java.util.Random;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
+import static com.hbm.blocks.OreEnumUtil.OreEnum;
 
 public class BlockDepthOre extends BlockDepth {
-	
-	public BlockDepthOre(String s){
-		super(s);
-	}
 
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune){
-		if(this == ModBlocks.cluster_depth_iron) {
-			return ModItems.crystal_iron;
-		}
-		if(this == ModBlocks.cluster_depth_titanium) {
-			return ModItems.crystal_titanium;
-		}
-		if(this == ModBlocks.cluster_depth_tungsten) {
-			return ModItems.crystal_tungsten;
-		}
-		if(this == ModBlocks.ore_depth_cinnebar) {
-			return ModItems.cinnebar;
-		}
-		if(this == ModBlocks.ore_depth_zirconium) {
-			return ModItems.nugget_zirconium;
-		}
-		if(this == ModBlocks.ore_depth_nether_neodymium) {
-			return ModItems.fragment_neodymium;
-		}
-		if(this == ModBlocks.ore_depth_nether_nitan) {
-			return ModItems.powder_nitan_mix;
-		}
-		
-		return super.getItemDropped(state, rand, fortune);
-	}
-	
-	@Override
-	public int quantityDropped(Random rand) {
-		
-		if(this == ModBlocks.ore_depth_cinnebar) {
-			return 2 + rand.nextInt(3);
-		}
-		if(this == ModBlocks.ore_depth_zirconium) {
-			return 2 + rand.nextInt(2);
-		}
-		if(this == ModBlocks.ore_depth_nether_neodymium) {
-			return 2 + rand.nextInt(2);
-		}
-		if(this == ModBlocks.ore_depth_nether_nitan) {
-			return 1;
-		}
-		
-		return super.quantityDropped(rand);
-	}
+    protected final OreEnum oreEnum;
+
+    public BlockDepthOre(String s, OreEnum oreEnum) {
+        super(s);
+        this.oreEnum = oreEnum;
+    }
+
+
+    @Override
+    public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+
+        Random rand = world instanceof World ? ((World) world).rand : RANDOM;
+
+        int count = (oreEnum == null) ? quantityDropped(state, fortune, rand) : oreEnum.quantityFunction.apply(state, fortune, rand);
+
+        for (int i = 0; i < count; i++) {
+            ItemStack droppedItem;
+
+            if (oreEnum == null) {
+                droppedItem = new ItemStack(this.getItemDropped(state, rand, fortune), 1, this.damageDropped(state));
+            } else {
+                droppedItem = oreEnum.dropFunction.apply(state, rand);
+            }
+
+            if (droppedItem.getItem() != Items.AIR) {
+                drops.add(droppedItem);
+            }
+        }
+    }
+
 }

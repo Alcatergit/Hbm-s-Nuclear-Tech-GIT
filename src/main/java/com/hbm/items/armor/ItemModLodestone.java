@@ -1,17 +1,16 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.items.ModItems;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModLodestone extends ItemArmorMod {
 

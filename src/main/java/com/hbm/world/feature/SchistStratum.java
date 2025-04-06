@@ -15,13 +15,13 @@ public class SchistStratum {
 
 	NoiseGeneratorPerlin noise;
 
-	Block b;
+	IBlockState b;
 	double scale;
 	double threshold;
 	double thickness;
 	int heigth;
 
-	public SchistStratum(Block s, double scale, double threshold, double thickness, int heigth){
+	public SchistStratum(IBlockState s, double scale, double threshold, double thickness, int heigth){
 		this.b = s;
 		this.scale = scale;
 		this.threshold = threshold;
@@ -64,7 +64,7 @@ public class SchistStratum {
 						IBlockState target = world.getBlockState(new BlockPos(x, y, z));
 						
 						if(target.isNormalCube() && target.getMaterial() == Material.ROCK) {
-							world.setBlockState(new BlockPos(x, y, z), b.getDefaultState());
+							world.setBlockState(new BlockPos(x, y, z), b);
 						}
 					}
 				}

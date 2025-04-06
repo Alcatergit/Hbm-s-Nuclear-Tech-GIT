@@ -1,28 +1,23 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.GeneralConfig;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.explosion.ExplosionBalefire;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityBalefire extends Entity implements IChunkLoader {
 
@@ -31,7 +26,6 @@ public class EntityBalefire extends Entity implements IChunkLoader {
 	public ExplosionBalefire exp;
 	public int speed = 1;
 	public boolean did = false;
-	public boolean mute = false;
 	private Ticket loaderTicket;
 
 	@Override
@@ -40,7 +34,6 @@ public class EntityBalefire extends Entity implements IChunkLoader {
 		destructionRange = nbt.getInteger("destructionRange");
 		speed = nbt.getInteger("speed");
 		did = nbt.getBoolean("did");
-		mute = nbt.getBoolean("mute");
     	
 		exp = new ExplosionBalefire((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
 		exp.readFromNbt(nbt, "exp_");
@@ -54,7 +47,6 @@ public class EntityBalefire extends Entity implements IChunkLoader {
 		nbt.setInteger("destructionRange", destructionRange);
 		nbt.setInteger("speed", speed);
 		nbt.setBoolean("did", did);
-		nbt.setBoolean("mute", mute);
 		
 		if(exp != null)
 			exp.saveToNbt(nbt, "exp_");
@@ -158,10 +150,5 @@ public class EntityBalefire extends Entity implements IChunkLoader {
                 ForgeChunkManager.forceChunk(loaderTicket, chunk);
             }
         }
-	}
-	
-	public EntityBalefire mute() {
-		this.mute = true;
-		return this;
 	}
 }

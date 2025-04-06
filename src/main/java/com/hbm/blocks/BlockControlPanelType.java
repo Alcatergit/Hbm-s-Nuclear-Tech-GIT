@@ -1,7 +1,8 @@
 package com.hbm.blocks;
 
-import java.util.Locale;
 import net.minecraft.util.IStringSerializable;
+
+import java.util.Locale;
 
 public enum BlockControlPanelType implements IStringSerializable {
     CUSTOM_PANEL,

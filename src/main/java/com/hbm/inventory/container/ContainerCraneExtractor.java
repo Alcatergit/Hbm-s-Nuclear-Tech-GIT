@@ -2,9 +2,7 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotPattern;
 import com.hbm.inventory.SlotUpgrade;
-import com.hbm.items.ModItems;
 import com.hbm.tileentity.network.TileEntityCraneExtractor;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.ClickType;

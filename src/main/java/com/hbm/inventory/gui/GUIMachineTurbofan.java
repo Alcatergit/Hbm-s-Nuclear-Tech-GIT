@@ -1,16 +1,14 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineTurbofan;
 import com.hbm.lib.RefStrings;
+import com.hbm.render.util.GaugeUtil;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIMachineTurbofan extends GuiInfoContainer {
 	
@@ -29,8 +27,9 @@ public class GUIMachineTurbofan extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 16, 34, 52, turbofan.tank);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 16, 16, 52, turbofan.power, turbofan.maxPower);
+		turbofan.tank.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 17, 34, 52);
+		if(turbofan.showBlood) turbofan.blood.renderTankInfo(this, mouseX, mouseY, guiLeft + 98, guiTop + 17, 16, 16);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 17, 16, 52, turbofan.power, turbofan.maxPower);
 
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -59,7 +58,8 @@ public class GUIMachineTurbofan extends GuiInfoContainer {
 			int a = Math.min(turbofan.afterburner, 6);
 			drawTexturedModalRect(guiLeft + 98, guiTop + 44, 176, (a - 1) * 16, 16, 16);
 		}
-		
-		FFUtils.drawLiquid(turbofan.tank, guiLeft, guiTop, zLevel, 34, 52, 35, 53+44);
+
+		if(turbofan.showBlood) GaugeUtil.renderGauge(GaugeUtil.Gauge.ROUND_SMALL, guiLeft + 97, guiTop + 16, this.zLevel, (double) turbofan.blood.getFill() / (double) turbofan.blood.getMaxFill());
+		turbofan.tank.renderTank(guiLeft + 35, guiTop + 69, this.zLevel, 34, 52);
 	}
 }

@@ -118,4 +118,6 @@ public abstract class Satellite {
 	 * @param z ditto
 	 */
 	public void onCoordAction(World world, EntityPlayer player, int x, int y, int z) { }
+
+	public abstract float[] getColor();
 }

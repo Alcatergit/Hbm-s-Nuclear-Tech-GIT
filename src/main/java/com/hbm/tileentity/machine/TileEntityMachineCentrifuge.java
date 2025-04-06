@@ -1,18 +1,20 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.items.ModItems;
+import api.hbm.energymk2.IBatteryItem;
+import api.hbm.energymk2.IEnergyReceiverMK2;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.items.ModItems;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.IConfigurableMachine;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
-import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -22,13 +24,32 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyUser {
+import java.io.IOException;
+// I'll keep most of the thing intact because I'm too fucking lazy to rework basically EVERYTHING
+public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2, IConfigurableMachine {
 
 	public int progress;
 	public long power;
 	public boolean isProgressing;
-	public static final int maxPower = 1000000;
-	public static final int processingSpeed = 200;
+	public static int maxPower = 100000;
+	public static int processingSpeed = 200;
+	public static int baseConsumption = 200;
+
+	public String getConfigName() {
+		return "centrifuge";
+	}
+	/* reads the JSON object and sets the machine's parameters, use defaults and ignore if a value is not yet present */
+	public void readIfPresent(JsonObject obj) {
+		maxPower = IConfigurableMachine.grab(obj, "I:powerCap", maxPower);
+		processingSpeed = IConfigurableMachine.grab(obj, "I:timeToProcess", processingSpeed);
+		baseConsumption = IConfigurableMachine.grab(obj, "I:consumption", baseConsumption);
+	}
+	/* writes the entire config for this machine using the relevant values */
+	public void writeConfig(JsonWriter writer) throws IOException {
+		writer.name("I:powerCap").value(maxPower);
+		writer.name("I:timeToProcess").value(processingSpeed);
+		writer.name("I:consumption").value(baseConsumption);
+	}
 	
 	public TileEntityMachineCentrifuge() {
 		super(8);
@@ -236,8 +257,9 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public void update() {
 		
 		if(!world.isRemote) {
-			
-			this.updateStandardConnections(world, pos);
+
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+				this.trySubscribe(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, dir);
 
 			if(inventory.getSlots() < 7){
 				inventory = this.getNewInventory(8, 64);
@@ -246,17 +268,17 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 			power = Library.chargeTEFromItems(inventory, 1, power, maxPower);
 
 			int speed = 1;
-			int consumption = 200;
+			int consumption = baseConsumption;
 			
 			int speedLvl = getSpeedLvl();
 			int powerLvl = getPowerLvl();
 			int overdriveLvl = getOverdriveLvl();
 
 			speed += speedLvl;
-			consumption += speedLvl * 200;
+			consumption += speedLvl * baseConsumption;
 			
 			speed *= (1 + overdriveLvl * 2);
-			consumption += overdriveLvl * 10000;
+			consumption += overdriveLvl * baseConsumption * 50;
 			
 			consumption /= (1 + powerLvl);
 			

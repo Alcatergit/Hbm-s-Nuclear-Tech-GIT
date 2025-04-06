@@ -1,18 +1,21 @@
 package com.hbm.items.weapon;
 
-import java.util.HashMap;
-import java.util.List;
-
+import com.hbm.entity.missile.EntityMissileCustom;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ItemMissile extends Item {
 	
@@ -21,12 +24,13 @@ public class ItemMissile extends Item {
 	public PartSize bottom;
 	public Rarity rarity;
 	public float health;
+	public int mass = 0;
 	private String title;
 	private String author;
 	private String witty;
 	
 	public ItemMissile(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(MainRegistry.missileTab);
@@ -68,15 +72,27 @@ public class ItemMissile extends Item {
 	}
 	
 	public enum PartSize {
-		
 		//for chips
 		ANY,
 		//for missile tips and thrusters
 		NONE,
 		//regular sizes, 1.0m, 1.5m and 2.0m
-		SIZE_10,
-		SIZE_15,
-		SIZE_20
+		SIZE_10(1.0),
+		SIZE_15(1.5),
+		SIZE_20(2.0),
+		// Space-grade
+		SIZE_25(2.5),
+		SIZE_30(3.0);
+
+		PartSize() {
+			this.radius = 0;
+		}
+
+		PartSize(double radius) {
+			this.radius = radius;
+		}
+
+		public double radius;
 	}
 	
 	public enum WarheadType {
@@ -93,16 +109,31 @@ public class ItemMissile extends Item {
 		TAINT,
 		CLOUD,
 		VOLCANO,
-		MIRV
+		MIRV,
+		APOLLO,
+		SATELLITE,
+
+		//shit solution but it works. this allows traits to be attached to these empty dummy types, allowing for custom warheads
+		CUSTOM0, CUSTOM1, CUSTOM2, CUSTOM3, CUSTOM4, CUSTOM5, CUSTOM6, CUSTOM7, CUSTOM8, CUSTOM9;
+
+		/** Overrides that type's impact effect. Only runs serverside */
+		public Consumer<EntityMissileCustom> impactCustom = null;
+		/** Runs at the beginning of the missile's update cycle, both client and serverside. */
+		public Consumer<EntityMissileCustom> updateCustom = null;
+		/** Override for the warhead's name in the missile description */
+		public String labelCustom = null;
 	}
 	
 	public enum FuelType {
-		
+		ANY, // Used by space-grade fuselages
 		KEROSENE,
 		SOLID,
 		HYDROGEN,
 		XENON,
-		BALEFIRE
+		BALEFIRE,
+		HYDRAZINE,
+		METHALOX,
+		KEROLOX, // oxygen rather than peroxide
 	}
 	
 	public enum Rarity {
@@ -146,11 +177,12 @@ public class ItemMissile extends Item {
 		return this;
 	}
 	
-	public ItemMissile makeFuselage(FuelType type, float fuel, PartSize top, PartSize bottom) {
+	public ItemMissile makeFuselage(FuelType type, float fuel, int mass, PartSize top, PartSize bottom) {
 
 		this.type = PartType.FUSELAGE;
 		this.top = top;
 		this.bottom = bottom;
+		this.mass = mass;
 		attributes = new Object[] { type, fuel };
 		//setTextureName(RefStrings.MODID + ":mp_fuselage");
 		
@@ -198,14 +230,17 @@ public class ItemMissile extends Item {
 			case WARHEAD:
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.size") + " " + TextFormatting.GRAY + getSize(bottom));
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.type") + " " + TextFormatting.GRAY + getWarhead((WarheadType)attributes[0]));
-				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.strength") + " " + TextFormatting.RED + (Float)attributes[1]);
+				if(attributes[0] != WarheadType.APOLLO && attributes[0] != WarheadType.SATELLITE)
+					list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.strength") + " " + TextFormatting.RED + (Float)attributes[1]);
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.weight") + " " + TextFormatting.GRAY + (Float)attributes[2] + "t");
+				list.add(TextFormatting.BOLD + "Mass: " + TextFormatting.GRAY + mass + "kg");
 				break;
 			case FUSELAGE:
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.topsize") + " " + TextFormatting.GRAY + getSize(top));
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.botsize") + " " + TextFormatting.GRAY + getSize(bottom));
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.fueltype") + " " + TextFormatting.GRAY + getFuel((FuelType)attributes[0]));
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.fuelamnt") + " " + TextFormatting.GRAY + (Float)attributes[1] + "l");
+				list.add(TextFormatting.BOLD + "Mass: " + TextFormatting.GRAY + mass + "kg");
 				break;
 			case FINS:
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.size") + " " + TextFormatting.GRAY + getSize(top));
@@ -214,8 +249,9 @@ public class ItemMissile extends Item {
 			case THRUSTER:
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.size") + " " + TextFormatting.GRAY + getSize(top));
 				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.fuelamnt") + " " + TextFormatting.GRAY + getFuel((FuelType)attributes[0]));
-				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.fuelcon") + " " + TextFormatting.GRAY + (Float)attributes[1] + "l/tick");
-				list.add(TextFormatting.BOLD + I18nUtil.resolveKey("desc.payload") + " " + TextFormatting.GRAY + (Float)attributes[2] + "t");
+				list.add(TextFormatting.BOLD + "Thrust: " + TextFormatting.GRAY + (Integer)attributes[3] + "N");
+				list.add(TextFormatting.BOLD + "ISP: " + TextFormatting.GRAY + (Integer)attributes[4] + "s");
+				list.add(TextFormatting.BOLD + "Mass: " + TextFormatting.GRAY + mass + "kg");
 				break;
 			}
 		} catch(Exception ex) {
@@ -250,6 +286,7 @@ public class ItemMissile extends Item {
 	}
 	
 	public String getWarhead(WarheadType type) {
+		if(type.labelCustom != null) return type.labelCustom;
 		
 		switch(type) {
 		case HE:
@@ -284,10 +321,16 @@ public class ItemMissile extends Item {
 	}
 	
 	public String getFuel(FuelType type) {
-		
+
 		switch(type) {
+		case ANY:
+			return TextFormatting.GRAY + "Any Liquid Fuel";
 		case KEROSENE:
 			return TextFormatting.LIGHT_PURPLE + I18nUtil.resolveKey("fuel.kerosene");
+		case METHALOX:
+			return TextFormatting.YELLOW + "Natural Gas / Oxygen";
+		case KEROLOX:
+			return TextFormatting.LIGHT_PURPLE + "Kerosene / Oxygen";
 		case SOLID:
 			return TextFormatting.GOLD + I18nUtil.resolveKey("fuel.solid");
 		case HYDROGEN:
@@ -296,9 +339,70 @@ public class ItemMissile extends Item {
 			return TextFormatting.DARK_PURPLE + I18nUtil.resolveKey("fuel.xenon");
 		case BALEFIRE:
 			return TextFormatting.GREEN + I18nUtil.resolveKey("fuel.balefire");
+		case HYDRAZINE:
+			return TextFormatting.AQUA + "Hydrazine";
 		default:
 			return TextFormatting.BOLD + I18nUtil.resolveKey("desc.na");
 		}
+	}
+
+	public FluidType getFuel() {
+		if(!(attributes[0] instanceof FuelType)) return null;
+
+		switch((FuelType)attributes[0]) {
+			case KEROSENE:
+				return Fluids.KEROSENE;
+			case KEROLOX:
+				return Fluids.KEROSENE;
+			case METHALOX:
+				return Fluids.GAS;
+			case HYDROGEN:
+				return Fluids.HYDROGEN;
+			case XENON:
+				return Fluids.XENON;
+			case BALEFIRE:
+				return Fluids.BALEFIRE;
+			case HYDRAZINE:
+				return Fluids.HYDRAZINE;
+			case SOLID:
+				return Fluids.NONE; // Requires non-fluid fuel
+			default:
+				return null;
+		}
+	}
+
+	public FluidType getOxidizer() {
+		if(!(attributes[0] instanceof FuelType)) return null;
+
+		switch((FuelType)attributes[0]) {
+			case KEROLOX:
+			case HYDROGEN:
+			case METHALOX:
+				return Fluids.OXYGEN;
+			case KEROSENE:
+			case BALEFIRE:
+				return Fluids.PEROXIDE;
+			default:
+				return null;
+		}
+	}
+
+	public int getThrust() {
+		if(type != PartType.THRUSTER) return 0;
+		if(attributes[3] == null || !(attributes[3] instanceof Integer)) return 0;
+		return (Integer) attributes[3];
+	}
+
+	public int getISP() {
+		if(type != PartType.THRUSTER) return 0;
+		if(attributes[4] == null || !(attributes[4] instanceof Integer)) return 0;
+		return (Integer) attributes[4];
+	}
+
+	public int getTankSize() {
+		if(type != PartType.FUSELAGE) return 0;
+		if(!(attributes[1] instanceof Integer)) return 0;
+		return (Integer) attributes[1];
 	}
 	
 	//am i retarded?
@@ -311,6 +415,7 @@ public class ItemMissile extends Item {
 		part.health = this.health;
 		part.attributes = this.attributes;
 		part.health = this.health;
+		part.mass = this.mass;
 		
 		return part;
 	}

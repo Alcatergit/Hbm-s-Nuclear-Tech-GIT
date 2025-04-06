@@ -1,15 +1,10 @@
 package com.hbm.entity.grenade;
 
-import java.util.List;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockFenceGate;
@@ -33,6 +28,9 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.logging.log4j.Level;
+
+import java.util.List;
 
 public abstract class EntityGrenadeBouncyBase extends Entity implements IProjectile {
 
@@ -136,7 +134,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 		this.prevPosZ = this.posZ;
 		this.prevRotationPitch = this.rotationPitch;
 
-        this.rotationPitch -= Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector() * 25;
+        this.rotationPitch -= Vec3.createVectorHelper(motionX, motionY, motionZ).length() * 25;
 		
 		double d0 = this.motionX;
 		double d1 = this.motionY;
@@ -308,7 +306,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 				
 				bounce = true;
 				Vec3d mot = new Vec3d(motionX, motionY, motionZ);
-				if (mot.lengthVector() > 0.05)
+				if (mot.length() > 0.05)
 					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.grenadeBounce, SoundCategory.HOSTILE, 2.0F, 1.0F);
 
 				motionX *= getBounceMod()*1.5;

@@ -1,11 +1,10 @@
 package com.hbm.inventory.control_panel;
 
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Keyboard;
@@ -141,7 +140,7 @@ public class SubElementVariables extends SubElement {
             if ((i >= (currentPage-1)*6) && (i < ((currentPage-1)*6)+6)) {
                 GlStateManager.disableTexture2D();
                 GlStateManager.color(.15F, .19F, .14F, .2F);
-                RenderHelper.drawGuiRect(gui.getGuiLeft() + 55, (cY - 54.5F) + (j * 28), 0, 0, 193, 25, 0, 0);
+                NTMRenderHelper.drawGuiRect(gui.getGuiLeft() + 55, (cY - 54.5F) + (j * 28), 0, 0, 193, 25, 0, 0);
                 GlStateManager.color(1, 1, 1, 1);
                 GlStateManager.enableTexture2D();
 

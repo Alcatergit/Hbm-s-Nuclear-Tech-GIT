@@ -6,7 +6,6 @@ import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.interfaces.IBomb;
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -19,7 +18,7 @@ public class BombFloat extends Block implements IBomb {
 
 	public BombFloat(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -27,14 +26,14 @@ public class BombFloat extends Block implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0)
+        if (worldIn.getStrongPower(pos) > 0)
         {
         	explode(worldIn, pos);
         }
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
+	public BombReturnCode explode(World world, BlockPos pos) {
 		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sparkShoot, SoundCategory.BLOCKS, 5.0f, world.rand.nextFloat() * 0.2F + 0.9F);
 		
 		if(!world.isRemote) {
@@ -52,6 +51,8 @@ public class BombFloat extends Block implements IBomb {
     			world.spawnEntity(wave);
     		}
 		}
+
+		return BombReturnCode.DETONATED;
 	}
 
 }

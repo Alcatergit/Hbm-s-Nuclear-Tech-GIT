@@ -1,9 +1,7 @@
 package com.hbm.hazard.type;
 
-import java.util.List;
-
+import com.hbm.config.RadiationConfig;
 import com.hbm.hazard.modifier.HazardModifier;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,13 +9,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public abstract class HazardTypeBase {
+	public static int hazardRate = RadiationConfig.hazardRate;
 	
 	/**
 	 * Does the thing. Called by HazardEntry.applyHazard
 	 * @param target the holder
 	 * @param level the final level after calculating all the modifiers
-	 * @param the stack that is being updated
 	 */
 	public abstract void onUpdate(EntityLivingBase target, float level, ItemStack stack);
 
@@ -37,5 +37,5 @@ public abstract class HazardTypeBase {
 	 * @param modifiers
 	 */
 	@SideOnly(Side.CLIENT)
-	public abstract void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers);
+	public abstract void addHazardInformation(EntityPlayer player, List list, float level, ItemStack stack, List<HazardModifier> modifiers);
 }

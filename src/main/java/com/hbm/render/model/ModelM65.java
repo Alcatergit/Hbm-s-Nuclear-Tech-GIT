@@ -6,16 +6,14 @@
 
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.handler.ArmorUtil;
-import net.minecraft.inventory.EntityEquipmentSlot;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import org.lwjgl.opengl.GL11;
 
 public class ModelM65 extends ModelBiped {
 	// fields

@@ -1,15 +1,13 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.render.RenderHelper;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.tileentity.machine.TileEntityMachineExcavator;
-
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachineExcavator> {
 	
@@ -78,27 +76,27 @@ public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachine
 			double speed = 250D;
 			double dropU = -System.currentTimeMillis() % speed / speed;
 			double dropL = dropU + 4;
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(widthX, 3, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 3, 2.5 + widthZ, 1, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 1, dropL);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(widthX, 3, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 3, 2.5 + widthZ, 1, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 1, dropL);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropL);
 
-			RenderHelper.addVertexWithUV(-widthX, 3, 2.5 - widthZ, 1, dropU);
-			RenderHelper.addVertexWithUV(widthX, 3, 2.5 - widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 0, dropL);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, 1, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 3, 2.5 - widthZ, 1, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 3, 2.5 - widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, 1, dropL);
 
-			RenderHelper.addVertexWithUV(-widthX, 3, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 3, 2.5 - widthZ, 1, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, 1, dropL);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 3, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 3, 2.5 - widthZ, 1, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, 1, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 0, dropL);
 
-			RenderHelper.addVertexWithUV(widthX, 3, 2.5 - widthZ, 1, dropU);
-			RenderHelper.addVertexWithUV(widthX, 3, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropL);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 1, dropL);
-			RenderHelper.draw();
+			NTMRenderHelper.addVertexWithUV(widthX, 3, 2.5 - widthZ, 1, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 3, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 1, dropL);
+			NTMRenderHelper.draw();
 
 			boolean smoosh = drill.enableCrusher;
 			widthX = smoosh ? 0.5 : 0.25;
@@ -106,27 +104,27 @@ public class RenderExcavator extends TileEntitySpecialRenderer<TileEntityMachine
 			double uU = smoosh ? 4 : 2;
 			double uL = 0.5;
 			bindTexture(smoosh ? gravel : cobble);
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, uU, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 1, 2.5 + widthZ, uU, dropL);
-			RenderHelper.addVertexWithUV(widthX, 1, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, uU, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 1, 2.5 + widthZ, uU, dropL);
+			NTMRenderHelper.addVertexWithUV(widthX, 1, 2.5 + widthZ, 0, dropL);
 
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, uU, dropU);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(widthX, 1, 2.5 - widthZ, 0, dropL);
-			RenderHelper.addVertexWithUV(-widthX, 1, 2.5 - widthZ, uU, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, uU, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 1, 2.5 - widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 1, 2.5 - widthZ, uU, dropL);
 
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, uL, dropU);
-			RenderHelper.addVertexWithUV(-widthX, 1, 2.5 - widthZ, uL, dropL);
-			RenderHelper.addVertexWithUV(-widthX, 1, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 2, 2.5 - widthZ, uL, dropU);
+			NTMRenderHelper.addVertexWithUV(-widthX, 1, 2.5 - widthZ, uL, dropL);
+			NTMRenderHelper.addVertexWithUV(-widthX, 1, 2.5 + widthZ, 0, dropL);
 
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, uL, dropU);
-			RenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropU);
-			RenderHelper.addVertexWithUV(widthX, 1, 2.5 + widthZ, 0, dropL);
-			RenderHelper.addVertexWithUV(widthX, 1, 2.5 - widthZ, uL, dropL);
-			RenderHelper.draw();
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 - widthZ, uL, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 2, 2.5 + widthZ, 0, dropU);
+			NTMRenderHelper.addVertexWithUV(widthX, 1, 2.5 + widthZ, 0, dropL);
+			NTMRenderHelper.addVertexWithUV(widthX, 1, 2.5 - widthZ, uL, dropL);
+			NTMRenderHelper.draw();
 		}
 		
 		GL11.glPopMatrix();

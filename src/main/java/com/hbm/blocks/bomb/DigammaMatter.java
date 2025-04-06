@@ -1,10 +1,7 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -17,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class DigammaMatter extends Block {
 	
 	public static final PropertyInteger META = BlockDummyable.META;
@@ -25,7 +24,7 @@ public class DigammaMatter extends Block {
 
 	public DigammaMatter(String s) {
 		super(Material.PORTAL);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

@@ -1,28 +1,13 @@
 package com.hbm.render.entity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderSparks;
-import com.hbm.render.model.ModelBaleflare;
-import com.hbm.render.model.ModelBuckshot;
-import com.hbm.render.model.ModelBullet;
-import com.hbm.render.model.ModelGrenade;
-import com.hbm.render.model.ModelMIRV;
-import com.hbm.render.model.ModelMiniNuke;
-import com.hbm.render.model.ModelRocket;
-
+import com.hbm.render.model.*;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.ActiveRenderInfo;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.entity.Render;
@@ -32,6 +17,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderBulletMk2 extends Render<EntityBulletBase> {
 

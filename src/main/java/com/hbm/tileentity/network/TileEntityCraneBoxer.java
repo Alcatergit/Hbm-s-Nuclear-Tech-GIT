@@ -7,7 +7,6 @@ import com.hbm.inventory.container.ContainerCraneBoxer;
 import com.hbm.inventory.gui.GUICraneBoxer;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -247,7 +246,7 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
         int xCoord = pos.getX();
         int yCoord = pos.getY();
         int zCoord = pos.getZ();
-        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).lengthVector() < 20;
+        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).length() < 20;
     }
 
     @Override

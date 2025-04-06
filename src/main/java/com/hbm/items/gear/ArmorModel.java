@@ -1,14 +1,11 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.model.ModelCloak;
 import com.hbm.render.model.ModelGoggles;
 import com.hbm.render.model.ModelHat;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
@@ -25,6 +22,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ArmorModel extends ItemArmor {
 
@@ -46,7 +45,7 @@ public class ArmorModel extends ItemArmor {
 
 	public ArmorModel(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String s) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(CreativeTabs.COMBAT);
 		
@@ -167,12 +166,12 @@ public class ArmorModel extends ItemArmor {
         	}
         }
         
-        RenderHelper.startDrawingTexturedQuads();
-        RenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
-        RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), (double)resolution.getScaledHeight(), -90.0D, 1.0D, 1.0D);
-        RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
-        RenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
-        RenderHelper.draw();
+        NTMRenderHelper.startDrawingTexturedQuads();
+        NTMRenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
+        NTMRenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), (double)resolution.getScaledHeight(), -90.0D, 1.0D, 1.0D);
+        NTMRenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
+        NTMRenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+        NTMRenderHelper.draw();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
         GlStateManager.enableAlpha();

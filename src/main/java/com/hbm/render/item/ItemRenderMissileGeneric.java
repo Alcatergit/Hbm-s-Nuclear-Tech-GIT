@@ -1,20 +1,18 @@
 package com.hbm.render.item;
 
-import java.util.HashMap;
-import java.util.function.Consumer;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
-
+import com.hbm.render.amlfrom1710.IModelCustom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class ItemRenderMissileGeneric extends TEISRBase {
 	

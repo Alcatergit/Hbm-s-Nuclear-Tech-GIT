@@ -1,18 +1,14 @@
 package com.hbm.tileentity.turret;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.turret.TurretBase;
 import com.hbm.entity.logic.EntityBomber;
+import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.missile.EntityMissileCustom;
-import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.lib.Library;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETurretCIWSPacket;
 import com.hbm.packet.TETurretPacket;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +21,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityTurretBase extends TileEntity implements ITickable {
 
@@ -76,7 +75,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 
 				oldRotationPitch = rotationPitch;
 				oldRotationYaw = rotationYaw;
-				//rotationPitch = -Math.asin(turret.y / turret.lengthVector()) * 180 / Math.PI;
+				//rotationPitch = -Math.asin(turret.y / turret.length()) * 180 / Math.PI;
 				double sqrt = MathHelper.sqrt(turret.x * turret.x + turret.z * turret.z);
 				rotationPitch = -Math.atan2(turret.y, sqrt) * 180 / Math.PI;
 				rotationYaw = -Math.atan2(turret.x, turret.z) * 180 / Math.PI;

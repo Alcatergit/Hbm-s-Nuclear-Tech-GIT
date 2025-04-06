@@ -1,12 +1,11 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.tile.IHeatSource;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.modules.ModuleBurnTime;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.tile.IHeatSource;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

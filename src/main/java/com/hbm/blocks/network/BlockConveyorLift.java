@@ -3,18 +3,19 @@ package com.hbm.blocks.network;
 import api.hbm.block.IConveyorBelt;
 import api.hbm.block.IEnterableBlock;
 import com.hbm.entity.item.EntityMovingItem;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.item.EntityItem;
+import net.minecraft.block.properties.PropertyInteger;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
 public class BlockConveyorLift extends BlockConveyorChute {
+    public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 2); //Bottom 0, Middle 1, Input 2
 
     public BlockConveyorLift(Material materialIn, String s) {
         super(materialIn, s);
@@ -39,14 +40,14 @@ public class BlockConveyorLift extends BlockConveyorChute {
         EnumFacing dir = this.getTravelDirection(world, pos, itemPos);
         Vec3d snap = this.getClosestSnappingPosition(world, pos, itemPos);
         Vec3d dest = new Vec3d(
-                snap.x - dir.getFrontOffsetX() * speed,
-                snap.y - dir.getFrontOffsetY() * speed,
-                snap.z - dir.getFrontOffsetZ() * speed);
+                snap.x - dir.getXOffset() * speed,
+                snap.y - dir.getYOffset() * speed,
+                snap.z - dir.getZOffset() * speed);
         Vec3d motion = new Vec3d(
                 dest.x - itemPos.x,
                 dest.y - itemPos.y,
                 dest.z - itemPos.z);
-        double len = motion.lengthVector();
+        double len = motion.length();
         Vec3d ret = new Vec3d(
                 itemPos.x + motion.x / len * speed,
                 itemPos.y + motion.y / len * speed,
@@ -55,7 +56,7 @@ public class BlockConveyorLift extends BlockConveyorChute {
     }
 
     @Override
-    public void onEntityCollidedWithBlock(World world, BlockPos pos, IBlockState state, Entity entity) {
+    public void onEntityCollision(World world, BlockPos pos, IBlockState state, Entity entity) {
         if(!world.isRemote) {
 
             if(entity instanceof EntityItem && entity.ticksExisted > 10 && !entity.isDead) {

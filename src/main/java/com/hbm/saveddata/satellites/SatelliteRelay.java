@@ -16,4 +16,9 @@ public class SatelliteRelay extends Satellite {
 		for(EntityPlayer p : world.playerEntities)
 			AdvancementManager.grantAchievement(p, AdvancementManager.achFOEQ);
 	}
+	@Override
+	public float[] getColor() {
+		return new float[] { 0.0F, 0.0F, 0.0F };
+	}
+
 }

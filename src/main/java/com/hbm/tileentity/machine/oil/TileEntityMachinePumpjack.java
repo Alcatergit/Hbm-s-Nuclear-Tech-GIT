@@ -1,254 +1,253 @@
 package com.hbm.tileentity.machine.oil;
 
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.MachinePumpjack;
-import com.hbm.config.MachineConfig;
-import com.hbm.entity.particle.EntityGasFX;
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
+import com.hbm.dim.SolarSystem;
+import com.hbm.inventory.container.ContainerMachineOilWell;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.gui.GUIMachineOilWell;
+import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TEPumpjackPacket;
-
-import net.minecraft.init.Blocks;
-
+import com.hbm.tileentity.IConfigurableMachine;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.io.IOException;
 
 public class TileEntityMachinePumpjack extends TileEntityOilDrillBase {
 
-	public boolean isProgressing;
-	public float rotation;
-	public float prevRotation;
+	protected static int maxPower = 250_000;
+	protected static int consumption = 200;
+	protected static int delay = 25;
+	protected static int oilPerDeposit = 750;
+	protected static int oilPerDunaDeposit = 300;
+	protected static int gasPerDepositMin = 50;
+	protected static int gasPerDepositMax = 250;
+	protected static double drainChance = 0.025D;
+	protected static double drainChanceDuna = 0.05D; //essentially, duna is supposed to produce weaker oil than the overworld.
 
-	public TileEntityMachinePumpjack() {
-		super();
-	}
+	// Gas from pure natgas deposits
+	protected static int gasPerDeposit = 750;
+	protected static int petgasPerDepositMin = 10;
+	protected static int petgasPerDepositMax = 50;
 
-	public String getInventoryName() {
-		return this.hasCustomInventoryName() ? this.getCustomName() : "container.pumpjack";
+	public float rot = 0;
+	public float prevRot = 0;
+	public float speed = 0;
+
+	@Override
+	public String getName() {
+		return "container.pumpjack";
 	}
 
 	@Override
-    public long getMaxPower() {
-        return 200000L;
-    }
-
-	@Override
-	public void readFromNBT(NBTTagCompound compound) {
-		this.rotation = compound.getFloat("rotation");
-		super.readFromNBT(compound);
+	public long getMaxPower() {
+		return maxPower;
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setFloat("rotation", rotation);
-		return super.writeToNBT(compound);
+	public int getPowerReq() {
+		return consumption;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public void update() {
-		int timer = MachineConfig.delayPerOperationPumpjack;
-		prevRotation = rotation;
-		age++;
-		age2++;
-		if(age >= timer)
-			age -= timer;
-		if(age2 >= 20)
-			age2 -= 20;
-		if(!world.isRemote) {
-			this.updateConnections();
-			int tank0Amount = tanks[0].getFluidAmount();
-			int tank1Amount = tanks[1].getFluidAmount();
-			if(age2 == 9 || age2 == 19) {
-				fillFluidInit(tanks[0]);
-				fillFluidInit(tanks[1]);
-			}
+	public int getDelay() {
+		return delay;
+	}
 
-			if(FFUtils.fillFluidContainer(inventory, tanks[0], 1, 2))
-				needsUpdate = true;
-			if(FFUtils.fillFluidContainer(inventory, tanks[1], 3, 4))
-				needsUpdate = true;
+	@Override
+	public void onDrill(int y) {
+		Block b = world.getBlockState(new BlockPos(pos.getX(), y, pos.getZ())).getBlock();
+		ItemStack stack = new ItemStack(b);
+		int[] ids = OreDictionary.getOreIDs(stack);
+		for(Integer i : ids) {
+			String name = OreDictionary.getOreName(i);
 
-			if(needsUpdate) {
-				needsUpdate = false;
-			}
-			power = Library.chargeTEFromItems(inventory, 0, power, getMaxPower());
-
-			if(power >= MachineConfig.powerConsumptionPerOperationPumpjack && !(tank0Amount >= tanks[0].getCapacity() || tank1Amount >= tanks[1].getCapacity())) {
-
-				// operation start
-
-				if(age == timer - 1) {
-					warning = 0;
-
-					// warning 0, green: derrick is operational
-					// warning 1, red: derrick is full, has no power or the
-					// drill is jammed
-					// warning 2, yellow: drill has reached max depth
-
-					for(int i = pos.getY() - 1; i > pos.getY() - 1 - 250; i--) {
-
-						if(i <= 0) {
-							// Code 2: The drilling ended
-							warning = 2;
-							break;
-						}
-
-						Block b = world.getBlockState(new BlockPos(pos.getX(), i, pos.getZ())).getBlock();
-						if(b == ModBlocks.oil_pipe)
-							continue;
-
-						if((b.isReplaceable(world, new BlockPos(pos.getX(), i, pos.getZ())) || b.getExplosionResistance(null) < 1000) && !(b == ModBlocks.ore_oil || b == ModBlocks.ore_oil_empty || b == ModBlocks.ore_bedrock_oil)) {
-							world.setBlockState(new BlockPos(pos.getX(), i, pos.getZ()), ModBlocks.oil_pipe.getDefaultState());
-
-							// Code 2: The drilling ended
-							if(i == pos.getY() - 250)
-								warning = 2;
-							break;
-
-						} else if(this.tanks[0].getFluidAmount() < this.tanks[0].getCapacity() && this.tanks[1].getFluidAmount() < this.tanks[1].getCapacity()) {
-							if(succ(pos.getX(), i, pos.getZ()) == 1) {
-
-								int oilCollected = MachineConfig.oilPerDepositBlockMinPumpjack + ((MachineConfig.oilPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.oilPerDepositBlockMaxExtraPumpjack) : 0);
-								int gasCollected = MachineConfig.gasPerDepositBlockMinPumpjack + ((MachineConfig.gasPerDepositBlockMaxExtraPumpjack > 0) ? world.rand.nextInt(MachineConfig.gasPerDepositBlockMaxExtraPumpjack) : 0);
-
-								this.tanks[0].fill(new FluidStack(tankTypes[0], oilCollected), true);
-								this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
-								needsUpdate = true;
-
-								break;
-							} else {
-								warning = 2;
-								break;
-							}
-
-						} else {
-							// Code 1: Drill jammed
-							warning = 1;
-							break;
-						}
+			if("oreUranium".equals(name)) {
+				for(int j = 2; j < 6; j++) {
+					ForgeDirection dir = ForgeDirection.getOrientation(j);
+					if(world.getBlockState(pos.add(dir.offsetX, 0, dir.offsetZ)).getBlock().isReplaceable(world, pos.add(dir.offsetX, 0, dir.offsetZ))) {
+						world.setBlockState(pos.add(dir.offsetX, 0, dir.offsetZ), ModBlocks.gas_radon_dense.getDefaultState());
 					}
 				}
-
-				// operation end
-
-				power -= MachineConfig.powerConsumptionPerOperationPumpjack;
-			} else {
-				warning = 1;
 			}
 
-			warning2 = 0;
-			if(tanks[1].getFluidAmount() > 0) {
-				if(inventory.getStackInSlot(5).getItem() == ModItems.fuse || inventory.getStackInSlot(5).getItem() == ModItems.screwdriver) {
-					warning2 = 2;
-					tanks[1].drain(50, true);
-					needsUpdate = true;
-					world.spawnEntity(new EntityGasFX(world, pos.getX() + 0.5F, pos.getY() + 6.5F, pos.getZ() + 0.5F, 0.0, 0.0, 0.0));
-				} else {
-					warning2 = 1;
+			if("oreAsbestos".equals(name)) {
+				for(int j = 2; j < 6; j++) {
+					ForgeDirection dir = ForgeDirection.getOrientation(j);
+					if(world.getBlockState(pos.add(dir.offsetX, 0, dir.offsetZ)).getBlock().isReplaceable(world, pos.add(dir.offsetX, 0, dir.offsetZ))) {
+						world.setBlockState(pos.add(dir.offsetX, 0, dir.offsetZ), ModBlocks.gas_asbestos.getDefaultState());
+					}
 				}
-			}
-			isProgressing = warning == 0;
-			rotation += (warning == 0 ? 5 : 0);
-
-			PacketDispatcher.wrapper.sendToAllAround(new TEPumpjackPacket(pos.getX(), pos.getY(), pos.getZ(), rotation, isProgressing), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
-			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			if(tank0Amount != tanks[0].getFluidAmount() || tank1Amount != tanks[1].getFluidAmount()){
-				markDirty();
 			}
 		}
 	}
 
-	protected void updateConnections() {
-		ForgeDirection dir = ForgeDirection.getOrientation(world.getBlockState(pos).getValue(MachinePumpjack.FACING).ordinal());
-		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
-		
-		this.trySubscribe(world, pos.add(rot.offsetX * 2 + dir.offsetX * 2, 0, rot.offsetZ * 2 + dir.offsetZ * 2), dir);
-		this.trySubscribe(world, pos.add(rot.offsetX * 2 + dir.offsetX * 2, 0, rot.offsetZ * 4 - dir.offsetZ * 2), dir.getOpposite());
-		this.trySubscribe(world, pos.add(rot.offsetX * 4 - dir.offsetX * 2, 0, rot.offsetZ * 4 + dir.offsetZ * 2), dir);
-		this.trySubscribe(world, pos.add(rot.offsetX * 4 - dir.offsetX * 2, 0, rot.offsetZ * 2 - dir.offsetZ * 2), dir.getOpposite());
+	@Override
+	public void update() {
+		super.update();
+
+		if(world.isRemote) {
+
+			this.prevRot = rot;
+
+			if(this.indicator == 0) {
+				this.rot += speed;
+			}
+
+			if(this.rot >= 360) {
+				this.prevRot -= 360;
+				this.rot -= 360;
+			}
+		}
 	}
 
+	@Override
+	public void networkPack(NBTTagCompound nbt, int range) {
+		nbt.setFloat("speed", this.indicator == 0 ? (5F + (2F * this.speedLevel)) + (this.overLevel - 1F) * 10: 0F);
+
+		super.networkPack(nbt, range);
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		super.networkUnpack(nbt);
+
+		this.speed = nbt.getFloat("speed");
+	}
+
+	@Override
+	public void onSuck(BlockPos pos) {
+		IBlockState state = world.getBlockState(pos);
+		Block block = state.getBlock();
+		int meta = block.getMetaFromState(state);
+
+		if(block == ModBlocks.ore_oil) {
+			if(meta == SolarSystem.Body.LAYTHE.ordinal()) {
+				tanks[0].setTankType(Fluids.OIL_DS);
+			} else {
+				tanks[0].setTankType(Fluids.OIL);
+			}
+			tanks[1].setTankType(Fluids.GAS);
+
+			if(meta == SolarSystem.Body.DUNA.ordinal()) {
+				this.tanks[0].setFill(this.tanks[0].getFill() + oilPerDunaDeposit);
+				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
+				this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + world.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1)))); // ditto, lotsa gas
+				if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
+
+				if(world.rand.nextDouble() < drainChanceDuna) {
+					world.setBlockState(pos, ModBlocks.ore_oil_empty.getExtendedState(state, world, pos), 3);
+				}
+			} else {
+				this.tanks[0].setFill(this.tanks[0].getFill() + oilPerDeposit);
+				if(this.tanks[0].getFill() > this.tanks[0].getMaxFill()) this.tanks[0].setFill(tanks[0].getMaxFill());
+				this.tanks[1].setFill(this.tanks[1].getFill() + (gasPerDepositMin + world.rand.nextInt((gasPerDepositMax - gasPerDepositMin + 1))));
+				if(this.tanks[1].getFill() > this.tanks[1].getMaxFill()) this.tanks[1].setFill(tanks[1].getMaxFill());
+
+				if(world.rand.nextDouble() < drainChance) {
+					world.setBlockState(pos, ModBlocks.ore_oil_empty.getExtendedState(state, world, pos), 3);
+				}
+			}
+		}
+
+		if(block == ModBlocks.ore_gas) {
+			tanks[0].setTankType(Fluids.GAS);
+			tanks[1].setTankType(Fluids.PETROLEUM);
+
+			tanks[0].setFill(tanks[0].getFill() + gasPerDeposit);
+			if(tanks[0].getFill() > tanks[0].getMaxFill()) tanks[0].setFill(tanks[0].getMaxFill());
+			tanks[1].setFill(tanks[1].getFill() + (petgasPerDepositMin + world.rand.nextInt((petgasPerDepositMax - petgasPerDepositMin + 1))));
+			if(tanks[1].getFill() > tanks[1].getMaxFill()) tanks[1].setFill(tanks[1].getMaxFill());
+
+			if(world.rand.nextDouble() < drainChance) {
+				world.setBlockState(pos, ModBlocks.ore_gas_empty.getExtendedState(state, world, pos), 3);
+			}
+		}
+	}
+
+
+	AxisAlignedBB bb = null;
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return TileEntity.INFINITE_EXTENT_AABB;
+
+		if(bb == null) {
+			bb = new AxisAlignedBB(
+					pos.getX() - 7,
+					pos.getY(),
+					pos.getZ() - 7,
+					pos.getX() + 8,
+					pos.getY() + 6,
+					pos.getZ() + 8
+			);
+		}
+
+		return bb;
 	}
-	
+
+	@Override
+	public DirPos[] getConPos() {
+		this.getBlockMetadata();
+		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
+
+		return new DirPos[] {
+				new DirPos(pos.getX() + rot.offsetX * 2 + dir.offsetX * 2, pos.getY(), pos.getZ() + rot.offsetZ * 2 + dir.offsetZ * 2, dir),
+				new DirPos(pos.getX() + rot.offsetX * 2 + dir.offsetX * 2, pos.getY(), pos.getZ() + rot.offsetZ * 4 - dir.offsetZ * 2, dir.getOpposite()),
+				new DirPos(pos.getX() + rot.offsetX * 4 - dir.offsetX * 2, pos.getY(), pos.getZ() + rot.offsetZ * 4 + dir.offsetZ * 2, dir),
+				new DirPos(pos.getX() + rot.offsetX * 4 - dir.offsetX * 2, pos.getY(), pos.getZ() + rot.offsetZ * 2 - dir.offsetZ * 2, dir.getOpposite())
+		};
+	}
+
+	@Override
+	public String getConfigName() {
+		return "pumpjack";
+	}
+
+	@Override
+	public void readIfPresent(JsonObject obj) {
+		maxPower = IConfigurableMachine.grab(obj, "I:powerCap", maxPower);
+		consumption = IConfigurableMachine.grab(obj, "I:consumption", consumption);
+		delay = IConfigurableMachine.grab(obj, "I:delay", delay);
+		oilPerDeposit = IConfigurableMachine.grab(obj, "I:oilPerDeposit", oilPerDeposit);
+		gasPerDepositMin = IConfigurableMachine.grab(obj, "I:gasPerDepositMin", gasPerDepositMin);
+		gasPerDepositMax = IConfigurableMachine.grab(obj, "I:gasPerDepositMax", gasPerDepositMax);
+		drainChance = IConfigurableMachine.grab(obj, "D:drainChance", drainChance);
+	}
+
+	@Override
+	public void writeConfig(JsonWriter writer) throws IOException {
+		writer.name("I:powerCap").value(maxPower);
+		writer.name("I:consumption").value(consumption);
+		writer.name("I:delay").value(delay);
+		writer.name("I:oilPerDeposit").value(oilPerDeposit);
+		writer.name("I:gasPerDepositMin").value(gasPerDepositMin);
+		writer.name("I:gasPerDepositMax").value(gasPerDepositMax);
+		writer.name("D:drainChance").value(drainChance);
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineOilWell(player.inventory, this);
+	}
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public double getMaxRenderDistanceSquared()
-	{
-		return 65536.0D;
-	}
-	public void fillFluidInit(FluidTank tank) {
-		
-		EnumFacing e = world.getBlockState(pos).getValue(MachinePumpjack.FACING);
-		e = e.rotateY();
-		if(e == EnumFacing.EAST) {
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-4, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-4, 0, -2), 2000) || needsUpdate;
-		}
-		if(e == EnumFacing.SOUTH) {
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -4), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -4), 2000) || needsUpdate;
-		}
-		if(e == EnumFacing.WEST) {
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(4, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(4, 0, -2), 2000) || needsUpdate;
-		}
-		if(e == EnumFacing.NORTH) {
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 2), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 4), 2000) || needsUpdate;
-			needsUpdate = FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 4), 2000) || needsUpdate;
-		}
-	}
-
-	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(resource == null){
-			return null;
-		} else if(resource.getFluid() == tankTypes[0]){
-			return tanks[0].drain(resource.amount, doDrain);
-		} else if(resource.getFluid() == tankTypes[1]){
-			return tanks[1].drain(resource.amount, doDrain);
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(tanks[0].getFluidAmount() > 0){
-			return tanks[0].drain(maxDrain, doDrain);
-		} else if(tanks[1].getFluidAmount() > 0){
-			return tanks[1].drain(maxDrain, doDrain);
-		} else {
-			return null;
-		}
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineOilWell(player.inventory, this);
 	}
 }

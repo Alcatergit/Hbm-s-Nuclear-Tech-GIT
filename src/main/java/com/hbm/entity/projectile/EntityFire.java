@@ -321,7 +321,7 @@ public class EntityFire extends Entity implements IProjectile {
 
                     if (st.getMaterial() != Material.AIR)
                     {
-                        this.field_145790_g.onEntityCollidedWithBlock(this.world, newPos, st, this);
+                        this.field_145790_g.onEntityCollision(this.world, newPos, st, this);
                     }
                 }
             }

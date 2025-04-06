@@ -1,17 +1,15 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.effect.EntityCloudSolinium;
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderCloudSolinium extends Render<EntityCloudSolinium> {
 
@@ -25,7 +23,7 @@ public class RenderCloudSolinium extends Render<EntityCloudSolinium> {
     
 	protected RenderCloudSolinium(RenderManager renderManager) {
 		super(renderManager);
-		blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
+		blastModel = new HFRWavefrontObject(objTesterModelRL);
     	blastTexture = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlastSolinium.png");
     	scale = 0;
 	}

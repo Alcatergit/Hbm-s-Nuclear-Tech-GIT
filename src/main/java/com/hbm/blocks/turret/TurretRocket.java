@@ -4,7 +4,6 @@ import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.tileentity.turret.TileEntityTurretRocket;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;

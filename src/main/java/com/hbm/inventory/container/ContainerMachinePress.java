@@ -1,15 +1,14 @@
 	package com.hbm.inventory.container;
 
-import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.tileentity.machine.TileEntityMachinePress;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.SlotItemHandler;
+    import com.hbm.inventory.SlotMachineOutput;
+    import com.hbm.tileentity.machine.TileEntityMachinePress;
+    import net.minecraft.entity.player.EntityPlayer;
+    import net.minecraft.entity.player.InventoryPlayer;
+    import net.minecraft.inventory.Container;
+    import net.minecraft.inventory.IContainerListener;
+    import net.minecraft.inventory.Slot;
+    import net.minecraft.item.ItemStack;
+    import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachinePress extends Container {
 

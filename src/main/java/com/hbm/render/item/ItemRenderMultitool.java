@@ -1,20 +1,18 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelMultitoolClaw;
 import com.hbm.render.model.ModelMultitoolFist;
 import com.hbm.render.model.ModelMultitoolOpen;
 import com.hbm.render.model.ModelMultitoolPointer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.entity.RenderPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderMultitool extends TEISRBase {
 

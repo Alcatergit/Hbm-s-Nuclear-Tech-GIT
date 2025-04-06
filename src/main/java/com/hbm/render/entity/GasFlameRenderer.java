@@ -1,15 +1,8 @@
 package com.hbm.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.items.ModItems;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,6 +13,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 
@@ -36,14 +34,14 @@ public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 	public void doRender(EntityGasFlameFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
 
 		if(textures.size() == 0){
-			textures.put(ModItems.gasflame1, RenderHelper.getItemTexture(ModItems.gasflame1));
-			textures.put(ModItems.gasflame2, RenderHelper.getItemTexture(ModItems.gasflame2));
-			textures.put(ModItems.gasflame3, RenderHelper.getItemTexture(ModItems.gasflame3));
-			textures.put(ModItems.gasflame4, RenderHelper.getItemTexture(ModItems.gasflame4));
-			textures.put(ModItems.gasflame5, RenderHelper.getItemTexture(ModItems.gasflame5));
-			textures.put(ModItems.gasflame6, RenderHelper.getItemTexture(ModItems.gasflame6));
-			textures.put(ModItems.gasflame7, RenderHelper.getItemTexture(ModItems.gasflame7));
-			textures.put(ModItems.gasflame8, RenderHelper.getItemTexture(ModItems.gasflame8));
+			textures.put(ModItems.gasflame1, NTMRenderHelper.getItemTexture(ModItems.gasflame1));
+			textures.put(ModItems.gasflame2, NTMRenderHelper.getItemTexture(ModItems.gasflame2));
+			textures.put(ModItems.gasflame3, NTMRenderHelper.getItemTexture(ModItems.gasflame3));
+			textures.put(ModItems.gasflame4, NTMRenderHelper.getItemTexture(ModItems.gasflame4));
+			textures.put(ModItems.gasflame5, NTMRenderHelper.getItemTexture(ModItems.gasflame5));
+			textures.put(ModItems.gasflame6, NTMRenderHelper.getItemTexture(ModItems.gasflame6));
+			textures.put(ModItems.gasflame7, NTMRenderHelper.getItemTexture(ModItems.gasflame7));
+			textures.put(ModItems.gasflame8, NTMRenderHelper.getItemTexture(ModItems.gasflame8));
 		}
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
 			renderItem = ModItems.gasflame8;
@@ -111,12 +109,12 @@ public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 		float f6 = 0.25F;
 		GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		RenderHelper.startDrawingTexturedQuads(tes);
+		NTMRenderHelper.startDrawingTexturedQuads(tes);
 		//RenderHelper.setNormal(0.0F, 1.0F, 0.0F);
-		RenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
-		RenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
 		tes.draw();
 	}
 	

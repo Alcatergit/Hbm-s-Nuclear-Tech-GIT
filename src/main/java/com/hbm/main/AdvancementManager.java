@@ -20,6 +20,7 @@ public class AdvancementManager {
 	public static Advancement soyuz;
 	public static Advancement achRadPoison;
 	public static Advancement achRadDeath;
+	public static Advancement achInferno;
 
 	public static Advancement achSacrifice;
 	public static Advancement achPotato;
@@ -27,6 +28,7 @@ public class AdvancementManager {
 	public static Advancement achFOEQ;
 	public static Advancement achFiend;
 	public static Advancement achFiend2;
+	public static Advancement achGoFish;
 	public static Advancement bobMetalworks;
 	public static Advancement bobAssembly;
 	public static Advancement bobChemistry;
@@ -35,6 +37,8 @@ public class AdvancementManager {
 	public static Advancement bobHidden;
 	public static Advancement achStratum;
 	public static Advancement achMeltdown;
+	public static Advancement achZIRNOXBoom;
+	public static Advancement achDriveFail;
 	public static Advancement achOmega12;
 	public static Advancement digammaSee;
 	public static Advancement digammaFeel;
@@ -73,9 +77,11 @@ public class AdvancementManager {
 		soyuz = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "soyuz"));
 		achRadPoison = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achradpoison"));
 		achRadDeath = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achraddeath"));
+		achInferno = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achinferno"));
 		achStratum = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achstratum"));
 		achMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achmeltdown"));
 		achOmega12 = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achomega12"));
+		achGoFish = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achgofish"));
 		digammaSee = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammasee"));
 		digammaFeel = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammafeel"));
 		digammaKnow = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "digammaknow"));
@@ -84,6 +90,8 @@ public class AdvancementManager {
 		achSomeWounds = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsomewounds"));
 		progress_dfc = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_dfc"));
 		progress_rbmk_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_rbmk_boom"));
+		achZIRNOXBoom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achZIRNOXBoom"));
+		achDriveFail = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achDriveFail"));
 		
 		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));

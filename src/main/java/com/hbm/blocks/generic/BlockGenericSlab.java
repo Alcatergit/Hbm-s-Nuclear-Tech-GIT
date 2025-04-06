@@ -1,12 +1,7 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
-
-import net.minecraft.client.util.ITooltipFlag;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockSlab;
 import net.minecraft.block.SoundType;
@@ -15,23 +10,25 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class BlockGenericSlab extends BlockSlab {
 
 	public static final PropertyEnum<Variant> VARIANT = PropertyEnum.<Variant>create("variant", Variant.class);
-	
+
 	private boolean isDouble;
-	
+
 	public BlockGenericSlab(Material materialIn, boolean isDouble, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.isDouble = isDouble;
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -44,16 +41,16 @@ public class BlockGenericSlab extends BlockSlab {
 	}
 
 	@Override
-	public String getUnlocalizedName(int meta) {
-		return this.getUnlocalizedName();
+	public String getTranslationKey(int meta) {
+		return this.getTranslationKey();
 	}
 
-	
+
 	@Override
 	public boolean isDouble() {
 		return isDouble;
 	}
-	
+
 	@Override
 	public Block setSoundType(SoundType sound) {
 		return super.setSoundType(sound);
@@ -68,7 +65,7 @@ public class BlockGenericSlab extends BlockSlab {
 	public Comparable<?> getTypeForItem(ItemStack stack) {
 		return Variant.DEFAULT;
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		int i = 0;
@@ -80,7 +77,7 @@ public class BlockGenericSlab extends BlockSlab {
 
         return i;
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		IBlockState iblockstate = this.getDefaultState().withProperty(VARIANT, Variant.DEFAULT);
@@ -98,7 +95,7 @@ public class BlockGenericSlab extends BlockSlab {
     {
         return this.isDouble() ? new BlockStateContainer(this, new IProperty[] {VARIANT}) : new BlockStateContainer(this, new IProperty[] {HALF, VARIANT});
     }
-	
+
 	public static enum Variant implements IStringSerializable
     {
         DEFAULT;

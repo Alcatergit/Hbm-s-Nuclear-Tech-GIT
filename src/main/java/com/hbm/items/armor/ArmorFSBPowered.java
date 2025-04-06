@@ -1,21 +1,20 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
+import api.hbm.energymk2.IBatteryItem;
+import com.hbm.blocks.machine.ItemSelfcharger;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.Library;
-import com.hbm.blocks.machine.ItemSelfcharger;
-import api.hbm.energy.IBatteryItem;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ArmorFSBPowered extends ArmorFSB implements IBatteryItem {
 

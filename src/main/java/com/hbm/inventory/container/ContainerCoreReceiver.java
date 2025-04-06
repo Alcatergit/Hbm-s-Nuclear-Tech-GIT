@@ -1,11 +1,9 @@
 package com.hbm.inventory.container;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.packet.AuxLongPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityCoreReceiver;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
@@ -52,10 +50,6 @@ public class ContainerCoreReceiver extends Container {
 		if(joules != te.syncJoules) {
 			joules = (int) te.syncJoules;
 			PacketDispatcher.sendTo(new AuxLongPacket(te.getPos(), te.syncJoules, 0), player);
-		}
-		if(!FFUtils.areTanksEqual(tank, te.tank)){
-			tank = FFUtils.copyTank(te.tank);
-			PacketDispatcher.sendTo(new FluidTankPacket(te.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
 	}

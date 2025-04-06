@@ -1,22 +1,19 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerBarrel;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityBarrel;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public class GUIBarrel extends GuiInfoContainer {
 	
@@ -34,9 +31,7 @@ public class GUIBarrel extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
-
-		//tank.tank.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 68 - 52, 34, 52, tank.tank);
+		tank.tankNew.renderTankInfo(this, mouseX, mouseY, guiLeft + 71, guiTop + 69 - 52, 34, 52);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
@@ -67,8 +62,8 @@ public class GUIBarrel extends GuiInfoContainer {
 		
 		int i = tank.mode;
 		drawTexturedModalRect(guiLeft + 151, guiTop + 34, 176, i * 18, 18, 18);
-		
-		FFUtils.drawLiquid(tank.tank, guiLeft, guiTop, zLevel, 34, 52, 71, 97);
+
+		tank.tankNew.renderTank(guiLeft + 71, guiTop + 69, this.zLevel, 34, 52);
 		/*Minecraft.getMinecraft().getTextureManager().bindTexture(tank.tank.getSheet());
 		tank.tank.renderTank(this, guiLeft + 71, guiTop + 69, tank.tank.getTankType().textureX() * FluidTank.x, tank.tank.getTankType().textureY() * FluidTank.y, 16, 52);
 		tank.tank.renderTank(this, guiLeft + 71 + 16, guiTop + 69, tank.tank.getTankType().textureX() * FluidTank.x, tank.tank.getTankType().textureY() * FluidTank.y, 16, 52);

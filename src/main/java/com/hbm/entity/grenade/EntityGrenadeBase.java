@@ -1,11 +1,8 @@
 package com.hbm.entity.grenade;
 
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -15,6 +12,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.logging.log4j.Level;
 
 public abstract class EntityGrenadeBase extends EntityThrowable {
 
@@ -59,7 +57,7 @@ public abstract class EntityGrenadeBase extends EntityThrowable {
     	
     	this.prevRotationPitch = this.rotationPitch;
         
-        this.rotationPitch -= new Vec3d(motionX, motionY, motionZ).lengthVector() * 25;
+        this.rotationPitch -= new Vec3d(motionX, motionY, motionZ).length() * 25;
         
         this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 

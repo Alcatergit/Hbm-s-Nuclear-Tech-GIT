@@ -2,18 +2,15 @@ package com.hbm.inventory.control_panel;
 
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.*;
+import net.minecraftforge.fml.client.config.GuiSlider;
 import org.lwjgl.opengl.GL11;
-
-import java.util.ArrayList;
-import java.util.List;
 
 // placeholder gui until i make something better
 public class SubElementPanelResize extends SubElement {
@@ -69,14 +66,14 @@ public class SubElementPanelResize extends SubElement {
         GlStateManager.disableLighting();
         gui.mc.getTextureManager().bindTexture(ResourceManager.white);
         // top view
-        RenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, minY+gui.control.panel.a_off*box_len, 0, 0, (maxX-gui.control.panel.b_off*box_len)-(minX+gui.control.panel.d_off*box_len), 1, 1, 1, 1F, .2F, .2F, 1F);
-        RenderHelper.drawGuiRectColor(maxX-gui.control.panel.b_off*box_len-1, minY+gui.control.panel.a_off*box_len, 0, 0, 1, (maxY-gui.control.panel.c_off*box_len)-(minY+gui.control.panel.a_off*box_len), 1, 1, 1F, 1F, 1F, 1F);
-        RenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, maxY-gui.control.panel.c_off*box_len-1, 0, 0, (maxX-gui.control.panel.b_off*box_len)-(minX+gui.control.panel.d_off*box_len), 1, 1, 1, .2F, 1F, .2F, 1F);
-        RenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, minY+gui.control.panel.a_off*box_len, 0, 0, 1, (maxY-gui.control.panel.c_off*box_len)-(minY+gui.control.panel.a_off*box_len), 1, 1, 1F, 1F, 1F, 1F);
+        NTMRenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, minY+gui.control.panel.a_off*box_len, 0, 0, (maxX-gui.control.panel.b_off*box_len)-(minX+gui.control.panel.d_off*box_len), 1, 1, 1, 1F, .2F, .2F, 1F);
+        NTMRenderHelper.drawGuiRectColor(maxX-gui.control.panel.b_off*box_len-1, minY+gui.control.panel.a_off*box_len, 0, 0, 1, (maxY-gui.control.panel.c_off*box_len)-(minY+gui.control.panel.a_off*box_len), 1, 1, 1F, 1F, 1F, 1F);
+        NTMRenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, maxY-gui.control.panel.c_off*box_len-1, 0, 0, (maxX-gui.control.panel.b_off*box_len)-(minX+gui.control.panel.d_off*box_len), 1, 1, 1, .2F, 1F, .2F, 1F);
+        NTMRenderHelper.drawGuiRectColor(minX+gui.control.panel.d_off*box_len, minY+gui.control.panel.a_off*box_len, 0, 0, 1, (maxY-gui.control.panel.c_off*box_len)-(minY+gui.control.panel.a_off*box_len), 1, 1, 1F, 1F, 1F, 1F);
         // side view
-        RenderHelper.drawGuiRectColor(maxX-gui.control.panel.c_off*box_len-1, minY_2+(box_len-height1), 0, 0, 1, height1, 1, 1, .2F, 1F, .2F, 1F);
-        RenderHelper.drawGuiRectColor(minX+gui.control.panel.a_off*box_len, maxY_2-1, 0, 0, (maxX-gui.control.panel.c_off*box_len)-(minX+gui.control.panel.a_off*box_len), 1, 1, 1, 1, 1, 1, 1F);
-        RenderHelper.drawGuiRectColor(minX+gui.control.panel.a_off*box_len, minY_2+(box_len-height0), 0, 0, 1, height0, 1, 1, 1F, .2F, .2F, 1F);
+        NTMRenderHelper.drawGuiRectColor(maxX-gui.control.panel.c_off*box_len-1, minY_2+(box_len-height1), 0, 0, 1, height1, 1, 1, .2F, 1F, .2F, 1F);
+        NTMRenderHelper.drawGuiRectColor(minX+gui.control.panel.a_off*box_len, maxY_2-1, 0, 0, (maxX-gui.control.panel.c_off*box_len)-(minX+gui.control.panel.a_off*box_len), 1, 1, 1, 1, 1, 1, 1F);
+        NTMRenderHelper.drawGuiRectColor(minX+gui.control.panel.a_off*box_len, minY_2+(box_len-height0), 0, 0, 1, height0, 1, 1, 1F, .2F, .2F, 1F);
         // side view slope
         GlStateManager.disableTexture2D();
         GlStateManager.color(1, 1, 1, 1);

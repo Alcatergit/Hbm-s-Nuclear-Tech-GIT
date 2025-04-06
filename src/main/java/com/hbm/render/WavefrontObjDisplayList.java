@@ -1,18 +1,18 @@
 package com.hbm.render;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.hfr.render.loader.S_GroupObject;
 import com.hbm.render.amlfrom1710.GroupObject;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.amlfrom1710.WavefrontObject;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Deprecated //We should use VAOs for this, not displaylists
 public class WavefrontObjDisplayList implements IModelCustom {
 
 	public List<Pair<String, Integer>> nameToCallList = new ArrayList<>();

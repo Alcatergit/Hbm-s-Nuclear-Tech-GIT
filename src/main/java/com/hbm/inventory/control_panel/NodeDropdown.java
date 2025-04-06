@@ -1,18 +1,16 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.function.Function;
-import java.util.function.Supplier;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.control_panel.nodes.Node;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.nbt.NBTTagCompound;
+import org.lwjgl.opengl.GL11;
+
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class NodeDropdown extends NodeElement {
 
@@ -62,7 +60,7 @@ public class NodeDropdown extends NodeElement {
 		Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float x = offsetX+4;
 		float y = offsetY+8;
-		RenderHelper.drawGuiRectBatchedColor(x, y, 0F, 0.890625F, 32, 6, 0.609375F, 0.984375F, 1, 1, 1, 1);
+		NTMRenderHelper.drawGuiRectBatchedColor(x, y, 0F, 0.890625F, 32, 6, 0.609375F, 0.984375F, 1, 1, 1, 1);
 		Tessellator.getInstance().draw();
 		list.render(mX, mY);
 		
@@ -90,13 +88,13 @@ public class NodeDropdown extends NodeElement {
 	
 	@Override
 	public boolean onClick(float x, float y){
-		if(!list.isClosed && RenderHelper.intersects2DBox(x, y, list.getBoundingBox())){
+		if(!list.isClosed && NTMRenderHelper.intersects2DBox(x, y, list.getBoundingBox())){
 			if(list.mouseClicked(x, y)){
 				list.close();
 				return true;
 			}
 		}
-		if(RenderHelper.intersects2DBox(x, y, getBox())){
+		if(NTMRenderHelper.intersects2DBox(x, y, getBox())){
 			if(list.isClosed){
 				list.open();
 			} else {

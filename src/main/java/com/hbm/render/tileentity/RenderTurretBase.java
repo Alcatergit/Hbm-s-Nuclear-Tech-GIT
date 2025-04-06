@@ -1,18 +1,16 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import org.lwjgl.opengl.GL11;
 
 public abstract class RenderTurretBase<T extends TileEntityTurretBaseNT> extends TileEntitySpecialRenderer<T> {
 	
@@ -24,7 +22,7 @@ public abstract class RenderTurretBase<T extends TileEntityTurretBaseNT> extends
 	protected void renderConnectors(TileEntityTurretBaseNT turret, boolean power, boolean fluid, Fluid type) {
 
 		bindTexture(ResourceManager.turret_connector_tex);
-		Vec3d pos = turret.getHorizontalOffset();
+		Vec3d pos = turret.byHorizontalIndexOffset();
 		int x = (int)(turret.getPos().getX() + pos.x);
 		int y = turret.getPos().getY();
 		int z = (int)(turret.getPos().getZ() + pos.z);

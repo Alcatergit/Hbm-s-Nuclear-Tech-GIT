@@ -1,7 +1,6 @@
 package com.hbm.blocks;
 
 import com.hbm.interfaces.IFluidVisualConnectable;
-
 import net.minecraft.block.material.Material;
 import net.minecraftforge.fluids.Fluid;
 

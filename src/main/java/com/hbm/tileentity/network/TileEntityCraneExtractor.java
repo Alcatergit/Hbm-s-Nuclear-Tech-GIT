@@ -1,15 +1,16 @@
 package com.hbm.tileentity.network;
 
 import api.hbm.block.IConveyorBelt;
-import com.hbm.lib.Library;
+import cofh.core.util.core.SideConfig;
+import cofh.core.util.core.SlotConfig;
 import com.hbm.entity.item.EntityMovingItem;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.container.ContainerCraneExtractor;
 import com.hbm.inventory.gui.GUICraneExtractor;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.modules.ModulePatternMatcher;
 import com.hbm.tileentity.IGUIProvider;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,19 +24,22 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.IItemHandlerModifiable;
-
-import javax.annotation.Nonnull;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 
 public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGUIProvider, IControlReceiver {
     public boolean isWhitelist = false;
+    protected SideConfig sideConfig;
+    protected SlotConfig slotConfig;
+    public byte[] sideCache;
 
+    private boolean isCofhCoreLoaded() {
+        return Loader.isModLoaded("cofhcore");
+    }
     private int tickCounter = 0;
     public ModulePatternMatcher matcher;
 
@@ -49,6 +53,29 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
     @Override
     public String getName() {
         return "container.craneExtractor";
+    }
+
+    public boolean canExtractItemExtended(int slot, ItemStack stack, EnumFacing side) {
+        if (side == null) {
+            return true;
+        } else {
+            if (slot < 9) {
+                return SideConfig.allowExtraction(this.sideConfig.sideTypes[this.sideCache[side.ordinal()]])
+                        && (this.sideConfig.sideTypes[this.sideCache[side.ordinal()]] == 7
+                        || this.slotConfig.allowExtractionSlot[slot]);
+            }
+            else {
+                return true;
+            }
+        }
+    }
+
+    public boolean canExtractItemCE(int slot, ItemStack stack, EnumFacing side, ISidedInventory sided) {
+        if(isCofhCoreLoaded()) {
+            return canExtractItemExtended(slot, stack, side);
+        } else {
+            return sided.canExtractItem(slot, stack, side);
+        }
     }
 
     @Override
@@ -95,7 +122,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
                 if(te instanceof ISidedInventory && !(te instanceof TileEntityCraneExtractor)) {
                     sided = (ISidedInventory) te;
-                    access = masquerade(sided, EnumFacing.getFront(inputSide.getOpposite().ordinal()));
+                    access = masquerade(sided, EnumFacing.byIndex(inputSide.getOpposite().ordinal()));
                 }
 
                 //collect matching items
@@ -112,7 +139,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                             int index = access == null ? i : access[i];
                             ItemStack stack = inv.getStackInSlot(index);
 
-                            if(stack != ItemStack.EMPTY && (sided == null || sided.canExtractItem(index, stack, EnumFacing.getFront(inputSide.getOpposite().ordinal())))){
+                            if(stack != ItemStack.EMPTY && (sided == null || canExtractItemCE(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal()), sided))){
 
                                 boolean match = this.matchesFilter(stack);
 
@@ -137,16 +164,16 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
                     for(int index : allowed_slots) {
                         ItemStack stack = inventory.getStackInSlot(index);
-
-                        if(stack != ItemStack.EMPTY && (sided == null || sided.canExtractItem(index, stack, EnumFacing.getFront(inputSide.getOpposite().ordinal())))){
+                    try {
+                        if (stack != ItemStack.EMPTY && (sided == null || canExtractItemCE(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal()), sided))) {
 
                             boolean match = this.matchesFilter(stack);
 
-                            if((isWhitelist && match) || (!isWhitelist && !match)) {
+                            if ((isWhitelist && match) || (!isWhitelist && !match)) {
                                 int toSend = Math.min(amount, stack.getCount());
                                 ItemStack cStack = stack.copy();
                                 stack.shrink(toSend);
-                                if(stack.getCount() == 0)
+                                if (stack.getCount() == 0)
                                     inventory.setStackInSlot(index, ItemStack.EMPTY);
                                 cStack.setCount(toSend);
 
@@ -158,6 +185,9 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                                 world.spawnEntity(moving);
                                 break;
                             }
+                        }
+                    } catch(ArrayIndexOutOfBoundsException e){
+                        e.printStackTrace();
                         }
                     }
                 }
@@ -218,7 +248,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
         for(int i = 0; i < 9; i++) {
             ItemStack filter = inventory.getStackInSlot(i);
 
-            if(filter != null && this.matcher.isValidForFilter(filter, i, stack)) {
+            if(filter != ItemStack.EMPTY && this.matcher.isValidForFilter(filter, i, stack)) {
                 return true;
             }
         }
@@ -270,7 +300,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
         int xCoord = pos.getX();
         int yCoord = pos.getY();
         int zCoord = pos.getZ();
-        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).lengthVector() < 20;
+        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).length() < 20;
     }
 
     @Override

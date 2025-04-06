@@ -1,32 +1,28 @@
 package com.hbm.tileentity.bomb;
 
-import java.util.List;
-
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.MissileStruct;
-import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartSize;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TEMissileMultipartPacket;
+import com.hbm.packet.*;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityLoadedBase;
-import net.minecraftforge.fml.common.Optional;
-
-import api.hbm.energy.IEnergyUser;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -41,27 +37,21 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
+import java.util.List;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, SimpleComponent {
+public class TileEntityCompactLauncher extends TileEntityLoadedBase implements ITickable, IEnergyReceiverMK2, IFluidHandler, ITankPacketAcceptor, SimpleComponent {
 
 	public ItemStackHandler inventory;
 
@@ -176,7 +166,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 				for(int x = -1; x <= 1; x++) {
 					for(int z = -1; z <= 1; z++) {
 
-						if(world.isBlockIndirectlyGettingPowered(mPos.setPos(pos.getX() + x, pos.getY(), pos.getZ() + z)) > 0) {
+						if(world.getStrongPower(mPos.setPos(pos.getX() + x, pos.getY(), pos.getZ() + z)) > 0) {
 							launch();
 							break outer;
 						}
@@ -201,19 +191,19 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 	}
 
 	private void updateConnections() {
-		this.trySubscribe(world, pos.add(+ 2, 0, + 1), ForgeDirection.EAST);
-		this.trySubscribe(world, pos.add(+ 2, 0, + 1), ForgeDirection.EAST);
-		this.trySubscribe(world, pos.add(+ 2, 0, - 1), ForgeDirection.EAST);
-		this.trySubscribe(world, pos.add(- 2, 0, + 1), ForgeDirection.WEST);
-		this.trySubscribe(world, pos.add(- 2, 0, - 1), ForgeDirection.WEST);
-		this.trySubscribe(world, pos.add(+ 1, 0, + 2), ForgeDirection.NORTH);
-		this.trySubscribe(world, pos.add(- 1, 0, + 2), ForgeDirection.NORTH);
-		this.trySubscribe(world, pos.add(+ 1, 0, - 2), ForgeDirection.SOUTH);
-		this.trySubscribe(world, pos.add(- 1, 0, - 2), ForgeDirection.SOUTH);
-		this.trySubscribe(world, pos.add(+ 1, - 1, + 1), ForgeDirection.DOWN);
-		this.trySubscribe(world, pos.add(+ 1, - 1, - 1), ForgeDirection.DOWN);
-		this.trySubscribe(world, pos.add(- 1, - 1, + 1), ForgeDirection.DOWN);
-		this.trySubscribe(world, pos.add(- 1, - 1, - 1), ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.getX() + 2, pos.getY(), pos.getZ() + 1, ForgeDirection.EAST);
+		this.trySubscribe(world, pos.getX()+ 2, pos.getY(), pos.getZ() + 1, ForgeDirection.EAST);
+		this.trySubscribe(world, pos.getX()+ 2, pos.getY(), pos.getZ() - 1, ForgeDirection.EAST);
+		this.trySubscribe(world, pos.getX()- 2, pos.getY(), pos.getZ() + 1, ForgeDirection.WEST);
+		this.trySubscribe(world, pos.getX()- 2, pos.getY(), pos.getZ() - 1, ForgeDirection.WEST);
+		this.trySubscribe(world, pos.getX()+ 1, pos.getY(), pos.getZ() + 2, ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.getX()- 1, pos.getY(), pos.getZ() + 2, ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.getX()+ 1, pos.getY(), pos.getZ() - 2, ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.getX()- 1, pos.getY(), pos.getZ() - 2, ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.getX()+ 1, pos.getY() - 1, pos.getZ() + 1, ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.getX()+ 1, pos.getY() - 1, pos.getZ() - 1, ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.getX()- 1, pos.getY() - 1, pos.getZ() + 1, ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.getX()- 1, pos.getY() - 1, pos.getZ() - 1, ForgeDirection.DOWN);
 	}
 
 	public boolean canLaunch() {

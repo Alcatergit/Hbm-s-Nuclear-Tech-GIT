@@ -1,20 +1,19 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.tileentity.machine.TileEntityStorageDrum;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class StorageDrum extends BlockMachineBase implements ITooltipProvider {
 

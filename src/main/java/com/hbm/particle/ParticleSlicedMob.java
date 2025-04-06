@@ -6,7 +6,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
 import com.hbm.physics.RigidBody;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.client.Minecraft;
@@ -70,8 +70,8 @@ public class ParticleSlicedMob extends Particle {
         int k = i & 65535;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, k, j);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		RenderHelper.resetParticleInterpPos(entityIn, partialTicks);
-		RenderHelper.resetColor();
+		NTMRenderHelper.resetParticleInterpPos(entityIn, partialTicks);
+		NTMRenderHelper.resetColor();
 		body.doGlTransform(new Vec3(interpPosX, interpPosY, interpPosZ), partialTicks);
 		GL11.glCallList(cutMob);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(capTex);

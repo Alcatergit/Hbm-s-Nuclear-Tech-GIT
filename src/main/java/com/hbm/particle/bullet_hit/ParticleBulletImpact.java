@@ -1,7 +1,5 @@
 package com.hbm.particle.bullet_hit;
 
-import java.nio.IntBuffer;
-
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Vector4f;
@@ -13,14 +11,13 @@ import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleLayerBase;
 import com.hbm.particle.ParticleRenderLayer;
 import com.hbm.render.GLCompat;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
@@ -166,7 +163,7 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 			net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
 			GlStateManager.glNormal3f(0, 0, -1F);
 			GlStateManager.disableCull();
-			RenderHelper.resetColor();
+			NTMRenderHelper.resetColor();
 			GlStateManager.enableBlend();
 			GlStateManager.disableAlpha();
 			GlStateManager.depthMask(false);
@@ -205,7 +202,7 @@ public class ParticleBulletImpact extends ParticleLayerBase {
 			}
 			
 			GlStateManager.disablePolygonOffset();
-			RenderHelper.resetColor();
+			NTMRenderHelper.resetColor();
 			GlStateManager.enableCull();
 			GlStateManager.enableAlpha();
 			GlStateManager.depthMask(true);

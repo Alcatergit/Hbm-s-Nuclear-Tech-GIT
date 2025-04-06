@@ -1,13 +1,10 @@
 package com.hbm.blocks.fluid;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -17,8 +14,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class CoriumBlock extends BlockFluidClassic {
 
@@ -26,7 +23,7 @@ public class CoriumBlock extends BlockFluidClassic {
 
 	public CoriumBlock(Fluid fluid, Material material, String s) {
 		super(fluid, material);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		setQuantaPerBlock(5);
 		setCreativeTab(null);
@@ -59,7 +56,7 @@ public class CoriumBlock extends BlockFluidClassic {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		entity.setInWeb();
 		entity.setFire(3);
 		entity.attackEntityFrom(ModDamageSource.radiation, 200F);

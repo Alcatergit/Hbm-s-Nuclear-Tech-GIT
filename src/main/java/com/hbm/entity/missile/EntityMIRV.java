@@ -1,10 +1,6 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import api.hbm.entity.IRadarDetectable;
-
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
@@ -13,8 +9,6 @@ import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.main.MainRegistry;
-
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.network.datasync.DataParameter;
@@ -31,6 +25,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMIRV extends EntityThrowable implements IChunkLoader, IConstantRenderer, IRadarDetectable {
 	private Ticket loaderTicket;

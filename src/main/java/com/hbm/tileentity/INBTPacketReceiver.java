@@ -2,10 +2,9 @@ package com.hbm.tileentity;
 
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public interface INBTPacketReceiver {

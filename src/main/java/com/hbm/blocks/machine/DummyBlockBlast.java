@@ -1,18 +1,15 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
+import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IDummy;
 import com.hbm.interfaces.IRadResistantBlock;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityDummy;
-
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -31,6 +28,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.Random;
+
 @Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
 public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IRadResistantBlock, IPartialSealableBlock {
 
@@ -38,7 +37,7 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 
 	public DummyBlockBlast(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -108,16 +107,22 @@ public class DummyBlockBlast extends BlockContainer implements IDummy, IBomb, IR
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		TileEntity te = world.getTileEntity(pos);
-		if(te != null && te instanceof TileEntityDummy) {
-			
-			TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(((TileEntityDummy)te).target);
-			if(entity != null && !entity.isLocked())
-			{
-				entity.tryToggle();
+	public BombReturnCode explode(World world, BlockPos pos) {
+		if(!world.isRemote) {
+			TileEntity te = world.getTileEntity(pos);
+			if (te != null && te instanceof TileEntityDummy) {
+
+				TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(((TileEntityDummy) te).target);
+				if (entity != null && !entity.isLocked()) {
+					entity.tryToggle();
+					return BombReturnCode.TRIGGERED;
+				}
 			}
+
+			return BombReturnCode.ERROR_INCOMPATIBLE;
 		}
+
+		return BombReturnCode.UNDEFINED;
 	}
 
 	@Override

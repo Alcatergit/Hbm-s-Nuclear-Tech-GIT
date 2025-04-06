@@ -1,8 +1,8 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.inventory.SlotTakeOnly;
 import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -17,43 +17,42 @@ private TileEntityMachineRefinery testNuke;
 	public ContainerMachineRefinery(InventoryPlayer invPlayer, TileEntityMachineRefinery tedf) {
 		
 		testNuke = tedf;
-		
+
 		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 186, 72));
 		//Canister Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 35, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 8, 99));
 		//Canister Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 35, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 8, 119));
 		//Heavy Oil Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 80, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 86, 99));
 		//Heavy Oil Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 80, 108));
-		//Nahptha Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 98, 90));
-		//Nahptha Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 98, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 86, 119));
+		//Naphtha Input
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 106, 99));
+		//Naphtha Output
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 106, 119));
 		//Light Oil Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 116, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 126, 99));
 		//Light Oil Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 8, 116, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 8, 126, 119));
 		//Petroleum Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 134, 90));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 9, 146, 99));
 		//Petroleum Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 10, 134, 108));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 10, 146, 119));
 		//Sulfur Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 152, 36));
-		
-		for(int i = 0; i < 3; i++)
-		{
-			for(int j = 0; j < 9; j++)
-			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18 + 56));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 11, 58, 119));
+		//Fluid ID
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 12, 186, 106));
+
+		for(int i = 0; i < 3; i++) {
+			for(int j = 0; j < 9; j++) {
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 150 + i * 18));
 			}
 		}
-		
-		for(int i = 0; i < 9; i++)
-		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142 + 56));
+
+		for(int i = 0; i < 9; i++) {
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 208));
 		}
 	}
 	

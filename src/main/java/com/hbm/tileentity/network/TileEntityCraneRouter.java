@@ -6,7 +6,6 @@ import com.hbm.inventory.gui.GUICraneRouter;
 import com.hbm.modules.ModulePatternMatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -121,7 +120,7 @@ public class TileEntityCraneRouter extends TileEntityMachineBase implements IGUI
         int xCoord = pos.getX();
         int yCoord = pos.getY();
         int zCoord = pos.getZ();
-        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).lengthVector() < 20;
+        return new Vec3d(xCoord - player.posX, yCoord - player.posY, zCoord - player.posZ).length() < 20;
     }
 
     @Override

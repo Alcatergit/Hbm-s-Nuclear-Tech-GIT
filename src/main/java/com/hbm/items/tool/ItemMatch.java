@@ -1,7 +1,6 @@
 package com.hbm.items.tool;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -17,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemMatch extends Item {
 
 	public ItemMatch(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

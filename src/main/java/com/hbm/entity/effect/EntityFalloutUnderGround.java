@@ -1,55 +1,31 @@
 package com.hbm.entity.effect;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.WasteLog;
 import com.hbm.config.BombConfig;
-import com.hbm.config.RadiationConfig;
-import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.effect.EntityFalloutRain;
-import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.saveddata.AuxSavedData;
-
-//Chunkloading stuff
-import java.util.ArrayList;
-import java.util.List;
-
+import com.hbm.config.VersatileConfig;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
-import com.hbm.blocks.generic.WasteLog;
-
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.block.BlockHugeMushroom;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockGravel;
-import net.minecraft.block.BlockIce;
-import net.minecraft.block.BlockSnow;
-import net.minecraft.block.BlockSnowBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockStone;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockLeaves;
-import net.minecraft.block.state.IBlockState;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutUnderGround.class, DataSerializers.VARINT);

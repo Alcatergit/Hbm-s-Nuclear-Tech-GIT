@@ -1,16 +1,11 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -35,6 +30,10 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class ItemSwordAbility extends ItemSword implements IItemAbility {
 
 	private EnumRarity rarity = EnumRarity.COMMON;
@@ -49,7 +48,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		this.damage = damage;
 		this.movement = movement;
 		this.attackSpeed = attackSpeed;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
@@ -134,7 +133,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		if(player.capabilities.isCreativeMode) {
 			block.getBlock().onBlockHarvested(world, pos, block, player);
 			if(block.getBlock().removedByPlayer(block, world, pos, player, false))
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 
 			if(!world.isRemote) {
 				player.connection.sendPacket(new SPacketBlockChange(world, pos));
@@ -149,7 +148,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 			block.getBlock().onBlockHarvested(world, pos, block, player);
 
 			if(block.getBlock().removedByPlayer(block, world, pos, player, true)) {
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 				block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
 				block.getBlock().dropXpOnBlockBreak(world, pos, event);
 			}
@@ -159,7 +158,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		} else {
 			world.playEvent(2001, pos, Block.getStateId(block));
 			if(block.getBlock().removedByPlayer(block, world, pos, player, true)) {
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 			}
 			ItemStack itemstack = player.getHeldItem(hand);
 			if(itemstack != null) {

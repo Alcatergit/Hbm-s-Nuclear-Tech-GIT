@@ -3,15 +3,11 @@ package com.hbm.entity.mob;
 import com.google.common.base.Predicate;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.interfaces.IRadiationImmune;
+import com.hbm.inventory.material.Mats;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
@@ -20,6 +16,7 @@ import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
@@ -102,11 +99,11 @@ public class EntityCyberCrab extends EntityMob implements IRangedAttackMob, IRad
 	
 	@Override
 	protected Item getDropItem() {
-		return ModItems.wire_gold;
+		return new ItemStack(ModItems.wire_fine, 1, Mats.MAT_GOLD.id).getItem();
 	}
 	
 	protected void dropRareDrop(int p_70600_1_) {
-    	this.dropItem(ModItems.wire_magnetized_tungsten, 1);
+    	this.dropItem(new ItemStack(ModItems.wire_fine, 1, Mats.MAT_MAGTUNG.id).getItem(), 1);
     }
 	
 	@Override

@@ -1,17 +1,11 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.lang.NoClassDefFoundError;
-
+import api.hbm.energymk2.IEnergyReceiverMK2;
+import cofh.redstoneflux.api.IEnergyProvider;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
-
-import api.hbm.energy.IEnergyUser;
-import cofh.redstoneflux.api.IEnergyProvider;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -21,11 +15,14 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityEMP extends Entity implements IChunkLoader {
 
@@ -93,7 +90,7 @@ public class EntityEMP extends Entity implements IChunkLoader {
 		TileEntity te = world.getTileEntity(pos);
 		if(te == null)
 			return;
-		if(te instanceof IEnergyUser) {
+		if(te instanceof IEnergyReceiverMK2) {
 			machines.add(pos);
 		} else {
 			try{
@@ -114,9 +111,9 @@ public class EntityEMP extends Entity implements IChunkLoader {
 			return;
 		boolean flag = false;
 		
-		if (te instanceof IEnergyUser) {
+		if (te instanceof IEnergyReceiverMK2) {
 			
-			((IEnergyUser)te).setPower(0);
+			((IEnergyReceiverMK2)te).setPower(0);
 			flag = true;
 		}
 		try{

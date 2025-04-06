@@ -1,15 +1,13 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.util.SmallBlockPronter;
 import com.hbm.tileentity.machine.TileEntityPlasmaStruct;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderPlasmaMultiblock extends TileEntitySpecialRenderer<TileEntityPlasmaStruct> {
 
@@ -41,8 +39,8 @@ public class RenderPlasmaMultiblock extends TileEntitySpecialRenderer<TileEntity
         GlStateManager.disableAlpha();
         GlStateManager.depthMask(false);
 		
-		RenderHelper.bindBlockTexture();
-		RenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.bindBlockTexture();
+		NTMRenderHelper.startDrawingTexturedQuads();
 		
         for(int iy = 1; iy < 6; iy ++) {
 
@@ -53,16 +51,16 @@ public class RenderPlasmaMultiblock extends TileEntitySpecialRenderer<TileEntity
 	            	if(iy == 5 && ix > 3)
 	            		break;
 	            	
-	            	SmallBlockPronter.renderSmolBlockAt(RenderStructureMarker.fusion[1][1], ix, iy, iz);
+	            	SmallBlockPronter.renderSimpleBlockAt(RenderStructureMarker.fusion[1][1], ix, iy, iz);
 	            }
 	        }
         }
         
         for(int i = 10; i <= 11; i++)
             for(int j = 2; j <= 3; j++)
-            	SmallBlockPronter.renderSmolBlockAt(RenderStructureMarker.fusion[1][1], i, j, 0);
+            	SmallBlockPronter.renderSimpleBlockAt(RenderStructureMarker.fusion[1][1], i, j, 0);
         
-        RenderHelper.draw();
+        NTMRenderHelper.draw();
 
 		GlStateManager.disableBlend();
 		GlStateManager.enableAlpha();

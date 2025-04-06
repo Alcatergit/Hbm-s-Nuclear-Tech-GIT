@@ -1,9 +1,6 @@
 package com.hbm.entity.mob.botprime;
 
-import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -12,6 +9,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public abstract class EntityWormBaseNT extends EntityBurrowingNT {
 

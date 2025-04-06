@@ -42,7 +42,7 @@ public class LightningGenerator {
 				Vec3d randVec = BobMathUtil.randVecInCone(to.subtract(from).normalize(), info.forkConeDegrees, rand);
 				LightningNode fork1 = new LightningNode(child.pos);
 				float len = 1+rand.nextFloat()*info.forkLengthRandom;
-				LightningNode fork2 = new LightningNode(child.pos.add(randVec.scale(len*from.subtract(to).lengthVector()*0.25F)));
+				LightningNode fork2 = new LightningNode(child.pos.add(randVec.scale(len*from.subtract(to).length()*0.25F)));
 				fork1.children.add(fork2);
 				fork2.parent = fork1;
 				subdivide(fork1, (int) (len*0.75*info.forkSubdivisions), info.forkSubdivMult, info.forkSubdivRecurse, info.forkRandAmount*info.randAmount*rand.nextFloat()*0.8F, info.forkRandAmountSubdivMultiplier);
@@ -57,7 +57,7 @@ public class LightningGenerator {
 		LightningNode child = n.children.get(0);
 		float subdivision = 1F/(float)(subdivisions+1);
 		for(int i = 1; i <= subdivisions; i ++){
-			Vec3d newPos = BobMathUtil.mix(n.pos, child.pos, subdivision*i).addVector((rand.nextFloat()*2-1)*randAmount, (rand.nextFloat()*2-1)*randAmount, (rand.nextFloat()*2-1)*randAmount);
+			Vec3d newPos = BobMathUtil.mix(n.pos, child.pos, subdivision*i).add((rand.nextFloat()*2-1)*randAmount, (rand.nextFloat()*2-1)*randAmount, (rand.nextFloat()*2-1)*randAmount);
 			LightningNode insert = new LightningNode(newPos);
 			insert.parent = parent;
 			insert.children.add(child);
@@ -83,14 +83,14 @@ public class LightningGenerator {
 	@SideOnly(Side.CLIENT)
 	public static void render(LightningNode n, Vec3d playerPos, float scale, float x, float y, float z, boolean fadeEnd, @Nullable IColorGetter c){
 		List<Vec3d> toRender = new ArrayList<>();
-		toRender.add(n.pos.addVector(x, y, z));
+		toRender.add(n.pos.add(x, y, z));
 		while(n.children.size() > 0){
 			//Render forks
 			for(int i = 1; i < n.children.size(); i ++){
 				render(n.children.get(i), playerPos, scale*0.5F, x, y, z, fadeEnd, c);
 			}
 			n = n.children.get(0);
-			toRender.add(n.pos.addVector(x, y, z));
+			toRender.add(n.pos.add(x, y, z));
 		}
 		TrailRenderer2.draw(playerPos, toRender, scale, fadeEnd, true, c);
 	}

@@ -1,7 +1,5 @@
 package com.hbm.tileentity.network;
 
-import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;

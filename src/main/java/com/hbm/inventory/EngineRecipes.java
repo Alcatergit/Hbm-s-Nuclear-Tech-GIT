@@ -1,17 +1,10 @@
 package com.hbm.inventory;
 
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.BlockBaseVisualFluidConnectable;
 import com.hbm.forgefluid.ModForgeFluids;
-
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
+
+import java.util.HashMap;
 
 public class EngineRecipes {
 	

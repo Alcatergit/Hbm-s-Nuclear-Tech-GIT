@@ -1,7 +1,6 @@
 package com.hbm.tileentity.network;
 
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;

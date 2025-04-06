@@ -3,7 +3,6 @@ package com.hbm.inventory.gui;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.inventory.container.ContainerArmorTable;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;

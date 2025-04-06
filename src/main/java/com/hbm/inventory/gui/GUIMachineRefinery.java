@@ -1,16 +1,21 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
+import com.hbm.inventory.RefineryRecipes;
 import com.hbm.inventory.container.ContainerMachineRefinery;
+import com.hbm.inventory.fluid.FluidStack;
+import com.hbm.inventory.fluid.tank.FluidTankNTM;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
-
+import com.hbm.util.Tuple;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class GUIMachineRefinery extends GuiInfoContainer {
 
@@ -20,31 +25,31 @@ public class GUIMachineRefinery extends GuiInfoContainer {
 	public GUIMachineRefinery(InventoryPlayer invPlayer, TileEntityMachineRefinery tedf) {
 		super(new ContainerMachineRefinery(invPlayer, tedf));
 		refinery = tedf;
-		
-		this.xSize = 176;
-		this.ySize = 222;
+
+		this.xSize = 210;
+		this.ySize = 231;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
-		
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 70 - 52, 34, 52, refinery.tanks[0], refinery.tankTypes[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 80, guiTop + 70 - 52, 16, 52, refinery.tanks[1], refinery.tankTypes[1]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 98, guiTop + 70 - 52, 16, 52, refinery.tanks[2], refinery.tankTypes[2]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 70 - 52, 16, 52, refinery.tanks[3], refinery.tankTypes[3]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 70 - 52, 16, 52, refinery.tanks[4], refinery.tankTypes[4]);
-		
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 70 - 52, 16, 52, refinery.power, TileEntityMachineRefinery.maxPower);
+
+		refinery.tanks[0].renderTankInfo(this, mouseX, mouseY, guiLeft + 30, guiTop + 27, 21, 104);    // Render tooltip for column.
+		refinery.tanks[1].renderTankInfo(this, mouseX, mouseY, guiLeft + 86, guiTop + 42, 16, 52);
+		refinery.tanks[2].renderTankInfo(this, mouseX, mouseY, guiLeft + 106, guiTop + 42, 16, 52);
+		refinery.tanks[3].renderTankInfo(this, mouseX, mouseY, guiLeft + 126, guiTop + 42, 16, 52);
+		refinery.tanks[4].renderTankInfo(this, mouseX, mouseY, guiLeft + 146, guiTop + 42, 16, 52);
+
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 186, guiTop + 18, 16, 52, refinery.power, refinery.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
 		String name = this.refinery.hasCustomInventoryName() ? this.refinery.getInventoryName() : I18n.format(this.refinery.getInventoryName());
-		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
-		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
+
+		this.fontRenderer.drawString(name, this.xSize / 2 - 34/2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
+		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 4, 4210752);
 	}
 
 	@Override
@@ -52,28 +57,72 @@ public class GUIMachineRefinery extends GuiInfoContainer {
 		super.drawDefaultBackground();
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		drawModalRectWithCustomSizedTexture(guiLeft, guiTop, 0, 0, xSize, ySize, 350, 256);
 
-		int j = (int)refinery.getPowerScaled(52);
-		drawTexturedModalRect(guiLeft + 8, guiTop + 70 - j, 176, 52 - j, 16, j);
-		
-		FFUtils.drawLiquid(refinery.tanks[0], guiLeft, guiTop, zLevel, 34, 52, 26, 98);
-		
-		FFUtils.drawLiquid(refinery.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 80, 98);
-		FFUtils.drawLiquid(refinery.tanks[2], guiLeft, guiTop, zLevel, 16, 52, 98, 98);
-		FFUtils.drawLiquid(refinery.tanks[3], guiLeft, guiTop, zLevel, 16, 52, 116, 98);
-		FFUtils.drawLiquid(refinery.tanks[4], guiLeft, guiTop, zLevel, 16, 52, 134, 98);
-		
-		//refinery.tanks[0].renderTank(this, guiLeft + 26, guiTop + 70, refinery.tanks[0].getTankType().textureX() * FluidTank.x, refinery.tanks[0].getTankType().textureY() * FluidTank.y, 16, 52);
-	//	refinery.tanks[0].renderTank(this, guiLeft + 26 + 16, guiTop + 70, refinery.tanks[0].getTankType().textureX() * FluidTank.x, refinery.tanks[0].getTankType().textureY() * FluidTank.y, 16, 52);
-	//	refinery.tanks[0].renderTank(this, guiLeft + 26 + 32, guiTop + 70, refinery.tanks[0].getTankType().textureX() * FluidTank.x, refinery.tanks[0].getTankType().textureY() * FluidTank.y, 2, 52);
+		// power
+		int j = (int)refinery.getPowerScaled(50);
+		drawModalRectWithCustomSizedTexture(guiLeft + 186, guiTop + 69 - j, 210, 52 - j, 16, j, 350, 256);
 
-		//refinery.tanks[1].renderTank(this, guiLeft + 80, guiTop + 70, refinery.tanks[1].getTankType().textureX() * FluidTank.x, refinery.tanks[1].getTankType().textureY() * FluidTank.y, 16, 52);
+		OpenGlHelper.glBlendFunc(770, 771, 1, 0); // default
 
-	//	refinery.tanks[2].renderTank(this, guiLeft + 98, guiTop + 70, refinery.tanks[2].getTankType().textureX() * FluidTank.x, refinery.tanks[2].getTankType().textureY() * FluidTank.y, 16, 52);
+		// input tank
+		FluidTankNTM inputOil = refinery.tanks[0];
+		if (inputOil.getFill() != 0) {
 
-	//	refinery.tanks[3].renderTank(this, guiLeft + 116, guiTop + 70, refinery.tanks[3].getTankType().textureX() * FluidTank.x, refinery.tanks[3].getTankType().textureY() * FluidTank.y, 16, 52);
+			int targetHeight = inputOil.getFill() * 101 / inputOil.getMaxFill();
+			Color color = new Color(inputOil.getTankType().getColor());
 
-	//	refinery.tanks[4].renderTank(this, guiLeft + 134, guiTop + 70, refinery.tanks[4].getTankType().textureX() * FluidTank.x, refinery.tanks[4].getTankType().textureY() * FluidTank.y, 16, 52);
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+			drawModalRectWithCustomSizedTexture(guiLeft + 33, guiTop + 130 - targetHeight, 226, 101 - targetHeight, 16, targetHeight, 350, 256);
+			GL11.glDisable(GL11.GL_BLEND);
+		}
+
+		// fucking kgjhgdfjgdhjfg
+		// drawModalRectWithCustomSizedTexture lets you set the resolution of the source texture !!!!
+		// 350x256 texture by behated (the pipes wouldn't fit)
+
+		// pipes
+
+		Tuple.Quintet<FluidStack, FluidStack, FluidStack, FluidStack, ItemStack> recipe = RefineryRecipes.getRefinery(inputOil.getTankType());
+
+		if(recipe == null) {
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 63, 247, 1, 33, 48, 350, 256);
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 32, 247, 50, 66, 52, 350, 256);
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 24, 247, 145, 86, 35, 350, 256);
+			drawModalRectWithCustomSizedTexture(guiLeft + 36, guiTop + 16, 211, 119, 122, 25, 350, 256);
+		} else {
+
+			// Heavy Oil Products
+			Color color = new Color(recipe.getV().type.getColor());
+
+			GL11.glEnable(GL11.GL_BLEND);
+			GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 63, 247, 1, 33, 48, 350, 256);
+
+			// Naphtha Oil Products
+			color = new Color(recipe.getW().type.getColor());
+			GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 32, 247, 50, 66, 52, 350, 256);
+
+			// Light Oil Products
+			color = new Color(recipe.getX().type.getColor());
+			GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+			drawModalRectWithCustomSizedTexture(guiLeft + 52, guiTop + 24, 247, 145, 86, 35, 350, 256);
+
+			// Gaseous Products
+			color = new Color(recipe.getY().type.getColor());
+			GL11.glColor4f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F, 1F);
+			drawModalRectWithCustomSizedTexture(guiLeft + 36, guiTop + 16, 211, 119, 122, 25, 350, 256);
+
+			GL11.glDisable(GL11.GL_BLEND);
+			GL11.glColor4f(1F, 1F, 1F, 1F);
+		}
+
+		// output tanks
+		refinery.tanks[1].renderTank(guiLeft + 86, guiTop + 95, this.zLevel, 16, 52);
+		refinery.tanks[2].renderTank(guiLeft + 106, guiTop + 95, this.zLevel, 16, 52);
+		refinery.tanks[3].renderTank(guiLeft + 126, guiTop + 95, this.zLevel, 16, 52);
+		refinery.tanks[4].renderTank(guiLeft + 146, guiTop + 95, this.zLevel, 16, 52);
 	}
 }

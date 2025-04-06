@@ -1,43 +1,36 @@
 package com.hbm.entity.logic;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.util.ContaminationUtil;
-
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.SoundCategory;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.BombConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.explosion.ExplosionDrying;
 import com.hbm.explosion.ExplosionFleija;
 import com.hbm.explosion.ExplosionNukeAdvanced;
 import com.hbm.explosion.ExplosionSolinium;
-import com.hbm.explosion.ExplosionDrying;
 import com.hbm.interfaces.Spaghetti;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.packet.AuxParticlePacketNT;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map.Entry;
 
 @Spaghetti("why???")
 public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {

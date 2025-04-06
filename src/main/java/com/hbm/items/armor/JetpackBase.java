@@ -1,15 +1,10 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.main.MainRegistry;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelJetPack;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -29,6 +24,9 @@ import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class JetpackBase extends ItemArmorMod {
 

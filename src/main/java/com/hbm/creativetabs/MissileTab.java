@@ -16,7 +16,7 @@ public class MissileTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.missile_nuclear != null){
 			return new ItemStack(ModItems.missile_nuclear);
 		}

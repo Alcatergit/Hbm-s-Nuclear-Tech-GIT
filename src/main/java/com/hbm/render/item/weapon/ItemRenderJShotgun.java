@@ -1,11 +1,7 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
-import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunJShotty;
@@ -13,11 +9,10 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
@@ -28,6 +23,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
 
 public class ItemRenderJShotgun extends TEISRBase {
 
@@ -84,7 +81,7 @@ public class ItemRenderJShotgun extends TEISRBase {
 						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(HBMSoundHandler.jsg_reload1, 1F, 0.15F));
 					}
 					if(modelName.startsWith("Main")){
-						firstPersonFlashlightPos = RenderHelper.project(1.31674F, -8.20808F, -1.57076F);
+						firstPersonFlashlightPos = NTMRenderHelper.project(1.31674F, -8.20808F, -1.57076F);
 						flashlightDirection = BobMathUtil.viewFromLocal(new Vector4f(0, -1, 0, 0))[0];
 					}
 					//Render

@@ -1,15 +1,13 @@
 package com.hbm.blocks.machine;
 
+import api.hbm.energymk2.IEnergyConnectorBlock;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.main.MainRegistry;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.interfaces.IDummy;
-
-import api.hbm.energy.IEnergyConnectorBlock;
+import com.hbm.lib.ForgeDirection;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class DummyOldBase extends BlockContainer implements IDummy, IEnergyConnectorBlock {
 
@@ -18,7 +16,7 @@ public abstract class DummyOldBase extends BlockContainer implements IDummy, IEn
 	public DummyOldBase(Material mat, String s, boolean port) {
 		super(mat);
 		this.port = port;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(null);
 		ModBlocks.ALL_BLOCKS.add(this);

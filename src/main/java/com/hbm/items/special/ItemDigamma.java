@@ -1,13 +1,10 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
-import com.hbm.items.ItemBase;
 import com.hbm.config.WeaponConfig;
 import com.hbm.entity.effect.EntityQuasar;
+import com.hbm.items.ItemBase;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -15,6 +12,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemDigamma extends ItemBase {
 
@@ -24,6 +23,15 @@ public class ItemDigamma extends ItemBase {
 		super(s);
 		//obacht! the particle's digamma value is "ticks until half life" while the superclass' interpretation is "simply add flat value"
 		this.digamma = diagamma;
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entity, int itemSlot, boolean isSelected) {
+		super.onUpdate(stack, worldIn, entity, itemSlot, isSelected);
+		if(entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			ContaminationUtil.applyDigammaData(player, 1F / ((float) digamma));
+		}
 	}
 	
 	@Override

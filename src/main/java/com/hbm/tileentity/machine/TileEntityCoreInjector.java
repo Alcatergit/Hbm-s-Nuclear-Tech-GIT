@@ -6,7 +6,6 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -15,9 +14,9 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
@@ -44,12 +43,12 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 
 			beam = 0;
 			
-			EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
+			EnumFacing dir = EnumFacing.byIndex(this.getBlockMetadata());
 			for(int i = 1; i <= range; i++) {
 
-				int x = pos.getX() + dir.getFrontOffsetX() * i;
-				int y = pos.getY() + dir.getFrontOffsetY() * i;
-				int z = pos.getZ() + dir.getFrontOffsetZ() * i;
+				int x = pos.getX() + dir.getXOffset() * i;
+				int y = pos.getY() + dir.getYOffset() * i;
+				int z = pos.getZ() + dir.getZOffset() * i;
 				BlockPos pos1 = new BlockPos(x, y, z);
 				TileEntity te = world.getTileEntity(pos1);
 				

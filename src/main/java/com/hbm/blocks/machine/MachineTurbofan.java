@@ -1,27 +1,26 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.main.MainRegistry;
+import com.hbm.inventory.fluid.trait.FT_Combustible;
+import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.inventory.EngineRecipes.FuelGrade;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+
+import java.util.List;
 
 public class MachineTurbofan extends BlockDummyable {
 
@@ -62,7 +61,7 @@ public class MachineTurbofan extends BlockDummyable {
 
 			TileEntityMachineTurbofan entity = (TileEntityMachineTurbofan) world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 			if (entity != null) {
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_turbofan, world, pos1[0], pos1[1], pos1[2]);
+				FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, pos1[0], pos1[1], pos1[2]);
 			}
 			return true;
 		} else {
@@ -85,7 +84,7 @@ public class MachineTurbofan extends BlockDummyable {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		list.add(I18n.format("trait.fuelefficiency"));
-		list.add(" "+I18n.format("trait.fuelefficiency.desc", I18n.format(FuelGrade.AERO.getGrade()), 100));
+		list.add(" "+I18n.format("trait.fuelefficiency.desc", I18n.format(FT_Combustible.FuelGrade.AERO.getGrade()), 100));
 		super.addInformation(stack, worldIn, list, flagIn);
 	}
 }

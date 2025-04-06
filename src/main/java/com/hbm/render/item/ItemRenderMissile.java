@@ -1,13 +1,11 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.render.misc.MissileMultipart;
 import com.hbm.render.misc.MissilePronter;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderMissile extends TEISRBase {
 

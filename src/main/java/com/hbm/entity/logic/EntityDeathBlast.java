@@ -8,7 +8,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
@@ -32,7 +31,7 @@ public class EntityDeathBlast extends Entity implements IConstantRenderer {
 			this.setDead();
 
 			if(CompatibilityConfig.isWarDim(world)){
-				world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 40, posX, posY, posZ).mute());
+				world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 40, posX, posY, posZ));
 				
 				int count = 100;
 				for(int i = 0; i < count; i++) {

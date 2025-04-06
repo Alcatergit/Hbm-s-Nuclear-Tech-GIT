@@ -1,14 +1,13 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.saveddata.RadiationSavedData;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityGeiger extends TileEntity implements ITickable {
 

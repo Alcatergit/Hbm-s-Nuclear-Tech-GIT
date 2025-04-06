@@ -1,52 +1,49 @@
 package com.hbm.inventory;
 
-import java.util.HashSet;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
+
 import java.util.HashMap;
-
-import com.hbm.forgefluid.ModForgeFluids;
-
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class FluidCombustionRecipes {
 	
-	public static HashMap<Fluid, Integer> resultingTU = new HashMap<Fluid, Integer>();
+	public static HashMap<FluidType, Integer> resultingTU = new HashMap<>();
 	//for 1000 mb
 	public static void registerFluidCombustionRecipes() {
-		addBurnableFluid(ModForgeFluids.hydrogen, 5);
-		addBurnableFluid(ModForgeFluids.deuterium, 5);
-		addBurnableFluid(ModForgeFluids.tritium, 5);
+		addBurnableFluid(Fluids.HYDROGEN, 5);
+		addBurnableFluid(Fluids.DEUTERIUM, 5);
+		addBurnableFluid(Fluids.TRITIUM, 5);
 
-		addBurnableFluid(ModForgeFluids.oil, 10);
-		addBurnableFluid(ModForgeFluids.hotoil, 10);
-		addBurnableFluid(ModForgeFluids.crackoil, 10);
-		addBurnableFluid(ModForgeFluids.hotcrackoil, 10);
+		addBurnableFluid(Fluids.OIL, 10);
+		addBurnableFluid(Fluids.HOTOIL, 10);
+		addBurnableFluid(Fluids.CRACKOIL, 10);
+		addBurnableFluid(Fluids.HOTCRACKOIL, 10);
 
-		addBurnableFluid(ModForgeFluids.gas, 10);
-		addBurnableFluid(ModForgeFluids.fishoil, 15);
-		addBurnableFluid(ModForgeFluids.lubricant, 20);
-		addBurnableFluid(ModForgeFluids.aromatics, 25);
-		addBurnableFluid(ModForgeFluids.petroleum, 25);
-		addBurnableFluid(ModForgeFluids.biogas, 25);
-		addBurnableFluid(ModForgeFluids.bitumen, 35);
-		addBurnableFluid(ModForgeFluids.heavyoil, 50);
-		addBurnableFluid(ModForgeFluids.smear, 50);
-		addBurnableFluid(ModForgeFluids.ethanol, 75);
-		addBurnableFluid(ModForgeFluids.reclaimed, 100);
-		addBurnableFluid(ModForgeFluids.petroil, 125);
-		addBurnableFluid(ModForgeFluids.naphtha, 125);
-		addBurnableFluid(ModForgeFluids.heatingoil, 150);
-		addBurnableFluid(ModForgeFluids.biofuel, 150);
-		addBurnableFluid(ModForgeFluids.diesel, 200);
-		addBurnableFluid(ModForgeFluids.lightoil, 200);
-		addBurnableFluid(ModForgeFluids.kerosene, 300);
-		addBurnableFluid(ModForgeFluids.gasoline, 800);
+		addBurnableFluid(Fluids.GAS, 10);
+		addBurnableFluid(Fluids.FISHOIL, 15);
+		addBurnableFluid(Fluids.LUBRICANT, 20);
+		addBurnableFluid(Fluids.AROMATICS, 25);
+		addBurnableFluid(Fluids.PETROLEUM, 25);
+		addBurnableFluid(Fluids.BIOGAS, 25);
+		addBurnableFluid(Fluids.BITUMEN, 35);
+		addBurnableFluid(Fluids.HEAVYOIL, 50);
+		addBurnableFluid(Fluids.SMEAR, 50);
+		addBurnableFluid(Fluids.ETHANOL, 75);
+		addBurnableFluid(Fluids.RECLAIMED, 100);
+		addBurnableFluid(Fluids.PETROIL, 125);
+		addBurnableFluid(Fluids.NAPHTHA, 125);
+		addBurnableFluid(Fluids.HEATINGOIL, 150);
+		addBurnableFluid(Fluids.BIOFUEL, 150);
+		addBurnableFluid(Fluids.DIESEL, 200);
+		addBurnableFluid(Fluids.LIGHTOIL, 200);
+		addBurnableFluid(Fluids.KEROSENE, 300);
+		addBurnableFluid(Fluids.GASOLINE, 800);
 
-		addBurnableFluid(ModForgeFluids.balefire, 1_000);
-		addBurnableFluid(ModForgeFluids.unsaturateds, 1_000);
-		addBurnableFluid(ModForgeFluids.nitan, 2_000);
-		addBurnableFluid(ModForgeFluids.balefire, 10_000);
-		addBurnableFluid(ModForgeFluids.uu_matter, 50_000);
+		// why are we registering it twice?..
+		//addBurnableFluid(Fluids.BALEFIRE, 1_000);
+		addBurnableFluid(Fluids.UNSATURATEDS, 1_000);
+		addBurnableFluid(Fluids.NITAN, 2_000);
+		addBurnableFluid(Fluids.BALEFIRE, 10_000);
 
 		addBurnableFluid("liquidhydrogen", 5);
 		addBurnableFluid("liquiddeuterium", 5);
@@ -63,34 +60,34 @@ public class FluidCombustionRecipes {
 		
 	}
 
-	public static int getFlameEnergy(Fluid f){
+	public static int getFlameEnergy(FluidType f){
 		Integer heat = resultingTU.get(f);
 		if(heat != null)
 			return heat;
 		return 0;
 	}
 
-	public static boolean hasFuelRecipe(Fluid fluid){
+	public static boolean hasFuelRecipe(FluidType fluid){
 		return resultingTU.containsKey(fluid);
 	}
 
-	public static void addBurnableFluid(Fluid fluid, int heatPerMiliBucket) {
+	public static void addBurnableFluid(FluidType fluid, int heatPerMiliBucket) {
 		resultingTU.put(fluid, heatPerMiliBucket);
 	}
 
 	public static void addBurnableFluid(String fluid, int heatPerMiliBucket){
-		if(FluidRegistry.isFluidRegistered(fluid)){
-			addBurnableFluid(FluidRegistry.getFluid(fluid), heatPerMiliBucket);
+		if(Fluids.fromName(fluid) != Fluids.NONE){
+			addBurnableFluid(Fluids.fromName(fluid), heatPerMiliBucket);
 		}
 	}
 
-	public static void removeBurnableFluid(Fluid fluid){
+	public static void removeBurnableFluid(FluidType fluid){
 		resultingTU.remove(fluid);
 	}
 
 	public static void removeBurnableFluid(String fluid){
-		if(FluidRegistry.isFluidRegistered(fluid)){
-			resultingTU.remove(FluidRegistry.getFluid(fluid));
+		if(Fluids.fromName(fluid) != Fluids.NONE){
+			resultingTU.remove(Fluids.fromName(fluid));
 		}
 	}
 }

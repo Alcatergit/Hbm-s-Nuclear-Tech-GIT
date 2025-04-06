@@ -1,7 +1,6 @@
 package com.hbm.entity.mob;
 
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.util.DamageSource;

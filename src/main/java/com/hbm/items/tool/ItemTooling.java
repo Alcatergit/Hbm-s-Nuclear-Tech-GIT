@@ -1,12 +1,9 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
-
 import api.hbm.block.IToolable;
 import api.hbm.block.IToolable.ToolType;
+import com.hbm.items.ModItems;
+import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,12 +16,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class ItemTooling extends Item {
+import java.util.List;
+
+public class ItemTooling extends Item { //TODO: change parent class to Degradable
 
 	protected ToolType type;
 	
 	public ItemTooling(ToolType type, int dura, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setFull3D();

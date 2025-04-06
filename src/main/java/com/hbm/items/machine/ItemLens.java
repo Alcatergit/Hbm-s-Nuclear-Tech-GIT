@@ -1,10 +1,6 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-import com.hbm.util.BobMathUtil;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
@@ -13,6 +9,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemLens extends Item {
 
 	public long maxDamage;
@@ -20,7 +18,7 @@ public class ItemLens extends Item {
 	public float drainMod;
 	
 	public ItemLens(long maxDamage, float fieldMod, float drainMod, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxDamage = maxDamage;
 		this.fieldMod = fieldMod;

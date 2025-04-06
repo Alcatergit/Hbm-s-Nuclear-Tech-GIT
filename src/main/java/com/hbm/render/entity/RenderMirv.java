@@ -1,16 +1,14 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.missile.EntityMIRV;
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderMirv extends Render<EntityMIRV> {
 
@@ -22,7 +20,7 @@ public class RenderMirv extends Render<EntityMIRV> {
 	
 	protected RenderMirv(RenderManager renderManager) {
 		super(renderManager);
-		boyModel = AdvancedModelLoader.loadModel(objTesterModelRL);
+		boyModel = new HFRWavefrontObject(objTesterModelRL);
 		boyTexture = new ResourceLocation(RefStrings.MODID, "textures/models/misc/universaldark.png");
 	}
 

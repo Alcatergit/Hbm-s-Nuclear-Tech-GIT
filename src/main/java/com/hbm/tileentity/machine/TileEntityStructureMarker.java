@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEStructurePacket;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;

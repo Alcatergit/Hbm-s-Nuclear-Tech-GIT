@@ -19,21 +19,21 @@ public class HazardEntry {
 	 */
 	List<HazardModifier> mods = new ArrayList();
 	
-	public HazardEntry(HazardTypeBase type) {
+	public HazardEntry(final HazardTypeBase type) {
 		this(type, 1F);
 	}
 	
-	public HazardEntry(HazardTypeBase type, float level) {
+	public HazardEntry(final HazardTypeBase type, final float level) {
 		this.type = type;
 		this.baseLevel = level;
 	}
 	
-	public HazardEntry addMod(HazardModifier mod) {
+	public HazardEntry addMod(final HazardModifier mod) {
 		this.mods.add(mod);
 		return this;
 	}
 	
-	public void applyHazard(ItemStack stack, EntityLivingBase entity) {
+	public void applyHazard(final ItemStack stack, final EntityLivingBase entity) {
 		type.onUpdate(entity, HazardModifier.evalAllModifiers(stack, entity, baseLevel, mods), stack);
 	}
 	
@@ -45,17 +45,9 @@ public class HazardEntry {
 		return clone(1F);
 	}
 	
-	public HazardEntry clone(float mult) {
-		HazardEntry clone = new HazardEntry(type, baseLevel * mult);
-		clone.mods.addAll(this.mods);
+	public HazardEntry clone(final float mult) {
+		final HazardEntry clone = new HazardEntry(type, baseLevel * mult);
+		clone.mods = this.mods;
 		return clone;
-	}
-
-	public float getBaseLevel(){
-		return this.baseLevel;
-	}
-
-	public void setBaseLevel(float lvl){
-		this.baseLevel = lvl;
 	}
 }

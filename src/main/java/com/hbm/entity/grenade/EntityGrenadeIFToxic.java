@@ -1,10 +1,11 @@
 package com.hbm.entity.grenade;
 
+import com.hbm.entity.effect.EntityMist;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -37,6 +38,7 @@ public class EntityGrenadeIFToxic extends EntityGrenadeBouncyBase {
     		ExplosionLarge.explode(world, posX, posY, posZ, 2, true, true, true);
     		ExplosionChaos.poison(world, (int)posX, (int)posY, (int)posZ, 12);
     		ExplosionChaos.spawnChlorine(world, posX, posY, posZ, 50, 1.5, 0);
+
         }
     }
 

@@ -3,7 +3,7 @@ package com.hbm.particle.bfg;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
@@ -100,7 +100,7 @@ public class ParticleBFGRing extends Particle {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.depthMask(true);
-        RenderHelper.resetColor();
+        NTMRenderHelper.resetColor();
         
         GL11.glPopMatrix();
 	}

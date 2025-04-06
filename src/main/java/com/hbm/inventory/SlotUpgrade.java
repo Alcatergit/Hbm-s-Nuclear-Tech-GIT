@@ -1,7 +1,6 @@
 package com.hbm.inventory;
 
 import com.hbm.items.machine.ItemMachineUpgrade;
-
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.SlotItemHandler;

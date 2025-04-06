@@ -2,8 +2,8 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineNukeFurnace;
 import com.hbm.inventory.BreederRecipes;
-import com.hbm.hazard.HazardSystem;
-
+import com.hbm.inventory.RecipesCommon;
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -14,6 +14,8 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.HashMap;
 
 public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 
@@ -66,17 +68,12 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 	}
 	
 	private static int getItemPower(ItemStack stack) {
-		if(stack == null) {
+		if(stack == null || stack.isEmpty()) {
 			return 0;
 		} else {
+			int power = getFuelValue(stack);
 
-			int[] power = BreederRecipes.getFuelValue(stack);
-
-			if(power == null){
-				return (int)(Math.max(0, Math.sqrt(HazardSystem.getTotalRadsFromStack(stack))-7));
-			}
-
-			return power[0] * power[1] * 5;
+			return power;
 		}
 	}
 	
@@ -224,6 +221,25 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 		{
 			this.markDirty();
 		}
+	}
+
+	private static HashMap<RecipesCommon.ComparableStack, Integer> fuels = new HashMap();
+
+	/**
+	 * Returns an integer array of the fuel value of a certain stack
+	 * @param stack
+	 * @return an integer array (possibly null) with two fields, the HEAT value and the amount of operations
+	 */
+	public static int getFuelValue(ItemStack stack) {
+
+		if(stack == null)
+			return 0;
+
+		RecipesCommon.ComparableStack sta = new RecipesCommon.ComparableStack(stack).makeSingular();
+		if(fuels.get(sta) != null)
+			return fuels.get(sta);
+
+		return 0;
 	}
 	
 	@Override

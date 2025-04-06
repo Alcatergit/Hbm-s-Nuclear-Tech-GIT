@@ -1,61 +1,96 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModSoundTypes;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.items.IDynamicModels;
 import com.hbm.items.ModItems;
-import com.hbm.config.GeneralConfig;
-import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
-
+import com.hbm.items.special.ItemBedrockOreNew;
+import com.hbm.lib.RefStrings;
+import com.hbm.tileentity.network.TileEntityPipeBaseNT;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.renderer.color.IItemColor;
+import net.minecraft.client.renderer.color.ItemColors;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.init.SoundEvents;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.ModelBakeEvent;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ItemFFFluidDuct extends Item {
+	public static final ModelResourceLocation ductLoc = new ModelResourceLocation(
+			RefStrings.MODID + ":ff_fluid_duct", "inventory");
+	private static final List<ItemFFFluidDuct> INSTANCES = new ArrayList<>();
 
 	public ItemFFFluidDuct(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
+
+		if (FMLCommonHandler.instance().getSide() == Side.CLIENT) {
+			INSTANCES.add(this);
+		}
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(GeneralConfig.registerTanks){
-			if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-				FluidRegistry.getRegisteredFluids().values().forEach(f -> {items.add(getStackFromFluid(f));});
+		if (this.isInCreativeTab(tab)) {
+			FluidType[] order = Fluids.getInNiceOrder();
+			for (int i = 1; i < order.length; ++i) {
+				if (!order[i].hasNoID()) {
+					items.add(new ItemStack(this, 1, order[i].getID()));
+				}
 			}
+		}
+	}
+
+
+	@SideOnly(Side.CLIENT)
+	public static void registerColorHandlers() {
+		ItemColors itemColors = Minecraft.getMinecraft().getItemColors();
+		IItemColor handler = new ItemFFFluidDuct.FluidDuctColorHandler();
+
+		for (ItemFFFluidDuct item : INSTANCES) {
+			itemColors.registerItemColorHandler(handler, item);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	private static class FluidDuctColorHandler implements IItemColor {
+		@Override
+		public int colorMultiplier(ItemStack stack, int tintIndex) {
+			if (tintIndex == 1) {
+				int color = Fluids.fromID(stack.getItemDamage()).getColor();
+				return color < 0 ? 0xFFFFFF : color;
+			}
+			return 0xFFFFFF;
 		}
 	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
-		Fluid f = getFluidFromStack(stack);
-		String s1 = null;
-		if(f != null)
-			s1  = ("" + f.getLocalizedName(new FluidStack(f, 1000)).trim());
+		String s = ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
+		String s1 = ("" + I18n.format(Fluids.fromID(stack.getItemDamage()).getConditionalName())).trim();
 
         if (s1 != null)
         {
@@ -82,38 +117,21 @@ public class ItemFFFluidDuct extends Item {
         else
         {
             world.setBlockState(pos, ModBlocks.fluid_duct_mk2.getDefaultState());
-            if(world.getTileEntity(pos) instanceof TileEntityFFFluidDuctMk2) {
-            	((TileEntityFFFluidDuctMk2)world.getTileEntity(pos)).setType(getFluidFromStack(stack));;
+            if(world.getTileEntity(pos) instanceof TileEntityPipeBaseNT) {
+            	((TileEntityPipeBaseNT)world.getTileEntity(pos)).setType(Fluids.fromID(stack.getItemDamage()));;
             }
             stack.shrink(1);
-            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_STONE_PLACE, SoundCategory.PLAYERS, 1F, 0.8F + world.rand.nextFloat() * 0.2F);
+            world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), ModSoundTypes.pipe.getPlaceSound(), SoundCategory.PLAYERS, 1F, 0.8F + world.rand.nextFloat() * 0.2F);
 
             return EnumActionResult.SUCCESS;
         }
 	}
 	
-	@Override
-	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18nUtil.resolveKey("desc.extraction"));
+	public static ItemStack getStackFromFluid(FluidType f, int amount){
+		return new ItemStack(ModItems.ff_fluid_duct, amount, f.getID());
 	}
 	
-	public static Fluid getFluidFromStack(ItemStack stack){
-		if(stack == null || !stack.hasTagCompound() || !stack.getTagCompound().hasKey("fluidType"))
-			return null;
-		Fluid f = FluidRegistry.getFluid(stack.getTagCompound().getString("fluidType"));
-		return f;
-	}
-	
-	public static ItemStack getStackFromFluid(Fluid f, int amount){
-		ItemStack stack = new ItemStack(ModItems.ff_fluid_duct, amount, 0);
-		if(f == null)
-			return stack;
-		stack.setTagCompound(new NBTTagCompound());
-		stack.getTagCompound().setString("fluidType", f.getName());
-		return stack;
-	}
-	
-	public static ItemStack getStackFromFluid(Fluid f){
+	public static ItemStack getStackFromFluid(FluidType f){
 		return getStackFromFluid(f, 1);
 	}
 }

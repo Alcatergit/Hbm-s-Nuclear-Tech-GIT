@@ -1,30 +1,27 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
-
+import com.hbm.interfaces.ILaserable;
+import com.hbm.inventory.DFCRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.interfaces.ILaserable;
-import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCrucible;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.inventory.DFCRecipes;
 import com.hbm.tileentity.INBTPacketReceiver;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.Random;
 
 public class TileEntityCrateTungsten extends TileEntityLockableBase implements ITickable, ILaserable, INBTPacketReceiver {
 

@@ -1,19 +1,18 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.render.model.ModelGlasses;
-
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ArmorAshGlasses extends ItemArmor {
 
@@ -22,7 +21,7 @@ public class ArmorAshGlasses extends ItemArmor {
 
 	public ArmorAshGlasses(ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String s) {
 		super(armorMaterial, renderIndex, armorType);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

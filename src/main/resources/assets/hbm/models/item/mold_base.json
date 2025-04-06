@@ -1,6 +1,6 @@
 {
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "hbm:items/mold_base"
-	}
+    "parent": "item/generated",
+    "textures": {
+        "layer0": "hbm:items/mold_base"
+    }
 }

@@ -7,7 +7,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.model.ModelArmorWings;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,7 +22,7 @@ public class WingsMurk extends ItemArmor {
 
 	public WingsMurk(ArmorMaterial material, String s) {
 		super(material, -1, EntityEquipmentSlot.CHEST);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

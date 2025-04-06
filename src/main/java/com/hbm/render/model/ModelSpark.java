@@ -1,20 +1,18 @@
 package com.hbm.render.model;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.render.item.weapon.ItemRenderOverkill;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.FloatBuffer;
 
 public class ModelSpark extends ModelBase {
 

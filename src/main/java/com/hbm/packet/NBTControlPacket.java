@@ -69,7 +69,7 @@ public class NBTControlPacket implements IMessage {
 		@Override
 		public IMessage onMessage(NBTControlPacket m, MessageContext ctx) {
 
-			ctx.getServerHandler().player.mcServer.addScheduledTask(() -> {
+			ctx.getServerHandler().player.server.addScheduledTask(() -> {
 				EntityPlayer p = ctx.getServerHandler().player;
 				
 				if(p.world == null)
@@ -86,8 +86,10 @@ public class NBTControlPacket implements IMessage {
 							
 							IControlReceiver tile = (IControlReceiver)te;
 							
-							if(tile.hasPermission(p))
+							if(tile.hasPermission(p)) {
+								tile.receiveControl(p, nbt);
 								tile.receiveControl(nbt);
+							}
 						}
 					}
 					

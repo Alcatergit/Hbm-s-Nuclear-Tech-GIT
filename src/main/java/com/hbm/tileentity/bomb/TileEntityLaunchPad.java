@@ -1,39 +1,36 @@
 package com.hbm.tileentity.bomb;
 
-import com.hbm.lib.Library;
-import com.hbm.lib.ForgeDirection;
-import com.hbm.items.ModItems;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.interfaces.IBomb;
-import com.hbm.packet.AuxGaugePacket;
+import com.hbm.items.ModItems;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissilePacket;
 import com.hbm.tileentity.TileEntityLoadedBase;
-import net.minecraftforge.fml.common.Optional;
-
-import api.hbm.energy.IEnergyUser;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
-public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyUser, SimpleComponent {
+public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickable, IEnergyReceiverMK2, SimpleComponent {
 
 	public ItemStackHandler inventory;
 
@@ -110,11 +107,11 @@ public class TileEntityLaunchPad extends TileEntityLoadedBase implements ITickab
 	}
 
 	private void updateConnections() {
-		this.trySubscribe(world, pos.add(1, 0, 0), ForgeDirection.EAST);
-		this.trySubscribe(world, pos.add(-1, 0, 0), ForgeDirection.WEST);
-		this.trySubscribe(world, pos.add(0, 0, 1), ForgeDirection.SOUTH);
-		this.trySubscribe(world, pos.add(0, 0, -1), ForgeDirection.NORTH);
-		this.trySubscribe(world, pos.add(0, -1, 0), ForgeDirection.DOWN);
+		this.trySubscribe(world, pos.getX() + 1, pos.getY(), pos.getZ(), ForgeDirection.EAST);
+		this.trySubscribe(world, pos.getX() - 1, pos.getY(), pos.getZ(), ForgeDirection.WEST);
+		this.trySubscribe(world, pos.getX(), pos.getY(), pos.getZ() + 1, ForgeDirection.SOUTH);
+		this.trySubscribe(world, pos.getX(), pos.getY(), pos.getZ() - 1, ForgeDirection.NORTH);
+		this.trySubscribe(world, pos.getX(), pos.getY() -1, pos.getZ(), ForgeDirection.DOWN);
 	}
 
 	private ItemStack detectStack = ItemStack.EMPTY;

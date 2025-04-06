@@ -1,23 +1,20 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.FluidCombustionRecipes;
-import com.hbm.packet.NBTControlPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.util.I18nUtil;
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.NBTControlPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
-
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
@@ -41,7 +38,7 @@ public class GUIMachineGasFlare extends GuiInfoContainer {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 16, 35, 10, mouseX, mouseY, I18nUtil.resolveKeyArray("flare.valve"));
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 50, 35, 14, mouseX, mouseY, I18nUtil.resolveKeyArray("flare.ignition"));
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 69 - 52, 16, 52, flare.tank, flare.tankType);
+		flare.tank.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 69 - 52, 16, 52);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 69 - 52, 16, 52, flare.power, TileEntityMachineGasFlare.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
@@ -86,9 +83,9 @@ public class GUIMachineGasFlare extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 79, guiTop + 49, 176, 10, 35, 14);
 		}
 
-		if(flare.isOn && flare.doesBurn && flare.tank.getFluidAmount() > 0 && FluidCombustionRecipes.hasFuelRecipe(flare.tankType))
+		if(flare.isOn && flare.doesBurn && flare.tank.getFill() > 0 && FluidCombustionRecipes.hasFuelRecipe(flare.tank.getTankType()))
 			drawTexturedModalRect(guiLeft + 88, guiTop + 29, 176, 24, 18, 18);
 
-		FFUtils.drawLiquid(flare.tank, guiLeft, guiTop, zLevel, 16, 52, 35, 97);
+		flare.tank.renderTank(guiLeft + 35, guiTop + 69, this.zLevel, 16, 52);
 	}
 }

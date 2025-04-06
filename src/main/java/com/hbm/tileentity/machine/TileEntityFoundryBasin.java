@@ -4,6 +4,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.inventory.material.NTMMaterial;
 
+import com.hbm.main.MainRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -24,6 +25,8 @@ public class TileEntityFoundryBasin extends TileEntityFoundryCastingBase impleme
 
 	@Override
 	public boolean shouldRender() {
+		MainRegistry.logger.info("Basin type: " + this.type);
+		MainRegistry.logger.info("Basin amount: " + this.amount);
 		return this.type != null && this.amount > 0;
 	}
 

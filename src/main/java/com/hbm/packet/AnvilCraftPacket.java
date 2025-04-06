@@ -44,7 +44,7 @@ public class AnvilCraftPacket implements IMessage {
 		@Override
 		public IMessage onMessage(AnvilCraftPacket m, MessageContext ctx) {
 
-			ctx.getServerHandler().player.mcServer.addScheduledTask(() -> {
+			ctx.getServerHandler().player.server.addScheduledTask(() -> {
 				if(m.recipeIndex < 0 || m.recipeIndex >= AnvilRecipes.getConstruction().size()) //recipe is out of range -> bad
 					return;
 

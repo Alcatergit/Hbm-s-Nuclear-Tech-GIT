@@ -1,12 +1,9 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.potion.HbmPotion;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
@@ -14,6 +11,8 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModAuto extends ItemArmorMod {
 

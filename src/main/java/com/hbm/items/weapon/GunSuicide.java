@@ -1,14 +1,10 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,12 +24,15 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
+import java.util.List;
+import java.util.Random;
+
 public class GunSuicide extends Item {
 
 	private Item ammo;
     Random rand = new Random();
     public GunSuicide(String s) {
-    	this.setUnlocalizedName(s);
+    	this.setTranslationKey(s);
     	this.setRegistryName(s);
     	this.maxStackSize = 1;
     	this.setMaxDamage(500);

@@ -1,14 +1,12 @@
 package com.hbm.items.tool;
 
 import com.hbm.blocks.bomb.BlockCrashedBomb;
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.items.ModItems;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -34,14 +32,14 @@ public class ItemAmatExtractor extends ItemCustomLore {
 				} else if(chance <= 0.3) {
 					ItemCell.consumeEmptyCell(player);
 	
-					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.balefire))) {
-						player.dropItem(ItemCell.getFullCell(ModForgeFluids.balefire), false);
+					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(Fluids.BALEFIRE))) {
+						player.dropItem(ItemCell.getFullCell(Fluids.BALEFIRE), false);
 					}
 				} else {
 					ItemCell.consumeEmptyCell(player);
 	
-					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.amat))) {
-						player.dropItem(ItemCell.getFullCell(ModForgeFluids.amat), false);
+					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(Fluids.AMAT))) {
+						player.dropItem(ItemCell.getFullCell(Fluids.AMAT), false);
 					}
 				}
 				

@@ -4,25 +4,23 @@ import com.hbm.inventory.control_panel.controls.DialLarge;
 import com.hbm.inventory.control_panel.controls.DisplaySevenSeg;
 import com.hbm.inventory.control_panel.controls.DisplayText;
 import com.hbm.inventory.control_panel.controls.Label;
-import com.hbm.main.ResourceManager;
-import net.minecraft.item.EnumDyeColor;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.main.ResourceManager;
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 
 public class SubElementPlacement extends SubElement {
 
@@ -148,13 +146,13 @@ public class SubElementPlacement extends SubElement {
 
 		float uScale = (baseSizeX*10)/4;
 		float vScale = (panel_hyp*10)/4;
-		RenderHelper.drawGuiRect(pos1[0], pos1[1], 0, 0, pos2[0]-pos1[0], pos2[1]-pos1[1], uScale+0.015625F, vScale+0.015625F);
+		NTMRenderHelper.drawGuiRect(pos1[0], pos1[1], 0, 0, pos2[0]-pos1[0], pos2[1]-pos1[1], uScale+0.015625F, vScale+0.015625F);
 
 		// bottom,right lines to close the grid, cus somehow scaling the grid looks worse
 		GlStateManager.disableTexture2D();
 		GlStateManager.color(.4F, .4F, .4F, 1);
-		RenderHelper.drawGuiRect(pos1[0], pos2[1]-(1/(gridScale*15)), 0, 0, pos2[0]-pos1[0], 1/(gridScale*15), uScale+0.015625F, 0.015625F);
-		RenderHelper.drawGuiRect(pos2[0]-(1/(gridScale*15)), pos1[1], 0, 0, 1/(gridScale*15), pos2[1]-pos1[1], 0.015625F, vScale+0.015625F);
+		NTMRenderHelper.drawGuiRect(pos1[0], pos2[1]-(1/(gridScale*15)), 0, 0, pos2[0]-pos1[0], 1/(gridScale*15), uScale+0.015625F, 0.015625F);
+		NTMRenderHelper.drawGuiRect(pos2[0]-(1/(gridScale*15)), pos1[1], 0, 0, 1/(gridScale*15), pos2[1]-pos1[1], 0.015625F, vScale+0.015625F);
 		GlStateManager.enableTexture2D();
 
 		GL11.glPushMatrix();
@@ -335,11 +333,11 @@ public class SubElementPlacement extends SubElement {
 		if(gui.currentEditControl == null)
 			return false;
 		for(Control c : gui.control.panel.controls){
-			if(RenderHelper.boxesOverlap(c.getBox(), gui.currentEditControl.getBox())){
+			if(NTMRenderHelper.boxesOverlap(c.getBox(), gui.currentEditControl.getBox())){
 				return false;
 			}
 		}
-		if(!RenderHelper.boxContainsOther(gui.control.getBox(), gui.currentEditControl.getBox()))
+		if(!NTMRenderHelper.boxContainsOther(gui.control.getBox(), gui.currentEditControl.getBox()))
 			return false;
 		return true;
 	}
@@ -365,7 +363,7 @@ public class SubElementPlacement extends SubElement {
 				}
 			} else {
 				for(Control c : gui.control.panel.controls){
-					if(RenderHelper.intersects2DBox(gridMX, gridMY, c.getBox())){
+					if(NTMRenderHelper.intersects2DBox(gridMX, gridMY, c.getBox())){
 						selectedControl = c;
 						controlGrabbed = true;
 						return;

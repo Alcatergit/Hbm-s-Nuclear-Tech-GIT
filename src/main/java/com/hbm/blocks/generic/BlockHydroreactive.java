@@ -1,10 +1,6 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,26 +12,30 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+import java.util.Random;
+
 public class BlockHydroreactive extends Block {
 
 	public BlockHydroreactive(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
+
 
 	private boolean touchesWater(World world, int x, int y, int z) {
 
 		if(world.isRemote)
 			return false;
 
-		return world.getBlockState(new BlockPos(x + 1, y, z)).getMaterial() == Material.WATER || 
-				world.getBlockState(new BlockPos(x - 1, y, z)).getMaterial() == Material.WATER || 
-				world.getBlockState(new BlockPos(x, y + 1, z)).getMaterial() == Material.WATER || 
-				world.getBlockState(new BlockPos(x, y - 1, z)).getMaterial() == Material.WATER || 
-				world.getBlockState(new BlockPos(x, y, z + 1)).getMaterial() == Material.WATER || 
+		return world.getBlockState(new BlockPos(x + 1, y, z)).getMaterial() == Material.WATER ||
+				world.getBlockState(new BlockPos(x - 1, y, z)).getMaterial() == Material.WATER ||
+				world.getBlockState(new BlockPos(x, y + 1, z)).getMaterial() == Material.WATER ||
+				world.getBlockState(new BlockPos(x, y - 1, z)).getMaterial() == Material.WATER ||
+				world.getBlockState(new BlockPos(x, y, z + 1)).getMaterial() == Material.WATER ||
 				world.getBlockState(new BlockPos(x, y, z - 1)).getMaterial() == Material.WATER;
 	}
 
@@ -54,7 +54,7 @@ public class BlockHydroreactive extends Block {
 			world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 15, false, true);
 		}
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("It's not my fault you didn't pay");

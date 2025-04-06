@@ -1,17 +1,14 @@
 package com.hbm.blocks.bomb;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.bomb.TileEntityFireworks;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemDye;
 import net.minecraft.item.ItemStack;
@@ -25,11 +22,13 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class BlockFireworks extends BlockContainer {
 
 	public BlockFireworks(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -78,10 +77,10 @@ public class BlockFireworks extends BlockContainer {
 			}
 		}
 
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".name").setStyle(new Style().setColor(TextFormatting.GOLD)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".charges", te.charges).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".color", Integer.toHexString(te.color)).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".message", te.message).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".name").setStyle(new Style().setColor(TextFormatting.GOLD)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".charges", te.charges).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".color", Integer.toHexString(te.color)).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".message", te.message).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 
 		return true;
 	}

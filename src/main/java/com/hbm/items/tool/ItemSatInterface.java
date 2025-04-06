@@ -7,7 +7,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatPanelPacket;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteSavedData;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;

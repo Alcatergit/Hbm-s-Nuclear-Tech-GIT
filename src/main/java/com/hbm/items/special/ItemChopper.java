@@ -1,12 +1,9 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityUFO;
 import com.hbm.entity.mob.botprime.EntityBOTPrimeHead;
 import com.hbm.items.ModItems;
-
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -26,10 +23,12 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemChopper extends Item {
 
 	public ItemChopper(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
@@ -47,9 +46,9 @@ public class ItemChopper extends Item {
 			
 			//IBlockState blockState = world.getBlockState(pos);
 
-			x += facing.getFrontOffsetX();
-			y += facing.getFrontOffsetY();
-			z += facing.getFrontOffsetZ();
+			x += facing.getXOffset();
+			y += facing.getYOffset();
+			z += facing.getZOffset();
 			double offset = 0.0D;
 
 			//Drillgon200: No clue what 11 is supposed to mean. I'll just leave it and hope it doesn't break anything.

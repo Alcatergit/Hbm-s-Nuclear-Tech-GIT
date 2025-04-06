@@ -1,7 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.projectile.EntityDischarge;
@@ -9,7 +7,6 @@ import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,10 +25,12 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
+import java.util.List;
+
 public class GunEMPRay extends Item {
 
 	public GunEMPRay(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

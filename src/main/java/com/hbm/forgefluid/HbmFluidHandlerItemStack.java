@@ -1,121 +1,119 @@
 package com.hbm.forgefluid;
 
+import api.hbm.fluid.IFillableItem;
+import com.hbm.inventory.fluid.FluidStack;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.FluidTankProperties;
-import net.minecraftforge.fluids.capability.IFluidHandlerItem;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
-public class HbmFluidHandlerItemStack implements IFluidHandlerItem, ICapabilityProvider {
+public class HbmFluidHandlerItemStack implements IFillableItem, ICapabilityProvider {
 
 	public static final String FLUID_NBT_KEY = "HbmFluidKey";
 
 	private ItemStack container;
 	private int cap;
-	
-	public HbmFluidHandlerItemStack(ItemStack stack, int cap){
+
+	public HbmFluidHandlerItemStack(ItemStack stack, int cap) {
 		container = stack;
 		this.cap = cap;
 	}
-	
-	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[]{new FluidTankProperties(getFluid(), cap)};
-	}
 
-	private FluidStack getFluid(){
-		if(!container.hasTagCompound()){
+	private FluidStack getFluid() {
+		if (!container.hasTagCompound()) {
 			container.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagCompound tag = container.getTagCompound();
-		if(!tag.hasKey(FLUID_NBT_KEY)){
+		if (!tag.hasKey(FLUID_NBT_KEY)) {
 			return null;
 		}
-		return FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
+		return new FluidStack(tag.getInteger("Fill"), Fluids.fromID(tag.getInteger("FluidID")));
 	}
-	
-	private void setFluid(FluidStack fluid){
-		if(!container.hasTagCompound()){
+
+	private void setFluid(FluidStack fluid) {
+		if (!container.hasTagCompound()) {
 			container.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagCompound tag = container.getTagCompound();
-		if(fluid == null){
+		if (fluid == null) {
 			container.setItemDamage(0);
 			tag.removeTag(FLUID_NBT_KEY);
 			return;
 		}
-		container.setItemDamage(cap - fluid.amount);
-		tag.setTag(FLUID_NBT_KEY, fluid.writeToNBT(new NBTTagCompound()));
+		container.setItemDamage(cap - fluid.fill);
+		tag.setInteger("FluidID", fluid.type.getID());
+		tag.setInteger("Fill", fluid.fill);
 	}
-	
+
 	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		if(resource == null || container.getCount() > 1)
-			return 0;
+	public boolean acceptsFluid(FluidType type, ItemStack stack) {
+		FluidStack contained = getFluid();
+		return contained == null || contained.type == type;
+	}
+
+	@Override
+	public int tryFill(FluidType type, int amount, ItemStack stack) {
+		if (stack.getCount() > 1) return amount;
 		FluidStack contained = getFluid();
 		int filled;
-		if(contained == null){
-			filled = Math.min(cap, resource.amount);
-			if(doFill){
-				setFluid(new FluidStack(resource.getFluid(), filled));
-			}
-			return filled;
+		if (contained == null) {
+			filled = Math.min(cap, amount);
+			setFluid(new FluidStack(type, filled));
+			return amount - filled;
 		}
-		
-		if(contained.getFluid() != resource.getFluid())
-			return 0;
-		
-		filled = Math.min(cap-contained.amount, resource.amount);
-		if(doFill){
-			setFluid(new FluidStack(contained.getFluid(), filled+contained.amount));
-		}
-		return filled;
+
+		if (contained.type != type) return amount;
+
+		filled = Math.min(cap - contained.fill, amount);
+		setFluid(new FluidStack(type, filled + contained.fill));
+		return amount - filled;
 	}
 
 	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(container.getCount() > 1 || resource == null || (getFluid() != null && getFluid().getFluid() != resource.getFluid()))
-			return null;
-		return drain(resource.amount, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(container.getCount() > 1)
-			return null;
+	public boolean providesFluid(FluidType type, ItemStack stack) {
 		FluidStack contained = getFluid();
-		if(contained == null)
-			return null;
-		int drained = Math.min(contained.amount, maxDrain);
-		if(drained <= 0)
-			return null;
-		if(doDrain){
-			setFluid(drained >= contained.amount ? null : new FluidStack(contained.getFluid(), contained.amount - drained));
-		}
-		return new FluidStack(contained.getFluid(), drained);
+		return contained != null && contained.type == type;
+	}
+
+	@Override
+	public int tryEmpty(FluidType type, int amount, ItemStack stack) {
+		if (stack.getCount() > 1) return 0;
+		FluidStack contained = getFluid();
+		if (contained == null || contained.type != type) return 0;
+		int drained = Math.min(contained.fill, amount);
+		setFluid(drained >= contained.fill ? null : new FluidStack(type, contained.fill - drained));
+		return drained;
+	}
+
+	@Override
+	public FluidType getFirstFluidType(ItemStack stack) {
+		FluidStack contained = getFluid();
+		return contained != null ? contained.type : null;
+	}
+
+	@Override
+	public int getFill(ItemStack stack) {
+		FluidStack contained = getFluid();
+		return contained != null ? contained.fill : 0;
 	}
 
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		if(container.getCount() > 1)
-			return false;
+		if (container.getCount() > 1) return false;
 		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY;
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(container.getCount() > 1)
-			return null;
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ? (T)this : null;
+		if (container.getCount() > 1) return null;
+		return capability == CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY ? (T) this : null;
 	}
 
-	@Override
 	public ItemStack getContainer() {
 		return container;
 	}

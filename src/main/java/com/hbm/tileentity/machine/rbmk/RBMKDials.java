@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.config.GeneralConfig;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -26,6 +25,8 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 	public static final String KEY_REASIM_MOD = "dialReasimOutputMod";
 	public static final String KEY_REASIM_BOILERS = "dialReasimBoilers";
 	public static final String KEY_REASIM_BOILER_SPEED = "dialReasimBoilerSpeed";
+	public static final String KEY_DISABLE_MELTDOWNS = "dialDisableMeltdowns";
+	public static final String KEY_ENABLE_MELTDOWN_OVERPRESSURE = "dialEnableMeltdownOverpressure";
 	
 	public static void createDials(World world) {
 		GameRules rules = world.getGameRules();
@@ -49,6 +50,8 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 			rules.setOrCreateGameRule(KEY_REASIM_MOD, "1.0");
 			rules.setOrCreateGameRule(KEY_REASIM_BOILERS, "false");
 			rules.setOrCreateGameRule(KEY_REASIM_BOILER_SPEED, "0.05");
+			rules.setOrCreateGameRule(KEY_DISABLE_MELTDOWNS, "false");
+			rules.setOrCreateGameRule(KEY_ENABLE_MELTDOWN_OVERPRESSURE, "false");
 		}
 	}
 	
@@ -217,5 +220,24 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 			return Integer.parseInt(s);
 		} catch(Exception ex) { }
 		return def;
+	}
+
+	/**
+	 * Whether or not fuel columns should initiate a meltdown when overheating
+	 * The method is in reverse because the default for older worlds will be 'false'
+	 * @param world
+	 * @return
+	 */
+	public static boolean getMeltdownsDisabled(World world) {
+		return world.getGameRules().getBoolean(KEY_DISABLE_MELTDOWNS);
+	}
+
+	/**
+	 * Whether or not connected pipes and turbines should explode when the reactor undergoes a meltdown.
+	 * @param world
+	 * @return
+	 */
+	public static boolean getOverpressure(World world) {
+		return world.getGameRules().getBoolean(KEY_ENABLE_MELTDOWN_OVERPRESSURE);
 	}
 }

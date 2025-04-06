@@ -1,15 +1,14 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemFELCrystal extends Item {
 
@@ -18,7 +17,7 @@ public class ItemFELCrystal extends Item {
 	public ItemFELCrystal(EnumWavelengths wavelength, String s) {
 		this.wavelength = wavelength;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

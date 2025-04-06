@@ -1,14 +1,8 @@
 package com.hbm.inventory.container;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.gui.GUICoreEmitter;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.AuxLongPacket;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.*;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -81,10 +75,6 @@ public class ContainerCoreEmitter extends Container {
 		if(nukeBoy.prev != prev){
 			PacketDispatcher.sendTo(new AuxLongPacket(nukeBoy.getPos(), nukeBoy.prev, 0), player);
 			prev = (int) nukeBoy.prev;
-		}
-		if(!FFUtils.areTanksEqual(tank, nukeBoy.tank)){
-			tank = FFUtils.copyTank(nukeBoy.tank);
-			PacketDispatcher.sendTo(new FluidTankPacket(nukeBoy.getPos(), new FluidTank[] { tank }), player);
 		}
 		super.detectAndSendChanges();
 	}

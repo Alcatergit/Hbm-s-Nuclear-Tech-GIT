@@ -74,7 +74,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 		this.motionY = 2;
 
 		Vec3d vector = new Vec3d(targetX - startX, 0, targetZ - startZ);
-		accelXZ = decelY = 1 / vector.lengthVector();
+		accelXZ = decelY = 1 / vector.length();
 		decelY *= 2;
 
 		velocity = 0.0;
@@ -138,9 +138,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 	@Override
 	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
 		if (!world.isRemote && loaderTicket != null) {
-			for (ChunkPos chunk : loadedChunks) {
-				ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-			}
+			clearLoadedChunks();
 
 			loadedChunks.clear();
 			loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));

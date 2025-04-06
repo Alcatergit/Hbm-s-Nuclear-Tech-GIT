@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleBatchRenderer;
 import com.hbm.physics.RigidBody;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
 
@@ -87,8 +87,8 @@ public class ParticleMobGib extends Particle {
         int k = i & 65535;
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, k, j);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		RenderHelper.resetParticleInterpPos(entityIn, partialTicks);
-		RenderHelper.resetColor();
+		NTMRenderHelper.resetParticleInterpPos(entityIn, partialTicks);
+		NTMRenderHelper.resetColor();
 		body.doGlTransform(new Vec3(interpPosX, interpPosY, interpPosZ), partialTicks);
 		GlStateManager.color(0.9F, 0.6F, 0.6F, 1F);
 		GL11.glCallList(displayList);

@@ -2,7 +2,6 @@ package com.hbm.render.factories;
 
 import com.hbm.entity.particle.EntityDSmokeFX;
 import com.hbm.render.entity.DSmokeRenderer;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraftforge.fml.client.registry.IRenderFactory;

@@ -1,36 +1,34 @@
 package com.hbm.blocks.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
-import com.hbm.inventory.HeatRecipes;
-import com.hbm.lib.ForgeDirection;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.items.machine.IItemFluidIdentifier;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityHeatBoiler;
 import com.hbm.util.I18nUtil;
-
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.EnumHand;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltipProvider {
 
@@ -83,14 +81,10 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltip
                     return false;
 
                 TileEntityHeatBoiler boiler = (TileEntityHeatBoiler) te;
-                Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
-                if(!HeatRecipes.hasBoilRecipe(type)){
-                    player.sendMessage(new TextComponentString("§cNo recipe found for §e"+type.getLocalizedName(new FluidStack(type, 1))));
-                    return false;
-                }
-                boiler.setTankType(0, type);
+                FluidType type = ((IItemFluidIdentifier) player.getHeldItem(hand).getItem()).getType(world, pos[0], pos[1], pos[2], player.getHeldItem(hand));
+                boiler.tanksNew[0].setTankType(type);
                 boiler.markDirty();
-                player.sendMessage(new TextComponentString("§eRecipe changed to §a"+type.getLocalizedName(new FluidStack(type, 1))));
+                player.sendMessage(new TextComponentString("§eRecipe changed to §a"+type.getConditionalName()));
 
                 return true;
             }
@@ -139,10 +133,9 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltip
 
         List<String> text = new ArrayList();
 
-        for(int i = 0; i < boiler.types.length; i++)
-            if(boiler.types[i] != null)
-                text.add((i < 1 ? "§a-> " : "§c<- ") + "§r" + boiler.types[i].getLocalizedName(new FluidStack(boiler.types[i], 1)) + ": " + boiler.tanks[i].getFluidAmount() + "/" + boiler.tanks[i].getCapacity() + "mB");
+        for(int i = 0; i < boiler.tanksNew.length; i++)
+            text.add((i < 1 ? "§a-> " : "§c<- ") + "§r" + boiler.tanksNew[i].getTankType().getLocalizedName() + ": " + boiler.tanksNew[i].getFill() + "/" + boiler.tanksNew[i].getMaxFill() + "mB");
 
-        ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+        ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
     }
 }

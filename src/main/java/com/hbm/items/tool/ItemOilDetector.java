@@ -1,11 +1,8 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,18 +12,20 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemOilDetector extends Item {
 
 	public ItemOilDetector(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -34,8 +33,8 @@ public class ItemOilDetector extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc1"));
-		tooltip.add(I18n.format(this.getUnlocalizedName() + ".desc2"));
+		tooltip.add(I18n.format(this.getTranslationKey() + ".desc1"));
+		tooltip.add(I18n.format(this.getTranslationKey() + ".desc2"));
 	}
 
 	public static boolean isOil(World world, BlockPos b){
@@ -81,17 +80,17 @@ public class ItemOilDetector extends Item {
 		if(!world.isRemote) {
 			
 			if(directBedrock) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseyeBedrock").setStyle(new Style().setColor(TextFormatting.DARK_GREEN)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".bullseyeBedrock").setStyle(new Style().setColor(TextFormatting.DARK_GREEN)));
 			} else if(directoil) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".bullseye").setStyle(new Style().setColor(TextFormatting.GREEN)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".bullseye").setStyle(new Style().setColor(TextFormatting.GREEN)));
 			
 			} else if(bedrockoil) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detectedBedrock").setStyle(new Style().setColor(TextFormatting.GOLD)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".detectedBedrock").setStyle(new Style().setColor(TextFormatting.GOLD)));
 			} else if(oil) {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".detected").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".detected").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			
 			} else {
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".noOil").setStyle(new Style().setColor(TextFormatting.RED)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".noOil").setStyle(new Style().setColor(TextFormatting.RED)));
 			}
 		}
 

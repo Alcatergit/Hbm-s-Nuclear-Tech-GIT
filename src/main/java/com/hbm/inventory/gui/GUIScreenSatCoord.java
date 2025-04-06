@@ -1,11 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
@@ -13,7 +7,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatCoordPacket;
 import com.hbm.saveddata.satellites.Satellite.CoordActions;
 import com.hbm.saveddata.satellites.Satellite.Interfaces;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
@@ -21,6 +14,11 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public class GUIScreenSatCoord extends GuiScreen {
 	

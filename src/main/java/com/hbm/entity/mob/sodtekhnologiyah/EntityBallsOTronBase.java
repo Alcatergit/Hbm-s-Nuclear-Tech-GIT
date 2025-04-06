@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.util.math.Vec3d;

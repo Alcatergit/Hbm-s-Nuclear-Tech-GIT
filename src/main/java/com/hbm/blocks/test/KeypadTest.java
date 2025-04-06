@@ -2,7 +2,6 @@ package com.hbm.blocks.test;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.TileEntityKeypadBase;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -22,7 +21,7 @@ public class KeypadTest extends BlockContainer {
 
 	public KeypadTest(Material m, String s) {
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -73,7 +72,7 @@ public class KeypadTest extends BlockContainer {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		if(meta < 2 || meta > 5)
-			return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.getFront(2));
-		return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.getFront(meta));
+			return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.byIndex(2));
+		return this.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.byIndex(meta));
 	}
 }

@@ -1,7 +1,5 @@
 package com.hbm.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.animloader.AnimatedModel;
 import com.hbm.animloader.Animation;
 import com.hbm.lib.HBMSoundHandler;
@@ -9,7 +7,6 @@ import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.WavefrontObjDisplayList;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.SoundEvent;
@@ -17,6 +14,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 public abstract class DoorDecl {
 

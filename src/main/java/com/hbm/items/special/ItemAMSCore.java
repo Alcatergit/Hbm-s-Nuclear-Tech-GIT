@@ -1,11 +1,8 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
-import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -14,6 +11,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class ItemAMSCore extends Item {
 
 	int powerBase;
@@ -21,7 +20,7 @@ public class ItemAMSCore extends Item {
 	float fuelBase;
 	
 	public ItemAMSCore(int powerBase, float heatBase, float fuelBase, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.powerBase = powerBase;
 		this.heatBase = heatBase;

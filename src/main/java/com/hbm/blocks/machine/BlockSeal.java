@@ -3,7 +3,6 @@ package com.hbm.blocks.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.machine.TileEntityHatch;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -17,11 +16,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
@@ -32,7 +27,7 @@ public class BlockSeal extends Block implements IBomb {
 	
 	public BlockSeal(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -192,19 +187,28 @@ public class BlockSeal extends Block implements IBomb {
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		int i = BlockSeal.getFrameSize(world, pos);
-		
-		if(i != 0)
-			if(BlockSeal.isSealClosed(world, pos, i))
-				BlockSeal.openSeal(world, pos, i);
-			else
-				BlockSeal.closeSeal(world, pos, i);
+	public BombReturnCode explode(World world, BlockPos pos) {
+
+		if(!world.isRemote) {
+			int i = BlockSeal.getFrameSize(world, pos);
+
+			if (i != 0) {
+				if (BlockSeal.isSealClosed(world, pos, i))
+					BlockSeal.openSeal(world, pos, i);
+				else
+					BlockSeal.closeSeal(world, pos, i);
+				return BombReturnCode.TRIGGERED;
+			}
+
+			return BombReturnCode.ERROR_INCOMPATIBLE;
+		}
+
+		return BombReturnCode.UNDEFINED;
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-		if (world.isBlockIndirectlyGettingPowered(pos) > 0)
+		if (world.getStrongPower(pos) > 0)
         {
         	if(!world.getBlockState(pos).getValue(ACTIVATED)) {
         		world.setBlockState(pos, world.getBlockState(pos).withProperty(ACTIVATED, true), 2);
@@ -250,7 +254,7 @@ public class BlockSeal extends Block implements IBomb {
 	public IBlockState getStateFromMeta(int meta) {
 		boolean activated = (meta & 1) == 1 ? true : false;
 		meta = meta >> 1;
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

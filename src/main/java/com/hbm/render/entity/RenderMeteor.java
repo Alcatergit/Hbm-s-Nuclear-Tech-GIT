@@ -1,16 +1,14 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.projectile.EntityMeteor;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderMeteor extends Render<EntityMeteor> {
 
@@ -46,38 +44,38 @@ public class RenderMeteor extends Render<EntityMeteor> {
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 		GL11.glRotatef(180, 0F, 0F, 1F);
-		RenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.startDrawingTexturedQuads();
 		
-			RenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 1, 0);
-			RenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 0, 0);
-			RenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 0, 1);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 1, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 1, 1);
 
-			RenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 1, 0);
-			RenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 0, 0);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 0, 1);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 1, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 1, 1);
 
-			RenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 1, 0);
-			RenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 0, 0);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 0, 1);
-			RenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 1, 1);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 1, 1);
 
-			RenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 1, 0);
-			RenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 0, 0);
-			RenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 0, 1);
-			RenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 1, 1);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 1, 1);
 
-			RenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 1, 0);
-			RenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 0, 0);
-			RenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 0, 1);
-			RenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 1, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, +0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, +0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(+0.5, -0.5, -0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(-0.5, -0.5, -0.5, 1, 1);
 
-			RenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 1, 0);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 0, 0);
-			RenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 0, 1);
-			RenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 1, 1);
-		RenderHelper.draw();
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, +0.5, 1, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, +0.5, 0, 0);
+			NTMRenderHelper.addVertexWithUV(-0.5, +0.5, -0.5, 0, 1);
+			NTMRenderHelper.addVertexWithUV(+0.5, +0.5, -0.5, 1, 1);
+		NTMRenderHelper.draw();
 		GL11.glPopMatrix();
 		
 	}

@@ -1,8 +1,5 @@
 package com.hbm.tileentity;
 
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.interfaces.Spaghetti;
@@ -10,12 +7,13 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.util.Keypad;
 import com.hbm.util.KeypadClient;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 @Spaghetti("Weird stuff to make it work property client side")
 public class TileEntitySlidingBlastDoorKeypad extends TileEntityKeypadBase {

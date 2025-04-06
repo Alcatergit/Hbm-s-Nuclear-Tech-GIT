@@ -1,10 +1,11 @@
 package com.hbm.render.amlfrom1710;
 
-import javax.vecmath.Matrix3f;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+
+import javax.vecmath.Matrix3f;
 
 public class Vec3
 {
@@ -124,7 +125,7 @@ public class Vec3
      * Adds the specified x,y,z vector components to this vector and returns the resulting vector. Does not change this
      * vector.
      */
-    public Vec3 addVector(double p_72441_1_, double p_72441_3_, double p_72441_5_)
+    public Vec3 add(double p_72441_1_, double p_72441_3_, double p_72441_5_)
     {
         /**
          * Static method for creating a new Vec3D given the three x,y,z values. This is only called from the other
@@ -189,7 +190,7 @@ public class Vec3
     /**
      * Returns the length of the vector.
      */
-    public double lengthVector()
+    public double length()
     {
         return (double)MathHelper.sqrt(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
     }

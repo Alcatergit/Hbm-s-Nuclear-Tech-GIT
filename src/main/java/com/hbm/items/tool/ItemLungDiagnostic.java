@@ -1,21 +1,20 @@
 package com.hbm.items.tool;
 
 import com.hbm.items.ModItems;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.EnumHand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 public class ItemLungDiagnostic extends Item {
 
 	public ItemLungDiagnostic(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

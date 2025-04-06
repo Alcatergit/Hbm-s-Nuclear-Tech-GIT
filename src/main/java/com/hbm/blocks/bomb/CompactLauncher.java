@@ -1,7 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IBomb;
 import com.hbm.interfaces.IMultiBlock;
@@ -9,7 +7,6 @@ import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.machine.TileEntityDummy;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -28,13 +25,15 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.Random;
+
 public class CompactLauncher extends BlockContainer implements IMultiBlock, IBomb {
 
 	public static final AxisAlignedBB COMPACT_BOX = new AxisAlignedBB(0, 1, 0, 1, 1, 1);
 	
 	public CompactLauncher(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -153,10 +152,14 @@ public class CompactLauncher extends BlockContainer implements IMultiBlock, IBom
 	}
 	
 	@Override
-	public void explode(World world, BlockPos pos) {
+	public BombReturnCode explode(World world, BlockPos pos) {
 		TileEntityCompactLauncher entity = (TileEntityCompactLauncher) world.getTileEntity(pos);
-		if(entity.canLaunch())
+		if(entity.canLaunch()) {
 			entity.launch();
+			return BombReturnCode.LAUNCHED;
+		}
+
+		return BombReturnCode.ERROR_MISSING_COMPONENT;
 	}
 	
 	@Override

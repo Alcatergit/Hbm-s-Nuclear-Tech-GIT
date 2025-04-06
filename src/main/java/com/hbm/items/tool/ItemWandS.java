@@ -1,17 +1,8 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
-import com.hbm.world.FWatz;
-import com.hbm.world.FactoryAdvanced;
-import com.hbm.world.FactoryTitanium;
-import com.hbm.world.ParticleAccelerator;
-import com.hbm.world.NuclearReactor;
-import com.hbm.world.Watz;
-
+import com.hbm.world.*;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -25,10 +16,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class ItemWandS extends Item {
 
 	public ItemWandS(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -58,9 +52,6 @@ public class ItemWandS extends Item {
 				break;
 			case 4:
 				tooltip.add(I18nUtil.resolveKey("desc.structurewand.watz"));
-				break;
-			case 5:
-				tooltip.add(I18nUtil.resolveKey("desc.structurewand.safe"));
 				break;
 			}
 		}
@@ -99,12 +90,6 @@ public class ItemWandS extends Item {
 				break;
 			case 3:
 				new ParticleAccelerator().generate(world, rand, new BlockPos(pos.getX(), up ? pos.getY()-5 : pos.getY(), pos.getZ()));
-				break;
-			case 4:
-				new Watz().generateReactor(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 12 : pos.getY(), pos.getZ()));
-				break;
-			case 5:
-				new FWatz().generateHull(world, rand, new BlockPos(pos.getX(), up ? pos.getY() - 18 : pos.getY(), pos.getZ()));
 				break;
 			}
 			
@@ -150,9 +135,6 @@ public class ItemWandS extends Item {
 						break;
 					case 4:
 						player.sendMessage(new TextComponentTranslation("chat.structurewand.set.watz"));
-						break;
-					case 5:
-						player.sendMessage(new TextComponentTranslation("chat.structurewand.set.safe"));
 						break;
 					default:
 						player.sendMessage(new TextComponentTranslation("chat.structurewand.set.factory"));

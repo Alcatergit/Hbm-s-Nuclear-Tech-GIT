@@ -1,10 +1,9 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
+import api.hbm.item.IDesignatorItem;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,10 +15,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemDesignatorManual extends Item {
+import java.util.List;
+
+public class ItemDesignatorManual extends Item implements IDesignatorItem {
 
 	public ItemDesignatorManual(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.missileTab);
 		
@@ -50,5 +51,15 @@ public class ItemDesignatorManual extends Item {
 		if(worldIn.isRemote)
 			playerIn.openGui(MainRegistry.instance, ModItems.guiID_item_designator, worldIn, handIn == EnumHand.MAIN_HAND ? 1 : 0, 0, 0);
 		return super.onItemRightClick(worldIn, playerIn, handIn);
+	}
+
+	@Override
+	public boolean isReady(World world, ItemStack stack, int x, int y, int z) {
+		return stack.hasTagCompound();
+	}
+
+	@Override
+	public Vec3 getCoords(World world, ItemStack stack, int x, int y, int z) {
+		return Vec3.createVectorHelper(stack.getTagCompound().getInteger("xCoord"), 0, stack.getTagCompound().getInteger("zCoord"));
 	}
 }

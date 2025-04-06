@@ -1,10 +1,10 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.IStructTE;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
 import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -13,7 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityITERStruct extends TileEntity implements ITickable {
+public class TileEntityITERStruct extends TileEntity implements ITickable, IStructTE<TileEntityITERStruct> {
 
 	public static final int[][][] layout = new int[][][] {
 
@@ -183,5 +183,10 @@ public class TileEntityITERStruct extends TileEntity implements ITickable {
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
+	}
+
+	@Override
+	public TileEntityITERStruct newInstance() {
+		return this;
 	}
 }

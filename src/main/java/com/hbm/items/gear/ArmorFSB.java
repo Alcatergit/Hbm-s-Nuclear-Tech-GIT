@@ -1,24 +1,14 @@
 package com.hbm.items.gear;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
-
-import javax.annotation.Nullable;
-
+import com.hbm.config.PotionConfig;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemGeigerCounter;
-import com.hbm.config.PotionConfig;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.ClientProxy;
 import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -31,14 +21,13 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -53,6 +42,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.lang.reflect.Field;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map.Entry;
 
 public class ArmorFSB extends ItemArmor {
 
@@ -87,7 +82,7 @@ public class ArmorFSB extends ItemArmor {
 	
 	public ArmorFSB(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String texture, String name) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setRegistryName(name);
 		this.texture = texture;
 		
@@ -168,16 +163,13 @@ public class ArmorFSB extends ItemArmor {
 
 	
     public static void handleAttack(LivingAttackEvent event) {
-
 		EntityLivingBase e = event.getEntityLiving();
-
-		if(ArmorFSB.hasFSBArmor(e)) {
-
-			ItemStack plate = e.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-
-			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
-			
-			chestplate.handleAttack(event, chestplate);
+		if(e != null){
+			if(ArmorFSB.hasFSBArmor(e)) {
+				ItemStack plate = e.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+				chestplate.handleAttack(event, chestplate);
+			}
 		}
     }
 
@@ -329,9 +321,9 @@ public class ArmorFSB extends ItemArmor {
 
 					Vec3 vec = Vec3.createVectorHelper(entity.posX - e.posX, 0, entity.posZ - e.posZ);
 
-					if(vec.lengthVector() < 3) {
+					if(vec.length() < 3) {
 
-						double intensity = 3 - vec.lengthVector();
+						double intensity = 3 - vec.length();
 						e.motionX += vec.xCoord * intensity * -2;
 						e.motionY += 0.1D * intensity;
 						e.motionZ += vec.zCoord * intensity * -2;
@@ -612,12 +604,12 @@ public class ArmorFSB extends ItemArmor {
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableAlpha();
         Minecraft.getMinecraft().getTextureManager().bindTexture(overlay);
-        RenderHelper.startDrawingTexturedQuads();
-        RenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
-        RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), (double)resolution.getScaledHeight(), -90.0D, 1.0D, 1.0D);
-        RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
-        RenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
-        RenderHelper.draw();
+        NTMRenderHelper.startDrawingTexturedQuads();
+        NTMRenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
+        NTMRenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), (double)resolution.getScaledHeight(), -90.0D, 1.0D, 1.0D);
+        NTMRenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), 0.0D, -90.0D, 1.0D, 0.0D);
+        NTMRenderHelper.addVertexWithUV(0.0D, 0.0D, -90.0D, 0.0D, 0.0D);
+        NTMRenderHelper.draw();
         GlStateManager.depthMask(true);
         GlStateManager.enableDepth();
         GlStateManager.enableAlpha();

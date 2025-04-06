@@ -1,27 +1,46 @@
 package com.hbm.items.weapon;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.hbm.config.BombConfig;
 import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
-
+import com.hbm.items.special.ItemCustomLore;
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemMissileStandard extends Item {
-	
-	public ItemMissileStandard(String s) {
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		this.setMaxStackSize(1);
-		this.setCreativeTab(MainRegistry.missileTab);
-		ModItems.ALL_ITEMS.add(this);
+import java.util.List;
+
+public class ItemMissileStandard extends ItemCustomLore {
+
+	public final MissileFormFactor formFactor;
+	public final MissileTier tier;
+	public final MissileFuel fuel;
+
+	public int fuelCap;
+	public boolean launchable = true;
+
+
+	public ItemMissileStandard(String s, MissileFormFactor form, MissileTier tier) {
+		this(s, form, tier, form.defaultFuel);
+	}
+
+	public ItemMissileStandard(String s, MissileFormFactor form, MissileTier tier, MissileFuel fuel) {
+		super(s);
+		this.formFactor = form;
+		this.tier = tier;
+		this.fuel = fuel;
+		this.setFuelCap(this.fuel.defaultCap);
+	}
+
+	public ItemMissileStandard notLaunchable() {
+		this.launchable = false;
+		return this;
+	}
+
+	public ItemMissileStandard setFuelCap(int fuelCap) {
+		this.fuelCap = fuelCap;
+		return this;
 	}
 	
 	@Override
@@ -151,6 +170,52 @@ public class ItemMissileStandard extends Item {
 		if(this == ModItems.missile_anti_ballistic){
 			list.add("§2["+I18nUtil.resolveKey("desc.abmissile")+"]§r");
 			list.add(TextFormatting.GREEN+" "+I18nUtil.resolveKey("desc.abmissile1"));
+		}
+	}
+
+	public enum MissileFormFactor {
+		ABM(MissileFuel.SOLID),
+		MICRO(MissileFuel.SOLID),
+		V2(MissileFuel.ETHANOL_PEROXIDE),
+		STRONG(MissileFuel.KEROSENE_PEROXIDE),
+		HUGE(MissileFuel.KEROSENE_LOXY),
+		ATLAS(MissileFuel.JETFUEL_LOXY),
+		OTHER(MissileFuel.KEROSENE_PEROXIDE);
+
+		protected MissileFuel defaultFuel;
+
+		private MissileFormFactor(MissileFuel defaultFuel) {
+			this.defaultFuel = defaultFuel;
+		}
+	}
+
+	public enum MissileTier {
+		TIER0("Tier 0"),
+		TIER1("Tier 1"),
+		TIER2("Tier 2"),
+		TIER3("Tier 3"),
+		TIER4("Tier 4");
+
+		public String display;
+
+		private MissileTier(String display) {
+			this.display = display;
+		}
+	}
+
+	public enum MissileFuel {
+		SOLID(TextFormatting.GOLD + "Solid Fuel (pre-fueled)", 0),
+		ETHANOL_PEROXIDE(TextFormatting.AQUA + "Ethanol / Hydrogen Peroxide", 4_000),
+		KEROSENE_PEROXIDE(TextFormatting.BLUE + "Kerosene / Hydrogen Peroxide", 8_000),
+		KEROSENE_LOXY(TextFormatting.LIGHT_PURPLE + "Kerosene / Liquid Oxygen", 12_000),
+		JETFUEL_LOXY(TextFormatting.RED + "Jet Fuel / Liquid Oxygen", 16_000);
+
+		public String display;
+		public int defaultCap;
+
+		private MissileFuel(String display, int defaultCap) {
+			this.display = display;
+			this.defaultCap = defaultCap;
 		}
 	}
 }

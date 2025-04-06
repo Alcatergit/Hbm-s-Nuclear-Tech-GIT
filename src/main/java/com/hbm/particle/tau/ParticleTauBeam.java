@@ -3,7 +3,7 @@ package com.hbm.particle.tau;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -93,7 +93,7 @@ public class ParticleTauBeam extends Particle {
 		}
 		Tessellator.getInstance().draw();
 		
-		RenderHelper.resetColor();
+		NTMRenderHelper.resetColor();
 		GlStateManager.enableCull();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);

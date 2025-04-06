@@ -2,7 +2,6 @@ package com.hbm.entity.mob;
 
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

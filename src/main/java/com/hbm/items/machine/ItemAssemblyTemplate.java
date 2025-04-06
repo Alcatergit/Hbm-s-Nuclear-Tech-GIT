@@ -1,19 +1,13 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -27,12 +21,24 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemAssemblyTemplate extends Item {
+import javax.annotation.Nonnull;
+import java.util.List;
+
+public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
+
+	public static final ModelResourceLocation location = new ModelResourceLocation(
+			RefStrings.MODID + ":assembly_template", "inventory");
 	
-	public static final ModelResourceLocation location = new ModelResourceLocation(RefStrings.MODID + ":assembly_template", "inventory");
+	//private static IForgeRegistry<Item> itemRegistry;
+	//private static IForgeRegistry<Block> blockRegistry;
+
+
+	//public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
+	//public static List<AssemblerRecipe> recipesBackup = null;
+	
 
 	public ItemAssemblyTemplate(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHasSubtypes(true);
 		this.setMaxDamage(0);
@@ -44,10 +50,10 @@ public class ItemAssemblyTemplate extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+		String s = ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 		int damage = getTagWithRecipeNumber(stack).getInteger("type");
 		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : ItemStack.EMPTY;
-		String s1 = out!=null ? out.getDisplayName() : "ERROR";
+		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getTranslationKey() : "") + ".name")).trim();
 
 		if (s1 != null) {
 			s = s + " " + s1;
@@ -154,6 +160,11 @@ public class ItemAssemblyTemplate extends Item {
     	else
     		return 100;
 
+	}
+
+	@Override
+	public ModelResourceLocation getResourceLocation() {
+		return location;
 	}
 	
 	public static int getRecipeIndex(ItemStack stack){

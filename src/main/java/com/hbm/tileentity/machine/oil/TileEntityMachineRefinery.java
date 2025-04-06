@@ -1,254 +1,354 @@
 package com.hbm.tileentity.machine.oil;
 
+import api.hbm.energymk2.IEnergyReceiverMK2;
+import api.hbm.fluid.IFluidStandardTransceiver;
+import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.handler.MultiblockHandlerXR;
+import com.hbm.handler.pollution.PollutionHandler;
+import com.hbm.interfaces.IFFtoNTMF;
+import com.hbm.inventory.OreDictManager;
+import com.hbm.inventory.RecipesCommon;
 import com.hbm.inventory.RefineryRecipes;
+import com.hbm.inventory.container.ContainerMachineRefinery;
+import com.hbm.inventory.fluid.FluidStack;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.tank.FluidTankNTM;
+import com.hbm.inventory.gui.GUIMachineRefinery;
 import com.hbm.items.ModItems;
+import com.hbm.lib.DirPos;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.util.Tuple.Pair;
-
-import api.hbm.energy.IEnergyUser;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
+import com.hbm.tileentity.*;
+import com.hbm.util.ParticleUtil;
+import com.hbm.util.Tuple;
+import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.world.Explosion;
+import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidUtil;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityMachineRefinery extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class TileEntityMachineRefinery extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2, IOverpressurable, IPersistentNBT, IRepairable, IFluidStandardTransceiver, IGUIProvider, IFluidCopiable, IFFtoNTMF {
 
 	public long power = 0;
+	public int sulfur = 0;
 	public int itemOutputTimer = 0;
-	public static final int totalItemTime = 50;
+	public static final int maxSulfur = 100;
 	public static final long maxPower = 1000;
-	public int age = 0;
-	public boolean needsUpdate = false;
-	public FluidTank[] tanks;
+	public boolean isOn;
+	public FluidTankNTM[] tanks;
+	public FluidTank[] tanksOld;
 	public Fluid[] tankTypes;
 
-	//private static final int[] slots_top = new int[] { 1 };
-	//private static final int[] slots_bottom = new int[] { 0, 2, 4, 6, 8, 10, 11};
-	//private static final int[] slots_side = new int[] { 0, 3, 5, 7, 9 };
-	
-	private String customName;
-	
+	public boolean hasExploded = false;
+	public boolean onFire = false;
+	public Explosion lastExplosion = null;
+
+	private AudioWrapper audio;
+	private int audioTime;
+	private static boolean converted = false;
+
 	public TileEntityMachineRefinery() {
-		super(12);
-		tanks = new FluidTank[5];
+		super(13);
+		tanks = new FluidTankNTM[5];
+		tanks[0] = new FluidTankNTM(Fluids.HOTOIL, 64_000);
+		tanks[1] = new FluidTankNTM(Fluids.HEAVYOIL, 24_000);
+		tanks[2] = new FluidTankNTM(Fluids.NAPHTHA, 24_000);
+		tanks[3] = new FluidTankNTM(Fluids.LIGHTOIL, 24_000);
+		tanks[4] = new FluidTankNTM(Fluids.PETROLEUM, 24_000);
+
+		tanksOld = new FluidTank[5];
 		tankTypes = new Fluid[] {ModForgeFluids.hotoil, ModForgeFluids.heavyoil, ModForgeFluids.naphtha, ModForgeFluids.lightoil, ModForgeFluids.petroleum};
-		tanks[0] = new FluidTank(64000);
-		tanks[1] = new FluidTank(24000);
-		tanks[2] = new FluidTank(24000);
-		tanks[3] = new FluidTank(24000);
-		tanks[4] = new FluidTank(24000);
+		tanksOld[0] = new FluidTank(64000);
+		tanksOld[1] = new FluidTank(24000);
+		tanksOld[2] = new FluidTank(24000);
+		tanksOld[3] = new FluidTank(24000);
+		tanksOld[4] = new FluidTank(24000);
+
+		converted = true;
 	}
-	
+
 	public String getName() {
 		return "container.machineRefinery";
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		if(nbt.hasKey("f")) {
-            this.tankTypes[0] = FluidRegistry.getFluid(nbt.getString("f"));
-        }
+		super.readFromNBT(nbt);
+
 		power = nbt.getLong("power");
+		if(!converted){
+			if(nbt.hasKey("f")) {
+				this.tankTypes[0] = FluidRegistry.getFluid(nbt.getString("f"));
+			}
+			if(nbt.hasKey("tanks"))
+				FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanksOld);
+		} else {
+			tanks[0].readFromNBT(nbt, "input");
+			tanks[1].readFromNBT(nbt, "heavy");
+			tanks[2].readFromNBT(nbt, "naphtha");
+			tanks[3].readFromNBT(nbt, "light");
+			tanks[4].readFromNBT(nbt, "petroleum");
+			if(nbt.hasKey("f"))
+				nbt.removeTag("f");
+			if(nbt.hasKey("tanks"))
+				nbt.removeTag("tanks");
+		}
+		sulfur = nbt.getInteger("sulfur");
 		itemOutputTimer = nbt.getInteger("itemOutputTimer");
-		if(nbt.hasKey("tanks"))
-			FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		super.readFromNBT(nbt);
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		if(tankTypes[0] != null){
-			nbt.setString("f", tankTypes[0].getName());
-		} else {
-			if(tanks[0].getFluid() != null){
-				nbt.setString("f", tanks[0].getFluid().getFluid().getName());
-			}
-		}
 		nbt.setLong("power", power);
 		nbt.setInteger("itemOutputTimer", itemOutputTimer);
-		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		if(!converted){
+			if(tankTypes[0] != null){
+				nbt.setString("f", tankTypes[0].getName());
+			} else {
+				if(tanksOld[0].getFluid() != null){
+					nbt.setString("f", tanksOld[0].getFluid().getFluid().getName());
+				}
+			}
+            nbt.setTag("tanks", FFUtils.serializeTankArray(tanksOld));
+		} else {
+			tanks[0].writeToNBT(nbt, "input");
+			tanks[1].writeToNBT(nbt, "heavy");
+			tanks[2].writeToNBT(nbt, "naphtha");
+			tanks[3].writeToNBT(nbt, "light");
+			tanks[4].writeToNBT(nbt, "petroleum");
+		}
+		nbt.setInteger("sulfur", sulfur);
 		return super.writeToNBT(nbt);
 	}
-	
+
 	@Override
 	public void update() {
-		if (!world.isRemote) {
-			if(needsUpdate){
-				needsUpdate = false;
+		if(!converted){
+			resizeInventory(13);
+			convertAndSetFluids(tankTypes, tanksOld, tanks);
+			converted = true;
+		}
+		if(!world.isRemote) {
+
+			this.isOn = false;
+
+			if(this.getBlockMetadata() < 12) {
+				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata()).getRotation(ForgeDirection.DOWN);
+				world.removeTileEntity(pos);
+				world.setBlockState(pos, ModBlocks.machine_refinery.getStateFromMeta(dir.ordinal() + 10), 3);
+				MultiblockHandlerXR.fillSpace(world, pos.getX(), pos.getY(), pos.getZ(), ((BlockDummyable) ModBlocks.machine_refinery).getDimensions(), ModBlocks.machine_refinery, dir);
+				NBTTagCompound data = new NBTTagCompound();
+				this.writeToNBT(data);
+				world.getTileEntity(pos).readFromNBT(data);
+				return;
 			}
-			this.updateConnections();
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3], tanks[4]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
-			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 
-			age++;
-			if(age >= 20)
-			{
-				age = 0;
+			if(!this.hasExploded) {
+
+				this.updateConnections();
+
+				power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
+				tanks[0].setType(12, inventory);
+				tanks[0].loadTank(1, 2, inventory);
+
+				refine();
+
+				tanks[1].unloadTank(3, 4, inventory);
+				tanks[2].unloadTank(5, 6, inventory);
+				tanks[3].unloadTank(7, 8, inventory);
+				tanks[4].unloadTank(9, 10, inventory);
+
+				for(DirPos pos : getConPos()) {
+					for(int i = 1; i < 5; i++) {
+						if(tanks[i].getFill() > 0) {
+							this.sendFluid(tanks[i], world, pos.getPos().getX(), pos.getPos().getY(), pos.getPos().getZ(), pos.getDir());
+						}
+					}
+				}
+			} else if(onFire){
+
+				boolean hasFuel = false;
+				for(int i = 0; i < 5; i++) {
+					if(tanks[i].getFill() > 0) {
+						tanks[i].setFill(Math.max(tanks[i].getFill() - 10, 0));
+						hasFuel = true;
+					}
+				}
+
+				if(hasFuel) {
+					List<Entity> affected = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.add(-1.5, 0, -1.5), pos.add(2.5, 8, 2.5)));
+					for(Entity e : affected) e.setFire(5);
+					Random rand = world.rand;
+					ParticleUtil.spawnGasFlame(world, pos.getX() + rand.nextDouble(), pos.getY() + 1.5 + rand.nextDouble() * 3, pos.getZ() + rand.nextDouble(), rand.nextGaussian() * 0.05, 0.1, rand.nextGaussian() * 0.05);
+
+					if(world.getTotalWorldTime() % 20 == 0) {
+						PollutionHandler.incrementPollution(world, pos, PollutionHandler.PollutionType.SOOT, PollutionHandler.SOOT_PER_SECOND * 70);
+					}
+				}
 			}
-			
-			if(age == 1 || age == 11) {
-				fillFluidInit(tanks[1]);
-			}
-			if(age == 2 || age == 12){
-				fillFluidInit(tanks[2]);
-			}
-			if(age == 3 || age == 13){
-				fillFluidInit(tanks[3]);
-			}
-			if(age == 4 || age == 14){
-				fillFluidInit(tanks[4]);
-			}
-			if(this.inputValidForTank(0, 1)) //checking if the containers fluid has a recipe
-				FFUtils.fillFromFluidContainer(inventory, tanks[0], 1, 2);
-			
-			refine();
-			
-			FFUtils.fillFluidContainer(inventory, tanks[1], 3, 4);
-			FFUtils.fillFluidContainer(inventory, tanks[2], 5, 6);
-			FFUtils.fillFluidContainer(inventory, tanks[3], 7, 8);
-			FFUtils.fillFluidContainer(inventory, tanks[4], 9, 10);
 
-			detectAndSendChanges();
-		}
-	}
+			NBTTagCompound data = new NBTTagCompound();
+			data.setLong("power", this.power);
+			for(int i = 0; i < 5; i++) tanks[i].writeToNBT(data, "" + i);
+			data.setBoolean("exploded", hasExploded);
+			data.setBoolean("onFire", onFire);
+			data.setBoolean("isOn", this.isOn);
+			this.networkPack(data, 150);
+		} else {
 
-	private void updateConnections() {
-		this.trySubscribe(world, pos.add(2, 0, 1), Library.POS_X);
-		this.trySubscribe(world, pos.add(2, 0, -1), Library.POS_X);
-		this.trySubscribe(world, pos.add(-2, 0, 1), Library.NEG_X);
-		this.trySubscribe(world, pos.add(-2, 0, -1), Library.NEG_X);
-		this.trySubscribe(world, pos.add(1, 0, 2), Library.POS_Z);
-		this.trySubscribe(world, pos.add(-1, 0, 2), Library.POS_Z);
-		this.trySubscribe(world, pos.add(1, 0, -2), Library.NEG_Z);
-		this.trySubscribe(world, pos.add(-1, 0, -2), Library.NEG_Z);
-	}
+			if(this.isOn) audioTime = 20;
 
-	private void setupTanks(FluidStack[] fluids){
-		if(fluids != null){
-			setTankType(1, fluids[0].getFluid());
-			setTankType(2, fluids[1].getFluid());
-			setTankType(3, fluids[2].getFluid());
-			setTankType(4, fluids[3].getFluid());
-		}
-	}
+			if(audioTime > 0) {
 
-	public void setTankType(int idx, Fluid type){
-		if(tankTypes[idx] != type){
-			tankTypes[idx] = type;
-			if(type != null){
-				tanks[idx].setFluid(new FluidStack(type, 0));
-			}else {
-				tanks[idx].setFluid(null);
-			}
-		}
-	}
+				audioTime--;
 
-	private void refine(){
-		Pair<FluidStack[], ItemStack> recipe = RefineryRecipes.getRecipe(tankTypes[0]);
-		FluidStack[] outputFluids = recipe.getKey();
-		ItemStack outputItem = recipe.getValue();
-		setupTanks(outputFluids);
-		
-		if(power >= 5 && tanks[0].getFluidAmount() >= 100 &&
-				tanks[1].getFluidAmount() + outputFluids[0].amount <= tanks[1].getCapacity() && 
-				tanks[2].getFluidAmount() + outputFluids[1].amount <= tanks[2].getCapacity() && 
-				tanks[3].getFluidAmount() + outputFluids[2].amount <= tanks[3].getCapacity() && 
-				tanks[4].getFluidAmount() + outputFluids[3].amount <= tanks[4].getCapacity()) {
+				if(audio == null) {
+					audio = createAudioLoop();
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio = rebootAudio(audio);
+				}
 
-			tanks[0].drain(100, true);
-			tanks[1].fill(outputFluids[0].copy(), true);
-			tanks[2].fill(outputFluids[1].copy(), true);
-			tanks[3].fill(outputFluids[2].copy(), true);
-			tanks[4].fill(outputFluids[3].copy(), true);
-			itemOutputTimer += 1;
-			power -= 5;
-			needsUpdate = true;
-		}
+				audio.updateVolume(getVolume(1F));
+				audio.keepAlive();
 
-		if(itemOutputTimer >= totalItemTime) {
-			if(inventory.getStackInSlot(11).isEmpty()) {
-				inventory.setStackInSlot(11, outputItem.copy());
-				itemOutputTimer = 0;
-			} else if(!inventory.getStackInSlot(11).isEmpty() && inventory.getStackInSlot(11).getItem() == outputItem.getItem() && inventory.getStackInSlot(11).getCount() < inventory.getStackInSlot(11).getMaxStackSize()) {
-				inventory.getStackInSlot(11).grow(1);
-				itemOutputTimer = 0;
-			}
-		}
-	}
-	
-	private long detectPower;
-	private FluidTank[] detectTanks = new FluidTank[]{null, null, null, null, null};
-	
-	private void detectAndSendChanges() {
-		boolean mark = false;
-		if(detectPower != power){
-			mark = true;
-			detectPower = power;
-		}
-		if(!FFUtils.areTanksEqual(tanks[0], detectTanks[0])){
-			mark = true;
-			needsUpdate = true;
-			detectTanks[0] = FFUtils.copyTank(tanks[0]);
-		}
-		if(!FFUtils.areTanksEqual(tanks[1], detectTanks[1])){
-			mark = true;
-			needsUpdate = true;
-			detectTanks[1] = FFUtils.copyTank(tanks[1]);
-		}
-		if(!FFUtils.areTanksEqual(tanks[2], detectTanks[2])){
-			mark = true;
-			needsUpdate = true;
-			detectTanks[2] = FFUtils.copyTank(tanks[2]);
-		}
-		if(!FFUtils.areTanksEqual(tanks[3], detectTanks[3])){
-			mark = true;
-			needsUpdate = true;
-			detectTanks[3] = FFUtils.copyTank(tanks[3]);
-		}
-		if(!FFUtils.areTanksEqual(tanks[4], detectTanks[4])){
-			mark = true;
-			needsUpdate = true;
-			detectTanks[4] = FFUtils.copyTank(tanks[4]);
-		}
-		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
-		if(mark)
-			markDirty();
-	}
+			} else {
 
-	protected boolean inputValidForTank(int tank, int slot){
-		
-		if(!inventory.getStackInSlot(slot).isEmpty()){
-			FluidStack containerFluid = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
-			if(containerFluid != null){
-				if(RefineryRecipes.getRecipe(containerFluid.getFluid()) != null){
-					setTankType(tank, containerFluid.getFluid());
-					return true;
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
 				}
 			}
 		}
-		return false;
+	}
+
+	@Override
+	public AudioWrapper createAudioLoop() {
+		return MainRegistry.proxy.getLoopedSound(HBMSoundHandler.boiler, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.25F, 1.0F);
+	}
+
+	private void updateConnections() {
+		for(DirPos pos : getConPos()) {
+			this.trySubscribe(world, pos.getPos().getX(), pos.getPos().getY(), pos.getPos().getZ(), pos.getDir());
+			this.trySubscribe(tanks[0].getTankType(), world, pos.getPos().getX(), pos.getPos().getY(), pos.getPos().getZ(), pos.getDir());
+		}
+	}
+
+	@Override
+	public void onChunkUnload() {
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		super.networkUnpack(nbt);
+
+		this.power = nbt.getLong("power");
+		for(int i = 0; i < 5; i++) tanks[i].readFromNBT(nbt, "" + i);
+		this.hasExploded = nbt.getBoolean("exploded");
+		this.onFire = nbt.getBoolean("onFire");
+		this.isOn = nbt.getBoolean("isOn");
+	}
+
+	public DirPos[] getConPos() {
+		return new DirPos[] {
+				new DirPos(pos.getX() + 2, pos.getY(), pos.getZ() + 1, Library.POS_X),
+				new DirPos(pos.getX() + 2, pos.getY(), pos.getZ() - 1, Library.POS_X),
+				new DirPos(pos.getX() - 2, pos.getY(), pos.getZ() + 1, Library.NEG_X),
+				new DirPos(pos.getX() - 2, pos.getY(), pos.getZ() - 1, Library.NEG_X),
+				new DirPos(pos.getX() + 1, pos.getY(), pos.getZ() + 2, Library.POS_Z),
+				new DirPos(pos.getX() - 1, pos.getY(), pos.getZ() + 2, Library.POS_Z),
+				new DirPos(pos.getX() + 1, pos.getY(), pos.getZ() - 2, Library.NEG_Z),
+				new DirPos(pos.getX() - 1, pos.getY(), pos.getZ() - 2, Library.NEG_Z)
+		};
+	}
+
+	private void refine() {
+		Tuple.Quintet<FluidStack, FluidStack, FluidStack, FluidStack, ItemStack> refinery = RefineryRecipes.getRefinery(tanks[0].getTankType());
+		if(refinery == null) {
+			for(int i = 1; i < 5; i++) tanks[i].setTankType(Fluids.NONE);
+			return;
+		}
+
+		FluidStack[] stacks = new FluidStack[] {refinery.getV(), refinery.getW(), refinery.getX(), refinery.getY()};
+
+		for(int i = 0; i < stacks.length; i++) tanks[i + 1].setTankType(stacks[i].type);
+
+		if(power < 5 || tanks[0].getFill() < 100) return;
+
+		for(int i = 0; i < stacks.length; i++) {
+			if(tanks[i + 1].getFill() + stacks[i].fill > tanks[i + 1].getMaxFill()) {
+				return;
+			}
+		}
+
+		this.isOn = true;
+		tanks[0].setFill(tanks[0].getFill() - 100);
+
+		for(int i = 0; i < stacks.length; i++) tanks[i + 1].setFill(tanks[i + 1].getFill() + stacks[i].fill);
+
+		this.sulfur++;
+
+		if(this.sulfur >= maxSulfur) {
+			this.sulfur -= maxSulfur;
+
+			ItemStack out = refinery.getZ();
+
+			if(out != null) {
+
+				if(inventory.getStackInSlot(11).isEmpty()) {
+					inventory.setStackInSlot(11, out.copy());
+				} else {
+					if(out.getItem() == inventory.getStackInSlot(11).getItem() && out.getItemDamage() == inventory.getStackInSlot(11).getItemDamage() && inventory.getStackInSlot(11).getCount() + out.getCount() <= inventory.getStackInSlot(11).getMaxStackSize()) {
+						inventory.getStackInSlot(11).setCount(out.getCount());
+					}
+
+				}
+			}
+
+			this.markDirty();
+		}
+		this.power -= 5;
 	}
 
 	@Override
@@ -260,11 +360,11 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	public boolean canExtractItem(int i, ItemStack stack, int amount) {
 		return i==2 || i==4 || i==6 || i==8 || i==10 || i==11;
 	}
-	
+
 	public long getPowerScaled(long i) {
 		return (power * i) / maxPower;
 	}
-	
+
 	@Override
 	public void setPower(long i) {
 		power = i;
@@ -273,115 +373,122 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	@Override
 	public long getPower() {
 		return power;
-		
+
 	}
 
 	@Override
 	public long getMaxPower() {
 		return maxPower;
 	}
-	
-	public void fillFluidInit(FluidTank tank) {
-		FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 2000);
-		
-		FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 2000);
-		FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 2000);
-	}
-	
+
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
 		return TileEntity.INFINITE_EXTENT_AABB;
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
-	public double getMaxRenderDistanceSquared()
-	{
-		return 65536.0D;
+	public double getMaxRenderDistanceSquared() {return 65536.0D;}
+
+	@Override
+	public FluidTankNTM[] getSendingTanks() {
+		return new FluidTankNTM[] { tanks[1], tanks[2], tanks[3], tanks[4] };
 	}
 
 	@Override
-	public IFluidTankProperties[] getTankProperties() {
-		return new IFluidTankProperties[]{tanks[0].getTankProperties()[0], tanks[1].getTankProperties()[0], tanks[2].getTankProperties()[0], tanks[3].getTankProperties()[0], tanks[4].getTankProperties()[0]};
+	public FluidTankNTM[] getReceivingTanks() {
+		return new FluidTankNTM[] { tanks[0] };
 	}
 
 	@Override
-	public int fill(FluidStack resource, boolean doFill) {
-		if(resource == null)
-			return 0;
-		if(tankTypes[0] != null && resource.getFluid() == tankTypes[0]) {
-			return tanks[0].fill(resource, doFill);
-		}
-		if(tanks[0].getFluidAmount() == 0 && RefineryRecipes.getRecipe(resource.getFluid()) != null){
-			tankTypes[0] = resource.getFluid();
+	public FluidTankNTM[] getAllTanks() {
+		return tanks;
+	}
+
+	@Override
+	public boolean canConnect(FluidType type, ForgeDirection dir) {
+		return dir != ForgeDirection.UNKNOWN && dir != ForgeDirection.DOWN;
+	}
+
+	@Override
+	public void explode(World world, int x, int y, int z) {
+
+		if(this.hasExploded) return;
+
+		this.hasExploded = true;
+		this.onFire = true;
+		this.markDirty();
+	}
+
+	@Override
+	public void tryExtinguish(World world, int x, int y, int z, EnumExtinguishType type) {
+		if(!this.hasExploded || !this.onFire) return;
+
+		if(type == EnumExtinguishType.FOAM || type == EnumExtinguishType.CO2) {
+			this.onFire = false;
 			this.markDirty();
-			return tanks[0].fill(resource, doFill);
-		}
-		return 0;
-	}
-
-	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(resource == null)
-			return null;
-		if (resource.isFluidEqual(tanks[1].getFluid())) {
-			return tanks[1].drain(resource.amount, doDrain);
-		}
-		if (resource.isFluidEqual(tanks[2].getFluid())) {
-			return tanks[2].drain(resource.amount, doDrain);
-		}
-		if (resource.isFluidEqual(tanks[3].getFluid())) {
-			return tanks[3].drain(resource.amount, doDrain);
-		}
-		if (resource.isFluidEqual(tanks[4].getFluid())) {
-			return tanks[4].drain(resource.amount, doDrain);
-		}
-		return null;
-	}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if (tanks[1].getFluid() != null) {
-			return tanks[1].drain(maxDrain, doDrain);
-		} else if(tanks[2].getFluid() != null){
-			return tanks[2].drain(maxDrain, doDrain);
-		} else if(tanks[3].getFluid() != null){
-			return tanks[3].drain(maxDrain, doDrain);
-		} else if(tanks[4].getFluid() != null){
-			return tanks[4].drain(maxDrain, doDrain);
-		}
-		return null;
-	}
-
-	@Override
-	public void recievePacket(NBTTagCompound[] tags) {
-		if(tags.length != 5){
 			return;
-		} else {
-			tanks[0].readFromNBT(tags[0]);
-			tanks[1].readFromNBT(tags[1]);
-			tanks[2].readFromNBT(tags[2]);
-			tanks[3].readFromNBT(tags[3]);
-			tanks[4].readFromNBT(tags[4]);
+		}
+
+		if(type == EnumExtinguishType.WATER) {
+			for(FluidTankNTM tank : tanks) {
+				if(tank.getFill() > 0) {
+					world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 5F, true, true);
+					return;
+				}
+			}
 		}
 	}
 
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	public boolean isDamaged() {
+		return this.hasExploded;
 	}
-	
+
+	List<RecipesCommon.AStack> repair = new ArrayList();
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
-		} else {
-			return super.getCapability(capability, facing);
-		}
+	public List<RecipesCommon.AStack> getRepairMaterials() {
+
+		if(!repair.isEmpty())
+			return repair;
+
+		repair.add(new RecipesCommon.OreDictStack(OreDictManager.STEEL.plate(), 8));
+		repair.add(new RecipesCommon.ComparableStack(ModItems.ducttape, 4));
+		return repair;
+	}
+
+	@Override
+	public void repair() {
+		this.hasExploded = false;
+		this.markDirty();
+	}
+
+	@Override
+	public void writeNBT(NBTTagCompound nbt) {
+		if(tanks[0].getFill() == 0 && tanks[1].getFill() == 0 && tanks[2].getFill() == 0 && tanks[3].getFill() == 0 && tanks[4].getFill() == 0 && !this.hasExploded) return;
+		NBTTagCompound data = new NBTTagCompound();
+		for(int i = 0; i < 5; i++) this.tanks[i].writeToNBT(data, "" + i);
+		data.setBoolean("hasExploded", hasExploded);
+		data.setBoolean("onFire", onFire);
+		nbt.setTag(NBT_PERSISTENT_KEY, data);
+	}
+
+	@Override
+	public void readNBT(NBTTagCompound nbt) {
+		NBTTagCompound data = nbt.getCompoundTag(NBT_PERSISTENT_KEY);
+		for(int i = 0; i < 5; i++) this.tanks[i].readFromNBT(data, "" + i);
+		this.hasExploded = data.getBoolean("hasExploded");
+		this.onFire = data.getBoolean("onFire");
+	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineRefinery(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineRefinery(player.inventory, this);
 	}
 }

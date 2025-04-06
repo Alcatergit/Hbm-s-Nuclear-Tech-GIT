@@ -1,37 +1,38 @@
 package com.hbm.hazard.type;
 
-import java.util.List;
-
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.I18nUtil;
-import com.hbm.lib.Library;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
+import java.util.List;
+
 public class HazardTypeDigamma extends HazardTypeBase {
 
 	@Override
-	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
-		ContaminationUtil.applyDigammaData(target, level / 20F);
+	public void onUpdate(final EntityLivingBase target, final float level, final ItemStack stack) {
+		ContaminationUtil.applyDigammaData(target, (level / 20F)*hazardRate);
 	}
 
 	@Override
-	public void updateEntity(EntityItem item, float level) { }
+	public void updateEntity(final EntityItem item, final float level) { }
 
 	@Override
-	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-		
+	public void addHazardInformation(final EntityPlayer player, final List list, float level, final ItemStack stack, final List<HazardModifier> modifiers) {
 		level = HazardModifier.evalAllModifiers(stack, player, level, modifiers);
-		
-		list.add("§c[" + I18nUtil.resolveKey("trait.digamma") + "]");
-		list.add(" §4" + Library.roundFloat(level * 1000F, 2) + " " + I18nUtil.resolveKey("desc.digammaed"));
-		if(stack.getCount() > 1) {
-			list.add(" §4" + I18nUtil.resolveKey("desc.stack") + " " + Library.roundFloat(level * stack.getCount() * 1000F, 2) + " " + I18nUtil.resolveKey("desc.digammaed"));
+
+		final float displayLevel = Math.round(level * 10000F) / 10F;
+		list.add(TextFormatting.RED + "[" + I18nUtil.resolveKey("trait.digamma") + "]");
+		list.add(TextFormatting.DARK_RED + "" + displayLevel + "mDRX/s");
+
+		if (stack.getCount() > 1) {
+			final float stackLevel = displayLevel * stack.getCount();
+			list.add(TextFormatting.DARK_RED + "Stack: " + stackLevel + "mDRX/s");
 		}
 	}
+
 }

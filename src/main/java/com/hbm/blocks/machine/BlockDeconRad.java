@@ -1,10 +1,7 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.machine.TileEntityDeconRad;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,12 +15,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class BlockDeconRad extends BlockContainer {
 
 	public static float radRemove;
 	public BlockDeconRad(Material materialIn, String s, float rad) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.radRemove = rad;
 		ModBlocks.ALL_BLOCKS.add(this);

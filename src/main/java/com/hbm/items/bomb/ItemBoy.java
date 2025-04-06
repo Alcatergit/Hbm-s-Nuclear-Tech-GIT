@@ -1,14 +1,13 @@
 package com.hbm.items.bomb;
 
-import java.util.List;
-
 import com.hbm.items.ItemBase;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemBoy extends ItemBase {
 

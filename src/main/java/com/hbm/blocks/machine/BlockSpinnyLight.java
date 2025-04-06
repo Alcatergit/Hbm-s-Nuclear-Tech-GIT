@@ -1,10 +1,7 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.deco.TileEntitySpinnyLight;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -31,6 +28,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.List;
+
 public class BlockSpinnyLight extends BlockContainer {
 
 	public static final PropertyDirection FACING = BlockDirectional.FACING;
@@ -48,7 +47,7 @@ public class BlockSpinnyLight extends BlockContainer {
 
 	public BlockSpinnyLight(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -166,7 +165,7 @@ public class BlockSpinnyLight extends BlockContainer {
             world.setBlockToAir(pos);
             return;
         }
-		if(world.isBlockIndirectlyGettingPowered(pos) > 0) {
+		if(world.getStrongPower(pos) > 0) {
 			if(state.getValue(POWERED) == false){
 				TileEntity te = world.getTileEntity(pos);
 				world.setBlockState(pos, state.withProperty(POWERED, true));
@@ -193,7 +192,7 @@ public class BlockSpinnyLight extends BlockContainer {
 	}
 	
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.TRANSLUCENT;
 	}
 

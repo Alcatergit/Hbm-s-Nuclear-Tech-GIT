@@ -13,7 +13,7 @@ import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -83,7 +83,7 @@ public class InstancedParticleRenderer {
 		Particle.interpPosZ = entityIn.lastTickPosZ + (entityIn.posZ - entityIn.lastTickPosZ) * (double) partialTicks;
 		Particle.cameraViewDir = entityIn.getLook(partialTicks);
 		
-		RenderHelper.bindBlockTexture();
+		NTMRenderHelper.bindBlockTexture();
 		GlStateManager.enableBlend();
 		GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.003921569F);

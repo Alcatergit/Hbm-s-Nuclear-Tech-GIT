@@ -1,8 +1,7 @@
 package com.hbm.entity.mob;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IRadiationImmune;
@@ -16,9 +15,6 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.logic.EntityNukeExplosionMK5;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,6 +42,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 
@@ -168,7 +167,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 			if(rand.nextInt(3) > 0)
 				vec.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
 			
-			double length = vec.lengthVector();
+			double length = vec.length();
 			double overshoot = 35;
 			
 			int wX = (int)Math.floor(this.target.posX - vec.xCoord / length * overshoot);
@@ -287,7 +286,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 			double deltaY = this.getY() - this.posY;
 			double deltaZ = this.getZ() - this.posZ;
 			Vec3 delta = Vec3.createVectorHelper(deltaX, deltaY, deltaZ);
-			double len = delta.lengthVector();
+			double len = delta.length();
 			double speed = this.target instanceof EntityPlayer ? 5D : 2D;
 			
 			if(len > 5) {

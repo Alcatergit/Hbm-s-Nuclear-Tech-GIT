@@ -1,14 +1,15 @@
 package com.hbm.entity.grenade;
 
-import java.util.Random;
-
+import com.hbm.entity.effect.EntityMist;
 import com.hbm.explosion.ExplosionChaos;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class EntityGrenadeGas extends EntityGrenadeBouncyBase {
 	Random rand = new Random();
@@ -31,21 +32,13 @@ public class EntityGrenadeGas extends EntityGrenadeBouncyBase {
 		if (!this.world.isRemote) {
 			this.setDead();
 			this.world.createExplosion(this, this.posX, this.posY, this.posZ, 0.0F, true);
-			// ExplosionChaos.poison(this.worldObj, (int)this.posX,
-			// (int)this.posY, (int)this.posZ, 5);
-			// for(int i = 0; 0 < 15; i++) {
-
-			/*
-			 * ExplosionLarge.spawnParticlesRadial(worldObj, posX, posY, posZ,
-			 * 50); ExplosionLarge.spawnParticlesRadial(worldObj, posX, posY,
-			 * posZ, 50); ExplosionLarge.spawnParticlesRadial(worldObj, posX,
-			 * posY, posZ, 50); ExplosionLarge.spawnParticlesRadial(worldObj,
-			 * posX, posY, posZ, 50);
-			 */
-
-			ExplosionChaos.spawnChlorine(world, posX, posY, posZ, 50, 1.25, 0);
-
-			// }
+			for(int i = 0; i< 5; i++) {
+				EntityMist mist = new EntityMist(world);
+				mist.setType(Fluids.CHLORINE);
+				mist.setPosition(posX, posY - 5+(i*0.2), posZ);
+				mist.setArea(15, 10);
+				world.spawnEntity(mist);
+			}
 		}
 	}
 

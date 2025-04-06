@@ -14,7 +14,7 @@ public class BlockTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModBlocks.ore_uranium != null){
 			return new ItemStack(Item.getItemFromBlock(ModBlocks.brick_concrete));
 		}

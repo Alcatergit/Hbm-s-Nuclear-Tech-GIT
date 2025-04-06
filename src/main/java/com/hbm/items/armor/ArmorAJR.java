@@ -1,7 +1,6 @@
 package com.hbm.items.armor;
 
 import com.hbm.render.model.ModelArmorAJR;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;

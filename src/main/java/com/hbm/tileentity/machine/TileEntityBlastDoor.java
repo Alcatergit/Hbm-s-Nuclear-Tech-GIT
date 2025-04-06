@@ -1,8 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.DummyBlockBlast;
 import com.hbm.handler.RadiationSystemNT;
@@ -13,10 +10,8 @@ import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEVaultPacket;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -28,6 +23,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TileEntityBlastDoor extends TileEntityLockableBase implements ITickable, IControllable, IAnimatedDoor {
 
@@ -52,7 +50,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public void update() {
 		if(!world.isRemote) {
 			
-			if(!isLocked() && world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
+			if(!isLocked() && world.getStrongPower(pos) > 0 || world.getStrongPower(pos.up(6)) > 0) {
 				
 				if(!redstoned) {
 					this.tryToggle();

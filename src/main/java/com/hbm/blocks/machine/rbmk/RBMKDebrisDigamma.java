@@ -1,17 +1,14 @@
 package com.hbm.blocks.machine.rbmk;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.util.ContaminationUtil;
-import net.minecraft.entity.EntityLivingBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class RBMKDebrisDigamma extends RBMKDebris {
 

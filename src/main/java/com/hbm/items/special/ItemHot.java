@@ -1,7 +1,6 @@
 package com.hbm.items.special;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -14,7 +13,7 @@ public class ItemHot extends Item {
 	
 	public ItemHot(int heat, String s) {
 		ItemHot.heat = heat;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

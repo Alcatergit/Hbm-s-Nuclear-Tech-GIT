@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,7 +12,7 @@ import net.minecraft.world.World;
 public class ItemCatalog extends Item {
 
 	public ItemCatalog(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

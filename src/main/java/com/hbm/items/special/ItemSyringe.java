@@ -1,9 +1,5 @@
 package com.hbm.items.special;
 
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.VersatileConfig;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -14,7 +10,6 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -33,12 +28,15 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+import java.util.Random;
+
 public class ItemSyringe extends Item {
 
 	Random rand = new Random();
 	
 	public ItemSyringe(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);

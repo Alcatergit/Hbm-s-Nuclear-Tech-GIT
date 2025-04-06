@@ -1,14 +1,13 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityTaintCrab;
 import com.hbm.entity.mob.EntityTeslaCrab;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -16,8 +15,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETeslaPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
@@ -34,7 +31,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityTesla extends TileEntityMachineBase implements ITickable, IEnergyUser {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TileEntityTesla extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2 {
 
 	public long power;
 	public static final long maxPower = 100000;
@@ -56,7 +56,8 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			this.updateStandardConnections(world, pos);
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+				this.trySubscribe(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, dir);
 			this.targets.clear();
 			
 			if(world.getBlockState(pos.down()).getBlock() == ModBlocks.meteor_battery)
@@ -89,7 +90,7 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 			
 			Vec3 vec = Vec3.createVectorHelper(e.posX - x, e.posY + e.height / 2 - y, e.posZ - z);
 			
-			if(vec.lengthVector() > range)
+			if(vec.length() > range)
 				continue;
 
 			if(Library.isObstructed(worldObj, x, y, z, e.posX, e.posY + e.height / 2, e.posZ))

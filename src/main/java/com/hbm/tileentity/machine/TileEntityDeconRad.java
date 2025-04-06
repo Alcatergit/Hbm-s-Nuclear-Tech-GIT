@@ -1,19 +1,16 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.potion.HbmPotion;
 import com.hbm.util.ContaminationUtil;
-
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.List;
 
 public class TileEntityDeconRad extends TileEntity implements ITickable {
 

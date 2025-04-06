@@ -1,10 +1,7 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.potion.HbmPotion;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFire;
 import net.minecraft.block.state.IBlockState;
@@ -18,7 +15,7 @@ public class Balefire extends BlockFire {
 
 	public Balefire(String s) {
 		super();
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(null);
 
@@ -29,22 +26,22 @@ public class Balefire extends BlockFire {
 	protected boolean canDie(World worldIn, BlockPos pos){
 		Block b = worldIn.getBlockState(pos.down()).getBlock();
 
-		return (b != ModBlocks.baleonitite_slaked && 
-			b != ModBlocks.baleonitite_1 && 
-			b != ModBlocks.baleonitite_2 && 
-			b != ModBlocks.baleonitite_3 && 
-			b != ModBlocks.baleonitite_4 && 
-			b != ModBlocks.baleonitite_core);
+		return (b != ModBlocks.sellafield_slaked &&
+			b != ModBlocks.sellafield_1 &&
+			b != ModBlocks.sellafield_2 &&
+			b != ModBlocks.sellafield_3 &&
+			b != ModBlocks.sellafield_4 &&
+			b != ModBlocks.sellafield_core);
 	}
 
 	@Override 
 	public int getFlammability(Block b){
-		if(b != ModBlocks.baleonitite_slaked && 
-			b != ModBlocks.baleonitite_1 && 
-			b != ModBlocks.baleonitite_2 && 
-			b != ModBlocks.baleonitite_3 && 
-			b != ModBlocks.baleonitite_4 && 
-			b != ModBlocks.baleonitite_core){
+		if(b != ModBlocks.sellafield_slaked &&
+			b != ModBlocks.sellafield_1 &&
+			b != ModBlocks.sellafield_2 &&
+			b != ModBlocks.sellafield_3 &&
+			b != ModBlocks.sellafield_4 &&
+			b != ModBlocks.sellafield_core){
 			return 20000;
 		}
 		return super.getEncouragement(b);
@@ -52,19 +49,19 @@ public class Balefire extends BlockFire {
 
 	@Override 
 	public int getEncouragement(Block b){
-		if(b != ModBlocks.baleonitite_slaked && 
-			b != ModBlocks.baleonitite_1 && 
-			b != ModBlocks.baleonitite_2 && 
-			b != ModBlocks.baleonitite_3 && 
-			b != ModBlocks.baleonitite_4 && 
-			b != ModBlocks.baleonitite_core){
+		if(b != ModBlocks.sellafield_slaked &&
+			b != ModBlocks.sellafield_1 &&
+			b != ModBlocks.sellafield_2 &&
+			b != ModBlocks.sellafield_3 &&
+			b != ModBlocks.sellafield_4 &&
+			b != ModBlocks.sellafield_core){
 			return 20000;
 		}
 		return super.getEncouragement(b);
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn) {
 		entityIn.setFire(10);
 
 		if (entityIn instanceof EntityLivingBase)

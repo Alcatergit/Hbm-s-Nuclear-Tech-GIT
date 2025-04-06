@@ -1,27 +1,25 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
+import baubles.api.BaubleType;
+import baubles.api.IBauble;
 import com.hbm.items.ModItems;
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.util.ContaminationUtil;
-
-import baubles.api.BaubleType;
-import baubles.api.IBauble;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.EnumHand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")})
 public class ItemDosimeter extends Item implements IBauble {
@@ -29,7 +27,7 @@ public class ItemDosimeter extends Item implements IBauble {
 	Random rand = new Random();
 
 	public ItemDosimeter(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

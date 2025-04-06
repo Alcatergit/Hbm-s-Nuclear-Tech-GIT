@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.interfaces.ICopiable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.NTMMaterial;
@@ -7,6 +8,7 @@ import com.hbm.inventory.material.Mats.MaterialStack;
 
 import api.hbm.block.ICrucibleAcceptor;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -23,7 +25,7 @@ import net.minecraft.world.World;
  * @author hbm
  *
  */
-public abstract class TileEntityFoundryBase extends TileEntity implements ITickable, ICrucibleAcceptor {
+public abstract class TileEntityFoundryBase extends TileEntity implements ITickable, ICrucibleAcceptor, ICopiable {
 	
 	public NTMMaterial type;
 	protected NTMMaterial lastType;
@@ -36,7 +38,7 @@ public abstract class TileEntityFoundryBase extends TileEntity implements ITicka
 			if(!world.isRemote || (world.isRemote && shouldClientReRender())) {
 			
 				IBlockState state = world.getBlockState(pos);
-				world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+				world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 				this.lastType = this.type;
 				this.lastAmount = this.amount;
 				this.markDirty();
@@ -54,18 +56,6 @@ public abstract class TileEntityFoundryBase extends TileEntity implements ITicka
 		NBTTagCompound nbt = new NBTTagCompound();
 		this.writeToNBT(nbt);
 		return new SPacketUpdateTileEntity(this.getPos(), 0, nbt);
-	}
-	
-	@Override
-	public NBTTagCompound getUpdateTag(){
-		NBTTagCompound nbt = new NBTTagCompound();
-		this.writeToNBT(nbt);
-		return nbt;
-	}
-
-	@Override
-	public void handleUpdateTag(NBTTagCompound tag) {
-		this.readFromNBT(tag);
 	}
 
 	@Override
@@ -150,5 +140,17 @@ public abstract class TileEntityFoundryBase extends TileEntity implements ITicka
 	@Override
 	public MaterialStack pour(World world, BlockPos p, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {
 		return this.standardAdd(world, p, side, stack);
+	}
+
+	@Override
+	public NBTTagCompound getSettings(World world, int x, int y, int z) {
+		NBTTagCompound nbt = new NBTTagCompound();
+		if(type != null) nbt.setIntArray("matFilter", new int[]{ type.id });
+		return nbt;
+	}
+
+	@Override
+	public void pasteSettings(NBTTagCompound nbt, int index, World world, EntityPlayer player, int x, int y, int z) {
+
 	}
 }

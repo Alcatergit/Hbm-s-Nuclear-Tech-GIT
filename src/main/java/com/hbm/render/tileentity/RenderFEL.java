@@ -1,21 +1,18 @@
 package com.hbm.render.tileentity;
 
-import java.awt.Color;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.machine.TileEntityFEL;
-
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.BeamPronter.EnumBeamType;
 import com.hbm.render.misc.BeamPronter.EnumWaveType;
+import com.hbm.tileentity.machine.TileEntityFEL;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 
 public class RenderFEL extends TileEntitySpecialRenderer<TileEntityFEL> {
 

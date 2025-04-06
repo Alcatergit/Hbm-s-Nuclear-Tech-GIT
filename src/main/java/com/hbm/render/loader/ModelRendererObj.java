@@ -1,11 +1,9 @@
 package com.hbm.render.loader;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.render.amlfrom1710.IModelCustom;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 public class ModelRendererObj {
 

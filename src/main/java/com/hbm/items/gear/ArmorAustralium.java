@@ -1,11 +1,7 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,13 +12,16 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class ArmorAustralium extends ItemArmor {
 
 	Random rand = new Random();
 	
 	public ArmorAustralium(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String s) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

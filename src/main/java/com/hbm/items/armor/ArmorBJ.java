@@ -4,7 +4,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.model.ModelArmorBJ;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;

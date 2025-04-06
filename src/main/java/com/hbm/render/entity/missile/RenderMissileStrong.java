@@ -1,32 +1,30 @@
 package com.hbm.render.entity.missile;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.render.tileentity.RenderLaunchPadTier1;
-import com.hbm.entity.missile.EntityMissileStrong;
+import com.hbm.entity.missile.EntityMissileTier2;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
+import com.hbm.render.tileentity.RenderLaunchPadTier1;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
-public class RenderMissileStrong extends Render<EntityMissileStrong> {
+public class RenderMissileStrong extends Render<EntityMissileTier2.EntityMissileStrong> {
 
-	public static final IRenderFactory<EntityMissileStrong> FACTORY = (RenderManager man) -> {return new RenderMissileStrong(man);};
+	public static final IRenderFactory<EntityMissileTier2.EntityMissileStrong> FACTORY = (RenderManager man) -> {return new RenderMissileStrong(man);};
 	
 	protected RenderMissileStrong(RenderManager renderManager) {
 		super(renderManager);
 	}
 	
 	@Override
-	public void doRender(EntityMissileStrong missile, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityMissileTier2.EntityMissileStrong missile, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
         GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
         GlStateManager.enableLighting();
-        double[] renderPos = RenderHelper.getRenderPosFromMissile(missile, partialTicks);
+        double[] renderPos = NTMRenderHelper.getRenderPosFromMissile(missile, partialTicks);
         x = renderPos[0];
         y = renderPos[1];
         z = renderPos[2];
@@ -44,7 +42,7 @@ public class RenderMissileStrong extends Render<EntityMissileStrong> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityMissileStrong entity) {
+	protected ResourceLocation getEntityTexture(EntityMissileTier2.EntityMissileStrong entity) {
 		return ResourceManager.missileStrong_HE_tex;
 	}
 

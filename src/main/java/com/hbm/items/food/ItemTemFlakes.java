@@ -1,20 +1,19 @@
 package com.hbm.items.food;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemTemFlakes extends ItemFood {
 
 	public ItemTemFlakes(int amount, float saturation, boolean isWolfFood, String s) {
 		super(amount, saturation, isWolfFood);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setAlwaysEdible();
 		

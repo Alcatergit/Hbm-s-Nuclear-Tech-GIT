@@ -1,9 +1,9 @@
 package com.hbm.tileentity;
 
-import java.io.IOException;
-
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
+
+import java.io.IOException;
 
 public interface IConfigurableMachine {
 

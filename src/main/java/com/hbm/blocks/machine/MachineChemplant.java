@@ -1,15 +1,15 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.IMultiBlock;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
+import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -17,34 +17,48 @@ import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class MachineChemplant extends BlockContainer implements IMultiBlock {
-
-	public static final PropertyInteger FACING = PropertyInteger.create("facing", 2, 5);
+import java.util.Random;
+// Five fucking years, yeah finally reworking the shit that should've been done 3 years ago
+public class MachineChemplant extends BlockDummyable {
 	
 	public MachineChemplant(Material materialIn, String s) {
-		super(materialIn);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
+		super(materialIn, s);
+		this.bounding.add(new AxisAlignedBB(-1.0, 0.0, -2.0, 2.0, 3.0, 1.0));
+
+		// some guy once told me not to use magic numbers
+		// so I turned him into a newt
+		this.bounding.add(new AxisAlignedBB(-0.14375, 0.34375, -2.5, 0.15625, 0.65625, 1.5));
+		this.bounding.add(new AxisAlignedBB(0.85625, 0.34375, -2.5, 1.15625, 0.65625, 1.5));
+
+		this.bounding.add(new AxisAlignedBB(-1.5, 0.0, -0.5, 0.0, 1.0, 0.5));
+		this.bounding.add(new AxisAlignedBB(1.0, 0.0, -1.5, 2.5, 1.0, -0.5));
 		this.setCreativeTab(MainRegistry.machineTab);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, 2));
-		
-		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineChemplant();
+	public TileEntity createNewTileEntity(World world, int meta) {
+		if(meta >= 12) return new TileEntityMachineChemplant();
+		if(meta >= 6) return new TileEntityProxyCombo(false, true, true);
+		return null;
+	}
+
+	@Override
+	public int[] getDimensions() {
+		return new int[] {2, 0, 2, 1, 2, 1};
 	}
 	
 	@Override
@@ -81,208 +95,29 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return false;
 	}
-	
 	@Override
-	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+	public int getOffset() {
+		return 1;
 	}
-	
+
 	@Override
-	public int getMetaFromState(IBlockState state) {
-		return state.getValue(FACING);
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		return super.standardOpenBehavior(world, pos.getX(), pos.getY(), pos.getZ(), player, 0);
 	}
-	
+
 	@Override
-	public IBlockState getStateFromMeta(int meta) {
-		if(meta >= 2 && meta <=5)
-			return this.getDefaultState().withProperty(FACING, meta);
-		return this.getDefaultState().withProperty(FACING, 2);
-	}
-	
-	
-	
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		MutableBlockPos mbp = new BlockPos.MutableBlockPos();
-		if (i == 0) {
-			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 5), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionEast, ModBlocks.dummy_block_chemplant);
+	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		super.fillSpace(world, x, y, z, dir, o);
 
-				mbp.setPos(pos.getX()-1, pos.getY(), pos.getZ());
-				DummyBlockChemplant.safeBreak = true;
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te = world.getTileEntity(mbp);
-				if(te instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()-1, pos.getY(), pos.getZ()+1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te2 = world.getTileEntity(mbp);
-				if(te2 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te2;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()+2, pos.getY(), pos.getZ());
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te3 = world.getTileEntity(mbp);
-				if(te3 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te3;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()+2, pos.getY(), pos.getZ()+1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te4 = world.getTileEntity(mbp);
-				if(te4 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te4;
-					dummy.target = pos;
-				}
-				DummyBlockChemplant.safeBreak = false;
-				//
-				
-			} else
-				world.destroyBlock(pos, true);
-		}
-		if (i == 1) {
-			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 3), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionSouth, ModBlocks.dummy_block_chemplant);
+		x -= dir.offsetX;
+		z -= dir.offsetZ;
 
-				//
-				DummyBlockChemplant.safeBreak = true;
-				mbp.setPos(pos.getX(), pos.getY(), pos.getZ()-1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te = world.getTileEntity(mbp);
-				if(te instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()-1, pos.getY(), pos.getZ()-1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te2 = world.getTileEntity(mbp);
-				if(te2 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te2;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX(), pos.getY(), pos.getZ()+2);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te3 = world.getTileEntity(mbp);
-				if(te3 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te3;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()-1, pos.getY(), pos.getZ()+2);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te4 = world.getTileEntity(mbp);
-				if(te4 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te4;
-					dummy.target = pos;
-				}
-				DummyBlockChemplant.safeBreak = false;
-				//
-				
-			} else
-				world.destroyBlock(pos, true);
-		}
-		if (i == 2) {
-			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 4), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionWest, ModBlocks.dummy_block_chemplant);
+		ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-				//
-				DummyBlockChemplant.safeBreak = true;
-				mbp.setPos(pos.getX()+1, pos.getY(), pos.getZ());
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te = world.getTileEntity(mbp);
-				if(te instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()+1, pos.getY(), pos.getZ()-1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te2 = world.getTileEntity(mbp);
-				if(te2 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te2;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()-2, pos.getY(), pos.getZ());
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te3 = world.getTileEntity(mbp);
-				if(te3 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te3;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()-2, pos.getY(), pos.getZ()-1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te4 = world.getTileEntity(mbp);
-				if(te4 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te4;
-					dummy.target = pos;
-				}
-				DummyBlockChemplant.safeBreak = false;
-				//
-				
-			} else
-				world.destroyBlock(pos, true);
-		}
-		if (i == 3) {
-			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 2), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionNorth, ModBlocks.dummy_block_chemplant);
-
-				//
-				DummyBlockChemplant.safeBreak = true;
-				mbp.setPos(pos.getX(), pos.getY(), pos.getZ()+1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te = world.getTileEntity(mbp);
-				if(te instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()+1, pos.getY(), pos.getZ()+1);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te2 = world.getTileEntity(mbp);
-				if(te2 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te2;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX(), pos.getY(), pos.getZ()-2);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te3 = world.getTileEntity(mbp);
-				if(te3 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te3;
-					dummy.target = pos;
-				}
-				mbp.setPos(pos.getX()+1, pos.getY(), pos.getZ()-2);
-				world.setBlockState(mbp, ModBlocks.dummy_port_chemplant.getDefaultState());
-				TileEntity te4 = world.getTileEntity(mbp);
-				if(te4 instanceof TileEntityDummy) {
-					TileEntityDummy dummy = (TileEntityDummy)te4;
-					dummy.target = pos;
-				}
-				DummyBlockChemplant.safeBreak = false;
-				//
-				
-			} else
-				world.destroyBlock(pos, true);
-		}
-	}
-	private static boolean keepInventory;
-	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		if (!keepInventory) {
-			TileEntity tileentity = world.getTileEntity(pos);
-
-            if (tileentity instanceof TileEntityMachineChemplant)
-            {
-                InventoryHelper.dropInventoryItems(world, pos, (TileEntityMachineChemplant)tileentity);
-                
-                world.updateComparatorOutputLevel(pos, this);
-            }
-		}
-		super.breakBlock(world, pos, state);
+		this.makeExtra(world, x + rot.offsetX * 2,					y,	z + rot.offsetZ * 2);
+		this.makeExtra(world, x - rot.offsetX * 1,					y,	z - rot.offsetZ * 1);
+		this.makeExtra(world, x + rot.offsetX * 2 - dir.offsetX,	y,	z + rot.offsetZ * 2 - dir.offsetZ);
+		this.makeExtra(world, x - rot.offsetX * 1 - dir.offsetX,	y,	z - rot.offsetZ * 1 - dir.offsetZ);
 	}
 
 }

@@ -1,22 +1,20 @@
 package com.hbm.tileentity.machine;
 
-import java.util.HashMap;
-
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.ITankPacketAcceptor;
+import api.hbm.fluid.IFluidStandardReceiver;
+import com.hbm.interfaces.IFFtoNTMF;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.SILEXRecipes;
 import com.hbm.inventory.SILEXRecipes.SILEXRecipe;
-import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.util.InventoryUtil;
-import com.hbm.util.WeightedRandomObject;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.tank.FluidTankNTM;
+import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
-
+import com.hbm.lib.ForgeDirection;
+import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.util.BufferUtil;
+import com.hbm.util.InventoryUtil;
+import io.netty.buffer.ByteBuf;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -24,27 +22,25 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntitySILEX extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
+import java.util.HashMap;
+
+public class TileEntitySILEX extends TileEntityMachineBase implements ITickable, IFluidStandardReceiver, IFFtoNTMF {
 
 	public EnumWavelengths mode = EnumWavelengths.NULL;
-	public boolean hasLaser;
 	public FluidTank tank;
+	public FluidTankNTM tankNew;
 	public ComparableStack current;
 	public int currentFill;
 	public static final int maxFill = 16000;
 	public int progress;
 	public final int processTime = 80;
+
+	private static boolean converted = false;
 	
 	//0: Input
 	//2-3: Fluid Containers
@@ -52,9 +48,11 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	//5-10: Queue
 
 	public TileEntitySILEX() {
-		super(10);
+		super(11);
 		//acid
 		tank = new FluidTank(16000);
+		tankNew = new FluidTankNTM(Fluids.PEROXIDE, 16000);
+		converted = true;
 	}
 
 	public Fluid getTankType(){
@@ -68,52 +66,66 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public void update() {
-		
+		if(!converted){
+			resizeInventory(11);
+			convertAndSetFluid(tank.getFluid().getFluid(), tank, tankNew);
+			converted = true;
+		}
 		if(!world.isRemote) {
 
-			FFUtils.fillFromFluidContainer(inventory, tank, 1, 2);
-			
+			tankNew.setType(1, 1, inventory);
+			tankNew.loadTank(2, 3, inventory);
+
+			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - 10).getRotation(ForgeDirection.UP);
+			this.trySubscribe(tankNew.getTankType(), world, pos.getX() + dir.offsetX * 2, pos.getY() + 1, pos.getZ() + dir.offsetZ * 2, dir);
+			this.trySubscribe(tankNew.getTankType(), world, pos.getX() - dir.offsetX * 2, pos.getY() + 1, pos.getZ() - dir.offsetZ * 2, dir.getOpposite());
+
 			loadFluid();
-			
+
 			if(!process()) {
 				this.progress = 0;
 			}
-			
+
 			dequeue();
-			
+
 			if(currentFill <= 0) {
 				current = null;
 			}
-			
-			NBTTagCompound data = new NBTTagCompound();
-			data.setInteger("fill", currentFill);
-			data.setInteger("progress", progress);
-			data.setString("mode", mode.toString());
-			
-			if(this.current != null) {
-				data.setInteger("item", Item.getIdFromItem(this.current.item));
-				data.setInteger("meta", this.current.meta);
-			}
 
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tank), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			this.networkPack(data, 50);
+			this.networkPackNT(50);
 
 			this.mode = EnumWavelengths.NULL;
 		}
 	}
-	
-	public void networkUnpack(NBTTagCompound nbt) {
-		
-		this.currentFill = nbt.getInteger("fill");
-		this.progress = nbt.getInteger("progress");
-		this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
-		
-		if(this.currentFill > 0) {
-			this.current = new ComparableStack(Item.getItemById(nbt.getInteger("item")), 1, nbt.getInteger("meta"));
-			
-		} else {
-			this.current = null;
+
+	@Override
+	public void serialize(ByteBuf buf) {
+		super.serialize(buf);
+		buf.writeInt(currentFill);
+		buf.writeInt(progress);
+		BufferUtil.writeString(buf, mode.toString());
+
+		tankNew.serialize(buf);
+
+		if(this.current != null) {
+			buf.writeInt(Item.getIdFromItem(this.current.item));
+			buf.writeInt(this.current.meta);
 		}
+	}
+
+	@Override
+	public void deserialize(ByteBuf buf) {
+		super.deserialize(buf);
+		currentFill = buf.readInt();
+		progress = buf.readInt();
+		mode = EnumWavelengths.valueOf(BufferUtil.readString(buf));
+
+		tankNew.deserialize(buf);
+
+		if(currentFill > 0) {
+			current = new ComparableStack(Item.getItemById(buf.readInt()), 1, buf.readInt());
+		} else
+			current = null;
 	}
 	
 	public void handleButtonPacket(int value, int meta) {
@@ -134,51 +146,72 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		return (currentFill * i) / maxFill;
 	}
 	
-	public static final HashMap<Fluid, ComparableStack> fluidConversion = new HashMap<>();
-	
+	public static final HashMap<FluidType, ComparableStack> fluidConversion = new HashMap<>();
+
 	static {
-		fluidConversion.put(ModForgeFluids.uf6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.uf6)));
-		fluidConversion.put(ModForgeFluids.puf6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.puf6)));
+		putFluid(Fluids.UF6);
+		putFluid(Fluids.PUF6);
+		putFluid(Fluids.DEATH);
+	}
+
+	private static void putFluid(FluidType fluid) {
+		fluidConversion.put(fluid, new ComparableStack(ModItems.fluid_icon, 1, fluid.getID()));
 	}
 	
 	int loadDelay;
 	
 	public void loadFluid() {
 		
-		ComparableStack conv = fluidConversion.get(getTankType());
-		
+		ComparableStack conv = fluidConversion.get(tankNew.getTankType());
+
 		if(conv != null) {
-			
+
 			if(currentFill == 0) {
 				current = (ComparableStack) conv.copy();
 			}
-			
+
 			if(current != null && current.equals(conv)) {
-				
-				int toFill = Math.min(10, Math.min(maxFill - currentFill, tank.getFluidAmount()));
+
+				int toFill = Math.min(50, Math.min(maxFill - currentFill, tankNew.getFill()));
 				currentFill += toFill;
-				tank.drain(toFill, true);
+				tankNew.setFill(tankNew.getFill() - toFill);
+			}
+		} else {
+			ComparableStack direct = new ComparableStack(ModItems.fluid_icon, 1, tankNew.getTankType().getID());
+
+			if(SILEXRecipes.getOutput(direct.toStack()) != null) {
+
+				if(currentFill == 0) {
+					current = (ComparableStack) direct.copy();
+				}
+
+				if(current != null && current.equals(direct)) {
+
+					int toFill = Math.min(50, Math.min(maxFill - currentFill, tankNew.getFill()));
+					currentFill += toFill;
+					tankNew.setFill(tankNew.getFill() - toFill);
+				}
 			}
 		}
-		
+
 		loadDelay++;
-		
+
 		if(loadDelay > 20)
 			loadDelay = 0;
-		
-		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType() == ModForgeFluids.acid && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
+
+		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && tankNew.getTankType() == Fluids.PEROXIDE && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
 			SILEXRecipe recipe = SILEXRecipes.getOutput(inventory.getStackInSlot(0));
-			
+
 			if(recipe == null)
 				return;
-			
+
 			int load = recipe.fluidProduced;
-			
-			if(load <= maxFill - this.currentFill && load <= tank.getFluidAmount()) {
+
+			if(load <= this.maxFill - this.currentFill && load <= tankNew.getFill()) {
 				this.currentFill += load;
 				this.current = new ComparableStack(inventory.getStackInSlot(0)).makeSingular();
-				tank.drain(load*3, true);
-				inventory.getStackInSlot(0).shrink(1);
+				tankNew.setFill(tankNew.getFill() - load);
+				this.inventory.getStackInSlot(0).shrink(1);
 			}
 		}
 	}
@@ -199,17 +232,17 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		if(currentFill < recipe.fluidConsumed)
 			return false;
 		
-		if(!inventory.getStackInSlot(3).isEmpty())
+		if(!inventory.getStackInSlot(4).isEmpty())
 			return false;
 
-		progress += Math.pow(1.5, this.mode.ordinal()-recipe.laserStrength.ordinal());
+		progress += Math.pow(2, this.mode.ordinal() - recipe.laserStrength.ordinal() + 1) / 2;
 		
 		if(progress >= processTime) {
 			
 			currentFill -= recipe.fluidConsumed;
 			
-			ItemStack out = ((WeightedRandomObject)WeightedRandom.getRandomItem(world.rand, recipe.outputs)).asStack();
-			inventory.setStackInSlot(3, out.copy());
+			ItemStack out = (WeightedRandom.getRandomItem(world.rand, recipe.outputs)).asStack();
+			inventory.setStackInSlot(4, out.copy());
 			progress = 0;
 			this.markDirty();
 		}
@@ -219,9 +252,9 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	
 	private void dequeue() {
 		
-		if(!inventory.getStackInSlot(3).isEmpty()) {
+		if(!inventory.getStackInSlot(4).isEmpty()) {
 			
-			for(int i = 4; i < 10; i++) {
+			for(int i = 5; i < 11; i++) {
 				
 				if(!inventory.getStackInSlot(i).isEmpty() && inventory.getStackInSlot(i).getCount() < inventory.getStackInSlot(i).getMaxStackSize() && InventoryUtil.doesStackDataMatch(inventory.getStackInSlot(3), inventory.getStackInSlot(i))) {
 					inventory.getStackInSlot(i).grow(1);
@@ -230,7 +263,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 				}
 			}
 			
-			for(int i = 4; i < 10; i++) {
+			for(int i = 5; i < 11; i++) {
 				
 				if(inventory.getStackInSlot(i).isEmpty()) {
 					inventory.setStackInSlot(i, inventory.getStackInSlot(3).copy());
@@ -243,7 +276,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing p_94128_1_) {
-		return new int[] { 0, 4, 5, 6, 7, 8, 9 };
+		return new int[] { 0, 5, 6, 7, 8, 9, 10 };
 	}
 
 	@Override
@@ -256,14 +289,19 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int side) {
-		return slot >= 4;
+		return slot >= 5;
 	}
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		this.tank.readFromNBT(nbt.getCompoundTag("tank"));
+		if(!converted){
+			this.tank.readFromNBT(nbt.getCompoundTag("tank"));
+		} else{
+			this.tankNew.readFromNBT(nbt, "tankNew");
+		}
 		this.currentFill = nbt.getInteger("fill");
+		this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
 		
 		if(this.currentFill > 0) {
 			this.current = new ComparableStack(Item.getItemById(nbt.getInteger("item")), 1, nbt.getInteger("meta"));
@@ -273,7 +311,11 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setTag("tank", this.tank.writeToNBT(new NBTTagCompound()));
+		if(!converted){
+			nbt.setTag("tank", this.tank.writeToNBT(new NBTTagCompound()));
+		} else{
+			this.tankNew.writeToNBT(nbt, "tankNew");
+		}
 		nbt.setInteger("fill", this.currentFill);
 		nbt.setString("mode", mode.toString());
 		
@@ -295,54 +337,21 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 				pos.getZ() + 2
 			);
 	}
+
+	@Override
+	public FluidTankNTM[] getAllTanks() {
+		return new FluidTankNTM[] {tankNew};
+	}
+
+	@Override
+	public FluidTankNTM[] getReceivingTanks() {
+		return new FluidTankNTM[] {tankNew};
+	}
 	
 	@Override
 	@SideOnly(Side.CLIENT)
 	public double getMaxRenderDistanceSquared()
 	{
 		return 65536.0D;
-	}
-
-	@Override
-	public IFluidTankProperties[] getTankProperties(){
-		return tank.getTankProperties();
-	}
-
-	@Override
-	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && (resource.getFluid() == ModForgeFluids.acid || fluidConversion.containsKey(resource.getFluid()))){
-			return tank.fill(resource, doFill);
-		}
-		return 0;
-	}
-
-	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain){
-		return tank.drain(resource, doDrain);
-	}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain){
-		return tank.drain(maxDrain, doDrain);
-	}
-
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
-		}
-		return super.getCapability(capability, facing);
-	}
-
-	@Override
-	public void recievePacket(NBTTagCompound[] tags){
-		if(tags.length == 1){
-			tank.readFromNBT(tags[0]);
-		}
 	}
 }

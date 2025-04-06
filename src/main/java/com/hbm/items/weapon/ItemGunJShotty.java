@@ -1,8 +1,5 @@
 package com.hbm.items.weapon;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -14,13 +11,12 @@ import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleBatchRenderer;
 import com.hbm.particle.bullet_hit.ParticleSmokeAnim;
 import com.hbm.render.LightRenderer;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.item.weapon.ItemRenderJShotgun;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -42,6 +38,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
 
 public class ItemGunJShotty extends ItemGunBase {
 
@@ -56,9 +54,9 @@ public class ItemGunJShotty extends ItemGunBase {
 		case RELOAD:
 			int bullets = getMag(stack);
 			if(bullets == 1){
-				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim0, new EndResult(EndType.END));
+				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim0, new EndResult(EndType.END));
 			} else if(bullets == 0){
-				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim1, new EndResult(EndType.END));
+				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim1, new EndResult(EndType.END));
 			}
 		break;
 		case CYCLE:
@@ -99,13 +97,13 @@ public class ItemGunJShotty extends ItemGunBase {
 			Vec3d direction = player.getLook(partialTicks);
 			if(getFlashlightActive(player.getHeldItemMainhand())){
 				if(ItemRenderJShotgun.firstPersonFlashlightPos != null && player == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
-					Vec3d world = RenderHelper.unproject_world(HbmShaderManager2.inv_ViewProjectionMatrix, ItemRenderJShotgun.firstPersonFlashlightPos[0], ItemRenderJShotgun.firstPersonFlashlightPos[1], 1);
+					Vec3d world = NTMRenderHelper.unproject_world(HbmShaderManager2.inv_ViewProjectionMatrix, ItemRenderJShotgun.firstPersonFlashlightPos[0], ItemRenderJShotgun.firstPersonFlashlightPos[1], 1);
 					Vec3d eyePos = player.getPositionEyes(partialTicks);
 					Entity ent = Minecraft.getMinecraft().getRenderViewEntity();
 					double rPosX = ent.prevPosX + (ent.posX-ent.prevPosX)*partialTicks;
 					double rPosY = ent.prevPosY + (ent.posY-ent.prevPosY)*partialTicks;
 					double rPosZ = ent.prevPosZ + (ent.posZ-ent.prevPosZ)*partialTicks;
-					Vec3d camPos = ActiveRenderInfo.getCameraPosition().addVector(rPosX, rPosY, rPosZ);
+					Vec3d camPos = ActiveRenderInfo.getCameraPosition().add(rPosX, rPosY, rPosZ);
 					start = camPos.add(world.subtract(eyePos).normalize().scale(1));
 					
 					Vec3d dir = BobMathUtil.viewToLocal(new Vector4f((float)ItemRenderJShotgun.flashlightDirection.x, (float)ItemRenderJShotgun.flashlightDirection.y, (float)ItemRenderJShotgun.flashlightDirection.z, 0))[0].normalize();
@@ -144,7 +142,7 @@ public class ItemGunJShotty extends ItemGunBase {
 		        GlStateManager.enableBlend();
 		        GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE, SourceFactor.ONE, DestFactor.ZERO);
 		        GlStateManager.color(0.7F, 1, 0.5F, 1);
-		        RenderHelper.drawGuiRect(x - 20F, y - 20F, 0, 0, 40, 40, 1, 1);
+		        NTMRenderHelper.drawGuiRect(x - 20F, y - 20F, 0, 0, 40, 40, 1, 1);
 		        GlStateManager.color(1, 1, 1, 1);
 		        GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 		        GlStateManager.disableBlend();

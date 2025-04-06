@@ -13,7 +13,7 @@ public class ConsumableTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.bottle_nuka != null){
 			return new ItemStack(ModItems.bottle_nuka);
 		}

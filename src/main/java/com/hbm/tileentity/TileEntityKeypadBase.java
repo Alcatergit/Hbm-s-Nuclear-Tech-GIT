@@ -1,19 +1,17 @@
 package com.hbm.tileentity;
 
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.util.Keypad;
 import com.hbm.util.KeypadClient;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
 
 public class TileEntityKeypadBase extends TileEntity implements ITickable, IKeypadHandler {
 

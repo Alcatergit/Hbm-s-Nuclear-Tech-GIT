@@ -1,16 +1,14 @@
 package com.hbm.render.entity.projectile;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.projectile.EntityRBMKDebris;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRBMKDebris extends Render<EntityRBMKDebris> {
 

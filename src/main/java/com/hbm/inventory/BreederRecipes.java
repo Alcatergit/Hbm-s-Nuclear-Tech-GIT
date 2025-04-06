@@ -1,235 +1,70 @@
 package com.hbm.inventory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.util.I18nUtil;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.machine.ItemBreedingRod;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.util.ITooltipFlag;
 
-public class BreederRecipes {
+import java.io.IOException;
+import java.util.*;
 
-	private static LinkedHashMap<ComparableStack, BreederRecipe> recipes = new LinkedHashMap<>();
-	private static LinkedHashMap<ComparableStack, int[]> fuels = new LinkedHashMap<>();
-	//for the int array: [0] => level (1-4) [1] => amount of operations
-	
-	public static void registerRecipes() {
+public class BreederRecipes extends SerializableRecipe {
 
-		//lithium and impure rods
-		addRecipe(new ComparableStack(ModItems.rod_lithium), ModItems.rod_tritium, 1);
-		addRecipe(new ComparableStack(ModItems.rod_dual_lithium), ModItems.rod_dual_tritium, 1);
-		addRecipe(new ComparableStack(ModItems.rod_quad_lithium), ModItems.rod_quad_tritium, 1);
-		addRecipe(new ComparableStack(ModItems.rod_uranium), ModItems.rod_plutonium, 4);
-		addRecipe(new ComparableStack(ModItems.rod_dual_uranium), ModItems.rod_dual_plutonium, 4);
-		addRecipe(new ComparableStack(ModItems.rod_quad_uranium), ModItems.rod_quad_plutonium, 4);
-		addRecipe(new ComparableStack(ModItems.rod_plutonium), ModItems.rod_waste, 4);
-		addRecipe(new ComparableStack(ModItems.rod_dual_plutonium), ModItems.rod_dual_waste, 4);
-		addRecipe(new ComparableStack(ModItems.rod_quad_plutonium), ModItems.rod_quad_waste, 4);
-		
-		//isotopes
-		addRecipe(new ComparableStack(ModItems.rod_th232), ModItems.rod_thorium_fuel, 2);
-		addRecipe(new ComparableStack(ModItems.rod_dual_th232), ModItems.rod_dual_thorium_fuel, 2);
-		addRecipe(new ComparableStack(ModItems.rod_quad_th232), ModItems.rod_quad_thorium_fuel, 2);
-		addRecipe(new ComparableStack(ModItems.rod_u233), ModItems.rod_u235, 2);
-		addRecipe(new ComparableStack(ModItems.rod_dual_u233), ModItems.rod_dual_u235, 2);
-		addRecipe(new ComparableStack(ModItems.rod_quad_u233), ModItems.rod_quad_u235, 2);
-		addRecipe(new ComparableStack(ModItems.rod_u235), ModItems.rod_neptunium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_dual_u235), ModItems.rod_dual_neptunium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_quad_u235), ModItems.rod_quad_neptunium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_u238), ModItems.rod_pu239, 3);
-		addRecipe(new ComparableStack(ModItems.rod_dual_u238), ModItems.rod_dual_pu239, 3);
-		addRecipe(new ComparableStack(ModItems.rod_quad_u238), ModItems.rod_quad_pu239, 3);
-		addRecipe(new ComparableStack(ModItems.rod_neptunium), ModItems.rod_pu238, 3);
-		addRecipe(new ComparableStack(ModItems.rod_dual_neptunium), ModItems.rod_dual_pu238, 3);
-		addRecipe(new ComparableStack(ModItems.rod_quad_neptunium), ModItems.rod_quad_pu238, 3);
-		addRecipe(new ComparableStack(ModItems.rod_pu238), ModItems.rod_pu239, 2);
-		addRecipe(new ComparableStack(ModItems.rod_dual_pu238), ModItems.rod_dual_pu239, 2);
-		addRecipe(new ComparableStack(ModItems.rod_quad_pu238), ModItems.rod_quad_pu239, 2);
-		addRecipe(new ComparableStack(ModItems.rod_pu239), ModItems.rod_pu240, 2);
-		addRecipe(new ComparableStack(ModItems.rod_dual_pu239), ModItems.rod_dual_pu240, 2);
-		addRecipe(new ComparableStack(ModItems.rod_quad_pu239), ModItems.rod_quad_pu240, 2);
-		addRecipe(new ComparableStack(ModItems.rod_pu240), ModItems.rod_waste, 3);
-		addRecipe(new ComparableStack(ModItems.rod_dual_pu240), ModItems.rod_dual_waste, 3);
-		addRecipe(new ComparableStack(ModItems.rod_quad_pu240), ModItems.rod_quad_waste, 3);
+	private static HashMap<ComparableStack, BreederRecipe> recipes = new HashMap();
+	@Override
+	public void registerDefaults() {
+		setRecipe(ItemBreedingRod.BreedingRodType.LITHIUM, ItemBreedingRod.BreedingRodType.TRITIUM, 200);
+		setRecipe(ItemBreedingRod.BreedingRodType.CO, ItemBreedingRod.BreedingRodType.CO60, 100);
+		setRecipe(ItemBreedingRod.BreedingRodType.RA226, ItemBreedingRod.BreedingRodType.AC227, 300);
+		setRecipe(ItemBreedingRod.BreedingRodType.TH232, ItemBreedingRod.BreedingRodType.THF, 500);
+		setRecipe(ItemBreedingRod.BreedingRodType.U235, ItemBreedingRod.BreedingRodType.NP237, 300);
+		setRecipe(ItemBreedingRod.BreedingRodType.NP237, ItemBreedingRod.BreedingRodType.PU238, 200);
+		setRecipe(ItemBreedingRod.BreedingRodType.PU238, ItemBreedingRod.BreedingRodType.PU239, 1000);
+		setRecipe(ItemBreedingRod.BreedingRodType.U238, ItemBreedingRod.BreedingRodType.RGP, 300);
+		setRecipe(ItemBreedingRod.BreedingRodType.URANIUM, ItemBreedingRod.BreedingRodType.RGP, 200);
+		setRecipe(ItemBreedingRod.BreedingRodType.RGP, ItemBreedingRod.BreedingRodType.WASTE, 200);
 
-		//NEW
-		addRecipe(new ComparableStack(ModItems.rod_cobalt), ModItems.rod_co60, 2);
-		addRecipe(new ComparableStack(ModItems.rod_dual_cobalt), ModItems.rod_dual_co60, 2);
-		addRecipe(new ComparableStack(ModItems.rod_quad_cobalt), ModItems.rod_quad_co60, 2);
-		addRecipe(new ComparableStack(ModItems.rod_ra226), ModItems.rod_ac227, 4);
-		addRecipe(new ComparableStack(ModItems.rod_dual_ra226), ModItems.rod_dual_ac227, 4);
-		addRecipe(new ComparableStack(ModItems.rod_quad_ra226), ModItems.rod_quad_ac227, 4);
-
-		//advanced
-		addRecipe(new ComparableStack(ModItems.rod_schrabidium), ModItems.rod_solinium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_dual_schrabidium), ModItems.rod_dual_solinium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_quad_schrabidium), ModItems.rod_quad_solinium, 3);
-		addRecipe(new ComparableStack(ModItems.rod_balefire), ModItems.rod_balefire_blazing, 4);
-		addRecipe(new ComparableStack(ModItems.rod_dual_balefire), ModItems.rod_dual_balefire_blazing, 4);
-		addRecipe(new ComparableStack(ModItems.rod_quad_balefire), ModItems.rod_quad_balefire_blazing, 4);
-
-		//rocks
-		addRecipe(new ComparableStack(Blocks.STONE), new ItemStack(ModBlocks.sellafield_slaked), 1);
-		addRecipe(new ComparableStack(ModBlocks.sellafield_slaked), new ItemStack(ModBlocks.sellafield_0), 2);
-		addRecipe(new ComparableStack(ModBlocks.sellafield_0), new ItemStack(ModBlocks.sellafield_1), 2);
-		addRecipe(new ComparableStack(ModBlocks.sellafield_1), new ItemStack(ModBlocks.sellafield_2), 3);
-		addRecipe(new ComparableStack(ModBlocks.sellafield_2), new ItemStack(ModBlocks.sellafield_3), 3);
-		
-		addRecipe(new ComparableStack(ModItems.meteorite_sword_etched), new ItemStack(ModItems.meteorite_sword_bred), 4);
-	}
-	
-	public static void registerFuels() {
-		addFuel(new ComparableStack(ModItems.rod_u233), 2, 2);
-		addFuel(new ComparableStack(ModItems.rod_dual_u233), 2, 4);
-		addFuel(new ComparableStack(ModItems.rod_quad_u233), 2, 8);
-		
-		addFuel(new ComparableStack(ModItems.rod_u235), 2, 3);
-		addFuel(new ComparableStack(ModItems.rod_dual_u235), 2, 6);
-		addFuel(new ComparableStack(ModItems.rod_quad_u235), 2, 12);
-		
-		addFuel(new ComparableStack(ModItems.rod_u238), 1, 1);
-		addFuel(new ComparableStack(ModItems.rod_dual_u238), 1, 2);
-		addFuel(new ComparableStack(ModItems.rod_quad_u238), 1, 4);
-		
-		addFuel(new ComparableStack(ModItems.rod_neptunium), 2, 3);
-		addFuel(new ComparableStack(ModItems.rod_dual_neptunium), 2, 6);
-		addFuel(new ComparableStack(ModItems.rod_quad_neptunium), 2, 12);
-		
-		addFuel(new ComparableStack(ModItems.rod_pu238), 1, 2);
-		addFuel(new ComparableStack(ModItems.rod_dual_pu238), 1, 4);
-		addFuel(new ComparableStack(ModItems.rod_quad_pu238), 1, 8);
-		
-		addFuel(new ComparableStack(ModItems.rod_pu239), 3, 5);
-		addFuel(new ComparableStack(ModItems.rod_dual_pu239), 3, 10);
-		addFuel(new ComparableStack(ModItems.rod_quad_pu239), 3, 20);
-		
-		addFuel(new ComparableStack(ModItems.rod_pu240), 1, 2);
-		addFuel(new ComparableStack(ModItems.rod_dual_pu240), 1, 4);
-		addFuel(new ComparableStack(ModItems.rod_quad_pu240), 1, 8);
-		
-		addFuel(new ComparableStack(ModItems.rod_schrabidium), 3, 10);
-		addFuel(new ComparableStack(ModItems.rod_dual_schrabidium), 3, 20);
-		addFuel(new ComparableStack(ModItems.rod_quad_schrabidium), 3, 40);
-		
-		addFuel(new ComparableStack(ModItems.rod_solinium), 3, 15);
-		addFuel(new ComparableStack(ModItems.rod_dual_solinium), 3, 30);
-		addFuel(new ComparableStack(ModItems.rod_quad_solinium), 3, 60);
-		
-		addFuel(new ComparableStack(ModItems.rod_polonium), 4, 2);
-		addFuel(new ComparableStack(ModItems.rod_dual_polonium), 4, 4);
-		addFuel(new ComparableStack(ModItems.rod_quad_polonium), 4, 8);
-		
-		addFuel(new ComparableStack(ModItems.rod_tritium), 1, 1);
-		addFuel(new ComparableStack(ModItems.rod_dual_tritium), 1, 2);
-		addFuel(new ComparableStack(ModItems.rod_quad_tritium), 1, 4);
-		
-		addFuel(new ComparableStack(ModItems.rod_balefire), 2, 150);
-		addFuel(new ComparableStack(ModItems.rod_dual_balefire), 2, 300);
-		addFuel(new ComparableStack(ModItems.rod_quad_balefire), 2, 600);
-		
-		addFuel(new ComparableStack(ModItems.rod_balefire_blazing), 4, 75);
-		addFuel(new ComparableStack(ModItems.rod_dual_balefire_blazing), 4, 150);
-		addFuel(new ComparableStack(ModItems.rod_quad_balefire_blazing), 4, 300);
+		recipes.put(new ComparableStack(ModItems.meteorite_sword_etched), new BreederRecipe(new ItemStack(ModItems.meteorite_sword_bred), 1000));
 	}
 
-	public static void addRecipe(ComparableStack input, Item output, int heatLvl){
-		addRecipe(input, new ItemStack(output), heatLvl);
-	}
-	public static void addRecipe(ComparableStack input, ItemStack output, int heatLvl){
-		recipes.put(input, new BreederRecipe(output, heatLvl));
-	}
-
-	public static void removeRecipe(ComparableStack input){
-		recipes.remove(input);
+	public static void setRecipe(ItemBreedingRod.BreedingRodType inputType, ItemBreedingRod.BreedingRodType outputType, int flux) {
+		recipes.put(new ComparableStack(new ItemStack(ModItems.rod, 1, inputType.ordinal())), new BreederRecipe(new ItemStack(ModItems.rod, 1, outputType.ordinal()), flux));
+		recipes.put(new ComparableStack(new ItemStack(ModItems.rod_dual, 1, inputType.ordinal())), new BreederRecipe(new ItemStack(ModItems.rod_dual, 1, outputType.ordinal()), flux * 2));
+		recipes.put(new ComparableStack(new ItemStack(ModItems.rod_quad, 1, inputType.ordinal())), new BreederRecipe(new ItemStack(ModItems.rod_quad, 1, outputType.ordinal()), flux * 3));
 	}
 
-	public static void addFuel(ComparableStack input, int heatLvl, int usesInNuclearFurnace){
-		fuels.put(input, new int[] {heatLvl, usesInNuclearFurnace});
-	}
+	public static HashMap<ItemStack, BreederRecipe> getAllRecipes() {
 
-	public static void removeFuel(ComparableStack input){
-		fuels.remove(input);
-	}
-	
-	public static LinkedHashMap<ItemStack, BreederRecipe> getAllRecipes() {
-		
-		LinkedHashMap<ItemStack, BreederRecipe> map = new LinkedHashMap<>();
-		
+		HashMap<ItemStack, BreederRecipe> map = new HashMap();
+
 		for(Map.Entry<ComparableStack, BreederRecipe> recipe : recipes.entrySet()) {
 			map.put(recipe.getKey().toStack(), recipe.getValue());
 		}
-		
+
 		return map;
 	}
-	
-	public static List<ItemStack> getAllFuelsFromHEAT(int heat) {
-		
-		List<ItemStack> list = new ArrayList<>();
-		
-		for(Map.Entry<ComparableStack, int[]> fuel : fuels.entrySet()) {
-			
-			if(fuel.getValue()[0] >= heat) {
-				list.add(fuel.getKey().toStack());
-			}
-		}
-		
-		return list;
-	}
-	
-	public static BreederRecipe getOutput(ItemStack stack) {
-		
-		if(stack == null)
-			return null;
-		
-		ComparableStack sta = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
-		return BreederRecipes.recipes.get(sta);
-	}
-	
-	/**
-	 * Returns an integer array of the fuel value of a certain stack
-	 * @param stack
-	 * @return an integer array (possibly null) with two fields, the HEAT value and the amount of operations
-	 */
-	public static int[] getFuelValue(ItemStack stack) {
-		
-		if(stack == null)
-			return null;
-		
-		ComparableStack sta = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
-		int[] ret = BreederRecipes.fuels.get(sta);
-		
-		return ret;
-	}
-	
-	public static String getHEATString(String string, int heat) {
 
-		if(heat == 1)
-			string =  TextFormatting.GREEN + string;
-		if(heat == 2)
-			string = TextFormatting.YELLOW + string;
-		if(heat == 3)
-			string = TextFormatting.GOLD + string;
-		if(heat == 4)
-			string = TextFormatting.RED + string;
-		
-		return string; //strings are reference types I GET IT
+	public static BreederRecipe getOutput(ItemStack stack) {
+
+		if(stack == null || stack.isEmpty())
+			return null;
+
+		ComparableStack sta = new ComparableStack(stack).makeSingular();
+		return BreederRecipes.recipes.get(sta);
 	}
 	
 	//nicer than opaque object arrays
 	public static class BreederRecipe {
 		
 		public ItemStack output;
-		public int heat;
+		public int flux;
 		
 		public BreederRecipe() { }
 		
@@ -239,17 +74,44 @@ public class BreederRecipes {
 		
 		public BreederRecipe(ItemStack output, int heat) {
 			this.output = output;
-			this.heat = heat;
+			this.flux = heat;
 		}
 	}
 
-	public static void addBreedingTips(ItemStack stack, EntityPlayer player, List<String> list, ITooltipFlag flagIn){
-		int[] breeder = getFuelValue(stack);
-		
-		if(breeder != null) {
-			list.add(getHEATString("[" + I18nUtil.resolveKey("trait.heat", breeder[0]) + "]", breeder[0]));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.breeding", breeder[1]));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.furnace", (breeder[0] * breeder[1] * 5)));
-		}
+	@Override
+	public String getFileName() {
+		return "hbmBreeder.json";
+	}
+
+	@Override
+	public Object getRecipeObject() {
+		return recipes;
+	}
+
+	@Override
+	public void readRecipe(JsonElement recipe) {
+		JsonObject obj = (JsonObject) recipe;
+
+		RecipesCommon.AStack in = this.readAStack(obj.get("input").getAsJsonArray());
+		int flux = obj.get("flux").getAsInt();
+		ItemStack out = this.readItemStack(obj.get("output").getAsJsonArray());
+		recipes.put(((ComparableStack) in), new BreederRecipe(out, flux));
+	}
+
+	@Override
+	public void writeRecipe(Object recipe, JsonWriter writer) throws IOException {
+		Map.Entry<ComparableStack, BreederRecipe> rec = (Map.Entry<ComparableStack, BreederRecipe>) recipe;
+		ComparableStack in = rec.getKey();
+
+		writer.name("input");
+		this.writeAStack(in, writer);
+		writer.name("flux").value(rec.getValue().flux);
+		writer.name("output");
+		this.writeItemStack(rec.getValue().output, writer);
+	}
+
+	@Override
+	public void deleteRecipes() {
+		recipes.clear();
 	}
 }

@@ -2,8 +2,8 @@ package com.hbm.tileentity.bomb;
 
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemBreedingRod;
 import com.hbm.items.special.ItemCell;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -68,17 +68,17 @@ public class TileEntityNukePrototype extends TileEntity {
 	public boolean isReady() {
 		
 			if(ItemCell.isFullCell(inventory.getStackInSlot(0), ModForgeFluids.sas3) && 
-			ItemCell.isFullCell(inventory.getStackInSlot(1), ModForgeFluids.sas3) && 
-			inventory.getStackInSlot(2).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(3).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(4).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(5).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(6).getItem() == ModItems.rod_quad_neptunium && 
-			inventory.getStackInSlot(7).getItem() == ModItems.rod_quad_neptunium && 
-			inventory.getStackInSlot(8).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(9).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(10).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(11).getItem() == ModItems.rod_quad_uranium && 
+			ItemCell.isFullCell(inventory.getStackInSlot(1), ModForgeFluids.sas3) &&
+			inventory.getStackInSlot(2).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.URANIUM.ordinal())) &&
+			inventory.getStackInSlot(3).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.URANIUM.ordinal())) &&
+			inventory.getStackInSlot(4).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.LEAD.ordinal())) &&
+			inventory.getStackInSlot(5).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.LEAD.ordinal())) &&
+			inventory.getStackInSlot(6).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.NP237.ordinal())) &&
+			inventory.getStackInSlot(7).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.NP237.ordinal())) &&
+			inventory.getStackInSlot(8).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.LEAD.ordinal())) &&
+			inventory.getStackInSlot(9).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.LEAD.ordinal())) &&
+			inventory.getStackInSlot(10).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.URANIUM.ordinal())) &&
+			inventory.getStackInSlot(11).isItemEqual(new ItemStack(ModItems.rod_quad, 1, ItemBreedingRod.BreedingRodType.URANIUM.ordinal())) &&
 			ItemCell.isFullCell(inventory.getStackInSlot(12), ModForgeFluids.sas3) && 
 			ItemCell.isFullCell(inventory.getStackInSlot(13), ModForgeFluids.sas3))
 			{

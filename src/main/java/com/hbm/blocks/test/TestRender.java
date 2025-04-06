@@ -3,7 +3,6 @@ package com.hbm.blocks.test;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.deco.TileEntityTestRender;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -32,7 +31,7 @@ public class TestRender extends BlockContainer {
 	//Drillgon200: I set the unlocalized name and registry name, and add it the all block list so adding a block is easier and only needs one line of code.
 	public TestRender(Material p_i45394_1_, String s) {
 		super(p_i45394_1_);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.blockTab);
 		

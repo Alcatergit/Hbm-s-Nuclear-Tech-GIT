@@ -1,16 +1,10 @@
 package com.hbm.render.model;
 
-import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.render.loader.ModelRendererObj;
-
 import net.minecraft.client.model.ModelBiped;
-import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.util.EnumHandSide;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.player.EntityPlayer;
 
 public class ModelArmorBase extends ModelBiped {
 

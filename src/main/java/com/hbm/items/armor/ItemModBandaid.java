@@ -1,14 +1,13 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.hbm.handler.ArmorModHandler;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+import java.util.List;
 
 public class ItemModBandaid extends ItemArmorMod {
 

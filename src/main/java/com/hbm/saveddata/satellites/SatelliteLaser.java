@@ -39,4 +39,9 @@ public class SatelliteLaser extends Satellite {
     		world.spawnEntity(blast);
     	}
 	}
+
+	@Override
+	public float[] getColor() {
+		return new float[] { 0.221F, 0.663F, 1.0F };
+	}
 }

@@ -1,15 +1,7 @@
 package com.hbm.inventory.gui;
 
-import java.util.Iterator;
-import java.util.Arrays;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.lib.Library;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -18,6 +10,12 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 
 public abstract class GuiInfoContainer extends GuiContainer {
 	
@@ -217,5 +215,17 @@ public abstract class GuiInfoContainer extends GuiContainer {
 			RenderHelper.enableStandardItemLighting();
 			GL11.glEnable(GL12.GL_RESCALE_NORMAL);
 		}
+	}
+
+	protected boolean checkClick(int x, int y, int left, int top, int sizeX, int sizeY) {
+		return guiLeft + left <= x && guiLeft + left + sizeX > x && guiTop + top < y && guiTop + top + sizeY >= y;
+	}
+
+	public float getZLevel() {
+		return this.zLevel;
+	}
+
+	public void setZLevel(float level) {
+		this.zLevel = level;
 	}
 }

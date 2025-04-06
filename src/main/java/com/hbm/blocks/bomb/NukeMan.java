@@ -1,9 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
@@ -12,8 +8,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
-
-import net.minecraft.client.util.ITooltipFlag;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,6 +16,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -36,6 +32,9 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class NukeMan extends BlockContainer implements IBomb {
 
 	public static final PropertyInteger FACING = PropertyInteger.create("facing", 2, 5);
@@ -44,7 +43,7 @@ public class NukeMan extends BlockContainer implements IBomb {
 	
 	public NukeMan(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 		
@@ -98,12 +97,12 @@ public class NukeMan extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeMan entity = (TileEntityNukeMan) world.getTileEntity(pos);
-        if (world.isBlockIndirectlyGettingPowered(pos) > 0 && !world.isRemote)
+        if (world.getStrongPower(pos) > 0 && !world.isRemote)
         {
         	
         	if(entity.isReady())
         	{
-        		this.onBlockDestroyedByPlayer(world, pos, state);
+        		this.onPlayerDestroy(world, pos, state);
             	entity.clearSlots();
             	world.setBlockToAir(pos);
             	igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
@@ -199,20 +198,25 @@ public class NukeMan extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		if(!(world.getTileEntity(pos) instanceof TileEntityNukeMan))
-			return;
-		TileEntityNukeMan entity = (TileEntityNukeMan) world.getTileEntity(pos);
-        //if (p_149695_1_.isBlockIndirectlyGettingPowered(x, y, z))
-        {
-        	if(entity.isReady())
-        	{
-        		this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
-            	entity.clearSlots();
-            	world.setBlockToAir(pos);
-            	igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
-        	}
-        }
+	public BombReturnCode explode(World world, BlockPos pos) {
+
+		if (world.isRemote) {
+			if (!(world.getTileEntity(pos) instanceof TileEntityNukeMan))
+				return BombReturnCode.UNDEFINED;
+			TileEntityNukeMan entity = (TileEntityNukeMan) world.getTileEntity(pos);
+			//if (p_149695_1_.getStrongPower(x, y, z))
+			if (entity.isReady()) {
+				this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+				entity.clearSlots();
+				world.setBlockToAir(pos);
+				igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
+				return BombReturnCode.DETONATED;
+			}
+
+			return BombReturnCode.ERROR_MISSING_COMPONENT;
+		}
+
+		return BombReturnCode.UNDEFINED;
 	}
 
 	@Override

@@ -1,21 +1,16 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
-import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IAnimatedDoor;
-import com.hbm.interfaces.IDoor;
-import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.handler.RadiationSystemNT;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IKeypadHandler;
+import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
+import com.hbm.util.I18nUtil;
 import com.hbm.util.KeypadClient;
-
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -30,9 +25,11 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
+
+import java.util.List;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
 public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResistantBlock, IPartialSealableBlock {

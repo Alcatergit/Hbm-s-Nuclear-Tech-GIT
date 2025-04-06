@@ -1,26 +1,25 @@
 package com.hbm.items.tool;
 
 
+import api.hbm.item.IGasMask;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.handler.ArmorUtil;
-
-import api.hbm.item.IGasMask;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 public class ItemFilter extends Item {
 	
 	public ItemFilter(String s, int durability) {
 		this.setMaxDamage(durability);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		ModItems.ALL_ITEMS.add(this);
 	}

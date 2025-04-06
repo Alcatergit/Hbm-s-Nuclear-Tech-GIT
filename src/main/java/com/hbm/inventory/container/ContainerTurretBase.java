@@ -2,7 +2,6 @@ package com.hbm.inventory.container;
 
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;

@@ -1,14 +1,11 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.TileEntitySolarMirror;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,10 +21,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemMirrorTool extends Item {
 
 	public ItemMirrorTool(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -51,7 +50,7 @@ public class ItemMirrorTool extends Item {
 				stack.getTagCompound().setInteger("posY", pos[1] + 1);
 				stack.getTagCompound().setInteger("posZ", pos[2]);
 
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".linked").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".linked").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			}
 
 			return EnumActionResult.SUCCESS;
@@ -65,7 +64,7 @@ public class ItemMirrorTool extends Item {
 				int ty = stack.getTagCompound().getInteger("posY");
 				int tz = stack.getTagCompound().getInteger("posZ");
 
-				if(Vec3.createVectorHelper(pos1.getX()- tx, pos1.getY() - ty, pos1.getZ() - tz).lengthVector() < 25)
+				if(Vec3.createVectorHelper(pos1.getX()- tx, pos1.getY() - ty, pos1.getZ() - tz).length() < 25)
 					mirror.setTarget(tx, ty, tz);
 			}
 
@@ -77,7 +76,7 @@ public class ItemMirrorTool extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		for(String s : I18nUtil.resolveKeyArray(this.getUnlocalizedName() + ".desc"))
+		for(String s : I18nUtil.resolveKeyArray(this.getTranslationKey() + ".desc"))
 			tooltip.add(TextFormatting.YELLOW + s);
 	}
 }

@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,7 +11,7 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineRTG extends Container {
 
-	private TileEntityMachineRTG testNuke;
+	private final TileEntityMachineRTG testNuke;
 	private int heat;
 	
 	public ContainerMachineRTG(InventoryPlayer invPlayer, TileEntityMachineRTG tedf) {
@@ -57,10 +56,10 @@ public class ContainerMachineRTG extends Container {
 	}
 	
 	@Override
-    public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
+    public ItemStack transferStackInSlot(EntityPlayer player, int par2)
     {
 		ItemStack var3 = ItemStack.EMPTY;
-		Slot var4 = (Slot) this.inventorySlots.get(par2);
+		Slot var4 = this.inventorySlots.get(par2);
 		
 		if (var4 != null && var4.getHasStack())
 		{
@@ -102,7 +101,7 @@ public class ContainerMachineRTG extends Container {
 		
 		for(int i = 0; i < this.listeners.size(); i++)
 		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
+			IContainerListener par1 = this.listeners.get(i);
 
 			if(this.heat != this.testNuke.heat)
 			{

@@ -1,60 +1,49 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
-
+import com.hbm.inventory.SlotTakeOnly;
+import com.hbm.tileentity.machine.oil.TileEntityOilDrillBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachineOilWell extends Container {
 
-	private TileEntityMachineOilWell testNuke;
-	private int warning;
-	private int warning2;
+	private TileEntityOilDrillBase testNuke;
 	
-	public ContainerMachineOilWell(InventoryPlayer invPlayer, TileEntityMachineOilWell tedf) {
-		warning = 0;
-		warning2 = 0;
-		
+	public ContainerMachineOilWell(InventoryPlayer invPlayer, TileEntityOilDrillBase tedf) {
 		testNuke = tedf;
-		
-		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 44, 54));
-		//Canister Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 134, 18));
-		//Canister Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 134, 54));
-		//Gas Input
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 134, 72));
-		//Gas Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 134, 108));
-		//Chip
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 8, 90));
+
+		// Battery
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 53));
+		// Canister Input
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 80, 17));
+		// Canister Output
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 80, 53));
+		// Gas Input
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 125, 17));
+		// Gas Output
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 125, 53));
+		//Upgrades
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 5, 152, 17));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 6, 152, 35));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 7, 152, 53));
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18 + 56));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142 + 56));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
 		}
-	}
-	
-	@Override
-	public void addListener(IContainerListener crafting) {
-		super.addListener(crafting);
-		crafting.sendWindowProperty(this, 1, this.testNuke.warning);
-		crafting.sendWindowProperty(this, 2, this.testNuke.warning2);
 	}
 	
 	@Override
@@ -97,38 +86,5 @@ public class ContainerMachineOilWell extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return testNuke.isUseableByPlayer(player);
-	}
-	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			if(this.warning != this.testNuke.warning)
-			{
-				par1.sendWindowProperty(this, 1, this.testNuke.warning);
-			}
-			if(this.warning2 != this.testNuke.warning2)
-			{
-				par1.sendWindowProperty(this, 2, this.testNuke.warning2);
-			}
-		}
-
-		this.warning = this.testNuke.warning;
-		this.warning2 = this.testNuke.warning2;
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 1)
-		{
-			testNuke.warning = j;
-		}
-		if(i == 2)
-		{
-			testNuke.warning2 = j;
-		}
 	}
 }

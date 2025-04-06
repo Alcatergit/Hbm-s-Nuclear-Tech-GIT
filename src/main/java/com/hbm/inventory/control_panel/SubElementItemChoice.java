@@ -1,12 +1,11 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.ResourceLocation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubElementItemChoice extends SubElement {
 	public static ResourceLocation bg_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_base.png");

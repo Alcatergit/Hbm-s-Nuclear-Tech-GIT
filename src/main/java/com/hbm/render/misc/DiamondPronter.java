@@ -1,13 +1,11 @@
 package com.hbm.render.misc;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class DiamondPronter {
 
@@ -24,12 +22,12 @@ public class DiamondPronter {
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 
-		RenderHelper.startDrawingTexturedQuads();
-		RenderHelper.addVertexWithUV(0.0, 0.5, -0.5, p * 144, p * 45);
-		RenderHelper.addVertexWithUV(0.0, 0.5, 0.5, p * 5, p * 45);
-		RenderHelper.addVertexWithUV(0.0, -0.5, 0.5, p * 5, p * 184);
-		RenderHelper.addVertexWithUV(0.0, -0.5, -0.5, p * 144, p * 184);
-		RenderHelper.draw();
+		NTMRenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.addVertexWithUV(0.0, 0.5, -0.5, p * 144, p * 45);
+		NTMRenderHelper.addVertexWithUV(0.0, 0.5, 0.5, p * 5, p * 45);
+		NTMRenderHelper.addVertexWithUV(0.0, -0.5, 0.5, p * 5, p * 184);
+		NTMRenderHelper.addVertexWithUV(0.0, -0.5, -0.5, p * 144, p * 184);
+		NTMRenderHelper.draw();
 		
 		float width = 10F * s;
 		float height = 14F * s;
@@ -44,12 +42,12 @@ public class DiamondPronter {
 			
 			if(poison == 0) x = 125;
 
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
-			RenderHelper.draw();
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
+			NTMRenderHelper.draw();
 		}
 		
 		if(flammability >= 0 && flammability < 6) {
@@ -62,12 +60,12 @@ public class DiamondPronter {
 			
 			if(flammability == 0) x = 125;
 
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
-			RenderHelper.draw();
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
+			NTMRenderHelper.draw();
 		}
 		
 		if(reactivity >= 0 && reactivity < 6) {
@@ -80,12 +78,12 @@ public class DiamondPronter {
 			
 			if(reactivity == 0) x = 125;
 
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
-			RenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
-			RenderHelper.draw();
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, -width + oZ, (x + 20) * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, height + oY, width + oZ, x * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, width + oZ, x * p, (y + 28) * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -height + oY, -width + oZ, (x + 20) * p, (y + 28) * p);
+			NTMRenderHelper.draw();
 		}
 		
 
@@ -99,12 +97,12 @@ public class DiamondPronter {
 			int x = symbol.x;
 			int y = symbol.y;
 
-			RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.addVertexWithUV(0.01, symSize + oY, -symSize + oZ, (x + 59) * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, symSize + oY, symSize + oZ, x * p, y * p);
-			RenderHelper.addVertexWithUV(0.01, -symSize + oY, symSize + oZ, x * p, (y + 59) * p);
-			RenderHelper.addVertexWithUV(0.01, -symSize + oY, -symSize + oZ, (x + 59) * p, (y + 59) * p);
-			RenderHelper.draw();
+			NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.addVertexWithUV(0.01, symSize + oY, -symSize + oZ, (x + 59) * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, symSize + oY, symSize + oZ, x * p, y * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -symSize + oY, symSize + oZ, x * p, (y + 59) * p);
+			NTMRenderHelper.addVertexWithUV(0.01, -symSize + oY, -symSize + oZ, (x + 59) * p, (y + 59) * p);
+			NTMRenderHelper.draw();
 		}
 
 		GlStateManager.disableBlend();

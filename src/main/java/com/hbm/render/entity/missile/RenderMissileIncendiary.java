@@ -1,31 +1,29 @@
 package com.hbm.render.entity.missile;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.entity.missile.EntityMissileIncendiary;
+import com.hbm.entity.missile.EntityMissileTier1;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
-public class RenderMissileIncendiary extends Render<EntityMissileIncendiary> {
+public class RenderMissileIncendiary extends Render<EntityMissileTier1.EntityMissileIncendiary> {
 
-	public static final IRenderFactory<EntityMissileIncendiary> FACTORY = (RenderManager man) -> {return new RenderMissileIncendiary(man);};
+	public static final IRenderFactory<EntityMissileTier1.EntityMissileIncendiary> FACTORY = (RenderManager man) -> {return new RenderMissileIncendiary(man);};
 	
 	protected RenderMissileIncendiary(RenderManager renderManager) {
 		super(renderManager);
 	}
 	
 	@Override
-	public void doRender(EntityMissileIncendiary missile, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityMissileTier1.EntityMissileIncendiary missile, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GlStateManager.enableLighting();
-		double[] pos = RenderHelper.getRenderPosFromMissile(missile, partialTicks);
+		double[] pos = NTMRenderHelper.getRenderPosFromMissile(missile, partialTicks);
 		x = pos[0];
 		y = pos[1];
 		z = pos[2];
@@ -42,7 +40,7 @@ public class RenderMissileIncendiary extends Render<EntityMissileIncendiary> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityMissileIncendiary entity) {
+	protected ResourceLocation getEntityTexture(EntityMissileTier1.EntityMissileIncendiary entity) {
 		return ResourceManager.missileV2_IN_tex;
 	}
 

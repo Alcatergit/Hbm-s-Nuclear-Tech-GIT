@@ -1,12 +1,7 @@
 package com.hbm.render.item;
 
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-import java.lang.IndexOutOfBoundsException;
-
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.machine.ItemAssemblyTemplate;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -14,6 +9,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 public class AssemblyTemplateRender extends TileEntityItemStackRenderer {
 

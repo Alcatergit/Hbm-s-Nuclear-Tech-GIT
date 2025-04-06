@@ -41,4 +41,5 @@ public class RTGUtil {
 		return newHeat;
 		
 	}
+
 }

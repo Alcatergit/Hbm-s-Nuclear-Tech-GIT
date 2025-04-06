@@ -1,6 +1,7 @@
 {
-	"parent": "item/generated",
-	"textures": {
-		"layer0": "hbm:items/duct"
-	}
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "hbm:items/duct",
+    "layer1": "hbm:items/duct_overlay"
+  }
 }

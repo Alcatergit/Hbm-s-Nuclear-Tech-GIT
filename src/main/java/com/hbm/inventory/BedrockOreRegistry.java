@@ -1,27 +1,20 @@
 package com.hbm.inventory;
 
-import java.util.Random;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.HashSet;
-
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.Spaghetti;
-import com.hbm.lib.Library;
 import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.interfaces.Spaghetti;
+import com.hbm.inventory.fluid.FluidStack;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.lib.Library;
 import com.hbm.util.WeightedRandomObject;
-
-import net.minecraft.init.Items;
-import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
-import net.minecraft.item.ItemStack;
+import net.minecraft.init.Items;
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.WeightedRandom;
 import net.minecraftforge.oredict.OreDictionary;
-import net.minecraftforge.fluids.FluidStack;
+
+import java.util.*;
 
 //TODO: clean this shit up
 @Spaghetti("everything")
@@ -122,14 +115,14 @@ public class BedrockOreRegistry {
 	}
 
 	public static FluidStack getFluidRequirement(int tier){
-		if(tier == 1) return new FluidStack(ModForgeFluids.acid, 8000);
-		if(tier == 2) return new FluidStack(ModForgeFluids.sulfuric_acid, 500);
-		if(tier == 3) return new FluidStack(ModForgeFluids.nitric_acid, 500);
-		if(tier == 4) return new FluidStack(ModForgeFluids.radiosolvent, 200);
-		if(tier == 5) return new FluidStack(ModForgeFluids.schrabidic, 200);
-		if(tier == 6) return new FluidStack(ModForgeFluids.uu_matter, 200);
-		if(tier > 6) return new FluidStack(ModForgeFluids.liquid_osmiridium, 100);
-		return new FluidStack(ModForgeFluids.solvent, 300);
+		if(tier == 1) return new FluidStack(Fluids.ACID, 8000);
+		if(tier == 2) return new FluidStack(Fluids.SULFURIC_ACID, 500);
+		if(tier == 3) return new FluidStack(Fluids.NITRIC_ACID, 500);
+		if(tier == 4) return new FluidStack(Fluids.RADIOSOLVENT, 200);
+		if(tier == 5) return new FluidStack(Fluids.SCHRABIDIC, 200);
+		if(tier == 6) return new FluidStack(Fluids.SCHRABIDIC, 200);
+		if(tier > 6) return new FluidStack(Fluids.SCHRABIDIC, 100);
+		return new FluidStack(Fluids.SOLVENT, 300);
 	}
 
 	public static int getTierWeight(int tier){

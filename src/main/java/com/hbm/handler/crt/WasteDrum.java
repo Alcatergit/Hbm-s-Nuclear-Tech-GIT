@@ -1,5 +1,6 @@
 package com.hbm.handler.crt;
 
+import com.hbm.util.ItemStackUtil;
 import crafttweaker.IAction;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.api.minecraft.CraftTweakerMC;
@@ -36,7 +37,7 @@ public class WasteDrum {
 				CraftTweakerAPI.logError("ERROR Waste Drum recipe output item can not be an empty/air stack!");
 				return;
 			}
-			WasteDrumRecipes.addRecipe(this.input, this.output);
+			WasteDrumRecipes.addRecipe(ItemStackUtil.comparableStackFrom(this.input), this.output);
 		}
 		@Override
 		public String describe(){

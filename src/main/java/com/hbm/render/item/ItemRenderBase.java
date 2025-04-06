@@ -1,9 +1,8 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderBase extends TEISRBase {
 

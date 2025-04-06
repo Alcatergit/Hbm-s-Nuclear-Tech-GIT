@@ -1,15 +1,12 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
+import api.hbm.tile.IHeatSource;
 import com.hbm.inventory.container.ContainerFurnaceSteel;
 import com.hbm.inventory.gui.GUIFurnaceSteel;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ItemStackUtil;
-
-import api.hbm.tile.IHeatSource;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -26,6 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGUIProvider, ITickable {
 

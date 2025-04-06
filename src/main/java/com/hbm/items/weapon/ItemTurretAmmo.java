@@ -4,7 +4,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.turret.TileEntityTurretBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -22,7 +21,7 @@ public class ItemTurretAmmo extends Item {
 	int count;
 	
 	public ItemTurretAmmo(Block b, int i, String string) {
-		this.setUnlocalizedName(string);
+		this.setTranslationKey(string);
 		this.setRegistryName(string);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		this.turret = b;

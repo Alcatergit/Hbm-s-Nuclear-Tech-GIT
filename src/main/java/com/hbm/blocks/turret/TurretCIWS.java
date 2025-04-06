@@ -1,13 +1,10 @@
 package com.hbm.blocks.turret;
 
-import java.util.List;
-
 import com.hbm.config.WeaponConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.turret.TileEntityTurretCIWS;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -19,6 +16,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class TurretCIWS extends TurretBase {
 

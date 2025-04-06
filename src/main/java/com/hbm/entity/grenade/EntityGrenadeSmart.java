@@ -2,7 +2,6 @@ package com.hbm.entity.grenade;
 
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;

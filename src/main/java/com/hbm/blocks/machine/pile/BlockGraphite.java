@@ -1,16 +1,13 @@
 package com.hbm.blocks.machine.pile;
 
+import api.hbm.block.IToolable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockFuel;
 import com.hbm.items.ModItems;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
-
-import api.hbm.block.IToolable;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;

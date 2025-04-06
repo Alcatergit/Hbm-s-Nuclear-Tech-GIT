@@ -1,10 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.config.BombConfig;
-import com.hbm.handler.MultiblockHandler;
-import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
@@ -12,8 +9,11 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CyclotronRecipes;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
@@ -22,13 +22,11 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.item.Item;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -36,8 +34,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -46,10 +42,12 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 100000000;
@@ -404,14 +402,14 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	
 	private void updateConnections()  {
 		
-		this.trySubscribe(world, pos.add(3, 0, 1), Library.POS_X);
-		this.trySubscribe(world, pos.add(3, 0, -1), Library.POS_X);
-		this.trySubscribe(world, pos.add(-3, 0, 1), Library.NEG_X);
-		this.trySubscribe(world, pos.add(-3, 0, -1), Library.NEG_X);
-		this.trySubscribe(world, pos.add(1, 0, 3), Library.POS_Z);
-		this.trySubscribe(world, pos.add(-1, 0, 3), Library.POS_Z);
-		this.trySubscribe(world, pos.add(1, 0, -3), Library.NEG_Z);
-		this.trySubscribe(world, pos.add(-1, 0, -3), Library.NEG_Z);
+		this.trySubscribe(world, pos.getX() + 3, pos.getY(), pos.getZ() + 1, Library.POS_X);
+		this.trySubscribe(world, pos.getX() + 3, pos.getY(), pos.getZ() - 1, Library.POS_X);
+		this.trySubscribe(world, pos.getX() - 3, pos.getY(), pos.getZ() + 1, Library.NEG_X);
+		this.trySubscribe(world, pos.getX() - 3, pos.getY(), pos.getZ() - 1, Library.NEG_X);
+		this.trySubscribe(world, pos.getX() + 1, pos.getY(), pos.getZ() + 3, Library.POS_Z);
+		this.trySubscribe(world, pos.getX() - 1, pos.getY(), pos.getZ() + 3, Library.POS_Z);
+		this.trySubscribe(world, pos.getX() + 1, pos.getY(), pos.getZ() - 3, Library.NEG_Z);
+		this.trySubscribe(world, pos.getX() - 1, pos.getY(), pos.getZ() - 3, Library.NEG_Z);
 	}
 
 	@Override
@@ -453,14 +451,14 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		int rand = world.rand.nextInt(10);
 
 		if(rand < 2) {
-			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5).mute());
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)(BombConfig.fatmanRadius * 1.5), pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5));
 			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "muke");
 			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
 		} else if(rand < 4) {
-			EntityBalefire bf = new EntityBalefire(world).mute();
+			EntityBalefire bf = new EntityBalefire(world);
 			bf.posX = pos.getX() + 0.5;
 			bf.posY = pos.getY() + 1.5;
 			bf.posZ = pos.getZ() + 0.5;

@@ -3,7 +3,6 @@ package com.hbm.blocks.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -25,7 +24,7 @@ public class BlockMachineBase extends BlockContainer {
 	
 	public BlockMachineBase(Material materialIn, int guiID, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.guiID = guiID;
 		
@@ -88,7 +87,7 @@ public class BlockMachineBase extends BlockContainer {
 	public IBlockState getStateFromMeta(int meta) {
 		if(!rotatable())
 			return this.getDefaultState();
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

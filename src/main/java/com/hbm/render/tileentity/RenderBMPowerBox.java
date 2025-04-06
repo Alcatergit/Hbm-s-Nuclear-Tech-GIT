@@ -1,14 +1,11 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.lib.Library;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityBMPowerBox;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBMPowerBox extends TileEntitySpecialRenderer<TileEntityBMPowerBox> {
 

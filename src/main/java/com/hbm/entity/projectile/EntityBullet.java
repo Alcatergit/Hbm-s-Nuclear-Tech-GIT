@@ -567,7 +567,7 @@ public class EntityBullet extends Entity implements IProjectile {
 					this.arrowShake = 7;
 
 					if (this.test_blockstate.getMaterial() != Material.AIR) {
-						this.field_145790_g.onEntityCollidedWithBlock(this.world, pos, test_blockstate, this);
+						this.field_145790_g.onEntityCollision(this.world, pos, test_blockstate, this);
 					}
 				}
 			}

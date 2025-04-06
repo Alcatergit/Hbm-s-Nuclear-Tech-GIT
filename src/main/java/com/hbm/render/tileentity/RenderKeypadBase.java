@@ -1,10 +1,8 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.tileentity.TileEntityKeypadBase;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderKeypadBase extends TileEntitySpecialRenderer<TileEntityKeypadBase> {
 

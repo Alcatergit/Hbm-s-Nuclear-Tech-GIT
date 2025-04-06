@@ -1,13 +1,11 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderSparks;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRailgun extends TileEntitySpecialRenderer<TileEntityRailgun> {
 

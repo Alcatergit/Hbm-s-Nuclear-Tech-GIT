@@ -4,25 +4,22 @@ import com.hbm.entity.particle.EntitySmokeFX;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.interfaces.IRadiationImmune;
+import com.hbm.inventory.material.Mats;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.IMob;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -375,7 +372,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 
 		this.dropItem(ModItems.combine_scrap, rand.nextInt(8) + 1);
 		this.dropItem(ModItems.plate_combine_steel, rand.nextInt(5) + 1);
-		this.dropItem(ModItems.wire_magnetized_tungsten, rand.nextInt(3) + 1);
+		this.dropItem(new ItemStack(ModItems.wire_fine, 1, Mats.MAT_MAGTUNG.id).getItem(), rand.nextInt(3) + 1);
 	}
 	
 	@Override
@@ -415,7 +412,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
     	else if(i > 7)
 			this.dropItem(ModItems.plate_combine_steel, 1);
     	else
-			this.dropItem(ModItems.wire_magnetized_tungsten, 1);
+			this.dropItem(new ItemStack(ModItems.wire_fine, 1, Mats.MAT_MAGTUNG.id).getItem(), 1);
     }
 
 	public void setIsDying(boolean b) {

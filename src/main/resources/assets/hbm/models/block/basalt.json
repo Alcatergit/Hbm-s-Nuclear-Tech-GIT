@@ -1,6 +1,7 @@
 {
-	"parent": "block/cube_all",
+	"parent": "block/cube_column",
 	"textures": {
-		"all": "hbm:blocks/basalt"
+		"end": "hbm:blocks/basalt_top",
+		"side": "hbm:blocks/basalt"
 	}
 }

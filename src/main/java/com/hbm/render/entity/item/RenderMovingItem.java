@@ -1,9 +1,6 @@
 package com.hbm.render.entity.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.item.EntityMovingItem;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
@@ -15,6 +12,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.ForgeHooksClient;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderMovingItem extends Render<EntityMovingItem> {
 

@@ -1,20 +1,19 @@
 package com.hbm.blocks;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.handler.MultiblockBBHandler;
 import com.hbm.handler.MultiblockBBHandler.MultiblockBounds;
 import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class BlockDummyableMBB extends BlockDummyable {
 

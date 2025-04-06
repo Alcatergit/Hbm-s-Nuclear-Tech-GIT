@@ -1,150 +1,184 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.forgefluid.FFUtils;
+import api.hbm.fluid.IFluidStandardTransceiver;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
+import com.hbm.dim.CelestialBody;
+import com.hbm.dim.trait.CBT_Atmosphere;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.lib.ForgeDirection;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.interfaces.IFFtoNTMF;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.tank.FluidTankNTM;
+import com.hbm.saveddata.TomSaveData;
+import com.hbm.tileentity.IConfigurableMachine;
+import com.hbm.tileentity.IFluidCopiable;
 import com.hbm.tileentity.INBTPacketReceiver;
-
+import com.hbm.tileentity.TileEntityLoadedBase;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
+import net.minecraft.world.EnumSkyBlock;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import java.io.IOException;
 
-public class TileEntityCondenser extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, INBTPacketReceiver {
+public class TileEntityCondenser extends TileEntityLoadedBase implements ITickable, IFluidStandardTransceiver, INBTPacketReceiver, IConfigurableMachine, IFluidCopiable, IFFtoNTMF {
 
 	public int age = 0;
-	public FluidTank[] tanks;
+	public FluidTank[] tanksOld;
+	public FluidTankNTM[] tanks;
 	
 	public int waterTimer = 0;
+	protected int throughput;
+	public boolean vacuumOptimised = false;
+
+	//Configurable values
+	public static int inputTankSize = 100;
+	public static int outputTankSize = 100;
+	private static boolean converted = false;
 	
 	public TileEntityCondenser() {
-		tanks = new FluidTank[2];
+		tanksOld = new FluidTank[2];
 		//spentsteam
-		tanks[0] = new FluidTank(100);
+		tanksOld[0] = new FluidTank(100);
 		//water
-		tanks[1] = new FluidTank(100);
+		tanksOld[1] = new FluidTank(100);
+
+		tanks = new FluidTankNTM[2];
+		tanks[0] = new FluidTankNTM(Fluids.SPENTSTEAM, 100);
+		tanks[1] = new FluidTankNTM(Fluids.WATER, 100);
+		converted = true;
+	}
+
+	@Override
+	public String getConfigName() {
+		return "condenser";
+	}
+
+	@Override
+	public void readIfPresent(JsonObject obj) {
+		inputTankSize = IConfigurableMachine.grab(obj, "I:inputTankSize", inputTankSize);
+		outputTankSize = IConfigurableMachine.grab(obj, "I:outputTankSize", outputTankSize);
+	}
+
+	@Override
+	public void writeConfig(JsonWriter writer) throws IOException {
+		writer.name("I:inputTankSize").value(inputTankSize);
+		writer.name("I:outputTankSize").value(outputTankSize);
 	}
 	
 	@Override
 	public void update() {
-		
+		if (!converted){
+			convertAndSetFluids(new Fluid[]{ModForgeFluids.spentsteam, FluidRegistry.WATER}, tanksOld, tanks);
+			converted = true;
+		}
 		if(!world.isRemote) {
-			
+
 			age++;
 			if(age >= 2) {
 				age = 0;
 			}
 
+			NBTTagCompound data = new NBTTagCompound();
+			this.tanks[0].writeToNBT(data, "0");
+
 			if(this.waterTimer > 0)
 				this.waterTimer--;
 
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
-			
-			int convert = Math.min(tanks[0].getFluidAmount(), tanks[1].getCapacity() - tanks[1].getFluidAmount());
-			if(convert > 0)
-				this.waterTimer = 20;
+			int convert = Math.min(tanks[0].getFill(), tanks[1].getMaxFill() - tanks[1].getFill());
+			this.throughput = convert;
 
-			tanks[0].drain(convert, true);
-			tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
-			
-			networkPack();
-			fillFluidInit(tanks[1]);
+			if(extraCondition(convert)) {
+				tanks[0].setFill(tanks[0].getFill() - convert);
+
+				if(convert > 0)
+					this.waterTimer = 20;
+
+				int light = this.world.getLightFor(EnumSkyBlock.SKY, pos);
+
+				boolean shouldEvaporate = TomSaveData.forWorld(world).fire > 1e-5 && light > 7;
+				if(!shouldEvaporate && !vacuumOptimised) {
+					CBT_Atmosphere atmosphere = CelestialBody.getTrait(world, CBT_Atmosphere.class);
+					if(CelestialBody.inOrbit(world) || atmosphere == null || atmosphere.getPressure() < 0.01) shouldEvaporate = true;
+				}
+
+				if(shouldEvaporate) { // Make both steam and water evaporate during firestorms and in vacuums
+					tanks[1].setFill(tanks[1].getFill() - convert);
+				} else {
+					tanks[1].setFill(tanks[1].getFill() + convert);
+				}
+
+				postConvert(convert);
+			}
+
+			this.tanks[1].writeToNBT(data, "1");
+
+			this.subscribeToAllAround(tanks[0].getTankType(), this);
+			this.sendFluidToAll(tanks[1], this);
+
+			data.setByte("timer", (byte) this.waterTimer);
+			packExtra(data);
+			INBTPacketReceiver.networkPack(this, data, 150);
 		}
 	}
 
-	public void networkPack() {
-		NBTTagCompound data = new NBTTagCompound();
-		data.setTag("tanks", FFUtils.serializeTankArray(tanks));
-		data.setByte("timer", (byte) this.waterTimer);
-		INBTPacketReceiver.networkPack(this, data, 150);
-	}
+	public void packExtra(NBTTagCompound data) { }
+	public boolean extraCondition(int convert) { return true; }
+	public void postConvert(int convert) { }
 
 	@Override
-	public void networkUnpack(NBTTagCompound data) {
-		FFUtils.deserializeTankArray(data.getTagList("tanks", 10), tanks);
-		this.waterTimer = data.getByte("timer");
+	public void networkUnpack(NBTTagCompound nbt) {
+		this.tanks[0].readFromNBT(nbt, "0");
+		this.tanks[1].readFromNBT(nbt, "1");
+		this.waterTimer = nbt.getByte("timer");
 	}
-	
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		tanks[0].readFromNBT(nbt.getCompoundTag("steam"));
-		tanks[1].readFromNBT(nbt.getCompoundTag("water"));
+		if(!converted){
+			tanksOld[0].readFromNBT(nbt.getCompoundTag("steam"));
+			tanksOld[1].readFromNBT(nbt.getCompoundTag("water"));
+		} else {
+			tanks[0].readFromNBT(nbt, "water");
+			tanks[1].readFromNBT(nbt, "steam");
+			if(nbt.hasKey("water")){
+				nbt.removeTag("water");
+				nbt.removeTag("steam");
+			}
+		}
 	}
-	
+
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		super.writeToNBT(nbt);
-		nbt.setTag("steam", tanks[1].writeToNBT(new NBTTagCompound()));
-		nbt.setTag("water", tanks[1].writeToNBT(new NBTTagCompound()));
-		return nbt;
-	}
-
-	public void fillFluidInit(FluidTank tank) {
-		
-		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
-			fillFluid(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, tank);
-	}
-
-	public void fillFluid(int x, int y, int z, FluidTank type) {
-		FFUtils.fillFluid(this, type, world, new BlockPos(x, y, z), type.getCapacity());
-	}
-	
-	@Override
-	public void recievePacket(NBTTagCompound[] tags){
-		if(tags.length == 1){
-			tanks[0].readFromNBT(tags[0]);
+		if(!converted){
+			nbt.setTag("steam", tanksOld[0].writeToNBT(new NBTTagCompound()));
+			nbt.setTag("water", tanksOld[1].writeToNBT(new NBTTagCompound()));
+		} else {
+			tanks[0].writeToNBT(nbt, "water");
+			tanks[1].writeToNBT(nbt, "steam");
 		}
+		return super.writeToNBT(nbt);
 	}
 
 	@Override
-	public IFluidTankProperties[] getTankProperties(){
-		return new IFluidTankProperties[]{tanks[0].getTankProperties()[0], tanks[1].getTankProperties()[0]};
+	public FluidTankNTM[] getSendingTanks() {
+		return new FluidTankNTM[] {tanks [1]};
 	}
 
 	@Override
-	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && resource.getFluid() == ModForgeFluids.spentsteam){
-			return tanks[0].fill(resource, doFill);
-		}
-		return 0;
+	public FluidTankNTM[] getReceivingTanks() {
+		return new FluidTankNTM[] {tanks [0]};
 	}
 
 	@Override
-	public FluidStack drain(FluidStack resource, boolean doDrain){
-		if(resource != null && resource.getFluid() == FluidRegistry.WATER){
-			return tanks[1].drain(resource, doDrain);
-		}
+	public FluidTankNTM[] getAllTanks() {
+		return tanks;
+	}
+
+	@Override
+	public FluidTankNTM getTankToPaste() {
 		return null;
-	}
-
-	@Override
-	public FluidStack drain(int maxDrain, boolean doDrain){
-		return tanks[1].drain(maxDrain, doDrain);
-	}
-	
-	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing){
-		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
-		}
-		return super.getCapability(capability, facing);
-	}
-	
-	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing){
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 }

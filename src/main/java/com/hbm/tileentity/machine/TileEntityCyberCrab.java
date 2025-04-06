@@ -1,15 +1,14 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityTeslaCrab;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.List;
 
 public class TileEntityCyberCrab extends TileEntity implements ITickable {
 

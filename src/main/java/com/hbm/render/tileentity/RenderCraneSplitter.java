@@ -3,10 +3,7 @@ package com.hbm.render.tileentity;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
-
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-
 import org.lwjgl.opengl.GL11;
 
 public class RenderCraneSplitter extends TileEntitySpecialRenderer<TileEntityCraneSplitter> {

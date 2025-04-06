@@ -4,7 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.client.particle.Particle;
@@ -104,7 +104,7 @@ public class ParticleLightning extends Particle {
 		    }
 		}
 		
-		RenderHelper.bindTexture(ResourceManager.bfg_core_lightning);
+		NTMRenderHelper.bindTexture(ResourceManager.bfg_core_lightning);
 		
 		GlStateManager.disableCull();
 		GlStateManager.enableBlend();

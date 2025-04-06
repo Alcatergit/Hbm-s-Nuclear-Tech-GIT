@@ -1,20 +1,14 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.hbm.lib.RefStrings;
-
-import com.hbm.main.MainRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class ControlEventSystem {

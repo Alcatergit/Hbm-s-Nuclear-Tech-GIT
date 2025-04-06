@@ -1,37 +1,36 @@
 	package com.hbm.items.special.weapon;
 
-import java.util.List;
-import java.util.Random;
+    import com.google.common.collect.Multimap;
+    import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+    import com.hbm.entity.logic.EntityNukeExplosionMK3;
+    import com.hbm.entity.projectile.EntityExplosiveBeam;
+    import com.hbm.interfaces.IHasCustomModel;
+    import com.hbm.items.ModItems;
+    import com.hbm.lib.HBMSoundHandler;
+    import com.hbm.main.MainRegistry;
+    import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+    import net.minecraft.client.util.ITooltipFlag;
+    import net.minecraft.entity.Entity;
+    import net.minecraft.entity.EntityLivingBase;
+    import net.minecraft.entity.ai.attributes.AttributeModifier;
+    import net.minecraft.entity.player.EntityPlayer;
+    import net.minecraft.init.SoundEvents;
+    import net.minecraft.inventory.EntityEquipmentSlot;
+    import net.minecraft.item.EnumAction;
+    import net.minecraft.item.EnumRarity;
+    import net.minecraft.item.Item;
+    import net.minecraft.item.ItemStack;
+    import net.minecraft.nbt.NBTTagCompound;
+    import net.minecraft.util.ActionResult;
+    import net.minecraft.util.EnumHand;
+    import net.minecraft.util.SoundCategory;
+    import net.minecraft.util.text.TextFormatting;
+    import net.minecraft.world.World;
+    import net.minecraftforge.common.MinecraftForge;
+    import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
-import com.google.common.collect.Multimap;
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
-import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.entity.projectile.EntityExplosiveBeam;
-import com.hbm.interfaces.IHasCustomModel;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+    import java.util.List;
+    import java.util.Random;
 
 public class GunB92 extends Item implements IHasCustomModel {
 
@@ -45,7 +44,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 	public GunB92(String s) {
 
 		this.maxStackSize = 1;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		ModItems.ALL_ITEMS.add(this);

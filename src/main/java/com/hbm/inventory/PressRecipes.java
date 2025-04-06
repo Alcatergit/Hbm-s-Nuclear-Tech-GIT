@@ -1,22 +1,24 @@
 package com.hbm.inventory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-
-import static com.hbm.inventory.OreDictManager.*;
-import com.hbm.util.Tuple.Pair;
-import com.hbm.items.ModItems;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
-
+import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats;
+import com.hbm.inventory.material.NTMMaterial;
+import com.hbm.items.ModItems;
+import com.hbm.util.Tuple.Pair;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import static com.hbm.inventory.OreDictManager.*;
 
 //TODO: clean this shit up
 //Alcater: on it
@@ -70,15 +72,11 @@ public class PressRecipes {
 		addRecipe(PressType.PLATE, new OreDictStack(CMB.ingot()), new ItemStack(ModItems.plate_combine_steel));
 		addRecipe(PressType.PLATE, new OreDictStack(BIGMT.ingot()), new ItemStack(ModItems.plate_saturnite));
 
-		addRecipe(PressType.WIRE, new OreDictStack(AL.ingot()), new ItemStack(ModItems.wire_aluminium, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(CU.ingot()), new ItemStack(ModItems.wire_copper, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(W.ingot()), new ItemStack(ModItems.wire_tungsten, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(MINGRADE.ingot()), new ItemStack(ModItems.wire_red_copper, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(GOLD.ingot()), new ItemStack(ModItems.wire_gold, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(SA326.ingot()), new ItemStack(ModItems.wire_schrabidium, 8));
-		addRecipe(PressType.WIRE, new OreDictStack("ingotAdvanced"), new ItemStack(ModItems.wire_advanced_alloy, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(ALLOY.ingot()), new ItemStack(ModItems.wire_advanced_alloy, 8));
-		addRecipe(PressType.WIRE, new OreDictStack(MAGTUNG.ingot()), new ItemStack(ModItems.wire_magnetized_tungsten, 8));
+		for(NTMMaterial mat : Mats.orderedList) {
+			if(mat.autogen.contains(MaterialShapes.WIRE) && OreDictionary.doesOreNameExist(MaterialShapes.INGOT.make(mat))) {
+				addRecipe(PressType.WIRE, new OreDictStack(MaterialShapes.INGOT.make(mat)), new ItemStack(ModItems.wire_fine, 8, mat.id));
+			}
+		}
 
 		addRecipe(PressType.CIRCUIT, new ComparableStack(ModItems.circuit_raw), new ItemStack(ModItems.circuit_aluminium));
 		addRecipe(PressType.CIRCUIT, new ComparableStack(ModItems.circuit_bismuth_raw), new ItemStack(ModItems.circuit_bismuth));

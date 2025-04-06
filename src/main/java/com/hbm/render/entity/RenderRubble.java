@@ -1,19 +1,17 @@
 package com.hbm.render.entity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelRubble;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderRubble extends Render<EntityRubble> {
 

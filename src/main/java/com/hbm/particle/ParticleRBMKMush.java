@@ -1,5 +1,6 @@
 package com.hbm.particle;
 
+import com.hbm.render.NTMRenderHelper;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
@@ -48,7 +49,7 @@ public class ParticleRBMKMush extends Particle {
 	@Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ){
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
-		com.hbm.render.RenderHelper.resetParticleInterpPos(entityIn, partialTicks);
+		NTMRenderHelper.resetParticleInterpPos(entityIn, partialTicks);
 
 		int segs = 30;
 

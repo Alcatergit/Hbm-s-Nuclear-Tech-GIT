@@ -9,6 +9,7 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.util.CrucibleUtil;
 
 import api.hbm.block.ICrucibleAcceptor;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -28,7 +29,7 @@ public class TileEntityFoundryOutlet extends TileEntityFoundryBase {
 	
 	/** if TRUE, prevents all fluids from flowing through the outlet and renders a small barrier */
 	public boolean isClosed() {
-		return invertRedstone ^ this.world.isBlockIndirectlyGettingPowered(pos) > 0;
+		return invertRedstone ^ this.world.isBlockPowered(pos);
 	}
 	
 	@Override
@@ -40,6 +41,7 @@ public class TileEntityFoundryOutlet extends TileEntityFoundryBase {
 			if(this.lastClosed != isClosed || this.filter != this.lastFilter) {
 				this.lastFilter = this.filter;
 				this.lastClosed = isClosed;
+				world.markAndNotifyBlock(pos, world.getChunk(pos), world.getBlockState(pos), world.getBlockState(pos), 2);
 			}
 		}
 	}
@@ -120,5 +122,31 @@ public class TileEntityFoundryOutlet extends TileEntityFoundryBase {
 		nbt.setBoolean("invertFilter", this.invertFilter);
 		nbt.setShort("filter", this.filter == null ? -1 : (short) this.filter.id);
 		return super.writeToNBT(nbt);
+	}
+
+	@Override
+	public NBTTagCompound getSettings(World world, int x, int y, int z) {
+		NBTTagCompound nbt = new NBTTagCompound();
+
+		nbt.setBoolean("invert", this.invertRedstone);
+		nbt.setBoolean("invertFilter", this.invertFilter);
+		if(filter != null){
+			nbt.setIntArray("matFilter", new int[]{ filter.id });
+		}
+
+		return nbt;
+	}
+
+	@Override
+	public void pasteSettings(NBTTagCompound nbt, int index, World world, EntityPlayer player, int x, int y, int z) {
+
+		if(nbt.hasKey("invert"))   this.invertRedstone = nbt.getBoolean("invert");
+		if(nbt.hasKey("invertFilter")) this.invertFilter = nbt.getBoolean("invertFilter");
+		if(nbt.hasKey("matFilter")) {
+			int[] ids = nbt.getIntArray("matFilter");
+			if(ids.length > 0 && index < ids.length)
+				this.filter = Mats.matById.get(ids[index]);
+		}
+
 	}
 }

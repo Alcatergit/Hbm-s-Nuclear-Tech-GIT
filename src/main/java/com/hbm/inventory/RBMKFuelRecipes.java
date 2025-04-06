@@ -1,15 +1,12 @@
 package com.hbm.inventory;
 
-import java.util.LinkedHashMap;
-import java.util.Random;
-
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.LinkedHashMap;
+import java.util.Random;
 
 public class RBMKFuelRecipes {
 	public static Random rand = new Random();

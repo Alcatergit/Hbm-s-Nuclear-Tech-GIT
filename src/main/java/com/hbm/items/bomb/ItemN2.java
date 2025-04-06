@@ -1,19 +1,18 @@
 package com.hbm.items.bomb;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemN2 extends Item {
 
 	public ItemN2(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

@@ -1,14 +1,10 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,12 +21,15 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class GunDampfmaschine extends Item {
 
 	Random rand = new Random();
 	
 	public GunDampfmaschine(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

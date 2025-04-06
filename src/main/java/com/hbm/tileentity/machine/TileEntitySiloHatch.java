@@ -4,12 +4,10 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockSiloHatch;
 import com.hbm.blocks.machine.DummyBlockSiloHatch;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.IAnimatedDoor;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEDoorAnimationPacket;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -34,7 +32,7 @@ public class TileEntitySiloHatch extends TileEntityLockableBase implements ITick
 	public void update() {
 		if(!world.isRemote){
 			if(!this.isLocked()){
-				boolean rs = world.isBlockIndirectlyGettingPowered(pos) > 0;
+				boolean rs = world.getStrongPower(pos) > 0;
 				if(rs){
 					tryOpen();
 				} else {

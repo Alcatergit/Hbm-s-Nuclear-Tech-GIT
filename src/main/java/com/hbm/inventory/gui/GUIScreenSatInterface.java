@@ -1,21 +1,16 @@
 package com.hbm.inventory.gui;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
+import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatLaserPacket;
-import com.hbm.blocks.ModBlocks;
-import com.hbm.inventory.BedrockOreRegistry;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
 import com.hbm.saveddata.satellites.Satellite.Interfaces;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -25,12 +20,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class GUIScreenSatInterface extends GuiScreen {
 	
@@ -239,7 +237,7 @@ public class GUIScreenSatInterface extends GuiScreen {
 	private void prontMap() {
 		for(int x = 0; x < 200; x++) {
 			for(int z = 0; z < 200; z++) {
-				RenderHelper.setColor(map[x][z]);
+				NTMRenderHelper.setColor(map[x][z]);
 				drawTexturedModalRect(guiLeft + 8 + x, guiTop + 8 + z, 216, 216, 1, 1);
 			}
 		}

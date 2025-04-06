@@ -1,16 +1,14 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.BeamPronter.EnumBeamType;
 import com.hbm.render.misc.BeamPronter.EnumWaveType;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachineMiningLaser> {
 
@@ -47,7 +45,7 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 
 		Vec3 vec = Vec3.createVectorHelper(vx - nVec.xCoord, vy - nVec.yCoord, vz - nVec.zCoord);
 
-		double length = vec.lengthVector();
+		double length = vec.length();
 		double yaw = Math.toDegrees(Math.atan2(vec.xCoord, vec.zCoord));
 		double sqrt = MathHelper.sqrt(vec.xCoord * vec.xCoord + vec.zCoord * vec.zCoord);
 		double pitch = Math.toDegrees(Math.atan2(vec.yCoord, sqrt));
@@ -75,7 +73,7 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 		//GlStateManager.shadeModel(GL11.GL_FLAT);
 
 		if(laser.beam) {
-			length = vec.lengthVector();
+			length = vec.length();
 			GL11.glTranslated(nVec.xCoord, nVec.yCoord - 1, nVec.zCoord);
 			int range = (int)Math.ceil(length * 0.5);
 			BeamPronter.prontBeam(vec, EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0xa00000, 0xFFFFFF, 0, 1, 0, 3, 0.09F);

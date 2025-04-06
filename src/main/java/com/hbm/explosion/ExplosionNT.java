@@ -321,6 +321,7 @@ public class ExplosionNT extends Explosion {
 		DIGAMMA_CIRCUIT,
 		LAVA,		//again the same thing but lava
 		LAVA_V,		//again the same thing but volcaniclava
+		ERRODE,		//will turn select blocks into gravel or sand
 		ALLMOD,		//block placer attributes like fire are applied for all destroyed blocks
 		ALLDROP,	//miner TNT!
 		NODROP,		//the opposite

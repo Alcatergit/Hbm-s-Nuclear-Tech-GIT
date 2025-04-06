@@ -4,7 +4,6 @@ import com.hbm.entity.item.EntityFireworks;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -24,7 +23,7 @@ public class TileEntityFireworks extends TileEntity implements ITickable {
 	public void update() {
 		if(!world.isRemote) {
 
-			if(world.isBlockIndirectlyGettingPowered(pos) > 0 && !message.isEmpty() && charges > 0) {
+			if(world.getStrongPower(pos) > 0 && !message.isEmpty() && charges > 0) {
 
 				delay--;
 

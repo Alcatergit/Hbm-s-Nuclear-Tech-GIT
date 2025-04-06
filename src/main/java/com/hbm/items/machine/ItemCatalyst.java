@@ -1,14 +1,13 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
-
+import com.hbm.lib.Library;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemCatalyst extends Item {
 
@@ -24,7 +23,7 @@ public class ItemCatalyst extends Item {
 		this.powerMod = 1.0F;
 		this.heatMod = 1.0F;
 		this.fuelMod = 1.0F;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -36,7 +35,7 @@ public class ItemCatalyst extends Item {
 		this.powerMod = powerMod;
 		this.heatMod = heatMod;
 		this.fuelMod = fuelMod;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

@@ -25,7 +25,7 @@ public class ParticleCrucibleSpark extends ParticleFirstPerson {
 		this.particleScale = scale;
 		Vec3d am = new Vec3d(amx, amy, amz);
 		if(am.lengthSquared() != 0){
-			Vec3d rand = BobMathUtil.randVecInCone(am.normalize(), 30).scale(am.lengthVector());
+			Vec3d rand = BobMathUtil.randVecInCone(am.normalize(), 30).scale(am.length());
 			motionX = rand.x;
 			motionY = rand.y;
 			motionZ = rand.z;
@@ -70,7 +70,7 @@ public class ParticleCrucibleSpark extends ParticleFirstPerson {
 			timeUntilChange = rand.nextInt(6)+1;
 			Vec3d am = new Vec3d(motionX, motionY, motionZ);
 			if(am.lengthSquared() != 0){
-				Vec3d rand = BobMathUtil.randVecInCone(am.normalize(), 30).scale(am.lengthVector());
+				Vec3d rand = BobMathUtil.randVecInCone(am.normalize(), 30).scale(am.length());
 				motionX = rand.x;
 				motionY = rand.y;
 				motionZ = rand.z;
@@ -107,8 +107,8 @@ public class ParticleCrucibleSpark extends ParticleFirstPerson {
         Vec3d toPlayer = new Vec3d(mX, mY, mZ).subtract(ItemRenderCrucible.playerPos);
         Vec3d point1 = particleAxis.crossProduct(toPlayer).normalize().scale(0.5*particleScale);
         Vec3d point2 = point1.scale(-1);
-        point1 = point1.addVector(f5, f6, f7);
-        point2 = point2.addVector(f5, f6, f7);
+        point1 = point1.add(f5, f6, f7);
+        point2 = point2.add(f5, f6, f7);
         particleAxis = particleAxis.scale(stretch);
         
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);

@@ -2,7 +2,6 @@ package com.hbm.render.entity.mob;
 
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.renderer.entity.RenderChicken;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.passive.EntityChicken;

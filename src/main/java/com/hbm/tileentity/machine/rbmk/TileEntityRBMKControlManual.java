@@ -1,20 +1,19 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.blocks.machine.rbmk.RBMKControl;
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.render.amlfrom1710.Vec3;
-import net.minecraft.util.math.BlockPos;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver {
 
@@ -64,7 +63,7 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 
 	@Override
 	public boolean hasPermission(EntityPlayer player) {
-		return Vec3.createVectorHelper(pos.getX() - player.posX, pos.getY() - player.posY, pos.getZ() - player.posZ).lengthVector() < 20;
+		return Vec3.createVectorHelper(pos.getX() - player.posX, pos.getY() - player.posY, pos.getZ() - player.posZ).length() < 20;
 	}
 
 	@Override

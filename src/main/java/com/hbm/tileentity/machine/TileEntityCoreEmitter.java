@@ -1,18 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ILaserable;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.AuxLongPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
@@ -35,7 +32,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ILaserable, ITankPacketAcceptor {
+import java.util.List;
+
+public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2, IFluidHandler, ILaserable, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000000L;
@@ -57,8 +56,8 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 	@Override
 	public void update() {
 		if (!world.isRemote) {
-			
-			this.updateStandardConnections(world, pos);
+
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) this.trySubscribe(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, dir);
 			
 			watts = MathHelper.clamp(watts, 1, 100);
 			long demand = maxPower * watts / 2000;
@@ -93,14 +92,14 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 					
 					long out = joules;
 					
-					EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
+					EnumFacing dir = EnumFacing.byIndex(this.getBlockMetadata());
 					for(int i = 1; i <= range; i++) {
 						
 						beam = i;
 		
-						int x = pos.getX() + dir.getFrontOffsetX() * i;
-						int y = pos.getY() + dir.getFrontOffsetY() * i;
-						int z = pos.getZ() + dir.getFrontOffsetZ() * i;
+						int x = pos.getX() + dir.getXOffset() * i;
+						int y = pos.getY() + dir.getYOffset() * i;
+						int z = pos.getZ() + dir.getZOffset() * i;
 						
 						BlockPos pos1 = new BlockPos(x, y, z);
 						
@@ -138,12 +137,12 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 						}
 					}
 					
-					double blx = Math.min(pos.getX(), pos.getX() + dir.getFrontOffsetX() * beam) + 0.2;
-					double bux = Math.max(pos.getX(), pos.getX() + dir.getFrontOffsetX() * beam) + 0.8;
-					double bly = Math.min(pos.getY(), pos.getY() + dir.getFrontOffsetY() * beam) + 0.2;
-					double buy = Math.max(pos.getY(), pos.getY() + dir.getFrontOffsetY() * beam) + 0.8;
-					double blz = Math.min(pos.getZ(), pos.getZ() + dir.getFrontOffsetZ() * beam) + 0.2;
-					double buz = Math.max(pos.getZ(), pos.getZ() + dir.getFrontOffsetZ() * beam) + 0.8;
+					double blx = Math.min(pos.getX(), pos.getX() + dir.getXOffset() * beam) + 0.2;
+					double bux = Math.max(pos.getX(), pos.getX() + dir.getXOffset() * beam) + 0.8;
+					double bly = Math.min(pos.getY(), pos.getY() + dir.getYOffset() * beam) + 0.2;
+					double buy = Math.max(pos.getY(), pos.getY() + dir.getYOffset() * beam) + 0.8;
+					double blz = Math.min(pos.getZ(), pos.getZ() + dir.getZOffset() * beam) + 0.2;
+					double buz = Math.max(pos.getZ(), pos.getZ() + dir.getZOffset() * beam) + 0.8;
 					
 					List<Entity> list = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(blx, bly, blz, bux, buy, buz));
 					

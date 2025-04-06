@@ -1,11 +1,9 @@
 package com.hbm.blocks.machine;
 
+import api.hbm.block.IToolable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityHadronDiode;
 import com.hbm.tileentity.machine.TileEntityHadronDiode.DiodeConfig;
-
-import api.hbm.block.IToolable;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.SoundType;
@@ -32,7 +30,7 @@ public class BlockHadronDiode extends BlockContainer implements IToolable {
 	
 	public BlockHadronDiode(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

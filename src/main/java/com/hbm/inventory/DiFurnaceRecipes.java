@@ -1,30 +1,27 @@
 package com.hbm.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashSet;
-import java.util.LinkedHashMap;
-
-import static com.hbm.inventory.OreDictManager.*;
-import static net.minecraft.item.ItemStack.areItemStacksEqual;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
-import com.hbm.util.Tuple.Pair;
-import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.interfaces.Spaghetti;
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.items.tool.ItemFluidCanister;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RecipesCommon.NbtComparableStack;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
-
-import net.minecraft.init.Blocks;
+import com.hbm.util.Tuple.Pair;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+
+import static com.hbm.inventory.OreDictManager.*;
+import static net.minecraft.item.ItemStack.areItemStacksEqual;
 
 //TODO: clean this shit up
 //Alcater: on it
@@ -56,7 +53,7 @@ public class DiFurnaceRecipes {
 		addRecipe(new OreDictStack(CU.ingot()), new OreDictStack(REDSTONE.dust()), new ItemStack(ModItems.ingot_red_copper, 2));
 		addRecipe(new OreDictStack(CU.dust()), new OreDictStack(REDSTONE.dust()), new ItemStack(ModItems.ingot_red_copper, 2));
 
-		addRecipe(new NbtComparableStack(ItemFluidCanister.getFullCanister(ModForgeFluids.diesel)), new ComparableStack(Items.SLIME_BALL), new ItemStack(ModItems.canister_napalm, 1));
+		addRecipe(new ComparableStack(ModItems.canister_generic, 1, Fluids.OIL.getID()), new ComparableStack(Items.SLIME_BALL), new ItemStack(ModItems.canister_napalm, 1));
 		
 		addRecipe(new OreDictStack(MINGRADE.ingot()), new OreDictStack(STEEL.ingot()), new ItemStack(ModItems.ingot_advanced_alloy, 2));
 		addRecipe(new OreDictStack(MINGRADE.dust()), new OreDictStack(STEEL.ingot()), new ItemStack(ModItems.ingot_advanced_alloy, 2));
@@ -96,7 +93,7 @@ public class DiFurnaceRecipes {
 			addRecipe(new OreDictStack(IRON.ingot()), new OreDictStack(NETHERQUARTZ.gem()), new ItemStack(ModBlocks.test_render, 1));
 		}
 		if(GeneralConfig.enableBabyMode) {
-			addRecipe(new ComparableStack(ModItems.canister_generic), new OreDictStack(COAL.gem()), ItemFluidCanister.getFullCanister(ModForgeFluids.oil));
+			addRecipe(new ComparableStack(ModItems.canister_generic), new OreDictStack(COAL.gem()), new ItemStack(ModItems.canister_generic, 1, Fluids.OIL.getID()));
 		}
 	}
 

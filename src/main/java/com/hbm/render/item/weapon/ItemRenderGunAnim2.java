@@ -1,7 +1,5 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.anim.HbmAnimations;
@@ -10,12 +8,12 @@ import com.hbm.render.model.ModelB92;
 import com.hbm.render.model.ModelB93;
 import com.hbm.render.model.ModelBoltAction;
 import com.hbm.render.model.ModelLeverAction;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderGunAnim2 extends TEISRBase {
 

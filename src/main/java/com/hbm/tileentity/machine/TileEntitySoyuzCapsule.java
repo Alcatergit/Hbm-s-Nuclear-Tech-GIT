@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.tileentity.TileEntityInventoryBase;
-
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

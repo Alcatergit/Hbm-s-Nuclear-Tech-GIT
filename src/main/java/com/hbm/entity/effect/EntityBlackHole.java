@@ -1,16 +1,11 @@
 package com.hbm.entity.effect;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -29,6 +24,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityBlackHole extends Entity implements IConstantRenderer {
 
@@ -129,7 +126,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 			
 			Vec3 vec = Vec3.createVectorHelper(posX - e.posX, posY - e.posY, posZ - e.posZ);
 			
-			double dist = vec.lengthVector();
+			double dist = vec.length();
 			
 			if(dist > range)
 				continue;

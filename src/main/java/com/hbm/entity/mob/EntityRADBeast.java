@@ -1,15 +1,12 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.saveddata.RadiationSavedData;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -28,6 +25,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 
@@ -221,13 +220,13 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
             int r = this.rand.nextInt(3);
             
             if(r == 0) {
-                this.dropItem(this.isWet() ? ModItems.waste_uranium : ModItems.rod_uranium_fuel_depleted, 1);
+                this.dropItem(this.isWet() ? ModItems.waste_uranium_legacy : ModItems.rod_uranium_fuel_depleted, 1);
                 
             } else if(r == 1) {
-                this.dropItem(this.isWet() ? ModItems.waste_mox : ModItems.rod_mox_fuel_depleted, 1);
+                this.dropItem(this.isWet() ? ModItems.waste_mox_legacy : ModItems.rod_mox_fuel_depleted, 1);
                 
             } else if(r == 2) {
-                this.dropItem(this.isWet() ? ModItems.waste_plutonium : ModItems.rod_plutonium_fuel_depleted, 1);
+                this.dropItem(this.isWet() ? ModItems.waste_plutonium_legacy : ModItems.rod_plutonium_fuel_depleted, 1);
                 
             }
         }

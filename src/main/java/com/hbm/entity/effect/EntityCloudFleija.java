@@ -1,7 +1,6 @@
 package com.hbm.entity.effect;
 
 import com.hbm.config.CompatibilityConfig;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.nbt.NBTTagCompound;

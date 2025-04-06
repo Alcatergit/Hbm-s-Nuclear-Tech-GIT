@@ -1,14 +1,11 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
+import api.hbm.energymk2.IBatteryItem;
 import com.hbm.items.ModItems;
 import com.hbm.items.armor.ArmorFSBPowered;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-
-import api.hbm.energy.IBatteryItem;
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,12 +17,14 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemFusionCore extends Item {
 
 	private int charge;
 	
 	public ItemFusionCore(int charge, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.charge = charge;
 		

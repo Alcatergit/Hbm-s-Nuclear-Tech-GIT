@@ -48,6 +48,9 @@ public class HbmLivingCapability {
 		
 		public int getContagion();
 		public void setContagion(int cont);
+
+		public int getOil();
+		public void setOil(int time);
 		
 		public List<ContaminationEffect> getContaminationEffectList();
 		
@@ -70,6 +73,7 @@ public class HbmLivingCapability {
 		public static final int maxBlacklung = 60 * 60 * 20;
 		private int bombTimer;
 		private int contagion;
+		private int oil;
 		private List<ContaminationEffect> contamination = new ArrayList<>();
 		
 		@Override
@@ -181,7 +185,13 @@ public class HbmLivingCapability {
 		public void setContagion(int cont){
 			contagion = cont;
 		}
-		
+
+		@Override
+		public int getOil() { return oil; }
+
+		@Override public void setOil(int time) { this.oil = time; }
+
+
 		@Override
 		public List<ContaminationEffect> getContaminationEffectList(){
 			return contamination;
@@ -198,6 +208,7 @@ public class HbmLivingCapability {
 			tag.setInteger("blacklung", blacklung);
 			tag.setInteger("bombtimer", bombTimer);
 			tag.setInteger("contagion", contagion);
+			tag.setInteger("oil", getOil());
 			tag.setInteger("conteffectsize", contamination.size());
 			for(int i = 0; i < contamination.size(); i ++){
 				contamination.get(i).save(tag, i);
@@ -215,6 +226,7 @@ public class HbmLivingCapability {
 			setBlacklung(tag.getInteger("blacklung"));
 			setBombTimer(tag.getInteger("bombtimer"));
 			setContagion(tag.getInteger("contagion"));
+			setOil(tag.getInteger("oil"));
 			contamination.clear();
 			for(int i = 0; i < tag.getInteger("conteffectsize"); i ++){
 				contamination.add(ContaminationEffect.load(tag, i));
@@ -329,6 +341,10 @@ public class HbmLivingCapability {
 			@Override
 			public void setContagion(int cont){
 			}
+			@Override
+			public int getOil(){ return 0; }
+			@Override
+			public void setOil(int cont){ }
 		};
 		
 		@CapabilityInject(IEntityHbmProps.class)

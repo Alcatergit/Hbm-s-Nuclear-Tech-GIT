@@ -1,32 +1,30 @@
 package com.hbm.render.entity.missile;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.render.tileentity.RenderLaunchPadTier1;
-import com.hbm.entity.missile.EntityMissileRain;
+import com.hbm.entity.missile.EntityMissileTier3;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
+import com.hbm.render.tileentity.RenderLaunchPadTier1;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
-public class RenderMissileRain extends Render<EntityMissileRain> {
+public class RenderMissileRain extends Render<EntityMissileTier3.EntityMissileRain> {
 	
-	public static final IRenderFactory<EntityMissileRain> FACTORY = (RenderManager man) -> {return new RenderMissileRain(man);};
+	public static final IRenderFactory<EntityMissileTier3.EntityMissileRain> FACTORY = (RenderManager man) -> {return new RenderMissileRain(man);};
 	
 	protected RenderMissileRain(RenderManager renderManager) {
 		super(renderManager);
 	}
 	
 	@Override
-	public void doRender(EntityMissileRain missile, double x, double y, double z, float entityYaw, float partialTicks) {
+	public void doRender(EntityMissileTier3.EntityMissileRain missile, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 		GlStateManager.enableLighting();
-		double[] renderPos = RenderHelper.getRenderPosFromMissile(missile, partialTicks);
+		double[] renderPos = NTMRenderHelper.getRenderPosFromMissile(missile, partialTicks);
 		x = renderPos[0];
 		y = renderPos[1];
 		z = renderPos[2];
@@ -44,7 +42,7 @@ public class RenderMissileRain extends Render<EntityMissileRain> {
 	}
 
 	@Override
-	protected ResourceLocation getEntityTexture(EntityMissileRain entity) {
+	protected ResourceLocation getEntityTexture(EntityMissileTier3.EntityMissileRain entity) {
 		return ResourceManager.missileHuge_CL_tex;
 	}
 }

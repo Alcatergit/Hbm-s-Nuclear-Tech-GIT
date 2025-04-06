@@ -1,19 +1,15 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
-
+import com.hbm.util.I18nUtil;
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -21,6 +17,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -33,6 +30,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.List;
+
 @Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
 public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock, IPartialSealableBlock, IRadResistantBlock {
 
@@ -40,7 +39,7 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock, IPa
 	
 	public BlastDoor(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -79,14 +78,22 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock, IPa
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(pos);
-		if(entity != null)
-		{
-			if(!entity.isLocked()) {
-				entity.tryToggle();
+	public BombReturnCode explode(World world, BlockPos pos) {
+
+		if(!world.isRemote) {
+			TileEntityBlastDoor entity = (TileEntityBlastDoor) world.getTileEntity(pos);
+			if(entity != null) {
+
+				if(!entity.isLocked()) {
+					entity.tryToggle();
+					return BombReturnCode.TRIGGERED;
+				}
+
+				return BombReturnCode.ERROR_INCOMPATIBLE;
 			}
 		}
+
+		return BombReturnCode.UNDEFINED;
 	}
 	
 	@Override
@@ -170,7 +177,7 @@ public class BlastDoor extends BlockContainer implements IBomb, IMultiBlock, IPa
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

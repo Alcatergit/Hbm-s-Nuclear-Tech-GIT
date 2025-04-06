@@ -95,7 +95,7 @@ public class ParticleDecal extends Particle {
 		GlStateManager.enableColorMaterial();
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		GlStateManager.enablePolygonOffset();
-		float fade = (float)(this.particleAge-particleMaxAge+30+partialTicks)/30F;
+		float fade = (this.particleAge-particleMaxAge+30+partialTicks) /30F;
 		GlStateManager.color(0.5F, 0.1F, 0.1F, 1-fade);
 		GlStateManager.doPolygonOffset(-5, -5);
 		GL11.glCallList(displayList);

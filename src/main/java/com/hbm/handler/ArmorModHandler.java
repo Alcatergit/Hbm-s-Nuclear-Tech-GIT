@@ -116,7 +116,7 @@ public class ArmorModHandler {
 		NBTTagCompound mods = nbt.getCompoundTag(MOD_COMPOUND_KEY);
 		mods.removeTag(MOD_SLOT_KEY + slot);
 		
-		if(mods.hasNoTags())
+		if(mods.isEmpty())
 			clearMods(armor);
 	}
 	
@@ -132,7 +132,7 @@ public class ArmorModHandler {
 		
 		NBTTagCompound nbt = armor.getTagCompound();
 		nbt.removeTag(MOD_COMPOUND_KEY);
-		if(nbt.hasNoTags())
+		if(nbt.isEmpty())
 			armor.setTagCompound(null);
 	}
 	

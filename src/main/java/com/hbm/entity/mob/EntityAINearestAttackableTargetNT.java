@@ -1,15 +1,14 @@
 package com.hbm.entity.mob;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.google.common.base.Predicate;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget.Sorter;
 import net.minecraft.entity.ai.EntityAITarget;
+
+import java.util.Collections;
+import java.util.List;
 
 public class EntityAINearestAttackableTargetNT extends EntityAITarget {
 	

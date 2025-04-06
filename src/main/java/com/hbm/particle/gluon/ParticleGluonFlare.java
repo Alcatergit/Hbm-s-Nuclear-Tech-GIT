@@ -99,7 +99,7 @@ public class ParticleGluonFlare extends Particle {
         	Vec3d pos = null;
 			if(r != null && r.hitVec != null && r.typeOfHit != Type.MISS && r.sideHit != null){
 				Vec3i norm = r.sideHit.getDirectionVec();
-				pos = r.hitVec.addVector(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
+				pos = r.hitVec.add(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
 			} else {
 				pos = player.getPositionEyes(partialTicks).add(look.scale(50));
 			}

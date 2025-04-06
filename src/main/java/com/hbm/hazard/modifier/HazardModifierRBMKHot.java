@@ -8,13 +8,13 @@ import net.minecraft.item.ItemStack;
 public class HazardModifierRBMKHot extends HazardModifier {
 
 	@Override
-	public float modify(ItemStack stack, EntityLivingBase holder, float level) {
+	public float modify(final ItemStack stack, final EntityLivingBase holder, float level) {
 		
 		level = 0;
 		
 		if(stack.getItem() instanceof ItemRBMKRod) {
-			double heat = ItemRBMKRod.getHullHeat(stack);
-			int fire = (int)Math.min(Math.ceil((heat - 100) / 10D), 60);
+			final double heat = ItemRBMKRod.getHullHeat(stack);
+			final int fire = (int)Math.min(Math.ceil((heat - 100) / 10D), 60);
 			level = fire;
 		}
 		

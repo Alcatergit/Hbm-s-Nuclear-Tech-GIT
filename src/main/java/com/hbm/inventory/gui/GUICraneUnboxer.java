@@ -9,8 +9,6 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
-
 public class GUICraneUnboxer extends GuiInfoContainer {
 
     private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crane_unboxer.png");

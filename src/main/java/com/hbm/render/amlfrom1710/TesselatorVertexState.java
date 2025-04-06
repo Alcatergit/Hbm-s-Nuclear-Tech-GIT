@@ -13,7 +13,6 @@ public class TesselatorVertexState
     private boolean hasBrightness;
     private boolean hasNormals;
     private boolean hasColor;
-    private static final String __OBFID = "CL_00000961";
 
     public TesselatorVertexState(int[] p_i45079_1_, int p_i45079_2_, int p_i45079_3_, boolean p_i45079_4_, boolean p_i45079_5_, boolean p_i45079_6_, boolean p_i45079_7_)
     {

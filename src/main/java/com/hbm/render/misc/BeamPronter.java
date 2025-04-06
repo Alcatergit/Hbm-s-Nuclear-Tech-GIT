@@ -1,27 +1,24 @@
 package com.hbm.render.misc;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Tessellator;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.util.Random;
 
 public class BeamPronter {
 	
@@ -71,7 +68,7 @@ public class BeamPronter {
 		
 		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
 		Random rand = new Random(start);
-		double length = skeleton.lengthVector();
+		double length = skeleton.length();
 		double segLength = length / segments;
 		double lastX = 0;
 		double lastY = 0;
@@ -146,7 +143,7 @@ public class BeamPronter {
 		if(beam == EnumBeamType.LINE) {
 			tessellator.setColorOpaque_I(innerColor);
             tessellator.addVertex(0, 0, 0);
-            tessellator.addVertex(0, skeleton.lengthVector(), 0);
+            tessellator.addVertex(0, skeleton.length(), 0);
 		}
 
 		
@@ -183,7 +180,7 @@ public class BeamPronter {
 		}
 		
 		Vec3 diff = pos1.subtract(pos2);
-		float len = (float) diff.lengthVector();
+		float len = (float) diff.length();
 		Vec3 angles = BobMathUtil.getEulerAngles(diff);
 		GL11.glTranslated(pos1.xCoord, pos1.yCoord, pos1.zCoord);
 		

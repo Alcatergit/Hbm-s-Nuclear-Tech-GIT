@@ -1,10 +1,8 @@
 package com.hbm.render.misc;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.weapon.ItemMissile.PartType;
-
 import net.minecraft.client.renderer.texture.TextureManager;
+import org.lwjgl.opengl.GL11;
 
 public class MissilePronter {
 

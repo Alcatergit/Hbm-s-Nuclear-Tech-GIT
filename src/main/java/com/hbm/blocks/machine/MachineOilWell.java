@@ -1,44 +1,66 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
+import com.hbm.blocks.BlockDummyable;
+import com.hbm.blocks.IPersistentInfoProvider;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.handler.MultiblockHandler;
-import com.hbm.interfaces.IMultiBlock;
+import com.hbm.explosion.ExplosionLarge;
+import com.hbm.explosion.ExplosionNT;
+import com.hbm.explosion.vanillant.ExplosionVNT;
+import com.hbm.explosion.vanillant.standard.BlockAllocatorStandard;
+import com.hbm.explosion.vanillant.standard.BlockProcessorStandard;
+import com.hbm.explosion.vanillant.standard.EntityProcessorStandard;
+import com.hbm.explosion.vanillant.standard.PlayerProcessorStandard;
+import com.hbm.handler.MultiblockHandlerXR;
+import com.hbm.inventory.fluid.Fluids;
+import com.hbm.inventory.fluid.tank.FluidTankNTM;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.IPersistentNBT;
 import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
-
-import net.minecraft.block.BlockContainer;
+import com.hbm.util.BobMathUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
-public class MachineOilWell extends BlockContainer implements IMultiBlock {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public class MachineOilWell extends BlockDummyable implements IPersistentInfoProvider {
 
 	public MachineOilWell(Material materialIn, String s) {
-		super(materialIn);
-		this.setUnlocalizedName(s);
-		this.setRegistryName(s);
-		
-		ModBlocks.ALL_BLOCKS.add(this);
+		super(materialIn, s);
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World worldIn, int meta) {
-		return new TileEntityMachineOilWell();
+	public TileEntity createNewTileEntity(World world, int meta) {
+		if(meta >= 12) return new TileEntityMachineOilWell();
+		return null;
+	}
+
+	@Override
+	public int[] getDimensions() {
+		return new int[] {9, 0, 1, 1, 1, 1};
+	}
+
+	@Override
+	public int getOffset() {
+		return 0;
 	}
 	
 	@Override
@@ -88,11 +110,12 @@ public class MachineOilWell extends BlockContainer implements IMultiBlock {
 			return true;
 		} else if(!player.isSneaking())
 		{
-			TileEntityMachineOilWell entity = (TileEntityMachineOilWell) world.getTileEntity(pos);
-			if(entity != null)
-			{
-				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_well, world, pos.getX(), pos.getY(), pos.getZ());
-			}
+			int[] posC = this.findCore(world, pos.getX(), pos.getY(), pos.getZ());
+
+			if(posC == null)
+				return false;
+
+			FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, posC[0], posC[1], posC[2]);
 			return true;
 		} else {
 			return false;
@@ -104,41 +127,69 @@ public class MachineOilWell extends BlockContainer implements IMultiBlock {
 		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
 		super.breakBlock(worldIn, pos, state);
 	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.wellDimension)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.wellDimension, ModBlocks.dummy_block_well);
 
-			DummyBlockWell.safeBreak = true;
-			world.setBlockState(pos.add(0, 0, 1), ModBlocks.dummy_port_well.getDefaultState());
-			TileEntity te = world.getTileEntity(pos.add(0, 0, 1));
-			if(te instanceof TileEntityDummy) {
-				TileEntityDummy dummy = (TileEntityDummy)te;
-				dummy.target = pos;
-			}
-			world.setBlockState(pos.add(0, 0, -1), ModBlocks.dummy_port_well.getDefaultState());
-			TileEntity te2 = world.getTileEntity(pos.add(0, 0, -1));
-			if(te instanceof TileEntityDummy) {
-				TileEntityDummy dummy = (TileEntityDummy)te2;
-				dummy.target = pos;
-			}
-			world.setBlockState(pos.add(1, 0, 0), ModBlocks.dummy_port_well.getDefaultState());
-			TileEntity te3 = world.getTileEntity(pos.add(1, 0, 0));
-			if(te3 instanceof TileEntityDummy) {
-				TileEntityDummy dummy = (TileEntityDummy)te3;
-				dummy.target = pos;
-			}
-			world.setBlockState(pos.add(-1, 0, 0), ModBlocks.dummy_port_well.getDefaultState());
-			TileEntity te4 = world.getTileEntity(pos.add(-1, 0, 0));
-			if(te4 instanceof TileEntityDummy) {
-				TileEntityDummy dummy = (TileEntityDummy)te4;
-				dummy.target = pos;
-			}
-			DummyBlockWell.safeBreak = false;
-			
-		} else
-			world.destroyBlock(pos, true);
+	@Override
+	protected boolean checkRequirement(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		return MultiblockHandlerXR.checkSpace(world, x, y, z, new int[] {1, -1, 0, 0, 0, 0}, x, y, z, dir) &&
+				MultiblockHandlerXR.checkSpace(world, x, y + 1, z, new int[] {8, 0, 1, 1, 1, 1}, x, y, z, dir) &&
+				MultiblockHandlerXR.checkSpace(world, x + 1, y + 1, z + 1, new int[] {-1, 1, 0, 0, 0, 0}, x, y, z, dir) &&
+				MultiblockHandlerXR.checkSpace(world, x + 1, y + 1, z - 1, new int[] {-1, 1, 0, 0, 0, 0}, x, y, z, dir) &&
+				MultiblockHandlerXR.checkSpace(world, x - 1, y + 1, z + 1, new int[] {-1, 1, 0, 0, 0, 0}, x, y, z, dir) &&
+				MultiblockHandlerXR.checkSpace(world, x - 1, y + 1, z - 1, new int[] {-1, 1, 0, 0, 0, 0}, x, y, z, dir);
+	}
+
+	@Override
+	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
+		MultiblockHandlerXR.fillSpace(world, x, y, z, new int[] {1, -1, 0, 0, 0, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x, y + 1, z, new int[] {8, 0, 1, 1, 1, 1}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + 1, y + 1, z + 1, new int[] {-1, 1, 0, 0, 0, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x + 1, y + 1, z - 1, new int[] {-1, 1, 0, 0, 0, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x - 1, y + 1, z + 1, new int[] {-1, 1, 0, 0, 0, 0}, this, dir);
+		MultiblockHandlerXR.fillSpace(world, x - 1, y + 1, z - 1, new int[] {-1, 1, 0, 0, 0, 0}, this, dir);
+	}
+
+	@Override
+	public ArrayList<ItemStack> getDrops(IBlockAccess world, BlockPos pos, IBlockState state, int fortune) {
+		return IPersistentNBT.getDrops(world, pos, this);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, NBTTagCompound persistentTag, EntityPlayer player, List list, boolean ext) {
+		list.add(TextFormatting.GREEN + BobMathUtil.getShortNumber(persistentTag.getLong("power")) + "HE");
+		for(int i = 0; i < 2; i++) {
+			FluidTankNTM tank = new FluidTankNTM(Fluids.NONE, 0);
+			tank.readFromNBT(persistentTag, "t" + i);
+			list.add(TextFormatting.YELLOW + "" + tank.getFill() + "/" + tank.getMaxFill() + "mB " + tank.getTankType().getLocalizedName());
+		}
+	}
+
+	@Override
+	public void onBlockExploded(World world, BlockPos pos, Explosion explosion) {
+
+		int[] posC = this.findCore(world, pos.getX(), pos.getY(), pos.getZ());
+		if(posC == null) return;
+		TileEntity core = world.getTileEntity(new BlockPos(posC[0], posC[1], posC[2]));
+		if(!(core instanceof TileEntityMachineOilWell)) return;
+
+		world.setBlockToAir(pos);
+		onBlockExploded(world, pos, explosion);
+
+		TileEntityMachineOilWell well = (TileEntityMachineOilWell) core;
+		if(well.tanks[0].getFill() > 0 || well.tanks[1].getFill() > 0) {
+			well.tanks[0].setFill(0);
+			well.tanks[1].setFill(0);
+
+			ExplosionVNT xnt = new ExplosionVNT(world, posC[0] + 0.5, posC[1] + 0.5, posC[2] + 0.5, 15F);
+			xnt.setBlockAllocator(new BlockAllocatorStandard(24));
+			xnt.setBlockProcessor(new BlockProcessorStandard().setNoDrop());
+			xnt.setEntityProcessor(new EntityProcessorStandard());
+			xnt.setPlayerProcessor(new PlayerProcessorStandard());
+			xnt.explode();
+
+			new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 50).overrideResolution(64).explode();
+			ExplosionLarge.spawnParticles(world, pos.getX(), pos.getY(), pos.getZ(), ExplosionLarge.cloudFunction(15));
+			//ExplosionCreator.composeEffect(world, posC[0] + 0.5, posC[1] + 0.5, posC[2] + 0.5, 10, 2F, 0.5F, 25F, 5, 8, 20, 0.75F, 1F, -2F, 150);
+		}
 	}
 
 }

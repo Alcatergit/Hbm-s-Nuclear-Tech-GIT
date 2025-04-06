@@ -1,19 +1,11 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-import com.hbm.inventory.control_panel.nodes.NodeFunction;
-import com.hbm.main.MainRegistry;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.control_panel.nodes.Node;
+import com.hbm.inventory.control_panel.nodes.NodeFunction;
 import com.hbm.inventory.control_panel.nodes.NodeInput;
 import com.hbm.inventory.control_panel.nodes.NodeOutput;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -22,6 +14,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class NodeSystem {
 
@@ -174,10 +174,10 @@ public class NodeSystem {
 			end:
 			for(int i = nodes.size()-1; i >= 0; i --){
 				Node n = nodes.get(i);
-				if(RenderHelper.intersects2DBox(mX, mY, n.getExtendedBoundingBox())){
+				if(NTMRenderHelper.intersects2DBox(mX, mY, n.getExtendedBoundingBox())){
 					for(NodeConnection c : (connectionInProgress.isInput ? n.outputs : n.inputs)){
-						if(connectionInProgress.parent != c.parent && RenderHelper.intersects2DBox(mX, mY, c.getPortBox())){
-							float[] center = RenderHelper.getBoxCenter(c.getPortBox());
+						if(connectionInProgress.parent != c.parent && NTMRenderHelper.intersects2DBox(mX, mY, c.getPortBox())){
+							float[] center = NTMRenderHelper.getBoxCenter(c.getPortBox());
 							nodeMx = center[0];
 							nodeMy = center[1];
 							break end;
@@ -249,12 +249,12 @@ public class NodeSystem {
 		//Do line connection handling
 		for(int i = nodes.size()-1; i >= 0; i --){
 			Node n = nodes.get(i);
-			if(RenderHelper.intersects2DBox(gridMX, gridMY, n.getExtendedBoundingBox())){
+			if(NTMRenderHelper.intersects2DBox(gridMX, gridMY, n.getExtendedBoundingBox())){
 				List<NodeConnection> union = new ArrayList<>();
 				union.addAll(n.inputs);
 				union.addAll(n.outputs);
 				for(NodeConnection c : union){
-					if(RenderHelper.intersects2DBox(gridMX, gridMY, c.getPortBox())){
+					if(NTMRenderHelper.intersects2DBox(gridMX, gridMY, c.getPortBox())){
 						if(c.connection != null){
 							connectionInProgress = c.removeConnection();
 							connectionInProgress.drawsLine = true;
@@ -277,7 +277,7 @@ public class NodeSystem {
 		boolean clear = true;
 		for(int i = nodes.size()-1; i >= 0; i --){
 			Node n = nodes.get(i);
-			boolean intersectsBox = RenderHelper.intersects2DBox(gridMX, gridMY, n.getBoundingBox());
+			boolean intersectsBox = NTMRenderHelper.intersects2DBox(gridMX, gridMY, n.getBoundingBox());
 			for(NodeConnection c : n.inputs){
 				if(c.enumSelector != null){
 					if(currentTypingBox != null){
@@ -287,7 +287,7 @@ public class NodeSystem {
 					if(c.enumSelector.onClick(gridMX, gridMY))
 						return;
 				}
-				if(intersectsBox && RenderHelper.intersects2DBox(gridMX, gridMY, c.getValueBox())){
+				if(intersectsBox && NTMRenderHelper.intersects2DBox(gridMX, gridMY, c.getValueBox())){
 					if(currentTypingBox != c && c.connection == null){
 						c.isTyping = true;
 						c.startTyping();
@@ -311,7 +311,7 @@ public class NodeSystem {
 				break;
 			}
 		}
-		if(currentTypingBox != null && !RenderHelper.intersects2DBox(gridMX, gridMY, currentTypingBox.getValueBox())){
+		if(currentTypingBox != null && !NTMRenderHelper.intersects2DBox(gridMX, gridMY, currentTypingBox.getValueBox())){
 			currentTypingBox.stopTyping();
 			currentTypingBox = null;
 		}
@@ -328,9 +328,9 @@ public class NodeSystem {
 		if(connectionInProgress != null){
 			for(int i = nodes.size()-1; i >= 0; i --){
 				Node n = nodes.get(i);
-				if(RenderHelper.intersects2DBox(gridMX, gridMY, n.getExtendedBoundingBox())){
+				if(NTMRenderHelper.intersects2DBox(gridMX, gridMY, n.getExtendedBoundingBox())){
 					for(NodeConnection c : (connectionInProgress.isInput ? n.outputs : n.inputs)){
-						if(connectionInProgress.parent != c.parent && RenderHelper.intersects2DBox(gridMX, gridMY, c.getPortBox())){
+						if(connectionInProgress.parent != c.parent && NTMRenderHelper.intersects2DBox(gridMX, gridMY, c.getPortBox())){
 							c.removeConnection();
 							//Only input nodes draw lines, so we don't have to maintain a connection list at each output
 							if(c.isInput){
@@ -354,7 +354,7 @@ public class NodeSystem {
 		if(!Keyboard.isKeyDown(Keyboard.KEY_LSHIFT) && dragDist == 0){
 			for(int i = nodes.size()-1; i >= 0; i --){
 				Node n = nodes.get(i);
-				if(RenderHelper.intersects2DBox(gridMX, gridMY, n.getBoundingBox())){
+				if(NTMRenderHelper.intersects2DBox(gridMX, gridMY, n.getBoundingBox())){
 					selectedNodes.clear();
 					selectedNodes.add(n);
 					activeNode = n;

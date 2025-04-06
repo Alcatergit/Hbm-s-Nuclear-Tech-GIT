@@ -404,7 +404,7 @@ public class HbmShaderManager2 {
 			int program = GLCompat.createProgram();
 			
 			vertexShader = GLCompat.createShader(GLCompat.GL_VERTEX_SHADER);
-			GLCompat.shaderSource(vertexShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".vert")));
+			GLCompat.shaderSource(vertexShader, readFileToBuf(new ResourceLocation(file.getNamespace(), file.getPath() + ".vert")));
 			GLCompat.compileShader(vertexShader);
 			if(GLCompat.getShaderi(vertexShader, GLCompat.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
 				MainRegistry.logger.error(GLCompat.getShaderInfoLog(vertexShader, GLCompat.GL_INFO_LOG_LENGTH));
@@ -412,7 +412,7 @@ public class HbmShaderManager2 {
 			}
 			
 			fragmentShader = GLCompat.createShader(GLCompat.GL_FRAGMENT_SHADER);
-			GLCompat.shaderSource(fragmentShader, readFileToBuf(new ResourceLocation(file.getResourceDomain(), file.getResourcePath() + ".frag")));
+			GLCompat.shaderSource(fragmentShader, readFileToBuf(new ResourceLocation(file.getNamespace(), file.getPath() + ".frag")));
 			GLCompat.compileShader(fragmentShader);
 			if(GLCompat.getShaderi(fragmentShader, GLCompat.GL_COMPILE_STATUS) == GL11.GL_FALSE) {
 				MainRegistry.logger.error(GLCompat.getShaderInfoLog(fragmentShader, GLCompat.GL_INFO_LOG_LENGTH));

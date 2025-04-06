@@ -1,24 +1,22 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import javax.annotation.CheckForNull;
-
 import com.hbm.items.ItemBase;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import javax.annotation.CheckForNull;
+import java.util.List;
 
 public class ItemRTGPellet extends ItemBase {
 	
@@ -27,7 +25,7 @@ public class ItemRTGPellet extends ItemBase {
 	private Item decayItem = null;
 	private long halflife = 0;
 	private long lifespan = 0;
-	
+
 	public ItemRTGPellet(int heatIn, String s) {
 		super(s);
 		this.heat = (short)heatIn;
@@ -167,6 +165,6 @@ public class ItemRTGPellet extends ItemBase {
 	}
 
 	public String getData() {
-		return String.format("%s (%s HE/t) %s", I18nUtil.resolveKey(getUnlocalizedName().concat(".name")), getHeat()*5, (getDoesDecay() ? " (decays)" : ""));
+		return String.format("%s (%s HE/t) %s", I18nUtil.resolveKey(getTranslationKey().concat(".name")), getHeat()*5, (getDoesDecay() ? " (decays)" : ""));
 	}
 }

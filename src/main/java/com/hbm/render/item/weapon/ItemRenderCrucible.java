@@ -1,10 +1,5 @@
 package com.hbm.render.item.weapon;
 
-import java.nio.DoubleBuffer;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.config.GeneralConfig;
@@ -22,9 +17,7 @@ import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -36,6 +29,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.nio.DoubleBuffer;
 
 public class ItemRenderCrucible extends TEISRBase {
 

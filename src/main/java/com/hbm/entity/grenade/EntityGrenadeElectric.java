@@ -2,7 +2,6 @@ package com.hbm.entity.grenade;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.util.EnumHand;

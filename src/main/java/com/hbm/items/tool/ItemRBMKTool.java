@@ -1,7 +1,5 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
@@ -10,7 +8,6 @@ import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKCraneConsole;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -29,10 +26,12 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemRBMKTool extends Item {
 
 	public ItemRBMKTool(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -54,7 +53,7 @@ public class ItemRBMKTool extends Item {
 				stack.getTagCompound().setInteger("posY", pos[1]);
 				stack.getTagCompound().setInteger("posZ", pos[2]);
 				
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".linked").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".linked").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			}
 			
 			return EnumActionResult.SUCCESS;
@@ -73,7 +72,7 @@ public class ItemRBMKTool extends Item {
 				console.setTarget(tx, ty, tz);
 				console.setupDisplays();
 				console.markDirty();
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".set").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".set").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			}
 			
 			return EnumActionResult.SUCCESS;
@@ -90,7 +89,7 @@ public class ItemRBMKTool extends Item {
 				int ty = stack.getTagCompound().getInteger("posY");
 				int tz = stack.getTagCompound().getInteger("posZ");
 				console.setTarget(tx, ty, tz);
-				player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".set").setStyle(new Style().setColor(TextFormatting.YELLOW)));
+				player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".set").setStyle(new Style().setColor(TextFormatting.YELLOW)));
 			}
 			
 			return EnumActionResult.SUCCESS;
@@ -101,7 +100,7 @@ public class ItemRBMKTool extends Item {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn){
-		for(String s : I18nUtil.resolveKeyArray(this.getUnlocalizedName() + ".desc"))
+		for(String s : I18nUtil.resolveKeyArray(this.getTranslationKey() + ".desc"))
 			tooltip.add(TextFormatting.YELLOW + s);
 	}
 	

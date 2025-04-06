@@ -1,12 +1,11 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.items.ModItems;
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.items.machine.ItemLens;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +19,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyUser {
+public class TileEntityCoreStabilizer extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2 {
 
 	public long power;
 	public static final long maxPower = 10000000000000L;
@@ -39,7 +38,7 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 	public void update() {
 		if(!world.isRemote) {
 
-			this.updateStandardConnections(world, pos);
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) this.trySubscribe(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, dir);
 			
 			watts = MathHelper.clamp(watts, 1, 100);
 			long demand = (long) Math.pow(watts, 6);
@@ -54,12 +53,12 @@ public class TileEntityCoreStabilizer extends TileEntityMachineBase implements I
 
 			if(lens != null && power >= demand * lens.drainMod) {
 				isOn = true;
-				EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
+				EnumFacing dir = EnumFacing.byIndex(this.getBlockMetadata());
 				for(int i = 1; i <= range; i++) {
 	
-					int x = pos.getX() + dir.getFrontOffsetX() * i;
-					int y = pos.getY() + dir.getFrontOffsetY() * i;
-					int z = pos.getZ() + dir.getFrontOffsetZ() * i;
+					int x = pos.getX() + dir.getXOffset() * i;
+					int y = pos.getY() + dir.getYOffset() * i;
+					int z = pos.getZ() + dir.getZOffset() * i;
 					BlockPos pos1 = new BlockPos(x, y, z);
 					
 					TileEntity te = world.getTileEntity(pos1);

@@ -1,22 +1,20 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Function;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Function;
 
 public class ItemList {
 
@@ -62,10 +60,10 @@ public class ItemList {
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = tes.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
-		RenderHelper.drawGuiRectBatchedColor(posX, posY, 0, 0, width, itemNames.size()*6+4, 1, 1, r, g, b, alpha);
+		NTMRenderHelper.drawGuiRectBatchedColor(posX, posY, 0, 0, width, itemNames.size()*6+4, 1, 1, r, g, b, alpha);
 		int idx = getMouseoverIndex(mouseX, mouseY);
 		if(idx != -1){
-			RenderHelper.drawGuiRectBatchedColor(posX, posY+idx*6+2, 0, 0, width, 5, 1, 1, r+0.1F, g+0.1F, b+0.1F, alpha);
+			NTMRenderHelper.drawGuiRectBatchedColor(posX, posY+idx*6+2, 0, 0, width, 5, 1, 1, r+0.1F, g+0.1F, b+0.1F, alpha);
 		}
 		tes.draw();
 		GlStateManager.disableBlend();
@@ -91,7 +89,7 @@ public class ItemList {
 		if(isClosed)
 			return false;
 		boolean didAction = false;
-		if(child != null && RenderHelper.intersects2DBox(x, y, child.getBoundingBox())){
+		if(child != null && NTMRenderHelper.intersects2DBox(x, y, child.getBoundingBox())){
 			return child.mouseClicked(x, y);
 		} else {
 			if(child != null){

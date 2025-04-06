@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.hbm.items.ModItems;
 
-import api.hbm.energy.IBatteryItem;
+import api.hbm.energymk2.IBatteryItem;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -18,7 +18,7 @@ public class ControlTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.pellet_rtg != null){
 			return new ItemStack(ModItems.pellet_rtg);
 		}

@@ -1,7 +1,5 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -12,9 +10,7 @@ import com.hbm.packet.PacketSpecialDeath;
 import com.hbm.particle.bullet_hit.ParticleDecalFlow;
 import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
-import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
@@ -39,10 +35,12 @@ import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class ItemWandD extends Item {
 
 	public ItemWandD(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -68,9 +66,11 @@ public class ItemWandD extends Item {
 				MainRegistry.z--;
 			if (b == ModBlocks.red_pylon) {
 				TileEntityPylonBase te = (TileEntityPylonBase) world.getTileEntity(pos);
-				for(int i = 0; i < te.connected.size(); i++)
+				for(int i = 0; i < te.connected.size(); i++){
+					int[] coords = te.connected.get(i);
 					if(world.isRemote)
-						player.sendMessage(new TextComponentString(te.connected.get(i).getX() + " " + te.connected.get(i).getY() + " " + te.connected.get(i).getZ()));
+						player.sendMessage(new TextComponentString(coords[0] + " " + coords[1] + " " + coords[2]));
+				}
 			}
 			
 			if(player.isSneaking()){
@@ -92,16 +92,12 @@ public class ItemWandD extends Item {
 		} else {
 			clickClient(world, player, pos, hitX, hitY, hitZ);
 		}
-		if(b == ModBlocks.fluid_duct_mk2){
-			System.out.println("client: " + world.isRemote + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork() + " " + ((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).getNetwork().size());
-			System.out.println(((TileEntityFFDuctBaseMk2)world.getTileEntity(pos)).connections);
-		}
 		
 		/*int x = pos.getX();
 		int y = pos.getY();
 		int z = pos.getZ();
 		Random rand = world.rand;
-		world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.getFront(rand.nextInt(4) + 2)), 2);
+		world.setBlockState(new BlockPos(x, y, z), ModBlocks.safe.getDefaultState().withProperty(BlockStorageCrate.FACING, EnumFacing.byIndex(rand.nextInt(4) + 2)), 2);
 		WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(10),
 				(TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z)), rand.nextInt(4) + 3);
 		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setPins(rand.nextInt(999) + 1);

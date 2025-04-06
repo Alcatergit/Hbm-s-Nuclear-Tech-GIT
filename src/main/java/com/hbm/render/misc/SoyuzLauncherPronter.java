@@ -1,12 +1,10 @@
 package com.hbm.render.misc;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
+import org.lwjgl.opengl.GL11;
 
 public class SoyuzLauncherPronter {
 

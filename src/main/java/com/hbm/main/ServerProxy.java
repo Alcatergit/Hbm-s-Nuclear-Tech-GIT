@@ -1,6 +1,8 @@
 package com.hbm.main;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -10,12 +12,14 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.registry.IRegistry;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
@@ -42,7 +46,9 @@ public class ServerProxy
 	public AudioWrapper getLoopedSoundStartStop(World world, SoundEvent sound, SoundEvent start, SoundEvent stop, SoundCategory cat, float x, float y, float z, float volume, float pitch){return null;}
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
-	
+
+	public void init(FMLInitializationEvent evt) {}
+
 	public void checkGLCaps(){};
 	
 	public File getDataDir(){
@@ -70,10 +76,24 @@ public class ServerProxy
 	public void playSound(String sound, Object data) { }
 	
 	public void displayTooltip(String msg) { }
+
+	public void displayTooltipLegacy(String msg, int id) {
+		displayTooltipLegacy(msg, 1000, id);
+	}
+	public void displayTooltipLegacy(String msg, int time, int id) { }
 	
 	public void setRecoil(float rec){};
+
+	public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) { }
 	
 	public boolean isVanished(Entity e) {
 		return false;
+	}
+
+	public List<ItemStack> getSubItems(ItemStack stack) {
+
+		List<ItemStack> list = new ArrayList();
+		list.add(stack);
+		return list;
 	}
 }

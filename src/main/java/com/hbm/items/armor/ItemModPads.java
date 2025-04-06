@@ -1,19 +1,18 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
-
-import net.minecraft.util.DamageSource;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
+
+import java.util.List;
 
 public class ItemModPads extends ItemArmorMod {
 

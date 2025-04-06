@@ -1,15 +1,8 @@
 package com.hbm.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.items.ModItems;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,6 +10,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 
@@ -28,15 +26,15 @@ public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 	protected TSmokeRenderer(RenderManager renderManager) {
 		super(renderManager);
 		this.field_94151_a = ModItems.nuclear_waste;
-		textures.put(ModItems.d_smoke1, RenderHelper.getItemTexture(ModItems.d_smoke1));
-		textures.put(ModItems.d_smoke2, RenderHelper.getItemTexture(ModItems.d_smoke2));
-		textures.put(ModItems.d_smoke3, RenderHelper.getItemTexture(ModItems.d_smoke3));
-		textures.put(ModItems.d_smoke4, RenderHelper.getItemTexture(ModItems.d_smoke4));
-		textures.put(ModItems.d_smoke5, RenderHelper.getItemTexture(ModItems.d_smoke5));
-		textures.put(ModItems.d_smoke6, RenderHelper.getItemTexture(ModItems.d_smoke6));
-		textures.put(ModItems.d_smoke7, RenderHelper.getItemTexture(ModItems.d_smoke7));
-		textures.put(ModItems.d_smoke8, RenderHelper.getItemTexture(ModItems.d_smoke8));
-		textures.put(ModItems.nuclear_waste, RenderHelper.getItemTexture(ModItems.nuclear_waste));
+		textures.put(ModItems.d_smoke1, NTMRenderHelper.getItemTexture(ModItems.d_smoke1));
+		textures.put(ModItems.d_smoke2, NTMRenderHelper.getItemTexture(ModItems.d_smoke2));
+		textures.put(ModItems.d_smoke3, NTMRenderHelper.getItemTexture(ModItems.d_smoke3));
+		textures.put(ModItems.d_smoke4, NTMRenderHelper.getItemTexture(ModItems.d_smoke4));
+		textures.put(ModItems.d_smoke5, NTMRenderHelper.getItemTexture(ModItems.d_smoke5));
+		textures.put(ModItems.d_smoke6, NTMRenderHelper.getItemTexture(ModItems.d_smoke6));
+		textures.put(ModItems.d_smoke7, NTMRenderHelper.getItemTexture(ModItems.d_smoke7));
+		textures.put(ModItems.d_smoke8, NTMRenderHelper.getItemTexture(ModItems.d_smoke8));
+		textures.put(ModItems.nuclear_waste, NTMRenderHelper.getItemTexture(ModItems.nuclear_waste));
 
 	}
 
@@ -103,13 +101,13 @@ public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 		float f6 = 0.25F;
 		GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		RenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.startDrawingTexturedQuads();
 		// p_77026_1_.setNormal(0.0F, 1.0F, 0.0F);
-		RenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
-		RenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
-		RenderHelper.draw();
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
+		NTMRenderHelper.draw();
 	}
 
 	@Override

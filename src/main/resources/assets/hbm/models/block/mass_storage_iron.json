@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"top": "hbm:blocks/mass_storage_top_iron",
+		"bottom": "hbm:blocks/mass_storage_top_iron",
+		"side": "hbm:blocks/mass_storage_side_iron"
+	}
+}

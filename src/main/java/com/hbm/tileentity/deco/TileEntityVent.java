@@ -1,16 +1,15 @@
 package com.hbm.tileentity.deco;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
 import com.hbm.entity.particle.EntityPinkCloudFX;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public class TileEntityVent extends TileEntity implements ITickable {
 
@@ -18,7 +17,7 @@ public class TileEntityVent extends TileEntity implements ITickable {
 	
 	@Override
 	public void update() {
-		if(!world.isRemote && world.isBlockIndirectlyGettingPowered(pos) > 0) {
+		if(!world.isRemote && world.getStrongPower(pos) > 0) {
 			Block b = world.getBlockState(pos).getBlock();
 
 			if(b == ModBlocks.vent_chlorine) {

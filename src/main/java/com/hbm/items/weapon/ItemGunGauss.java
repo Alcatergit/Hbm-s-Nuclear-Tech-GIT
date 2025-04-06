@@ -1,12 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.items.ModItems;
@@ -18,20 +11,14 @@ import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
 import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunFXPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.GunFXPacket.FXType;
-import com.hbm.particle.tau.ParticleTauBeam;
-import com.hbm.particle.tau.ParticleTauHit;
-import com.hbm.particle.tau.ParticleTauLightning;
-import com.hbm.particle.tau.ParticleTauMuzzleLightning;
-import com.hbm.particle.tau.ParticleTauParticleFirstPerson;
-import com.hbm.particle.tau.ParticleTauRay;
-import com.hbm.render.RenderHelper;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.particle.tau.*;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -53,6 +40,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemGunGauss extends ItemGunBase {
 	
@@ -99,7 +91,7 @@ public class ItemGunGauss extends ItemGunBase {
 				r.entityHit.attackEntityFrom(ModDamageSource.causeTauDamage(player, null), damage);
 				break;
 			} else {
-				Vec3d normal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
+				Vec3d normal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
 				if(Math.acos(normal.dotProduct(direction.scale(-1))) > Math.toRadians(20)){
 					switch(r.sideHit.getAxis()){
 					case X:
@@ -129,7 +121,7 @@ public class ItemGunGauss extends ItemGunBase {
 						newDirection.rotateAroundX((float) Math.toRadians(angles.yCoord-90));
 						newDirection.rotateAroundY((float) Math.toRadians(angles.xCoord));
 						newDirection = newDirection.mult(3);
-						RayTraceResult r2 = Library.rayTraceIncludeEntities(world, r.hitVec.addVector(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01), r.hitVec.addVector(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord), player);
+						RayTraceResult r2 = Library.rayTraceIncludeEntities(world, r.hitVec.add(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01), r.hitVec.add(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord), player);
 						if(r2 != null && r2.typeOfHit == Type.BLOCK){
 							Vec3d vec1 = r2.hitVec.add(new Vec3d(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01));
 							Vec3d vec2 = r.hitVec.add(new Vec3d(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord));
@@ -232,7 +224,7 @@ public class ItemGunGauss extends ItemGunBase {
 				hitPoints.add(direction.scale(40).add(prevPos));
 				break;
 			} else if(r.typeOfHit == Type.ENTITY){
-				Vec3d normal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
+				Vec3d normal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
 				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleTauHit(world, r.hitVec.x, r.hitVec.y, r.hitVec.z, 0.5F, normal));
 				hitPoints.add(r.hitVec);
 				switch(r.sideHit.getAxis()){
@@ -273,7 +265,7 @@ public class ItemGunGauss extends ItemGunBase {
 				break;
 			} else {
 				hitPoints.add(r.hitVec);
-				Vec3d normal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
+				Vec3d normal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
 				Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleTauHit(world, r.hitVec.x, r.hitVec.y, r.hitVec.z, 0.75F, normal));
 				if(Math.acos(normal.dotProduct(direction.scale(-1))) > Math.toRadians(20)){
 					switch(r.sideHit.getAxis()){
@@ -304,7 +296,7 @@ public class ItemGunGauss extends ItemGunBase {
 						newDirection.rotateAroundX((float) Math.toRadians(angles.yCoord-90));
 						newDirection.rotateAroundY((float) Math.toRadians(angles.xCoord));
 						newDirection = newDirection.mult(3);
-						RayTraceResult r2 = Library.rayTraceIncludeEntities(world, r.hitVec.addVector(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01), r.hitVec.addVector(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord), shooter);
+						RayTraceResult r2 = Library.rayTraceIncludeEntities(world, r.hitVec.add(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01), r.hitVec.add(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord), shooter);
 						if(r2 != null && r2.typeOfHit == Type.BLOCK){
 							Vec3d vec1 = r2.hitVec.add(new Vec3d(newDirection.xCoord*0.01, newDirection.yCoord*0.01, newDirection.zCoord*0.01));
 							Vec3d vec2 = r.hitVec.add(new Vec3d(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord));
@@ -315,7 +307,7 @@ public class ItemGunGauss extends ItemGunBase {
 							ParticleTauRay ray = new ParticleTauRay(world, new Vec3d[]{r.hitVec, new Vec3d(newDirection.xCoord, newDirection.yCoord, newDirection.zCoord).add(r.hitVec)}, 0.25F);
 							Minecraft.getMinecraft().effectRenderer.addEffect(ray);
 						} else if(r2.typeOfHit == Type.ENTITY){
-							normal = new Vec3d(r2.sideHit.getFrontOffsetX(), r2.sideHit.getFrontOffsetY(), r2.sideHit.getFrontOffsetZ());
+							normal = new Vec3d(r2.sideHit.getXOffset(), r2.sideHit.getYOffset(), r2.sideHit.getZOffset());
 							Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleTauHit(world, r2.hitVec.x, r2.hitVec.y, r2.hitVec.z, 0.5F, normal));
 							ParticleTauRay ray = new ParticleTauRay(world, new Vec3d[]{r.hitVec, r2.hitVec}, 0.25F);
 							Minecraft.getMinecraft().effectRenderer.addEffect(ray);
@@ -356,7 +348,7 @@ public class ItemGunGauss extends ItemGunBase {
 						} else {
 							ParticleTauRay ray = new ParticleTauRay(world, new Vec3d[]{r.hitVec, r2.hitVec}, 0.25F);
 							Minecraft.getMinecraft().effectRenderer.addEffect(ray);
-							normal = new Vec3d(r2.sideHit.getFrontOffsetX(), r2.sideHit.getFrontOffsetY(), r2.sideHit.getFrontOffsetZ());
+							normal = new Vec3d(r2.sideHit.getXOffset(), r2.sideHit.getYOffset(), r2.sideHit.getZOffset());
 							Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleTauHit(world, r2.hitVec.x, r2.hitVec.y, r2.hitVec.z, 0.75F, normal));
 						}
 					}
@@ -436,8 +428,8 @@ public class ItemGunGauss extends ItemGunBase {
 		GlStateManager.color(0.9F, 0.9F, 0F, 1F);
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE, SourceFactor.ONE, DestFactor.ZERO);
-		RenderHelper.drawGuiRect(x - 2F, y - 2F, 0, 0, 4, 4, 1, 1);
-		RenderHelper.resetColor();
+		NTMRenderHelper.drawGuiRect(x - 2F, y - 2F, 0, 0, 4, 4, 1, 1);
+		NTMRenderHelper.resetColor();
 		GlStateManager.disableBlend();
 	}
 	

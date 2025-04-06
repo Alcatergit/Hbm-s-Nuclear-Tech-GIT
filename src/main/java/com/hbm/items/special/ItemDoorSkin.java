@@ -1,9 +1,8 @@
 package com.hbm.items.special;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.interfaces.IDoor;
 import com.hbm.items.ModItems;
-import com.hbm.blocks.BlockDummyable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
@@ -19,7 +18,7 @@ public class ItemDoorSkin extends Item {
 	
 	public ItemDoorSkin(String s, String tex) {
 		this.tex = tex;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

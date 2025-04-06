@@ -3,18 +3,13 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.machine.MachineRtgFurnace;
 import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.items.ModItems;
 import com.hbm.util.RTGUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITickable {
 

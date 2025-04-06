@@ -1,18 +1,18 @@
 package com.hbm.inventory;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import com.hbm.items.ModItems;
 import com.hbm.blocks.ModBlocks;
-import static com.hbm.inventory.OreDictManager.*;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
-
+import com.hbm.items.ModItems;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+import static com.hbm.inventory.OreDictManager.U;
 
 public class NuclearTransmutationRecipes {
 

@@ -1,10 +1,10 @@
 package com.hbm.inventory.control_panel;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ControlEvent {
 

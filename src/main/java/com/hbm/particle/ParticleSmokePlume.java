@@ -54,7 +54,7 @@ public class ParticleSmokePlume extends Particle {
 			this.setExpired();
 		}
         
-		double bak = new Vec3d(motionX, motionY, motionZ).lengthVector();
+		double bak = new Vec3d(motionX, motionY, motionZ).length();
 		
         this.move(this.motionX, this.motionY, this.motionZ);
         

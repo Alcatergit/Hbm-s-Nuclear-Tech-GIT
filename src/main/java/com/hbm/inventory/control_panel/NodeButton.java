@@ -1,16 +1,12 @@
 package com.hbm.inventory.control_panel;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.control_panel.nodes.Node;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-
-import java.util.function.Consumer;
+import org.lwjgl.opengl.GL11;
 
 public class NodeButton extends NodeElement {
 
@@ -26,7 +22,7 @@ public class NodeButton extends NodeElement {
         Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         float x = offsetX+4;
         float y = offsetY+8;
-        RenderHelper.drawGuiRectBatchedColor(x, y, 0F, 0.890625F, 32, 6, 0.609375F, 0.984375F, 1, 1, 1, 1);
+        NTMRenderHelper.drawGuiRectBatchedColor(x, y, 0F, 0.890625F, 32, 6, 0.609375F, 0.984375F, 1, 1, 1, 1);
         Tessellator.getInstance().draw();
 
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
@@ -40,7 +36,7 @@ public class NodeButton extends NodeElement {
 
     @Override
     public boolean onClick(float x, float y) {
-        if (RenderHelper.intersects2DBox(x, y, getBox())) {
+        if (NTMRenderHelper.intersects2DBox(x, y, getBox())) {
             return true;
         }
         return false;

@@ -1,20 +1,19 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.items.ModItems;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemSatChip extends Item {
 
 	public ItemSatChip(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

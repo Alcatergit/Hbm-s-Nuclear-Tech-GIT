@@ -1,10 +1,9 @@
 package com.hbm.render;
 
-import java.nio.ByteBuffer;
-
+import net.minecraft.client.renderer.GLAllocation;
 import org.lwjgl.opengl.GL11;
 
-import net.minecraft.client.renderer.GLAllocation;
+import java.nio.ByteBuffer;
 
 public class Vbo {
 

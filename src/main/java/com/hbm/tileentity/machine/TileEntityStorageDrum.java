@@ -1,32 +1,20 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.StorageDrumRecipes;
-import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.items.ModItems;
 import com.hbm.hazard.HazardSystem;
-
+import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.util.ContaminationUtil.ContaminationType;
-import com.hbm.util.ContaminationUtil.HazardType;
-
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -70,9 +58,9 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 			for(int i = 0; i < 24; i++) {
 				
 				if(!inventory.getStackInSlot(i).isEmpty()) {
-					
+
 					ItemStack itemStack = inventory.getStackInSlot(i);
-					
+
 					if(world.getTotalWorldTime() % 20 == 0) {
 						rad += HazardSystem.getRawRadsFromStack(itemStack);
 					}

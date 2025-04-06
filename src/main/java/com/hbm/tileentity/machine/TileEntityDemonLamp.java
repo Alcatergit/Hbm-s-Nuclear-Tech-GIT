@@ -1,12 +1,9 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.tileentity.TileEntity;
@@ -17,6 +14,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityDemonLamp extends TileEntity implements ITickable {
 
@@ -37,7 +36,7 @@ public class TileEntityDemonLamp extends TileEntity implements ITickable {
 		for(EntityLivingBase e : entities) {
 
 			Vec3 vec = Vec3.createVectorHelper(e.posX - (x + 0.5), (e.posY + e.getEyeHeight()) - (y + 0.5), e.posZ - (z + 0.5));
-			double len = vec.lengthVector();
+			double len = vec.length();
 			vec = vec.normalize();
 
 			float res = 0;

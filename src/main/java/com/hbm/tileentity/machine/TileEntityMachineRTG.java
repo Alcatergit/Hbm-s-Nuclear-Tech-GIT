@@ -1,30 +1,31 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
+import api.hbm.energymk2.IEnergyProviderMK2;
+import com.hbm.inventory.container.ContainerMachineRTG;
+import com.hbm.inventory.gui.GUIMachineRTG;
+import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.items.machine.ItemRTGPellet;
+import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.util.RTGUtil;
-
-import api.hbm.energy.IEnergyGenerator;
+import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITickable, IEnergyGenerator {
+public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITickable, IEnergyProviderMK2, IGUIProvider {
 
 	public ItemStackHandler inventory;
 	
@@ -60,16 +61,17 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 				return stack;
 			}
 
-			public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-				return !isItemValid(slot, itemStack);
-			}
+			//Alcater moment
+//			public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+//				return !isItemValid(slot, itemStack);
+//			}
 
-			@Override
-			public ItemStack extractItem(int slot, int amount, boolean simulate) {
-				if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
-					return super.extractItem(slot, amount, simulate);
-				return ItemStack.EMPTY;
-			}
+//			@Override
+//			public ItemStack extractItem(int slot, int amount, boolean simulate) {
+//				if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
+//					return super.extractItem(slot, amount, simulate);
+//				return ItemStack.EMPTY;
+//			}
 		};
 	}
 	
@@ -77,7 +79,8 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 	public void update() {
 		if(!world.isRemote)
 		{
-			this.sendPower(world, pos);
+			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
+				this.tryProvide(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ, dir);
 			int[] slots = new int[inventory.getSlots()];
 			for(int i = 0; i < inventory.getSlots();i++){
 				slots[i] = i;
@@ -87,9 +90,9 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 			if(heat > heatMax)
 				heat = heatMax;
 			
-			power += heat*5;
-			if(power > maxPower)
-				power = maxPower;
+			this.power += heat* 5L;
+			if(this.power > maxPower)
+				this.power = maxPower;
 			
 			
 			detectAndSendChanges();
@@ -125,7 +128,8 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 	}
 	
 	public boolean hasPower() {
-		return power > 0;
+		return this.power > 0;
+
 	}
 	
 	public boolean hasHeat() {
@@ -197,4 +201,17 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 	public long getMaxPower() {
 		return maxPower;
 	}
+
+	@Override
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new ContainerMachineRTG(player.inventory, this);
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z) {
+		return new GUIMachineRTG(player.inventory, this);
+	}
+
+
 }

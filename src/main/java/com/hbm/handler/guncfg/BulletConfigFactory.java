@@ -381,7 +381,7 @@ public class BulletConfigFactory {
 				if(bullet.shooter == null || !(bullet.shooter instanceof EntityPlayer))
 					return;
 				
-				if(Vec3.createVectorHelper(bullet.posX - bullet.shooter.posX, bullet.posY - bullet.shooter.posY, bullet.posZ - bullet.shooter.posZ).lengthVector() > 100)
+				if(Vec3.createVectorHelper(bullet.posX - bullet.shooter.posX, bullet.posY - bullet.shooter.posY, bullet.posZ - bullet.shooter.posZ).length() > 100)
 					return;
 
 				RayTraceResult mop = Library.rayTraceIncludeEntities((EntityPlayer)bullet.shooter, 200, 1);
@@ -395,12 +395,12 @@ public class BulletConfigFactory {
 
 				Vec3 vec = Vec3.createVectorHelper(mop.hitVec.x - bullet.posX, mop.hitVec.y - bullet.posY, mop.hitVec.z - bullet.posZ);
 
-				if(vec.lengthVector() < 1)
+				if(vec.length() < 1)
 					return;
 
 				vec = vec.normalize();
 
-				double speed = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).lengthVector();
+				double speed = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).length();
 
 				bullet.motionX = vec.xCoord * speed;
 				bullet.motionY = vec.yCoord * speed;
@@ -433,7 +433,7 @@ public class BulletConfigFactory {
 					Vec3 delta = Vec3.createVectorHelper(target.posX - bullet.posX, target.posY + target.height / 2 - bullet.posY, target.posZ - bullet.posZ);
 					delta = delta.normalize();
 
-					double vel = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).lengthVector();
+					double vel = Vec3.createVectorHelper(bullet.motionX, bullet.motionY, bullet.motionZ).length();
 
 					bullet.motionX = delta.xCoord * vel;
 					bullet.motionY = delta.yCoord * vel;

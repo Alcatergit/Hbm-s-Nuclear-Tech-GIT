@@ -13,7 +13,6 @@ public class TileEntityTurretBrandon extends TileEntityTurretBaseNT {
 	@Override
 	public void updateFiringTick() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

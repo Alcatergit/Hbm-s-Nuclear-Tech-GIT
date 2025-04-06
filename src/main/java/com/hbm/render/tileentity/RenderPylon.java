@@ -1,21 +1,19 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.model.ModelPylon;
 import com.hbm.tileentity.network.energy.TileEntityPylon;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import org.lwjgl.opengl.GL11;
 
 public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 
@@ -53,8 +51,8 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 		GL11.glTranslatef((float) x, (float) y, (float) z);
 		for (int i = 0; i < pyl.connected.size(); i++) {
 
-			BlockPos otherPylon = pyl.connected.get(i);
-			TileEntity tile = pyl.getWorld().getTileEntity(otherPylon);
+			int[] otherPylon = pyl.connected.get(i);
+			TileEntity tile = pyl.getWorld().getTileEntity(new BlockPos(otherPylon[0], otherPylon[1], otherPylon[2]));
 
 			if(tile instanceof TileEntityPylonBase) {
 				TileEntityPylonBase pylon = (TileEntityPylonBase) tile;
@@ -74,8 +72,8 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 					Vec3 first = m1[line % m1.length];
 					Vec3 second = m2[secondIndex];
 
-					Vec3 mid = new Vec3(otherPylon).add(second).subtract(new Vec3(pyl.getPos()).add(first));
-					drawLine(first, first.add(new Vec3(mid.xCoord*0.5, mid.yCoord*0.5, mid.zCoord*0.5)), lineCount == 1 ? 0.03125F : 0.055F, mid.lengthVector()*0.045);
+					Vec3 mid = new Vec3(new BlockPos(otherPylon[0], otherPylon[1], otherPylon[2])).add(second).subtract(new Vec3(pyl.getPos()).add(first));
+					drawLine(first, first.add(new Vec3(mid.xCoord*0.5, mid.yCoord*0.5, mid.zCoord*0.5)), lineCount == 1 ? 0.03125F : 0.055F, mid.length()*0.045);
 				}
 			}
 		}

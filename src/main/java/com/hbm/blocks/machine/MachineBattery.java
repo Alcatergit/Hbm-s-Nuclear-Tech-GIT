@@ -1,17 +1,11 @@
 package com.hbm.blocks.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.util.I18nUtil;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.ILookOverlay;
-import com.hbm.lib.Library;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -19,30 +13,30 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
-import net.minecraft.tileentity.TileEntity;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	private long maxPower;
+	private final long maxPower;
 
 	public MachineBattery(Material materialIn, long power, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		this.maxPower = power;
@@ -71,7 +65,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 			IBlockState iblockstate1 = worldIn.getBlockState(pos.south());
 			IBlockState iblockstate2 = worldIn.getBlockState(pos.west());
 			IBlockState iblockstate3 = worldIn.getBlockState(pos.east());
-			EnumFacing enumfacing = (EnumFacing) state.getValue(FACING);
+			EnumFacing enumfacing = state.getValue(FACING);
 
 			if (enumfacing == EnumFacing.NORTH && iblockstate.isFullBlock() && !iblockstate1.isFullBlock()) {
 				enumfacing = EnumFacing.SOUTH;
@@ -94,17 +88,17 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	@Override
 	protected BlockStateContainer createBlockState() {
-		return new BlockStateContainer(this, new IProperty[] { FACING });
+		return new BlockStateContainer(this, FACING);
 	}
 
 	@Override
 	public int getMetaFromState(IBlockState state) {
-		return ((EnumFacing) state.getValue(FACING)).getIndex();
+		return state.getValue(FACING).getIndex();
 	}
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;
@@ -115,12 +109,12 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
-		return state.withProperty(FACING, rot.rotate((EnumFacing) state.getValue(FACING)));
+		return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
 	}
 
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn) {
-		return state.withRotation(mirrorIn.toRotation((EnumFacing) state.getValue(FACING)));
+		return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
 	}
 
 	@Override
@@ -134,13 +128,12 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 			
 			ItemStack drop = new ItemStack(this);
 			TileEntity te = world.getTileEntity(pos);
-			if (te instanceof TileEntityMachineBattery) {
-				TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
-			
-				NBTTagCompound nbt = new NBTTagCompound();
+			if (te instanceof TileEntityMachineBattery battery) {
+
+                NBTTagCompound nbt = new NBTTagCompound();
 				battery.writeNBT(nbt);
 
-				if(!nbt.hasNoTags()) {
+				if(!nbt.isEmpty()) {
 					drop.setTagCompound(nbt);
 				}
 			}
@@ -156,9 +149,8 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 		TileEntity te = worldIn.getTileEntity(pos);
 		if(stack.hasTagCompound()){
-			if (te instanceof TileEntityMachineBattery) {
-				TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
-				if(stack.hasDisplayName()) {
+			if (te instanceof TileEntityMachineBattery battery) {
+                if(stack.hasDisplayName()) {
 					battery.setCustomName(stack.getDisplayName());
 				}
 				try {
@@ -195,7 +187,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		TileEntity tileentity = worldIn.getTileEntity(pos);
 		if (tileentity instanceof TileEntityMachineBattery) {
-			InventoryHelper.dropInventoryItems(worldIn, pos, (TileEntityMachineBattery) tileentity);
+			InventoryHelper.dropInventoryItems(worldIn, pos, tileentity);
 			worldIn.updateComparatorOutputLevel(pos, this);
 		}
 
@@ -217,11 +209,10 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 		
 		TileEntity te = worldIn.getTileEntity(pos);
 		
-		if(!(te instanceof TileEntityMachineBattery))
+		if(!(te instanceof TileEntityMachineBattery battery))
 			return 0;
-		
-		TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
-		return (int)battery.getPowerRemainingScaled(15L);
+
+        return (int)battery.getPowerRemainingScaled(15L);
 	}
 
 	@Override
@@ -257,20 +248,19 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 			
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		
-		if(!(te instanceof TileEntityMachineBattery))
+		if(!(te instanceof TileEntityMachineBattery battery))
 			return;
 
-		TileEntityMachineBattery battery = (TileEntityMachineBattery) te;
-		List<String> text = new ArrayList();
+        List<String> text = new ArrayList();
 		text.add(Library.getShortNumber(battery.power) + "/" + Library.getShortNumber(getMaxPower()) + " HE");
-		if(battery.powerDelta == 0){
+		if(battery.delta == 0){
 			text.add("§e-- §r0HE/s");
 		}
-		else if(battery.powerDelta > 0){
-			text.add("§a-> §r" + Library.getShortNumber(battery.powerDelta) + "HE/s");
+		else if(battery.delta > 0){
+			text.add("§a-> §r" + Library.getShortNumber(battery.delta) + "HE/s");
 		}
 		else{
-			text.add("§c<- §r" + Library.getShortNumber(-battery.powerDelta) + "HE/s");
+			text.add("§c<- §r" + Library.getShortNumber(-battery.delta) + "HE/s");
 		}
 		text.add("&["+Library.getColorProgress((double)battery.power/(double)getMaxPower())+"&]    "+Library.getPercentage((double)battery.power/(double)getMaxPower())+"%");
 		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);

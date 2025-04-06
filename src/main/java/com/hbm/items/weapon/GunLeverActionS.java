@@ -1,15 +1,11 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,6 +32,9 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+import java.util.Random;
+
 public class GunLeverActionS extends Item {
 
 	Random rand = new Random();
@@ -44,7 +43,7 @@ public class GunLeverActionS extends Item {
 	public int dmgMax = 16;
 	
 	public GunLeverActionS(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		this.setMaxDamage(500);
@@ -145,9 +144,9 @@ public class GunLeverActionS extends Item {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		if(MainRegistry.polaroidID == 11)
-			return ("" + I18n.format(this.getUnlocalizedName() + "_2.name")).trim();
+			return ("" + I18n.format(this.getTranslationKey() + "_2.name")).trim();
 		else
-			return ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+			return ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 	}
 	
 	@Override

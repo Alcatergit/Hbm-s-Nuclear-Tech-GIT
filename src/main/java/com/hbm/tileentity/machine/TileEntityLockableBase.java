@@ -1,15 +1,12 @@
 package com.hbm.tileentity.machine;
 
 import api.hbm.block.IToolable.ToolType;
-import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemTooling;
 import com.hbm.items.tool.ItemKeyPin;
+import com.hbm.items.tool.ItemTooling;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -78,24 +75,25 @@ public class TileEntityLockableBase extends TileEntity {
 	}
 	
 	public boolean canAccess(EntityPlayer player) {
-		
-		if(player == null) { //!isLocked || 
-			return false;
-		} else {
-			ItemStack stack = player.getHeldItemMainhand();
-			
-			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				return true;
-			}
-			
-			if(stack.getItem() == ModItems.key_red) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				return true;
-			}
-			
-			return tryPick(player);
+		if(!isLocked) {
+			return true;
 		}
+		if(player == null) { //!isLocked ||
+			return false;
+		}
+
+		ItemStack stack = player.getHeldItemMainhand();
+
+		if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			return true;
+		}
+
+		if(stack.getItem() == ModItems.key_red) {
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			return true;
+		}
+		return tryPick(player);
 	}
 
 	public static int hasLockPickTools(EntityPlayer player){

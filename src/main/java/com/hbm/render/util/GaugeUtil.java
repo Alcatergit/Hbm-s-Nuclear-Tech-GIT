@@ -1,14 +1,12 @@
 package com.hbm.render.util;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GaugeUtil {
 

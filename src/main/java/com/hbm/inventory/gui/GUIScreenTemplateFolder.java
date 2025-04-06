@@ -1,24 +1,16 @@
 package com.hbm.inventory.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.PressRecipes;
-import com.hbm.forgefluid.FluidTypeHandler;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCassette;
-import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.CrucibleRecipes;
-import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.ItemFolderPacket;
 import com.hbm.packet.PacketDispatcher;
-
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
@@ -26,15 +18,19 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.input.Keyboard;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Locale;
 
 public class GUIScreenTemplateFolder extends GuiScreen {
 	
@@ -63,18 +59,20 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 
 		sub = sub.toLowerCase();
 
+		outer:
 		for(ItemStack stack : allStacks) {
-			if(stack.getDisplayName().toLowerCase().contains(sub)) {
-				stacks.add(stack);
-			} else if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
-				Fluid fluid = ItemForgeFluidIdentifier.getType(stack);
-				if(I18nUtil.resolveKey(fluid.getUnlocalizedName()).toLowerCase().contains(sub)) {
-					stacks.add(stack);
+			for(Object o : stack.getTooltip(MainRegistry.proxy.me(), ITooltipFlag.TooltipFlags.ADVANCED)) {
+				if(o instanceof String) {
+					String text = (String) o;
+					if(text.toLowerCase(Locale.US).contains(sub)) {
+						stacks.add(stack);
+						continue outer;
+					}
 				}
-			} else if (stack.getItem() instanceof ItemCassette) {
-				TrackType track = ItemCassette.getType(stack);
-
-				if (I18nUtil.resolveKey(track.getTrackTitle()).toLowerCase().contains(sub)){
+			}
+			if(stack.getItem() == ModItems.forge_fluid_identifier) {
+				FluidType fluid = Fluids.fromID(stack.getItemDamage());
+				if(fluid.getLocalizedName().contains(sub)) {
 					stacks.add(stack);
 				}
 			}
@@ -98,12 +96,9 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		//Tracks
     	for(int i = 1; i < ItemCassette.TrackType.values().length; i++)
 			allStacks.add(new ItemStack(ModItems.siren_track, 1, i));
-    	//Fluid IDs
-    	for(Fluid fluid : FluidRegistry.getRegisteredFluids().values()){
-    		if(FluidTypeHandler.noID(fluid)) continue;
-			allStacks.add(ItemForgeFluidIdentifier.getStackFromFluid(fluid));
-    	}
     	//Assembly Templates
+    	//for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++)
+    	//	stacks.add(new ItemStack(ModItems.assembly_template, 1, i));
     	for (int i = 0; i < AssemblerRecipes.recipeList.size(); ++i) {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("type", i);
@@ -112,12 +107,17 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 			allStacks.add(stack);
 		}
     	//Chemistry Templates
-    	for (int i: ChemplantRecipes.recipeNames.keySet()){
-			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
+		for(int i = 0; i < ChemplantRecipes.recipes.size(); i++) {
+			ChemplantRecipes.ChemRecipe chem = ChemplantRecipes.recipes.get(i);
+			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, chem.getId()));
 		}
-		//Crucible Templates
-    	for (int i: CrucibleRecipes.recipes.keySet()){
-			allStacks.add(new ItemStack(ModItems.crucible_template, 1, i));
+
+		// Fluid IDs
+		FluidType[] fluids = Fluids.getInNiceOrder();
+		for(int i = 1; i < fluids.length; i++) {
+			if(!fluids[i].hasNoID()) {
+				allStacks.add(new ItemStack(ModItems.forge_fluid_identifier, 1, fluids[i].getID()));
+			}
 		}
 		search(null);
     }
@@ -278,8 +278,6 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 						itemRender.renderItemAndEffectIntoGUI(player, AssemblerRecipes.getOutputFromTempate(stack), xPos + 1, yPos + 1);
 					else if(stack.getItem() == ModItems.chemistry_template)
 						itemRender.renderItemAndEffectIntoGUI(player, new ItemStack(ModItems.chemistry_icon, 1, stack.getItemDamage()), xPos + 1, yPos + 1);
-					else if(stack.getItem() == ModItems.crucible_template)
-						itemRender.renderItemAndEffectIntoGUI(player, CrucibleRecipes.getIcon(stack), xPos + 1, yPos + 1);
 					else
 						itemRender.renderItemAndEffectIntoGUI(player, stack, xPos + 1, yPos + 1);
 				}
@@ -290,16 +288,12 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		public void drawString(int x, int y) {
 			if(info == null || info.isEmpty())
 				return;
-			
-			String s = info;
-			if(stack != null) {
-				if(stack.getItem() instanceof ItemForgeFluidIdentifier)
-					s += (": " + I18n.format(ItemForgeFluidIdentifier.getType(stack).getUnlocalizedName()));
-				else if(stack.getItem() instanceof ItemCassette)
-					s = TrackType.getEnum(stack.getItemDamage()).getTrackTitle();
-			}
 
-			drawHoveringText(Arrays.asList(new String[] { s }), x, y);
+			if(stack != null) {
+				GUIScreenTemplateFolder.this.renderToolTip(stack, x, y);
+			} else {
+				drawHoveringText(Arrays.asList(new String[] { info }), x, y);
+			}
 		}
 		
 		public void executeAction() {
@@ -316,5 +310,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 				updateButtons();
 			}
 		}
+		
 	}
+
 }

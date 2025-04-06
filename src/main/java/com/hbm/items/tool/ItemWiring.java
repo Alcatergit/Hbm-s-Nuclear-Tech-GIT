@@ -1,31 +1,30 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
+import com.hbm.util.I18nUtil;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemWiring extends Item {
 
 	public ItemWiring(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -89,17 +88,23 @@ public class ItemWiring extends Item {
 
 							TileEntityPylonBase targetPylon = (TileEntityPylonBase) target;
 
-							if(TileEntityPylonBase.canConnect(thisPylon, targetPylon)){
-								thisPylon.addConnection(targetPylon.getPos());
-								targetPylon.addConnection(thisPylon.getPos());
-
-								if (world.isRemote)
-									player.sendMessage(new TextComponentTranslation("chat.wiring.connected"));
-							}else{
-								if(thisPylon.getConnectionType() != targetPylon.getConnectionType()){
+							switch (TileEntityPylonBase.canConnect(thisPylon, targetPylon)) {
+								case 0:
+									thisPylon.addConnection(targetPylon.getPos().getX(), target.getPos().getY(), target.getPos().getZ());
+									targetPylon.addConnection(thisPylon.getPos().getX(), thisPylon.getPos().getY(), thisPylon.getPos().getZ());
+									if (world.isRemote)
+										player.sendMessage(new TextComponentTranslation("chat.wiring.connected"));
+									break;
+								case 1:
 									if (world.isRemote)
 										player.sendMessage(new TextComponentTranslation("chat.wiring.notcompatible"));
-								}
+									break;
+								case 2:
+									player.sendMessage(new TextComponentTranslation("chat.wiring.noself"));
+									break;
+								case 3:
+									player.sendMessage(new TextComponentTranslation("chat.wiring.tofar"));
+									break;
 							}
 						}
 					}
@@ -145,7 +150,7 @@ public class ItemWiring extends Item {
 		}
 	}
 	
-	public boolean isLengthValid(int x1, int y1, int z1, int x2, int y2, int z2, int length) {
+	public boolean isLengthValid(int x1, int y1, int z1, int x2, int y2, int z2, double length) {
 		double l = Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
 		
 		return l <= length;

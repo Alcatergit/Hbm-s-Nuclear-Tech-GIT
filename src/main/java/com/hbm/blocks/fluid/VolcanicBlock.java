@@ -1,17 +1,16 @@
 package com.hbm.blocks.fluid;
 
-import java.util.Random;
-
+import com.hbm.blocks.BlockEnumMeta;
+import com.hbm.blocks.BlockEnums;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockLog;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -30,13 +29,20 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
+import static com.hbm.blocks.BlockEnumMeta.*;
+import static com.hbm.blocks.BlockEnums.*;
+import static com.hbm.blocks.BlockEnums.EnumBasaltOreType.*;
+import static com.hbm.blocks.ModBlocks.basalt_ore;
+
 public class VolcanicBlock extends BlockFluidClassic {
 
 	public VolcanicBlock(Fluid fluid, Material material, String s) {
 		super(fluid, material);
 		this.setTickRandomly(true);
 		this.setQuantaPerBlock(4);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -73,7 +79,7 @@ public class VolcanicBlock extends BlockFluidClassic {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		entity.setInWeb();
 		entity.setFire(3);
 		entity.attackEntityFrom(ModDamageSource.radiation, 2F);
@@ -107,13 +113,14 @@ public class VolcanicBlock extends BlockFluidClassic {
 			boolean canMakeGem = lavaCount + basaltCount == 6 && lavaCount < 3 && (above == ModBlocks.basalt || above == ModBlocks.volcanic_lava_block);
 			
 			if(r < 2)
-				world.setBlockState(pos, ModBlocks.basalt_sulfur.getDefaultState());
+				world.setBlockState(pos, stateFromEnum(basalt_ore, SULFUR));
+
 			else if(r == 2)
-				world.setBlockState(pos, ModBlocks.basalt_asbestos.getDefaultState());
+				world.setBlockState(pos, stateFromEnum(basalt_ore, ASBESTOS));
 			else if(r == 3)
-				world.setBlockState(pos, ModBlocks.basalt_fluorite.getDefaultState());
+				world.setBlockState(pos, stateFromEnum(basalt_ore, FLUORITE));
 			else if(r < 14 && canMakeGem)
-				world.setBlockState(pos, ModBlocks.basalt_gem.getDefaultState());
+				world.setBlockState(pos, stateFromEnum(basalt_ore, GEM));
 			else
 				world.setBlockState(pos, ModBlocks.basalt.getDefaultState());
 		}
@@ -154,22 +161,22 @@ public class VolcanicBlock extends BlockFluidClassic {
 		int z = pos.getZ();
 		if(world.getBlockState(pos.up()).getMaterial() == Material.AIR && !world.getBlockState(pos.up()).isOpaqueCube()) {
 			if(rand.nextInt(100) == 0) {
-				dx = (double) ((float) x + rand.nextFloat());
-				dy = (double) y + this.getBlockLiquidHeight(world, pos, state, this.blockMaterial);
-				dz = (double) ((float) z + rand.nextFloat());
+				dx = (float) x + rand.nextFloat();
+				dy = (double) y + this.getBlockLiquidHeight(world, pos, state, this.material);
+				dz = (float) z + rand.nextFloat();
 				world.spawnParticle(EnumParticleTypes.LAVA, dx, dy, dz, 0.0D, 0.0D, 0.0D);
 				world.playSound(null, dx, dy, dz, SoundEvents.BLOCK_LAVA_POP, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F);
 			}
 
 			if(rand.nextInt(200) == 0) {
-				world.playSound(null, (double) x, (double) y, (double) z, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F);
+				world.playSound(null, x, y, z, SoundEvents.BLOCK_LAVA_AMBIENT, SoundCategory.BLOCKS, 0.2F + rand.nextFloat() * 0.2F, 0.9F + rand.nextFloat() * 0.15F);
 			}
 		}
 
 		if(rand.nextInt(10) == 0 && world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) && !world.getBlockState(pos.down(2)).getMaterial().blocksMovement()) {
-			dx = (double) ((float) x + rand.nextFloat());
+			dx = (float) x + rand.nextFloat();
 			dy = (double) y - 1.05D;
-			dz = (double) ((float) z + rand.nextFloat());
+			dz = (float) z + rand.nextFloat();
 			world.spawnParticle(EnumParticleTypes.DRIP_LAVA, dx, dy, dz, 0.0D, 0.0D, 0.0D);
 		}
 	}

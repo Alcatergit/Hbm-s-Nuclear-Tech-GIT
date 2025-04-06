@@ -1,16 +1,15 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.oil.TileEntityMachinePumpjack;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.GL11;
 
 public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachinePumpjack> {
 	
@@ -50,15 +49,15 @@ public class RenderPumpjack extends TileEntitySpecialRenderer<TileEntityMachineP
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		GL11.glEnable(GL11.GL_LIGHTING);
-		
-		switch(pj.getBlockMetadata()) {
-		case 2: GL11.glRotatef(90, 0F, 1F, 0F); break;
-		case 4: GL11.glRotatef(180, 0F, 1F, 0F); break;
-		case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
-		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
+
+		switch(pj.getBlockMetadata() - BlockDummyable.offset) {
+			case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
+			case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
+			case 2: GL11.glRotatef(90, 0F, 1F, 0F); break;
+			case 4: GL11.glRotatef(180, 0F, 1F, 0F); break;
 		}
 		
-		float rotation = (pj.prevRotation + (pj.rotation - pj.prevRotation) * f);
+		float rotation = (pj.prevRot + (pj.rot - pj.prevRot) * f);
 
 		GL11.glShadeModel(GL11.GL_SMOOTH);
 		

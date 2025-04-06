@@ -1,7 +1,6 @@
 package com.hbm.tileentity;
 
 import com.hbm.lib.ItemStackHandlerWrapper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

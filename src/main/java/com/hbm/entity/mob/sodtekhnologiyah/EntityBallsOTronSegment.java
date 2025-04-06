@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;

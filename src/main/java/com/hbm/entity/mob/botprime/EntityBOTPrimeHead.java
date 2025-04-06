@@ -1,11 +1,8 @@
 package com.hbm.entity.mob.botprime;
 
-import java.util.List;
-
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
 import com.hbm.items.ModItems;
 import com.hbm.main.AdvancementManager;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,6 +18,8 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityBOTPrimeHead extends EntityBOTPrimeBase {
 

@@ -1,16 +1,14 @@
 package com.hbm.render.entity.missile;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.missile.EntityCarrier;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderCarrierMissile extends Render<EntityCarrier> {
 
@@ -24,7 +22,7 @@ public class RenderCarrierMissile extends Render<EntityCarrier> {
 	public void doRender(EntityCarrier rocket, double x, double y, double z, float entityYaw, float partialTicks) {
 		GL11.glPushMatrix();
 		GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
-		double[] renderPos = RenderHelper.getRenderPosFromMissile(rocket, partialTicks);
+		double[] renderPos = NTMRenderHelper.getRenderPosFromMissile(rocket, partialTicks);
 		x = renderPos[0];
 		y = renderPos[1];
 		z = renderPos[2];

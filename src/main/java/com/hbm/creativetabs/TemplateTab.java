@@ -14,7 +14,7 @@ public class TemplateTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.assembly_template != null){
 			return new ItemStack(ModItems.assembly_template);
 		}

@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-
 import net.minecraft.advancements.CriteriaTriggers;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,7 +19,7 @@ import net.minecraft.world.World;
 public class ItemBalefireMatch extends Item {
 
 	public ItemBalefireMatch(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		this.setMaxDamage(256);

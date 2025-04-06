@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.interfaces.IBomb;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDirectional;
 import net.minecraft.block.SoundType;
@@ -28,7 +27,7 @@ public class BlockSemtex extends Block implements IBomb {
 	
 	public BlockSemtex(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -46,23 +45,26 @@ public class BlockSemtex extends Block implements IBomb {
 	
 
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn){
+	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn){
 		this.explode(worldIn, pos);
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
+		if(worldIn.getStrongPower(pos) > 0){
 			this.explode(worldIn, pos);
 		}
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
+	public BombReturnCode explode(World world, BlockPos pos) {
 		if(!world.isRemote) {
 			new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 50).overrideResolution(64).explode();
 			ExplosionLarge.spawnParticles(world, pos.getX(), pos.getY(), pos.getZ(), ExplosionLarge.cloudFunction(15));
+
+			return BombReturnCode.DETONATED;
 		}
+		return BombReturnCode.UNDEFINED;
 	}
 	
 	@Override
@@ -77,7 +79,7 @@ public class BlockSemtex extends Block implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 	

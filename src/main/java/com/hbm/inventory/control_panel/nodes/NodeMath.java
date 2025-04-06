@@ -1,13 +1,7 @@
 package com.hbm.inventory.control_panel.nodes;
 
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.NodeConnection;
-import com.hbm.inventory.control_panel.NodeDropdown;
-import com.hbm.inventory.control_panel.NodeSystem;
-import com.hbm.inventory.control_panel.NodeType;
+import com.hbm.inventory.control_panel.*;
 import com.hbm.inventory.control_panel.DataValue.DataType;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 

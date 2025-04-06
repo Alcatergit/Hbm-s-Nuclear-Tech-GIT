@@ -2,7 +2,6 @@ package com.hbm.render.anim;
 
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -78,7 +77,7 @@ public class HbmAnimations {
 		if(hotbar[slot] == null)
 			return null;
 
-		if(hotbar[slot].key.equals(stack.getItem().getUnlocalizedName())) {
+		if(hotbar[slot].key.equals(stack.getItem().getTranslationKey())) {
 			return hotbar[slot];
 		}
 

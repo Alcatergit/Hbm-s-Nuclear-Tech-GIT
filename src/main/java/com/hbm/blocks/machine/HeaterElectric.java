@@ -1,8 +1,5 @@
 package com.hbm.blocks.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import api.hbm.block.IToolable;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
@@ -11,19 +8,21 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyEnergy;
 import com.hbm.tileentity.machine.TileEntityHeaterElectric;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HeaterElectric extends BlockDummyable implements ILookOverlay, ITooltipProvider, IToolable {
 
@@ -85,7 +84,7 @@ public class HeaterElectric extends BlockDummyable implements ILookOverlay, IToo
 		text.add("§a-> §r" + heater.getConsumption() + " HE/t");
 		text.add("§c<- §r" + heater.getHeatGen() + " TU/t");
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 
 	@Override

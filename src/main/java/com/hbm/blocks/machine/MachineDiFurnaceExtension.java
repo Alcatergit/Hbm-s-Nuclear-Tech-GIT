@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 public class MachineDiFurnaceExtension extends BlockContainer {
     public MachineDiFurnaceExtension(Material mat, String s) {
         super(mat);
-        this.setUnlocalizedName(s);
+        this.setTranslationKey(s);
         this.setRegistryName(s);
         this.setCreativeTab(MainRegistry.machineTab);
         ModBlocks.ALL_BLOCKS.add(this);

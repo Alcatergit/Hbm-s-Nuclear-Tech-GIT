@@ -1,23 +1,23 @@
 package com.hbm.render.amlfrom1710;
 
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.nio.ShortBuffer;
-import java.util.PriorityQueue;
-
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.vertex.VertexFormat;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.*;
+import java.util.PriorityQueue;
 
 @SideOnly(Side.CLIENT)
+// Norwood: DO NOT FUCKING USE THIS. It doesn't work well, its incompatible with 1.12 render and provides no value in the longterm.
+// We should forgo any of this stuff. Base minecraft uses VBO with its vertex buffers nowdays, and uses renderlists when VBOs are disabled.
+// And no, you can't just copy-paste stuff either as it breaks. If you struggle I propose a wrapper to make our time easier.
+// Please take your time to port stuff properly and address issues using minecraft renderer, not this frankestein  abomination
+//On top of that I have depricated 90% of stuff that uses it.
+@Deprecated()
 public class Tessellator
 {
     private static int nativeBufferSize = 0x200000;
@@ -78,7 +78,6 @@ public class Tessellator
     private boolean isDrawing;
     /** The size of the buffers used (in integers). */
     private int bufferSize;
-    private static final String __OBFID = "CL_00000960";
 
     private Tessellator(int p_i1250_1_) {
     }
@@ -318,6 +317,10 @@ public class Tessellator
     public void addVertexWithUV(double x, double y, double z, double u, double v)
     {
         BufferBuilder buf = net.minecraft.client.renderer.Tessellator.getInstance().getBuffer();
+        if (buf == null) {
+            System.out.println("BufferBuilder is null");
+            return;
+        }
         buf.pos(x+xOffset, y+yOffset, z+zOffset).tex(u, v);
         if(hasColor)
             buf.color(r, g, b, a);

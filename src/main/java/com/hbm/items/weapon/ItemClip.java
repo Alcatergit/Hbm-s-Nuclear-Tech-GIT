@@ -1,11 +1,8 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
-import com.hbm.items.special.ItemSimpleConsumable;
 import com.hbm.items.ModItems;
+import com.hbm.items.special.ItemSimpleConsumable;
 import com.hbm.lib.Library;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -14,10 +11,12 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemClip extends Item {
 
 	public ItemClip(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(1);
 		this.setMaxStackSize(32);

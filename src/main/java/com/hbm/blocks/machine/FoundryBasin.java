@@ -16,12 +16,6 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class FoundryBasin extends FoundryCastingBase {
-
-	protected static final AxisAlignedBB AABB_WALL_1 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 0.125D, 1.0D);
-    protected static final AxisAlignedBB AABB_WALL_2 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 1.0D, 1.0D, 0.125D);
-    protected static final AxisAlignedBB AABB_WALL_3 = new AxisAlignedBB(0.0D, 0.0D, 0.0D, 0.125D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB AABB_WALL_4 = new AxisAlignedBB(0.875D, 0.0D, 0.0D, 1.0D, 1.0D, 1.0D);
-    protected static final AxisAlignedBB AABB_WALL_5 = new AxisAlignedBB(0.0D, 0.0D, 0.875D, 1.0D, 1.0D, 1.0D);
     
 	public FoundryBasin(String s) {
 		super(s);
@@ -32,25 +26,53 @@ public class FoundryBasin extends FoundryCastingBase {
 		return new TileEntityFoundryBasin();
 	}
 
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
-        return FULL_BLOCK_AABB;
-    }
-
     @Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_1);
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_2);
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_3);
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_4);
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_5);
+		AxisAlignedBB[] bbs = new AxisAlignedBB[] {
+				new AxisAlignedBB(pos, pos.add(1D, 0.125D, 1D)),
+				new AxisAlignedBB(pos, pos.add(1D, 1D, 0.125D)),
+				new AxisAlignedBB(pos, pos.add(0.125D, 1D, 1D)),
+				new AxisAlignedBB(pos.add(0.875, 0, 0), pos.add(1D, 1D, 1D)),
+				new AxisAlignedBB(pos.add(0, 0, 0.875), pos.add(1D, 1D, 1D)),
+		};
+
+		for(AxisAlignedBB bb : bbs) {
+			if(entityBox.intersects(bb)) {
+				collidingBoxes.add(bb);
+			}
+		}
     }
+
+	@Override
+	public boolean isOpaqueCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isBlockNormalCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockState state) {
+		return false;
+	}
+
+	@Override
+	public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
+		return false;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.999F, 1.0F);
+	}
 
 	@Override public boolean canAcceptPartialFlow(World world, BlockPos p, ForgeDirection side, MaterialStack stack) { return false; }
 	@Override public MaterialStack flow(World world, BlockPos p, ForgeDirection side, MaterialStack stack) { return stack; }
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean isSideSolid(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		return side != EnumFacing.UP;
 	}
 

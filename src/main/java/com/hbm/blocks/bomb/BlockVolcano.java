@@ -1,9 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityShrapnel;
@@ -11,7 +7,6 @@ import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -28,13 +23,17 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+
 public class BlockVolcano extends Block {
 
 	public static final PropertyInteger META = BlockDummyable.META;
 	
 	public BlockVolcano(String s) {
 		super(Material.IRON);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -42,7 +41,7 @@ public class BlockVolcano extends Block {
 	
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items){
-		if(tab == CreativeTabs.SEARCH || tab == this.getCreativeTabToDisplayOn())
+		if(tab == CreativeTabs.SEARCH || tab == this.getCreativeTab())
 			for(int i = 0; i < 4; ++i) {
 				items.add(new ItemStack(this, 1, i));
 			}

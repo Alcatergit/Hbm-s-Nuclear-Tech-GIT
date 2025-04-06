@@ -1,12 +1,10 @@
 package com.hbm.tileentity.network;
 
+import com.hbm.util.Tuple.Pair;
+import net.minecraft.world.World;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.hbm.util.Tuple.Pair;
-
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.world.World;
 
 public class RTTYSystem {
 

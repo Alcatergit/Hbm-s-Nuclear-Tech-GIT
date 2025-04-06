@@ -1,16 +1,15 @@
 package com.hbm.tileentity.machine.pile;
 
-import java.util.Random;
-
+import api.hbm.block.IPileNeutronReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.pile.BlockGraphiteRod;
 import com.hbm.render.amlfrom1710.Vec3;
-
-import api.hbm.block.IPileNeutronReceiver;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public abstract class TileEntityPileBase extends TileEntity implements ITickable {
 

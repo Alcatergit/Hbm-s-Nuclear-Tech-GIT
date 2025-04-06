@@ -1,14 +1,10 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-
-import akka.Main;
-import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubElementEventEditor extends SubElement {
 

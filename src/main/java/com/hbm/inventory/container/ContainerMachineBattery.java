@@ -1,9 +1,8 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.tileentity.machine.TileEntityMachineFENSU;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
-
+import com.hbm.tileentity.machine.TileEntityMachineFENSU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -78,7 +77,7 @@ public class ContainerMachineBattery extends Container {
 		NBTTagCompound nbt = new NBTTagCompound();
 
 		nbt.setLong("power", diFurnace.power);
-		nbt.setLong("powerDelta", diFurnace.powerDelta);
+		nbt.setLong("powerDelta", diFurnace.delta);
 		nbt.setShort("redLow", diFurnace.redLow);
 		nbt.setShort("redHigh", diFurnace.redHigh);
 		nbt.setByte("priority", (byte)diFurnace.priority.ordinal());

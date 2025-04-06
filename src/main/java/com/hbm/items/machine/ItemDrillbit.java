@@ -1,14 +1,13 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.items.ModItems;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemDrillbit extends Item {
 
@@ -17,7 +16,7 @@ public class ItemDrillbit extends Item {
 	public ItemDrillbit(EnumDrillType drillType, String s) {
 		this.drillType = drillType;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

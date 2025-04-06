@@ -1,20 +1,16 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.logic.EntityBalefire;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IBomb;
-
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -23,24 +19,27 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Random;
+
 public class DetCord extends Block implements IBomb {
 
 	public DetCord(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
 	@Override
-	public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosionIn) {
+	public void onExplosionDestroy(World world, BlockPos pos, Explosion explosionIn) {
 		this.explode(world, pos);
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
+		if(worldIn.getStrongPower(pos) > 0){
 			explode(worldIn, pos);
 		}
 	}
@@ -51,7 +50,7 @@ public class DetCord extends Block implements IBomb {
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
+	public BombReturnCode explode(World world, BlockPos pos) {
 		if(!world.isRemote) {
 			
 			world.setBlockState(pos, Blocks.AIR.getDefaultState());
@@ -85,6 +84,7 @@ public class DetCord extends Block implements IBomb {
 				}
 			}
 		}
+		return BombReturnCode.DETONATED;
 	}
 
 	@Override

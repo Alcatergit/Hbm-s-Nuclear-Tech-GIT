@@ -1,18 +1,15 @@
 package com.hbm.inventory.gui;
 
-import com.hbm.util.I18nUtil;
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineBoiler;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachineBoiler;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIMachineBoiler extends GuiInfoContainer {
 
@@ -35,8 +32,8 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 		if(diFurnace.isInvalid() && diFurnace.getWorld().getTileEntity(diFurnace.getPos()) instanceof TileEntityMachineBoiler)
 			dud = (TileEntityMachineBoiler) diFurnace.getWorld().getTileEntity(diFurnace.getPos());
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 69 - 52, 16, 52, dud.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 69 - 52, 16, 52, dud.tanks[1]);
+		dud.tanksNew[0].renderTankInfo(this, mouseX, mouseY, guiLeft + 62, guiTop + 69 - 52, 16, 52);
+		dud.tanksNew[1].renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52);
 
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 84, guiTop + 16, 8, 18, mouseX, mouseY, new String[] { String.valueOf((int) ((double) dud.heat / 100D)) + "°C" });
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 34, 18, 18, mouseX, mouseY, new String[] { String.valueOf((int) (Math.ceil((double) dud.burnTime / 20D))) + "s" });
@@ -99,9 +96,8 @@ public class GUIMachineBoiler extends GuiInfoContainer {
 
 		// sizeX and sizeY doesn't do anything, no need for it.
 		// ^ Out dated comment
-		FFUtils.drawLiquid(dud.tanks[0], guiLeft, guiTop, this.zLevel, 16, 52, 44, 97);
-
-		FFUtils.drawLiquid(dud.tanks[1], guiLeft, guiTop, this.zLevel, 16, 52, 116, 97);
+		dud.tanksNew[0].renderTank(guiLeft + 62, guiTop + 69, this.zLevel, 16, 52);
+		dud.tanksNew[1].renderTank(guiLeft + 134, guiTop + 69, this.zLevel, 16, 52);
 		// Minecraft.getMinecraft().getTextureManager().bindTexture(diFurnace.tanks[1].getSheet());
 		// diFurnace.tanks[1].renderTank(this, guiLeft + 134, guiTop + 69,
 		// diFurnace.tanks[1].getTankType().textureX() * FluidTank.x,

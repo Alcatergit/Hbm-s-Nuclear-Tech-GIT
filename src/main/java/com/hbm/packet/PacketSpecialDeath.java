@@ -149,7 +149,7 @@ public class PacketSpecialDeath implements IMessage {
 								Vec3d pos = randTriangle.p1.pos.scale(rand1);
 								pos = pos.add(randTriangle.p2.pos.scale(rand2-rand1));
 								pos = pos.add(randTriangle.p3.pos.scale(1-rand2));
-								pos = pos.addVector(ent.posX, ent.posY, ent.posZ);
+								pos = pos.add(ent.posX, ent.posY, ent.posZ);
 								
 								Random rand = ent.world.rand;
 								if(i < bloodCount){

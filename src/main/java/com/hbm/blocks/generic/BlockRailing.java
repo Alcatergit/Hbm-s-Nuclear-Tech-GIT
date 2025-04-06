@@ -1,10 +1,7 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.Library;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -23,18 +20,20 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class BlockRailing extends Block {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	
+
 	public int type;
-	
+
 	public BlockRailing(Material materialIn, int type, String s){
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.type = type;
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -42,12 +41,12 @@ public class BlockRailing extends Block {
 	public boolean isFullCube(IBlockState state){
 		return false;
 	}
-	
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state){
 		return false;
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
@@ -60,7 +59,7 @@ public class BlockRailing extends Block {
 			return super.getBoundingBox(state, source, pos);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState){
@@ -77,25 +76,25 @@ public class BlockRailing extends Block {
 			super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 		}
 	}
-	
+
 	@Override
 	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer, EnumHand hand) {
 		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{FACING});
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumFacing)state.getValue(FACING)).getIndex();
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {
@@ -104,19 +103,19 @@ public class BlockRailing extends Block {
 
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
-	
-	
-	
+
+
+
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
 	}
-	
+
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
 	   return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
 	}
-	
-	
+
+
 }

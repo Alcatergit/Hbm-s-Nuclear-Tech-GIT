@@ -1,22 +1,5 @@
 package com.hbm.render;
 
-import java.lang.reflect.Field;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.util.glu.Project;
-import org.lwjgl.util.vector.Matrix4f;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
@@ -25,7 +8,6 @@ import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -45,6 +27,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.glu.Project;
+import org.lwjgl.util.vector.Matrix4f;
+
+import java.lang.reflect.Field;
+import java.nio.FloatBuffer;
+import java.util.*;
 
 public class LightRenderer {
 
@@ -182,7 +172,7 @@ public class LightRenderer {
 			Vec3d vec = l.end.subtract(l.start).normalize();
 			if(playerPos.add(ActiveRenderInfo.getCameraPosition()).subtract(l.start).normalize().dotProduct(vec) < Math.cos(Math.toRadians(l.degrees+10))){
 				GlStateManager.enableCull();
-				RenderHelper.renderConeMesh(l.start.subtract(playerPos), vec, (float) l.height, (float)l.radius*1.1F, 12);
+				NTMRenderHelper.renderConeMesh(l.start.subtract(playerPos), vec, (float) l.height, (float)l.radius*1.1F, 12);
 			} else {
 				GL11.glPushMatrix();
 				GL11.glLoadIdentity();
@@ -191,7 +181,7 @@ public class LightRenderer {
 				GL11.glLoadIdentity();
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 				GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
-				RenderHelper.renderFullscreenTriangle();
+				NTMRenderHelper.renderFullscreenTriangle();
 				GlStateManager.matrixMode(GL11.GL_PROJECTION);
 				GL11.glPopMatrix();
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -230,7 +220,7 @@ public class LightRenderer {
 				GL11.glLoadIdentity();
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
 				GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, ClientProxy.AUX_GL_BUFFER);
-				RenderHelper.renderFullscreenTriangle();
+				NTMRenderHelper.renderFullscreenTriangle();
 				GlStateManager.matrixMode(GL11.GL_PROJECTION);
 				GL11.glPopMatrix();
 				GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -251,7 +241,7 @@ public class LightRenderer {
 			ResourceManager.volume_upscale.uniform1i("depthTex", 3);
 			GlStateManager.bindTexture(volAccTex);
 			ResourceManager.volume_upscale.uniform2f("zNearFar", 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
-			RenderHelper.renderFullscreenTriangle();
+			NTMRenderHelper.renderFullscreenTriangle();
 			GlStateManager.disableBlend();
 		}
 		
@@ -263,7 +253,7 @@ public class LightRenderer {
 		GlStateManager.bindTexture(mcFbo.framebufferTexture);
 		GlStateManager.setActiveTexture(GLCompat.GL_TEXTURE0);
 		ResourceManager.flashlight_blit.uniform1i("target", 3);
-		RenderHelper.renderFullscreenTriangle();
+		NTMRenderHelper.renderFullscreenTriangle();
 		
 		HbmShaderManager2.releaseShader();
 		GlStateManager.color(1, 1, 1, 1);
@@ -280,7 +270,7 @@ public class LightRenderer {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		ResourceManager.cone_volume.use();
 		Shader shader = ResourceManager.cone_volume;
-		float height = (float) vec.lengthVector();
+		float height = (float) vec.length();
 		shader.uniform1f("height", height);
 		vec = vec.normalize();
 		shader.uniform1f("cosAngle", (float) Math.cos(Math.toRadians(light.degrees)));
@@ -313,7 +303,7 @@ public class LightRenderer {
 		GlStateManager.enableCull();
 		//renderConeMesh(pos, vec, height, radius, 8);
 		if(playerPos.add(ActiveRenderInfo.getCameraPosition()).subtract(light.start).normalize().dotProduct(vec) < Math.cos(Math.toRadians(light.degrees+10))){
-			RenderHelper.renderConeMesh(light.start.subtract(playerPos), vec, height, (float)light.radius*1.1F, 12);
+			NTMRenderHelper.renderConeMesh(light.start.subtract(playerPos), vec, height, (float)light.radius*1.1F, 12);
 		} else {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
@@ -321,7 +311,7 @@ public class LightRenderer {
 			GL11.glPushMatrix();
 			GL11.glLoadIdentity();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
-			RenderHelper.renderFullscreenTriangle();
+			NTMRenderHelper.renderFullscreenTriangle();
 			GlStateManager.matrixMode(GL11.GL_PROJECTION);
 			GL11.glPopMatrix();
 			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
@@ -336,12 +326,12 @@ public class LightRenderer {
 	}
 	
 	private static void renderObjects(Vec3d playerPos, Collection<RenderChunk> chunksToRender, Collection<Entity> entitiesToRender, Collection<TileEntity> tilesToRender, Shader shader, float partialTicks) {
-		RenderHelper.bindBlockTexture();
+		NTMRenderHelper.bindBlockTexture();
 		GlStateManager.enableTexture2D();
 		shader.use();
-		RenderHelper.enableBlockVBOs();
-		RenderHelper.renderChunks(chunksToRender, playerPos.x, playerPos.y, playerPos.z);
-		RenderHelper.disableBlockVBOs();
+		NTMRenderHelper.enableBlockVBOs();
+		NTMRenderHelper.renderChunks(chunksToRender, playerPos.x, playerPos.y, playerPos.z);
+		NTMRenderHelper.disableBlockVBOs();
 		OpenGlHelper.glBindBuffer(OpenGlHelper.GL_ARRAY_BUFFER, 0);
 
 		for(Entity ent : entitiesToRender){
@@ -371,8 +361,8 @@ public class LightRenderer {
 				for(int k = (int) box.minZ; k < box.maxZ; k += 16) {
 					if(!Minecraft.getMinecraft().world.isBlockLoaded(new BlockPos(i, j, k)))
 						continue;
-					RenderChunk chunk = RenderHelper.getRenderChunk(new BlockPos(i, j, k));
-					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunkFromBlockCoords(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
+					RenderChunk chunk = NTMRenderHelper.getRenderChunk(new BlockPos(i, j, k));
+					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunk(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
 					if(d.intersects(chunk.boundingBox)) {
 						d.addChunkToRender(chunk);
 						if(d.doesTiles()) {
@@ -441,7 +431,7 @@ public class LightRenderer {
 	
 	private static void sendPostShaderUniforms(DirectionalLight light, Vec3d entityPos, Shader shader){
 		Vec3d pos = light.start.subtract(entityPos);
-		float height = (float) light.end.subtract(light.start).lengthVector();
+		float height = (float) light.end.subtract(light.start).length();
 		shader.uniform1f("height", height);
 		shader.uniform3f("fs_Pos", (float)pos.x, (float)pos.y, (float)pos.z);
 		shader.uniform2f("zNearFar", 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
@@ -630,7 +620,7 @@ public class LightRenderer {
 
 			double radians = Math.toRadians(degrees);
 			Vec3d startToEnd = end.subtract(start);
-			height = startToEnd.lengthVector();
+			height = startToEnd.length();
 			radius = height * Math.tan(radians);
 			
 			GL11.glMatrixMode(GL11.GL_PROJECTION);

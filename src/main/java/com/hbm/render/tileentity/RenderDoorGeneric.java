@@ -1,28 +1,25 @@
 package com.hbm.render.tileentity;
 
-import java.nio.DoubleBuffer;
-
-import com.hbm.interfaces.IDoor;
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.animloader.AnimatedModel;
 import com.hbm.animloader.Animation;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.main.ResourceManager;
+import com.hbm.interfaces.IDoor;
 import com.hbm.render.WavefrontObjDisplayList;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
-
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.MathHelper;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.DoubleBuffer;
 
 public class RenderDoorGeneric extends TileEntitySpecialRenderer<TileEntityDoorGeneric> {
 

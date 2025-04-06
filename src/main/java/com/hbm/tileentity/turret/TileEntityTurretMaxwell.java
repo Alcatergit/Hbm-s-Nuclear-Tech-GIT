@@ -1,13 +1,10 @@
 package com.hbm.tileentity.turret;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.EntityDamageUtil;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
 
 public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 
@@ -93,7 +92,7 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 			
 			if(this.tPos != null) {
 				Vec3d pos = this.getTurretPos();
-				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).lengthVector();
+				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
 				this.lastDist = length;
 			}
 			

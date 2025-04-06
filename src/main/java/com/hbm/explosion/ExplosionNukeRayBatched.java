@@ -149,7 +149,10 @@ public class ExplosionNukeRayBatched {
 				if(b.getExplosionResistance(null) >= 2_000_000)
 					break;
 
-				rayStrength -= Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1;
+				//Norwood: not ideal solution, but fixes insane blast doors actually blast proof when grenade lands inside block
+				rayStrength -= (float) (Math.pow(getNukeResistance(blockState, b)+1, 3 * ((float) (r = (r > 0) ? r : 1)) / ((float) radius))-1);
+
+
 
 				//save block positions in to-destroy-boolean[] until rayStrength is 0 
 				if(rayStrength > 0){

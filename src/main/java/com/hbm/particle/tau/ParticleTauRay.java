@@ -4,7 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -85,7 +85,7 @@ public class ParticleTauRay extends Particle {
 		
 		HbmShaderManager2.releaseShader();
 		
-		RenderHelper.resetColor();
+		NTMRenderHelper.resetColor();
 		GlStateManager.enableCull();
 		GlStateManager.enableAlpha();
 		GlStateManager.depthMask(true);

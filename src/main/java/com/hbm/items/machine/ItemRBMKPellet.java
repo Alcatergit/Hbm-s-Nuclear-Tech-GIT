@@ -1,31 +1,23 @@
 package com.hbm.items.machine;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
 import net.minecraft.util.NonNullList;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemRBMKPellet extends Item {
 	
 	public String fullName = "";
 
 	public ItemRBMKPellet(String fullName, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.fullName = fullName;
 		this.setHasSubtypes(true);
@@ -65,11 +57,11 @@ public class ItemRBMKPellet extends Item {
 			tooltip.add(TextFormatting.DARK_PURPLE + "High Xenon Poison");
 	}
 	
-	public static boolean hasXenon(int meta) {
+	static public boolean hasXenon(int meta) {
 		return rectify(meta) >= 5;
 	}
 	
-	public static int rectify(int meta) {
+	static public int rectify(int meta) {
 		return Math.abs(meta) % 10;
 	}
 }

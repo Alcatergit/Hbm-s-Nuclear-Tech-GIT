@@ -5,7 +5,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketSpecialDeath;
 import com.hbm.particle.gluon.ParticleGluonFlare;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -24,7 +23,7 @@ public class TileEntityObjTester extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		RayTraceResult r = Library.rayTraceIncludeEntities(world, new Vec3d(this.pos).addVector(0, 2, 0.5), new Vec3d(this.pos).addVector(12, 2, 0.5), null);
+		RayTraceResult r = Library.rayTraceIncludeEntities(world, new Vec3d(this.pos).add(0, 2, 0.5), new Vec3d(this.pos).add(12, 2, 0.5), null);
 		if(world.isRemote) {
 			if(world.getTotalWorldTime() %1 == 0){
 				if(r != null && r.hitVec != null){

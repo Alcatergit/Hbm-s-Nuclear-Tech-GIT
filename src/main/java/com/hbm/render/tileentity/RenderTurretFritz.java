@@ -1,18 +1,16 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.turret.TileEntityTurretFritz;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 public class RenderTurretFritz extends RenderTurretBase<TileEntityTurretFritz> {
 
 	@Override
 	public void render(TileEntityTurretFritz turret, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
-		Vec3d pos = turret.getHorizontalOffset();
+		Vec3d pos = turret.byHorizontalIndexOffset();
 
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + pos.x, y, z + pos.z);
@@ -20,7 +18,7 @@ public class RenderTurretFritz extends RenderTurretBase<TileEntityTurretFritz> {
 		GlStateManager.enableCull();
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		
-		this.renderConnectors(turret, true, true, turret.tank.getFluid() == null ? null : turret.tank.getFluid().getFluid());
+		this.renderConnectors(turret, true, true, turret.tankOld.getFluid() == null ? null : turret.tankOld.getFluid().getFluid());
 
 		bindTexture(ResourceManager.turret_base_tex);
 		ResourceManager.turret_chekhov.renderPart("Base");

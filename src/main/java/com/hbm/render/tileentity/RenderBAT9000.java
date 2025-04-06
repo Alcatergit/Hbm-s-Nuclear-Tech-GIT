@@ -1,25 +1,19 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.FluidTypeHandler;
-import com.hbm.forgefluid.FluidTypeHandler.FluidProperties;
+import com.hbm.inventory.fluid.FluidType;
+import com.hbm.inventory.fluid.Fluids;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.misc.DiamondPronter;
 import com.hbm.render.misc.EnumSymbol;
 import com.hbm.tileentity.machine.TileEntityMachineBAT9000;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraftforge.fluids.Fluid;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBAT9000 extends TileEntitySpecialRenderer<TileEntityMachineBAT9000> {
 
@@ -30,11 +24,10 @@ public class RenderBAT9000 extends TileEntitySpecialRenderer<TileEntityMachineBA
 
 	@Override
 	public void render(TileEntityMachineBAT9000 bat, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
-
-		GL11.glPushMatrix();
-		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
+		GlStateManager.pushMatrix();
+		GlStateManager.translate(x + 0.5F, y, z + 0.5F);
 		GlStateManager.enableLighting();
-		GlStateManager.disableCull();
+		GlStateManager.enableCull();
 
 		bindTexture(ResourceManager.bat9000_tex);
 
@@ -42,85 +35,60 @@ public class RenderBAT9000 extends TileEntitySpecialRenderer<TileEntityMachineBA
 		ResourceManager.bat9000.renderAll();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 
-		Fluid type = null;
-		if(bat.tank.getFluid() != null)
-			type = bat.tank.getFluid().getFluid();
+		FluidType type = bat.tankNew.getTankType();
 
-		if(type != null) {
-
+		if (type != null && type != Fluids.NONE) {
 			RenderHelper.disableStandardItemLighting();
-			GL11.glPushMatrix();
-			FluidProperties props = FluidTypeHandler.getProperties(type);
-			int poison = props.poison;
-			int flammability = props.flammability;
-			int reactivity = props.reactivity;
-			EnumSymbol symbol = props.symbol;
+			GlStateManager.pushMatrix();
+			int poison = type.poison;
+			int flammability = type.flammability;
+			int reactivity = type.reactivity;
+			EnumSymbol symbol = type.symbol;
 
-			GL11.glRotatef(45, 0, 1, 0);
+			GlStateManager.rotate(45F, 0F, 1F, 0F);
 
-			for(int j = 0; j < 4; j++) {
-
-				GL11.glPushMatrix();
-				GL11.glTranslated(2.5, 2.25, 0);
-				GL11.glScalef(1.0F, 0.75F, 0.75F);
+			for (int j = 0; j < 4; j++) {
+				GlStateManager.pushMatrix();
+				GlStateManager.translate(2.5F, 2.25F, 0F);
+				GlStateManager.scale(1.0F, 0.75F, 0.75F);
 				DiamondPronter.pront(poison, flammability, reactivity, symbol);
-				GL11.glPopMatrix();
-				GL11.glRotatef(90, 0, 1, 0);
+				GlStateManager.popMatrix();
+				GlStateManager.rotate(90F, 0F, 1F, 0F);
 			}
-			GL11.glPopMatrix();
+			GlStateManager.popMatrix();
 			RenderHelper.enableStandardItemLighting();
-
-			GlStateManager.disableCull();
-			GlStateManager.disableLighting();
-			FFUtils.setColorFromFluid(type);
-			
-			float scale = (float)bat.tank.getFluidAmount()/bat.tank.getCapacity();
-			
-			float lby = OpenGlHelper.lastBrightnessY;
-			float lbx = OpenGlHelper.lastBrightnessX;
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, (int)(15*type.getLuminosity())+15, lby);
-			
-			TextureAtlasSprite sprite = FFUtils.getTextureFromFluid(type);
-			float u = sprite.getMinU();
-			float v = sprite.getMinV();
-			float mU = sprite.getMaxU();
-			float mV = sprite.getInterpolatedV(scale*16);
-			bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-			Tessellator tess = Tessellator.getInstance();
-			BufferBuilder buf = tess.getBuffer();
-
-			double height = bat.tank.getFluidAmount() * 1.5D / bat.tank.getCapacity();
-			double off = 2.2;
-
-			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-
-			buf.pos(-off, 1.5, -0.5).tex(u, v).endVertex();
-			buf.pos(-off, 1.5 + height, -0.5).tex(u, mV).endVertex();
-			buf.pos(-off, 1.5 + height, 0.5).tex(mU, mV).endVertex();
-			buf.pos(-off, 1.5, 0.5).tex(mU, v).endVertex();
-
-			buf.pos(off, 1.5, -0.5).tex(u, v).endVertex();
-			buf.pos(off, 1.5 + height, -0.5).tex(u, mV).endVertex();
-			buf.pos(off, 1.5 + height, 0.5).tex(mU, mV).endVertex();
-			buf.pos(off, 1.5, 0.5).tex(mU, v).endVertex();
-
-			buf.pos(-0.5, 1.5, -off).tex(u, v).endVertex();
-			buf.pos(-0.5, 1.5 + height, -off).tex(u, mV).endVertex();
-			buf.pos(0.5, 1.5 + height, -off).tex(mU, mV).endVertex();
-			buf.pos(0.5, 1.5, -off).tex(mU, v).endVertex();
-
-			buf.pos(-0.5, 1.5, off).tex(u, v).endVertex();
-			buf.pos(-0.5, 1.5 + height, off).tex(u, mV).endVertex();
-			buf.pos(0.5, 1.5 + height, off).tex(mU, mV).endVertex();
-			buf.pos(0.5, 1.5, off).tex(mU, v).endVertex();
-
-			tess.draw();
-
-			GlStateManager.color(1, 1, 1, 1);
-			GlStateManager.enableLighting();
-			
-			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, lbx, lby);
 		}
-		GL11.glPopMatrix();
+
+		GlStateManager.disableTexture2D();
+		GlStateManager.disableCull();
+		GlStateManager.disableLighting();
+		GlStateManager.color(1F, 1F, 1F, 1F);
+
+		double height = bat.tankNew.getFill() * 1.5D / bat.tankNew.getMaxFill();
+		double off = 2.2;
+		int color = type.getColor();
+
+		Tessellator tess = Tessellator.getInstance();
+		BufferBuilder buffer = tess.getBuffer();
+
+		int r = (color >> 16) & 0xFF;
+		int g = (color >> 8) & 0xFF;
+		int b = color & 0xFF;
+
+		buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+
+		NTMRenderHelper.addQuad(buffer, -off, 1.5, -0.5, -off, 1.5 + height, -0.5, -off, 1.5 + height, 0.5, -off, 1.5, 0.5, r, g, b);
+		NTMRenderHelper.addQuad(buffer, off, 1.5, -0.5, off, 1.5 + height, -0.5, off, 1.5 + height, 0.5, off, 1.5, 0.5, r, g, b);
+		NTMRenderHelper.addQuad(buffer, -0.5, 1.5, -off, -0.5, 1.5 + height, -off, 0.5, 1.5 + height, -off, 0.5, 1.5, -off, r, g, b);
+		NTMRenderHelper.addQuad(buffer, -0.5, 1.5, off, -0.5, 1.5 + height, off, 0.5, 1.5 + height, off, 0.5, 1.5, off, r, g, b);
+
+		tess.draw();
+
+		GlStateManager.enableLighting();
+		GlStateManager.enableCull();
+		GlStateManager.enableTexture2D();
+
+		GlStateManager.popMatrix();
+
 	}
 }

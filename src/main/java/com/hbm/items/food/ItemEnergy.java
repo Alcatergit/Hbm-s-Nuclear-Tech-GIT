@@ -1,7 +1,5 @@
 package com.hbm.items.food;
 
-import java.util.List;
-
 import com.hbm.config.VersatileConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
@@ -10,7 +8,6 @@ import com.hbm.main.MainRegistry;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,10 +22,12 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 
+import java.util.List;
+
 public class ItemEnergy extends Item {
 
 	public ItemEnergy(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.consumableTab);
 		ModItems.ALL_ITEMS.add(this);

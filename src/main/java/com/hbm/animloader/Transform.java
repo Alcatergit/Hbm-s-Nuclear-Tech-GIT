@@ -30,9 +30,9 @@ public class Transform {
 	}
 	
 	private Vec3 getScaleFromMatrix(float[] matrix){
-		float scaleX = (float) Vec3.createVectorHelper(matrix[0], matrix[1], matrix[2]).lengthVector();
-		float scaleY = (float) Vec3.createVectorHelper(matrix[4], matrix[5], matrix[6]).lengthVector();
-		float scaleZ = (float) Vec3.createVectorHelper(matrix[8], matrix[9], matrix[10]).lengthVector();
+		float scaleX = (float) Vec3.createVectorHelper(matrix[0], matrix[1], matrix[2]).length();
+		float scaleY = (float) Vec3.createVectorHelper(matrix[4], matrix[5], matrix[6]).length();
+		float scaleZ = (float) Vec3.createVectorHelper(matrix[8], matrix[9], matrix[10]).length();
 		
 		matrix[0] = matrix[0]/scaleX;
 		matrix[1] = matrix[1]/scaleX;

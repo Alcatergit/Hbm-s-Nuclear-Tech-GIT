@@ -1,18 +1,20 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemRBMKRod;
+import com.hbm.inventory.RecipesCommon;
 import com.hbm.inventory.WasteDrumRecipes;
+import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 
 public class TileEntityWasteDrum extends TileEntityMachineBase implements ITickable {
 
@@ -40,12 +42,7 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		Item item = stack.getItem();
-		
-		if(item instanceof ItemRBMKRod)
-			return true;
-		
-		return WasteDrumRecipes.hasRecipe(item);
+		return WasteDrumRecipes.recipes.containsKey(new RecipesCommon.ComparableStack(stack)) || stack.getItem() instanceof ItemRBMKRod;
 	}
 	
 	@Override
@@ -61,12 +58,12 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		Item item = itemStack.getItem();
-		
+
 		if(item instanceof ItemRBMKRod) {
 			return ItemRBMKRod.getCoreHeat(itemStack) < 50 && ItemRBMKRod.getHullHeat(itemStack) < 50;
 		}
 		
-		return WasteDrumRecipes.isCold(item);
+		return WasteDrumRecipes.isCold(itemStack);
 	}
 	
 	@Override
@@ -127,11 +124,11 @@ public class TileEntityWasteDrum extends TileEntityMachineBase implements ITicka
 					} else if(world.rand.nextInt(r) == 0) {
 						
 						if(!inventory.getStackInSlot(i).isEmpty()) {
-							
-							Item waste_hot = inventory.getStackInSlot(i).getItem();
-							ItemStack waste_cold = WasteDrumRecipes.getOutput(waste_hot);
-							if(waste_cold != null){
-								inventory.setStackInSlot(i, waste_cold.copy());
+
+							RecipesCommon.ComparableStack comp = new RecipesCommon.ComparableStack(inventory.getStackInSlot(i));
+							if(WasteDrumRecipes.recipes.containsKey(comp)) {
+								inventory.setStackInSlot(i, WasteDrumRecipes.recipes.get(comp).copy());
+								world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 1.0F);
 							}
 						}
 					}

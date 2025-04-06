@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import api.hbm.energymk2.IEnergyReceiverMK2;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.entity.missile.EntitySoyuz;
 import com.hbm.forgefluid.FFUtils;
@@ -11,17 +9,15 @@ import com.hbm.handler.MissileStruct;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemSoyuz;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -41,7 +37,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements ITickable, IEnergyReceiverMK2, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
 	public static final long maxPower = 1000000;
@@ -148,8 +147,8 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	private void updateConnections(){
 		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
-		this.trySubscribe(world, pos.add(0, 0, dir.offsetX * 10), rot.getOpposite());
-		this.trySubscribe(world, pos.add(0, 0, dir.offsetX * -9), rot);
+		this.trySubscribe(world, pos.getX(), pos.getY(), pos.getZ() + dir.offsetX * 10, rot.getOpposite());
+		this.trySubscribe(world, pos.getX(), pos.getY(), pos.getZ() + dir.offsetX * -9, rot);
 	}
 	
 	private boolean isValidFluidForTank(int slot, int tank){
@@ -266,7 +265,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 			int x = inventory.getStackInSlot(1).getTagCompound().getInteger("xCoord");
 			int z = inventory.getStackInSlot(1).getTagCompound().getInteger("zCoord");
 			
-			return (int) Vec3.createVectorHelper(pos.getX() - x, 0, pos.getZ() - z).lengthVector();
+			return (int) Vec3.createVectorHelper(pos.getX() - x, 0, pos.getZ() - z).length();
 		}
 			
 		return 0;

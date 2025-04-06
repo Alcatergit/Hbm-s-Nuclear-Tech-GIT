@@ -1,14 +1,10 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +19,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ItemModKnife extends ItemArmorMod {
 	

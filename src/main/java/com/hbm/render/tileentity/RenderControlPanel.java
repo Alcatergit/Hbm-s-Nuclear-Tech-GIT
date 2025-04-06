@@ -2,19 +2,15 @@ package com.hbm.render.tileentity;
 
 import com.hbm.inventory.control_panel.ControlPanel;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.ResourceLocation;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityControlPanel;
-
+import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderControlPanel extends TileEntitySpecialRenderer<TileEntityControlPanel> {
 

@@ -1,14 +1,13 @@
 package com.hbm.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityHadron.EnumHadronState;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HadronRecipes {
 

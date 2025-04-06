@@ -2,15 +2,16 @@ package com.hbm.inventory;
 
 import java.util.List;
 
-import com.hbm.inventory.OreNames;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
+import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.items.ModItems;
 import com.hbm.util.ItemStackUtil;
 
 import net.minecraft.item.ItemStack;
 
+// Th3_Sl1ze: special for Alcater - we don't use OreNames now, they're moved into MaterialShapes
 public class AnvilSmithingMold extends AnvilSmithingRecipe {
 	
 	OreDictStack matchesPrefix;
@@ -33,8 +34,8 @@ public class AnvilSmithingMold extends AnvilSmithingRecipe {
 			List<String> names = ItemStackUtil.getOreDictNames(left);
 			
 			for(String name : names) {
-				
-				for(String otherPrefix : OreNames.prefixes) {
+
+				for(MaterialShapes shape : MaterialShapes.allShapes) for(String otherPrefix : shape.prefixes) {
 					if(otherPrefix.length() > matchesPrefix.name.length() && name.startsWith(otherPrefix)) {
 						return false; //ignore if there's a longer prefix that matches (i.e. a more accurate match)
 					}

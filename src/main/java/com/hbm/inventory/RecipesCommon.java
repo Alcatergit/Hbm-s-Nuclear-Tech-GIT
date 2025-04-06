@@ -1,17 +1,17 @@
 package com.hbm.inventory;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class RecipesCommon {
 	
@@ -105,6 +105,20 @@ public class RecipesCommon {
 		@Override
 		public String toString() {
 			return "AStack: size, " + stacksize;
+		}
+
+		/**
+		 * Generates either an ItemStack or an ArrayList of ItemStacks
+		 * @return
+		 */
+		public abstract List<ItemStack> extractForJEI();
+
+		public ItemStack extractForCyclingDisplay(int cycle) {
+			List<ItemStack> list = extractForJEI();
+
+			cycle *= 50;
+
+			return list.get((int)(System.currentTimeMillis() % (cycle * list.size()) / cycle));
 		}
 	}
 
@@ -299,8 +313,13 @@ public class RecipesCommon {
 		public String toString() {
 			return "ComparableStack: { "+stacksize+" x "+item.getRegistryName()+"@"+meta+" }";
 		}
+
+		@Override
+		public List<ItemStack> extractForJEI() {
+			return Arrays.asList(this.toStack());
+		}
 	}
-	
+
 	public static class NbtComparableStack extends ComparableStack {
 		ItemStack stack;
 		public NbtComparableStack(ItemStack stack) {
@@ -475,6 +494,74 @@ public class RecipesCommon {
 		@Override
 		public String toString() {
 			return "OreDictStack: name, " + name + ", stacksize, " + stacksize;
+		}
+
+		@Override
+		public List<ItemStack> extractForJEI() {
+
+			List<ItemStack> fromDict = OreDictionary.getOres(name);
+			List<ItemStack> ores = new ArrayList();
+
+			for(ItemStack stack : fromDict) {
+
+				ItemStack copy = stack.copy();
+				copy.setCount(this.stacksize);
+
+				if(stack.getItemDamage() != OreDictionary.WILDCARD_VALUE) {
+					ores.add(copy);
+				} else {
+					ores.addAll(MainRegistry.proxy.getSubItems(copy));
+				}
+			}
+
+			return ores;
+		}
+	}
+
+	public static class MetaBlock {
+
+		public Block block;
+		public int meta;
+
+		public MetaBlock(Block block, int meta) {
+			this.block = block;
+			this.meta = meta;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Block.REGISTRY.getNameForObject(block).hashCode();
+			result = prime * result + meta;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(this == obj)
+				return true;
+			if(obj == null)
+				return false;
+			if(getClass() != obj.getClass())
+				return false;
+			MetaBlock other = (MetaBlock) obj;
+			if(block == null) {
+				if(other.block != null)
+					return false;
+			} else if(!block.equals(other.block))
+				return false;
+			if(meta != other.meta)
+				return false;
+			return true;
+		}
+
+		public MetaBlock(Block block) {
+			this(block, 0);
+		}
+
+		@Deprecated public int getID() {
+			return hashCode();
 		}
 	}
 }

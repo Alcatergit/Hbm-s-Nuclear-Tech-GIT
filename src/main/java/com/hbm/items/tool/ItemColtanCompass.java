@@ -1,13 +1,8 @@
 package com.hbm.items.tool;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -16,11 +11,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.Random;
 
 public class ItemColtanCompass extends Item {
 
@@ -29,7 +26,7 @@ public class ItemColtanCompass extends Item {
 	public long lease = 0;
 	
 	public ItemColtanCompass(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter(){
 
@@ -123,7 +120,7 @@ public class ItemColtanCompass extends Item {
 				lease = System.currentTimeMillis() + 1000;
 				
 				Vec3 vec = Vec3.createVectorHelper(entity.posX - lastX, 0, entity.posZ - lastZ);
-				MainRegistry.proxy.displayTooltip(((int) vec.lengthVector()) + "m");
+				MainRegistry.proxy.displayTooltip(((int) vec.length()) + "m");
 			}
 			
 			if(ItemColtanCompass.this.lease < System.currentTimeMillis()) {

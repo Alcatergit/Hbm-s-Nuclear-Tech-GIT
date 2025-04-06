@@ -1,7 +1,5 @@
 package com.hbm.render.entity.mob;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.mob.EntityRADBeast;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -9,7 +7,6 @@ import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.BeamPronter.EnumBeamType;
 import com.hbm.render.misc.BeamPronter.EnumWaveType;
 import com.hbm.render.model.ModelM65Blaze;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBlaze;
 import net.minecraft.client.renderer.entity.RenderLiving;
@@ -17,6 +14,7 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRADBeast extends RenderLiving<EntityRADBeast> {
 

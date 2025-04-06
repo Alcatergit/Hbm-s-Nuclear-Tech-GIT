@@ -8,9 +8,6 @@ import com.hbm.tileentity.bomb.TileEntityCompactLauncher;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
-import com.hbm.tileentity.machine.TileEntityAMSBase;
-import com.hbm.tileentity.machine.TileEntityAMSEmitter;
-import com.hbm.tileentity.machine.TileEntityAMSLimiter;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
 import com.hbm.tileentity.machine.TileEntityCoreInjector;
 import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
@@ -19,16 +16,11 @@ import com.hbm.tileentity.machine.TileEntityMachineBoiler;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerElectric;
 import com.hbm.tileentity.machine.TileEntityMachineBoilerRTG;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
-import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
-import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
-import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
-import com.hbm.tileentity.machine.TileEntityMachineSeleniumEngine;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
-import com.hbm.tileentity.machine.TileEntityWatzCore;
 import com.hbm.tileentity.turret.TileEntityTurretCIWS;
 import com.hbm.tileentity.turret.TileEntityTurretCheapo;
 
@@ -95,30 +87,7 @@ public class AuxGaugePacket implements IMessage {
 				try {
 					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-					if(te instanceof TileEntityAMSLimiter) {
-						TileEntityAMSLimiter limiter = (TileEntityAMSLimiter) te;
-						if(m.id == 0)
-							limiter.locked = m.value == 1;
-						else if(m.id == 1)
-							limiter.efficiency = m.value;
-					} else if(te instanceof TileEntityAMSEmitter) {
-						TileEntityAMSEmitter emitter = (TileEntityAMSEmitter) te;
-						if(m.id == 0)
-							emitter.locked = m.value == 1;
-						else if(m.id == 1)
-							emitter.efficiency = m.value;
-					} else if(te instanceof TileEntityAMSBase) {
-						TileEntityAMSBase base = (TileEntityAMSBase) te;
-
-						if(m.id == 0)
-							base.locked = m.value == 1;
-						else if(m.id == 1)
-							base.color = m.value;
-						else if(m.id == 2)
-							base.efficiency = m.value;
-						else if(m.id == 3)
-							base.field = m.value;
-					} else if(te instanceof TileEntityTurretCIWS) {
+					if(te instanceof TileEntityTurretCIWS) {
 						TileEntityTurretCIWS cwis = (TileEntityTurretCIWS) te;
 
 						cwis.rotation = m.value;
@@ -126,28 +95,10 @@ public class AuxGaugePacket implements IMessage {
 						TileEntityTurretCheapo cwis = (TileEntityTurretCheapo) te;
 
 						cwis.rotation = m.value;
-					} else if(te instanceof TileEntityMachineSeleniumEngine) {
-						TileEntityMachineSeleniumEngine selenium = (TileEntityMachineSeleniumEngine) te;
-
-						if(m.id == 0)
-							selenium.pistonCount = m.value;
-						if(m.id == 1)
-							selenium.powerCap = m.value;
 					} else if(te instanceof TileEntityMachineDiesel) {
 						TileEntityMachineDiesel selenium = (TileEntityMachineDiesel) te;
 
 						selenium.powerCap = m.value;
-					} else if(te instanceof TileEntityMachineReactorSmall) {
-						TileEntityMachineReactorSmall reactor = (TileEntityMachineReactorSmall) te;
-
-						if(m.id == 0)
-							reactor.rods = m.value;
-						if(m.id == 1)
-							reactor.retracting = m.value == 1;
-						if(m.id == 2)
-							reactor.coreHeat = m.value;
-						if(m.id == 3)
-							reactor.hullHeat = m.value;
 					} else if(te instanceof TileEntityMachineGasCent) {
 						TileEntityMachineGasCent cent = (TileEntityMachineGasCent) te;
 
@@ -176,11 +127,6 @@ public class AuxGaugePacket implements IMessage {
 							rtgBoiler.heat = m.value;
 						if(m.id == 1)
 							rtgBoiler.rtgPower = m.value;
-					} else if(te instanceof TileEntityMachineCoal) {
-						TileEntityMachineCoal coalgen = (TileEntityMachineCoal) te;
-
-						if(m.id == 0)
-							coalgen.burnTime = m.value;
 					} else if(te instanceof TileEntityMachineElectricFurnace) {
 						TileEntityMachineElectricFurnace furn = (TileEntityMachineElectricFurnace) te;
 
@@ -248,23 +194,6 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityCoreStabilizer) {
 						if(m.id == 0)
 							((TileEntityCoreStabilizer) te).beam = m.value;
-					} else if(te instanceof TileEntityMachineGenerator){
-						if(m.id == 0)
-							((TileEntityMachineGenerator) te).heat = m.value;
-					} else if(te instanceof TileEntityWatzCore){
-						TileEntityWatzCore core = (TileEntityWatzCore) te;
-						if(m.id == 0)
-							core.powerList = m.value;
-						else if(m.id == 1)
-							core.heatList = m.value;
-						else if(m.id == 2)
-							core.decayMultiplier = m.value;
-						else if(m.id == 3)
-							core.powerMultiplier = m.value;
-						else if(m.id == 4)
-							core.heatMultiplier = m.value;
-						else if(m.id == 5)
-							core.heat = m.value;
 					} else if(te instanceof TileEntitySlidingBlastDoor){
 						((TileEntitySlidingBlastDoor) te).shouldUseBB = m.value == 1 ? true : false;
 					}

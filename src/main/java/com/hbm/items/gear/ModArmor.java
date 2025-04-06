@@ -2,7 +2,6 @@ package com.hbm.items.gear;
 
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
@@ -13,7 +12,7 @@ public class ModArmor extends ItemArmor {
 
 	public ModArmor(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String s) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(CreativeTabs.COMBAT);
 		

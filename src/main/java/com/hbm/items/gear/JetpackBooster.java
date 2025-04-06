@@ -1,17 +1,13 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmCapability.IHBMData;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.armor.JetpackBase;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.model.ModelJetPack;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -28,6 +24,8 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class JetpackBooster extends JetpackBase {
 
@@ -91,7 +89,7 @@ public class JetpackBooster extends JetpackBase {
 
 			Vec3d look = player.getLookVec();
 
-			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).lengthVector() < 5) {
+			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 5) {
 				player.motionX += look.x * 0.25;
 				player.motionY += look.y * 0.25;
 				player.motionZ += look.z * 0.25;

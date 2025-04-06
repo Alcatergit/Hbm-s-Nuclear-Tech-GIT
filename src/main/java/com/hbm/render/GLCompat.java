@@ -1,42 +1,10 @@
 package com.hbm.render;
 
+import net.minecraft.client.Minecraft;
+import org.lwjgl.opengl.*;
+
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
-
-import org.lwjgl.opengl.APPLEFloatPixels;
-import org.lwjgl.opengl.APPLEVertexArrayObject;
-import org.lwjgl.opengl.ARBDepthTexture;
-import org.lwjgl.opengl.ARBDrawInstanced;
-import org.lwjgl.opengl.ARBFragmentShader;
-import org.lwjgl.opengl.ARBFramebufferObject;
-import org.lwjgl.opengl.ARBGeometryShader4;
-import org.lwjgl.opengl.ARBImaging;
-import org.lwjgl.opengl.ARBInstancedArrays;
-import org.lwjgl.opengl.ARBMultitexture;
-import org.lwjgl.opengl.ARBOcclusionQuery;
-import org.lwjgl.opengl.ARBShaderObjects;
-import org.lwjgl.opengl.ARBTextureFloat;
-import org.lwjgl.opengl.ARBVertexArrayObject;
-import org.lwjgl.opengl.ARBVertexBufferObject;
-import org.lwjgl.opengl.ARBVertexProgram;
-import org.lwjgl.opengl.ARBVertexShader;
-import org.lwjgl.opengl.ATITextureFloat;
-import org.lwjgl.opengl.ContextCapabilities;
-import org.lwjgl.opengl.EXTDrawInstanced;
-import org.lwjgl.opengl.EXTFramebufferBlit;
-import org.lwjgl.opengl.EXTFramebufferObject;
-import org.lwjgl.opengl.EXTGeometryShader4;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GL31;
-import org.lwjgl.opengl.GL32;
-import org.lwjgl.opengl.GL33;
-import org.lwjgl.opengl.GLContext;
-
-import net.minecraft.client.Minecraft;
 
 public class GLCompat {
 

@@ -1,11 +1,8 @@
 package com.hbm.tileentity.bomb;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.Landmine;
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +13,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityLandmine extends TileEntity implements ITickable {
 

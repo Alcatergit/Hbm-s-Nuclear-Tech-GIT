@@ -1,34 +1,28 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energymk2.IEnergyProviderMK2;
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
-import com.hbm.hazard.HazardSystem;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyGenerator;
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-
-public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITickable, IEnergyGenerator {
+//TODO: REWORK
+public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITickable, IEnergyProviderMK2 {
 
 	public ItemStackHandler inventory;
 
@@ -105,15 +99,16 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	}
 
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i == 0 && HazardSystem.getTotalRadsFromStack(stack) > 0;
+		return i == 0 && ContaminationUtil.getNeutronRads(stack) > 0;
 	}
 	
 	@Override
 	public void update() {
 		if (!world.isRemote) {
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
-			sendRADGenPower();
-			int r = (int)Math.sqrt(HazardSystem.getTotalRadsFromStack(inventory.getStackInSlot(0)));
+			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
+			this.tryProvide(world, this.pos.getX() - dir.offsetX * 4, this.pos.getY(), this.pos.getZ() - dir.offsetZ * 4, dir.getOpposite());
+			int r = (int)Math.sqrt(ContaminationUtil.getNeutronRads(inventory.getStackInSlot(0)));
 			if(r > 0) {
 				if(inventory.getStackInSlot(0).getItem().hasContainerItem(inventory.getStackInSlot(0))) {
 					if(inventory.getStackInSlot(1).isEmpty()) {
@@ -178,19 +173,6 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 				mode = 2;
 			
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
-		}
-	}
-	public void sendRADGenPower(){
-		int i = getBlockMetadata();
-		switch(i) {
-		case 2: 
-			this.sendPower(world, pos.add(5, 0, 0), Library.POS_X); break;
-		case 3: 
-			this.sendPower(world, pos.add(-5, 0, 0), Library.NEG_X); break;
-		case 4: 
-			this.sendPower(world, pos.add(0, 0, -5), Library.NEG_Z); break;
-		case 5: 
-			this.sendPower(world, pos.add(0, 0, 5), Library.POS_Z); break;
 		}
 	}
 	

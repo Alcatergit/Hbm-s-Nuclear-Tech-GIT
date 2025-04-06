@@ -2,30 +2,24 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.handler.MultiblockHandler;
 import com.hbm.handler.MultiblockHandlerXR;
-import com.hbm.lib.InventoryHelper;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyCombo;
-import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.oil.TileEntityMachineFrackingTower;
-import com.hbm.lib.ForgeDirection;
-
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 import java.util.Random;
 
@@ -109,10 +103,7 @@ public class MachineFrackingTower extends BlockDummyable {
             if (pos == null)
                 return false;
 
-            TileEntityMachineFrackingTower frackingTower = (TileEntityMachineFrackingTower)world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
-
-            if (frackingTower != null)
-                player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_fracking_tower, world, pos[0], pos[1], pos[2]);
+            FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, pos[0], pos[1], pos[2]);
 
             return true;
         } else {

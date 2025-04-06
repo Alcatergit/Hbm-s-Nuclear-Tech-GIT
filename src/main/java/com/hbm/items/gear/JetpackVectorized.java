@@ -1,7 +1,5 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
@@ -12,7 +10,6 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -25,6 +22,8 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
 
 public class JetpackVectorized extends JetpackBase {
 
@@ -78,7 +77,7 @@ public class JetpackVectorized extends JetpackBase {
 
 			Vec3d look = player.getLookVec();
 
-			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).lengthVector() < 2) {
+			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 2) {
 				player.motionX += look.x * 0.1;
 				player.motionY += look.y * 0.1;
 				player.motionZ += look.z * 0.1;

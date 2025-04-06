@@ -2,7 +2,6 @@ package com.hbm.items.gear;
 
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
@@ -12,7 +11,7 @@ public class MaskOfInfamy extends ItemArmor {
 
 	public MaskOfInfamy(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String s) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

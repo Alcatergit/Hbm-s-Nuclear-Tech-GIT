@@ -1,12 +1,9 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
-
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRefinery extends TileEntitySpecialRenderer<TileEntityMachineRefinery> {
 
@@ -19,7 +16,7 @@ public class RenderRefinery extends TileEntitySpecialRenderer<TileEntityMachineR
 	public void render(TileEntityMachineRefinery te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        GlStateManager.enableLighting();
+		GL11.glEnable(GL11.GL_LIGHTING);
         GL11.glDisable(GL11.GL_CULL_FACE);
 		GL11.glRotatef(180, 0F, 1F, 0F);
 

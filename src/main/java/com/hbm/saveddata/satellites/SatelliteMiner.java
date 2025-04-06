@@ -17,4 +17,9 @@ public class SatelliteMiner extends Satellite {
 	public void readFromNBT(NBTTagCompound nbt) {
 		lastOp = nbt.getLong("lastOp");
 	}
+
+	@Override
+	public float[] getColor() {
+		return new float[] { 0.0F, 0.0F, 0.0F };
+	}
 }

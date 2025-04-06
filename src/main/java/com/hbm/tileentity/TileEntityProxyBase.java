@@ -6,7 +6,6 @@ import com.hbm.blocks.machine.MachineDiFurnaceExtension;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 import com.hbm.tileentity.machine.TileEntityHadron;
-
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 

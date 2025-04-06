@@ -1,31 +1,28 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
-import com.hbm.render.misc.RenderScreenOverlay;
-import com.hbm.capability.HbmLivingProps;
-import com.hbm.util.ContaminationUtil;
-import com.hbm.lib.HBMSoundHandler;
-
 import baubles.api.BaubleType;
 import baubles.api.IBauble;
+import com.hbm.capability.HbmLivingProps;
+import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.EnumHand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "baubles.api.IBauble", modid = "baubles")})
 public class ItemDigammaDiagnostic extends Item implements IBauble {
 
 	public ItemDigammaDiagnostic(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

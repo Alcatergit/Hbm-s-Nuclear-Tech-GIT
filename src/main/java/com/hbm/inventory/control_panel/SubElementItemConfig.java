@@ -1,9 +1,5 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.inventory.control_panel.controls.configs.*;
 import com.hbm.lib.RefStrings;
 import net.minecraft.client.gui.GuiButton;
@@ -11,6 +7,10 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 
 public class SubElementItemConfig extends SubElement {
     public static ResourceLocation bg_tex = new ResourceLocation(RefStrings.MODID + ":textures/gui/control_panel/gui_base.png");

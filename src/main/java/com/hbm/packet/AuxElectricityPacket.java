@@ -1,7 +1,8 @@
 package com.hbm.packet;
 
-import api.hbm.energy.IEnergyUser;
-
+import api.hbm.energymk2.IEnergyProviderMK2;
+import api.hbm.energymk2.IEnergyReceiverMK2;
+import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
@@ -65,10 +66,14 @@ public class AuxElectricityPacket implements IMessage {
 				try {
 					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 
-					if (te != null && te instanceof IEnergyUser) {
-						
-						IEnergyUser gen = (IEnergyUser) te;
+					if (te != null && te instanceof IEnergyReceiverMK2) {
+
+						IEnergyReceiverMK2 gen = (IEnergyReceiverMK2) te;
 						gen.setPower(m.charge);
+					} else if (te instanceof TileEntityMachineRTG) { //Quickfix before threaded packets are implemented
+						TileEntityMachineRTG rtg = (TileEntityMachineRTG) te;
+						rtg.power = m.charge;
+
 					}
 				} catch (Exception x) { }
 			});

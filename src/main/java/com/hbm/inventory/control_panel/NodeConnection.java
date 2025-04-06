@@ -1,23 +1,20 @@
 package com.hbm.inventory.control_panel;
 
-import javax.annotation.Nonnull;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.control_panel.DataValue.DataType;
 import com.hbm.inventory.control_panel.nodes.Node;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nonnull;
 
 public class NodeConnection extends NodeElement {
 
@@ -144,8 +141,8 @@ public class NodeConnection extends NodeElement {
 		Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		float x = offsetX+38 + (isInput ? -40 : 0);
 		float y = offsetY+8;
-		RenderHelper.drawGuiRectBatchedColor(x, y, 0.625F, 0, 4, 4, 0.6875F, 0.0625F, color[0], color[1], color[2], 1);
-		color = RenderHelper.intersects2DBox(mX, mY, this.getValueBox()) && !isTyping ? new float[]{1, 1, 1} : new float[]{0.6F, 0.6F, 0.6F};
+		NTMRenderHelper.drawGuiRectBatchedColor(x, y, 0.625F, 0, 4, 4, 0.6875F, 0.0625F, color[0], color[1], color[2], 1);
+		color = NTMRenderHelper.intersects2DBox(mX, mY, this.getValueBox()) && !isTyping ? new float[]{1, 1, 1} : new float[]{0.6F, 0.6F, 0.6F};
 		if(isInput){
 			if(enumSelector != null){
 				Tessellator.getInstance().draw();
@@ -153,7 +150,7 @@ public class NodeConnection extends NodeElement {
 				return;
 			}
 			if(connection == null){
-				RenderHelper.drawGuiRectBatchedColor(x, y-1, 0, 0.203125F, 40, 6, 0.625F, 0.296875F, color[0], color[1], color[2], 1);
+				NTMRenderHelper.drawGuiRectBatchedColor(x, y-1, 0, 0.203125F, 40, 6, 0.625F, 0.296875F, color[0], color[1], color[2], 1);
 			}
 		}
 		Tessellator.getInstance().draw();

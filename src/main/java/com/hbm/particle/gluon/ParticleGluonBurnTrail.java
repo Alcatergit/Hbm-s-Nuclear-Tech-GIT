@@ -8,7 +8,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
@@ -40,7 +40,7 @@ public class ParticleGluonBurnTrail extends Particle {
 		if(nodes.isEmpty()){
 			nodes.add(new Node(pos, normal, null, 0));
 		}
-		float dist = (float) pos.subtract(nodes.get(nodes.size()-1).pos).lengthVector();
+		float dist = (float) pos.subtract(nodes.get(nodes.size()-1).pos).length();
 		if(dist < 0.1){
 			return true;
 		}
@@ -68,7 +68,7 @@ public class ParticleGluonBurnTrail extends Particle {
 				nodes.add(new Node(interPos, interNormal, interTan,  prev.uCoord-distToPlane*uScale));
 				
 				Vec3d tan = normal.crossProduct(interPos.subtract(pos)).normalize();
-				nodes.add(new Node(pos, normal, tan, (prev.uCoord-distToPlane*uScale)+(float) pos.subtract(interPos).lengthVector()*uScale));
+				nodes.add(new Node(pos, normal, tan, (prev.uCoord-distToPlane*uScale)+(float) pos.subtract(interPos).length()*uScale));
 			} else {
 				Vec3d tan = normal.crossProduct(prev.pos.subtract(pos)).normalize();
 				nodes.add(new Node(pos, normal, tan, prev.uCoord+dist*uScale));
@@ -104,7 +104,7 @@ public class ParticleGluonBurnTrail extends Particle {
 	
 	@Override
 	public void renderParticle(BufferBuilder buf, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
-		RenderHelper.resetParticleInterpPos(entityIn, partialTicks);
+		NTMRenderHelper.resetParticleInterpPos(entityIn, partialTicks);
 		//GL11.glTranslated(-interpPosX, -interpPosY, -interpPosZ);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.gluon_burn);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);

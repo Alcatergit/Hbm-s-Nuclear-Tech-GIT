@@ -1,24 +1,18 @@
 package com.hbm.render.entity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntityVortex;
-import com.hbm.forgefluid.FFUtils;
+import com.hbm.hfr.render.loader.HFRWavefrontObject;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
-import com.hbm.render.amlfrom1710.AdvancedModelLoader;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -26,6 +20,9 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderBlackHole extends Render<EntityBlackHole> {
 
@@ -41,7 +38,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	protected RenderBlackHole(RenderManager renderManager){
 		super(renderManager);
-		blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
+		blastModel = new HFRWavefrontObject(objTesterModelRL);
 	}
 
 	@Override
@@ -419,22 +416,22 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	protected void setColorFull(EntityBlackHole e, float[] color){
 		if(e instanceof EntityVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0x3898b3, color);
+			NTMRenderHelper.unpackColor(0x3898b3, color);
 		} else if(e instanceof EntityRagingVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0xe8390d, color);
+			NTMRenderHelper.unpackColor(0xe8390d, color);
 		} else {
-			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);
+			NTMRenderHelper.unpackColor(0xFFB900, color);
 		}
 		color[3] = 1;
 	}
 
 	protected void setColorNone(EntityBlackHole e, float[] color){
 		if(e instanceof EntityVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0x3898b3, color);
+			NTMRenderHelper.unpackColor(0x3898b3, color);
 		} else if(e instanceof EntityRagingVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0xe8390d, color);
+			NTMRenderHelper.unpackColor(0xe8390d, color);
 		} else {
-			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);
+			NTMRenderHelper.unpackColor(0xFFB900, color);
 		}
 		color[3] = 0;
 	}

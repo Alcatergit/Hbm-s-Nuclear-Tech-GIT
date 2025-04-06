@@ -3,7 +3,6 @@ package com.hbm.render.entity;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelCrab;
-
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

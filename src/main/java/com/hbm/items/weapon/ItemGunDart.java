@@ -1,7 +1,6 @@
 package com.hbm.items.weapon;
 
 import com.hbm.handler.GunConfiguration;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;

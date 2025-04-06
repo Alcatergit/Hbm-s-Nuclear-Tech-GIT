@@ -1,29 +1,25 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
-import com.hbm.blocks.BlockDummyable;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.DoorDecl;
 import com.hbm.tileentity.TileEntityDoorGeneric;
-
+import com.hbm.util.I18nUtil;
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
@@ -34,12 +30,14 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
 
+import java.util.List;
+
 @Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
 public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlock, IPartialSealableBlock {
 
 	public DoorDecl type;
 	private boolean isRadResistant;
-	
+
 	public BlockDoorGeneric(Material materialIn, DoorDecl type, boolean isRadResistant, String s){
 		super(materialIn, s);
 		this.type = type;
@@ -77,19 +75,19 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 	public int getOffset(){
 		return 0;
 	}
-	
+
 	@Override
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
 		if(world.isRemote) {
 			return true;
 		} else if(player.getHeldItem(hand).getItem() instanceof ItemLock || player.getHeldItem(hand).getItem() == ModItems.key_kit) {
 			return false;
-			
+
 		} if(!player.isSneaking()) {
 			int[] pos1 = findCore(world, pos.getX(), pos.getY(), pos.getZ());
 			if(pos1 == null)
@@ -102,7 +100,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 		}
 		return false;
 	}
-	
+
 	@Override
 	public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity){
 		TileEntity te = world.getTileEntity(pos);
@@ -110,7 +108,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 		boolean open = hasExtra(meta) || (te instanceof TileEntityDoorGeneric && ((TileEntityDoorGeneric)te).shouldUseBB);
 		return type.isLadder(open);
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	@Override
 	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState){
@@ -119,7 +117,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 			return;
 		super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
 	}
-	
+
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
 		if(!world.isRemote){
@@ -142,7 +140,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 	public BlockFaceShape getBlockFaceShape(IBlockAccess worldIn, IBlockState state, BlockPos pos, EnumFacing face) {
 		return BlockFaceShape.UNDEFINED;
 	}
-	
+
 	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos){
 		int meta = state.getValue(META);
@@ -176,7 +174,7 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 		}
 		super.onBlockAdded(worldIn, pos, state);
 	}
-	
+
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
 		if(this.isRadResistant){

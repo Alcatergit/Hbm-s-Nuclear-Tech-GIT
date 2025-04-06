@@ -6,6 +6,8 @@ import java.util.Map.Entry;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.storage.WorldSavedData;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class SatelliteSavedData extends WorldSavedData {
 
@@ -72,5 +74,17 @@ public class SatelliteSavedData extends WorldSavedData {
 	        data = (SatelliteSavedData)worldObj.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 	    }
 	    return data;
+	}
+
+	public static HashMap<Integer, Satellite> clientSats = new HashMap<>();
+
+	@SideOnly(Side.CLIENT)
+	public static void setClientSats(HashMap<Integer, Satellite> sats) {
+		clientSats = sats;
+	}
+
+	@SideOnly(Side.CLIENT)
+	public static HashMap<Integer, Satellite> getClientSats() {
+		return clientSats;
 	}
 }

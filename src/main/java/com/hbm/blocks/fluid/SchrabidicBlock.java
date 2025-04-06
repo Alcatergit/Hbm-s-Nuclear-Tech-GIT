@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -23,7 +22,7 @@ public class SchrabidicBlock extends BlockFluidClassic {
 	
 	public SchrabidicBlock(Fluid fluid, Material material, DamageSource source, String s) {
 		super(fluid, material);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		damageSource = source;
 		setQuantaPerBlock(4);
@@ -50,7 +49,7 @@ public class SchrabidicBlock extends BlockFluidClassic {
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
 		entity.setInWeb();
 		if(entity instanceof EntityLivingBase)
 			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 10.0F);

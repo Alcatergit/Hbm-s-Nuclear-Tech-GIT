@@ -1,11 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -16,19 +10,14 @@ import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.GunAnimationPacket;
-import com.hbm.packet.GunButtonPacket;
-import com.hbm.packet.GunFXPacket;
+import com.hbm.packet.*;
 import com.hbm.packet.GunFXPacket.FXType;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -52,6 +41,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 
@@ -69,7 +62,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 	public ItemGunBase(GunConfiguration config, String s) {
 		mainConfig = config;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
@@ -134,7 +127,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 			
 			if(mainConfig.reloadType != GunConfiguration.RELOAD_NONE || (altConfig != null && altConfig.reloadType != 0)) {
 				
-				if((HbmKeybinds.reloadKey.isKeyDown() && (getMag(stack) < mainConfig.ammoCap || (mainConfig.allowsInfinity && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0)))) {
+				if((HbmKeybinds.reloadKey.isPressed() && (getMag(stack) < mainConfig.ammoCap || (mainConfig.allowsInfinity && EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0)))) {
 					PacketDispatcher.wrapper.sendToServer(new GunButtonPacket(true, (byte) 2, hand));
 					setIsReloading(stack, true);
 					resetReloadCycle(stack);
@@ -475,7 +468,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 			list.add("Ammo: §6Belt");
 		}
 
-		list.add("Ammo Type: §e" + I18n.format(ammo.getUnlocalizedName() + ".name"));
+		list.add("Ammo Type: §e" + I18n.format(ammo.getTranslationKey() + ".name"));
 
 		int dura = mainConfig.durability - getItemWear(stack);
 
@@ -703,7 +696,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		BusAnimation animation = config.animations.get(type);
 
 		if(animation != null) {
-			HbmAnimations.hotbar[slot] = new Animation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+			HbmAnimations.hotbar[slot] = new Animation(stack.getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 		}
 	}
 	

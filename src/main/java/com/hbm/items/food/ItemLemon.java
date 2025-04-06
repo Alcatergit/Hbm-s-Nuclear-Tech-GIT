@@ -1,10 +1,7 @@
 package com.hbm.items.food;
 
-import java.util.List;
-
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.items.ModItems;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,11 +12,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemLemon extends ItemFood {
 
 	public ItemLemon(int amount, float saturation, boolean isWolfFood, String s) {
 		super(amount, saturation, isWolfFood);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

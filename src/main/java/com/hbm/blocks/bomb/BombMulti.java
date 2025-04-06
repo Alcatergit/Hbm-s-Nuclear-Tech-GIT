@@ -8,7 +8,6 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityBombMulti;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
@@ -21,11 +20,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -45,7 +40,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 	
 	public BombMulti(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -77,11 +72,11 @@ public class BombMulti extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityBombMulti entity = (TileEntityBombMulti) worldIn.getTileEntity(pos);
-        if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0)
+        if (worldIn.getStrongPower(pos) > 0)
         {
         	if(/*entity.getExplosionType() != 0*/entity.isLoaded())
         	{
-        		this.onBlockDestroyedByPlayer(worldIn, pos, state);
+        		this.onPlayerDestroy(worldIn, pos, state);
             	igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ());
         	}
         }
@@ -191,13 +186,16 @@ public class BombMulti extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void explode(World world, BlockPos pos) {
-		TileEntityBombMulti entity = (TileEntityBombMulti) world.getTileEntity(pos);
-    	if(/*entity.getExplosionType() != 0*/entity.isLoaded())
-    	{
-    		this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
-        	igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
-    	}
+	public BombReturnCode explode(World world, BlockPos pos) {
+		if(!world.isRemote) {
+			TileEntityBombMulti entity = (TileEntityBombMulti) world.getTileEntity(pos);
+			if (/*entity.getExplosionType() != 0*/entity.isLoaded()) {
+				this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+				igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
+			}
+			return BombReturnCode.ERROR_MISSING_COMPONENT;
+		}
+		return BombReturnCode.UNDEFINED;
 	}
 	
 	@Override
@@ -242,7 +240,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

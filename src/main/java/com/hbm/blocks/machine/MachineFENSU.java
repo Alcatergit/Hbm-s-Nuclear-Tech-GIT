@@ -1,35 +1,33 @@
 package com.hbm.blocks.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.lib.Library;
-import com.hbm.lib.InventoryHelper;
-import com.hbm.blocks.ILookOverlay;
-import com.hbm.lib.Library;
 import com.hbm.blocks.BlockDummyableMBB;
+import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.InventoryHelper;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineFENSU;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 
@@ -78,7 +76,7 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 				NBTTagCompound nbt = new NBTTagCompound();
 				battery.writeNBT(nbt);
 
-				if(!nbt.hasNoTags()) {
+				if(!nbt.isEmpty()) {
 					drop.setTagCompound(nbt);
 				}
 			}
@@ -229,12 +227,12 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 		TileEntityMachineFENSU battery = (TileEntityMachineFENSU) te;
 		List<String> text = new ArrayList();
 		text.add("§6<> §rStored Energy: " + Library.getShortNumber(battery.power) + "/9.22EHE");
-		if(battery.powerDelta == 0)
+		if(battery.delta == 0)
 			text.add("§e-- §r0HE/s");
-		else if(battery.powerDelta > 0)
-			text.add("§a-> §r" + Library.getShortNumber(battery.powerDelta) + "HE/s");
+		else if(battery.delta > 0)
+			text.add("§a-> §r" + Library.getShortNumber(battery.delta) + "HE/s");
 		else
-			text.add("§c<- §r" + Library.getShortNumber(-battery.powerDelta) + "HE/s");
+			text.add("§c<- §r" + Library.getShortNumber(-battery.delta) + "HE/s");
 		text.add("&["+Library.getColorProgress((double)battery.power/(double)Long.MAX_VALUE)+"&]    "+Library.getPercentage((double)battery.power/(double)Long.MAX_VALUE)+"%");
 		ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
 	}

@@ -1,25 +1,14 @@
 package com.hbm.inventory.control_panel.nodes;
 
+import com.hbm.inventory.control_panel.*;
+import com.hbm.inventory.control_panel.DataValue.DataType;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.hbm.inventory.control_panel.ControlEvent;
-import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValue.DataType;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.IControllable;
-import com.hbm.inventory.control_panel.NodeConnection;
-import com.hbm.inventory.control_panel.NodeDropdown;
-import com.hbm.inventory.control_panel.NodeSystem;
-import com.hbm.inventory.control_panel.NodeType;
-
-import com.hbm.main.MainRegistry;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
 public class NodeEventBroadcast extends NodeOutput {
 

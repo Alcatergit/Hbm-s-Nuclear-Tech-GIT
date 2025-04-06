@@ -1,16 +1,15 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerCrateDesh;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityCrateDesh;
-
+import com.hbm.tileentity.machine.storage.TileEntityCrateBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUICrateDesh extends GuiContainer {
 	
@@ -29,6 +28,21 @@ public class GUICrateDesh extends GuiContainer {
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
 		super.renderHoveredToolTip(mouseX, mouseY);
+	}
+
+	public void initGui() {
+		super.initGui();
+		if (mc.player != null) {
+			TileEntityCrateBase.openInventory(mc.player);
+		}
+	}
+
+	@Override
+	public void onGuiClosed() {
+		super.onGuiClosed();
+		if (mc.player != null) {
+			TileEntityCrateBase.closeInventory(mc.player);
+		}
 	}
 	
 	@Override

@@ -2,9 +2,7 @@ package com.hbm.tileentity;
 
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;

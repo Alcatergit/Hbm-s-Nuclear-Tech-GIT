@@ -1,19 +1,15 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL14;
-
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.tileentity.machine.TileEntityStructureMarker;
-import com.hbm.world.FWatz;
 import com.hbm.world.FactoryTitanium;
 import com.hbm.world.NuclearReactor;
-import com.hbm.world.Watz;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityStructureMarker> {
 
@@ -82,9 +78,9 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GlStateManager.glBlendEquation(GL14.GL_FUNC_ADD);
 		GlStateManager.color(0.5f, 0.25f, 1.0f, 1f);
-		RenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.startDrawingTexturedQuads();
 		this.renderBlocks((int) x, (int) y, (int) z, te.type, te.getBlockMetadata());
-		RenderHelper.draw();
+		NTMRenderHelper.draw();
 		GlStateManager.enableLighting();
 		GlStateManager.disableBlend();
 		GL11.glPopMatrix();
@@ -219,133 +215,41 @@ public class RenderStructureMarker extends TileEntitySpecialRenderer<TileEntityS
 				}
 			}
 		}
-		if(type == 3) {
-
-			if(meta == 1) {
-				offsetZ = 0;
-				offsetX = 10;
-			}
-			if(meta == 2) {
-				offsetZ = 0;
-				offsetX = 2;
-			}
-			if(meta == 3) {
-				offsetX = 6;
-				offsetZ = -4;
-			}
-			if(meta == 4) {
-				offsetZ = 4;
-				offsetX = 6;
-			}
-
-			GL11.glTranslatef(-3 + offsetX, 0, -3 + offsetZ);
-			for(int a = 0; a < 7; a++) {
-				for(int b = 0; b < 13; b++) {
-					for(int c = 0; c < 7; c++) {
-				
-						int texture = -1;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("C"))
-							texture = 0;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("A"))
-							texture = 1;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("R"))
-							texture = 2;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("S"))
-							texture = 3;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("I"))
-							texture = 4;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("#"))
-							texture = 5;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("K"))
-							texture = 6;
-						if(Watz.watz[b][a].substring(c, c + 1).equals("W"))
-							texture = 7;
-						if(texture >= 0) {
-							renderSmolBlockAt(watz[texture][0], watz[texture][1], a, b, c);
-						}
-					}
-				}
-			}
-		}
-		if(type == 4) {
-			if(meta == 1) {
-				offsetZ = 0;
-				offsetX = 28;
-			}
-			if(meta == 2) {
-				offsetZ = 0;
-				offsetX = 8;
-			}
-			if(meta == 3) {
-				offsetX = 18;
-				offsetZ = -10;
-			}
-			if(meta == 4) {
-				offsetZ = 10;
-				offsetX = 18;
-			}
-			
-			GL11.glTranslatef(-9 + offsetX, 0, -9 + offsetZ);
-			for(int a = 0; a < 19; a++) {
-				for(int b = 0; b < 13; b++) {
-					for(int c = 0; c < 19; c++) {
-				
-						int texture = -1;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("X"))
-							texture = 0;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("H"))
-							texture = 1;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("S"))
-							texture = 2;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("T"))
-							texture = 3;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("M"))
-							texture = 4;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("C"))
-							texture = 5;
-						if(FWatz.fwatz[b][a].substring(c, c + 1).equals("#"))
-							texture = 6;
-						if(texture >= 0) {
-							renderSmolBlockAt(fwatz[texture][0], fwatz[texture][1], a, b, c);
-						}
-					}
-				}
-			}
-		}
 	}
 
+	//TODO: remove that
 	public void renderSmolBlockAt(TextureAtlasSprite loc1, TextureAtlasSprite loc2, int x, int y, int z) {
 		// GL11.glTranslatef(x, y, z);
 		GL11.glRotatef(180, 0F, 0F, 1F);
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
 
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
 
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
 
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc2.getMinU(), loc2.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc2.getMaxU(), loc2.getMaxV());
 
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMaxU(), loc1.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMinU(), loc1.getMinV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMinU(), loc1.getMaxV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMaxU(), loc1.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMaxU(), loc1.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMinU(), loc1.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMinU(), loc1.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 1 - 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMaxU(), loc1.getMaxV());
 
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMaxU(), loc1.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMinU(), loc1.getMinV());
-		RenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMinU(), loc1.getMaxV());
-		RenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMaxU(), loc1.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMaxU(), loc1.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 11 * pixel / 2, loc1.getMinU(), loc1.getMinV());
+		NTMRenderHelper.addVertexWithUV(x + 1 - 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMinU(), loc1.getMaxV());
+		NTMRenderHelper.addVertexWithUV(x + 11 * pixel / 2, y + 11 * pixel / 2, z + 1 - 11 * pixel / 2, loc1.getMaxU(), loc1.getMaxV());
 
 	}
 }

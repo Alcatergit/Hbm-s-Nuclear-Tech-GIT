@@ -6,7 +6,6 @@ import com.hbm.render.model.ModelT45Boots;
 import com.hbm.render.model.ModelT45Chest;
 import com.hbm.render.model.ModelT45Helmet;
 import com.hbm.render.model.ModelT45Legs;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

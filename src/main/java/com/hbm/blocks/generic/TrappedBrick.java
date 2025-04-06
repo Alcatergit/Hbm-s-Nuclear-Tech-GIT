@@ -1,12 +1,9 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.deco.TileEntityTrappedBrick;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -32,15 +29,17 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class TrappedBrick extends BlockContainer {
 
 	public static final PropertyInteger TYPE = PropertyInteger.create("type", 0, 15);
-	
+
 	public TrappedBrick(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -50,17 +49,17 @@ public class TrappedBrick extends BlockContainer {
 			return new TileEntityTrappedBrick();
 		return null;
 	}
-	
+
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {
 		return EnumBlockRenderType.MODEL;
 	}
-	
+
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> list, ITooltipFlag advanced) {
 		list.add(Trap.get(stack.getItemDamage()).toString());
 	}
-	
+
 	@Override
 	public void onEntityWalk(World world, BlockPos pos, Entity entity) {
 		int x = pos.getX();
@@ -139,31 +138,31 @@ public class TrappedBrick extends BlockContainer {
 		world.playSound(null, x + 0.5D, y + 0.5D, z + 0.5D, SoundEvents.BLOCK_TRIPWIRE_CLICK_ON, SoundCategory.BLOCKS, 0.3F, 0.6F);
 		world.setBlockState(new BlockPos(x, y, z), ModBlocks.brick_jungle.getDefaultState());
 	}
-	
+
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, TYPE);
 	}
-	
+
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return state.getValue(TYPE);
 	}
-	
+
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState().withProperty(TYPE, meta);
 	}
-	
+
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTabToDisplayOn() || tab == CreativeTabs.SEARCH)
+		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH)
 			for (int i = 0; i < Trap.values().length; ++i) {
 				items.add(new ItemStack(this, 1, i));
 			}
 	}
-	
+
 	public static enum TrapType {
 		ON_STEP,
 		DETECTOR

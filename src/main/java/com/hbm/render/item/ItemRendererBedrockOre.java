@@ -1,16 +1,12 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.special.ItemBedrockOre;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRendererBedrockOre extends TEISRBase {
 
@@ -40,12 +36,12 @@ public class ItemRendererBedrockOre extends TEISRBase {
 			}
 
 			GL11.glTranslated(-0.5, -0.5, -HALF_A_PIXEL);
-			RenderHelper.setColor(color);
-        	RenderHelper.startDrawingTexturedQuads();
-			RenderHelper.drawFullTexture(layerTex, 0, 0, 1, 1, 0, false);
-			RenderHelper.drawFullTexture(layerTex, 0, 0, 1, 1, PIX, true);
-			RenderHelper.draw();
-        	RenderHelper.resetColor();
+			NTMRenderHelper.setColor(color);
+        	NTMRenderHelper.startDrawingTexturedQuads();
+			NTMRenderHelper.drawFullTexture(layerTex, 0, 0, 1, 1, 0, false);
+			NTMRenderHelper.drawFullTexture(layerTex, 0, 0, 1, 1, PIX, true);
+			NTMRenderHelper.draw();
+        	NTMRenderHelper.resetColor();
 		}
 		GL11.glPopMatrix();
 		super.renderByItem(stack);

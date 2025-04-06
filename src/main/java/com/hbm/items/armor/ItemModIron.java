@@ -1,10 +1,7 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
@@ -13,6 +10,8 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModIron extends ItemArmorMod {
 

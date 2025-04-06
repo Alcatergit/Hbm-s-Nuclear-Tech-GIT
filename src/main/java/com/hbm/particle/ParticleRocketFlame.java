@@ -29,6 +29,17 @@ public class ParticleRocketFlame extends Particle {
 	public void setMotionY(double y){
 		this.motionY = y;
 	}
+
+	public void setMotion(double x, double y, double z){
+		this.motionX = x;
+		this.motionY = y;
+		this.motionZ = z;
+	}
+
+	public ParticleRocketFlame setScale(float scale) {
+		this.particleScale = scale;
+		return this;
+	}
 	
 	@Override
 	public void onUpdate() {

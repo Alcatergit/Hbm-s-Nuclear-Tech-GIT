@@ -1,9 +1,6 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.entity.player.EntityPlayer;
@@ -16,12 +13,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemCapacitor extends Item {
 
 	private int dura;
 	
 	public ItemCapacitor(int dura, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.dura = dura;
 		
@@ -44,11 +43,6 @@ public class ItemCapacitor extends Item {
 			tooltip.add("§b[Needed for Schrabidium Synthesis]");
 			int itemDura = getDura(stack);
 			tooltip.add(getColor(itemDura, dura) + itemDura + " §2/ " + dura);
-		}
-		if (this == ModItems.titanium_filter) {
-			tooltip.add("§e[Needed for Watz Reaction]");
-			int itemDura = getDura(stack);
-			tooltip.add(getColor(itemDura, dura) + itemDura/20 + " §2/ " + dura/20);
 		}
 	}
 	

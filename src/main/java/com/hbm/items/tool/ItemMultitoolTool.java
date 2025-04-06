@@ -1,11 +1,7 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-import java.util.Set;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,11 +15,14 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
+import java.util.List;
+import java.util.Set;
+
 public class ItemMultitoolTool extends ItemTool {
 
 	public ItemMultitoolTool(float f, ToolMaterial materialIn, Set<Block> effectiveBlocksIn, String s) {
 		super(f, 0, materialIn, effectiveBlocksIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

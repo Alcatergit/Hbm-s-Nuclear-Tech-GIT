@@ -1,12 +1,8 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.items.ModItems;
-import com.hbm.render.RenderHelper;
-
+import com.hbm.render.NTMRenderHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
@@ -17,6 +13,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class ElectricityRenderer extends Render<EntityDischarge> {
 
@@ -65,13 +63,13 @@ public class ElectricityRenderer extends Render<EntityDischarge> {
 		float f6 = 0.25F;
 		GL11.glRotatef(180.0F - this.renderManager.playerViewY, 0.0F, 1.0F, 0.0F);
 		GL11.glRotatef(-this.renderManager.playerViewX, 1.0F, 0.0F, 0.0F);
-		RenderHelper.startDrawingTexturedQuads();
+		NTMRenderHelper.startDrawingTexturedQuads();
 		//p_77026_1_.setNormal(0.0F, 1.0F, 0.0F);
-		RenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
-		RenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
-		RenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
-		RenderHelper.draw();
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, 0.0F - f6, 0.0D, f, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, 0.0F - f6, 0.0D, f1, f3);
+		NTMRenderHelper.addVertexWithUV(f4 - f5, f4 - f6, 0.0D, f1, f2);
+		NTMRenderHelper.addVertexWithUV(0.0F - f5, f4 - f6, 0.0D, f, f2);
+		NTMRenderHelper.draw();
 	}
 	
 }

@@ -1,21 +1,16 @@
 package com.hbm.render.entity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.culling.ICamera;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -26,6 +21,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.biome.Biome;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderFallout extends Render<EntityFalloutRain> {
 
@@ -66,14 +64,14 @@ public class RenderFallout extends Render<EntityFalloutRain> {
         GlStateManager.disableCull();
         //Drillgon200: It doesn't work when I use GLStateManager...
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderHelper.resetColor();
+        NTMRenderHelper.resetColor();
         
         GlStateManager.disableLighting();
         Entity ent = this.mc.getRenderViewEntity();
         Vec3 vector = Vec3.createVectorHelper(ent.posX - entity.posX,
                 ent.posY - entity.posY, ent.posZ - entity.posZ);
        
-        double d = vector.lengthVector();
+        double d = vector.length();
        
         if (d <= entity.getScale()) {
             rendererUpdateCount++;
@@ -143,7 +141,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             }
  
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderHelper.resetColor();
+            NTMRenderHelper.resetColor();
             for (int l = i3 - b0; l <= i3 + b0; ++l) {
                 for (int i1 = k2 - b0; i1 <= k2 + b0; ++i1) {
                     int j1 = (l - i3 + 16) * 32 + i1 - k2 + 16;

@@ -31,7 +31,7 @@ import com.hbm.particle.ParticleFakeBrightness;
 import com.hbm.particle.ParticleHeatDistortion;
 import com.hbm.particle.ParticleJetpackTrail;
 import com.hbm.particle.rocket.ParticleRocketPlasma;
-import com.hbm.render.RenderHelper;
+import com.hbm.render.NTMRenderHelper;
 import com.hbm.render.misc.ColorGradient;
 import com.hbm.sound.MovingSoundJetpack;
 import com.hbm.util.BobMathUtil;
@@ -423,7 +423,7 @@ public class JetpackHandler {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GlStateManager.enableAlpha();
-			RenderHelper.drawGuiRect(0, res.getScaledHeight()-maxHeightPixels, 0, 1-maxHeight, 50, maxHeightPixels, 1, 1);
+			NTMRenderHelper.drawGuiRect(0, res.getScaledHeight()-maxHeightPixels, 0, 1-maxHeight, 50, maxHeightPixels, 1, 1);
 			GlStateManager.disableAlpha();
 			GlStateManager.enableBlend();
 			float oX = 31/256F;
@@ -440,7 +440,7 @@ public class JetpackHandler {
 			GL11.glTranslated(rX+(117/256F)*50, rY+(76/256F)*maxHeightPixels, 0);
 			GL11.glRotated(thrustDegrees, 0, 0, 1);
 			GL11.glTranslated(-rX, -rY, 0);
-			RenderHelper.drawGuiRect(oX*50, res.getScaledHeight()-(maxHeightPixels-maxHeightPixels*oY), oX, oY, width*50, height*50, oX+width, oY+height);
+			NTMRenderHelper.drawGuiRect(oX*50, res.getScaledHeight()-(maxHeightPixels-maxHeightPixels*oY), oX, oY, width*50, height*50, oX+width, oY+height);
 			GL11.glPopMatrix();
 			//Fuel
 			FluidTank tank = getTank(p);
@@ -450,7 +450,7 @@ public class JetpackHandler {
 			GL11.glTranslated(rX, rY+(76/256F)*maxHeightPixels, 0);
 			GL11.glRotated(fuelDegrees, 0, 0, 1);
 			GL11.glTranslated(-rX, -rY, 0);
-			RenderHelper.drawGuiRect(oX*50, res.getScaledHeight()-(maxHeightPixels-maxHeightPixels*oY), oX, oY, width*50, height*50, oX+width, oY+height);
+			NTMRenderHelper.drawGuiRect(oX*50, res.getScaledHeight()-(maxHeightPixels-maxHeightPixels*oY), oX, oY, width*50, height*50, oX+width, oY+height);
 			GL11.glPopMatrix();
 			
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.jetpack_hud_small_text);
@@ -479,14 +479,14 @@ public class JetpackHandler {
 				yHeight = 75/128F-yOffset;
 				yPosition = -6;
 			}
-			RenderHelper.drawGuiRect(0, res.getScaledHeight()-25-(yOffset-yOffset*25)-yPosition, 0, yOffset, 50, 25*yHeight, 1, yOffset+yHeight);
+			NTMRenderHelper.drawGuiRect(0, res.getScaledHeight()-25-(yOffset-yOffset*25)-yPosition, 0, yOffset, 50, 25*yHeight, 1, yOffset+yHeight);
 			//GL11.glPopMatrix();
 		} else {
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.jetpack_hud_large);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GlStateManager.enableAlpha();
-			RenderHelper.drawGuiRect(0, res.getScaledHeight()-80, 0, 0, 80, 80, 0.5F, 1);
+			NTMRenderHelper.drawGuiRect(0, res.getScaledHeight()-80, 0, 0, 80, 80, 0.5F, 1);
 			GlStateManager.disableAlpha();
 			
 			boolean active = jetpackActive(p);
@@ -498,22 +498,22 @@ public class JetpackHandler {
 			//oX = 0.2F;
 			//width = 0.8F-oX;
 			if(active){
-				RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
+				NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
 			}
 			oX = 172/512F;
 			width = 282/512F - oX;
 			if(hover){
-				RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
+				NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
 			}
 			oX = 282/512F;
 			width = 383/512F - oX;
 			if(!hover){
-				RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
+				NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
 			}
 			oX = 383/512F;
 			width = 512/512F - oX;
 			if(info.failureTicks > 0){
-				RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
+				NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-40, 0.5F+oX*0.5F, 0.5F, width*80, 40, 0.5F+(width+oX)*0.5F, 1);
 			}
 			oX = 49/512F;
 			width = 134/512F - oX;
@@ -529,7 +529,7 @@ public class JetpackHandler {
 			GL11.glTranslated(rX, rY, 0);
 			GL11.glRotated(thrustDegrees, 0, 0, 1);
 			GL11.glTranslated(-rX, -rY, 0);
-			RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-(80-oY*80), 0.5F+oX*0.5F, oY, width*80, height*80, 0.5F+(width+oX)*0.5F, oY+height);
+			NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-(80-oY*80), 0.5F+oX*0.5F, oY, width*80, height*80, 0.5F+(width+oX)*0.5F, oY+height);
 			GL11.glPopMatrix();
 			//Fuel
 			FluidTank tank = getTank(p);
@@ -539,13 +539,13 @@ public class JetpackHandler {
 			GL11.glTranslated(rX+80*179/512F, rY, 0);
 			GL11.glRotated(fuelDegrees, 0, 0, 1);
 			GL11.glTranslated(-rX, -rY, 0);
-			RenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-(80-oY*80), 0.5F+oX*0.5F, oY, width*80, height*80, 0.5F+(width+oX)*0.5F, oY+height);
+			NTMRenderHelper.drawGuiRect(oX*80, res.getScaledHeight()-(80-oY*80), 0.5F+oX*0.5F, oY, width*80, height*80, 0.5F+(width+oX)*0.5F, oY+height);
 			GL11.glPopMatrix();
 			//GlStateManager.disableBlend();
 			if(tank.getFluid() != null){
 				Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 				TextureAtlasSprite fuel = FFUtils.getTextureFromFluid(tank.getFluid().getFluid());
-				RenderHelper.drawGuiRect(66.8F, res.getScaledHeight()-71.3F, fuel.getMinU(), fuel.getMinV(), 6.5F, 6.8F, fuel.getMaxU(), fuel.getMaxV());
+				NTMRenderHelper.drawGuiRect(66.8F, res.getScaledHeight()-71.3F, fuel.getMinU(), fuel.getMinV(), 6.5F, 6.8F, fuel.getMaxU(), fuel.getMaxV());
 			}
 		}
 	}

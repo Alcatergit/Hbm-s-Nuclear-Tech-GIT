@@ -27,7 +27,7 @@ public class ParticleCrucibleLightning extends ParticleFirstPerson {
 		i.forkLengthRandom = 2;
 		i.forkConeDegrees = 10;
 		Vec3d start = new Vec3d(posXIn, posYIn, posZIn);
-		Vec3d end = start.addVector(0, 0, -1F);
+		Vec3d end = start.add(0, 0, -1F);
 		if(worldIn.rand.nextBoolean()){
 			Vec3d tmp = start;
 			start = end;
