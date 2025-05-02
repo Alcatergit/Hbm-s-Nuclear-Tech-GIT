@@ -192,7 +192,7 @@ public class BlockHazard extends BlockBase {
 	}
 
 	@Override
-	public void onBlockDestroyedByPlayer(World world, BlockPos pos, IBlockState state) {
+	public void onPlayerDestroy(World world, BlockPos pos, IBlockState state) {
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!world.isRemote)
         		world.setBlockState(pos, Blocks.LAVA.getDefaultState());
@@ -220,7 +220,7 @@ public class BlockHazard extends BlockBase {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
 			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
 

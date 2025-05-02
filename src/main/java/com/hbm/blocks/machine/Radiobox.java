@@ -46,7 +46,7 @@ public class Radiobox extends BlockContainer {
 	
 	public Radiobox(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -159,7 +159,7 @@ public class Radiobox extends BlockContainer {
 	public IBlockState getStateFromMeta(int meta) {
 		boolean state = (meta & 1) == 1 ? true : false;
 		meta = meta >> 1;
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;

@@ -27,20 +27,20 @@ public class DetCord extends Block implements IBomb {
 
 	public DetCord(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
 	@Override
-	public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosionIn) {
+	public void onExplosionDestroy(World world, BlockPos pos, Explosion explosionIn) {
 		this.explode(world, pos);
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
+		if(worldIn.getStrongPower(pos) > 0){
 			explode(worldIn, pos);
 		}
 	}

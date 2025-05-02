@@ -21,7 +21,7 @@ public class BlockBase extends Block {
 	
 	public BlockBase(Material m, String s){
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHarvestLevel("pickaxe", 0);
 		this.setCreativeTab(MainRegistry.controlTab);
@@ -30,7 +30,7 @@ public class BlockBase extends Block {
 
 	public BlockBase(Material m, SoundType sound, String s){
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setSoundType(sound);
 		this.setHarvestLevel("pickaxe", 0);

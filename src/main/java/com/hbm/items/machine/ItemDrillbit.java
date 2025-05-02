@@ -17,7 +17,7 @@ public class ItemDrillbit extends Item {
 	public ItemDrillbit(EnumDrillType drillType, String s) {
 		this.drillType = drillType;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

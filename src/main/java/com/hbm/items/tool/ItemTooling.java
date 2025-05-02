@@ -24,7 +24,7 @@ public class ItemTooling extends Item {
 	protected ToolType type;
 	
 	public ItemTooling(ToolType type, int dura, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setFull3D();

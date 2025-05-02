@@ -20,7 +20,7 @@ public abstract class TurretBase extends BlockContainer {
 	
 	protected TurretBase(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		

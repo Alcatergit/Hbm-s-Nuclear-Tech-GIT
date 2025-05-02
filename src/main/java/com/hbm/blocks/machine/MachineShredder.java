@@ -23,7 +23,7 @@ public class MachineShredder extends BlockContainer {
 
 	public MachineShredder(Material m, String s) {
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);

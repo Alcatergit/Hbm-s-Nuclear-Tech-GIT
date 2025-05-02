@@ -20,7 +20,7 @@ import net.minecraft.world.World;
 public class ItemBalefireMatch extends Item {
 
 	public ItemBalefireMatch(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		this.setMaxDamage(256);

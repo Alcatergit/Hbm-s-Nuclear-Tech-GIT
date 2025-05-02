@@ -27,7 +27,7 @@ public class ItemCustomLore extends Item {
 	EnumRarity rarity;
 	
 	public ItemCustomLore(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);
@@ -36,7 +36,7 @@ public class ItemCustomLore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
-		String unloc = this.getUnlocalizedName() + ".desc";
+		String unloc = this.getTranslationKey() + ".desc";
 		String loc = I18nUtil.resolveKey(unloc);
 
 		if(!unloc.equals(loc)) {

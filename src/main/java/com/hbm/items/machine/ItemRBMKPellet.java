@@ -25,7 +25,7 @@ public class ItemRBMKPellet extends Item {
 	public String fullName = "";
 
 	public ItemRBMKPellet(String fullName, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.fullName = fullName;
 		this.setHasSubtypes(true);

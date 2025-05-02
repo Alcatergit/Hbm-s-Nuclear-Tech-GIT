@@ -21,7 +21,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 public class BlockPinkLog extends BlockLog {
 
 	public BlockPinkLog(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(LOG_AXIS, BlockLog.EnumAxis.Y));
 		
@@ -52,7 +52,7 @@ public class BlockPinkLog extends BlockLog {
     @Override
     @SideOnly(Side.CLIENT)
     public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-    	tooltip.add(I18n.format(this.getUnlocalizedName()+".desc"));
+    	tooltip.add(I18n.format(this.getTranslationKey()+".desc"));
         super.addInformation(stack, player, tooltip, advanced);
     }
 }

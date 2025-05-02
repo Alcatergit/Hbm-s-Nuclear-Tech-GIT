@@ -44,7 +44,7 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 		for(EntityZombie e : entities) {
 			
 			Vec3 vec = Vec3.createVectorHelper(e.posX - posX, (e.posY + e.getEyeHeight()) - posY, e.posZ - posZ);
-			double len = vec.lengthVector();
+			double len = vec.length();
 			if(len < effectRadius){
 				e.heal((float)(0.02 * (effectRadius-len)));
 			}
@@ -59,7 +59,7 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 			if(e instanceof EntityGlowingOne)
     			continue;
 			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
-			double len = vec.lengthVector();
+			double len = vec.length();
 			if(len < radius){
 				convertToGlow(world, e);
 			}

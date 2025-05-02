@@ -44,7 +44,7 @@ public class GunLeverActionS extends Item {
 	public int dmgMax = 16;
 	
 	public GunLeverActionS(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		this.setMaxDamage(500);
@@ -145,9 +145,9 @@ public class GunLeverActionS extends Item {
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
 		if(MainRegistry.polaroidID == 11)
-			return ("" + I18n.format(this.getUnlocalizedName() + "_2.name")).trim();
+			return ("" + I18n.format(this.getTranslationKey() + "_2.name")).trim();
 		else
-			return ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+			return ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 	}
 	
 	@Override

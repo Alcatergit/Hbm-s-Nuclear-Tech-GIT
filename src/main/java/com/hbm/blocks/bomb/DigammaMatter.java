@@ -25,7 +25,7 @@ public class DigammaMatter extends Block {
 
 	public DigammaMatter(String s) {
 		super(Material.PORTAL);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

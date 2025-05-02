@@ -38,7 +38,7 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb, IR
 
 	public DummyBlockVault(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

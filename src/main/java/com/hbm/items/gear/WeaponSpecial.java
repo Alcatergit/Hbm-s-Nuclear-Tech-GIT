@@ -45,7 +45,7 @@ public class WeaponSpecial extends ItemSword {
 	
 	public WeaponSpecial(ToolMaterial material, String s) {
 		super(material);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);

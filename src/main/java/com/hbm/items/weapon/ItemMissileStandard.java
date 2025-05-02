@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemMissileStandard extends Item {
 	
 	public ItemMissileStandard(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(MainRegistry.missileTab);

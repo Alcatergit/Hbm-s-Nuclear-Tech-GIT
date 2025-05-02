@@ -40,7 +40,7 @@ public class BlockNTMOre extends BlockOre {
 	public BlockNTMOre(String name, int harvestLvl, int xp) {
 		super();
 		this.xp = xp;
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
@@ -246,7 +246,7 @@ public class BlockNTMOre extends BlockOre {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
 			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
 	}

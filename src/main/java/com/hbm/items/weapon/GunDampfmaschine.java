@@ -30,7 +30,7 @@ public class GunDampfmaschine extends Item {
 	Random rand = new Random();
 	
 	public GunDampfmaschine(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

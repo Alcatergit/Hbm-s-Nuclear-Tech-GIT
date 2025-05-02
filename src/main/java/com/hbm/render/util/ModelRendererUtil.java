@@ -576,7 +576,7 @@ public class ModelRendererUtil {
 				colliders[i++] = dat.collider;
 			}
 			body.addColliders(colliders);
-			body.impulseVelocityDirect(new Vec3(plane[0]*scale, plane[1]*scale, plane[2]*scale), body.globalCentroid.addVector(0, 0, 0));
+			body.impulseVelocityDirect(new Vec3(plane[0]*scale, plane[1]*scale, plane[2]*scale), body.globalCentroid.add(0, 0, 0));
 			
 			//Create rendering display lists
 			int bodyDL = GL11.glGenLists(1);

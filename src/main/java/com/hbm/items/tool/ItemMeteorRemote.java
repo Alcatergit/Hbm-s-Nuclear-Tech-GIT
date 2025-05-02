@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class ItemMeteorRemote extends Item {
 
 	public ItemMeteorRemote(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.canRepair = false;
 		this.setMaxDamage(2);

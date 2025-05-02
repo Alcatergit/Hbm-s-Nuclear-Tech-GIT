@@ -167,6 +167,6 @@ public class ItemRTGPellet extends ItemBase {
 	}
 
 	public String getData() {
-		return String.format("%s (%s HE/t) %s", I18nUtil.resolveKey(getUnlocalizedName().concat(".name")), getHeat()*5, (getDoesDecay() ? " (decays)" : ""));
+		return String.format("%s (%s HE/t) %s", I18nUtil.resolveKey(getTranslationKey().concat(".name")), getHeat()*5, (getDoesDecay() ? " (decays)" : ""));
 	}
 }

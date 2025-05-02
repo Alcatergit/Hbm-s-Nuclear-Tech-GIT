@@ -243,6 +243,6 @@ public class Mats {
 		if(mats.isEmpty()) return;
 		list.add("§6Smelts into:");
 		int count = stack.getCount();
-		for(MaterialStack mat : mats) list.add(" §e"+I18nUtil.resolveKey(mat.material.getUnlocalizedName()) + ": " + Mats.formatAmount(mat.amount * count, shift)); 
+		for(MaterialStack mat : mats) list.add(" §e"+I18nUtil.resolveKey(mat.material.getTranslationKey()) + ": " + Mats.formatAmount(mat.amount * count, shift)); 
 	}
 }

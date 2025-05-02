@@ -14,7 +14,7 @@ public class RBMKInlet extends BlockContainer {
 
 	public RBMKInlet(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

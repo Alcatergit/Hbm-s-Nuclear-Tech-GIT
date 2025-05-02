@@ -42,7 +42,7 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	private int cap;
 
 	public ItemFluidTank(String s, int cap) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setHasSubtypes(true);
@@ -79,9 +79,9 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		String s = ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+		String s = ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 		String s1 = null;// ("" +
-							// StatCollector.translateToLocal(FluidType.getEnum(stack.getItemDamage()).getUnlocalizedName()))
+							// StatCollector.translateToLocal(FluidType.getEnum(stack.getItemDamage()).getTranslationKey()))
 		// .trim();
 		if (FluidUtil.getFluidContained(stack) != null) {
 			s1 = ("" + I18n.format(FluidUtil.getFluidContained(stack).getLocalizedName()).trim());

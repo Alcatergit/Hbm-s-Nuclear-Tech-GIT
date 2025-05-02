@@ -17,7 +17,7 @@ public class BlockGenericStairs extends BlockStairs {
 
 	public BlockGenericStairs(IBlockState modelState, String s) {
 		super(modelState);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

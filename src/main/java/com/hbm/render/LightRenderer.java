@@ -280,7 +280,7 @@ public class LightRenderer {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		ResourceManager.cone_volume.use();
 		Shader shader = ResourceManager.cone_volume;
-		float height = (float) vec.lengthVector();
+		float height = (float) vec.length();
 		shader.uniform1f("height", height);
 		vec = vec.normalize();
 		shader.uniform1f("cosAngle", (float) Math.cos(Math.toRadians(light.degrees)));
@@ -372,7 +372,7 @@ public class LightRenderer {
 					if(!Minecraft.getMinecraft().world.isBlockLoaded(new BlockPos(i, j, k)))
 						continue;
 					RenderChunk chunk = RenderHelper.getRenderChunk(new BlockPos(i, j, k));
-					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunkFromBlockCoords(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
+					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunk(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
 					if(d.intersects(chunk.boundingBox)) {
 						d.addChunkToRender(chunk);
 						if(d.doesTiles()) {
@@ -441,7 +441,7 @@ public class LightRenderer {
 	
 	private static void sendPostShaderUniforms(DirectionalLight light, Vec3d entityPos, Shader shader){
 		Vec3d pos = light.start.subtract(entityPos);
-		float height = (float) light.end.subtract(light.start).lengthVector();
+		float height = (float) light.end.subtract(light.start).length();
 		shader.uniform1f("height", height);
 		shader.uniform3f("fs_Pos", (float)pos.x, (float)pos.y, (float)pos.z);
 		shader.uniform2f("zNearFar", 0.05F, Minecraft.getMinecraft().gameSettings.renderDistanceChunks * 16 * MathHelper.SQRT_2);
@@ -630,7 +630,7 @@ public class LightRenderer {
 
 			double radians = Math.toRadians(degrees);
 			Vec3d startToEnd = end.subtract(start);
-			height = startToEnd.lengthVector();
+			height = startToEnd.length();
 			radius = height * Math.tan(radians);
 			
 			GL11.glMatrixMode(GL11.GL_PROJECTION);

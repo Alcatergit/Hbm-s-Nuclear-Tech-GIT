@@ -13,7 +13,7 @@ public class WeaponTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.gun_lever_action != null){
 			return new ItemStack(ModItems.gun_lever_action);
 		}

@@ -34,7 +34,7 @@ public class GunSpark extends Item {
 	public int dmgMax = 24;
 
 	public GunSpark(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		this.setMaxStackSize(1);

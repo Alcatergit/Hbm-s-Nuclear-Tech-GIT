@@ -72,7 +72,7 @@ public class ItemGunShotty extends ItemGunBase {
 				setHookedEntity(playerIn, stack, ent);
 				setTimeout(stack, 30);
 				
-				/*Vec3d toEnt = ent.getPositionVector().addVector(0, ent.getEyeHeight()*0.75, 0).subtract(playerIn.getPositionEyes(1.0F)).normalize();
+				/*Vec3d toEnt = ent.getPositionVector().add(0, ent.getEyeHeight()*0.75, 0).subtract(playerIn.getPositionEyes(1.0F)).normalize();
 				double yaw = Math.toDegrees(Math.atan2(toEnt.x, toEnt.z));
 				double sqrt = MathHelper.sqrt(toEnt.x * toEnt.x + toEnt.z * toEnt.z);
 				double pitch = Math.toDegrees(Math.atan2(toEnt.y, sqrt));
@@ -99,7 +99,7 @@ public class ItemGunShotty extends ItemGunBase {
 		if(hasHookedEntity(world, stack)){
 			player.fallDistance = 0;
 			Entity ent = getHookedEntity(world, stack);
-			Vec3d entPos = ent.getPositionVector().addVector(0, ent.getEyeHeight()*0.75, 0);
+			Vec3d entPos = ent.getPositionVector().add(0, ent.getEyeHeight()*0.75, 0);
 			Vec3d playerPos = player.getPositionEyes(1);
 			double toEnt = entPos.subtract(playerPos).lengthSquared();
 			if(toEnt < 16 || Library.isObstructed(world, playerPos.x, playerPos.y, playerPos.z, entPos.x, entPos.y, entPos.z))
@@ -118,14 +118,14 @@ public class ItemGunShotty extends ItemGunBase {
 		prevScreenPos = screenPos;
 		RayTraceResult ray = Library.rayTraceEntitiesInCone(player, 30, 1, 6);
 		if(ray != null && ray.typeOfHit == Type.ENTITY){
-			rayTrace = ray.entityHit.getPositionVector().addVector(0, ray.entityHit.getEyeHeight()*0.75, 0);
+			rayTrace = ray.entityHit.getPositionVector().add(0, ray.entityHit.getEyeHeight()*0.75, 0);
 		} else {
 			rayTrace = null;
 		}
 		
 		if(hasHookedEntity(world, stack)){
 			Entity ent = getHookedEntity(world, stack);
-			Vec3d toEnt = ent.getPositionVector().addVector(0, ent.getEyeHeight()*0.75, 0).subtract(player.getPositionEyes(1.0F)).normalize().scale(1.3);
+			Vec3d toEnt = ent.getPositionVector().add(0, ent.getEyeHeight()*0.75, 0).subtract(player.getPositionEyes(1.0F)).normalize().scale(1.3);
 			motionStrafe *= 0.9;
 			//Cross product returns a vector perpendicular to the two supplied vectors.
 			//In this case, it gives us the tangent vector to the circle we want to travel around to get a nice swing.
@@ -139,14 +139,14 @@ public class ItemGunShotty extends ItemGunBase {
 				//then adds the difference to the player's rotation. Only do this when the player is actually tracking the entity.
 				//This essentially acts as aim assist so you don't have to track the entity manually.
 				toEnt = toEnt.normalize();
-				Vec3d newToEnt = ent.getPositionVector().addVector(player.motionX, ent.getEyeHeight()*0.75+player.motionY, player.motionZ).subtract(player.getPositionEyes(1.0F)).normalize();
+				Vec3d newToEnt = ent.getPositionVector().add(player.motionX, ent.getEyeHeight()*0.75+player.motionY, player.motionZ).subtract(player.getPositionEyes(1.0F)).normalize();
 				Vec3d toEntAngle = Library.getEuler(toEnt);
 				Vec3d toEntAngle2 = Library.getEuler(newToEnt);
 				Vec3d diff = toEntAngle2.subtract(toEntAngle);
 				if(diff.x > 180){
 					diff = diff.subtract(360, 0, 0);
 				} else if(diff.x < -180){
-					diff = diff.addVector(360, 0, 0);
+					diff = diff.add(360, 0, 0);
 				}
 				player.rotationYaw += diff.x;
 				player.rotationPitch += diff.y;

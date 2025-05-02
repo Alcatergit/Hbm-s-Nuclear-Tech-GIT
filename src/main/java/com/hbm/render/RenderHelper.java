@@ -596,7 +596,7 @@ public class RenderHelper {
 		clearDeferredBuffer();
 		double radians = Math.toRadians(degrees);
 		Vec3d startToEnd = end.subtract(start);
-		double height = startToEnd.lengthVector();
+		double height = startToEnd.length();
 		double radius = height * Math.tan(radians);
 		AxisAlignedBB box = new AxisAlignedBB(start.x, start.y, start.z, end.x, end.y, end.z).grow(radius);
 		box = new AxisAlignedBB(
@@ -613,7 +613,7 @@ public class RenderHelper {
 					if(!Minecraft.getMinecraft().world.isBlockLoaded(new BlockPos(i, j, k)))
 						continue;
 					RenderChunk chunk = getRenderChunk(new BlockPos(i, j, k));
-					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunkFromBlockCoords(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
+					ClassInheritanceMultiMap<Entity> classinheritancemultimap = Minecraft.getMinecraft().world.getChunk(chunk.getPosition()).getEntityLists()[chunk.getPosition().getY() / 16];
 					if(Library.isBoxCollidingCone(chunk.boundingBox, start, end, degrees)){
 						toRender.add(chunk);
 						for(TileEntity te : chunk.compiledChunk.getTileEntities()){
@@ -757,7 +757,7 @@ public class RenderHelper {
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		ResourceManager.cone_volume.use();
 		int shader = ResourceManager.cone_volume.getShaderId();
-		float height = (float) vec.lengthVector();
+		float height = (float) vec.length();
 		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "height"), height);
 		vec = vec.normalize();
 		GL20.glUniform1f(GL20.glGetUniformLocation(shader, "cosAngle"), (float) Math.cos(Math.toRadians(degrees)));

@@ -344,7 +344,7 @@ public class ContaminationUtil {
 			} else {
 				nbt.setFloat(NTM_NEUTRON_NBT_KEY, newActivation);
 			}
-			if(nbt.hasNoTags()){
+			if(nbt.isEmpty()){
 				stack.setTagCompound(null);
 			} else {
 				stack.setTagCompound(nbt);
@@ -392,7 +392,7 @@ public class ContaminationUtil {
 		float totalResistanceValue = 0.0F;
 		if(!(e instanceof EntityPlayer)){
 			ResourceLocation entity_path = EntityList.getKey(e);
-			Object resistanceMod = CompatibilityConfig.mobModRadresistance.get(entity_path.getResourceDomain());
+			Object resistanceMod = CompatibilityConfig.mobModRadresistance.get(entity_path.getNamespace());
 			Object resistanceMob = CompatibilityConfig.mobRadresistance.get(entity_path.toString());
 			if(resistanceMod != null){
 				totalResistanceValue = totalResistanceValue + (float)resistanceMod;
@@ -408,7 +408,7 @@ public class ContaminationUtil {
 		if(!(e instanceof EntityPlayer)){
 			ResourceLocation entity_path = EntityList.getKey(e);
 			if(entity_path != null){
-				if(CompatibilityConfig.mobModRadimmune.contains(entity_path.getResourceDomain())){
+				if(CompatibilityConfig.mobModRadimmune.contains(entity_path.getNamespace())){
 					return true;
 				}else{
 					return CompatibilityConfig.mobRadimmune.contains(entity_path.toString());
@@ -573,7 +573,7 @@ public class ContaminationUtil {
 			if(isExplosionExempt(e)) continue;
 
 			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
-			double len = vec.lengthVector();
+			double len = vec.length();
 
 			if(len > range) continue;
 			vec = vec.normalize();

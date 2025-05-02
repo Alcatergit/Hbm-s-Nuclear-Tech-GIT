@@ -32,7 +32,7 @@ public class BlockSeal extends Block implements IBomb {
 	
 	public BlockSeal(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -204,7 +204,7 @@ public class BlockSeal extends Block implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block block, BlockPos fromPos) {
-		if (world.isBlockIndirectlyGettingPowered(pos) > 0)
+		if (world.getStrongPower(pos) > 0)
         {
         	if(!world.getBlockState(pos).getValue(ACTIVATED)) {
         		world.setBlockState(pos, world.getBlockState(pos).withProperty(ACTIVATED, true), 2);
@@ -250,7 +250,7 @@ public class BlockSeal extends Block implements IBomb {
 	public IBlockState getStateFromMeta(int meta) {
 		boolean activated = (meta & 1) == 1 ? true : false;
 		meta = meta >> 1;
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

@@ -38,7 +38,7 @@ public class SpecialContainerFillLists {
 		private EnumCanister(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
-			this.translateKey = "item." + r.getResourcePath() + ".name";
+			this.translateKey = "item." + r.getPath() + ".name";
 		}
 		public Fluid getFluid(){
 			return fluid;
@@ -100,7 +100,7 @@ public class SpecialContainerFillLists {
 		private EnumCell(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
-			this.translateKey = "item." + r.getResourcePath() + ".name";
+			this.translateKey = "item." + r.getPath() + ".name";
 		}
 		public Fluid getFluid(){
 			return fluid;
@@ -162,7 +162,7 @@ public class SpecialContainerFillLists {
 		private EnumGasCanister(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
-			this.translateKey = "item." + r.getResourcePath() + ".name";
+			this.translateKey = "item." + r.getPath() + ".name";
 		}
 		public Fluid getFluid(){
 			return fluid;

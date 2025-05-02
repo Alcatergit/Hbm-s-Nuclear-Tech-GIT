@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class ItemSoyuz extends Item {
 
 	public ItemSoyuz(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

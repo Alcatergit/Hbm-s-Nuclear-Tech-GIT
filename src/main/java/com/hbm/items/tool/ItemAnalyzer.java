@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 public class ItemAnalyzer extends Item {
 
 	public ItemAnalyzer(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -38,7 +38,7 @@ public class ItemAnalyzer extends Item {
 		
 		if(world.isRemote) {
 			player.sendMessage(new TextComponentString(
-					"Block: " + I18n.format(block.getUnlocalizedName() + ".name") + " (" + block.getUnlocalizedName() + ")"
+					"Block: " + I18n.format(block.getTranslationKey() + ".name") + " (" + block.getTranslationKey() + ")"
 					));
 			
 			player.sendMessage(new TextComponentString(

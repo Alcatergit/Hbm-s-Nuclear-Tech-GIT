@@ -19,7 +19,7 @@ public class ItemDoorSkin extends Item {
 	
 	public ItemDoorSkin(String s, String tex) {
 		this.tex = tex;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

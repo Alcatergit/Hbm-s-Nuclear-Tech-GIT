@@ -28,7 +28,7 @@ public class BlockSemtex extends Block implements IBomb {
 	
 	public BlockSemtex(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -46,13 +46,13 @@ public class BlockSemtex extends Block implements IBomb {
 	
 
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn){
+	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn){
 		this.explode(worldIn, pos);
 	}
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0){
+		if(worldIn.getStrongPower(pos) > 0){
 			this.explode(worldIn, pos);
 		}
 	}
@@ -77,7 +77,7 @@ public class BlockSemtex extends Block implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 	

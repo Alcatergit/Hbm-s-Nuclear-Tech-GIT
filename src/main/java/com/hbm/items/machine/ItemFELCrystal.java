@@ -18,7 +18,7 @@ public class ItemFELCrystal extends Item {
 	public ItemFELCrystal(EnumWavelengths wavelength, String s) {
 		this.wavelength = wavelength;
 		this.setMaxStackSize(1);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

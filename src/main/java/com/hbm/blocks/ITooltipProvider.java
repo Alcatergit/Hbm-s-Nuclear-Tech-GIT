@@ -16,7 +16,7 @@ public interface ITooltipProvider {
 	public default void addStandardInfo(List<String> list) {
 		
 		if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			for(String s : I18nUtil.resolveKeyArray(((Block)this).getUnlocalizedName() + ".desc")) list.add(TextFormatting.YELLOW + s);
+			for(String s : I18nUtil.resolveKeyArray(((Block)this).getTranslationKey() + ".desc")) list.add(TextFormatting.YELLOW + s);
 		} else {
 			list.add(I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
 		}

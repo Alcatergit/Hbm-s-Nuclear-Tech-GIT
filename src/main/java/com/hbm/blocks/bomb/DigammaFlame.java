@@ -28,7 +28,7 @@ public class DigammaFlame extends BlockFire {
 
 	public DigammaFlame(String s) {
 		super();
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -49,7 +49,7 @@ public class DigammaFlame extends BlockFire {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entityIn){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entityIn){
 		if(entityIn instanceof EntityLivingBase) {
 			ContaminationUtil.contaminate((EntityLivingBase) entityIn, HazardType.DIGAMMA, ContaminationType.DIGAMMA, 0.05F);
 		}

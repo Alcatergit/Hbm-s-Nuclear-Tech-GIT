@@ -21,7 +21,7 @@ public class BlockPorous extends Block {
 
 	public BlockPorous(String s) {
 		super(Material.ROCK);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHardness(1.5F); //stone tier
 		this.setResistance(30.0F); //ha

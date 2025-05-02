@@ -26,7 +26,7 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 
 	public BlockBedrockOreTE(String s) {
 		super(Material.ROCK);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -65,7 +65,7 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 			text.add(I18nUtil.resolveKey("desc.requires", ore.acidRequirement.amount, ore.acidRequirement.getFluid().getLocalizedName(ore.acidRequirement)));
 		}
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 	
 	public static class TileEntityBedrockOre extends TileEntity {

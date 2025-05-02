@@ -108,7 +108,7 @@ public abstract class ToolAbility {
 			if(x == refX && y == refY && z == refZ)
 				return;
 			
-			if(Vec3.createVectorHelper(x - refX, y - refY, z - refZ).lengthVector() > radius)
+			if(Vec3.createVectorHelper(x - refX, y - refY, z - refZ).length() > radius)
 				return;
 			
 			IBlockState b = world.getBlockState(new BlockPos(x, y, z));

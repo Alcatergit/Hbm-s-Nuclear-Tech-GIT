@@ -11,10 +11,8 @@ import com.hbm.render.amlfrom1710.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.renderer.texture.TextureManager;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -40,7 +38,6 @@ public class ParticleFoundry extends Particle {
 		this.length = length;
 		this.base = base;
 		this.offset = offset;
-		
 		this.particleMaxAge = 20;
 	}
 	
@@ -171,8 +168,8 @@ public class ParticleFoundry extends Particle {
 		
 		tess.draw();
 
-		
-		GL11.glColor3f(1F, 1F, 1F);
+
+		GlStateManager.resetColor();
 		GL11.glEnable(GL11.GL_CULL_FACE);
 		GL11.glPopMatrix();
 	}

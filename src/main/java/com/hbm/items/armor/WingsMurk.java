@@ -23,7 +23,7 @@ public class WingsMurk extends ItemArmor {
 
 	public WingsMurk(ArmorMaterial material, String s) {
 		super(material, -1, EntityEquipmentSlot.CHEST);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

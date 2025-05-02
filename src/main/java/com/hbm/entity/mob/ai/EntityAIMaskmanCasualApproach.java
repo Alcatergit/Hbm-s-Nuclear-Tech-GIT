@@ -151,7 +151,7 @@ public class EntityAIMaskmanCasualApproach extends EntityAIBase {
 
 		Vec3 vec = Vec3.createVectorHelper(this.attacker.posX - target.posX, this.attacker.posY - target.posY, this.attacker.posZ - target.posZ);
 
-		double range = Math.min(vec.lengthVector(), 20) - 10;
+		double range = Math.min(vec.length(), 20) - 10;
 
 		vec = vec.normalize();
 

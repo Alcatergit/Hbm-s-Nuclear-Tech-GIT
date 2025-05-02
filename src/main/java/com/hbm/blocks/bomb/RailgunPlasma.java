@@ -28,7 +28,7 @@ public class RailgunPlasma extends BlockContainer {
 
 	public RailgunPlasma(Material p_i45386_1_, String s) {
 		super(p_i45386_1_);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

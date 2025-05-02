@@ -24,7 +24,7 @@ public class ItemCatalyst extends Item {
 		this.powerMod = 1.0F;
 		this.heatMod = 1.0F;
 		this.fuelMod = 1.0F;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -36,7 +36,7 @@ public class ItemCatalyst extends Item {
 		this.powerMod = powerMod;
 		this.heatMod = heatMod;
 		this.fuelMod = fuelMod;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

@@ -25,7 +25,7 @@ public class MachinePress extends BlockContainer {
 	
 	public MachinePress(Material m, String s) {
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		ModBlocks.ALL_BLOCKS.add(this);

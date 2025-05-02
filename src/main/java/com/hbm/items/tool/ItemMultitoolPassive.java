@@ -39,7 +39,7 @@ public class ItemMultitoolPassive extends Item {
 	Random rand = new Random();
 
 	public ItemMultitoolPassive(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(5000);
 

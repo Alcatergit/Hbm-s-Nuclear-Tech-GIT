@@ -15,7 +15,7 @@ public class ItemFuel extends Item {
 	private int burntime;
 	
 	public ItemFuel(String s, int burntime){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.burntime = burntime;

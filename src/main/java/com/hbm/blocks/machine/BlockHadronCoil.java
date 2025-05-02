@@ -18,7 +18,7 @@ public class BlockHadronCoil extends Block {
 	
 	public BlockHadronCoil(Material materialIn, int factor, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.factor = factor;
 		

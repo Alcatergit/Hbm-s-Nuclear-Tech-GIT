@@ -21,7 +21,7 @@ public class BlockCoalBurning extends BlockOre {
 
 	public BlockCoalBurning(String s) {
 		super();
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -37,16 +37,16 @@ public class BlockCoalBurning extends BlockOre {
 
         	if(world.getBlockState(pos.offset(dir)).getMaterial() == Material.AIR) {
 
-        		double ix = pos.getX() + 0.5F + dir.getFrontOffsetX() + rand.nextDouble() - 0.5D;
-        		double iy = pos.getY() + 0.5F + dir.getFrontOffsetY() + rand.nextDouble() - 0.5D;
-        		double iz = pos.getZ() + 0.5F + dir.getFrontOffsetZ() + rand.nextDouble() - 0.5D;
+        		double ix = pos.getX() + 0.5F + dir.getXOffset() + rand.nextDouble() - 0.5D;
+        		double iy = pos.getY() + 0.5F + dir.getYOffset() + rand.nextDouble() - 0.5D;
+        		double iz = pos.getZ() + 0.5F + dir.getZOffset() + rand.nextDouble() - 0.5D;
 
-        		if(dir.getFrontOffsetX() != 0)
-        			ix = pos.getX() + 0.5F + dir.getFrontOffsetX() * 0.5 + rand.nextDouble() * 0.125 * dir.getFrontOffsetX();
-        		if(dir.getFrontOffsetY() != 0)
-        			iy = pos.getY() + 0.5F + dir.getFrontOffsetY() * 0.5 + rand.nextDouble() * 0.125 * dir.getFrontOffsetY();
-        		if(dir.getFrontOffsetZ() != 0)
-        			iz = pos.getZ() + 0.5F + dir.getFrontOffsetZ() * 0.5 + rand.nextDouble() * 0.125 * dir.getFrontOffsetZ();
+        		if(dir.getXOffset() != 0)
+        			ix = pos.getX() + 0.5F + dir.getXOffset() * 0.5 + rand.nextDouble() * 0.125 * dir.getXOffset();
+        		if(dir.getYOffset() != 0)
+        			iy = pos.getY() + 0.5F + dir.getYOffset() * 0.5 + rand.nextDouble() * 0.125 * dir.getYOffset();
+        		if(dir.getZOffset() != 0)
+        			iz = pos.getZ() + 0.5F + dir.getZOffset() * 0.5 + rand.nextDouble() * 0.125 * dir.getZOffset();
 
         		world.spawnParticle(EnumParticleTypes.FLAME, ix, iy, iz, 0.0, 0.0, 0.0);
         		world.spawnParticle(EnumParticleTypes.SMOKE_NORMAL, ix, iy, iz, 0.0, 0.0, 0.0);

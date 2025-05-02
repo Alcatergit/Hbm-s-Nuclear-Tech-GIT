@@ -148,7 +148,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 				} else if(stack.hasTagCompound()){
 					NBTTagCompound nbt = stack.getTagCompound();
 					if(nbt.getBoolean("ntmContagion")) nbt.removeTag("ntmContagion");
-					if(nbt.hasNoTags()) stack.setTagCompound(null);
+					if(nbt.isEmpty()) stack.setTagCompound(null);
 				}
 			}
 

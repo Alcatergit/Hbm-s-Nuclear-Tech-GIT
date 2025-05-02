@@ -13,7 +13,7 @@ public class ItemNugget extends ItemFood {
 
 	public ItemNugget(int amount, boolean isWolfFood, String s) {
 		super(amount, isWolfFood);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

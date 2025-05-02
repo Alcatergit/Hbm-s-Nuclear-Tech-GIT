@@ -46,7 +46,7 @@ public class NTMMaterial {
 		Mats.matById.put(id, this);
 	}
 	
-	public String getUnlocalizedName() {
+	public String getTranslationKey() {
 		return "hbmmat." + this.names[0].toLowerCase(Locale.US);
 	}
 	

@@ -92,11 +92,11 @@ public class FakeWorldRenderer {
 		RenderGlobal renderglobal = this.mc.renderGlobal;
 		ParticleManager particlemanager = this.mc.effectRenderer;
 		GlStateManager.enableCull();
-		this.mc.mcProfiler.endStartSection("clear");
+		this.mc.profiler.endStartSection("clear");
 		GlStateManager.viewport(0, 0, this.mc.displayWidth, this.mc.displayHeight);
 		this.updateFogColor(partialTicks);
 		GlStateManager.clear(16640);
-		this.mc.mcProfiler.endStartSection("camera");
+		this.mc.profiler.endStartSection("camera");
 		this.setupCameraTransform(partialTicks, pass);
 		//ActiveRenderInfo.updateRenderInfo(this.mc.getRenderViewEntity(), this.mc.gameSettings.thirdPersonView == 2); // Forge:
 																														// MC-46445
@@ -112,9 +112,9 @@ public class FakeWorldRenderer {
 																														// have
 																														// been
 																														// before
-		this.mc.mcProfiler.endStartSection("frustum");
+		this.mc.profiler.endStartSection("frustum");
 		ClippingHelperImpl.getInstance();
-		this.mc.mcProfiler.endStartSection("culling");
+		this.mc.profiler.endStartSection("culling");
 		ICamera icamera = new Frustum();
 		Entity entity = this.mc.getRenderViewEntity();
 		double d0 = entity.lastTickPosX + (entity.posX - entity.lastTickPosX) * (double) partialTicks;
@@ -124,7 +124,7 @@ public class FakeWorldRenderer {
 
 		if(this.mc.gameSettings.renderDistanceChunks >= 4) {
 			this.setupFog(-1, partialTicks);
-			this.mc.mcProfiler.endStartSection("sky");
+			this.mc.profiler.endStartSection("sky");
 			GlStateManager.matrixMode(5889);
 			GlStateManager.loadIdentity();
 			Project.gluPerspective(this.getFOVModifier(partialTicks, true), (float) this.mc.displayWidth / (float) this.mc.displayHeight, 0.05F, this.farPlaneDistance * 2.0F);
@@ -139,19 +139,19 @@ public class FakeWorldRenderer {
 		this.setupFog(0, partialTicks);
 		GlStateManager.shadeModel(7425);
 
-		this.mc.mcProfiler.endStartSection("prepareterrain");
+		this.mc.profiler.endStartSection("prepareterrain");
 		this.setupFog(0, partialTicks);
 		this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
-		this.mc.mcProfiler.endStartSection("terrain_setup");
+		this.mc.profiler.endStartSection("terrain_setup");
 		renderglobal.setupTerrain(entity, (double) partialTicks, icamera, 0, this.mc.player.isSpectator());
 
 		if(pass == 0 || pass == 2) {
-			this.mc.mcProfiler.endStartSection("updatechunks");
+			this.mc.profiler.endStartSection("updatechunks");
 			this.mc.renderGlobal.updateChunks(finishTimeNano);
 		}
 
-		this.mc.mcProfiler.endStartSection("terrain");
+		this.mc.profiler.endStartSection("terrain");
 		GlStateManager.matrixMode(5888);
 		GlStateManager.pushMatrix();
 		GlStateManager.disableAlpha();
@@ -180,7 +180,7 @@ public class FakeWorldRenderer {
 		GlStateManager.popMatrix();
 		GlStateManager.pushMatrix();
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-		this.mc.mcProfiler.endStartSection("entities");
+		this.mc.profiler.endStartSection("entities");
 		net.minecraftforge.client.ForgeHooksClient.setRenderPass(0);
 		renderglobal.renderEntities(entity, icamera, partialTicks);
 		net.minecraftforge.client.ForgeHooksClient.setRenderPass(0);
@@ -194,7 +194,7 @@ public class FakeWorldRenderer {
 			this.mc.debugRenderer.renderDebug(partialTicks, finishTimeNano);
 		}
 
-		this.mc.mcProfiler.endStartSection("destroyProgress");
+		this.mc.profiler.endStartSection("destroyProgress");
 		GlStateManager.enableBlend();
 		GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
 		this.mc.getTextureManager().getTexture(TextureMap.LOCATION_BLOCKS_TEXTURE).setBlurMipmap(false, false);
@@ -203,17 +203,17 @@ public class FakeWorldRenderer {
 		GlStateManager.disableBlend();
 
 		this.enableLightmap();
-		this.mc.mcProfiler.endStartSection("litParticles");
+		this.mc.profiler.endStartSection("litParticles");
 		particlemanager.renderLitParticles(entity, partialTicks);
 		net.minecraft.client.renderer.RenderHelper.disableStandardItemLighting();
 		this.setupFog(0, partialTicks);
-		this.mc.mcProfiler.endStartSection("particles");
+		this.mc.profiler.endStartSection("particles");
 		particlemanager.renderParticles(entity, partialTicks);
 		this.disableLightmap();
 
 		GlStateManager.depthMask(false);
 		GlStateManager.enableCull();
-		this.mc.mcProfiler.endStartSection("weather");
+		this.mc.profiler.endStartSection("weather");
 		this.renderRainSnow(partialTicks);
 		GlStateManager.depthMask(true);
 		renderglobal.renderWorldBorder(entity, partialTicks);
@@ -226,11 +226,11 @@ public class FakeWorldRenderer {
 		GlStateManager.depthMask(false);
 		this.mc.getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 		GlStateManager.shadeModel(7425);
-		this.mc.mcProfiler.endStartSection("translucent");
+		this.mc.profiler.endStartSection("translucent");
 		renderglobal.renderBlockLayer(BlockRenderLayer.TRANSLUCENT, (double) partialTicks, pass, entity);
 
 		net.minecraft.client.renderer.RenderHelper.enableStandardItemLighting();
-		this.mc.mcProfiler.endStartSection("entities");
+		this.mc.profiler.endStartSection("entities");
 		net.minecraftforge.client.ForgeHooksClient.setRenderPass(1);
 		renderglobal.renderEntities(entity, icamera, partialTicks);
 		// restore blending function changed by
@@ -245,10 +245,10 @@ public class FakeWorldRenderer {
 		GlStateManager.disableBlend();
 		GlStateManager.disableFog();
 
-		this.mc.mcProfiler.endStartSection("forge_render_last");
+		this.mc.profiler.endStartSection("forge_render_last");
 		net.minecraftforge.client.ForgeHooksClient.dispatchRenderLast(renderglobal, partialTicks);
 
-		this.mc.mcProfiler.endStartSection("hand");
+		this.mc.profiler.endStartSection("hand");
 
 	}
 

@@ -389,7 +389,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
                     if (state1.getMaterial() != Material.AIR)
                     {
-                        this.field_145790_g.onEntityCollidedWithBlock(this.world, newPos, state1, this);
+                        this.field_145790_g.onEntityCollision(this.world, newPos, state1, this);
                     }
                 }
             }
@@ -471,7 +471,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
     	List<Entity> all = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(posX - homingRadius, posY - homingRadius, posZ - homingRadius, posX + homingRadius, posY + homingRadius, posZ + homingRadius));
     	HashMap<Entity, Double> targetable = new HashMap<Entity, Double>();
     	Vec3d path = new Vec3d(motionX, motionY, motionZ);
-    	double startSpeed = path.lengthVector();
+    	double startSpeed = path.length();
     	path.normalize();
     	
     	if(all.isEmpty())
@@ -485,7 +485,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
     		
     		Vec3d rel = new Vec3d(e.posX - posX, e.posY + e.getEyeHeight() - posY, e.posZ - posZ);
     		double vecProd = rel.x * path.x + rel.y * path.y + rel.z * path.z;
-    		double bot = rel.lengthVector() * path.lengthVector();
+    		double bot = rel.length() * path.length();
     		double angle = Math.acos(vecProd / bot) * 180 / Math.PI;
     		
     		if(angle <= acceptance);

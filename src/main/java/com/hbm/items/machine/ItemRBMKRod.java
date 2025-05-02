@@ -74,7 +74,7 @@ public class ItemRBMKRod extends Item {
 	}
 
 	public ItemRBMKRod(String fullName, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		this.fullName = fullName;

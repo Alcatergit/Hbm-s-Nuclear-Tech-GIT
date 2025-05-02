@@ -152,6 +152,6 @@ public class MachineCatalyticCracker extends BlockDummyable implements ILookOver
 			if(cracker.types[i] != null)
 				text.add((i < 2 ? "§a-> " : "§c<- ") + "§r" + cracker.types[i].getLocalizedName(new FluidStack(cracker.types[i], 1)) + ": " + cracker.tanks[i].getFluidAmount() + "/" + cracker.tanks[i].getCapacity() + "mB");
 
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 }

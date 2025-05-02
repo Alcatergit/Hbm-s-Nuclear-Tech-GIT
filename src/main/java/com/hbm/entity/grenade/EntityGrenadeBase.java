@@ -59,7 +59,7 @@ public abstract class EntityGrenadeBase extends EntityThrowable {
     	
     	this.prevRotationPitch = this.rotationPitch;
         
-        this.rotationPitch -= new Vec3d(motionX, motionY, motionZ).lengthVector() * 25;
+        this.rotationPitch -= new Vec3d(motionX, motionY, motionZ).length() * 25;
         
         this.rotationYaw = (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 

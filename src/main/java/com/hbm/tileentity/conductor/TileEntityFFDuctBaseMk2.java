@@ -47,7 +47,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 			world.neighborChanged(pos, getBlockType(), pos);
 			IBlockState state = world.getBlockState(pos);
-			world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+			world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 			rebuildNetworks(world, pos);
 			if(world instanceof WorldServer) {
 				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(MathHelper.floor(pos.getX()) >> 4, MathHelper.floor(pos.getZ()) >> 4);

@@ -54,7 +54,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 
 	public BlockControlPanel(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -192,7 +192,7 @@ public class BlockControlPanel extends BlockContainer implements ICustomSelectio
 		return this.getDefaultState()
 				.withProperty(UP, ((meta >> 3) & 1) > 0)
 				.withProperty(DOWN, ((meta >> 2) & 1) > 0)
-				.withProperty(FACING, EnumFacing.getFront((meta & 3) + 2));
+				.withProperty(FACING, EnumFacing.byIndex((meta & 3) + 2));
 	}
 	
 	@Override

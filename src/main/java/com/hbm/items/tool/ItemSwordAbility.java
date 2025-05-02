@@ -49,7 +49,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		this.damage = damage;
 		this.movement = movement;
 		this.attackSpeed = attackSpeed;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
@@ -134,7 +134,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		if(player.capabilities.isCreativeMode) {
 			block.getBlock().onBlockHarvested(world, pos, block, player);
 			if(block.getBlock().removedByPlayer(block, world, pos, player, false))
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 
 			if(!world.isRemote) {
 				player.connection.sendPacket(new SPacketBlockChange(world, pos));
@@ -149,7 +149,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 			block.getBlock().onBlockHarvested(world, pos, block, player);
 
 			if(block.getBlock().removedByPlayer(block, world, pos, player, true)) {
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 				block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
 				block.getBlock().dropXpOnBlockBreak(world, pos, event);
 			}
@@ -159,7 +159,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		} else {
 			world.playEvent(2001, pos, Block.getStateId(block));
 			if(block.getBlock().removedByPlayer(block, world, pos, player, true)) {
-				block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+				block.getBlock().onPlayerDestroy(world, pos, block);
 			}
 			ItemStack itemstack = player.getHeldItem(hand);
 			if(itemstack != null) {

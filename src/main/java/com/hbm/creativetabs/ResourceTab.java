@@ -14,7 +14,7 @@ public class ResourceTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModBlocks.ore_uranium != null){
 			return new ItemStack(Item.getItemFromBlock(ModBlocks.ore_uranium));
 		}

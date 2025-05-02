@@ -21,7 +21,7 @@ public class ItemAMSCore extends Item {
 	float fuelBase;
 	
 	public ItemAMSCore(int powerBase, float heatBase, float fuelBase, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.powerBase = powerBase;
 		this.heatBase = heatBase;

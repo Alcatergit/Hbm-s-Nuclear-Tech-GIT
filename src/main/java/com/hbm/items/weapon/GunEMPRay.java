@@ -31,7 +31,7 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 public class GunEMPRay extends Item {
 
 	public GunEMPRay(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

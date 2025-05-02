@@ -44,7 +44,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 
 	protected FoundryCastingBase(String s) {
 		super(Material.ROCK);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setSoundType(SoundType.METAL);
 
@@ -129,7 +129,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 			}
 			cast.inventory.setStackInSlot(1, ItemStack.EMPTY);
 			cast.markDirty();
-			world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+			world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 			return true;
 		}
 		
@@ -153,7 +153,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 				player.inventoryContainer.detectAndSendChanges();
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
 				cast.markDirty();
-				world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+				world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 				return true;
 			}
 		}
@@ -169,7 +169,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 				cast.amount = 0;
 				cast.type = null;
 				cast.markDirty();
-				world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+				world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 			}
 			return true;
 		}
@@ -242,9 +242,9 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 		}
 		
 		if(cast.type != null && cast.amount > 0) {
-			text.add("&["+ cast.type.moltenColor +"&]"+ I18nUtil.resolveKey(cast.type.getUnlocalizedName()) + ": " + cast.amount + " / " + cast.getCapacity());
+			text.add("&["+ cast.type.moltenColor +"&]"+ I18nUtil.resolveKey(cast.type.getTranslationKey()) + ": " + cast.amount + " / " + cast.getCapacity());
 		}
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(this.getUnlocalizedName() + ".name"), 0xFF4000, 0x401000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(this.getTranslationKey() + ".name"), 0xFF4000, 0x401000, text);
 	}
 }

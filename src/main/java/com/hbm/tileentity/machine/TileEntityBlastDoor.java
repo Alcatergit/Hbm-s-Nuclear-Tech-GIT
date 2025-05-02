@@ -52,7 +52,7 @@ public class TileEntityBlastDoor extends TileEntityLockableBase implements ITick
 	public void update() {
 		if(!world.isRemote) {
 			
-			if(!isLocked() && world.isBlockIndirectlyGettingPowered(pos) > 0 || world.isBlockIndirectlyGettingPowered(pos.up(6)) > 0) {
+			if(!isLocked() && world.getStrongPower(pos) > 0 || world.getStrongPower(pos.up(6)) > 0) {
 				
 				if(!redstoned) {
 					this.tryToggle();

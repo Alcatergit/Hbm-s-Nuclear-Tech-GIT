@@ -88,7 +88,7 @@ public class ItemSwordCutter extends ItemSwordAbility implements IEquipReceiver 
 			nbt.setString("type", "anim");
 			nbt.setInteger("hand", EnumHand.MAIN_HAND.ordinal());
 			nbt.setString("mode", "swing");
-			nbt.setString("name", stack.getItem().getRegistryName().getResourcePath());
+			nbt.setString("name", stack.getItem().getRegistryName().getPath());
 			MainRegistry.proxy.effectNT(nbt);
 		}
 	}
@@ -105,7 +105,7 @@ public class ItemSwordCutter extends ItemSwordAbility implements IEquipReceiver 
 		nbt.setString("type", "anim");
 		nbt.setInteger("hand", hand.ordinal());
 		nbt.setString("mode", "equip");
-		nbt.setString("name", this.getRegistryName().getResourcePath());
+		nbt.setString("name", this.getRegistryName().getPath());
 		PacketDispatcher.wrapper.sendTo(new AuxParticlePacketNT(nbt, 0, 0, 0), (EntityPlayerMP)player);
 	}
 

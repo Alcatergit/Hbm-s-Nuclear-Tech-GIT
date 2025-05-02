@@ -89,7 +89,7 @@ public class TileEntityTesla extends TileEntityMachineBase implements ITickable,
 			
 			Vec3 vec = Vec3.createVectorHelper(e.posX - x, e.posY + e.height / 2 - y, e.posZ - z);
 			
-			if(vec.lengthVector() > range)
+			if(vec.length() > range)
 				continue;
 
 			if(Library.isObstructed(worldObj, x, y, z, e.posX, e.posY + e.height / 2, e.posZ))

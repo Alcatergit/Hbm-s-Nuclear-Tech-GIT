@@ -87,7 +87,7 @@ public class ArmorFSB extends ItemArmor {
 	
 	public ArmorFSB(ArmorMaterial materialIn, int renderIndexIn, EntityEquipmentSlot equipmentSlotIn, String texture, String name) {
 		super(materialIn, renderIndexIn, equipmentSlotIn);
-		this.setUnlocalizedName(name);
+		this.setTranslationKey(name);
 		this.setRegistryName(name);
 		this.texture = texture;
 		
@@ -329,9 +329,9 @@ public class ArmorFSB extends ItemArmor {
 
 					Vec3 vec = Vec3.createVectorHelper(entity.posX - e.posX, 0, entity.posZ - e.posZ);
 
-					if(vec.lengthVector() < 3) {
+					if(vec.length() < 3) {
 
-						double intensity = 3 - vec.lengthVector();
+						double intensity = 3 - vec.length();
 						e.motionX += vec.xCoord * intensity * -2;
 						e.motionY += 0.1D * intensity;
 						e.motionZ += vec.zCoord * intensity * -2;

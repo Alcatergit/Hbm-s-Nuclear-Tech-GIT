@@ -23,7 +23,7 @@ import net.minecraft.world.World;
 public class ItemReactorSensor extends Item {
 
 	public ItemReactorSensor(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);

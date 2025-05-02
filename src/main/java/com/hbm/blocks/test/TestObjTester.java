@@ -29,7 +29,7 @@ public class TestObjTester extends BlockContainer implements IBomb {
 	
 	public TestObjTester(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -114,7 +114,7 @@ public class TestObjTester extends BlockContainer implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {
@@ -179,11 +179,11 @@ public class TestObjTester extends BlockContainer implements IBomb {
             }
             RigidBody r = new RigidBody(te.getWorld(), creep.posX, creep.posY, creep.posZ);
             r.addColliders(colliders.toArray(new Collider[colliders.size()]));
-            r.impulseVelocity(new Vec3(0, 1, 0.4), r.globalCentroid.addVector(0, -0.02, 0));
+            r.impulseVelocity(new Vec3(0, 1, 0.4), r.globalCentroid.add(0, -0.02, 0));
             Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, r, creep.posX, creep.posY, creep.posZ));
             r = new RigidBody(te.getWorld(), creep.posX, creep.posY, creep.posZ);
             r.addColliders(colliders2.toArray(new Collider[colliders2.size()]));
-            r.impulseVelocity(new Vec3(0, 0, -0.1), r.globalCentroid.addVector(0, 0.02, 0));
+            r.impulseVelocity(new Vec3(0, 0, -0.1), r.globalCentroid.add(0, 0.02, 0));
             Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, r, creep.posX, creep.posY, creep.posZ));*/
             
     	}

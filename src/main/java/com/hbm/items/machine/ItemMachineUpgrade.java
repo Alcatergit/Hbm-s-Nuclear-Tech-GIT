@@ -29,7 +29,7 @@ public class ItemMachineUpgrade extends Item {
 	}
 
 	public ItemMachineUpgrade(String s, UpgradeType type, int tier) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		this.type = type;

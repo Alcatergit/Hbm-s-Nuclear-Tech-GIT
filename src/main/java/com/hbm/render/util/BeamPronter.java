@@ -52,7 +52,7 @@ public class BeamPronter {
 
 		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
 		Random rand = new Random(start);
-		double length = skeleton.lengthVector();
+		double length = skeleton.length();
 		double segLength = length / segments;
 		double lastX = 0;
 		double lastY = 0;
@@ -146,7 +146,7 @@ public class BeamPronter {
 			tessellator.startDrawing(3);
 			tessellator.setColorOpaque_I(innerColor);
 			tessellator.addVertex(0, 0, 0);
-			tessellator.addVertex(0, skeleton.lengthVector(), 0);
+			tessellator.addVertex(0, skeleton.length(), 0);
 			tessellator.draw();
 		}
 

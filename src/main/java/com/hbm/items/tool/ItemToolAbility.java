@@ -101,7 +101,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 	
 	public ItemToolAbility(float damage, float attackSpeedIn, double movement, ToolMaterial material, EnumToolType type, String s) {
 		super(0, attackSpeedIn, material, type.blocks);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.damage = damage;
 		this.movement = movement;
@@ -237,7 +237,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
         if (player.capabilities.isCreativeMode) {
             block.getBlock().onBlockHarvested(world, pos, block, player);
             if (block.getBlock().removedByPlayer(block, world, pos, player, false))
-                block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+                block.getBlock().onPlayerDestroy(world, pos, block);
 
             if (!world.isRemote) {
                 player.connection.sendPacket(new SPacketBlockChange(world, pos));
@@ -253,7 +253,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 
             if(block.getBlock().removedByPlayer(block, world, pos, player, true))
             {
-                block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+                block.getBlock().onPlayerDestroy(world, pos, block);
                 block.getBlock().harvestBlock(world, player, pos, block, world.getTileEntity(pos), stack);
                 block.getBlock().dropXpOnBlockBreak(world, pos, event);
             }
@@ -264,7 +264,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
             world.playEvent(2001, pos, Block.getStateId(block));
             if(block.getBlock().removedByPlayer(block, world, pos, player, true))
             {
-                block.getBlock().onBlockDestroyedByPlayer(world, pos, block);
+                block.getBlock().onPlayerDestroy(world, pos, block);
             }
             ItemStack itemstack = player.getHeldItem(hand);
             if (itemstack != null)

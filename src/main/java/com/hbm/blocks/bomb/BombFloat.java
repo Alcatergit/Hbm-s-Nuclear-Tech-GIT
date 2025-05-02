@@ -19,7 +19,7 @@ public class BombFloat extends Block implements IBomb {
 
 	public BombFloat(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -27,7 +27,7 @@ public class BombFloat extends Block implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-        if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0)
+        if (worldIn.getStrongPower(pos) > 0)
         {
         	explode(worldIn, pos);
         }

@@ -40,7 +40,7 @@ public class ParticleGluonBurnTrail extends Particle {
 		if(nodes.isEmpty()){
 			nodes.add(new Node(pos, normal, null, 0));
 		}
-		float dist = (float) pos.subtract(nodes.get(nodes.size()-1).pos).lengthVector();
+		float dist = (float) pos.subtract(nodes.get(nodes.size()-1).pos).length();
 		if(dist < 0.1){
 			return true;
 		}
@@ -68,7 +68,7 @@ public class ParticleGluonBurnTrail extends Particle {
 				nodes.add(new Node(interPos, interNormal, interTan,  prev.uCoord-distToPlane*uScale));
 				
 				Vec3d tan = normal.crossProduct(interPos.subtract(pos)).normalize();
-				nodes.add(new Node(pos, normal, tan, (prev.uCoord-distToPlane*uScale)+(float) pos.subtract(interPos).lengthVector()*uScale));
+				nodes.add(new Node(pos, normal, tan, (prev.uCoord-distToPlane*uScale)+(float) pos.subtract(interPos).length()*uScale));
 			} else {
 				Vec3d tan = normal.crossProduct(prev.pos.subtract(pos)).normalize();
 				nodes.add(new Node(pos, normal, tan, prev.uCoord+dist*uScale));

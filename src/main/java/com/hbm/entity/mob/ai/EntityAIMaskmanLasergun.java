@@ -32,7 +32,7 @@ public class EntityAIMaskmanLasergun extends EntityAIBase {
 
         } else {
             this.target = entity;
-            double dist = Vec3.createVectorHelper(target.posX - owner.posX, target.posY - owner.posY, target.posZ - owner.posZ).lengthVector();
+            double dist = Vec3.createVectorHelper(target.posX - owner.posX, target.posY - owner.posY, target.posZ - owner.posZ).length();
             return dist > 10;
         }
 	}

@@ -16,7 +16,7 @@ import net.minecraft.world.World;
 public class ItemDyatlov extends Item {
 
 	public ItemDyatlov(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

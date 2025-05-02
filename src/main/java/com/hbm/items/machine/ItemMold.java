@@ -35,7 +35,7 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 	public HashMap<NTMMaterial, ItemStack> blockOverrides = new HashMap();
 	
 	public ItemMold(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		this.setHasSubtypes(true);
@@ -124,8 +124,8 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 		Mold mold = getMold(stack);
 		list.add("§e" + mold.getTitle());
 		
-		if(mold.size == 0) list.add("§6" + I18nUtil.resolveKey(ModBlocks.foundry_mold.getUnlocalizedName() + ".name"));
-		else if(mold.size == 1) list.add("§c" + I18nUtil.resolveKey(ModBlocks.foundry_basin.getUnlocalizedName() + ".name"));
+		if(mold.size == 0) list.add("§6" + I18nUtil.resolveKey(ModBlocks.foundry_mold.getTranslationKey() + ".name"));
+		else if(mold.size == 1) list.add("§c" + I18nUtil.resolveKey(ModBlocks.foundry_basin.getTranslationKey() + ".name"));
 	}
 	
 	public Mold getMold(ItemStack stack) {

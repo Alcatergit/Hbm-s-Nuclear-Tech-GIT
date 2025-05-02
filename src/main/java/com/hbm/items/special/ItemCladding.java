@@ -22,7 +22,7 @@ public class ItemCladding extends Item {
 	float rad;
 
 	public ItemCladding(float rad, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.rad = rad;
 		

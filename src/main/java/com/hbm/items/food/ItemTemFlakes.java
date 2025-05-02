@@ -14,7 +14,7 @@ public class ItemTemFlakes extends ItemFood {
 
 	public ItemTemFlakes(int amount, float saturation, boolean isWolfFood, String s) {
 		super(amount, saturation, isWolfFood);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setAlwaysEdible();
 		

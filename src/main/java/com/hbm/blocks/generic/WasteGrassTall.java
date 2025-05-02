@@ -29,7 +29,7 @@ public class WasteGrassTall extends BlockBush {
 	
 	public WasteGrassTall(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setSoundType(SoundType.PLANT);

@@ -688,7 +688,7 @@ public class ClientProxy extends ServerProxy {
 	
 	@Override
 	public File getDataDir() {
-		return Minecraft.getMinecraft().mcDataDir;
+		return Minecraft.getMinecraft().gameDir;
 	}
 	
 	@Override
@@ -877,7 +877,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityCrucible.class, new RenderCrucible());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryMold.class, new RenderFoundryMold());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryBasin.class, new RenderFoundryBasin());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryOutlet.class, new RenderFoundryOutlet());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryChannel.class, new RenderFoundryChannel());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityFoundryOutlet.class, new RenderFoundryOutlet());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityDoorGeneric.class, new RenderDoorGeneric());
 		
 		RenderingRegistry.registerEntityRenderingHandler(EntityDSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.d_smoke1, ModItems.d_smoke2, ModItems.d_smoke3, ModItems.d_smoke4, ModItems.d_smoke5, ModItems.d_smoke6, ModItems.d_smoke7, ModItems.d_smoke8}));
@@ -1440,7 +1441,7 @@ public class ClientProxy extends ServerProxy {
 			String mode = data.getString("mode");
 			
 			if("soyuz".equals(mode)) {
-				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350)
+				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).length() > 350)
 					return;
 				
 				int count = Math.max(1, data.getInteger("count"));
@@ -1462,7 +1463,7 @@ public class ClientProxy extends ServerProxy {
 			
 			if("meteor".equals(mode)) {
 				
-				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).lengthVector() > 350)
+				if(Vec3.createVectorHelper(player.posX - x, player.posY - y, player.posZ - z).length() > 350)
 					return;
 	
 				int count = Math.max(1, data.getInteger("count"));
@@ -1769,7 +1770,7 @@ public class ClientProxy extends ServerProxy {
 					newDirection.rotateAroundX((float) Math.toRadians(angles.yCoord-90));
 					newDirection.rotateAroundY((float) Math.toRadians(angles.xCoord));
 					//Multiply it by the original vector's length to ensure it has the right magnitude
-					newDirection = newDirection.mult((float) direction.lengthVector()+rand.nextFloat()*velocityRand);
+					newDirection = newDirection.mult((float) direction.length()+rand.nextFloat()*velocityRand);
 					Particle fx = new ParticleSpark(world, x, y, z, length+rand.nextFloat()*randLength, width, lifetime + rand.nextInt(randLifeTime), gravity).color(r, g, b, a).motion((float)newDirection.xCoord, (float)newDirection.yCoord, (float)newDirection.zCoord);
 					Minecraft.getMinecraft().effectRenderer.addEffect(fx);
 				}
@@ -2029,7 +2030,7 @@ public class ClientProxy extends ServerProxy {
 			String mode = data.getString("mode");
 			if("crucible".equals(name)){
 				if("equip".equals(mode)){
-					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.crucible_equip, new EndResult(EndType.STAY));
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.crucible_equip, new EndResult(EndType.STAY));
 				}
 				if("crucible".equals(mode)) {
 					BusAnimation animation = new BusAnimation()
@@ -2038,7 +2039,7 @@ public class ClientProxy extends ServerProxy {
 									.addKeyframe(new BusAnimationKeyframe(90, 0, 1, 800))
 									.addKeyframe(new BusAnimationKeyframe(0, 0, 1, 50)));
 
-					HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+					HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 				}
 				if("swing".equals(mode)){
 					BusAnimation animation = new BusAnimation()
@@ -2049,7 +2050,7 @@ public class ClientProxy extends ServerProxy {
 						HbmAnimations.hotbar[slot].animation = animation;
 						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
 					} else {
-						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 					}
 				}
 				if("cSwing".equals(mode)) {
@@ -2074,13 +2075,13 @@ public class ClientProxy extends ServerProxy {
 							HbmAnimations.hotbar[slot].animation = animation;
 							HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
 						} else {
-							HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+							HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 						}
 					}
 				}
 			} else if("hs_sword".equals(name)){
 				if("equip".equals(mode)){
-					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.hs_sword_equip, new EndResult(EndType.STAY));
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.hs_sword_equip, new EndResult(EndType.STAY));
 				} else if("swing".equals(mode)){
 					BusAnimation animation = new BusAnimation()
 							.addBus("SWING", new BusAnimationSequence()
@@ -2090,12 +2091,12 @@ public class ClientProxy extends ServerProxy {
 						HbmAnimations.hotbar[slot].animation = animation;
 						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
 					} else {
-						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 					}
 				}
 			} else if("hf_sword".equals(name)){
 				if("equip".equals(mode)){
-					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.hf_sword_equip, new EndResult(EndType.STAY));
+					HbmAnimations.hotbar[slot] = new BlenderAnimation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.hf_sword_equip, new EndResult(EndType.STAY));
 				} else if("swing".equals(mode)){
 					BusAnimation animation = new BusAnimation()
 							.addBus("SWING", new BusAnimationSequence()
@@ -2105,7 +2106,7 @@ public class ClientProxy extends ServerProxy {
 						HbmAnimations.hotbar[slot].animation = animation;
 						HbmAnimations.hotbar[slot].startMillis = System.currentTimeMillis();
 					} else {
-						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getUnlocalizedName(), System.currentTimeMillis(), animation);
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), animation);
 					}
 				}
 			}

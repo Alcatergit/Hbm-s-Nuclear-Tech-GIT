@@ -375,7 +375,7 @@ public class EntityRocket extends Entity implements IProjectile {
 
                     if (newState.getMaterial() != Material.AIR)
                     {
-                        this.field_145790_g.onEntityCollidedWithBlock(this.world, newPos, newState, this);
+                        this.field_145790_g.onEntityCollision(this.world, newPos, newState, this);
                     }
                 }
             }

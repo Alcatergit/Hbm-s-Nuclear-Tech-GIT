@@ -34,7 +34,7 @@ public class GunXVL1456 extends Item {
 	Random rand = new Random();
 	
 	public GunXVL1456(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
         this.setMaxDamage(2500);

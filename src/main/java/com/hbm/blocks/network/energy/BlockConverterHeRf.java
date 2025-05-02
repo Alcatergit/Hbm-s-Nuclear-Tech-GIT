@@ -17,7 +17,7 @@ public class BlockConverterHeRf extends BlockContainer {
 
 	public BlockConverterHeRf(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		

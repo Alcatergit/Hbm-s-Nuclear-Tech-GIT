@@ -28,7 +28,7 @@ public class BlockGenericSlab extends BlockSlab {
 	
 	public BlockGenericSlab(Material materialIn, boolean isDouble, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.isDouble = isDouble;
 		
@@ -44,8 +44,8 @@ public class BlockGenericSlab extends BlockSlab {
 	}
 
 	@Override
-	public String getUnlocalizedName(int meta) {
-		return this.getUnlocalizedName();
+	public String getTranslationKey(int meta) {
+		return this.getTranslationKey();
 	}
 
 	

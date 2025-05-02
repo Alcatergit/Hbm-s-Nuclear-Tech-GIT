@@ -29,7 +29,7 @@ public class RedBarrel extends Block {
 	
 	public RedBarrel(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -41,7 +41,7 @@ public class RedBarrel extends Block {
 	}
 	
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
 		if(!worldIn.isRemote && worldIn instanceof WorldServer) {
 			((WorldServer)worldIn).addScheduledTask(() -> {
         		explode(worldIn, pos.getX(), pos.getY(), pos.getZ());

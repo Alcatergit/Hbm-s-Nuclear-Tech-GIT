@@ -71,7 +71,7 @@ public class BeamPronter {
 		
 		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
 		Random rand = new Random(start);
-		double length = skeleton.lengthVector();
+		double length = skeleton.length();
 		double segLength = length / segments;
 		double lastX = 0;
 		double lastY = 0;
@@ -146,7 +146,7 @@ public class BeamPronter {
 		if(beam == EnumBeamType.LINE) {
 			tessellator.setColorOpaque_I(innerColor);
             tessellator.addVertex(0, 0, 0);
-            tessellator.addVertex(0, skeleton.lengthVector(), 0);
+            tessellator.addVertex(0, skeleton.length(), 0);
 		}
 
 		
@@ -183,7 +183,7 @@ public class BeamPronter {
 		}
 		
 		Vec3 diff = pos1.subtract(pos2);
-		float len = (float) diff.lengthVector();
+		float len = (float) diff.length();
 		Vec3 angles = BobMathUtil.getEulerAngles(diff);
 		GL11.glTranslated(pos1.xCoord, pos1.yCoord, pos1.zCoord);
 		

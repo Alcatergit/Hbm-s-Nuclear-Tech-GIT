@@ -85,7 +85,7 @@ public class HeaterElectric extends BlockDummyable implements ILookOverlay, IToo
 		text.add("§a-> §r" + heater.getConsumption() + " HE/t");
 		text.add("§c<- §r" + heater.getHeatGen() + " TU/t");
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 
 	@Override

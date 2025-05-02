@@ -34,7 +34,7 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 	
 	public MachineChemplant(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, 2));

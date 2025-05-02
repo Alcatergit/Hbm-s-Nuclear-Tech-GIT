@@ -21,7 +21,7 @@ public class BlockCable extends BlockContainer {
 
 	public BlockCable(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.blockTab);
 

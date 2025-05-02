@@ -136,7 +136,7 @@ public class RadiationSavedData extends WorldSavedData {
 					struct.radiation = 0;
 				}
 				
-				if(struct.radiation > RadiationConfig.fogRad && worldObj != null && worldObj.rand.nextInt(RadiationConfig.fogCh) == 0 && worldObj.getChunkFromChunkCoords(struct.chunkX, struct.chunkY).isLoaded()) {
+				if(struct.radiation > RadiationConfig.fogRad && worldObj != null && worldObj.rand.nextInt(RadiationConfig.fogCh) == 0 && worldObj.getChunk(struct.chunkX, struct.chunkY).isLoaded()) {
 					
 					int x = struct.chunkX * 16 + worldObj.rand.nextInt(16);
 					int z = struct.chunkY * 16 + worldObj.rand.nextInt(16);
@@ -234,7 +234,7 @@ public class RadiationSavedData extends WorldSavedData {
 		}
 		RadiationSavedData data = getData(worldObj);
 		
-		Chunk chunk = worldObj.getChunkFromBlockCoords(pos);
+		Chunk chunk = worldObj.getChunk(pos);
 		
 		float r = data.getRadNumFromChunkCoord(chunk.x, chunk.z);
 		
@@ -251,7 +251,7 @@ public class RadiationSavedData extends WorldSavedData {
 		}
 		RadiationSavedData data = getData(worldObj);
 		
-		Chunk chunk = worldObj.getChunkFromBlockCoords(pos);
+		Chunk chunk = worldObj.getChunk(pos);
 		
 		float r = data.getRadNumFromChunkCoord(chunk.x, chunk.z);
 		

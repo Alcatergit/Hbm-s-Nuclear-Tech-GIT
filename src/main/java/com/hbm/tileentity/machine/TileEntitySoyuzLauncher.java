@@ -266,7 +266,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 			int x = inventory.getStackInSlot(1).getTagCompound().getInteger("xCoord");
 			int z = inventory.getStackInSlot(1).getTagCompound().getInteger("zCoord");
 			
-			return (int) Vec3.createVectorHelper(pos.getX() - x, 0, pos.getZ() - z).lengthVector();
+			return (int) Vec3.createVectorHelper(pos.getX() - x, 0, pos.getZ() - z).length();
 		}
 			
 		return 0;

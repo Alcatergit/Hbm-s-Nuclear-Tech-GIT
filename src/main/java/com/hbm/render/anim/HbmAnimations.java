@@ -78,7 +78,7 @@ public class HbmAnimations {
 		if(hotbar[slot] == null)
 			return null;
 
-		if(hotbar[slot].key.equals(stack.getItem().getUnlocalizedName())) {
+		if(hotbar[slot].key.equals(stack.getItem().getTranslationKey())) {
 			return hotbar[slot];
 		}
 

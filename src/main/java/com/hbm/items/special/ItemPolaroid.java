@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemPolaroid extends Item {
 
 	public ItemPolaroid(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.consumableTab);
 		

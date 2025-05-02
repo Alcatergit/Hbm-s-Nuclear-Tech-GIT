@@ -16,7 +16,7 @@ public class MachineGenerator extends Block {
 	
 	public MachineGenerator(Material m, String s) {
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 

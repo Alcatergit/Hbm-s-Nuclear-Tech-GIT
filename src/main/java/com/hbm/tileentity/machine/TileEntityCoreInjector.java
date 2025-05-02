@@ -44,12 +44,12 @@ public class TileEntityCoreInjector extends TileEntityMachineBase implements ITi
 
 			beam = 0;
 			
-			EnumFacing dir = EnumFacing.getFront(this.getBlockMetadata());
+			EnumFacing dir = EnumFacing.byIndex(this.getBlockMetadata());
 			for(int i = 1; i <= range; i++) {
 
-				int x = pos.getX() + dir.getFrontOffsetX() * i;
-				int y = pos.getY() + dir.getFrontOffsetY() * i;
-				int z = pos.getZ() + dir.getFrontOffsetZ() * i;
+				int x = pos.getX() + dir.getXOffset() * i;
+				int y = pos.getY() + dir.getYOffset() * i;
+				int z = pos.getZ() + dir.getZOffset() * i;
 				BlockPos pos1 = new BlockPos(x, y, z);
 				TileEntity te = world.getTileEntity(pos1);
 				

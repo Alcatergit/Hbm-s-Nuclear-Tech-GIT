@@ -20,7 +20,7 @@ public class ItemFilter extends Item {
 	
 	public ItemFilter(String s, int durability) {
 		this.setMaxDamage(durability);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		ModItems.ALL_ITEMS.add(this);
 	}

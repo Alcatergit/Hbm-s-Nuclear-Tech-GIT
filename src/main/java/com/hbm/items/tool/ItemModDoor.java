@@ -21,7 +21,7 @@ import net.minecraft.world.World;
 public class ItemModDoor extends Item {
 
 	public ItemModDoor(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
         this.setCreativeTab(CreativeTabs.REDSTONE);
@@ -58,8 +58,8 @@ public class ItemModDoor extends Item {
             if (player.canPlayerEdit(pos, facing, itemstack) && block1.canPlaceBlockAt(worldIn, pos))
             {
                 EnumFacing enumfacing = EnumFacing.fromAngle((double)player.rotationYaw);
-                int i = enumfacing.getFrontOffsetX();
-                int j = enumfacing.getFrontOffsetZ();
+                int i = enumfacing.getXOffset();
+                int j = enumfacing.getZOffset();
                 boolean flag = i < 0 && hitZ < 0.5F || i > 0 && hitZ > 0.5F || j < 0 && hitX > 0.5F || j > 0 && hitX < 0.5F;
                 placeDoor(worldIn, pos, enumfacing, block1, flag);
                 SoundType soundtype = worldIn.getBlockState(pos).getBlock().getSoundType(worldIn.getBlockState(pos), worldIn, pos, player);

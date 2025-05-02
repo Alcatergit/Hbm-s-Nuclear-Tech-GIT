@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemTemplateFolder extends Item {
 
 	public ItemTemplateFolder(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

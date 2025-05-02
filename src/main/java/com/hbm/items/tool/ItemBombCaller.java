@@ -30,7 +30,7 @@ public class ItemBombCaller extends Item {
 
 	public ItemBombCaller(String s) {
 		this.setRegistryName(s);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setCreativeTab(MainRegistry.consumableTab);
 		this.setHasSubtypes(true);
 

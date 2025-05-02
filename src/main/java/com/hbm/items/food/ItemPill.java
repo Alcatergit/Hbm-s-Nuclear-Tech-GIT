@@ -27,7 +27,7 @@ public class ItemPill extends ItemFood {
 	
 	public ItemPill(int hunger, String s) {
 		super(hunger, false);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setAlwaysEdible();
 		

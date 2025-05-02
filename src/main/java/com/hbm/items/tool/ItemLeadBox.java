@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemLeadBox extends Item {
 
 	public ItemLeadBox(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.partsTab);
 		ModItems.ALL_ITEMS.add(this);

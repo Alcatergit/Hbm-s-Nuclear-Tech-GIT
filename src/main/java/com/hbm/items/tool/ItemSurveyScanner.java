@@ -33,7 +33,7 @@ import net.minecraftforge.oredict.OreDictionary;
 public class ItemSurveyScanner extends Item {
 
 	public ItemSurveyScanner(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

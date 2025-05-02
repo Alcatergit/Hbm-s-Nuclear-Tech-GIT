@@ -440,7 +440,7 @@ public class EntityMiniMIRV extends Entity implements IProjectile {
 
                     if (newState.getMaterial() != Material.AIR)
                     {
-                    	newState.getBlock().onEntityCollidedWithBlock(world, newPos, newState, this);
+                    	newState.getBlock().onEntityCollision(world, newPos, newState, this);
                     }
                 }
             }

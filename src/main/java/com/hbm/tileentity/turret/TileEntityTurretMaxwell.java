@@ -93,7 +93,7 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 			
 			if(this.tPos != null) {
 				Vec3d pos = this.getTurretPos();
-				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).lengthVector();
+				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
 				this.lastDist = length;
 			}
 			

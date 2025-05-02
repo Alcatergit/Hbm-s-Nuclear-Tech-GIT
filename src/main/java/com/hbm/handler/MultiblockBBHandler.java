@@ -25,7 +25,7 @@ public class MultiblockBBHandler {
 	
 	public static MultiblockBounds load(ResourceLocation loc){
 		try {
-			InputStream s = MainRegistry.class.getResourceAsStream("/assets/"+loc.getResourceDomain()+"/"+loc.getResourcePath());
+			InputStream s = MainRegistry.class.getResourceAsStream("/assets/"+loc.getNamespace()+"/"+loc.getPath());
 			return parse(ByteBuffer.wrap(IOUtils.toByteArray(s)));
 		} catch(Exception e) {
 			e.printStackTrace();

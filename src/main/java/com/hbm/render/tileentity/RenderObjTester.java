@@ -307,7 +307,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
 		//System.out.println(bruh2);
         
 		GL11.glTranslated(-0.5, -4, 0);
-		RayTraceResult r = Library.rayTraceIncludeEntities(te.getWorld(), new Vec3d(te.getPos()).addVector(0, 2, 0.5), new Vec3d(te.getPos()).addVector(12, 2, 0.5), null);
+		RayTraceResult r = Library.rayTraceIncludeEntities(te.getWorld(), new Vec3d(te.getPos()).add(0, 2, 0.5), new Vec3d(te.getPos()).add(12, 2, 0.5), null);
 		if(r != null && r.hitVec != null){
 			BeamPronter.gluonBeam(Vec3.createVectorHelper(0, 0, 0), new Vec3(r.hitVec.subtract(te.getPos().getX(), te.getPos().getY()+2, te.getPos().getZ()+0.5)), 0.8F);
 		} else {

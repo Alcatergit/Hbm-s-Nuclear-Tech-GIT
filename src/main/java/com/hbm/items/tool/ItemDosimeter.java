@@ -29,7 +29,7 @@ public class ItemDosimeter extends Item implements IBauble {
 	Random rand = new Random();
 
 	public ItemDosimeter(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

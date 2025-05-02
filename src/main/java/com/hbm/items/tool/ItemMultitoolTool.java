@@ -23,7 +23,7 @@ public class ItemMultitoolTool extends ItemTool {
 
 	public ItemMultitoolTool(float f, ToolMaterial materialIn, Set<Block> effectiveBlocksIn, String s) {
 		super(f, 0, materialIn, effectiveBlocksIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

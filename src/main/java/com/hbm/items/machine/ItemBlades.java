@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemBlades extends Item {
 	public ItemBlades(String s, int i){
 
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(i);
 		this.setMaxStackSize(1);

@@ -26,7 +26,7 @@ public class SoyuzCapsule extends BlockContainer {
 	
 	public SoyuzCapsule(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(RUSTY, false));
 		

@@ -25,24 +25,24 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
 
 public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor {
 
 	protected static final AxisAlignedBB AABB_BIG_BOX = new AxisAlignedBB(-0.75D, 0D, -0.75D, 1.75D, 1.5D, 1.75D);
-    
 	protected static final AxisAlignedBB AABB_FLOOR = new AxisAlignedBB(-1.5D, 0D, -1.5D, 2.5D, 0.5D, 2.5D);
-
-    protected static final AxisAlignedBB AABB_WALL_2 = new AxisAlignedBB(-1D, 0.5D, -1D, -0.75D, 1.5D, 2D);
-    protected static final AxisAlignedBB AABB_WALL_3 = new AxisAlignedBB(-0.75D, 0.5D, -0.75D,	1.75D, 1.5D, -1D);
-    protected static final AxisAlignedBB AABB_WALL_4 = new AxisAlignedBB(1.75D, 0.5D, -1D, 2D, 1.5D, 2D);
-    protected static final AxisAlignedBB AABB_WALL_5 = new AxisAlignedBB(-0.75D, 0.5D, 1.75D,	1.75D, 1.5D, 2D);
-    
 
 	public MachineCrucible(Material materialIn, String s) {
 		super(materialIn, s);
+
+		this.bounding.add(new AxisAlignedBB(-1.5D, 0D, -1.5D, 1.5D, 0.5D, 1.5D));
+        this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, -1.25D, 1.25D, 1.5D, -1D));
+        this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, -1.25D, -1D, 1.5D, 1.25D));
+        this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, 1D, 1.25D, 1.5D, 1.25D));
+        this.bounding.add(new AxisAlignedBB(1D, 0.5D, -1.25D, 1.25D, 1.5D, 1.25D));
+        this.FULL_BLOCK_AABB.setMaxY(0.999D); //item bounce prevention
 	}
 
 	@Override
@@ -55,30 +55,6 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 	public boolean hasShovelInHand(EntityPlayer player, EnumHand hand){
 		return player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemTool && (((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel"));
 	}
-
-	@Override
-	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
-		if(getMetaFromState(state) >= 12){
-			return AABB_BIG_BOX;
-		} else {
-			BlockPos p = this.findCore(world, pos);
-			if(p != null){
-				return AABB_BIG_BOX.offset(p.getX()-pos.getX(), p.getY()-pos.getY(), p.getZ()-pos.getZ());
-			}
-		}
-        return FULL_BLOCK_AABB;
-    }
-
-	@Override
-	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, Entity entityIn, boolean isActualState) {
-		if(getMetaFromState(state) >= 12){
-	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_2);
-	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_3);
-	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_4);
-	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_WALL_5);
-	        addCollisionBoxToList(pos, entityBox, collidingBoxes, AABB_FLOOR);
-	    }
-    }
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -150,6 +126,19 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 		
 		super.breakBlock(world, pos, state);
 	}
+
+    @Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
+		if(getMetaFromState(state) >= 12){
+			return AABB_BIG_BOX;
+		} else {
+			BlockPos p = this.findCore(world, pos);
+			if(p != null){
+				return AABB_BIG_BOX.offset(p.getX()-pos.getX(), p.getY()-pos.getY(), p.getZ()-pos.getZ());
+			}
+		}
+        return FULL_BLOCK_AABB;
+    }
 	
 	@Override
 	public boolean canAcceptPartialPour(World world, BlockPos p, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {

@@ -76,7 +76,7 @@ public class TileEntityTurretBase extends TileEntity implements ITickable {
 
 				oldRotationPitch = rotationPitch;
 				oldRotationYaw = rotationYaw;
-				//rotationPitch = -Math.asin(turret.y / turret.lengthVector()) * 180 / Math.PI;
+				//rotationPitch = -Math.asin(turret.y / turret.length()) * 180 / Math.PI;
 				double sqrt = MathHelper.sqrt(turret.x * turret.x + turret.z * turret.z);
 				rotationPitch = -Math.atan2(turret.y, sqrt) * 180 / Math.PI;
 				rotationYaw = -Math.atan2(turret.x, turret.z) * 180 / Math.PI;

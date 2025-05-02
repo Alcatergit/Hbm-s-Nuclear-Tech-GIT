@@ -26,9 +26,11 @@ public class RenderNukeFleija extends TileEntitySpecialRenderer<TileEntityNukeFl
 		case 3:
 			GL11.glRotatef(0, 0F, 1F, 0F); break;
 		}
-
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_fleija_tex);
         ResourceManager.bomb_fleija.renderAll();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        
         GL11.glPopMatrix();
     }
 }

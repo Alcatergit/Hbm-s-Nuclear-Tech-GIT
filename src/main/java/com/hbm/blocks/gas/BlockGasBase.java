@@ -33,7 +33,7 @@ public abstract class BlockGasBase extends Block {
 
 	public BlockGasBase(float r, float g, float b, String s) {
 		super(ModBlocks.materialGas);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHardness(0.0F);
 		this.setResistance(0.0F);

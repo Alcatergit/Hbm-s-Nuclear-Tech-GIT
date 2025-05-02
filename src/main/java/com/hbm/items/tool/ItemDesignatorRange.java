@@ -27,7 +27,7 @@ import net.minecraft.world.World;
 public class ItemDesignatorRange extends Item {
 
 	public ItemDesignatorRange(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.missileTab);
 		

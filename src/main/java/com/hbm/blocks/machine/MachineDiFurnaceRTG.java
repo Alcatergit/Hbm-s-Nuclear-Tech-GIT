@@ -42,7 +42,7 @@ public class MachineDiFurnaceRTG extends BlockContainer {
 	public MachineDiFurnaceRTG(Material materialIn, String s, boolean state) {
 		super(materialIn);
 		isActive = state;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH));
@@ -145,7 +145,7 @@ public class MachineDiFurnaceRTG extends BlockContainer {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

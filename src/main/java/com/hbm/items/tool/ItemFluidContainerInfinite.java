@@ -18,7 +18,7 @@ public class ItemFluidContainerInfinite extends Item {
 	private int maxDrain;
 	
 	public ItemFluidContainerInfinite(int maxDrain, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxDrain = maxDrain;
 		

@@ -10,7 +10,7 @@ import net.minecraft.item.ItemStack;
 public class AxeSchrabidium extends ItemAxe {
 	public AxeSchrabidium(ToolMaterial t, String s){
 		super(t, t.getAttackDamage(), -3.2F);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setMaxStackSize(1);

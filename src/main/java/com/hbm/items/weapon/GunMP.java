@@ -31,7 +31,7 @@ public class GunMP extends Item {
 	Random rand = new Random();
 	
 	public GunMP(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

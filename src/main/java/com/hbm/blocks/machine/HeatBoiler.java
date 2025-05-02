@@ -143,6 +143,6 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltip
             if(boiler.types[i] != null)
                 text.add((i < 1 ? "§a-> " : "§c<- ") + "§r" + boiler.types[i].getLocalizedName(new FluidStack(boiler.types[i], 1)) + ": " + boiler.tanks[i].getFluidAmount() + "/" + boiler.tanks[i].getCapacity() + "mB");
 
-        ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+        ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
     }
 }

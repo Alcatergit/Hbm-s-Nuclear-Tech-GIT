@@ -22,7 +22,7 @@ public class BlockDeadPlant extends BlockBush
 {
     public BlockDeadPlant(Material materialIn, String s) {
         super(materialIn);
-        this.setUnlocalizedName(s);
+        this.setTranslationKey(s);
         this.setRegistryName(s);
 
         ModBlocks.ALL_BLOCKS.add(this);

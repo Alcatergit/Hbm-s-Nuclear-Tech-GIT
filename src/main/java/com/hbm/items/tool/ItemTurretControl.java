@@ -40,7 +40,7 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 public class ItemTurretControl extends Item {
 
 	public ItemTurretControl(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 

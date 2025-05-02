@@ -426,7 +426,7 @@ public class EntityMiniNuke extends Entity implements IProjectile {
 
                     if (newBlockState.getMaterial() != Material.AIR)
                     {
-                        newBlockState.getBlock().onEntityCollidedWithBlock(world, newPos, newBlockState, this);
+                        newBlockState.getBlock().onEntityCollision(world, newPos, newBlockState, this);
                     }
                 }
             }

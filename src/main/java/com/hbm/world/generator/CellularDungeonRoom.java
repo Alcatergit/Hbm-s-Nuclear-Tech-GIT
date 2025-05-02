@@ -19,7 +19,7 @@ public class CellularDungeonRoom {
 	public void generate(World world, int x, int y, int z, EnumFacing door) {
 		generateMain(world, x, y, z);
 		for(int i = 2; i < 6; i++) {
-			EnumFacing dir = EnumFacing.getFront(i);
+			EnumFacing dir = EnumFacing.byIndex(i);
 			generateWall(world, x, y, z, dir, dir == door);
 		}
 	}

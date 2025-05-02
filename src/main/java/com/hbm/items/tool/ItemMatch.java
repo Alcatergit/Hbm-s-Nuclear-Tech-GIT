@@ -17,7 +17,7 @@ import net.minecraft.world.World;
 public class ItemMatch extends Item {
 
 	public ItemMatch(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

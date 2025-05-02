@@ -25,7 +25,7 @@ public class RailHighspeed extends BlockRailBase {
     });
 	public RailHighspeed(String s) {
 		super(true);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(SHAPE, BlockRailBase.EnumRailDirection.NORTH_SOUTH));
 		

@@ -41,7 +41,7 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 	
 	public BlockSiloHatch(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -163,7 +163,7 @@ public class BlockSiloHatch extends BlockContainer implements IBomb, IMultiBlock
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

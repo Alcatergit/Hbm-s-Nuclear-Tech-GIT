@@ -34,7 +34,7 @@ public class ItemGasCanister extends Item implements IHasCustomModel {
 	
 	
 	public ItemGasCanister(String s, int cap){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setMaxStackSize(1);

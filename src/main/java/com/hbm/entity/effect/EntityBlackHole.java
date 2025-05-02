@@ -129,7 +129,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 			
 			Vec3 vec = Vec3.createVectorHelper(posX - e.posX, posY - e.posY, posZ - e.posZ);
 			
-			double dist = vec.lengthVector();
+			double dist = vec.length();
 			
 			if(dist > range)
 				continue;

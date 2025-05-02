@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemCatalog extends Item {
 
 	public ItemCatalog(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

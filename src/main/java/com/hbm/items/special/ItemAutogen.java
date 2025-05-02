@@ -26,7 +26,7 @@ public class ItemAutogen extends Item implements IHasCustomMetaModels {
 	MaterialShapes shape;
 	
 	public ItemAutogen(String s, MaterialShapes shape) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHasSubtypes(true);
 		this.shape = shape;
@@ -63,7 +63,7 @@ public class ItemAutogen extends Item implements IHasCustomMetaModels {
 			return "UNDEFINED";
 		}
 		
-		return I18n.format(this.getUnlocalizedName() + ".name", I18n.format(mat.getUnlocalizedName()));
+		return I18n.format(this.getTranslationKey() + ".name", I18n.format(mat.getTranslationKey()));
 	}
 
 	@Override
@@ -74,6 +74,6 @@ public class ItemAutogen extends Item implements IHasCustomMetaModels {
 	@Override
 	public ModelResourceLocation getResourceLocation(int meta) {
 		NTMMaterial mat = Mats.matById.get(meta);
-		return new ModelResourceLocation(RefStrings.MODID + ":"+this.getUnlocalizedName().substring(5)+"_"+mat.getUnlocalizedName().substring(7), "inventory");
+		return new ModelResourceLocation(RefStrings.MODID + ":"+this.getTranslationKey().substring(5)+"_"+mat.getTranslationKey().substring(7), "inventory");
 	}
 }

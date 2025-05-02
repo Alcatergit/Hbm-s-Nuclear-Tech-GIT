@@ -15,7 +15,7 @@ public class NukeTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModBlocks.float_bomb != null){
 			return new ItemStack(Item.getItemFromBlock(ModBlocks.nuke_man));
 		}

@@ -136,7 +136,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 		this.prevPosZ = this.posZ;
 		this.prevRotationPitch = this.rotationPitch;
 
-        this.rotationPitch -= Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector() * 25;
+        this.rotationPitch -= Vec3.createVectorHelper(motionX, motionY, motionZ).length() * 25;
 		
 		double d0 = this.motionX;
 		double d1 = this.motionY;
@@ -308,7 +308,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 				
 				bounce = true;
 				Vec3d mot = new Vec3d(motionX, motionY, motionZ);
-				if (mot.lengthVector() > 0.05)
+				if (mot.length() > 0.05)
 					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.grenadeBounce, SoundCategory.HOSTILE, 2.0F, 1.0F);
 
 				motionX *= getBounceMod()*1.5;

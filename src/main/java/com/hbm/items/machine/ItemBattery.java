@@ -25,7 +25,7 @@ public class ItemBattery extends Item implements IBatteryItem {
 		this.maxCharge = dura;
 		this.chargeRate = chargeRate;
 		this.dischargeRate = dischargeRate;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);

@@ -56,9 +56,9 @@ public class ItemGunJShotty extends ItemGunBase {
 		case RELOAD:
 			int bullets = getMag(stack);
 			if(bullets == 1){
-				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim0, new EndResult(EndType.END));
+				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim0, new EndResult(EndType.END));
 			} else if(bullets == 0){
-				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getUnlocalizedName(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim1, new EndResult(EndType.END));
+				HbmAnimations.hotbar[slot] = new BlenderAnimation(stack.getItem().getTranslationKey(), System.currentTimeMillis(), 1, ResourceManager.jshotgun_anim1, new EndResult(EndType.END));
 			}
 		break;
 		case CYCLE:
@@ -105,7 +105,7 @@ public class ItemGunJShotty extends ItemGunBase {
 					double rPosX = ent.prevPosX + (ent.posX-ent.prevPosX)*partialTicks;
 					double rPosY = ent.prevPosY + (ent.posY-ent.prevPosY)*partialTicks;
 					double rPosZ = ent.prevPosZ + (ent.posZ-ent.prevPosZ)*partialTicks;
-					Vec3d camPos = ActiveRenderInfo.getCameraPosition().addVector(rPosX, rPosY, rPosZ);
+					Vec3d camPos = ActiveRenderInfo.getCameraPosition().add(rPosX, rPosY, rPosZ);
 					start = camPos.add(world.subtract(eyePos).normalize().scale(1));
 					
 					Vec3d dir = BobMathUtil.viewToLocal(new Vector4f((float)ItemRenderJShotgun.flashlightDirection.x, (float)ItemRenderJShotgun.flashlightDirection.y, (float)ItemRenderJShotgun.flashlightDirection.z, 0))[0].normalize();

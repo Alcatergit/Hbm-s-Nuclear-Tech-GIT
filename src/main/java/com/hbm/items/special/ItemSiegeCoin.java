@@ -19,7 +19,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemSiegeCoin extends Item {
 	
 	public ItemSiegeCoin(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.hasSubtypes = true;
 		this.setMaxDamage(0);

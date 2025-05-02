@@ -37,7 +37,7 @@ public class GunB93 extends Item {
 	public int dmgMax = 28;
 
 	public GunB93(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		this.maxStackSize = 1;

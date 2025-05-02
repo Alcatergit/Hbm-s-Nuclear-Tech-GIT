@@ -91,7 +91,7 @@ public class JetpackBooster extends JetpackBase {
 
 			Vec3d look = player.getLookVec();
 
-			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).lengthVector() < 5) {
+			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 5) {
 				player.motionX += look.x * 0.25;
 				player.motionY += look.y * 0.25;
 				player.motionZ += look.z * 0.25;

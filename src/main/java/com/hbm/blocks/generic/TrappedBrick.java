@@ -38,7 +38,7 @@ public class TrappedBrick extends BlockContainer {
 	
 	public TrappedBrick(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -158,7 +158,7 @@ public class TrappedBrick extends BlockContainer {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items) {
-		if(tab == this.getCreativeTabToDisplayOn() || tab == CreativeTabs.SEARCH)
+		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH)
 			for (int i = 0; i < Trap.values().length; ++i) {
 				items.add(new ItemStack(this, 1, i));
 			}

@@ -35,7 +35,7 @@ public class BlockPowder extends Block {
 
 	public BlockPowder(Material mat, SoundType soundType, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setSoundType(soundType);
 		this.setHarvestLevel("shovel", 0);

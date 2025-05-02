@@ -39,7 +39,7 @@ public class GunBoltAction extends Item {
 	public int dmgMax = 28;
 	
 	public GunBoltAction(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 

@@ -29,7 +29,7 @@ public class BlockFireworks extends BlockContainer {
 
 	public BlockFireworks(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -78,10 +78,10 @@ public class BlockFireworks extends BlockContainer {
 			}
 		}
 
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".name").setStyle(new Style().setColor(TextFormatting.GOLD)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".charges", te.charges).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".color", Integer.toHexString(te.color)).setStyle(new Style().setColor(TextFormatting.YELLOW)));
-		player.sendMessage(new TextComponentTranslation(this.getUnlocalizedName() + ".message", te.message).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".name").setStyle(new Style().setColor(TextFormatting.GOLD)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".charges", te.charges).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".color", Integer.toHexString(te.color)).setStyle(new Style().setColor(TextFormatting.YELLOW)));
+		player.sendMessage(new TextComponentTranslation(this.getTranslationKey() + ".message", te.message).setStyle(new Style().setColor(TextFormatting.YELLOW)));
 
 		return true;
 	}

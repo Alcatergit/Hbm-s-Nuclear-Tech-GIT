@@ -44,8 +44,8 @@ public class RenderLaser extends Render<EntityLaser> {
 			Vec3 skeleton = Vec3.createVectorHelper(pos.hitVec.x - player.posX, pos.hitVec.y - player.posY - player.getEyeHeight(), pos.hitVec.z - player.posZ);
 			int init = (int) -(System.currentTimeMillis() % 360);
 			
-			//BeamPronter.prontHelix(skeleton, 0, 0, 0, EnumWaveType.SPIRAL, EnumBeamType.LINE, 0x0000ff, 0x8080ff, 0, (int)(skeleton.lengthVector() * 5), 0.2F);
-	        BeamPronter.prontBeam(skeleton, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xff5000, 0xff5000, init, (int) skeleton.lengthVector() + 1, 0.1F, 4, 0.05F);
+			//BeamPronter.prontHelix(skeleton, 0, 0, 0, EnumWaveType.SPIRAL, EnumBeamType.LINE, 0x0000ff, 0x8080ff, 0, (int)(skeleton.length() * 5), 0.2F);
+	        BeamPronter.prontBeam(skeleton, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xff5000, 0xff5000, init, (int) skeleton.length() + 1, 0.1F, 4, 0.05F);
 	        BeamPronter.prontBeam(skeleton, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0xff3000, 0xff3000, init, 1, 0F, 4, 0.05F);
 		}
 		

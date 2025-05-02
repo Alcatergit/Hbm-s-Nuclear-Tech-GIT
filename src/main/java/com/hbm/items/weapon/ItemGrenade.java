@@ -64,7 +64,7 @@ public class ItemGrenade extends Item {
 	protected int fuse = 4;
 	
 	public ItemGrenade(int fuse, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 16;
 		this.fuse = fuse;

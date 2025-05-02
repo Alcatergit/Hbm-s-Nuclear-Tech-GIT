@@ -56,7 +56,7 @@ public class ParticleTauMuzzleLightning extends ParticleFirstPerson {
 		}
 		if(nextPositionTime == 0){
 			nextPositionTime = 3 + rand.nextInt(3);
-			positions.add(new Vec3d(rand.nextFloat()-0.5, rand.nextFloat()-0.5, rand.nextFloat()-0.5).scale(0.3).addVector(posX, posY, posZ));
+			positions.add(new Vec3d(rand.nextFloat()-0.5, rand.nextFloat()-0.5, rand.nextFloat()-0.5).scale(0.3).add(posX, posY, posZ));
 			if(positions.size() > 9){
 				positions.remove(0);
 			}

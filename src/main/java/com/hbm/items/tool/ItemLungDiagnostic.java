@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class ItemLungDiagnostic extends Item {
 
 	public ItemLungDiagnostic(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

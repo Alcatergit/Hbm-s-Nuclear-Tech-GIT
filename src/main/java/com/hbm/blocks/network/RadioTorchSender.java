@@ -28,7 +28,7 @@ public class RadioTorchSender extends BlockContainer {
 
 	public RadioTorchSender(String s) {
 		super(Material.IRON);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

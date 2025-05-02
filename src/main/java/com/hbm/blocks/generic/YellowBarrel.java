@@ -27,14 +27,14 @@ public class YellowBarrel extends Block {
 	
 	public YellowBarrel(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 	
 	@Override
-	public void onBlockDestroyedByExplosion(World worldIn, BlockPos pos, Explosion explosionIn) {
+	public void onExplosionDestroy(World worldIn, BlockPos pos, Explosion explosionIn) {
 		if (!worldIn.isRemote && worldIn instanceof WorldServer) {
 			((WorldServer)worldIn).addScheduledTask(() -> {
         		explode(worldIn, pos.getX(), pos.getY(), pos.getZ());

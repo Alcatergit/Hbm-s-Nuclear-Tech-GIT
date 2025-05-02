@@ -17,7 +17,7 @@ public class BlockAbsorber extends Block {
 	
 	public BlockAbsorber(Material materialIn, float ab, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setTickRandomly(true);
 		absorb = ab;

@@ -160,8 +160,8 @@ public class ParticleSpark extends Particle {
         Vec3d toPlayer = new Vec3d(mX, mY, mZ);
         Vec3d point1 = particleAxis.crossProduct(toPlayer).normalize().scale(0.5*particleScale);
         Vec3d point2 = point1.scale(-1);
-        point1 = point1.addVector(f5, f6, f7);
-        point2 = point2.addVector(f5, f6, f7);
+        point1 = point1.add(f5, f6, f7);
+        point2 = point2.add(f5, f6, f7);
         particleAxis = particleAxis.scale(stretch);
         
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);

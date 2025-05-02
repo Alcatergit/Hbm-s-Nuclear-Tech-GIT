@@ -56,7 +56,7 @@ public class SoundLoopSiren extends SoundLoopMachine {
 	}
 	
 	public String getPath() {
-		return this.positionedSoundLocation.getResourceDomain() + ":" + this.positionedSoundLocation.getResourcePath();
+		return this.positionedSoundLocation.getNamespace() + ":" + this.positionedSoundLocation.getPath();
 	}
 	
 	public void setRepeat(boolean b) {

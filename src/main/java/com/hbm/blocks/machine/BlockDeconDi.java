@@ -23,7 +23,7 @@ public class BlockDeconDi extends BlockContainer {
 	public static float digammaRemove;
 	public BlockDeconDi(Material materialIn, String s, float digamma) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.digammaRemove = digamma;
 		ModBlocks.ALL_BLOCKS.add(this);

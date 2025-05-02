@@ -1,10 +1,7 @@
 package com.hbm.blocks;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.handler.MultiblockHandlerXR;
+import com.hbm.interfaces.ICopiable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -16,26 +13,35 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public abstract class BlockDummyable extends BlockContainer {
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+public abstract class BlockDummyable extends BlockContainer implements ICopiable {
 
 	//Drillgon200: I'm far to lazy to figure out what all the meta values should be translated to in properties
 	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
 	
 	public BlockDummyable(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setTickRandomly(true);
 		
@@ -227,7 +233,6 @@ public abstract class BlockDummyable extends BlockContainer {
 	}
 	
 	protected void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
-
 		MultiblockHandlerXR.fillSpace(world, x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o, getDimensions(), this, dir);
 	}
 	
@@ -277,13 +282,13 @@ public abstract class BlockDummyable extends BlockContainer {
 			//ForgeDirection d = ForgeDirection.getOrientation(world.getBlockMetadata(x, y, z) - offset);
 			//MultiblockHandler.emptySpace(world, x, y, z, getDimensions(), this, d);
 		} else if(!safeRem) {
-			
-	    	if(i >= extra)
-	    		i -= extra;
 
-	    	ForgeDirection dir = ForgeDirection.getOrientation(i).getOpposite();
+			if(i >= extra)
+				i -= extra;
+
+			ForgeDirection dir = ForgeDirection.getOrientation(i).getOpposite();
 			int[] pos1 = findCore(world, pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ);
-			
+
 			if(pos1 != null) {
 
 				//ForgeDirection d = ForgeDirection.getOrientation(world.getBlockMetadata(pos[0], pos[1], pos[2]) - offset);
@@ -292,6 +297,67 @@ public abstract class BlockDummyable extends BlockContainer {
 		}
 		InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
 		super.breakBlock(world, pos, state);
+	}
+
+	public boolean useDetailedHitbox() {
+		return !bounding.isEmpty();
+	}
+
+	public List<AxisAlignedBB> bounding = new ArrayList<>();
+
+	@Override
+	public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn, boolean isActualState) {
+		if (!this.useDetailedHitbox()) {
+			super.addCollisionBoxToList(state, worldIn, pos, entityBox, collidingBoxes, entityIn, isActualState);
+			return;
+		}
+
+		int[] corePos = this.findCore(worldIn, pos.getX(), pos.getY(), pos.getZ());
+
+		if (corePos == null) {
+			return;
+		}
+
+		BlockPos coreBlockPos = new BlockPos(corePos[0], corePos[1], corePos[2]);
+
+		for (AxisAlignedBB aabb : this.bounding) {
+			AxisAlignedBB rotatedBox = getAABBRotationOffset(
+					aabb,
+					coreBlockPos.getX() + 0.5,
+					coreBlockPos.getY(),
+					coreBlockPos.getZ() + 0.5,
+					getRotationFromState(worldIn.getBlockState(coreBlockPos))
+			);
+
+			if (entityBox.intersects(rotatedBox)) {
+				collidingBoxes.add(rotatedBox);
+			}
+		}
+	}
+
+	private ForgeDirection getRotationFromState(IBlockState state) {
+		int meta = state.getValue(META);
+		return ForgeDirection.getOrientation(meta - offset).getRotation(ForgeDirection.UP);
+	}
+
+	public static AxisAlignedBB getAABBRotationOffset(AxisAlignedBB aabb, double x, double y, double z, ForgeDirection dir) {
+		AxisAlignedBB newBox = null;
+
+		if (dir == ForgeDirection.NORTH) {
+			newBox = new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ);
+		} else if (dir == ForgeDirection.EAST) {
+			newBox = new AxisAlignedBB(-aabb.maxZ, aabb.minY, aabb.minX, -aabb.minZ, aabb.maxY, aabb.maxX);
+		} else if (dir == ForgeDirection.SOUTH) {
+			newBox = new AxisAlignedBB(-aabb.maxX, aabb.minY, -aabb.maxZ, -aabb.minX, aabb.maxY, -aabb.minZ);
+		} else if (dir == ForgeDirection.WEST) {
+			newBox = new AxisAlignedBB(aabb.minZ, aabb.minY, -aabb.maxX, aabb.maxZ, aabb.maxY, -aabb.minX);
+		}
+
+		if (newBox != null) {
+			return newBox.offset(x, y, z);
+		}
+
+		return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ).offset(x + 0.5, y + 0.5, z + 0.5);
 	}
 	
 	@Override
@@ -343,6 +409,42 @@ public abstract class BlockDummyable extends BlockContainer {
 	
 	public int getHeightOffset() {
 		return 0;
+	}
+
+	@Override
+	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
+		if (!this.useDetailedHitbox()) {
+			return FULL_BLOCK_AABB;
+		} else {
+			return new AxisAlignedBB(0.0F, 0.0F, 0.0F, 1.0F, 0.999F, 1.0F);
+		}
+	}
+
+	@Override
+	public NBTTagCompound getSettings(World world, int x, int y, int z) {
+		int[] pos = findCore(world, x, y, z);
+		TileEntity tile = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+		if (tile instanceof ICopiable)
+			return ((ICopiable) tile).getSettings(world, pos[0], pos[1], pos[2]);
+		else
+			return null;
+	}
+
+	@Override
+	public void pasteSettings(NBTTagCompound nbt, int index, World world, EntityPlayer player, int x, int y, int z) {
+		int[] pos = findCore(world, x, y, z);
+		TileEntity tile = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+		if (tile instanceof ICopiable)
+			((ICopiable) tile).pasteSettings(nbt, index, world, player, pos[0], pos[1], pos[2]);
+	}
+
+	@Override
+	public String[] infoForDisplay(World world, int x, int y, int z) {
+		int[] pos = findCore(world, x, y, z);
+		TileEntity tile = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
+		if (tile instanceof ICopiable)
+			return ((ICopiable) tile).infoForDisplay(world, x, y, z);
+		return null;
 	}
 
 }

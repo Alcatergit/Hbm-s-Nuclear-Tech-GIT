@@ -223,7 +223,7 @@ public class GJK {
 				info.result = Result.COLLIDING;
 				Vec3 separation = planeProjectOrigin(closestFace);
 				info.normal = separation.normalize();
-				info.depth = (float) separation.lengthVector();
+				info.depth = (float) separation.length();
 				for(int i = 0; i < 3; i ++){
 					features[0][i] = localSupport(bodyA, a, closestFace[i].r);
 					features[1][i] = localSupport(bodyB, b, closestFace[i].r.negate());
@@ -328,9 +328,9 @@ public class GJK {
 		//and make that the weight. You also have to divide by the sum of the weights to normalize them.
 		//I was under the impression that the area of the triangle would be the cross product over 2, but apparently the barycentric coords don't need that.
 		//I'm thinking this is because the normalization deals with that for me.
-		double u = face[1].v.subtract(point).crossProduct(face[2].v.subtract(point)).lengthVector();
-		double v = face[0].v.subtract(point).crossProduct(face[2].v.subtract(point)).lengthVector();
-		double w = face[0].v.subtract(point).crossProduct(face[1].v.subtract(point)).lengthVector();
+		double u = face[1].v.subtract(point).crossProduct(face[2].v.subtract(point)).length();
+		double v = face[0].v.subtract(point).crossProduct(face[2].v.subtract(point)).length();
+		double w = face[0].v.subtract(point).crossProduct(face[1].v.subtract(point)).length();
 		//Normalize
 		double uvw = u+v+w;
 		return new Vec3(u, v, w).multd(1/uvw);

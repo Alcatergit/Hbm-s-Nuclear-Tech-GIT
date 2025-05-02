@@ -26,7 +26,7 @@ public class ItemMissile extends Item {
 	private String witty;
 	
 	public ItemMissile(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxStackSize(1);
 		this.setCreativeTab(MainRegistry.missileTab);

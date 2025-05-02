@@ -32,7 +32,7 @@ import java.util.List;
 public class CraneRouter extends BlockContainer implements IEnterableBlock {
     public CraneRouter(Material materialIn, String s) {
         super(materialIn);
-        this.setUnlocalizedName(s);
+        this.setTranslationKey(s);
         this.setRegistryName(s);
         ModBlocks.ALL_BLOCKS.add(this);
     }
@@ -132,7 +132,7 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
 
     protected void sendOnRoute(World world, int x, int y, int z, IConveyorItem item, EnumFacing dir) {
         IConveyorBelt belt = null;
-        BlockPos targetPos = new BlockPos(x + dir.getFrontOffsetX(), y + dir.getFrontOffsetY(), z + dir.getFrontOffsetZ());
+        BlockPos targetPos = new BlockPos(x + dir.getXOffset(), y + dir.getYOffset(), z + dir.getZOffset());
         Block block = world.getBlockState(targetPos).getBlock();
 
         if (block instanceof IConveyorBelt) {
@@ -141,13 +141,13 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
 
         if (belt != null) {
             EntityMovingItem moving = new EntityMovingItem(world);
-            Vec3d pos = new Vec3d(x + 0.5 + dir.getFrontOffsetX() * 0.55, y + 0.5 + dir.getFrontOffsetY() * 0.55, z + 0.5 + dir.getFrontOffsetZ() * 0.55);
+            Vec3d pos = new Vec3d(x + 0.5 + dir.getXOffset() * 0.55, y + 0.5 + dir.getYOffset() * 0.55, z + 0.5 + dir.getZOffset() * 0.55);
             Vec3d snap = belt.getClosestSnappingPosition(world, targetPos, pos);
             moving.setPosition(snap.x, snap.y, snap.z);
             moving.setItemStack(item.getItemStack());
             world.spawnEntity(moving);
         } else {
-            world.spawnEntity(new EntityItem(world, x + 0.5 + dir.getFrontOffsetX() * 0.55, y + 0.5 + dir.getFrontOffsetY() * 0.55, z + 0.5 + dir.getFrontOffsetZ() * 0.55, item.getItemStack()));
+            world.spawnEntity(new EntityItem(world, x + 0.5 + dir.getXOffset() * 0.55, y + 0.5 + dir.getYOffset() * 0.55, z + 0.5 + dir.getZOffset() * 0.55, item.getItemStack()));
         }
     }
 

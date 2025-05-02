@@ -23,7 +23,7 @@ public class BlockDeconRad extends BlockContainer {
 	public static float radRemove;
 	public BlockDeconRad(Material materialIn, String s, float rad) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.radRemove = rad;
 		ModBlocks.ALL_BLOCKS.add(this);

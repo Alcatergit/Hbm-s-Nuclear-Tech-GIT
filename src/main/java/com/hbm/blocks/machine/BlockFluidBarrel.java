@@ -34,7 +34,7 @@ public class BlockFluidBarrel extends BlockContainer {
 	
 	public BlockFluidBarrel(Material materialIn, int cap, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		capacity = cap;
 		

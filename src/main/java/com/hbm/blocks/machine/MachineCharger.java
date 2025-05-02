@@ -32,7 +32,7 @@ public class MachineCharger extends BlockContainer implements ITooltipProvider, 
 		super(mat);
 		this.maxThroughput = max / 20L;
 		this.pointingUp = pointingUp;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

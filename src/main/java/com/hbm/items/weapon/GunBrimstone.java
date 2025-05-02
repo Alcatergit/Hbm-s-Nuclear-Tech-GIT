@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 public class GunBrimstone extends Item {
 
 	public GunBrimstone(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

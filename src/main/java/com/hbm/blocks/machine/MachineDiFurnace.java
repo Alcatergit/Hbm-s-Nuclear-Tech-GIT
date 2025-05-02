@@ -45,7 +45,7 @@ public class MachineDiFurnace extends BlockContainer {
 	public MachineDiFurnace(Material materialIn, String s, boolean state) {
 		super(materialIn);
 		isActive = state;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(EXT, false));
@@ -148,7 +148,7 @@ public class MachineDiFurnace extends BlockContainer {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta & 0b111);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta & 0b111);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

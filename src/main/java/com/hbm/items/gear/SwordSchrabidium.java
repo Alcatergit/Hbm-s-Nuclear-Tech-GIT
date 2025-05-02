@@ -10,7 +10,7 @@ import net.minecraft.item.ItemSword;
 public class SwordSchrabidium extends ItemSword {
 	public SwordSchrabidium(ToolMaterial t, String s){
 		super(t);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		ModItems.ALL_ITEMS.add(this);

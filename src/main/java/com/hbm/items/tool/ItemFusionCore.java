@@ -25,7 +25,7 @@ public class ItemFusionCore extends Item {
 	private int charge;
 	
 	public ItemFusionCore(int charge, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.charge = charge;
 		

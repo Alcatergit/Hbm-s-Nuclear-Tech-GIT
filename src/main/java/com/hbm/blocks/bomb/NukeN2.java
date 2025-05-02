@@ -42,7 +42,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	
 	public NukeN2(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -77,10 +77,10 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) worldIn.getTileEntity(pos);
-		if(worldIn.isBlockIndirectlyGettingPowered(pos) > 0 && !worldIn.isRemote) {
+		if(worldIn.getStrongPower(pos) > 0 && !worldIn.isRemote) {
 			int charges = entity.countCharges();
 			if(charges > 0) {
-				this.onBlockDestroyedByPlayer(worldIn, pos, worldIn.getBlockState(pos));
+				this.onPlayerDestroy(worldIn, pos, worldIn.getBlockState(pos));
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
@@ -113,7 +113,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) world.getTileEntity(pos);
 		int charges = entity.countCharges();
 		if(charges > 0) {
-			this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+			this.onPlayerDestroy(world, pos, world.getBlockState(pos));
 			entity.clearSlots();
 			world.setBlockToAir(pos);
 			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
@@ -162,7 +162,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

@@ -18,7 +18,7 @@ public abstract class DummyOldBase extends BlockContainer implements IDummy, IEn
 	public DummyOldBase(Material mat, String s, boolean port) {
 		super(mat);
 		this.port = port;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(null);
 		ModBlocks.ALL_BLOCKS.add(this);

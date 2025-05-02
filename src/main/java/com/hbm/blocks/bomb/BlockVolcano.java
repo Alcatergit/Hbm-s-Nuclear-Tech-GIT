@@ -34,7 +34,7 @@ public class BlockVolcano extends Block {
 	
 	public BlockVolcano(String s) {
 		super(Material.IRON);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -42,7 +42,7 @@ public class BlockVolcano extends Block {
 	
 	@Override
 	public void getSubBlocks(CreativeTabs tab, NonNullList<ItemStack> items){
-		if(tab == CreativeTabs.SEARCH || tab == this.getCreativeTabToDisplayOn())
+		if(tab == CreativeTabs.SEARCH || tab == this.getCreativeTab())
 			for(int i = 0; i < 4; ++i) {
 				items.add(new ItemStack(this, 1, i));
 			}

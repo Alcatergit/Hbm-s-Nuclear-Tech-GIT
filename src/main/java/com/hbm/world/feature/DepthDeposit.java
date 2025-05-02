@@ -41,7 +41,7 @@ public static void generateConditionOverworld(World world, int x, int yMin, int 
 						continue;
 					
 					BlockPos pos = new BlockPos(i, j, k);
-					double len = Vec3.createVectorHelper(x - i, y - j, z - k).lengthVector();
+					double len = Vec3.createVectorHelper(x - i, y - j, z - k).length();
 					Block target = world.getBlockState(pos).getBlock();
 					
 					if(target.isReplaceableOreGen(world.getBlockState(pos), world, pos, BlockMatcher.forBlock(genTarget)) || target.isReplaceableOreGen(world.getBlockState(pos), world, pos, BlockMatcher.forBlock(Blocks.BEDROCK))) { //yes you've heard right, bedrock

@@ -37,7 +37,7 @@ import net.minecraftforge.fml.common.Optional;
 public class ItemGeigerCounter extends Item implements IBauble {
 	
 	public ItemGeigerCounter(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

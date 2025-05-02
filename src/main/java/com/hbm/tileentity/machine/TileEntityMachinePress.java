@@ -90,7 +90,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 	public void update() {
 		/*	if(test){
 				Vec3d bottomLeft = new Vec3d(pos.getX(), pos.getY() + 5, pos.getZ());
-				Portal portal = new Mirror(world, bottomLeft, bottomLeft.addVector(1, 0, 0), bottomLeft.addVector(0, 1, 0), bottomLeft.addVector(1, 1, 0), null);
+				Portal portal = new Mirror(world, bottomLeft, bottomLeft.add(1, 0, 0), bottomLeft.add(0, 1, 0), bottomLeft.add(1, 1, 0), null);
 				System.out.println(portal);
 				test = false;
 			}*/
@@ -104,7 +104,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 				if(power > 0)
 					power--;
 			}
-			if(!(world.isBlockIndirectlyGettingPowered(pos) > 0)) {
+			if(!(world.getStrongPower(pos) > 0)) {
 				if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
 					this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
 					ItemStack copy = inventory.getStackInSlot(0).copy();

@@ -46,7 +46,7 @@ public class ItemScraps extends ItemAutogen {
 				list.add(Mats.formatAmount(contents.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
 				if(contents.material.smeltable == contents.material.smeltable.ADDITIVE) list.add("§4Additive, not castable!");
 			} else {
-				list.add(I18nUtil.resolveKey(contents.material.getUnlocalizedName()) + ", " + Mats.formatAmount(contents.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
+				list.add(I18nUtil.resolveKey(contents.material.getTranslationKey()) + ", " + Mats.formatAmount(contents.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
 			}
 		}
 	}

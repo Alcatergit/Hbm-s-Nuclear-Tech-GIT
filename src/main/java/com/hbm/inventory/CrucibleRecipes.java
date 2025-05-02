@@ -80,16 +80,20 @@ public class CrucibleRecipes {
 		recipes.put(6, new CrucibleRecipe(6, "crucible.cdalloy", 9, new ItemStack(ModItems.ingot_cdalloy))
 				.inputs(new MaterialStack(Mats.MAT_STEEL, n * 8), new MaterialStack(Mats.MAT_CADMIUM, n))
 				.outputs(new MaterialStack(Mats.MAT_CDALLOY, i)));
+
+		recipes.put(7, new CrucibleRecipe(7, "crucible.magtung", 3, new ItemStack(ModItems.ingot_magnetized_tungsten))
+				.inputs(new MaterialStack(Mats.MAT_TUNGSTEN, i), new MaterialStack(Mats.MAT_SCHRABIDIUM, n * 1))
+				.outputs(new MaterialStack(Mats.MAT_MAGTUNG, i)));
 		
-		// recipes.put(new CrucibleRecipe(13, "crucible.cmb", 3, new ItemStack(ModItems.ingot_combine_steel))
+		// recipes.put(8, new CrucibleRecipe(8, "crucible.cmb", 3, new ItemStack(ModItems.ingot_combine_steel))
 		// 		.inputs(new MaterialStack(Mats.MAT_MAGTUNG, n * 6), new MaterialStack(Mats.MAT_MUD, n * 3))
 		// 		.outputs(new MaterialStack(Mats.MAT_CMB, i)));
 		
-		recipes.put(7, new CrucibleRecipe(7, "crucible.hematite", 6, new ItemStack(ModBlocks.ore_hematite))
+		recipes.put(9, new CrucibleRecipe(9, "crucible.hematite", 6, new ItemStack(ModBlocks.ore_hematite))
 				.inputs(new MaterialStack(Mats.MAT_HEMATITE, i * 2), new MaterialStack(Mats.MAT_FLUX, n * 2))
 				.outputs(new MaterialStack(Mats.MAT_IRON, i), new MaterialStack(Mats.MAT_SLAG, n * 3)));
 		
-		recipes.put(8, new CrucibleRecipe(8, "crucible.malachite", 6, new ItemStack(ModBlocks.ore_malachite))
+		recipes.put(10, new CrucibleRecipe(10, "crucible.malachite", 6, new ItemStack(ModBlocks.ore_malachite))
 				.inputs(new MaterialStack(Mats.MAT_MALACHITE, i * 2), new MaterialStack(Mats.MAT_FLUX, n * 2))
 				.outputs(new MaterialStack(Mats.MAT_COPPER, i), new MaterialStack(Mats.MAT_SLAG, n * 3)));
 		

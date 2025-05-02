@@ -22,7 +22,7 @@ public class ArmorAshGlasses extends ItemArmor {
 
 	public ArmorAshGlasses(ArmorMaterial armorMaterial, int renderIndex, EntityEquipmentSlot armorType, String s) {
 		super(armorMaterial, renderIndex, armorType);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

@@ -78,7 +78,7 @@ public class JetpackVectorized extends JetpackBase {
 
 			Vec3d look = player.getLookVec();
 
-			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).lengthVector() < 2) {
+			if(Vec3.createVectorHelper(player.motionX, player.motionY, player.motionZ).length() < 2) {
 				player.motionX += look.x * 0.1;
 				player.motionY += look.y * 0.1;
 				player.motionZ += look.z * 0.1;

@@ -69,7 +69,7 @@ public class NBTControlPacket implements IMessage {
 		@Override
 		public IMessage onMessage(NBTControlPacket m, MessageContext ctx) {
 
-			ctx.getServerHandler().player.mcServer.addScheduledTask(() -> {
+			ctx.getServerHandler().player.server.addScheduledTask(() -> {
 				EntityPlayer p = ctx.getServerHandler().player;
 				
 				if(p.world == null)

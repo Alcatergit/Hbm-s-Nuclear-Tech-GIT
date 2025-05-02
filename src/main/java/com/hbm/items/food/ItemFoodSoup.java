@@ -24,7 +24,7 @@ public class ItemFoodSoup extends ItemSoup {
 
 	public ItemFoodSoup(int i, String s) {
 		super(i);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

@@ -27,7 +27,7 @@ public class BlockMetalFence extends BlockFence {
 	
 	public BlockMetalFence(Material materialIn, MapColor mapColorIn, String s) {
 		super(materialIn, mapColorIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -69,7 +69,7 @@ public class BlockMetalFence extends BlockFence {
 	}
 	
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT_MIPPED;
 	}
 

@@ -30,7 +30,7 @@ public class BlockGasAsbestos extends BlockGasBase {
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		ContaminationUtil.applyAsbestos(entity, 10, 1);
 	}
 	

@@ -42,7 +42,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	public MachineBattery(Material materialIn, long power, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 		this.maxPower = power;
@@ -104,7 +104,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if (enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;
@@ -140,7 +140,7 @@ public class MachineBattery extends BlockContainer implements ILookOverlay {
 				NBTTagCompound nbt = new NBTTagCompound();
 				battery.writeNBT(nbt);
 
-				if(!nbt.hasNoTags()) {
+				if(!nbt.isEmpty()) {
 					drop.setTagCompound(nbt);
 				}
 			}

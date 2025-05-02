@@ -51,7 +51,7 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 	
 	public CableDiode(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -69,7 +69,7 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 
@@ -149,7 +149,7 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 		text.add("Max.: " + Library.getShortNumber(diode.getMaxPower()*20) + "HE/s");
 		text.add("Priority: " + diode.priority.name());
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 
 	@Override

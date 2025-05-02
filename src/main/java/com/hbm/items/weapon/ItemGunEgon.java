@@ -71,7 +71,7 @@ public class ItemGunEgon extends ItemGunBase {
 				RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
 				if(r != null && r.hitVec != null && r.typeOfHit != Type.MISS && r.sideHit != null){
 					Vec3i norm = r.sideHit.getDirectionVec();
-					Vec3d pos = r.hitVec.addVector(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
+					Vec3d pos = r.hitVec.add(norm.getX()*0.1F, norm.getY()*0.1F, norm.getZ()*0.1F);
 					ParticleGluonFlare flare = new ParticleGluonFlare(world, pos.x, pos.y, pos.z, player);
 					Minecraft.getMinecraft().effectRenderer.addEffect(flare);
 				} else {

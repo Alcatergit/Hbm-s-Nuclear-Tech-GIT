@@ -100,7 +100,7 @@ public class ItemGunVortex extends ItemGunBase {
 			pos = new Vec3d(0.16, -0.20, 1).rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYawHead));
 		}
 		pos = pos.add(player.getPositionEyes(1F));
-		Vec3d view = BobMathUtil.getVectorFromAngle(BobMathUtil.getEulerAngles(player.getLookVec()).addVector(0, 3, 0));
+		Vec3d view = BobMathUtil.getVectorFromAngle(BobMathUtil.getEulerAngles(player.getLookVec()).add(0, 3, 0));
 		Vec3d hitPos = null;
 		Vec3d hitNormal = null;
 		RayTraceResult r = Library.rayTraceIncludeEntities(player, 100, MainRegistry.proxy.partialTicks());
@@ -108,7 +108,7 @@ public class ItemGunVortex extends ItemGunBase {
 			hitPos = player.getLook(MainRegistry.proxy.partialTicks()).scale(100).add(pos);
 		} else {
 			hitPos = r.hitVec;
-			hitNormal = new Vec3d(r.sideHit.getFrontOffsetX(), r.sideHit.getFrontOffsetY(), r.sideHit.getFrontOffsetZ());
+			hitNormal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
 		}
 		
 		tag.setString("type", "spark");
@@ -142,7 +142,7 @@ public class ItemGunVortex extends ItemGunBase {
 		Minecraft.getMinecraft().effectRenderer.addEffect(flash);
 		
 		Vec3d line = hitPos.subtract(pos);
-		int circleParticles = (int) line.lengthVector();
+		int circleParticles = (int) line.length();
 		for(int i = 0; i < circleParticles; i ++){
 			Vec3d circlePos = line.scale(i/(float)circleParticles).add(pos);
 			ParticleVortexCircle c = new ParticleVortexCircle(player.world, circlePos.x, circlePos.y, circlePos.z, 0.5F+player.world.rand.nextFloat()*0.3F);
@@ -151,7 +151,7 @@ public class ItemGunVortex extends ItemGunBase {
 			Minecraft.getMinecraft().effectRenderer.addEffect(c);
 		}
 		
-		int extraParticles = (int) line.lengthVector();
+		int extraParticles = (int) line.length();
 		for(int i = 0; i < extraParticles; i ++){
 			Vec3d circlePos = line.scale((i/(float)circleParticles)*0.25).add(pos);
 			float randX = (float) (player.world.rand.nextGaussian()-0.5) * 0.01F;

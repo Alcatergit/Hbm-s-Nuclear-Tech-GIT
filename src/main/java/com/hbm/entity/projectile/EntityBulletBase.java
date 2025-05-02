@@ -469,7 +469,7 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			this.setDead();
 
 		if(world.isRemote && !config.vPFX.isEmpty()) {
-			double motion = Math.min(Vec3.createVectorHelper(motionX, motionY, motionZ).lengthVector(), 0.1);
+			double motion = Math.min(Vec3.createVectorHelper(motionX, motionY, motionZ).length(), 0.1);
 
 			for (double d = 0; d < 1; d += 1 / motion) {
 

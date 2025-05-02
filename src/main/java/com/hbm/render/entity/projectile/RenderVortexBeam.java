@@ -40,7 +40,7 @@ public class RenderVortexBeam extends Render<EntityBeamBase> {
 			int init = (int) -(System.currentTimeMillis() % 360);
 
 	        BeamPronter.prontBeam(skeleton, EnumWaveType.SPIRAL, EnumBeamType.SOLID, 0x000040, 0x2020d0, init, 1, 0F, 4, 0.005F);
-	        BeamPronter.prontBeam(skeleton, EnumWaveType.RANDOM, EnumBeamType.LINE, 0x8080ff, 0x8080ff, init, (int)skeleton.lengthVector() * 3 + 1, 0.01F, 1, 0.01F);
+	        BeamPronter.prontBeam(skeleton, EnumWaveType.RANDOM, EnumBeamType.LINE, 0x8080ff, 0x8080ff, init, (int)skeleton.length() * 3 + 1, 0.01F, 1, 0.01F);
 		}
 
 		GL11.glPopMatrix();

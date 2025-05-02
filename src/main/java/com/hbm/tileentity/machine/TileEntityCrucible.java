@@ -397,7 +397,7 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 			//if no recipe is loaded, everything will land in the waste stack
 			int recipeInputRequired = recipe != null ? getQuantaFromType(recipe.input, mat.material) : 0;
 			
-			//this allows pouring the ouput material back into the crucible
+			//this allows pouring the output material back into the crucible
 			if(recipe != null && getQuantaFromType(recipe.output, mat.material) > 0) {
 				recipeAmount += mat.amount;
 				matchesRecipe = true;
@@ -423,8 +423,8 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 			}
 		}
 		
-		//if the amount doesn't exceed the capacity and the recipe matches (or isn't null), return true
-		return recipeAmount <= this.recipeZCapacity && wasteAmount <= this.wasteZCapacity && matchesRecipe;
+		//if the amount doesn't exceed the capacity, return true
+		return recipeAmount <= this.recipeZCapacity && wasteAmount <= this.wasteZCapacity;
 	}
 	
 	public void addToStack(List<MaterialStack> stack, MaterialStack matStack) {

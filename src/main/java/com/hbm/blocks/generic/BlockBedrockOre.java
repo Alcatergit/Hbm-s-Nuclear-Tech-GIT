@@ -16,7 +16,7 @@ public class BlockBedrockOre extends Block implements IDrillInteraction {
 
 	public BlockBedrockOre(String s) {
 		super(Material.ROCK);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

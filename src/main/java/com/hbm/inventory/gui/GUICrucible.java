@@ -81,7 +81,7 @@ public class GUICrucible extends GuiInfoContainer {
 		} else {
 			for(int i = stack.size()-1; i>=0; i--) {
 				MaterialStack sta = stack.get(i);
-				list.add("§e" + I18nUtil.resolveKey(sta.material.getUnlocalizedName()) + ": " + Mats.formatAmount(sta.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
+				list.add("§e" + I18nUtil.resolveKey(sta.material.getTranslationKey()) + ": " + Mats.formatAmount(sta.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
 			}
 		}
 		String[] texts = list.toArray(new String[list.size()]);

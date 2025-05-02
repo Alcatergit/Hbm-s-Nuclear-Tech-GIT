@@ -19,7 +19,7 @@ public class ItemSelfcharger extends Item implements IBatteryItem {
 	
 	public ItemSelfcharger(long charge, String s) {
 		this.charge = charge;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

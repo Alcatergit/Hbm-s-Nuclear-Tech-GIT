@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 public class ItemWand extends Item {
 
 	public ItemWand(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);
@@ -48,7 +48,7 @@ public class ItemWand extends Item {
 			list.add(I18nUtil.resolveKey("desc.contructionwand.posnoset"));
 		}
 		if(itemstack.getTagCompound() != null)
-			list.add(I18nUtil.resolveKey("desc.contructionwand.blocksaved", I18nUtil.resolveKey(Block.getBlockById(itemstack.getTagCompound().getInteger("block")).getUnlocalizedName())));
+			list.add(I18nUtil.resolveKey("desc.contructionwand.blocksaved", I18nUtil.resolveKey(Block.getBlockById(itemstack.getTagCompound().getInteger("block")).getTranslationKey())));
 	}
 	
 	@SuppressWarnings("deprecation")
@@ -66,7 +66,7 @@ public class ItemWand extends Item {
 			stack.getTagCompound().setInteger("block", Block.getIdFromBlock(state.getBlock()));
 			stack.getTagCompound().setInteger("meta", state.getBlock().getMetaFromState(state));
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("chat.constructionwand.setblock").appendSibling(new TextComponentTranslation(Block.getBlockById(stack.getTagCompound().getInteger("block")).getUnlocalizedName())));
+				player.sendMessage(new TextComponentTranslation("chat.constructionwand.setblock").appendSibling(new TextComponentTranslation(Block.getBlockById(stack.getTagCompound().getInteger("block")).getTranslationKey())));
 		} else {
 			if(stack.getTagCompound().getInteger("x") == 0 &&
 					stack.getTagCompound().getInteger("y") == 0 &&
@@ -121,7 +121,7 @@ public class ItemWand extends Item {
 			stack.getTagCompound().setInteger("block", 0);
 			stack.getTagCompound().setInteger("meta", 0);
 			if(world.isRemote)
-				player.sendMessage(new TextComponentTranslation("chat.constructionwand.setblock").appendSibling(new TextComponentTranslation(Block.getBlockById(stack.getTagCompound().getInteger("block")).getUnlocalizedName())));
+				player.sendMessage(new TextComponentTranslation("chat.constructionwand.setblock").appendSibling(new TextComponentTranslation(Block.getBlockById(stack.getTagCompound().getInteger("block")).getTranslationKey())));
 			return ActionResult.newResult(EnumActionResult.SUCCESS, stack);
 		}
 				

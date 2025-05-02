@@ -10,7 +10,7 @@ public class TileEntityRadioTorchSender extends TileEntityRadioTorchBase {
 	public void update() {
 		
 		if(!world.isRemote) {
-			int redstonePower = world.isBlockIndirectlyGettingPowered(pos);
+			int redstonePower = world.getStrongPower(pos);
 
 			boolean shouldSend = this.polling;
 			if(redstonePower != this.lastState) {

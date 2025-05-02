@@ -23,7 +23,7 @@ public class ItemLootCrate extends Item {
 	private static Random rand = new Random();
 	
 	public ItemLootCrate(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

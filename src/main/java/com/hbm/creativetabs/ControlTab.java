@@ -18,7 +18,7 @@ public class ControlTab extends CreativeTabs {
 	}
 
 	@Override
-	public ItemStack getTabIconItem() {
+	public ItemStack createIcon() {
 		if(ModItems.pellet_rtg != null){
 			return new ItemStack(ModItems.pellet_rtg);
 		}

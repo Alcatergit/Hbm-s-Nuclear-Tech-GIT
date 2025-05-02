@@ -89,8 +89,8 @@ public class ParticleVortexFireFlash extends Particle {
         Vec3d toPlayer = new Vec3d(f5, f6-entityIn.getEyeHeight(), f7);
         Vec3d point1 = toPlayer.crossProduct(particleAxis).normalize().scale(0.5*particleScale+timeScale*0.2);
         Vec3d point2 = point1.scale(-1);
-        point1 = point1.addVector(f5, f6, f7).add(movement);
-        point2 = point2.addVector(f5, f6, f7).add(movement);
+        point1 = point1.add(f5, f6, f7).add(movement);
+        point2 = point2.add(f5, f6, f7).add(movement);
         
         buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);

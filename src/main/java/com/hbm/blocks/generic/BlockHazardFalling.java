@@ -25,7 +25,7 @@ public class BlockHazardFalling extends BlockFalling {
 
 	public BlockHazardFalling(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHarvestLevel("shovel", 0);
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -87,7 +87,7 @@ public class BlockHazardFalling extends BlockFalling {
 	}
 
 	@Override
-	public void onEntityCollidedWithBlock(World worldIn, BlockPos pos, IBlockState state, Entity entity){
+	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
 			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
 	}

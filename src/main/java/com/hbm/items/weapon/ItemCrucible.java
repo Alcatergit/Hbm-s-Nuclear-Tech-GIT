@@ -85,7 +85,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 			nbt.setString("type", "anim");
 			nbt.setInteger("hand", hand.ordinal());
 			nbt.setString("mode", "cSwing");
-			nbt.setString("name", this.getRegistryName().getResourcePath());
+			nbt.setString("name", this.getRegistryName().getPath());
 			PacketDispatcher.wrapper.sendTo(new AuxParticlePacketNT(nbt, 0, 0, 0), (EntityPlayerMP)entityLiving);
 		}
 		if(getCharges(stack) > 0)

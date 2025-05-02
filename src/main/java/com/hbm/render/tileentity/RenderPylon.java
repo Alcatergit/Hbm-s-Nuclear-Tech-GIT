@@ -75,7 +75,7 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 					Vec3 second = m2[secondIndex];
 
 					Vec3 mid = new Vec3(otherPylon).add(second).subtract(new Vec3(pyl.getPos()).add(first));
-					drawLine(first, first.add(new Vec3(mid.xCoord*0.5, mid.yCoord*0.5, mid.zCoord*0.5)), lineCount == 1 ? 0.03125F : 0.055F, mid.lengthVector()*0.045);
+					drawLine(first, first.add(new Vec3(mid.xCoord*0.5, mid.yCoord*0.5, mid.zCoord*0.5)), lineCount == 1 ? 0.03125F : 0.055F, mid.length()*0.045);
 				}
 			}
 		}

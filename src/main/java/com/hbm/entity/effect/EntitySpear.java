@@ -61,7 +61,7 @@ public class EntitySpear extends Entity {
 				double iz = posZ + rand.nextGaussian() * 25;
 				double iy = world.getHeight((int)Math.floor(ix), (int)Math.floor(iz)) + 2;
 				
-				ExAttrib at = Vec3.createVectorHelper(ix - posX, 0, iz - posZ).lengthVector() < 20 ? ExAttrib.DIGAMMA_CIRCUIT : ExAttrib.DIGAMMA;
+				ExAttrib at = Vec3.createVectorHelper(ix - posX, 0, iz - posZ).length() < 20 ? ExAttrib.DIGAMMA_CIRCUIT : ExAttrib.DIGAMMA;
 				
 				new ExplosionNT(world, this, ix, iy, iz, 7.5F)
 				.addAttrib(ExAttrib.NOHURT)

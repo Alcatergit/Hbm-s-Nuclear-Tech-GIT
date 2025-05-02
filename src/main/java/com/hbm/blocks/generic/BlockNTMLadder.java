@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class BlockNTMLadder extends BlockLadder {
 
 	public BlockNTMLadder(String s){
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

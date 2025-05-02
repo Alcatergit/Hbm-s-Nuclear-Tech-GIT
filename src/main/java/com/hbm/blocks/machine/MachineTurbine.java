@@ -20,7 +20,7 @@ public class MachineTurbine extends BlockContainer {
 
 	public MachineTurbine(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.machineTab);
 

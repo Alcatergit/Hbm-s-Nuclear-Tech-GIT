@@ -305,8 +305,8 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 		Vec3 v1 = Vec3.createVectorHelper(e.motionX, e.motionY, e.motionZ);
 		Vec3 v2 = Vec3.createVectorHelper(e.posX - e.prevPosY, e.posY - e.prevPosY, e.posZ - e.prevPosZ);
 
-		double s1 = v1.lengthVector();
-		double s2 = v2.lengthVector();
+		double s1 = v1.length();
+		double s2 = v2.length();
 		
 		if(s1 == 0)
 			return s2;

@@ -13,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemN2 extends Item {
 
 	public ItemN2(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

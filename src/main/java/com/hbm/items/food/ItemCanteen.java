@@ -22,7 +22,7 @@ import net.minecraft.world.World;
 public class ItemCanteen extends Item {
 
 	public ItemCanteen(int cooldown, String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(cooldown);
 		

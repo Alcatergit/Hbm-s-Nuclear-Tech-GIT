@@ -42,7 +42,7 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 				(secondPos.getZ()) - (firstPos.getZ())
 				);
 		
-		return len >= delta.lengthVector();
+		return len >= delta.length();
 	}
 	
 	public void addConnection(BlockPos targetPos) {

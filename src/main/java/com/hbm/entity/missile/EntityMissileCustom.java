@@ -93,7 +93,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		this.getDataManager().set(TEMPLATE, template);
 		
         Vec3d vector = new Vec3d(targetX - startX, 0, targetZ - startZ);
-		accelXZ = decelY = 1/vector.lengthVector();
+		accelXZ = decelY = 1/vector.length();
 		decelY *= 2;
 		
 		velocity = 0.0;

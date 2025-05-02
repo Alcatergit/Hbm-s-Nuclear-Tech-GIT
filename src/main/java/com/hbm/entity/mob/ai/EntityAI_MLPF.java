@@ -61,7 +61,7 @@ public class EntityAI_MLPF extends EntityAIBase {
     	//line length is capped so the pathfinder can manage it
     	int range = distance;
     	
-    	if(vec.lengthVector() < 16)
+    	if(vec.length() < 16)
     		mover.setAttackTarget(target);
 
     	vec = vec.normalize();

@@ -27,7 +27,7 @@ public class GunFolly extends Item implements IHoldableWeapon {
 	}
 	
 	public GunFolly(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.maxStackSize = 1;
 		

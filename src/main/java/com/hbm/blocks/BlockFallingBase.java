@@ -15,7 +15,7 @@ public class BlockFallingBase extends BlockFalling {
 	
 	public BlockFallingBase(Material m, String s, SoundType type){
 		super(m);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setHarvestLevel("shovel", 0);

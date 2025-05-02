@@ -24,7 +24,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class ItemUnstable extends Item {
 
 	public ItemUnstable(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHasSubtypes(true);
 
@@ -42,7 +42,7 @@ public class ItemUnstable extends Item {
 		case 3:
 			return "VAULT";
 		default:
-			return ("" + I18n.format(this.getUnlocalizedName() + ".name")).trim();
+			return ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 		}
 	}
 

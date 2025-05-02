@@ -715,7 +715,7 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_fleija), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -2, 0);
-				GL11.glScaled(4.5, 4.5, 4.5);
+				GL11.glScaled(3, 3, 3);
 			}
 			public void renderCommon() {
 				GL11.glScaled(2, 2, 2);
@@ -780,8 +780,8 @@ public class ItemRenderLibrary {
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.crashed_balefire), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, 3, 0);
-				GL11.glScaled(2, 2, 2);
+				GL11.glTranslated(0, 1, 0);
+				GL11.glScaled(3, 3, 3);
 			}
 			public void renderCommon() {
 				GL11.glRotated(90, 0, 1, 0);

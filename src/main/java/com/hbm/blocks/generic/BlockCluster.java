@@ -23,7 +23,7 @@ public class BlockCluster extends BlockOre implements IDrillInteraction {
 
 	public BlockCluster(String s) {
 		super();
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHarvestLevel("pickaxe", 1);
 		

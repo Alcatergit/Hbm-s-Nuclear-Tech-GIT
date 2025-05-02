@@ -39,7 +39,7 @@ public class PotionRecipes {
 	}
 
 	public static void addPotionRecipe(Potion type, Object input, int normalTime, int longTime, int strongTime, int normalLvl, int longLvl, int strongLvL) {
-		String baseName = type.getRegistryName().getResourcePath();
+		String baseName = type.getRegistryName().getPath();
 		PotionType normalType = addPotion(new PotionEffect(type, normalTime, normalLvl), baseName, baseName);
 		
 		Ingredient brewItem = getIngredient(input);

@@ -45,7 +45,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 	
 	public BombMulti(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -77,11 +77,11 @@ public class BombMulti extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityBombMulti entity = (TileEntityBombMulti) worldIn.getTileEntity(pos);
-        if (worldIn.isBlockIndirectlyGettingPowered(pos) > 0)
+        if (worldIn.getStrongPower(pos) > 0)
         {
         	if(/*entity.getExplosionType() != 0*/entity.isLoaded())
         	{
-        		this.onBlockDestroyedByPlayer(worldIn, pos, state);
+        		this.onPlayerDestroy(worldIn, pos, state);
             	igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ());
         	}
         }
@@ -195,7 +195,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 		TileEntityBombMulti entity = (TileEntityBombMulti) world.getTileEntity(pos);
     	if(/*entity.getExplosionType() != 0*/entity.isLoaded())
     	{
-    		this.onBlockDestroyedByPlayer(world, pos, world.getBlockState(pos));
+    		this.onPlayerDestroy(world, pos, world.getBlockState(pos));
         	igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
     	}
 	}
@@ -242,7 +242,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

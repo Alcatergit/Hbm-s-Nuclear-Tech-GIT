@@ -48,7 +48,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 	public NukeCustom(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -91,7 +91,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (world.isBlockIndirectlyGettingPowered(pos) > 0 && !world.isRemote) {
+		if (world.getStrongPower(pos) > 0 && !world.isRemote) {
 			this.explode(world, pos);
 		}
 	}
@@ -259,7 +259,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if(enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;

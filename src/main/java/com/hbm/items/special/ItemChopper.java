@@ -29,7 +29,7 @@ import net.minecraft.world.World;
 public class ItemChopper extends Item {
 
 	public ItemChopper(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
@@ -47,9 +47,9 @@ public class ItemChopper extends Item {
 			
 			//IBlockState blockState = world.getBlockState(pos);
 
-			x += facing.getFrontOffsetX();
-			y += facing.getFrontOffsetY();
-			z += facing.getFrontOffsetZ();
+			x += facing.getXOffset();
+			y += facing.getYOffset();
+			z += facing.getZOffset();
 			double offset = 0.0D;
 
 			//Drillgon200: No clue what 11 is supposed to mean. I'll just leave it and hope it doesn't break anything.

@@ -45,7 +45,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 	public GunB92(String s) {
 
 		this.maxStackSize = 1;
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		ModItems.ALL_ITEMS.add(this);

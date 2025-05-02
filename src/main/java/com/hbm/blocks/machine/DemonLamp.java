@@ -19,7 +19,7 @@ public class DemonLamp extends BlockContainer {
 
 	public DemonLamp(SoundType st, String s) {
 		super(Material.IRON);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		super.setSoundType(st);
 		

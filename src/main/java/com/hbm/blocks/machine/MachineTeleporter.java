@@ -26,7 +26,7 @@ public class MachineTeleporter extends BlockContainer implements ILookOverlay {
 
 	public MachineTeleporter(Material materialIn, String s) {
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
@@ -55,7 +55,7 @@ public class MachineTeleporter extends BlockContainer implements ILookOverlay {
 			text.add("Destination: " + tele.target.getX() + " / " + tele.target.getY() + " / " + tele.target.getZ());
 		}
 		
-		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getUnlocalizedName() + ".name"), 0xffff00, 0x404000, text);
+		ILookOverlay.printGeneric(event, I18nUtil.resolveKey(getTranslationKey() + ".name"), 0xffff00, 0x404000, text);
 	}
 	
 	@Override

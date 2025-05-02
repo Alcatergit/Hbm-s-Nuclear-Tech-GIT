@@ -15,7 +15,7 @@ import net.minecraft.world.World;
 public class ItemBook extends Item {
 
 	public ItemBook(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModItems.ALL_ITEMS.add(this);

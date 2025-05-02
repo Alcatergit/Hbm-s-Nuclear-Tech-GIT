@@ -40,7 +40,7 @@ public class MachineNukeFurnace extends BlockContainer {
 	
 	public MachineNukeFurnace(boolean active, String s) {
 		super(Material.IRON);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		isActive = active;
 		
@@ -175,7 +175,7 @@ public class MachineNukeFurnace extends BlockContainer {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
         if (enumfacing.getAxis() == EnumFacing.Axis.Y)
         {

@@ -448,7 +448,7 @@ public class OreDictManager {
 		VOLCANIC																																																							.gem(gem_volcanic)															.ore(basalt_gem);
 		HEMATITE																																																																										.ore(ore_hematite);
 		MALACHITE																																																																										.ore(ore_malachite);
-		//SLAG																																																	.block(block_slag);
+		SLAG																																																	.block(block_slag);
 
 		OreDictionary.registerOre(KEY_OIL_TAR, fromOne(oil_tar, EnumTarType.CRUDE));
 		// OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));

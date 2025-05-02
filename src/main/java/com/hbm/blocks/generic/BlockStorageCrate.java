@@ -55,7 +55,7 @@ public class BlockStorageCrate extends BlockContainer {
 
 	public BlockStorageCrate(Material materialIn, String s){
 		super(materialIn);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setSoundType(SoundType.METAL);
 
@@ -143,7 +143,7 @@ public class BlockStorageCrate extends BlockContainer {
 			}
 			
 			
-			if(!nbt.hasNoTags()) {
+			if(!nbt.isEmpty()) {
 				drop.setTagCompound(nbt);
 								
 				if(nbt.toString().length() > MachineConfig.crateByteSize * 1000) {
@@ -262,7 +262,7 @@ public class BlockStorageCrate extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta){
-		EnumFacing enumfacing = EnumFacing.getFront(meta);
+		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 
 		if(enumfacing.getAxis() == EnumFacing.Axis.Y) {
 			enumfacing = EnumFacing.NORTH;

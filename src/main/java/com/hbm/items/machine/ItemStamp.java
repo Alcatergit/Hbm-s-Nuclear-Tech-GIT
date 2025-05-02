@@ -14,7 +14,7 @@ import net.minecraft.world.World;
 public class ItemStamp extends Item {
 
 	public ItemStamp(String s, int dura) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setMaxDamage(dura);
 		this.setCreativeTab(MainRegistry.controlTab);

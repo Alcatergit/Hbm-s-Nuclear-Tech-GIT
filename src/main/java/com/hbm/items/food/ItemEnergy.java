@@ -28,7 +28,7 @@ import net.minecraftforge.common.util.FakePlayer;
 public class ItemEnergy extends Item {
 
 	public ItemEnergy(String s) {
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(MainRegistry.consumableTab);
 		ModItems.ALL_ITEMS.add(this);

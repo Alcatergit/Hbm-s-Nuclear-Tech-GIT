@@ -28,7 +28,7 @@ public class ItemLaserDetonator extends Item {
 
 	public ItemLaserDetonator(String s) {
 		this.setRegistryName(s);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setCreativeTab(MainRegistry.controlTab);
 		
 		ModItems.ALL_ITEMS.add(this);

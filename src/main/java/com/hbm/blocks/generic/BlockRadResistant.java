@@ -21,7 +21,7 @@ public class BlockRadResistant extends Block implements IRadResistantBlock {
 	public BlockRadResistant(Material materialIn, String s) {
 		super(materialIn);
 		this.setRegistryName(s);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}

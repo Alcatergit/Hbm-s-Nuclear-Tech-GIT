@@ -22,7 +22,7 @@ public class ItemTurretAmmo extends Item {
 	int count;
 	
 	public ItemTurretAmmo(Block b, int i, String string) {
-		this.setUnlocalizedName(string);
+		this.setTranslationKey(string);
 		this.setRegistryName(string);
 		this.setCreativeTab(MainRegistry.weaponTab);
 		this.turret = b;

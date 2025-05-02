@@ -296,7 +296,7 @@ public class DisintegrationParticleHandler {
 			int numLTrails = MathHelper.clamp(trailCount, 0, 2);
 			ParticleLightningGib p = new ParticleLightningGib(world, pX, pY, pZ, cube, matrix, tex, cubeMidX, cubeMidY, cubeMidZ, scale, numLTrails);
 			trailCount -= numLTrails;
-			Vec3d motion = hitPos.toVec3d().normalize().addVector(0, 0.2, 0).scale(1.2)
+			Vec3d motion = hitPos.toVec3d().normalize().add(0, 0.2, 0).scale(1.2)
 					.add(new Vec3d(world.rand.nextFloat()-0.5F, world.rand.nextFloat()-0.5F, world.rand.nextFloat()-0.5F).scale(0.5));
 			p.motion(motion);
 			Minecraft.getMinecraft().effectRenderer.addEffect(p);

@@ -34,7 +34,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 
 	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, boolean doesDrop, boolean isRadResistant, String s) {
 		super(materialIn, false);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.layer = layer;
 		this.doesDrop = doesDrop;
@@ -75,7 +75,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	}
 	
 	@Override
-	public BlockRenderLayer getBlockLayer() {
+	public BlockRenderLayer getRenderLayer() {
 		return layer;
 	}
 	

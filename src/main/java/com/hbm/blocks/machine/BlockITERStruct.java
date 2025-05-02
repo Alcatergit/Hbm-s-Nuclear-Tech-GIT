@@ -14,7 +14,7 @@ public class BlockITERStruct extends BlockContainer {
 
 	public BlockITERStruct(Material mat, String s) {
 		super(mat);
-		this.setUnlocalizedName(s);
+		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		
 		ModBlocks.ALL_BLOCKS.add(this);

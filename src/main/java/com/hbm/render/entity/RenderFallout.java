@@ -73,7 +73,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
         Vec3 vector = Vec3.createVectorHelper(ent.posX - entity.posX,
                 ent.posY - entity.posY, ent.posZ - entity.posZ);
        
-        double d = vector.lengthVector();
+        double d = vector.length();
        
         if (d <= entity.getScale()) {
             rendererUpdateCount++;

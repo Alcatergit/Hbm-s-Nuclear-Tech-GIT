@@ -36,7 +36,7 @@ public abstract class TileEntityFoundryBase extends TileEntity implements ITicka
 			if(!world.isRemote || (world.isRemote && shouldClientReRender())) {
 			
 				IBlockState state = world.getBlockState(pos);
-				world.markAndNotifyBlock(pos, world.getChunkFromBlockCoords(pos), state, state, 2);
+				world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 				this.lastType = this.type;
 				this.lastAmount = this.amount;
 				this.markDirty();

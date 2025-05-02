@@ -28,7 +28,7 @@ public class TileEntityFoundryOutlet extends TileEntityFoundryBase {
 	
 	/** if TRUE, prevents all fluids from flowing through the outlet and renders a small barrier */
 	public boolean isClosed() {
-		return invertRedstone ^ this.world.isBlockIndirectlyGettingPowered(pos) > 0;
+		return invertRedstone ^ this.world.getStrongPower(pos) > 0;
 	}
 	
 	@Override
