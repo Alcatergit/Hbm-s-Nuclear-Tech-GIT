@@ -299,6 +299,13 @@ public class AnvilRecipes {
 				}, new AnvilOutput(new ItemStack(ModBlocks.furnace_steel))).setTier(2));
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
+						new ComparableStack(Blocks.STONEBRICK, 8),
+						new OreDictStack(KEY_LOG, 16),
+						new OreDictStack(CU.plateCast(), 2),
+						new ComparableStack(ModBlocks.brick_light, 4)
+				}, new AnvilOutput(new ItemStack(ModBlocks.furnace_combination))).setTier(2));
+		constructionRecipes.add(new AnvilConstructionRecipe(
+				new AStack[] {
 						new OreDictStack(STEEL.ingot(), 4),
 						new OreDictStack(CU.plate(), 16),
 						new ComparableStack(ModItems.plate_polymer, 8)

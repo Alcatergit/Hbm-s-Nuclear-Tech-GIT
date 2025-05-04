@@ -1,58 +1,37 @@
 package com.hbm.handler.jei;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.Map.Entry;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.config.GeneralConfig;
+import com.hbm.inventory.material.MaterialShapes;
+import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
-import com.hbm.inventory.AnvilRecipes;
+import com.hbm.inventory.*;
 import com.hbm.inventory.AnvilRecipes.AnvilConstructionRecipe;
 import com.hbm.inventory.AnvilRecipes.AnvilOutput;
 import com.hbm.inventory.AnvilRecipes.OverlayType;
-import com.hbm.inventory.AnvilSmithingRecipe;
-import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.MixerRecipes;
-import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
-import com.hbm.inventory.RBMKFuelRecipes;
-import com.hbm.inventory.WasteDrumRecipes;
-import com.hbm.inventory.StorageDrumRecipes;
-import com.hbm.inventory.CyclotronRecipes;
-import com.hbm.inventory.FusionRecipes;
-import com.hbm.inventory.DiFurnaceRecipes;
-import com.hbm.inventory.HeatRecipes;
-import com.hbm.inventory.PressRecipes;
-import com.hbm.inventory.MachineRecipes;
 import com.hbm.inventory.MachineRecipes.GasCentOutput;
-import com.hbm.inventory.MagicRecipes;
-import com.hbm.inventory.RefineryRecipes;
-import com.hbm.inventory.CrackRecipes;
-import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.inventory.MagicRecipes.MagicRecipe;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
+import com.hbm.inventory.CrucibleRecipes;
 import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.material.Mats;
+import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemAssemblyTemplate;
-import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.machine.ItemFluidTank;
+import com.hbm.items.machine.*;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemGasCanister;
 import com.hbm.lib.Library;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.WeightedRandomObject;
 import com.hbm.util.Tuple.Quartet;
 import com.hbm.util.Tuple.Pair;
@@ -73,6 +52,7 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraft.util.text.TextFormatting;
+import org.lwjgl.Sys;
 
 public class JeiRecipes {
 
@@ -81,6 +61,10 @@ public class JeiRecipes {
 	private static List<CyclotronRecipe> cyclotronRecipes = null;
 	private static List<PressRecipe> pressRecipes = null;
 	private static List<AlloyFurnaceRecipe> alloyFurnaceRecipes = null;
+	private static List<CombinationFurnaceRecipe> combinationFurnaceRecipes = null;
+	private static List<FoundrySmeltRecipe> foundrySmeltRecipes = null;
+	private static List<FoundryMixRecipe> foundryMixRecipes = null;
+	private static List<FoundryPourRecipe> foundryPourRecipes = null;
 	private static List<BoilerRecipe> boilerRecipes = null;
 	private static List<CMBFurnaceRecipe> cmbRecipes = null;
 	private static List<GasCentRecipe> gasCentRecipes = null;
@@ -217,6 +201,82 @@ public class JeiRecipes {
 		}
 		
 	}
+
+	public static class CombinationFurnaceRecipe implements IRecipeWrapper {
+
+		private final ItemStack input;
+		private final List<ItemStack> outputs;
+
+		public CombinationFurnaceRecipe(AStack input, ItemStack outputItem, FluidStack outputFluid) {
+			this.input = input.getStack();
+			this.outputs = new ArrayList<ItemStack>();
+			if(!outputItem.isEmpty()) outputs.add(outputItem);
+			if(outputFluid != null) outputs.add(ItemFluidIcon.getStackWithQuantity(outputFluid));
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class FoundrySmeltRecipe implements IRecipeWrapper {
+
+		private final List<ItemStack> inputs;
+		private final List<ItemStack> outputs;
+
+		public FoundrySmeltRecipe(List<ItemStack> inputs, List<ItemStack> outputs) {
+			this.inputs = inputs;
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class FoundryMixRecipe implements IRecipeWrapper {
+		private final List<ItemStack> inputs;
+		private final List<ItemStack> outputs;
+
+		public FoundryMixRecipe(ItemStack template, List<ItemStack> inputs, List<ItemStack> outputs) {
+			this.inputs = inputs;
+			this.inputs.add(0, template);
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class FoundryPourRecipe implements IRecipeWrapper {
+		private final List<ItemStack> inputs;
+		private final ItemStack output;
+
+		public FoundryPourRecipe(ItemStack basin, ItemStack mold, ItemStack input, ItemStack output) {
+			this.inputs = new ArrayList<ItemStack>();
+			this.inputs.add(basin);
+			this.inputs.add(mold);
+			this.inputs.add(input);
+			this.output = output;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+
+	}
 	
 	public static class BoilerRecipe implements IRecipeWrapper {
 		
@@ -339,7 +399,7 @@ public class JeiRecipes {
 		private final ItemStack output;
 		
 		public TransmutationRecipe(List<ItemStack> inputs, ItemStack output) {
-			this.inputs = new ArrayList();
+			this.inputs = new ArrayList<List<ItemStack>>();
 			this.inputs.add(inputs);
 			this.output = output; 
 		}
@@ -788,6 +848,83 @@ public class JeiRecipes {
 			alloyFurnaceRecipes.add(new AlloyFurnaceRecipe(pairEntry.getKey().getKey(), pairEntry.getKey().getValue(), pairEntry.getValue()));
 		}
 		return alloyFurnaceRecipes;
+	}
+
+	public static List<CombinationFurnaceRecipe> getCombinationFurnaceRecipes() {
+		if(combinationFurnaceRecipes != null)
+			return combinationFurnaceRecipes;
+		combinationFurnaceRecipes = new ArrayList<CombinationFurnaceRecipe>();
+
+		for(Map.Entry<AStack, Pair<ItemStack, FluidStack>> pairEntry : CombinationRecipes.recipes.entrySet()){
+			combinationFurnaceRecipes.add(new CombinationFurnaceRecipe(pairEntry.getKey(), pairEntry.getValue().getKey(), pairEntry.getValue().getValue()));
+		}
+		return combinationFurnaceRecipes;
+	}
+
+	public static List<FoundrySmeltRecipe> getFoundrySmeltRecipes() {
+		if(foundrySmeltRecipes != null)
+			return foundrySmeltRecipes;
+		foundrySmeltRecipes = new ArrayList<FoundrySmeltRecipe>();
+
+		for(NTMMaterial mat : Mats.orderedList){ //iron, gold
+			for(Entry<String, MaterialShapes> prefixEntry : Mats.prefixByName.entrySet()) { //iron ingot, nugget
+				String prefix = prefixEntry.getKey();
+				List<ItemStack> shapeMatItemStacks = new ArrayList<>();
+				for (String name : mat.names) { // iron/eisen ingot
+						shapeMatItemStacks.addAll(new OreDictStack(prefix + name).getStackList());
+				}
+				if (shapeMatItemStacks.isEmpty()) continue;
+				List<MaterialStack> mats = new ArrayList<MaterialStack>();
+				mats.add(new MaterialStack(mat.smeltsInto, prefixEntry.getValue().q(1)));
+				foundrySmeltRecipes.add(new FoundrySmeltRecipe(shapeMatItemStacks, Mats.matsToScrap(mats, false)));
+			}
+		}
+
+		for(Map.Entry<ComparableStack, List<MaterialStack>>  entry: Mats.materialEntries.entrySet()){
+			foundrySmeltRecipes.add(new FoundrySmeltRecipe(entry.getKey().getStackList(), Mats.matsToScrap(entry.getValue(), false)));
+		}
+		for(Map.Entry<String, List<MaterialStack>>  entry: Mats.materialOreEntries.entrySet()){
+			foundrySmeltRecipes.add(new FoundrySmeltRecipe(new OreDictStack(entry.getKey()).getStackList(), Mats.matsToScrap(entry.getValue(), false)));
+		}
+
+		return foundrySmeltRecipes;
+	}
+
+	public static List<FoundryMixRecipe> getFoundryMixRecipes() {
+		if(foundryMixRecipes != null)
+			return foundryMixRecipes;
+		foundryMixRecipes = new ArrayList<FoundryMixRecipe>();
+
+		for(CrucibleRecipes.CrucibleRecipe recipe : CrucibleRecipes.recipes.values()){
+			List<ItemStack> inputs = Mats.matsToScrap(recipe.input, false);
+			List<ItemStack> outputs = Mats.matsToScrap(recipe.output, false);
+			foundryMixRecipes.add(new FoundryMixRecipe(new ItemStack(ModItems.crucible_template, 1, recipe.getId()), inputs, outputs));
+		}
+
+		return foundryMixRecipes;
+	}
+
+	public static List<FoundryPourRecipe> getFoundryPourRecipes() {
+		if(foundryPourRecipes != null)
+			return foundryPourRecipes;
+		foundryPourRecipes = new ArrayList<FoundryPourRecipe>();
+
+		for(NTMMaterial material : Mats.orderedList) {
+
+			if (material.smeltable != NTMMaterial.SmeltingBehavior.SMELTABLE)
+				continue;
+
+			for (ItemMold.Mold mold : ItemMold.molds) {
+				ItemStack out = mold.getOutput(material);
+				if (out != null) {
+					ItemStack scrap = ItemScraps.create(new MaterialStack(material, mold.getCost()), false);
+					ItemStack moldStack = new ItemStack(ModItems.mold, 1, mold.id);
+					ItemStack basin = new ItemStack(mold.size == 0 ? ModBlocks.foundry_mold : mold.size == 1 ? ModBlocks.foundry_basin : Blocks.FIRE);
+					foundryPourRecipes.add(new FoundryPourRecipe(basin, moldStack, scrap, out));
+				}
+			}
+		}
+		return foundryPourRecipes;
 	}
 
 	public static List<RBMKFuelRecipe> getRBMKFuelRecipes() {

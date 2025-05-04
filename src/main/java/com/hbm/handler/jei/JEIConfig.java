@@ -8,31 +8,7 @@ import com.hbm.inventory.ShredderRecipes;
 import com.hbm.inventory.RBMKOutgasserRecipes;
 import com.hbm.inventory.DFCRecipes;
 import com.hbm.inventory.CrackRecipes;
-import com.hbm.inventory.gui.GUIAnvil;
-import com.hbm.inventory.gui.GUIBook;
-import com.hbm.inventory.gui.GUICrystallizer;
-import com.hbm.inventory.gui.GUIHadron;
-import com.hbm.inventory.gui.GUIMixer;
-import com.hbm.inventory.gui.GUIMachineAssembler;
-import com.hbm.inventory.gui.GUIMachineBoiler;
-import com.hbm.inventory.gui.GUIMachineBoilerElectric;
-import com.hbm.inventory.gui.GUIMachineBoilerRTG;
-import com.hbm.inventory.gui.GUIMachineCMBFactory;
-import com.hbm.inventory.gui.GUIMachineCentrifuge;
-import com.hbm.inventory.gui.GUIMachineChemplant;
-import com.hbm.inventory.gui.GUIMachineCyclotron;
-import com.hbm.inventory.gui.GUIMachineEPress;
-import com.hbm.inventory.gui.GUIMachineGasCent;
-import com.hbm.inventory.gui.GUIMachinePress;
-import com.hbm.inventory.gui.GUIMachineReactor;
-import com.hbm.inventory.gui.GUIMachineRefinery;
-import com.hbm.inventory.gui.GUIMachineShredder;
-import com.hbm.inventory.gui.GUISILEX;
-import com.hbm.inventory.gui.GUITestDiFurnace;
-import com.hbm.inventory.gui.GUIDiFurnaceRTG;
-import com.hbm.inventory.gui.GUIRBMKOutgasser;
-import com.hbm.inventory.gui.GUIFWatzCore;
-import com.hbm.inventory.gui.GUIMachineSchrabidiumTransmutator;
+import com.hbm.inventory.gui.*;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
@@ -61,6 +37,10 @@ public class JEIConfig implements IModPlugin {
 	public static final String CYCLOTRON = "hbm.cyclotron";
 	public static final String PRESS = "hbm.press";
 	public static final String ALLOY = "hbm.alloy";
+	public static final String COMBINATION = "hbm.combination";
+	public static final String FOUNDRYSMELT = "hbm.foundrysmelt";
+	public static final String FOUNDRYMIX = "hbm.foundrymix";
+	public static final String FOUNDRYPOUR = "hbm.foundrypour";
 	public static final String BOILER = "hbm.boiler";
 	public static final String CENTRIFUGE = "hbm.centrifuge";
 	public static final String CMB = "hbm.cmb_furnace";
@@ -121,6 +101,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_epress), PRESS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_difurnace_off), ALLOY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_difurnace_rtg_off), ALLOY);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.furnace_combination), COMBINATION);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYSMELT);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYMIX);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYPOUR);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_electric_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_rtg_off), BOILER);
@@ -166,6 +150,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getTransmutationRecipes(), TRANSMUTATION);
 		registry.addRecipes(JeiRecipes.getPressRecipes(), PRESS);
 		registry.addRecipes(JeiRecipes.getAlloyRecipes(), ALLOY);
+		registry.addRecipes(JeiRecipes.getCombinationFurnaceRecipes(), COMBINATION);
+		registry.addRecipes(JeiRecipes.getFoundrySmeltRecipes(), FOUNDRYSMELT);
+		registry.addRecipes(JeiRecipes.getFoundryMixRecipes(), FOUNDRYMIX);
+		registry.addRecipes(JeiRecipes.getFoundryPourRecipes(), FOUNDRYPOUR);
 		registry.addRecipes(JeiRecipes.getBoilerRecipes(), BOILER);
 		registry.addRecipes(CentrifugeRecipes.getCentrifugeRecipes(), CENTRIFUGE);
 		registry.addRecipes(JeiRecipes.getCMBRecipes(), CMB);
@@ -206,6 +194,7 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineEPress.class, 80, 35, 15, 15, PRESS);
 		registry.addRecipeClickArea(GUITestDiFurnace.class, 102, 36, 21, 14, ALLOY);
 		registry.addRecipeClickArea(GUIDiFurnaceRTG.class, 102, 36, 21, 14, ALLOY);
+		registry.addRecipeClickArea(GUIFurnaceCombo.class, 44, 53, 39, 18, COMBINATION);
 		registry.addRecipeClickArea(GUIMachineBoiler.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerElectric.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerRTG.class, 61, 34, 17, 17, BOILER);
@@ -304,6 +293,10 @@ public class JEIConfig implements IModPlugin {
 				new AssemblerRecipeHandler(help),
 				new ChemplantRecipeHandler(help),
 				new MixerRecipeHandler(help),
+				new CombinationRecipeHandler(help),
+				new FoundrySmeltRecipeHandler(help),
+				new FoundryMixRecipeHandler(help),
+				new FoundryPourRecipeHandler(help),
 				new BoilerRecipeHandler(help),
 				new RefineryRecipeHandler(help),
 				new CrackingRecipeHandler(help),

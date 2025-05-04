@@ -6,7 +6,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntitySmokeFX extends EntityModFX {
 
-	private static final String __OBFID = "CL_00000924";
+	
 	
 	public EntitySmokeFX(World world) {
 		super(world, 0, 0, 0);

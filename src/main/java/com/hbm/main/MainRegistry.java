@@ -233,6 +233,7 @@ import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrucibleRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.CyclotronRecipes;
+import com.hbm.inventory.CombinationRecipes;
 import com.hbm.inventory.HadronRecipes;
 import com.hbm.inventory.MagicRecipes;
 import com.hbm.inventory.OreDictManager;
@@ -830,6 +831,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityHeaterRadioThermal.class, new ResourceLocation(RefStrings.MODID, "tileentity_heater_rt"));
 		GameRegistry.registerTileEntity(TileEntityFurnaceIron.class, new ResourceLocation(RefStrings.MODID, "tileentity_furnace_iron"));
 		GameRegistry.registerTileEntity(TileEntityFurnaceSteel.class, new ResourceLocation(RefStrings.MODID, "tileentity_furnace_steel"));
+		GameRegistry.registerTileEntity(TileEntityFurnaceCombination.class, new ResourceLocation(RefStrings.MODID, "tileentity_furnace_combination"));
 		GameRegistry.registerTileEntity(TileEntityCrucible.class, new ResourceLocation(RefStrings.MODID, "tileentity_crucible"));
 		GameRegistry.registerTileEntity(TileEntityFoundryMold.class, new ResourceLocation(RefStrings.MODID, "tileentity_foundry_mold"));
 		GameRegistry.registerTileEntity(TileEntityFoundryBasin.class, new ResourceLocation(RefStrings.MODID, "tileentity_foundry_basin"));
@@ -1097,6 +1099,7 @@ public class MainRegistry {
 		CrackRecipes.registerRecipes();
 		ExplosionNukeGeneric.loadSoliniumFromFile();
 		CyclotronRecipes.register();
+		CombinationRecipes.registerDefaults();
 		HadronRecipes.register();
 		MagicRecipes.register();
 		SILEXRecipes.register();

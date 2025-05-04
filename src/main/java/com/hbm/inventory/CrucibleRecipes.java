@@ -29,7 +29,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class CrucibleRecipes {
 
-	public static HashMap<Integer, CrucibleRecipe> recipes = new HashMap();
+	public static HashMap<Integer, CrucibleRecipe> recipes = new HashMap<Integer, CrucibleRecipe>();
 	
 	/*
 	 * IMPORTANT: crucibles do not have stack size checks for the recipe's result, meaning that they can overflow if the resulting stacks are
@@ -158,73 +158,44 @@ public class CrucibleRecipes {
 	}
 	
 	/** Returns a map containing all recipes where an item becomes a liquid material in the crucible. */
-	public static HashMap<AStack, List<ItemStack>> getSmeltingRecipes() {
-		HashMap<AStack, List<ItemStack>> map = new HashMap();
-		
-		for(NTMMaterial material : Mats.orderedList) {
-			int in = material.convIn;
-			int out = material.convOut;
-			NTMMaterial convert = material.smeltsInto;
-			for(MaterialShapes shape : MaterialShapes.allShapes) {
-				//TODO: buffer these
-				
-				String name = shape.name() + material.names[0];
-				List<ItemStack> ores = OreDictionary.getOres(name);
-				
-				if(!ores.isEmpty()) {
-					List<ItemStack> stacks = new ArrayList();
-					stacks.add(ItemScraps.create(new MaterialStack(convert, (int) (shape.q(1) * out / in)), true));
-					map.put(new OreDictStack(name), stacks);
-				}
-			}
-		}
-		
-		for(Entry<String, List<MaterialStack>> entry : Mats.materialOreEntries.entrySet()) {
-			List<ItemStack> stacks = new ArrayList();
-			for(MaterialStack mat : entry.getValue()) {
-				stacks.add(ItemScraps.create(mat, true));
-			}
-			map.put(new OreDictStack(entry.getKey()), stacks);
-		}
-		
-		for(Entry<ComparableStack, List<MaterialStack>> entry : Mats.materialEntries.entrySet()) {
-			List<ItemStack> stacks = new ArrayList();
-			for(MaterialStack mat : entry.getValue()) {
-				stacks.add(ItemScraps.create(mat, true));
-			}
-			map.put(entry.getKey().copy(), stacks);
-		}
-		
-		return map;
-	}
-	
-	// private static List<ItemStack[]> moldRecipes = new ArrayList();
-	
-	// public static List<ItemStack[]> getMoldRecipes() {
-	// 	if(moldRecipes.isEmpty()) {
-	// 		registerMoldsForNEI();
-	// 	}
-		
-	// 	return moldRecipes;
-	// }
-	
-	// private static void registerMoldsForNEI() {
-		
-	// 	for(NTMMaterial material : Mats.orderedList) {
-			
-	// 		if(material.smeltable != SmeltingBehavior.SMELTABLE)
-	// 			continue;
-			
-	// 		for(Mold mold : ItemMold.molds) {
-	// 			ItemStack out = mold.getOutput(material);
-	// 			if(out != null) {
-	// 				ItemStack scrap = ItemScraps.create(new MaterialStack(material, mold.getCost()), true);
-	// 				ItemStack shape = new ItemStack(ModItems.mold, 1, mold.id);
-	// 				ItemStack basin = new ItemStack(mold.size == 0 ? ModBlocks.foundry_mold : mold.size == 1 ? ModBlocks.foundry_basin : Blocks.fire);
-	// 				ItemStack[] entry = new ItemStack[] {scrap, shape, basin, out};
-	// 				moldrecipes.put(entry);
-	// 			}
-	// 		}
-	// 	}
-	// }
+//	public static HashMap<AStack, List<ItemStack>> getSmeltingRecipes() {
+//		HashMap<AStack, List<ItemStack>> map = new HashMap();
+//
+//		for(NTMMaterial material : Mats.orderedList) {
+//			int in = material.convIn;
+//			int out = material.convOut;
+//			NTMMaterial convert = material.smeltsInto;
+//			for(MaterialShapes shape : MaterialShapes.allShapes) {
+//				//TODO: buffer these
+//
+//				String name = shape.name() + material.names[0];
+//				List<ItemStack> ores = OreDictionary.getOres(name);
+//
+//				if(!ores.isEmpty()) {
+//					List<ItemStack> stacks = new ArrayList<ItemStack>();
+//					stacks.add(ItemScraps.create(new MaterialStack(convert, (int) (shape.q(1) * out / in)), true));
+//					map.put(new OreDictStack(name), stacks);
+//				}
+//			}
+//		}
+//
+//		for(Entry<String, List<MaterialStack>> entry : Mats.materialOreEntries.entrySet()) {
+//			List<ItemStack> stacks = new ArrayList<ItemStack>();
+//			for(MaterialStack mat : entry.getValue()) {
+//				stacks.add(ItemScraps.create(mat, true));
+//			}
+//			map.put(new OreDictStack(entry.getKey()), stacks);
+//		}
+//
+//		for(Entry<ComparableStack, List<MaterialStack>> entry : Mats.materialEntries.entrySet()) {
+//			List<ItemStack> stacks = new ArrayList<ItemStack>();
+//			for(MaterialStack mat : entry.getValue()) {
+//				stacks.add(ItemScraps.create(mat, true));
+//			}
+//			map.put(entry.getKey().copy(), stacks);
+//		}
+//
+//		return map;
+//	}
+
 }

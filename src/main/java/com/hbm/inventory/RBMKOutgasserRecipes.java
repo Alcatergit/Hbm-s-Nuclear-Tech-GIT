@@ -8,6 +8,8 @@ import java.util.Map.Entry;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.ModItems;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.items.machine.ItemFluidIcon;
@@ -28,7 +30,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class RBMKOutgasserRecipes {
 
-	public static LinkedHashMap<ComparableStack, Object[]> rbmkOutgasserRecipes = new LinkedHashMap<ComparableStack, Object[]>();
+	public static LinkedHashMap<AStack, Object[]> rbmkOutgasserRecipes = new LinkedHashMap<AStack, Object[]>();
 	public static List<RBMKOutgasserRecipe> jeiRBMKOutgasserRecipes = null;
 	
 	public static void registerOverrides() {
@@ -154,8 +156,8 @@ public class RBMKOutgasserRecipes {
 	}
 
 	public static void addRecipe(int requiredFlux, String in, ItemStack out) {
-		if(!OreDictionary.getOres(in).isEmpty() && OreDictionary.getOres(in).get(0) != null && !OreDictionary.getOres(in).get(0).isEmpty())
-			rbmkOutgasserRecipes.put(new ComparableStack(OreDictionary.getOres(in).get(0)), new Object[] {requiredFlux, out});
+		if(!OreDictionary.getOres(in).isEmpty())
+			rbmkOutgasserRecipes.put(new OreDictStack(in), new Object[] {requiredFlux, out});
 	}
 
 	public static void addRecipe(float requiredFlux, String in, ItemStack out) {
@@ -187,8 +189,9 @@ public class RBMKOutgasserRecipes {
 		String[] dictKeys = comp.getDictKeys();
 		
 		for(String key : dictKeys) {
-			if(rbmkOutgasserRecipes.containsKey(key)){
-				return (int)rbmkOutgasserRecipes.get(key)[1];
+			OreDictStack oreStack = new OreDictStack(key);
+			if(rbmkOutgasserRecipes.containsKey(oreStack)){
+				return (int)rbmkOutgasserRecipes.get(oreStack)[1];
 			}
 		}
 		return -1;
@@ -196,7 +199,7 @@ public class RBMKOutgasserRecipes {
 
 	public static ItemStack getOutput(ItemStack stack) {
 		
-		if(stack == null || stack.getItem() == null)
+		if(stack == null || stack.isEmpty())
 			return null;
 
 		ComparableStack comp = new ComparableStack(stack).makeSingular();
@@ -207,9 +210,9 @@ public class RBMKOutgasserRecipes {
 		String[] dictKeys = comp.getDictKeys();
 		
 		for(String key : dictKeys) {
-			
-			if(rbmkOutgasserRecipes.containsKey(key)){
-				return (ItemStack)rbmkOutgasserRecipes.get(key)[1];
+			OreDictStack oreStack = new OreDictStack(key);
+			if(rbmkOutgasserRecipes.containsKey(oreStack)){
+				return (ItemStack)rbmkOutgasserRecipes.get(oreStack)[1];
 			}
 		}
 		return null;
@@ -218,8 +221,8 @@ public class RBMKOutgasserRecipes {
 	public static List<RBMKOutgasserRecipe> getRBMKOutgasserRecipes() {
 		if(jeiRBMKOutgasserRecipes == null){
 			jeiRBMKOutgasserRecipes = new ArrayList<RBMKOutgasserRecipe>();
-			for(Entry<ComparableStack, Object[]> e : rbmkOutgasserRecipes.entrySet()){
-				jeiRBMKOutgasserRecipes.add(new RBMKOutgasserRecipe(e.getKey().toStack(), (int)e.getValue()[0], (ItemStack)e.getValue()[1]));
+			for(Entry<AStack, Object[]> e : rbmkOutgasserRecipes.entrySet()){
+				jeiRBMKOutgasserRecipes.add(new RBMKOutgasserRecipe(e.getKey().getStackList(), (int)e.getValue()[0], (ItemStack)e.getValue()[1]));
 			}
 		}
 		return jeiRBMKOutgasserRecipes;
@@ -227,11 +230,11 @@ public class RBMKOutgasserRecipes {
 	
 	public static class RBMKOutgasserRecipe implements IRecipeWrapper {
 		
-		private final ItemStack input;
+		private final List<ItemStack> input;
 		private final int requiredFlux;
 		private final ItemStack output;
 		
-		public RBMKOutgasserRecipe(ItemStack input, int requiredFlux, ItemStack output) {
+		public RBMKOutgasserRecipe(List<ItemStack> input, int requiredFlux, ItemStack output) {
 			this.input = input;
 			this.requiredFlux = requiredFlux;
 			this.output = output;
@@ -239,7 +242,7 @@ public class RBMKOutgasserRecipes {
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setInputs(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 

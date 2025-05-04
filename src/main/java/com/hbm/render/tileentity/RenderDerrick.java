@@ -23,8 +23,10 @@ public class RenderDerrick extends TileEntitySpecialRenderer<TileEntityMachineOi
         GlStateManager.enableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.derrick_tex);
         ResourceManager.derrick.renderAll();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
 
         GL11.glPopMatrix();
 	}

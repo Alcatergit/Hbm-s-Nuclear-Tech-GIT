@@ -1,3 +1,9 @@
+container.foundryMixing=Crucible Alloying
+container.foundrySmelting=Crucible Smelting
+container.foundryCasting= Crucible Casting
+container.furnaceCombination=Combination Oven
+tile.furnace_combination.name=Combination Oven
+tile.furnace_combination.desc=A large furnace that can produce charcoal and coal coke.$Produces fluid byproducts.$Heat transfer rate: ΔT*0.25 TU/t
 tile.block_slag.name=Block of Slag
 adjective.extreme=Extreme
 adjective.high=High

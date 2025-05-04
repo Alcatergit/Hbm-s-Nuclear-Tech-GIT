@@ -51,7 +51,6 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
     private int fuseTime = 30;
     /** Explosion radius for this creeper. */
     private int explosionRadius = 20;
-    private static final String __OBFID = "CL_00001684";
 	public EntityTaintedCreeper(World world) {
 		super(world);
 			this.tasks.addTask(1, new EntityAISwimming(this));

@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.inventory.CombinationRecipes;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.inventory.container.ContainerCrucible;
 import com.hbm.inventory.gui.GUICrucible;

@@ -345,7 +345,7 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_well), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(4, 4, 4);
+				GL11.glScaled(3, 3, 3);
 			}
 			public void renderCommon() {
 				GL11.glScaled(0.5, 0.5, 0.5);
@@ -600,6 +600,18 @@ public class ItemRenderLibrary {
 				GL11.glScaled(1.9, 1.9, 1.9);
 		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.furnace_steel_tex);  ResourceManager.furnace_steel.renderAll();
+		        GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.furnace_combination), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GL11.glScaled(1.9, 1.9, 1.9);
+		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.combination_oven_tex);  ResourceManager.combination_oven.renderAll();
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.tesla), new ItemRenderBase() {

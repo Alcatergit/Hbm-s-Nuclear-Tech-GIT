@@ -102,13 +102,13 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 					
 				}
 			}
-			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setIntArray("progress", progress);
 			data.setIntArray("bonus", bonus);
 			data.setInteger("heat", heat);
 			data.setBoolean("wasOn", wasOn);
 			this.networkPack(data, 50);
+
 		} else {
 			
 			if(this.wasOn) {
@@ -189,12 +189,11 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 	protected void tryPullHeat() {
 		
 		if(this.heat >= TileEntityFurnaceSteel.maxHeat) return;
-		BlockPos blockBelow = pos.down();
-		TileEntity con = world.getTileEntity(blockBelow);
+
+		TileEntity con = world.getTileEntity(pos.down());
 		
-		if(con instanceof IHeatSource) {
-			IHeatSource source = (IHeatSource) con;
-			int diff = source.getHeatStored() - this.heat;
+		if(con instanceof IHeatSource source) {
+            int diff = source.getHeatStored() - this.heat;
 			
 			if(diff == 0) {
 				return;
@@ -222,7 +221,7 @@ public class TileEntityFurnaceSteel extends TileEntityMachineBase implements IGU
 		}
         ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(index));
         
-		if(itemStack == null || itemStack.isEmpty())
+		if(itemStack.isEmpty())
 		{
 			return false;
 		}

@@ -23,10 +23,10 @@ public class ParticleRBMKFlame extends Particle {
 
 	private static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/particle/rbmk_fire.png");
 	
-	public ParticleRBMKFlame(World worldIn, double posXIn, double posYIn, double posZIn, int maxAge){
+	public ParticleRBMKFlame(World worldIn, double posXIn, double posYIn, double posZIn, int maxAge, float scale){
 		super(worldIn, posXIn, posYIn, posZIn);
 		this.particleMaxAge = maxAge;
-		this.particleScale = rand.nextFloat() + 1F;
+		this.particleScale = (rand.nextFloat() + 1F) * scale;
 	}
 	
 	@Override

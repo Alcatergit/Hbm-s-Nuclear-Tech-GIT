@@ -155,7 +155,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 			/// END Processing part ///
 
 			/// START Notif packets ///
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1], plasma }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 120));
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0], tanks[1], plasma), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 120));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{plasmaType}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			/// END Notif packets ///
 			NBTTagCompound data = new NBTTagCompound();

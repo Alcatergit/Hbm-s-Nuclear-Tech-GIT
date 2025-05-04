@@ -38,7 +38,6 @@ public class RBMKDebrisBurning extends RBMKDebris {
 				data.setString("type", "rbmkflame");
 				data.setInteger("maxAge", 300);
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.25 + rand.nextDouble() * 0.5, pos.getY() + 1.75, pos.getZ() + 0.25 + rand.nextDouble() * 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 1.75, pos.getZ() + 0.5, 75));
-				MainRegistry.proxy.effectNT(data);
 				world.playSound(null, pos.getX() + 0.5F, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_AMBIENT, SoundCategory.BLOCKS, 1.0F + rand.nextFloat(), rand.nextFloat() * 0.7F + 0.3F);
 			}
 
