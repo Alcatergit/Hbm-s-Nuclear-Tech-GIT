@@ -53,6 +53,9 @@ public class MixerRecipes {
 		addRecipe(new FluidStack(ModForgeFluids.nitroglycerin, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 1000), new FluidStack(ModForgeFluids.nitric_acid, 1000)}, null, 20);
 		addRecipe(new FluidStack(ModForgeFluids.biofuel, 250), new FluidStack[]{ new FluidStack(ModForgeFluids.fishoil, 500), new FluidStack(ModForgeFluids.sunfloweroil, 500)}, null, 20);
 		addRecipe(new FluidStack(ModForgeFluids.lubricant, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.ethanol, 200), new FluidStack(ModForgeFluids.sunfloweroil, 800)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.phosgene, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.unsaturateds, 500), new FluidStack(ModForgeFluids.chlorine, 500)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.iongel, 1000), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000), new FluidStack(ModForgeFluids.hydrogen, 200) }, new ComparableStack(ModItems.pellet_charged), 50);
+		addRecipe(new FluidStack(ModForgeFluids.syngas, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.coaloil, 500), new FluidStack(ModForgeFluids.steam, 500) }, null, 50);
 	}
 
 	public static void addRecipe(FluidStack output, FluidStack[] inputs, AStack inputItem, int duration){

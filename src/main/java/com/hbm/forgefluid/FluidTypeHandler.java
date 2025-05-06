@@ -99,6 +99,16 @@ public class FluidTypeHandler {
 		
 		fluidProperties.put(ModForgeFluids.reclaimed.getName(), new FluidProperties(2, 2, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.petroil.getName(), new FluidProperties(1, 3, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.chlorine.getName(), new FluidProperties(3, 0, 0, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE));
+		fluidProperties.put(ModForgeFluids.phosgene.getName(), new FluidProperties(4, 0, 1, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.woodoil.getName(), new FluidProperties(2, 2, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.coalcreosote.getName(), new FluidProperties(3, 2, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.coaloil.getName(), new FluidProperties(2, 1, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.coalgas.getName(), new FluidProperties(1, 2, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.coalgas_leaded.getName(), new FluidProperties(1, 2, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.petroil_leaded.getName(), new FluidProperties(1, 3, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.gasoline_leaded.getName(), new FluidProperties(1, 2, 0, EnumSymbol.NONE));
+		fluidProperties.put(ModForgeFluids.syngas.getName(), new FluidProperties(1, 4, 2, EnumSymbol.NONE));
 
 		fluidProperties.put(ModForgeFluids.fracksol.getName(), new FluidProperties(1, 3, 3, EnumSymbol.ACID, FluidTrait.CORROSIVE));
 		
@@ -164,6 +174,9 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.plasma_put.getName(), new FluidProperties(2, 3, 1, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_xm.getName(), new FluidProperties(0, 4, 1, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
 		fluidProperties.put(ModForgeFluids.plasma_bf.getName(), new FluidProperties(4, 5, 4, EnumSymbol.RADIATION, FluidTrait.NO_CONTAINER, FluidTrait.NO_ID));
+
+		fluidProperties.put(ModForgeFluids.iongel.getName(), new FluidProperties(1, 0, 4, EnumSymbol.NONE));
+
 		fluidProperties.put(ModForgeFluids.uu_matter.getName(),	new FluidProperties(6, 2, 6, 2.0F, EnumSymbol.ACID, FluidTrait.CORROSIVE));
 
 		fluidProperties.put(ModForgeFluids.toxic_fluid.getName(), new FluidProperties(3, 0, 4, EnumSymbol.RADIATION, FluidTrait.CORROSIVE_2));

@@ -147,37 +147,7 @@ import com.hbm.items.machine.ItemTemplateFolder;
 import com.hbm.items.machine.ItemTurretBiometry;
 import com.hbm.items.machine.ItemTurretChip;
 import com.hbm.items.machine.ItemScraps;
-import com.hbm.items.special.ItemSimpleConsumable;
-import com.hbm.items.special.ItemAutogen;
-import com.hbm.items.special.ItemAMSCore;
-import com.hbm.items.special.ItemBook;
-import com.hbm.items.special.ItemBedrockOre;
-import com.hbm.items.special.ItemCell;
-import com.hbm.items.special.ItemChopper;
-import com.hbm.items.special.ItemCustomLore;
-import com.hbm.items.special.ItemDemonCore;
-import com.hbm.items.special.ItemDigamma;
-import com.hbm.items.special.ItemDoorSkin;
-import com.hbm.items.special.ItemDrop;
-import com.hbm.items.special.ItemFuel;
-import com.hbm.items.special.ItemFusionShield;
-import com.hbm.items.special.ItemGlitch;
-import com.hbm.items.special.ItemRag;
-import com.hbm.items.special.ItemHot;
-import com.hbm.items.special.ItemHotDusted;
-import com.hbm.items.special.ItemLootCrate;
-import com.hbm.items.special.ItemModRecord;
-import com.hbm.items.special.ItemPolaroid;
-import com.hbm.items.special.ItemPotatos;
-import com.hbm.items.special.ItemSiegeCoin;
-import com.hbm.items.special.ItemSoyuz;
-import com.hbm.items.special.ItemStarterKit;
-import com.hbm.items.special.ItemSyringe;
-import com.hbm.items.special.ItemTeleLink;
-import com.hbm.items.special.ItemUnstable;
-import com.hbm.items.special.ItemWasteLong;
-import com.hbm.items.special.ItemWasteShort;
-import com.hbm.items.special.WatzFuel;
+import com.hbm.items.special.*;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAnalyzer;
 import com.hbm.items.tool.ItemAmatExtractor;
@@ -1090,6 +1060,7 @@ public class ModItems {
 	public static final Item ingot_bakelite = new ItemCustomLore("ingot_bakelite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_rubber = new ItemCustomLore("ingot_rubber").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_biorubber = new ItemCustomLore("ingot_biorubber").setCreativeTab(MainRegistry.partsTab);	
+	public static final Item ingot_pvc = new ItemCustomLore("ingot_pvc").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_desh = new ItemCustomLore("ingot_desh").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_saturnite = new ItemCustomLore("ingot_saturnite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_ferrouranium = new ItemBase("ingot_ferrouranium").setCreativeTab(MainRegistry.partsTab);
@@ -1756,13 +1727,16 @@ public class ModItems {
 	
 	
 	//Fuels
-	public static final Item oil_tar = new ItemBase("oil_tar").setCreativeTab(MainRegistry.partsTab);
+	public static final Item oil_tar = new ItemFuelEnum("oil_tar", 1200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel = new ItemFuel("solid_fuel", 3200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto = new ItemFuel("solid_fuel_presto", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto_triplet = new ItemFuel("solid_fuel_presto_triplet", 19200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item rocket_fuel = new ItemFuel("rocket_fuel", 6400).setCreativeTab(MainRegistry.partsTab);
+	public static final Item solid_fuel_bf = new ItemFuel("solid_fuel_bf", 32000).setCreativeTab(MainRegistry.partsTab);
+	public static final Item solid_fuel_presto_bf = new ItemFuel("solid_fuel_presto_bf", 64000).setCreativeTab(MainRegistry.partsTab);
+	public static final Item solid_fuel_presto_triplet_bf = new ItemFuel("solid_fuel_presto_triplet_bf", 192000).setCreativeTab(MainRegistry.partsTab);
 	public static final Item briquette_lignite = new ItemFuel("briquette_lignite", 1600).setCreativeTab(MainRegistry.partsTab);
-	public static final Item coke = new ItemFuel("coke", 3200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item coke = new ItemFuelEnum("coke", 3200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item lignite = new ItemFuel("lignite", 1200).setCreativeTab(MainRegistry.partsTab);
 	
 	//Fragments

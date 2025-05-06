@@ -105,7 +105,15 @@ public class ModuleBurnTime {
 		
 		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel))						return mod[modSolid];
 		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto)) 				return mod[modSolid];
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet))		return mod[modSolid];
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet))			return mod[modSolid];
+
+		if(stack.getItem() == ModItems.solid_fuel_bf)					return mod[modBalefire];
+		if(stack.getItem() == ModItems.solid_fuel_presto_bf) 			return mod[modBalefire];
+		if(stack.getItem() == ModItems.solid_fuel_presto_triplet_bf)	return mod[modBalefire];
+		
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_bf))						return mod[modBalefire];
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_bf)) 				return mod[modBalefire];
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet_bf))		return mod[modBalefire];
 
 		
 		if(stack.getItem() == ModItems.rocket_fuel)						return mod[modRocket];

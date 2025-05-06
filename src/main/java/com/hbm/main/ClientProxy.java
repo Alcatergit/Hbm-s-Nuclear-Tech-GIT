@@ -567,6 +567,8 @@ import com.hbm.tileentity.machine.oil.TileEntityMachineCatalyticCracker;
 import com.hbm.tileentity.machine.oil.TileEntityMachineRefinery;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
 import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
+import com.hbm.tileentity.machine.oil.TileEntityMachineLiquefactor;
+import com.hbm.tileentity.machine.oil.TileEntityMachineSolidifier;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKAbsorber;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBlank;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
@@ -746,6 +748,8 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRailgun.class, new RenderRailgun());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineFluidTank.class, new RenderFluidTank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRefinery.class, new RenderRefinery());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineLiquefactor.class, new RenderLiquefactor());
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineSolidifier.class, new RenderSolidifier());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCyclotron.class, new RenderCyclotron());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBroadcaster.class, new RenderBroadcaster());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityGeiger.class, new RenderGeiger());

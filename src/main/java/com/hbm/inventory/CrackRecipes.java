@@ -21,7 +21,8 @@ public class CrackRecipes {
 		makeRecipe(ModForgeFluids.gas, new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 30), new FluidStack(ModForgeFluids.unsaturateds, 20) });
 		makeRecipe(ModForgeFluids.diesel, new FluidStack[]{ new FluidStack(ModForgeFluids.kerosene, 40), new FluidStack(ModForgeFluids.petroleum, 30) });
 		makeRecipe(ModForgeFluids.kerosene, new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 60) });
-		
+		makeRecipe(ModForgeFluids.woodoil, new FluidStack[]{ new FluidStack(ModForgeFluids.heatingoil, 40), new FluidStack(ModForgeFluids.aromatics, 10) });
+
 		// makeRecipe(new Fluid(), new FluidStack[]{ new FluidStack() });
 	}
 

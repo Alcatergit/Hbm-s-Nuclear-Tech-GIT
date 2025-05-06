@@ -342,6 +342,28 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Tank");
 			}});
 
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_solidifier), new ItemRenderBase( ) {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.solidifier_tex); ResourceManager.solidifier.renderPart("Main");
+				GL11.glShadeModel(GL11.GL_FLAT);
+			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_liquefactor), new ItemRenderBase( ) {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2.5, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.liquefactor_tex); ResourceManager.liquefactor.renderPart("Main");
+				GL11.glShadeModel(GL11.GL_FLAT);
+			}});
+		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_well), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);

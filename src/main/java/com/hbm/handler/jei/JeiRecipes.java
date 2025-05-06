@@ -66,6 +66,8 @@ public class JeiRecipes {
 	private static List<FoundryMixRecipe> foundryMixRecipes = null;
 	private static List<FoundryPourRecipe> foundryPourRecipes = null;
 	private static List<BoilerRecipe> boilerRecipes = null;
+	private static List<LiquefactionRecipe> liquefactionRecipes = null;
+	private static List<SolidificationRecipe> solidificationRecipes = null;
 	private static List<CMBFurnaceRecipe> cmbRecipes = null;
 	private static List<GasCentRecipe> gasCentRecipes = null;
 	private static List<ReactorRecipe> reactorRecipes = null;
@@ -357,6 +359,40 @@ public class JeiRecipes {
 			heatTex.draw(minecraft, 1, 20, 16-heat*4, 0, 0, 0);
 		}
 		
+	}
+
+	public static class LiquefactionRecipe implements IRecipeWrapper {
+
+		private final List<ItemStack> inputs;
+		private final ItemStack output;
+
+		public LiquefactionRecipe(List<ItemStack> inputs, ItemStack output) {
+			this.inputs = inputs;
+			this.output = output;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+	}
+
+	public static class SolidificationRecipe implements IRecipeWrapper {
+
+		private final ItemStack input;
+		private final ItemStack output;
+
+		public SolidificationRecipe(ItemStack input, ItemStack output) {
+			this.input = input;
+			this.output = output;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
 	}
 
 	public static class WasteDrumRecipe implements IRecipeWrapper {
@@ -1059,6 +1095,35 @@ public class JeiRecipes {
 		}
 		
 		return reactorRecipes;
+	}
+
+	public static List<LiquefactionRecipe> getLiquefactionRecipes(){
+		if(liquefactionRecipes != null)
+			return liquefactionRecipes;
+		liquefactionRecipes = new ArrayList<LiquefactionRecipe>();
+
+		for(Map.Entry<Object, FluidStack> entry : LiquefactionRecipes.recipes.entrySet()){
+			ItemStack output = ItemFluidIcon.getStackWithQuantity(entry.getValue());
+			if(entry.getKey() instanceof String name) {
+				liquefactionRecipes.add(new LiquefactionRecipe(new OreDictStack(name).getStackList(), output));
+			} else if(entry.getKey() instanceof ComparableStack stack){
+				liquefactionRecipes.add(new LiquefactionRecipe(stack.getStackList(), output));
+			}
+		}
+
+		return liquefactionRecipes;
+	}
+
+	public static List<SolidificationRecipe> getSolidificationRecipes(){
+		if(solidificationRecipes != null)
+			return solidificationRecipes;
+		solidificationRecipes = new ArrayList<SolidificationRecipe>();
+
+		for(Map.Entry<Fluid, Pair<Integer, ItemStack>> entry : SolidificationRecipes.recipes.entrySet()) {
+			solidificationRecipes.add(new SolidificationRecipe(ItemFluidIcon.getStackWithQuantity(entry.getKey(), entry.getValue().getKey()), entry.getValue().getValue()));
+		}
+
+		return solidificationRecipes;
 	}
 
 	public static List<WasteDrumRecipe> getWasteDrumRecipes(){

@@ -14,7 +14,8 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.special.ItemBedrockOre;
+import com.hbm.items.ItemEnums.EnumTarType;
+import com.hbm.inventory.OreDictManager.DictFrame;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;
@@ -119,6 +120,11 @@ public class CrystallizerRecipes {
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new FluidStack(ModForgeFluids.solvent, 100), new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta));
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.radiosolvent, 50), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
 		}
+
+		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRUDE)), new FluidStack(ModForgeFluids.chlorine, 250),		DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
+		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)), new FluidStack(ModForgeFluids.chlorine, 100),		DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
+		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.PARAFFIN)), new FluidStack(ModForgeFluids.chlorine, 100),	DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
+		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX)), new FluidStack(ModForgeFluids.iongel, 500), 	new ItemStack(ModItems.pellet_charged));
 	}
 
 	public static void addRecipe(Object itemInput, FluidStack fluidInput, ItemStack itemOutput){

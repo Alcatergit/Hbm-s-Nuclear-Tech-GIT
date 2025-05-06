@@ -231,9 +231,12 @@ public class HazardRegistry {
 		HazardSystem.register(powder_paleogenite, makeData(DIGAMMA, 0.005F));
 		HazardSystem.register(powder_impure_osmiridium, makeData(DIGAMMA, 0.010F));
 
-		// HazardSystem.register(solid_fuel_bf, makeData(RADIATION, 1000)); //roughly the amount of the balefire shard diluted in 250mB of rocket fuel
-		// HazardSystem.register(solid_fuel_presto_bf, makeData(RADIATION, 2000));
-		// HazardSystem.register(solid_fuel_presto_triplet_bf, makeData(RADIATION, 6000));
+		HazardSystem.register(solid_fuel_bf, makeData(RADIATION, 1000)); //roughly the amount of the balefire shard diluted in 250mB of rocket fuel
+		HazardSystem.register(solid_fuel_presto_bf, makeData(RADIATION, 2000));
+		HazardSystem.register(solid_fuel_presto_triplet_bf, makeData(RADIATION, 6000));
+		HazardSystem.register(block_solid_fuel_bf, makeData(RADIATION, 10000));
+		HazardSystem.register(block_solid_fuel_presto_bf, makeData(RADIATION, 20000));
+		HazardSystem.register(block_solid_fuel_presto_triplet_bf, makeData(RADIATION, 60000));
 		HazardSystem.register(nuclear_waste, makeData(RADIATION, wst * powder).addEntry(CONTAMINATING, 21F));
 		HazardSystem.register(nuclear_waste_tiny, makeData(RADIATION, wst * powder_tiny).addEntry(CONTAMINATING, 7F));
 		HazardSystem.register(nuclear_waste_vitrified, makeData(RADIATION, wstv * powder).addEntry(CONTAMINATING, 15F));

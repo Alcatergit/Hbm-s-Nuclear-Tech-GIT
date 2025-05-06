@@ -708,6 +708,9 @@ public class ModBlocks {
 	public static final Block block_solid_fuel = new BlockFuel(Material.ROCK, "block_solid_fuel", 10, 10, 32000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_solid_fuel_presto = new BlockFuel(Material.ROCK, "block_solid_fuel_presto", 6, 6, 64000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_solid_fuel_presto_triplet = new BlockFuel(Material.ROCK, "block_solid_fuel_presto_triplet", 2, 2, 192000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block block_solid_fuel_bf = new BlockFuel(Material.ROCK, "block_solid_fuel_bf", 10, 10, 320000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block block_solid_fuel_presto_bf = new BlockFuel(Material.ROCK, "block_solid_fuel_presto_bf", 6, 6, 640000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
+	public static final Block block_solid_fuel_presto_triplet_bf = new BlockFuel(Material.ROCK, "block_solid_fuel_presto_triplet_bf", 2, 2, 1920000).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_graphite = new BlockGraphite(Material.IRON, "block_graphite", 30, 5, 16000).setSoundType(SoundType.METAL).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_graphite_drilled = new BlockGraphiteDrilled("block_graphite_drilled");
 	public static final Block block_graphite_fuel = new BlockGraphiteFuel("block_graphite_fuel");
@@ -1131,6 +1134,9 @@ public class ModBlocks {
 	
 	public static final Block machine_deuterium_extractor = new MachineDeuteriumExtractor(Material.IRON, "machine_deuterium_extractor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block machine_deuterium_tower = new DeuteriumTower(Material.IRON, "machine_deuterium_tower").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
+
+	public static final Block machine_liquefactor = new MachineLiquefactor("machine_liquefactor").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block machine_solidifier = new MachineSolidifier("machine_solidifier").setHardness(10.0F).setResistance(20.0F).setCreativeTab(MainRegistry.machineTab);
 
 	public static final int guiID_anvil = 125;
 	public static final Block anvil_iron = new NTMAnvil(Material.IRON, 1, "anvil_iron").setCreativeTab(MainRegistry.machineTab);

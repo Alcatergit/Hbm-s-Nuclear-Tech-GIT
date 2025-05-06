@@ -1337,7 +1337,10 @@ public class CraftingManager {
 
 		addRecipeAuto(new ItemStack(ModItems.solid_fuel_presto, 1), new Object[] { " P ", "SRS", " P ", 'P', Items.PAPER, 'S', ModItems.solid_fuel, 'R', REDSTONE.dust() });
 		addShapelessAuto(new ItemStack(ModItems.solid_fuel_presto_triplet, 1), new Object[] { ModItems.solid_fuel_presto, ModItems.solid_fuel_presto, ModItems.solid_fuel_presto, ModItems.ball_dynamite });
-		
+
+		addRecipeAuto(new ItemStack(ModItems.solid_fuel_presto_bf, 1), new Object[] { " P ", "SRS", " P ", 'P', Items.PAPER, 'S', ModItems.solid_fuel_bf, 'R', REDSTONE.dust() });
+		addShapelessAuto(new ItemStack(ModItems.solid_fuel_presto_triplet_bf, 1), new Object[] { ModItems.solid_fuel_presto_bf, ModItems.solid_fuel_presto_bf, ModItems.solid_fuel_presto_bf, ModItems.ball_dynamite });
+
 		addRecipeAuto(new ItemStack(ModBlocks.flame_war, 1), new Object[] { "WHW", "CTP", "WOW", 'W', Item.getItemFromBlock(Blocks.PLANKS), 'T', Item.getItemFromBlock(Blocks.TNT), 'H', ModItems.flame_pony, 'C', ModItems.flame_conspiracy, 'P', ModItems.flame_politics, 'O', ModItems.flame_opinion });
 		addRecipeAuto(new ItemStack(ModBlocks.emp_bomb, 1), new Object[] { "LML", "LCL", "LML", 'L', PB.plate(), 'M', ModItems.magnetron, 'C', ModItems.circuit_gold });
 
@@ -2131,6 +2134,9 @@ public class CraftingManager {
 		add1To9Pair(ModBlocks.block_solid_fuel, ModItems.solid_fuel);
 		add1To9Pair(ModBlocks.block_solid_fuel_presto, ModItems.solid_fuel_presto);
 		add1To9Pair(ModBlocks.block_solid_fuel_presto_triplet, ModItems.solid_fuel_presto_triplet);
+		add1To9Pair(ModBlocks.block_solid_fuel_bf, ModItems.solid_fuel_bf);
+		add1To9Pair(ModBlocks.block_solid_fuel_presto_bf, ModItems.solid_fuel_presto_bf);
+		add1To9Pair(ModBlocks.block_solid_fuel_presto_triplet_bf, ModItems.solid_fuel_presto_triplet_bf);
 
 		add1To9Pair(ModItems.ingot_osmiridium, ModItems.nugget_osmiridium);
 		add1To9Pair(ModItems.ingot_radspice, ModItems.nugget_radspice);

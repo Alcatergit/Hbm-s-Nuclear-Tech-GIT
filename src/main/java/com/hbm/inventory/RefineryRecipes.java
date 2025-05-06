@@ -6,8 +6,9 @@ import java.util.Map;
 import com.hbm.util.Tuple.Pair;
 
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.ItemEnums.EnumTarType;
 import com.hbm.util.Tuple.Quartet;
 
 import net.minecraft.item.ItemStack;
@@ -41,8 +42,8 @@ public class RefineryRecipes {
 			new FluidStack(ModForgeFluids.naphtha, 40), 
 			new FluidStack(ModForgeFluids.lightoil, 30),
 			new FluidStack(ModForgeFluids.aromatics, 15),
-			new FluidStack(ModForgeFluids.unsaturateds, 15)	}, 
-			new ItemStack(ModItems.oil_tar, 1)));
+			new FluidStack(ModForgeFluids.unsaturateds, 15)	},
+				DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)));
 
 		refineryRecipesMap.put(ModForgeFluids.toxic_fluid, new Pair(new FluidStack[]{ 
 			new FluidStack(ModForgeFluids.wastefluid, 50),
@@ -63,6 +64,9 @@ public class RefineryRecipes {
 		fractions.put(ModForgeFluids.smear, new Quartet<>(ModForgeFluids.heatingoil, ModForgeFluids.lubricant, smear_frac_heat, smear_frac_lube));
 		fractions.put(ModForgeFluids.naphtha, new Quartet<>(ModForgeFluids.heatingoil, ModForgeFluids.diesel, napht_frac_heat, napht_frac_diesel));
 		fractions.put(ModForgeFluids.lightoil, new Quartet<>(ModForgeFluids.diesel, ModForgeFluids.kerosene, light_frac_diesel, light_frac_kero));
+		fractions.put(ModForgeFluids.coalcreosote, new Quartet<>(ModForgeFluids.coaloil, ModForgeFluids.bitumen, 10, 90));
+		fractions.put(ModForgeFluids.coaloil, new Quartet<>(ModForgeFluids.coalgas, ModForgeFluids.oil, 30, 70));
+
 	}
 	
 	public static Quartet<Fluid, Fluid, Integer, Integer> getFractions(Fluid oil) {

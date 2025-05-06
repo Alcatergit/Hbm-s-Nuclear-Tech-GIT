@@ -217,25 +217,12 @@ public class TileEntityFurnaceCombination extends TileEntityMachineBase implemen
 		if (resource == null || !resource.isFluidEqual(tank.getFluid())) {
 			return null;
 		}
-		if (this.canDrain(resource.getFluid())) {
-			return tank.drain(resource.amount, doDrain);
-		}
-		return null;
+		return tank.drain(resource.amount, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if (this.canDrain(null)) {
-			return tank.drain(maxDrain, doDrain);
-		}
-		return null;
-	}
-
-	public boolean canDrain(Fluid fluid) {
-		if (!this.world.isRemote) {
-			return tank.getFluid() != null;
-		}
-		return false;
+		return tank.drain(maxDrain, doDrain);
 	}
 
 	@Override

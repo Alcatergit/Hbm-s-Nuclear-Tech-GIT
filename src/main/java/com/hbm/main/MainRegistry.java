@@ -254,6 +254,8 @@ import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.EngineRecipes;
 import com.hbm.inventory.PressRecipes;
 import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.SolidificationRecipes;
+import com.hbm.inventory.LiquefactionRecipes;
 import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
@@ -816,6 +818,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineBAT9000.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_bat9000"));
 		GameRegistry.registerTileEntity(TileEntityMachineOrbus.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_orbus"));
 		GameRegistry.registerTileEntity(TileEntityCondenser.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_condenser"));
+		GameRegistry.registerTileEntity(TileEntityMachineLiquefactor.class, new ResourceLocation(RefStrings.MODID, "tileentity_liquefactor"));
+		GameRegistry.registerTileEntity(TileEntityMachineSolidifier.class, new ResourceLocation(RefStrings.MODID, "tileentity_solidifier"));
 		GameRegistry.registerTileEntity(TileEntityChungus.class, new ResourceLocation(RefStrings.MODID, "tileentity_chungus"));
 		GameRegistry.registerTileEntity(TileEntitySpacer.class, new ResourceLocation(RefStrings.MODID, "tileentity_spacer"));
 		GameRegistry.registerTileEntity(TileEntityMachineFractionTower.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_frac_tower"));
@@ -1118,6 +1122,8 @@ public class MainRegistry {
 		HeatRecipes.registerHeatRecipes();
 		EngineRecipes.registerEngineRecipes();
 		FluidCombustionRecipes.registerFluidCombustionRecipes();
+		LiquefactionRecipes.registerDefaults();
+		SolidificationRecipes.registerDefaults();
 		HbmDetox.init();
 
 		FluidContainerRegistry.registerContainer(Item.getItemFromBlock(ModBlocks.lox_barrel), ModItems.tank_steel, new FluidStack(ModForgeFluids.oxygen, 10000));

@@ -1,6 +1,5 @@
 package com.hbm.inventory;
 
-import java.util.HashSet;
 import java.util.HashMap;
 
 import com.hbm.forgefluid.ModForgeFluids;
@@ -41,7 +40,16 @@ public class FluidCombustionRecipes {
 		addBurnableFluid(ModForgeFluids.lightoil, 200);
 		addBurnableFluid(ModForgeFluids.kerosene, 300);
 		addBurnableFluid(ModForgeFluids.gasoline, 800);
+		addBurnableFluid(ModForgeFluids.syngas, 650);
 
+		addBurnableFluid(ModForgeFluids.woodoil, 4);
+		addBurnableFluid(ModForgeFluids.coalcreosote, 5);
+		addBurnableFluid(ModForgeFluids.coaloil, 10);
+		addBurnableFluid(ModForgeFluids.coalgas, 75);
+		addBurnableFluid(ModForgeFluids.coalgas_leaded, 75);
+		addBurnableFluid(ModForgeFluids.petroil_leaded, 125);
+		addBurnableFluid(ModForgeFluids.gasoline_leaded, 400);
+		
 		addBurnableFluid(ModForgeFluids.balefire, 1_000);
 		addBurnableFluid(ModForgeFluids.unsaturateds, 1_000);
 		addBurnableFluid(ModForgeFluids.nitan, 2_000);
