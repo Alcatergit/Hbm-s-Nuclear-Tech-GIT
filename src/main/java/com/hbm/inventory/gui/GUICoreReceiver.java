@@ -32,7 +32,7 @@ public class GUICoreReceiver extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 16, 16, 52, receiver.tank, ModForgeFluids.cryogel);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 16, 16, 52, receiver.tank, ModForgeFluids.CRYOGEL);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 

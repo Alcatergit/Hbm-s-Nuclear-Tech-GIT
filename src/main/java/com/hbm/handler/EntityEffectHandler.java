@@ -27,6 +27,7 @@ import com.hbm.util.ContaminationUtil.HazardType;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -46,7 +47,7 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class EntityEffectHandler {
 	public static void onUpdate(EntityLivingBase entity) {
-		
+
 		if(!entity.world.isRemote) {
 			
 			if(entity.ticksExisted % 20 == 0) {

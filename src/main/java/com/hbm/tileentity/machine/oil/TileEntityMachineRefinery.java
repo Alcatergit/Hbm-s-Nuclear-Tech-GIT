@@ -4,7 +4,6 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RefineryRecipes;
-import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.packet.AuxElectricityPacket;
@@ -13,7 +12,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.Tuple.Pair;
 
 import api.hbm.energy.IEnergyUser;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -53,7 +51,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	public TileEntityMachineRefinery() {
 		super(12);
 		tanks = new FluidTank[5];
-		tankTypes = new Fluid[] {ModForgeFluids.hotoil, ModForgeFluids.heavyoil, ModForgeFluids.naphtha, ModForgeFluids.lightoil, ModForgeFluids.petroleum};
+		tankTypes = new Fluid[] {ModForgeFluids.HOTOIL, ModForgeFluids.HEAVYOIL, ModForgeFluids.NAPHTHA, ModForgeFluids.LIGHTOIL, ModForgeFluids.PETROLEUM};
 		tanks[0] = new FluidTank(64000);
 		tanks[1] = new FluidTank(24000);
 		tanks[2] = new FluidTank(24000);
@@ -360,9 +358,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 
 	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
-		if(tags.length != 5){
-			return;
-		} else {
+		if(tags.length == 5){
 			tanks[0].readFromNBT(tags[0]);
 			tanks[1].readFromNBT(tags[1]);
 			tanks[2].readFromNBT(tags[2]);

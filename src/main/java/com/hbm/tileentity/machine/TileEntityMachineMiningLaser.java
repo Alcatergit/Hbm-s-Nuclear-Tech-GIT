@@ -357,7 +357,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			
 			if(item.getItem().getItem() == Item.getItemFromBlock(ModBlocks.ore_oil)) {
 
-				tank.fill(new FluidStack(ModForgeFluids.oil, 500), true);
+				tank.fill(new FluidStack(ModForgeFluids.OIL, 500), true);
 
 				item.setDead();
 				continue;
@@ -686,7 +686,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(resource != null && resource.getFluid() == ModForgeFluids.oil)
+		if(resource != null && resource.getFluid() == ModForgeFluids.OIL)
 			return tank.drain(resource, doDrain);
 		return null;
 	}

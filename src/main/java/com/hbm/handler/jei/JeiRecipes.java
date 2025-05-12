@@ -34,6 +34,7 @@ import com.hbm.items.tool.ItemGasCanister;
 import com.hbm.lib.Library;
 import com.hbm.util.WeightedRandomObject;
 import com.hbm.util.Tuple.Quartet;
+import com.hbm.util.Tuple.Triplet;
 import com.hbm.util.Tuple.Pair;
 import com.hbm.util.I18nUtil;
 
@@ -45,14 +46,12 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraft.util.text.TextFormatting;
-import org.lwjgl.Sys;
 
 public class JeiRecipes {
 
@@ -77,6 +76,10 @@ public class JeiRecipes {
 	private static List<RefineryRecipe> refineryRecipes = null;
 	private static List<CrackingRecipe> crackingRecipes = null;
 	private static List<FractioningRecipe> fractioningRecipes = null;
+	private static List<HydrotreaterRecipe> hydrotreaterRecipes = null;
+	private static List<ReformingRecipe> reformingRecipes = null;
+	private static List<VacuumDistillRecipe> vacuumdistillRecipes = null;
+	private static List<CokerRecipe> cokerRecipes = null;
 	private static List<FluidRecipe> fluidEquivalences = null;
 	private static List<BookRecipe> bookRecipes = null;
 	private static List<FusionRecipe> fusionByproducts = null;
@@ -516,6 +519,78 @@ public class JeiRecipes {
 			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
 		}
 		
+	}
+
+	public static class HydrotreaterRecipe implements IRecipeWrapper {
+
+		private final List<ItemStack> inputs;
+		private final List<ItemStack> outputs;
+
+		public HydrotreaterRecipe(List<ItemStack> inputs, List<ItemStack> outputs) {
+			this.inputs = inputs;
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputs(VanillaTypes.ITEM, inputs);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class ReformingRecipe implements IRecipeWrapper {
+
+		private final ItemStack input;
+		private final List<ItemStack> outputs;
+
+		public ReformingRecipe(ItemStack input, List<ItemStack> outputs) {
+			this.input = input;
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class VacuumDistillRecipe implements IRecipeWrapper {
+
+		private final ItemStack input;
+		private final List<ItemStack> outputs;
+
+		public VacuumDistillRecipe(ItemStack input, List<ItemStack> outputs) {
+			this.input = input;
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
+	}
+
+	public static class CokerRecipe implements IRecipeWrapper {
+
+		private final ItemStack input;
+		private final List<ItemStack> outputs;
+
+		public CokerRecipe(ItemStack input, List<ItemStack> outputs) {
+			this.input = input;
+			this.outputs = outputs;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInput(VanillaTypes.ITEM, input);
+			ingredients.setOutputs(VanillaTypes.ITEM, outputs);
+		}
+
 	}
 	
 	public static class FluidRecipe implements IRecipeWrapper {
@@ -1218,8 +1293,8 @@ public class JeiRecipes {
 			return fractioningRecipes;
 		fractioningRecipes = new ArrayList<FractioningRecipe>();
 
-		for(Fluid fluid : RefineryRecipes.fractions.keySet()){
-			Quartet<Fluid, Fluid, Integer, Integer> recipe = RefineryRecipes.getFractions(fluid);
+		for(Fluid fluid : FractionRecipes.fractions.keySet()){
+			Quartet<Fluid, Fluid, Integer, Integer> recipe = FractionRecipes.getFractions(fluid);
 			
 			fractioningRecipes.add(new FractioningRecipe(
 					ItemFluidIcon.getStackWithQuantity(fluid, 1000),
@@ -1231,6 +1306,83 @@ public class JeiRecipes {
 			);
 		}
 		return fractioningRecipes;
+	}
+
+	public static List<HydrotreaterRecipe> getHydrotreaterRecipes() {
+		if(hydrotreaterRecipes != null)
+			return hydrotreaterRecipes;
+		hydrotreaterRecipes = new ArrayList<HydrotreaterRecipe>();
+
+		for(Map.Entry<Fluid, Triplet<FluidStack, FluidStack, FluidStack>> rec : HydrotreatingRecipes.recipes.entrySet()){
+
+			hydrotreaterRecipes.add(new HydrotreaterRecipe(
+					Arrays.asList(
+							ItemFluidIcon.getStackWithQuantity(rec.getKey(), 100),
+							ItemFluidIcon.getStackWithQuantity(rec.getValue().getX())
+							),
+					Arrays.asList(
+							ItemFluidIcon.getStackWithQuantity(rec.getValue().getY()),
+							ItemFluidIcon.getStackWithQuantity(rec.getValue().getZ())
+					)
+				)
+			);
+		}
+		return hydrotreaterRecipes;
+	}
+
+	public static List<ReformingRecipe> getReformingRecipes() {
+		if(reformingRecipes != null)
+			return reformingRecipes;
+		reformingRecipes = new ArrayList<ReformingRecipe>();
+
+		for(Map.Entry<Fluid, Triplet<FluidStack, FluidStack, FluidStack>> ref : ReformingRecipes.recipes.entrySet()){
+
+			reformingRecipes.add(new ReformingRecipe(
+							ItemFluidIcon.getStackWithQuantity(ref.getKey(), 100),
+							Arrays.asList(
+									ItemFluidIcon.getStackWithQuantity(ref.getValue().getX()),
+									ItemFluidIcon.getStackWithQuantity(ref.getValue().getY()),
+									ItemFluidIcon.getStackWithQuantity(ref.getValue().getZ())
+							)
+					)
+			);
+		}
+		return reformingRecipes;
+	}
+
+	public static List<VacuumDistillRecipe> getVacuumDistillRecipes() {
+		if(vacuumdistillRecipes != null)
+			return vacuumdistillRecipes;
+		vacuumdistillRecipes = new ArrayList<VacuumDistillRecipe>();
+
+		for(Map.Entry<Fluid, Quartet<FluidStack, FluidStack, FluidStack, FluidStack>> vac : VacuumDistillRecipes.vacuum.entrySet()){
+
+			vacuumdistillRecipes.add(new VacuumDistillRecipe(
+							ItemFluidIcon.getStackWithQuantity(vac.getKey(), 100),
+							Arrays.asList(
+									ItemFluidIcon.getStackWithQuantity(vac.getValue().getW()),
+									ItemFluidIcon.getStackWithQuantity(vac.getValue().getX()),
+									ItemFluidIcon.getStackWithQuantity(vac.getValue().getY()),
+									ItemFluidIcon.getStackWithQuantity(vac.getValue().getZ())
+							)
+					)
+			);
+		}
+		return vacuumdistillRecipes;
+	}
+
+	public static List<CokerRecipe> getCokerRecipes() {
+		if(cokerRecipes != null)
+			return cokerRecipes;
+		cokerRecipes = new ArrayList<CokerRecipe>();
+
+		for(Map.Entry<Fluid, Triplet<Integer, ItemStack, FluidStack>> cok : CokerRecipes.recipes.entrySet()){
+			List<ItemStack> outputs = new ArrayList<ItemStack>();
+			outputs.add(ItemFluidIcon.getStackWithQuantity(cok.getValue().getZ()));
+			if(cok.getValue().getY() != null) outputs.add(cok.getValue().getY());
+			cokerRecipes.add(new CokerRecipe(ItemFluidIcon.getStackWithQuantity(cok.getKey(), cok.getValue().getX()), outputs));
+		}
+		return cokerRecipes;
 	}
 	
 	public static List<ItemStack> getBlades() {
@@ -1255,7 +1407,7 @@ public class JeiRecipes {
 		fluidEquivalences = new ArrayList<FluidRecipe>();
 		
 		for(Fluid f : FluidRegistry.getRegisteredFluids().values()){
-			if(f == ModForgeFluids.hydrogen){
+			if(f == ModForgeFluids.HYDROGEN){
 				fluidEquivalences.add(new FluidRecipe(ItemFluidIcon.getStack(f), new ItemStack(ModItems.particle_hydrogen)));
 				fluidEquivalences.add(new FluidRecipeInverse(ItemFluidIcon.getStack(f), new ItemStack(ModItems.particle_hydrogen)));
 			}
@@ -1290,12 +1442,12 @@ public class JeiRecipes {
 		if(fusionByproducts != null)
 			return fusionByproducts;
 		fusionByproducts = new ArrayList<>();
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_dt, FusionRecipes.getByproduct(ModForgeFluids.plasma_dt)));
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_hd, FusionRecipes.getByproduct(ModForgeFluids.plasma_hd)));
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_ht, FusionRecipes.getByproduct(ModForgeFluids.plasma_ht)));
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_xm, FusionRecipes.getByproduct(ModForgeFluids.plasma_xm)));
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_put, FusionRecipes.getByproduct(ModForgeFluids.plasma_put)));
-		fusionByproducts.add(new FusionRecipe(ModForgeFluids.plasma_bf, FusionRecipes.getByproduct(ModForgeFluids.plasma_bf)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_DT, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_DT)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_HD, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_HD)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_HT, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_HT)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_MX, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_MX)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_PUT, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_PUT)));
+		fusionByproducts.add(new FusionRecipe(ModForgeFluids.PLASMA_BF, FusionRecipes.getByproduct(ModForgeFluids.PLASMA_BF)));
 		return fusionByproducts;
 	}
 

@@ -2,9 +2,7 @@ package com.hbm.inventory;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 
 import net.minecraft.init.Blocks;
@@ -15,7 +13,6 @@ import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.oredict.OreDictionary;
 
-import java.io.IOException;
 import java.util.HashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
@@ -27,14 +24,14 @@ public class LiquefactionRecipes {
     public static void registerDefaults() {
 
         //oil processing
-        addRecipe(COAL.gem(),										ModForgeFluids.coaloil, 100);
-        addRecipe(COAL.dust(),									    ModForgeFluids.coaloil, 100);
-        addRecipe(LIGNITE.gem(),									ModForgeFluids.coaloil, 50);
-        addRecipe(LIGNITE.dust(),									ModForgeFluids.coaloil, 50);
-        addRecipe(KEY_OIL_TAR,									    ModForgeFluids.bitumen, 75);
-        addRecipe(KEY_CRACK_TAR,									ModForgeFluids.bitumen, 100);
-        addRecipe(KEY_COAL_TAR,									    ModForgeFluids.bitumen, 50);
-        addRecipe(KNO.dust(),										ModForgeFluids.nitric_acid, 250);
+        addRecipe(COAL.gem(),										ModForgeFluids.COALOIL, 100);
+        addRecipe(COAL.dust(),									    ModForgeFluids.COALOIL, 100);
+        addRecipe(LIGNITE.gem(),									ModForgeFluids.COALOIL, 50);
+        addRecipe(LIGNITE.dust(),									ModForgeFluids.COALOIL, 50);
+        addRecipe(KEY_OIL_TAR,									    ModForgeFluids.BITUMEN, 75);
+        addRecipe(KEY_CRACK_TAR,									ModForgeFluids.BITUMEN, 100);
+        addRecipe(KEY_COAL_TAR,									    ModForgeFluids.BITUMEN, 50);
+        addRecipe(KNO.dust(),										ModForgeFluids.NITRIC_ACID, 250);
         //general utility recipes because why not
         addRecipe(new ComparableStack(Blocks.NETHERRACK),			FluidRegistry.LAVA, 250);
         addRecipe(new ComparableStack(Blocks.COBBLESTONE),		    FluidRegistry.LAVA, 250);
@@ -45,12 +42,12 @@ public class LiquefactionRecipes {
         addRecipe(new ComparableStack(Blocks.SNOW),				    FluidRegistry.WATER, 500);
         addRecipe(new ComparableStack(Blocks.ICE),				    FluidRegistry.WATER, 1000);
         addRecipe(new ComparableStack(Blocks.PACKED_ICE),			FluidRegistry.WATER, 1000);
-        addRecipe(new ComparableStack(ModBlocks.ore_oil_sand),	    ModForgeFluids.bitumen, 100);
+        addRecipe(new ComparableStack(ModBlocks.ore_oil_sand),	    ModForgeFluids.BITUMEN, 100);
 
-        addRecipe(new ComparableStack(Items.SUGAR),				    ModForgeFluids.ethanol, 100);
-        addRecipe(new ComparableStack(ModItems.biomass),			ModForgeFluids.biogas, 125);
-        addRecipe(new ComparableStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE), ModForgeFluids.fishoil, 100);
-        addRecipe(new ComparableStack(Blocks.DOUBLE_PLANT, 1, 0),	ModForgeFluids.sunfloweroil, 100);
+        addRecipe(new ComparableStack(Items.SUGAR),				    ModForgeFluids.ETHANOL, 100);
+        addRecipe(new ComparableStack(ModItems.biomass),			ModForgeFluids.BIOGAS, 125);
+        addRecipe(new ComparableStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE), ModForgeFluids.FISHOIL, 100);
+        addRecipe(new ComparableStack(Blocks.DOUBLE_PLANT, 1, 0),	ModForgeFluids.SUNFLOWEROIL, 100);
 
 
         addRecipe("oreClathrateGlowstone", "glowstone", 1000);

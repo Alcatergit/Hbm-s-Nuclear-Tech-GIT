@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine.rbmk;
 
 import java.util.Map;
 
-import com.hbm.lib.Library;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -18,7 +17,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
@@ -35,7 +33,7 @@ public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHa
 
 	public TileEntityRBMKCooler() {
 		super();
-		this.tank = new FluidTank(ModForgeFluids.cryogel, 0, 16000);
+		this.tank = new FluidTank(ModForgeFluids.CRYOGEL, 0, 16000);
 	}
 
 	public void getDiagData(NBTTagCompound nbt) {
@@ -167,7 +165,7 @@ public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHa
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && resource.getFluid() == ModForgeFluids.cryogel){
+		if(resource != null && resource.getFluid() == ModForgeFluids.CRYOGEL){
 			return tank.fill(resource, doFill);
 		}
 		return 0;

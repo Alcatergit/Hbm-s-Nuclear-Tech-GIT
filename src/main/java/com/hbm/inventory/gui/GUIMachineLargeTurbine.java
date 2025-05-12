@@ -59,16 +59,16 @@ public class GUIMachineLargeTurbine extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		if(turbine.types[0] == ModForgeFluids.steam) {
+		if(turbine.types[0] == ModForgeFluids.STEAM) {
 			drawTexturedModalRect(guiLeft + 99, guiTop + 18, 183, 0, 14, 14);
 		}
-		if(turbine.types[0] == ModForgeFluids.hotsteam) {
+		if(turbine.types[0] == ModForgeFluids.HOTSTEAM) {
 			drawTexturedModalRect(guiLeft + 99, guiTop + 18, 183, 14, 14, 14);
 		}
-		if(turbine.types[0] == ModForgeFluids.superhotsteam) {
+		if(turbine.types[0] == ModForgeFluids.SUPERHOTSTEAM) {
 			drawTexturedModalRect(guiLeft + 99, guiTop + 18, 183, 28, 14, 14);
 		}
-		if(turbine.types[0] == ModForgeFluids.ultrahotsteam) {
+		if(turbine.types[0] == ModForgeFluids.ULTRAHOTSTEAM) {
 			drawTexturedModalRect(guiLeft + 99, guiTop + 18, 183, 42, 14, 14);
 		}
 

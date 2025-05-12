@@ -68,7 +68,7 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 			}
 		};
 		tank = new FluidTank(8000);
-		tankType = ModForgeFluids.coolant;
+		tankType = ModForgeFluids.COOLANT;
 		needsUpdate = false;
 	}
 	
@@ -135,7 +135,7 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 					warning = 1;
 				}
 				
-				if(tankType == ModForgeFluids.cryogel) {
+				if(tankType == ModForgeFluids.CRYOGEL) {
 					
 					if(tank.getFluidAmount() >= 5) {
 						if(heat > 0){
@@ -157,7 +157,7 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 					} else {
 						heat += efficiency;
 					}
-				} else if(tankType == ModForgeFluids.coolant) {
+				} else if(tankType == ModForgeFluids.COOLANT) {
 					
 					if(tank.getFluidAmount() >= 5) {
 						if(heat > 0){
@@ -255,9 +255,9 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 				warning = 3;
 			}
 			
-			tankType = ModForgeFluids.cryogel;
+			tankType = ModForgeFluids.CRYOGEL;
 			tank.drain(tank.getCapacity(), true);
-			tank.fill(new FluidStack(ModForgeFluids.cryogel, tank.getCapacity()), true);
+			tank.fill(new FluidStack(ModForgeFluids.CRYOGEL, tank.getCapacity()), true);
 
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, locked ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
@@ -304,7 +304,7 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 	}
 	
 	public boolean isValidFluid(Fluid fluid){
-		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.coolant || fluid == ModForgeFluids.cryogel))
+		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL))
 			return true;
 		return false;
 	}

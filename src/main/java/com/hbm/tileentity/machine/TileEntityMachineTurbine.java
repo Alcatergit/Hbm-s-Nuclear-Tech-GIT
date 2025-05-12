@@ -20,7 +20,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -79,9 +78,9 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 		tanks = new FluidTank[2];
 		tankTypes = new Fluid[2];
 		tanks[0] = new FluidTank(64000);
-		tankTypes[0] = ModForgeFluids.steam;
+		tankTypes[0] = ModForgeFluids.STEAM;
 		tanks[1] = new FluidTank(128000);
-		tankTypes[1] = ModForgeFluids.spentsteam;
+		tankTypes[1] = ModForgeFluids.SPENTSTEAM;
 		needsTankTypeUpdate = false;
 	}
 
@@ -188,7 +187,7 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 	private boolean isValidFluidForTank(int tank, FluidStack stack) {
 		if(stack == null || tanks[tank] == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam || stack.getFluid() == ModForgeFluids.superhotsteam || stack.getFluid() == ModForgeFluids.ultrahotsteam;
+		return stack.getFluid() == ModForgeFluids.STEAM || stack.getFluid() == ModForgeFluids.HOTSTEAM || stack.getFluid() == ModForgeFluids.SUPERHOTSTEAM || stack.getFluid() == ModForgeFluids.ULTRAHOTSTEAM;
 	}
 
 	public String getInventoryName() {

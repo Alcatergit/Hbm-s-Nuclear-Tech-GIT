@@ -46,6 +46,10 @@ public class JEIConfig implements IModPlugin {
 	public static final String REFINERY = "hbm.refinery";
 	public static final String CRACKING = "hbm.cracking";
 	public static final String FRACTIONING = "hbm.fracturing";
+	public static final String HYDROTREATER = "hbm.hydrotreater";
+	public static final String REFORMER = "hbm.reformer";
+	public static final String VACUUMDISTILL = "hbm.vacuumdistill";
+	public static final String COKER = "hbm.coker";
 	public static final String SHREDDER = "hbm.shredder";
 	public static final String FLUIDS = "hbm.fluids";
 	public static final String CRYSTALLIZER = "hbm.crystallizer";
@@ -119,6 +123,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_refinery), REFINERY);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_catalytic_cracker), CRACKING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fraction_tower), FRACTIONING);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_hydrotreater), HYDROTREATER);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_catalytic_reformer), REFORMER);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_vacuum_distill), VACUUMDISTILL);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_coker), COKER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_shredder), SHREDDER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_fluidtank), FLUIDS);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crystallizer), CRYSTALLIZER);
@@ -165,6 +173,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getRefineryRecipe(), REFINERY);
 		registry.addRecipes(JeiRecipes.getCrackingRecipe(), CRACKING);
 		registry.addRecipes(JeiRecipes.getFractioningRecipe(), FRACTIONING);
+		registry.addRecipes(JeiRecipes.getHydrotreaterRecipes(), HYDROTREATER);
+		registry.addRecipes(JeiRecipes.getReformingRecipes(), REFORMER);
+		registry.addRecipes(JeiRecipes.getVacuumDistillRecipes(), VACUUMDISTILL);
+		registry.addRecipes(JeiRecipes.getCokerRecipes(), COKER);
 		registry.addRecipes(ShredderRecipes.getShredderRecipes(), SHREDDER);
 		registry.addRecipes(JeiRecipes.getFluidEquivalences(), FLUIDS);
 		registry.addRecipes(CrystallizerRecipes.getRecipes(), CRYSTALLIZER);
@@ -206,6 +218,10 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineGasCent.class, 118, 36, 51, 13, GAS_CENT);
 		registry.addRecipeClickArea(GUIMachineReactor.class, 80, 35, 21, 14, REACTOR);
 		registry.addRecipeClickArea(GUIMachineRefinery.class, 79, 71, 71, 17, REFINERY);
+		registry.addRecipeClickArea(GUIMachineHydrotreater.class, 80, 70, 33, 53, HYDROTREATER);
+		registry.addRecipeClickArea(GUIMachineCatalyticReformer.class, 62, 70, 33, 53, REFORMER);
+		registry.addRecipeClickArea(GUIMachineVacuumDistill.class, 65, 16, 9, 108, VACUUMDISTILL);
+		registry.addRecipeClickArea(GUIMachineCoker.class, 52, 17, 43, 26, COKER);
 		registry.addRecipeClickArea(GUIMachineShredder.class, 43, 89, 53, 17, SHREDDER);
 		registry.addRecipeClickArea(GUICrystallizer.class, 79, 40, 29, 26, CRYSTALLIZER);
 		registry.addRecipeClickArea(GUIBook.class, 89, 34, 23, 16, BOOK);
@@ -306,6 +322,10 @@ public class JEIConfig implements IModPlugin {
 				new RefineryRecipeHandler(help),
 				new CrackingRecipeHandler(help),
 				new FractioningRecipeHandler(help),
+				new HydrotreaterRecipeHandler(help),
+				new ReformingRecipeHandler(help),
+				new VacuumDistillRecipeHandler(help),
+				new CokerRecipeHandler(help),
 				new CrystallizerRecipeHandler(help),
 				new CentrifugeRecipeHandler(help),
 				new GasCentrifugeRecipeHandler(help),

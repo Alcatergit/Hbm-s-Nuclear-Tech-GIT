@@ -51,11 +51,11 @@ public class RenderChungus extends TileEntitySpecialRenderer<TileEntityChungus> 
 		GL11.glPushMatrix();
 		GL11.glTranslated(0, 0, 4.5);
 		int rot = 0;
-		if(turbine.types[0] == ModForgeFluids.hotsteam){
+		if(turbine.types[0] == ModForgeFluids.HOTSTEAM){
 			rot = 1;
-		} else if(turbine.types[0] == ModForgeFluids.superhotsteam){
+		} else if(turbine.types[0] == ModForgeFluids.SUPERHOTSTEAM){
 			rot = 2;
-		} else if(turbine.types[0] == ModForgeFluids.ultrahotsteam){
+		} else if(turbine.types[0] == ModForgeFluids.ULTRAHOTSTEAM){
 			rot = 3;
 		}
 		GL11.glRotatef(15 - rot * 10, 1, 0, 0);

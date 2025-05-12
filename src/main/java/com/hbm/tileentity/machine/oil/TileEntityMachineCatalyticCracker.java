@@ -33,20 +33,20 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 		tanks = new FluidTank[5];
 		types = new Fluid[5];
 
-		tanks[0] = new FluidTank(ModForgeFluids.bitumen, 0, 4000);
-		types[0] = ModForgeFluids.bitumen;
+		tanks[0] = new FluidTank(ModForgeFluids.BITUMEN, 0, 4000);
+		types[0] = ModForgeFluids.BITUMEN;
 
-		tanks[1] = new FluidTank(ModForgeFluids.steam, 0, 8000);
-		types[1] = ModForgeFluids.steam;
+		tanks[1] = new FluidTank(ModForgeFluids.STEAM, 0, 8000);
+		types[1] = ModForgeFluids.STEAM;
 
-		tanks[2] = new FluidTank(ModForgeFluids.oil, 0, 4000);
-		types[2] = ModForgeFluids.oil;
+		tanks[2] = new FluidTank(ModForgeFluids.OIL, 0, 4000);
+		types[2] = ModForgeFluids.OIL;
 
-		tanks[3] = new FluidTank(ModForgeFluids.aromatics, 0, 4000);
-		types[3] = ModForgeFluids.aromatics;
+		tanks[3] = new FluidTank(ModForgeFluids.AROMATICS, 0, 4000);
+		types[3] = ModForgeFluids.AROMATICS;
 
-		tanks[4] = new FluidTank(ModForgeFluids.spentsteam, 0, 4000);
-		types[4] = ModForgeFluids.spentsteam;
+		tanks[4] = new FluidTank(ModForgeFluids.SPENTSTEAM, 0, 4000);
+		types[4] = ModForgeFluids.SPENTSTEAM;
 	}
 	
 	public void setTankType(int idx, Fluid type){
@@ -108,13 +108,13 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 		FluidStack[] fluids = CrackRecipes.getOutputsFromFluid(types[0]);
 		
 		if(fluids != null) {
-			setTankType(1, ModForgeFluids.steam);
+			setTankType(1, ModForgeFluids.STEAM);
 			setTankType(2, fluids[0].getFluid());
 			if(fluids.length == 2){
 				setTankType(3, fluids[1].getFluid());
-				setTankType(4, ModForgeFluids.spentsteam);
+				setTankType(4, ModForgeFluids.SPENTSTEAM);
 			} else {
-				setTankType(3, ModForgeFluids.spentsteam);
+				setTankType(3, ModForgeFluids.SPENTSTEAM);
 				setTankType(4, null);
 			}
 		} else {
@@ -138,10 +138,10 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 				if(outputFluids.length == 2){
 					tanks[2].fill(outputFluids[0].copy(), true);
 					tanks[3].fill(outputFluids[1].copy(), true);
-					tanks[4].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
+					tanks[4].fill(new FluidStack(ModForgeFluids.SPENTSTEAM, 2), true); //LPS has the density of WATER not STEAM (1%!)
 				} else {
 					tanks[2].fill(outputFluids[0].copy(), true);
-					tanks[3].fill(new FluidStack(ModForgeFluids.spentsteam, 2), true); //LPS has the density of WATER not STEAM (1%!)
+					tanks[3].fill(new FluidStack(ModForgeFluids.SPENTSTEAM, 2), true); //LPS has the density of WATER not STEAM (1%!)
 				}
 			}
 		}

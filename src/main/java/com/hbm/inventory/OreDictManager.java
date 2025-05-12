@@ -80,6 +80,7 @@ public class OreDictManager {
 	public static final String KEY_OIL_TAR = "oiltar";
 	public static final String KEY_CRACK_TAR = "cracktar";
 	public static final String KEY_COAL_TAR = "coaltar";
+	public static final String KEY_WOOD_TAR = "woodtar";
 
 	public static final String KEY_UNIVERSAL_TANK = "ntmuniversaltank";
 	public static final String KEY_HAZARD_TANK = "ntmhazardtank";
@@ -190,6 +191,8 @@ public class OreDictManager {
 	public static final DictFrame POLYMER = new DictFrame("Polymer");
 	public static final DictFrame BAKELITE = new DictFrame("Bakelite");
 	public static final DictFrame RUBBER = new DictFrame("Rubber");
+	public static final DictFrame PC = new DictFrame("Polycarbonate");
+	public static final DictFrame PVC = new DictFrame("PVC");
 	public static final DictFrame LATEX = new DictFrame("Latex");
 	public static final DictFrame MAGTUNG = new DictFrame("MagnetizedTungsten");
 	public static final DictFrame CMB = new DictFrame("CMBSteel");
@@ -222,7 +225,8 @@ public class OreDictManager {
 	public static final DictFrame MALACHITE = new DictFrame("Malachite");
 	public static final DictFrame SLAG = new DictFrame("Slag");
 	public static final DictFrame INFERNAL = new DictFrame("InfernalCoal");
-	
+	public static final DictFrame METEOR = new DictFrame("Meteor");
+
 	/*
 	 * HAZARDS, MISC
 	 */
@@ -286,6 +290,8 @@ public class OreDictManager {
 	public static final DictGroup ANY_RUBBER = new DictGroup("AnyRubber", LATEX, RUBBER);	
 	/** Any post oil polymer like teflon ("polymer") or bakelite */
 	public static final DictGroup ANY_PLASTIC = new DictGroup("AnyPlastic", POLYMER, BAKELITE);		//using the Any prefix means that it's just the secondary prefix, and that shape prefixes are applicable
+	/** Any post vacuum polymer like PET or PVC */
+	public static final DictGroup ANY_HARDPLASTIC = new DictGroup("AnyHardPlastic", PC, PVC);
 	/** Any post nuclear steel like TCA or CDA */
 	public static final DictGroup ANY_RESISTANTALLOY = new DictGroup("AnyResistantAlloy", TCALLOY, CDALLOY);
 	/** Any "powder" propellant like gunpowder, ballistite and cordite */
@@ -343,6 +349,7 @@ public class OreDictManager {
 		KNO																																				.dust(niter)											.block(block_niter)								.crystal(crystal_niter)									.ore(ore_niter);
 		F																																				.dust(fluorite)											.block(block_fluorite)							.crystal(crystal_fluorite)								.ore(ore_fluorite, basalt_fluorite);
 		INFERNAL	.hot(4).coal(20)																																										.block(block_coal_infernal)	.gem(coal_infernal)															.ore(ore_nether_coal);
+		METEOR																																			.dust(powder_meteorite).dustSmall(powder_meteorite_tiny);
 		RAREEARTH																																		.dust(powder_desh_mix)																.gem(rare_earth_chunk).crystal(crystal_rare)								.ore(ore_rare, ore_gneiss_rare);
 		NITANIUM																																		.dust(powder_nitan_mix)																																			.ore(ore_depth_nether_nitan);
 
@@ -357,6 +364,8 @@ public class OreDictManager {
 		POLYMER																												.ingot(ingot_polymer)		.dust(powder_polymer)									.block(block_polymer);
 		BAKELITE																											.ingot(ingot_bakelite)		.dust(powder_bakelite)									.block(block_bakelite);
 		RUBBER																												.ingot(ingot_rubber)																.block(block_rubber);
+		PC																	.ingot(ingot_pc);
+		PVC																	.ingot(ingot_pvc);
 		LATEX																												.ingot(ingot_biorubber)																							.gem(ball_resin);
 		MAGTUNG		.rad(HazardRegistry.magt)																				.ingot(ingot_magnetized_tungsten).dust(powder_magnetized_tungsten)					.block(block_magnetized_tungsten)												.wire(wire_magnetized_tungsten);
 		CMB																													.ingot(ingot_combine_steel)	.dust(powder_combine_steel)								.block(block_combine_steel)														.plate(plate_combine_steel);
@@ -435,7 +444,7 @@ public class OreDictManager {
 		ANY_GUNPOWDER																																	.dust(Items.GUNPOWDER, ballistite, cordite);
 		ANY_SMOKELESS																																	.dust(ballistite, cordite);
 		ANY_PLASTICEXPLOSIVE																								.ingot(ingot_semtex, ingot_c4);
-		ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt, ball_dynamite);
+		ANY_HIGHEXPLOSIVE																									.ingot(ball_tnt, ball_dynamite, ball_tatb);
 		ANY_CONCRETE			.any(concrete, concrete_smooth, concrete_asbestos, ducrete, ducrete_smooth);
 
 		ANY_COKE	.coal(1)																																													.block(block_coke)			.gem(fromAll(coke, EnumCokeType.class));
@@ -453,10 +462,10 @@ public class OreDictManager {
 		OreDictionary.registerOre(KEY_OIL_TAR, fromOne(oil_tar, EnumTarType.CRUDE));
 		OreDictionary.registerOre(KEY_CRACK_TAR, fromOne(oil_tar, EnumTarType.CRACK));
 		OreDictionary.registerOre(KEY_COAL_TAR, fromOne(oil_tar, EnumTarType.COAL));
+		OreDictionary.registerOre(KEY_WOOD_TAR, fromOne(oil_tar, EnumTarType.WOOD));
 
 		OreDictionary.registerOre(KEY_UNIVERSAL_TANK, new ItemStack(fluid_tank_full, 1, OreDictionary.WILDCARD_VALUE));
-		OreDictionary.registerOre(KEY_UNIVERSAL_TANK, new ItemStack(fluid_tank_lead_full, 1, OreDictionary.WILDCARD_VALUE));
-
+		OreDictionary.registerOre(KEY_HAZARD_TANK, new ItemStack(fluid_tank_lead_full, 1, OreDictionary.WILDCARD_VALUE));
 		OreDictionary.registerOre(KEY_UNIVERSAL_BARREL, new ItemStack(fluid_barrel_full, 1, OreDictionary.WILDCARD_VALUE));
 
 		OreDictionary.registerOre(KEY_TOOL_SCREWDRIVER, new ItemStack(screwdriver, 1, OreDictionary.WILDCARD_VALUE));
@@ -582,6 +591,7 @@ public class OreDictManager {
 	public static void registerGroups() {
 		ANY_RUBBER.addPrefix(INGOT, true);
 		ANY_PLASTIC.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(BLOCK, true);
+		ANY_HARDPLASTIC.addPrefix(INGOT, true);
 		ANY_RESISTANTALLOY.addPrefix(INGOT, true).addPrefix(DUST, true);
 		ANY_TAR.addPrefix(ANY, false);
 	}

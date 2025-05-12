@@ -157,7 +157,7 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 		FluidStack f = FluidUtil.getFluidContained(stack);
 		if(f == null)
 			return false;
-		if((tank == 0 && f.getFluid() == ModForgeFluids.kerosene) || (tank == 1 && f.getFluid() == ModForgeFluids.oxygen))
+		if((tank == 0 && f.getFluid() == ModForgeFluids.KEROSENE) || (tank == 1 && f.getFluid() == ModForgeFluids.OXYGEN))
 			return true;
 		return false;
 	}
@@ -375,9 +375,9 @@ public class TileEntitySoyuzLauncher extends TileEntityMachineBase implements IT
 	public int fill(FluidStack resource, boolean doFill) {
 		if(resource == null)
 			return 0;
-		if(resource.getFluid() == ModForgeFluids.kerosene)
+		if(resource.getFluid() == ModForgeFluids.KEROSENE)
 			return tanks[0].fill(resource, doFill);
-		if(resource.getFluid() == ModForgeFluids.oxygen)
+		if(resource.getFluid() == ModForgeFluids.OXYGEN)
 			return tanks[1].fill(resource, doFill);
 		return 0;
 	}

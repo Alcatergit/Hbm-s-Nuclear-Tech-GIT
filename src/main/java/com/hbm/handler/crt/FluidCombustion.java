@@ -6,7 +6,7 @@ import crafttweaker.annotations.ZenRegister;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
 
-import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.FluidFlameRecipes;
 
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -39,7 +39,7 @@ public class FluidCombustion {
 				CraftTweakerAPI.logError("ERROR Heat per mB can not be > 100,000!");
 				return;
 			}
-			FluidCombustionRecipes.addBurnableFluid(this.inputFluid, this.heatPerMiliBucket);
+			FluidFlameRecipes.addBurnableFluid(this.inputFluid, this.heatPerMiliBucket);
 		}
 		@Override
 		public String describe(){
@@ -67,7 +67,7 @@ public class FluidCombustion {
 				CraftTweakerAPI.logError("ERROR Input Fluid ("+this.inputFluid+") does not exist!");
 				return;
 			}
-			FluidCombustionRecipes.removeBurnableFluid(this.inputFluid);
+			FluidFlameRecipes.removeBurnableFluid(this.inputFluid);
 		}
 		@Override
 		public String describe(){

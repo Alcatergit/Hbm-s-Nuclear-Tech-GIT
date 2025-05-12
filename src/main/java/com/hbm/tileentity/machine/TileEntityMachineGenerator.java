@@ -1,7 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.machine.MachineGenerator;
@@ -26,7 +24,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -74,7 +71,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 					if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
 						return true;
 				if(i == 10)
-					if(FFUtils.containsFluid(itemStack, ModForgeFluids.coolant))
+					if(FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT))
 						return true;
 				if(i == 11)
 					if(itemStack.getItem() instanceof IBatteryItem)
@@ -95,7 +92,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 		tanks[0] = new FluidTank(32000);
 		tankTypes[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(16000);
-		tankTypes[1] = ModForgeFluids.coolant;
+		tankTypes[1] = ModForgeFluids.COOLANT;
 		needsUpdate = false;
 	}
 	
@@ -367,7 +364,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		tankTypes[0] = FluidRegistry.WATER;
-		tankTypes[1] = ModForgeFluids.coolant;
+		tankTypes[1] = ModForgeFluids.COOLANT;
 		power = compound.getLong("power");
 		detectPower = power + 1;
 		heat = compound.getInteger("heat");
@@ -444,7 +441,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 			return 0;
 		} else if (resource.getFluid() == FluidRegistry.WATER){
 			return tanks[0].fill(resource, doFill);
-		} else if (resource.getFluid() == ModForgeFluids.coolant){
+		} else if (resource.getFluid() == ModForgeFluids.COOLANT){
 			return tanks[1].fill(resource, doFill);
 		} else {
 		return 0;

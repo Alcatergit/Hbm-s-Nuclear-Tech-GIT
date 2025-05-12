@@ -3,7 +3,6 @@ package com.hbm.items.special;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
@@ -483,7 +482,7 @@ public class ItemCustomLore extends Item {
 			this == ModItems.crystal_schrabidium ||
     		this == ModItems.crystal_schraranium ||
     		this == ModItems.crystal_trixite ||
-    		ItemCell.hasFluid(stack, ModForgeFluids.sas3) || 
+    		ItemCell.hasFluid(stack, ModForgeFluids.SAS3) ||
     		this == ModItems.rod_unobtainium || 
     		this == ModItems.rod_schrabidium || 
 			this == ModItems.rod_dual_schrabidium || 

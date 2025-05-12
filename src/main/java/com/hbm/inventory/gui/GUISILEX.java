@@ -43,7 +43,7 @@ public class GUISILEX extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 		
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 42, 52, 7, silex.tank, ModForgeFluids.acid);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 42, 52, 7, silex.tank, ModForgeFluids.ACID);
 		
 		if(silex.current != null) {
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 27, guiTop + 72, 16, 52, mouseX, mouseY, new String[] { silex.currentFill + "/" + TileEntitySILEX.maxFill + "mB", silex.current.toStack().getDisplayName() });
@@ -84,7 +84,7 @@ public class GUISILEX extends GuiInfoContainer {
 
 		if(silex.tank.getFluidAmount() > 0) {
 			
-			if(silex.getTankType() == ModForgeFluids.acid || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType())) {
+			if(silex.getTankType() == ModForgeFluids.ACID || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType())) {
 				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 118, 54, 9);
 			} else {
 				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 109, 54, 9);
@@ -98,7 +98,7 @@ public class GUISILEX extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft + 26, guiTop + 124 - f, 176, 109 - f, 16, f);
 
 		int i = silex.getFluidScaled(52);
-		drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType() == ModForgeFluids.acid ? 43 : 50, i, 7);
+		drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType() == ModForgeFluids.ACID ? 43 : 50, i, 7);
 
 		if(silex.mode != EnumWavelengths.NULL) {
 			float freq = 0.0125F * (float)Math.pow(2, silex.mode.ordinal());

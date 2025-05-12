@@ -136,10 +136,10 @@ public class BlockCrate extends BlockFalling {
     	BlockCrate.addToListWithWeight(leadList, ModItems.nugget_uranium_fuel, 8);
     	BlockCrate.addToListWithWeight(leadList, ModItems.nugget_plutonium_fuel, 7);
     	BlockCrate.addToListWithWeight(leadList, ModItems.nugget_mox_fuel, 6);
-    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.deuterium), 8);
-    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.tritium), 8);
-    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.uf6), 8);
-    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.puf6), 8);
+    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.DEUTERIUM), 8);
+    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.TRITIUM), 8);
+    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.UF6), 8);
+    	BlockCrate.addToListWithWeight(leadList, ItemCell.getFullCell(ModForgeFluids.PUF6), 8);
     	BlockCrate.addToListWithWeight(leadList, ModItems.pellet_rtg, 6);
     	BlockCrate.addToListWithWeight(leadList, ModItems.pellet_rtg_weak, 7);
     	BlockCrate.addToListWithWeight(leadList, ModItems.tritium_deuterium_cake, 5);

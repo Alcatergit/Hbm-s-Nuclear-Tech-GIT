@@ -5,7 +5,7 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
-import com.hbm.inventory.EngineRecipes.FuelGrade;
+import com.hbm.inventory.FluidCombustionRecipes.FuelGrade;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 
 import net.minecraft.block.BlockContainer;

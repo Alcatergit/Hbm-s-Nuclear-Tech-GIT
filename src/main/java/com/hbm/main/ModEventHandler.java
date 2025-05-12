@@ -18,6 +18,7 @@ import java.util.HashSet;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import net.minecraft.entity.item.EntityArmorStand;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
 
@@ -651,7 +652,7 @@ public class ModEventHandler {
 			
 			ItemStack armor = ent.getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
 			
-			if(armor != null && ArmorModHandler.hasMods(armor)) {
+			if(ArmorModHandler.hasMods(armor)) {
 				
 				for(ItemStack mod : ArmorModHandler.pryMods(armor)) {
 					
@@ -667,7 +668,7 @@ public class ModEventHandler {
 	public void onEntityAttacked(LivingAttackEvent event) {
 		EntityLivingBase e = event.getEntityLiving();
 
-		if(e instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
+		if(e instanceof EntityPlayer && ArmorUtil.checkArmor(e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {
 			if(event.getSource() != ModDamageSource.digamma){
 				e.world.playSound(null, e.posX, e.posY, e.posZ, SoundEvents.ENTITY_ITEM_BREAK, SoundCategory.PLAYERS, 5F, 1.0F + e.getRNG().nextFloat() * 0.5F);
 				event.setCanceled(true);
@@ -915,12 +916,13 @@ public class ModEventHandler {
 	public void onLivingUpdate(LivingUpdateEvent event){
 		if(event.isCancelable() && event.isCanceled())
 			return;
+		if(event.getEntityLiving() instanceof EntityArmorStand) return;
 		ArmorFSB.handleTick(event.getEntityLiving());
 		if(r_handInventory == null){
 			r_handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
 			r_armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
 		}
-		NonNullList<ItemStack> handInventory = null;
+		NonNullList<ItemStack> handInventory;
 		NonNullList<ItemStack> armorArray = null;
 		try {
 			handInventory = (NonNullList<ItemStack>) r_handInventory.get(event.getEntityLiving());
@@ -932,7 +934,7 @@ public class ModEventHandler {
 			if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getHeldItemOffhand().getItem() instanceof IEquipReceiver && !ItemStack.areItemsEqual(handInventory.get(0), event.getEntityLiving().getHeldItemOffhand())) {
 				((IEquipReceiver)event.getEntityLiving().getHeldItemOffhand().getItem()).onEquip((EntityPlayer) event.getEntityLiving(), EnumHand.OFF_HAND);
 			}
-		} catch(Exception e) { }
+		} catch(Exception ignored) { }
 		
 		for(int i = 2; i < 6; i++) {
 			
@@ -943,7 +945,7 @@ public class ModEventHandler {
 			
 			if(reapply) {
 				
-				if(prev != null && ArmorModHandler.hasMods(prev)) {
+				if(ArmorModHandler.hasMods(prev)) {
 					
 					for(ItemStack mod : ArmorModHandler.pryMods(prev)) {
 						
@@ -958,7 +960,7 @@ public class ModEventHandler {
 				}
 			}
 			
-			if(armor != null && ArmorModHandler.hasMods(armor)) {
+			if(ArmorModHandler.hasMods(armor)) {
 				
 				for(ItemStack mod : ArmorModHandler.pryMods(armor)) {
 					

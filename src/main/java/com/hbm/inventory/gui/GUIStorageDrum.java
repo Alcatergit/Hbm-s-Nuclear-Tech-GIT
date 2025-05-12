@@ -30,8 +30,8 @@ public class GUIStorageDrum extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 16, guiTop + 23, 9, 108, drum.tanks[0], ModForgeFluids.wastefluid);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 151, guiTop + 23, 9, 108, drum.tanks[1], ModForgeFluids.wastegas);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 16, guiTop + 23, 9, 108, drum.tanks[0], ModForgeFluids.WASTEFLUID);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 151, guiTop + 23, 9, 108, drum.tanks[1], ModForgeFluids.WASTEGAS);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	

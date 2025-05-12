@@ -37,7 +37,7 @@ public class GUIMachineUUCreator extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 142, guiTop + 22, 16, 60, uu_creator.tank, ModForgeFluids.uu_matter);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 142, guiTop + 22, 16, 60, uu_creator.tank, ModForgeFluids.UU_MATTER);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 19, guiTop + 22, 16, 60, uu_creator.power, TileEntityMachineUUCreator.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

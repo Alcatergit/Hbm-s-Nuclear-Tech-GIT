@@ -6,11 +6,8 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.World;
 import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -20,7 +17,7 @@ public class TileEntityDeuteriumTower extends TileEntityDeuteriumExtractor {
 	public TileEntityDeuteriumTower() {
 		super();
 		tanks[0] = new FluidTank(FluidRegistry.WATER, 0, 50000);
-		tanks[1] = new FluidTank(ModForgeFluids.heavywater, 0, 5000);
+		tanks[1] = new FluidTank(ModForgeFluids.HEAVYWATER, 0, 5000);
 	}
 
 	@Override

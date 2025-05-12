@@ -37,8 +37,8 @@ public class GUISoyuzLauncher extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 36, 16, 52, launcher.tanks[0], ModForgeFluids.kerosene);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 36, 16, 52, launcher.tanks[1], ModForgeFluids.oxygen);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 36, 16, 52, launcher.tanks[0], ModForgeFluids.KEROSENE);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 36, 16, 52, launcher.tanks[1], ModForgeFluids.OXYGEN);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 49, guiTop + 72, 6, 34, launcher.power, TileEntitySoyuzLauncher.maxPower);
 
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 43, guiTop + 17, 18, 18, mouseX, mouseY, new String[]{"The Soyuz goes here"} );

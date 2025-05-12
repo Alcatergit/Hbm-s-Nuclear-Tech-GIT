@@ -377,19 +377,19 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 		
 		switch((FuelType)fuselage.attributes[0]) {
 			case KEROSENE:
-				tankTypes[0] = ModForgeFluids.kerosene;
-				tankTypes[1] = ModForgeFluids.acid;
+				tankTypes[0] = ModForgeFluids.KEROSENE;
+				tankTypes[1] = ModForgeFluids.ACID;
 				break;
 			case HYDROGEN:
-				tankTypes[0] = ModForgeFluids.hydrogen;
-				tankTypes[1] = ModForgeFluids.oxygen;
+				tankTypes[0] = ModForgeFluids.HYDROGEN;
+				tankTypes[1] = ModForgeFluids.OXYGEN;
 				break;
 			case XENON:
-				tankTypes[0] = ModForgeFluids.xenon;
+				tankTypes[0] = ModForgeFluids.XENON;
 				break;
 			case BALEFIRE:
-				tankTypes[0] = ModForgeFluids.balefire;
-				tankTypes[1] = ModForgeFluids.acid;
+				tankTypes[0] = ModForgeFluids.BALEFIRE;
+				tankTypes[1] = ModForgeFluids.ACID;
 				break;
 			default: break;
 		}

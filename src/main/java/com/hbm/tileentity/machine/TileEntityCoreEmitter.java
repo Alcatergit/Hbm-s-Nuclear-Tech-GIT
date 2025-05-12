@@ -221,7 +221,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(resource != null && resource.getFluid() == ModForgeFluids.cryogel)
+		if(resource != null && resource.getFluid() == ModForgeFluids.CRYOGEL)
 			return tank.fill(resource, doFill);
 		return 0;
 	}

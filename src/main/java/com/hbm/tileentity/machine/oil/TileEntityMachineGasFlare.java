@@ -7,7 +7,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.FluidFlameRecipes;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.inventory.gui.GUIMachineGasFlare;
@@ -54,16 +54,16 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	public FluidTank tank;
 	public boolean isOn = false;
 	public boolean doesBurn = false;
-	public int cacheEnergy = 0;
+	public long cacheEnergy = 0;
 	public boolean needsUpdate;
 
 	private final UpgradeManager upgradeManager = new UpgradeManager();
 
 	public TileEntityMachineGasFlare() {
 		super(6);
-		tankType = ModForgeFluids.gas;
+		tankType = ModForgeFluids.GAS;
 		tank = new FluidTank(64000);
-		cacheEnergy = FluidCombustionRecipes.getFlameEnergy(ModForgeFluids.gas);
+		cacheEnergy = FluidFlameRecipes.getHeatEnergy(ModForgeFluids.GAS);
 		needsUpdate = false;
 	}
 
@@ -142,14 +142,14 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 				maxVent += maxVent * burn;
 				maxBurn += maxBurn * burn;
 
-				cacheEnergy = FluidCombustionRecipes.getFlameEnergy(tankType);
+				cacheEnergy = FluidFlameRecipes.getHeatEnergy(tankType);
 
 				if (doesBurn && cacheEnergy != 0) {
 					int eject = Math.min(maxBurn, tank.getFluidAmount());
 					tank.drain(eject, true);
 					needsUpdate = true;
 
-					int powerGen = cacheEnergy * eject;
+					long powerGen = cacheEnergy * eject;
 					powerGen += powerGen * yield / 3;
 
 					this.power += powerGen;
@@ -205,7 +205,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 		Item itemId = slotId.getItem();
 		if (itemId == ModItems.forge_fluid_identifier) {
 			Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
-			int energy = FluidCombustionRecipes.getFlameEnergy(fluid);
+			long energy = FluidFlameRecipes.getHeatEnergy(fluid);
 
 			if (tankType != fluid) {
 				tankType = fluid;

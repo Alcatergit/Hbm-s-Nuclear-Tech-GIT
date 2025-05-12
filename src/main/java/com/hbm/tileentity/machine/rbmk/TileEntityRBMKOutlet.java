@@ -26,7 +26,7 @@ public class TileEntityRBMKOutlet extends TileEntity implements IFluidHandler, I
 	
 	public TileEntityRBMKOutlet() {
 		steam = new FluidTank(32000);
-		steamType = ModForgeFluids.superhotsteam;
+		steamType = ModForgeFluids.SUPERHOTSTEAM;
 	}
 	
 	@Override

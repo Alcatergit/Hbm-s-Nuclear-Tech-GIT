@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import com.hbm.blocks.bomb.BlockCrashedBomb;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.special.ItemCustomLore;
 import com.hbm.util.ContaminationUtil;
@@ -34,14 +33,14 @@ public class ItemAmatExtractor extends ItemCustomLore {
 				} else if(chance <= 0.3) {
 					ItemCell.consumeEmptyCell(player);
 	
-					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.balefire))) {
-						player.dropItem(ItemCell.getFullCell(ModForgeFluids.balefire), false);
+					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.BALEFIRE))) {
+						player.dropItem(ItemCell.getFullCell(ModForgeFluids.BALEFIRE), false);
 					}
 				} else {
 					ItemCell.consumeEmptyCell(player);
 	
-					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.amat))) {
-						player.dropItem(ItemCell.getFullCell(ModForgeFluids.amat), false);
+					if(!player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.AMAT))) {
+						player.dropItem(ItemCell.getFullCell(ModForgeFluids.AMAT), false);
 					}
 				}
 				

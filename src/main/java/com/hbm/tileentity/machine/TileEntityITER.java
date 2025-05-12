@@ -72,7 +72,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		tanks[0] = new FluidTank(12800000);
 		types[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(1280000);
-		types[1] = ModForgeFluids.ultrahotsteam;
+		types[1] = ModForgeFluids.ULTRAHOTSTEAM;
 		plasma = new FluidTank(16000);
 	}
 
@@ -412,7 +412,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
-		if(resource != null && resource.getFluid() == ModForgeFluids.ultrahotsteam) {
+		if(resource != null && resource.getFluid() == ModForgeFluids.ULTRAHOTSTEAM) {
 			return tanks[1].drain(resource, doDrain);
 		}
 		return null;

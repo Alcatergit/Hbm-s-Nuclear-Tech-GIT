@@ -112,9 +112,9 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		tanks[0] = new FluidTank(512000);
 		tankTypes[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(64000);
-		tankTypes[1] = ModForgeFluids.coolant;
+		tankTypes[1] = ModForgeFluids.COOLANT;
 		tanks[2] = new FluidTank(256000);
-		tankTypes[2] = ModForgeFluids.steam;
+		tankTypes[2] = ModForgeFluids.STEAM;
 		type = ReactorFuelType.URANIUM;
 		compression = 0;
 	}
@@ -149,13 +149,13 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		if(compound.hasKey("compression"))
 			compression = compound.getInteger("compression");
 		tankTypes[0] = FluidRegistry.WATER;
-		tankTypes[1] = ModForgeFluids.coolant;
+		tankTypes[1] = ModForgeFluids.COOLANT;
 		if(compression == 0){
-			tankTypes[2] = ModForgeFluids.steam;
+			tankTypes[2] = ModForgeFluids.STEAM;
 		} else if(compression == 1){
-			tankTypes[2] = ModForgeFluids.hotsteam;
+			tankTypes[2] = ModForgeFluids.HOTSTEAM;
 		} else if(compression == 2){
-			tankTypes[2] = ModForgeFluids.superhotsteam;
+			tankTypes[2] = ModForgeFluids.SUPERHOTSTEAM;
 		}
 		type = ReactorFuelType.getEnum(compound.getInteger("type"));
 		if(compound.hasKey("inventory"))
@@ -217,13 +217,13 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		if(level >= 0 && level < 3){
 			if(compression == 0){
 				if(level == 1){
-					tankTypes[2] = ModForgeFluids.hotsteam;
+					tankTypes[2] = ModForgeFluids.HOTSTEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()/10D);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
 				}
 				if(level == 2){
-					tankTypes[2] = ModForgeFluids.superhotsteam;
+					tankTypes[2] = ModForgeFluids.SUPERHOTSTEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()/100D);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
@@ -231,13 +231,13 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			}
 			if(compression == 1){
 				if(level == 0){
-					tankTypes[2] = ModForgeFluids.steam;
+					tankTypes[2] = ModForgeFluids.STEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()*10);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
 				}
 				if(level == 2){
-					tankTypes[2] = ModForgeFluids.superhotsteam;
+					tankTypes[2] = ModForgeFluids.SUPERHOTSTEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()/10D);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
@@ -245,13 +245,13 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 			}
 			if(compression == 2){
 				if(level == 0){
-					tankTypes[2] = ModForgeFluids.steam;
+					tankTypes[2] = ModForgeFluids.STEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()*100);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
 				}
 				if(level == 1){
-					tankTypes[2] = ModForgeFluids.hotsteam;
+					tankTypes[2] = ModForgeFluids.HOTSTEAM;
 					int newAmount = (int) (tanks[2].getFluidAmount()*10D);
 					tanks[2].drain(tanks[2].getCapacity(), true);
 					tanks[2].fill(new FluidStack(tankTypes[2], newAmount), true);
@@ -724,11 +724,11 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		int waterConsumption = (int)((((double)hullHeat / (double)maxHullHeat) * (statSteMaFiFiLe / 50D)) * size);
 		
 		int steamMul = 1;
-		if(tankTypes[2] == ModForgeFluids.steam){
+		if(tankTypes[2] == ModForgeFluids.STEAM){
 			steamMul = 100;
-		} else if(tankTypes[2] == ModForgeFluids.hotsteam){
+		} else if(tankTypes[2] == ModForgeFluids.HOTSTEAM){
 			steamMul = 10;
-		} else if(tankTypes[2] == ModForgeFluids.superhotsteam){
+		} else if(tankTypes[2] == ModForgeFluids.SUPERHOTSTEAM){
 			steamMul = 1;
 		}
 

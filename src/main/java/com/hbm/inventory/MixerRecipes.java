@@ -7,7 +7,6 @@ import com.hbm.items.ModItems;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.ChemplantRecipes;
 
 import net.minecraft.init.Items;
 import net.minecraft.init.Blocks;
@@ -46,16 +45,16 @@ public class MixerRecipes {
 	}
 
 	public static void registerRecipes() {
-		addRecipe(new FluidStack(ModForgeFluids.ethanol, 100), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 500)}, new ComparableStack(Items.SUGAR), 200);
-		addRecipe(new FluidStack(ModForgeFluids.colloid, 500), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 500)}, new ComparableStack(ModItems.dust), 20);
-		addRecipe(new FluidStack(ModForgeFluids.fishoil, 100), null, new ComparableStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE), 50);
-		addRecipe(new FluidStack(ModForgeFluids.sunfloweroil, 100), null, new ComparableStack(Blocks.DOUBLE_PLANT, 1, 0), 50);
-		addRecipe(new FluidStack(ModForgeFluids.nitroglycerin, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.petroleum, 1000), new FluidStack(ModForgeFluids.nitric_acid, 1000)}, null, 20);
-		addRecipe(new FluidStack(ModForgeFluids.biofuel, 250), new FluidStack[]{ new FluidStack(ModForgeFluids.fishoil, 500), new FluidStack(ModForgeFluids.sunfloweroil, 500)}, null, 20);
-		addRecipe(new FluidStack(ModForgeFluids.lubricant, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.ethanol, 200), new FluidStack(ModForgeFluids.sunfloweroil, 800)}, null, 20);
-		addRecipe(new FluidStack(ModForgeFluids.phosgene, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.unsaturateds, 500), new FluidStack(ModForgeFluids.chlorine, 500)}, null, 20);
-		addRecipe(new FluidStack(ModForgeFluids.iongel, 1000), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000), new FluidStack(ModForgeFluids.hydrogen, 200) }, new ComparableStack(ModItems.pellet_charged), 50);
-		addRecipe(new FluidStack(ModForgeFluids.syngas, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.coaloil, 500), new FluidStack(ModForgeFluids.steam, 500) }, null, 50);
+		addRecipe(new FluidStack(ModForgeFluids.ETHANOL, 100), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 500)}, new ComparableStack(Items.SUGAR), 200);
+		addRecipe(new FluidStack(ModForgeFluids.COLLOID, 500), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 500)}, new ComparableStack(ModItems.dust), 20);
+		addRecipe(new FluidStack(ModForgeFluids.FISHOIL, 100), null, new ComparableStack(Items.FISH, 1, OreDictionary.WILDCARD_VALUE), 50);
+		addRecipe(new FluidStack(ModForgeFluids.SUNFLOWEROIL, 100), null, new ComparableStack(Blocks.DOUBLE_PLANT, 1, 0), 50);
+		addRecipe(new FluidStack(ModForgeFluids.NITROGLYCERIN, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.PETROLEUM, 1000), new FluidStack(ModForgeFluids.NITRIC_ACID, 1000)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.BIOFUEL, 250), new FluidStack[]{ new FluidStack(ModForgeFluids.FISHOIL, 500), new FluidStack(ModForgeFluids.SUNFLOWEROIL, 500)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.LUBRICANT, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.ETHANOL, 200), new FluidStack(ModForgeFluids.SUNFLOWEROIL, 800)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.PHOSGENE, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.UNSATURATEDS, 500), new FluidStack(ModForgeFluids.CHLORINE, 500)}, null, 20);
+		addRecipe(new FluidStack(ModForgeFluids.IONGEL, 1000), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000), new FluidStack(ModForgeFluids.HYDROGEN, 200) }, new ComparableStack(ModItems.pellet_charged), 50);
+		addRecipe(new FluidStack(ModForgeFluids.SYNGAS, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.COALOIL, 500), new FluidStack(ModForgeFluids.STEAM, 500) }, null, 50);
 	}
 
 	public static void addRecipe(FluidStack output, FluidStack[] inputs, AStack inputItem, int duration){

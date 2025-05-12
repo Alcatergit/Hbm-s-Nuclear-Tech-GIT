@@ -1,7 +1,7 @@
 package com.hbm.inventory.gui;
 
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.FluidFlameRecipes;
 import com.hbm.inventory.container.ContainerOilburner;
 import com.hbm.packet.NBTControlPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -38,7 +38,7 @@ public class GUIOilburner extends GuiInfoContainer {
 
         this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 116, guiTop + 17, 16, 52, mouseX, mouseY, new String[]{String.format("%,d", Math.min(heater.heatEnergy, TileEntityHeaterOilburner.maxHeatEnergy)) + " / " + String.format("%,d", TileEntityHeaterOilburner.maxHeatEnergy) + " TU"});
 
-        int energy = FluidCombustionRecipes.getFlameEnergy(heater.fluidType);
+        long energy = FluidFlameRecipes.getHeatEnergy(heater.fluidType);
 
         if (energy != 0) {
             this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 34, 18, 18, mouseX, mouseY, new String[]{heater.setting + " mB/t", String.format("%,d", energy * heater.setting) + " TU/t"});
@@ -83,7 +83,7 @@ public class GUIOilburner extends GuiInfoContainer {
         if (heater.isOn) {
             drawTexturedModalRect(guiLeft + 70, guiTop + 54, 210, 0, 35, 14);
 
-            if (heater.tank.getFluidAmount() > 0 && FluidCombustionRecipes.hasFuelRecipe(heater.fluidType)) {
+            if (heater.tank.getFluidAmount() > 0 && FluidFlameRecipes.hasFuelRecipe(heater.fluidType)) {
                 drawTexturedModalRect(guiLeft + 79, guiTop + 34, 176, 0, 18, 18);
             }
         }

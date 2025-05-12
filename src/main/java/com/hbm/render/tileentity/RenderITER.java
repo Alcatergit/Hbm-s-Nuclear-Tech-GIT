@@ -93,17 +93,17 @@ public class RenderITER extends TileEntitySpecialRenderer<TileEntityITER> {
 	}
 	
 	private int getColor(Fluid type){
-		if(type == ModForgeFluids.plasma_dt){
+		if(type == ModForgeFluids.PLASMA_DT){
 			return 0xFF3FC2;
-		} else if(type == ModForgeFluids.plasma_hd){
+		} else if(type == ModForgeFluids.PLASMA_HD){
 			return 0xEB3FFF;
-		} else if(type == ModForgeFluids.plasma_ht){
+		} else if(type == ModForgeFluids.PLASMA_HT){
 			return 0x9F3FFF;
-		} else if(type == ModForgeFluids.plasma_put){
+		} else if(type == ModForgeFluids.PLASMA_PUT){
 			return 0x3F99FF;
-		} else if(type == ModForgeFluids.plasma_xm){
+		} else if(type == ModForgeFluids.PLASMA_MX){
 			return 0x3FFFFF;
-		} else if(type == ModForgeFluids.plasma_bf){
+		} else if(type == ModForgeFluids.PLASMA_BF){
 			return 0xB8FF3F;
 		}
 		return 0;

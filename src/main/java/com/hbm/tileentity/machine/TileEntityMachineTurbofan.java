@@ -8,7 +8,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-import com.hbm.inventory.EngineRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.ModDamageSource;
@@ -149,8 +149,8 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 			long burnValue = 0;
 			int amount = 1 + this.afterburner;
 			
-			if(tank.getFluid() != null && EngineRecipes.isAero(tank.getFluid().getFluid())) {
-				burnValue = EngineRecipes.getEnergy(tank.getFluid().getFluid()) / 1_000;
+			if(tank.getFluid() != null && FluidCombustionRecipes.isAero(tank.getFluid().getFluid())) {
+				burnValue = FluidCombustionRecipes.getCombustionEnergy(tank.getFluid().getFluid()) / 1_000;
 			}
 			
 			int amountToBurn = Math.min(amount, tank.getFluidAmount());
@@ -373,7 +373,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return EngineRecipes.isAero(stack.getFluid());
+		return FluidCombustionRecipes.isAero(stack.getFluid());
 	}
 
 	protected void sendTurboPower() {

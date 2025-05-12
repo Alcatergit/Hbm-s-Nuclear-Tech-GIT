@@ -204,8 +204,8 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
     }
 
     private void updateInputUUtank(){
-    	if(tanks[0].getFluid() == null || tanks[0].getFluid().getFluid() != ModForgeFluids.uu_matter)
-    		tanks[0].setFluid(new FluidStack(ModForgeFluids.uu_matter, 0));
+    	if(tanks[0].getFluid() == null || tanks[0].getFluid().getFluid() != ModForgeFluids.UU_MATTER)
+    		tanks[0].setFluid(new FluidStack(ModForgeFluids.UU_MATTER, 0));
     	if(tanks[1].getFluid() != null) tanks[1].setFluid(null);
     	if(outputFluid == null && tanks[2].getFluid() != null) outputFluid = tanks[2].getFluid().getFluid();
     }
@@ -258,7 +258,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 		//Mixing uu matter?
 		if(uuMixer){
 			this.processTime = 200;
-			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.uu_matter, MachineConfig.uuMixerFluidRatio))){
+			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.UU_MATTER, MachineConfig.uuMixerFluidRatio))){
 				return true;
 			}
 			return false;

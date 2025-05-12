@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -325,7 +324,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			this.power = Library.chargeTEFromItems(inventory, 13, power, maxPower);
 			FFUtils.fillFromFluidContainer(inventory, coolant, 11, 12);
-			if(coolant.getFluid() != null && coolant.getFluid().getFluid() != ModForgeFluids.coolant){
+			if(coolant.getFluid() != null && coolant.getFluid().getFluid() != ModForgeFluids.COOLANT){
 				coolant.setFluid(null);
 			}
 			FFUtils.fillFluidContainer(inventory, amat, 9, 10);
@@ -518,7 +517,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 				continue;
 
 			if(inventory.getStackInSlot(i+6).isEmpty()) {
-				amat.fill(new FluidStack(ModForgeFluids.amat, (Integer)res[1]), true);
+				amat.fill(new FluidStack(ModForgeFluids.AMAT, (Integer)res[1]), true);
 				inventory.getStackInSlot(i).shrink(1);
 				inventory.getStackInSlot(i+3).shrink(1);
 				inventory.setStackInSlot(i+6, out);
@@ -527,7 +526,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			if(inventory.getStackInSlot(i+6).getItem() == out.getItem() && inventory.getStackInSlot(i+6).getItemDamage() == out.getItemDamage() && inventory.getStackInSlot(i+6).getCount() < out.getMaxStackSize()) {
 
-				amat.fill(new FluidStack(ModForgeFluids.amat, (Integer)res[1]), true);
+				amat.fill(new FluidStack(ModForgeFluids.AMAT, (Integer)res[1]), true);
 				inventory.getStackInSlot(i).shrink(1);
 				inventory.getStackInSlot(i+3).shrink(1);
 				inventory.getStackInSlot(i+6).grow(1);
@@ -702,7 +701,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(resource != null && resource.getFluid() == ModForgeFluids.coolant){
+		if(resource != null && resource.getFluid() == ModForgeFluids.COOLANT){
 			return coolant.fill(resource, doFill);
 		}
 		return 0;

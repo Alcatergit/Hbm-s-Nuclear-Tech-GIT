@@ -23,7 +23,6 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -35,7 +34,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
     public TileEntityMachineFrackingTower() {
         super(9);
         tanks[2] = new FluidTank(64000);
-        tankTypes[2] = ModForgeFluids.fracksol;
+        tankTypes[2] = ModForgeFluids.FRACKSOL;
     }
 
     public String getInventoryName() { return this.hasCustomInventoryName() ? this.getCustomName() : "container.frackingTower"; }
@@ -267,7 +266,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
     @Override
     public int fill(FluidStack resource, boolean doFill) {
         if(resource != null){
-            if(resource.getFluid() == ModForgeFluids.fracksol){
+            if(resource.getFluid() == ModForgeFluids.FRACKSOL){
                 return tanks[2].fill(resource, doFill);
             }
 
@@ -295,7 +294,7 @@ public class TileEntityMachineFrackingTower extends TileEntityOilDrillBase {
 
     @Override
     public void readFromNBT(NBTTagCompound compound) {
-        tankTypes[2] = ModForgeFluids.fracksol;
+        tankTypes[2] = ModForgeFluids.FRACKSOL;
 
         super.readFromNBT(compound);
     }

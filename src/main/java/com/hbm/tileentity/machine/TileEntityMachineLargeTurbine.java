@@ -53,8 +53,8 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		tanks = new FluidTank[2];
 		tanks[0] = new FluidTank(512000);
 		tanks[1] = new FluidTank(10240000);
-		types[0] = ModForgeFluids.steam;
-		types[1] = ModForgeFluids.spentsteam;
+		types[0] = ModForgeFluids.STEAM;
+		types[1] = ModForgeFluids.SPENTSTEAM;
 	}
 
 	@Untested
@@ -153,7 +153,7 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 	private boolean isValidFluidForTank(int tank, FluidStack stack) {
 		if(stack == null || tanks[tank] == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.steam || stack.getFluid() == ModForgeFluids.hotsteam || stack.getFluid() == ModForgeFluids.superhotsteam || stack.getFluid() == ModForgeFluids.ultrahotsteam;
+		return stack.getFluid() == ModForgeFluids.STEAM || stack.getFluid() == ModForgeFluids.HOTSTEAM || stack.getFluid() == ModForgeFluids.SUPERHOTSTEAM || stack.getFluid() == ModForgeFluids.ULTRAHOTSTEAM;
 	}
 	
 	@Override

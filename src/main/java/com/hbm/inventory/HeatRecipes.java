@@ -8,7 +8,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockBaseVisualFluidConnectable;
 import com.hbm.forgefluid.ModForgeFluids;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -27,22 +26,23 @@ public class HeatRecipes {
 
 	//for 100 mb
 	public static void registerHeatRecipes() {
-		addBoilRecipe(new FluidStack(FluidRegistry.WATER, 1), new FluidStack(ModForgeFluids.steam, 100), 100);
-		addCoolRecipe(new FluidStack(ModForgeFluids.steam, 100), new FluidStack(ModForgeFluids.spentsteam, 1), 100);
+		addBoilRecipe(new FluidStack(FluidRegistry.WATER, 1), new FluidStack(ModForgeFluids.STEAM, 100), 100);
+		addCoolRecipe(new FluidStack(ModForgeFluids.STEAM, 100), new FluidStack(ModForgeFluids.SPENTSTEAM, 1), 100);
 		
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.steam, 10), new FluidStack(ModForgeFluids.hotsteam, 1), 15);
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.hotsteam, 10), new FluidStack(ModForgeFluids.superhotsteam, 1), 30);
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.superhotsteam, 10), new FluidStack(ModForgeFluids.ultrahotsteam, 1), 120);
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.oil, 1), new FluidStack(ModForgeFluids.hotoil, 1), 300);
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.crackoil, 1), new FluidStack(ModForgeFluids.hotcrackoil, 1), 300);
-		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.coolant, 1), new FluidStack(ModForgeFluids.hotcoolant, 1), 500);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.STEAM, 10), new FluidStack(ModForgeFluids.HOTSTEAM, 1), 15);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.HOTSTEAM, 10), new FluidStack(ModForgeFluids.SUPERHOTSTEAM, 1), 30);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.SUPERHOTSTEAM, 10), new FluidStack(ModForgeFluids.ULTRAHOTSTEAM, 1), 120);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.OIL, 1), new FluidStack(ModForgeFluids.HOTOIL, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.CRACKOIL, 1), new FluidStack(ModForgeFluids.HOTCRACKOIL, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.OIL_DS, 1), new FluidStack(ModForgeFluids.HOTOIL_DS, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.CRACKOIL_DS, 1), new FluidStack(ModForgeFluids.HOTCRACKOIL_DS, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.COOLANT, 1), new FluidStack(ModForgeFluids.HOTCOOLANT, 1), 500);
 
 		//Compat
 		addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
 		addBoilRecipe("oil_medium", 1, "hotoil", 1, 300);
 		addBoilRecipe("oilgc", 1, "hotoil", 1, 300); //galacticraft
 		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft & industrialforegoing
-		addBoilRecipe("petroil", 1, "fuel", 1, 100); //galacticraft
 		addBoilRecipe("refined_fuel", 1, "petroil", 1, 100); //thermalfoundation
 		addBoilRecipe("sulphuricacid", 1, "sulfuric_acid", 1, 100); //galacticraft
 		addBoilRecipe("sulfuricacid", 1, "sulfuric_acid", 1, 100); //mekanism 
@@ -51,7 +51,7 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe("liquiddeuterium", 1, "deuterium", 1, 1); //mekanism
 		addBoilAndCoolRecipe("liquidhydrogen", 1, "hydrogen", 1, 1); //mekanism
 		addBoilRecipe("refined_biofuel", 1, "biofuel", 1, 10); //thermalfoundation
-		addBoilAndCoolRecipe("ic2coolant", 1, "ic2hot_coolant", 1, 450); //mekanism", 1, 1); //IC2
+		addBoilAndCoolRecipe("ic2coolant", 1, "ic2hot_coolant", 1, 450); //IC2
 	}
 
 	public static void setFluidsForRBMKLoader(){

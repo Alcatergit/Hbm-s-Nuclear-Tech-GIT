@@ -189,7 +189,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			return false;
 		if(inventory.getStackInSlot(0) == null || inventory.getStackInSlot(0).isEmpty())
 			return false;
-		long recipePower = NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
+		long recipePower = NuclearTransmutationRecipes.getCombustionEnergy(inventory.getStackInSlot(0));
 
 		if(recipePower < 0)
 			return false;
@@ -214,7 +214,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 
 		if(process >= processSpeed) {
 			
-			power -= NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
+			power -= NuclearTransmutationRecipes.getCombustionEnergy(inventory.getStackInSlot(0));
 			if(power < 0)
 				power = 0;
 			process = 0;

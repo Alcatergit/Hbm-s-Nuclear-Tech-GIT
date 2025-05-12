@@ -116,11 +116,11 @@ public class JetpackHandler {
 	public static float getSpeed(Fluid f){
 		if(f == null)
 			return 0;
-		if(f == ModForgeFluids.kerosene){
+		if(f == ModForgeFluids.KEROSENE){
 			return 0.3F;
-		} else if(f == ModForgeFluids.nitan){
+		} else if(f == ModForgeFluids.NITAN){
 			return 0.5F;
-		} else if(f == ModForgeFluids.balefire){
+		} else if(f == ModForgeFluids.BALEFIRE){
 			return 1.5F;
 		}
 		return 0;
@@ -130,11 +130,11 @@ public class JetpackHandler {
 		if(f == null)
 			return 0;
 		//Drain is already scaled by thrust, which is greater with the higher tier fuels
-		if(f == ModForgeFluids.kerosene){
+		if(f == ModForgeFluids.KEROSENE){
 			return 1;
-		} else if(f == ModForgeFluids.nitan){
+		} else if(f == ModForgeFluids.NITAN){
 			return 1;
-		} else if(f == ModForgeFluids.balefire){
+		} else if(f == ModForgeFluids.BALEFIRE){
 			return 1;
 		}
 		return 0;
@@ -163,18 +163,18 @@ public class JetpackHandler {
 			new float[]{0, 1F, 0.4F, 0, 1});
 	
 	public static ColorGradient getGradientFromFuel(Fluid fuel){
-		if(fuel == ModForgeFluids.balefire){
+		if(fuel == ModForgeFluids.BALEFIRE){
 			return bfGradient;
-		} else if(fuel == ModForgeFluids.nitan){
+		} else if(fuel == ModForgeFluids.NITAN){
 			return nitanGradient;
 		}
 		return keroseneGradient;
 	}
 	
 	public static float[] getBrightnessColorFromFuel(Fluid fuel){
-		if(fuel == ModForgeFluids.balefire){
+		if(fuel == ModForgeFluids.BALEFIRE){
 			return bfColor;
-		} else if(fuel == ModForgeFluids.nitan){
+		} else if(fuel == ModForgeFluids.NITAN){
 			return nitanColor;
 		}
 		return keroseneColor;

@@ -54,8 +54,8 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	public TileEntityMachineChemfac() {
 		super(77);
 
-		water = new TypedFluidTank(ModForgeFluids.coolant, new FluidTank(6400));
-		steam = new TypedFluidTank(ModForgeFluids.hotcoolant, new FluidTank(6400));
+		water = new TypedFluidTank(ModForgeFluids.COOLANT, new FluidTank(6400));
+		steam = new TypedFluidTank(ModForgeFluids.HOTCOOLANT, new FluidTank(6400));
 
 		inventory = new ItemStackHandler(77) {
 			@Override
@@ -188,7 +188,7 @@ public class TileEntityMachineChemfac extends TileEntityMachineChemplantBase imp
 	protected void process(int index) {
 		super.process(index);
 		this.water.tank.drain(getWaterRequired(), true);
-		this.steam.tank.fill(new FluidStack(ModForgeFluids.hotcoolant, getWaterRequired()), true);
+		this.steam.tank.fill(new FluidStack(ModForgeFluids.HOTCOOLANT, getWaterRequired()), true);
 	}
 
 

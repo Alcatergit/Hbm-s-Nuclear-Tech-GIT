@@ -137,8 +137,8 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 	public static final HashMap<Fluid, ComparableStack> fluidConversion = new HashMap<>();
 	
 	static {
-		fluidConversion.put(ModForgeFluids.uf6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.uf6)));
-		fluidConversion.put(ModForgeFluids.puf6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.puf6)));
+		fluidConversion.put(ModForgeFluids.UF6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.UF6)));
+		fluidConversion.put(ModForgeFluids.PUF6, new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.PUF6)));
 	}
 	
 	int loadDelay;
@@ -166,7 +166,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		if(loadDelay > 20)
 			loadDelay = 0;
 		
-		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType() == ModForgeFluids.acid && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
+		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType() == ModForgeFluids.ACID && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
 			SILEXRecipe recipe = SILEXRecipes.getOutput(inventory.getStackInSlot(0));
 			
 			if(recipe == null)
@@ -310,7 +310,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && (resource.getFluid() == ModForgeFluids.acid || fluidConversion.containsKey(resource.getFluid()))){
+		if(resource != null && (resource.getFluid() == ModForgeFluids.ACID || fluidConversion.containsKey(resource.getFluid()))){
 			return tank.fill(resource, doFill);
 		}
 		return 0;

@@ -66,7 +66,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 			}
 		};
 		tank = new FluidTank(16000);
-		tankType = ModForgeFluids.coolant;
+		tankType = ModForgeFluids.COOLANT;
 	}
 	
 	public String getInventoryName() {
@@ -136,7 +136,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 					warning = 1;
 				}
 				
-				if(tankType == ModForgeFluids.cryogel) {
+				if(tankType == ModForgeFluids.CRYOGEL) {
 					
 					if(tank.getFluidAmount() >= 15) {
 						if(heat > 0){
@@ -158,7 +158,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 					} else {
 						heat += efficiency;
 					}
-				} else if(tankType == ModForgeFluids.coolant) {
+				} else if(tankType == ModForgeFluids.COOLANT) {
 					
 					if(tank.getFluidAmount() >= 15) {
 						if(heat > 0){
@@ -244,8 +244,8 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 			}
 
 			tank.drain(tank.getCapacity(), true);
-			tankType = ModForgeFluids.cryogel;
-			tank.fill(new FluidStack(ModForgeFluids.cryogel, tank.getCapacity()), true);
+			tankType = ModForgeFluids.CRYOGEL;
+			tank.fill(new FluidStack(ModForgeFluids.CRYOGEL, tank.getCapacity()), true);
 			needsUpdate = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, locked ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
@@ -291,7 +291,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 	}
 	
 	public boolean isValidFluid(Fluid fluid){
-		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.coolant || fluid == ModForgeFluids.cryogel))
+		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL))
 			return true;
 		return false;
 	}

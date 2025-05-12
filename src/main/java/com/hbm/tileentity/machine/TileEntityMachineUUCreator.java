@@ -60,7 +60,7 @@ public class TileEntityMachineUUCreator extends TileEntityMachineBase implements
 					int producedUUmB = (int)Math.min(power / rfPerMbOfUU, this.tank.getCapacity()-this.tank.getFluidAmount());
 					
 					if(producedUUmB > 0){
-						producedUUmB = tank.fill(new FluidStack(ModForgeFluids.uu_matter, producedUUmB), true);
+						producedUUmB = tank.fill(new FluidStack(ModForgeFluids.UU_MATTER, producedUUmB), true);
 						power -= producedUUmB * rfPerMbOfUU;
 						this.markDirty();
 						loggedProducedMB = producedUUmB;

@@ -9,96 +9,82 @@ import net.minecraftforge.fluids.FluidRegistry;
 
 public class FluidCombustionRecipes {
 	
-	public static HashMap<Fluid, Integer> resultingTU = new HashMap<Fluid, Integer>();
+	public static HashMap<Fluid, Long> combustionEnergies = new HashMap<Fluid, Long>();
+	public static HashMap<Fluid, FuelGrade> fuelGrades = new HashMap<Fluid, FuelGrade>();
+
 	//for 1000 mb
 	public static void registerFluidCombustionRecipes() {
-		addBurnableFluid(ModForgeFluids.hydrogen, 5);
-		addBurnableFluid(ModForgeFluids.deuterium, 5);
-		addBurnableFluid(ModForgeFluids.tritium, 5);
 
-		addBurnableFluid(ModForgeFluids.oil, 10);
-		addBurnableFluid(ModForgeFluids.hotoil, 10);
-		addBurnableFluid(ModForgeFluids.crackoil, 10);
-		addBurnableFluid(ModForgeFluids.hotcrackoil, 10);
+		//Compat
+		addFuel("biofuel", FuelGrade.HIGH, 400_000); //galacticraft & industrialforegoing
+		addFuel("petroil", FuelGrade.MEDIUM, 300_000); //galacticraft
+		addFuel("refined_fuel", FuelGrade.HIGH, 1_000_000); //thermalfoundation
+		addFuel("refined_biofuel", FuelGrade.HIGH, 400_000); //thermalfoundation
+	
+	}
 
-		addBurnableFluid(ModForgeFluids.gas, 10);
-		addBurnableFluid(ModForgeFluids.fishoil, 15);
-		addBurnableFluid(ModForgeFluids.lubricant, 20);
-		addBurnableFluid(ModForgeFluids.aromatics, 25);
-		addBurnableFluid(ModForgeFluids.petroleum, 25);
-		addBurnableFluid(ModForgeFluids.biogas, 25);
-		addBurnableFluid(ModForgeFluids.bitumen, 35);
-		addBurnableFluid(ModForgeFluids.heavyoil, 50);
-		addBurnableFluid(ModForgeFluids.smear, 50);
-		addBurnableFluid(ModForgeFluids.ethanol, 75);
-		addBurnableFluid(ModForgeFluids.reclaimed, 100);
-		addBurnableFluid(ModForgeFluids.petroil, 125);
-		addBurnableFluid(ModForgeFluids.naphtha, 125);
-		addBurnableFluid(ModForgeFluids.heatingoil, 150);
-		addBurnableFluid(ModForgeFluids.biofuel, 150);
-		addBurnableFluid(ModForgeFluids.diesel, 200);
-		addBurnableFluid(ModForgeFluids.lightoil, 200);
-		addBurnableFluid(ModForgeFluids.kerosene, 300);
-		addBurnableFluid(ModForgeFluids.gasoline, 800);
-		addBurnableFluid(ModForgeFluids.syngas, 650);
-
-		addBurnableFluid(ModForgeFluids.woodoil, 4);
-		addBurnableFluid(ModForgeFluids.coalcreosote, 5);
-		addBurnableFluid(ModForgeFluids.coaloil, 10);
-		addBurnableFluid(ModForgeFluids.coalgas, 75);
-		addBurnableFluid(ModForgeFluids.coalgas_leaded, 75);
-		addBurnableFluid(ModForgeFluids.petroil_leaded, 125);
-		addBurnableFluid(ModForgeFluids.gasoline_leaded, 400);
+	public static enum FuelGrade {
+		LOW("trait.fuelgrade.low"),			//heating and industrial oil				< star engine, iGen
+		MEDIUM("trait.fuelgrade.medium"),	//petroil									< diesel generator
+		HIGH("trait.fuelgrade.high"),		//diesel, gasoline							< HP engine
+		AERO("trait.fuelgrade.aero"),	//kerosene and other light aviation fuels	< turbofan
+		GAS("trait.fuelgrade.gas");		//fuel gasses like NG, PG and syngas		< gas turbine
 		
-		addBurnableFluid(ModForgeFluids.balefire, 1_000);
-		addBurnableFluid(ModForgeFluids.unsaturateds, 1_000);
-		addBurnableFluid(ModForgeFluids.nitan, 2_000);
-		addBurnableFluid(ModForgeFluids.balefire, 10_000);
-		addBurnableFluid(ModForgeFluids.uu_matter, 50_000);
-
-		addBurnableFluid("liquidhydrogen", 5);
-		addBurnableFluid("liquiddeuterium", 5);
-		addBurnableFluid("liquidtritium", 5);
-		addBurnableFluid("crude_oil", 10);
-		addBurnableFluid("oilgc", 10);
-		addBurnableFluid("fuel", 120);
-		addBurnableFluid("refined_biofuel", 150);
-		addBurnableFluid("pyrotheum", 1_500);
-		addBurnableFluid("ethanol", 30);
-		addBurnableFluid("plantoil", 50);
-		addBurnableFluid("acetaldehyde", 80);
-		addBurnableFluid("biodiesel", 175);
+		private String grade;
 		
-	}
-
-	public static int getFlameEnergy(Fluid f){
-		Integer heat = resultingTU.get(f);
-		if(heat != null)
-			return heat;
-		return 0;
-	}
-
-	public static boolean hasFuelRecipe(Fluid fluid){
-		return resultingTU.containsKey(fluid);
-	}
-
-	public static void addBurnableFluid(Fluid fluid, int heatPerMiliBucket) {
-		resultingTU.put(fluid, heatPerMiliBucket);
-	}
-
-	public static void addBurnableFluid(String fluid, int heatPerMiliBucket){
-		if(FluidRegistry.isFluidRegistered(fluid)){
-			addBurnableFluid(FluidRegistry.getFluid(fluid), heatPerMiliBucket);
+		private FuelGrade(String grade) {
+			this.grade = grade;
+		}
+		
+		public String getGrade() {
+			return this.grade;
 		}
 	}
 
-	public static void removeBurnableFluid(Fluid fluid){
-		resultingTU.remove(fluid);
+	public static long getCombustionEnergy(Fluid f){
+		if(f != null && combustionEnergies.get(f) != null)
+			return combustionEnergies.get(f);
+		return 0;
 	}
 
-	public static void removeBurnableFluid(String fluid){
-		if(FluidRegistry.isFluidRegistered(fluid)){
-			resultingTU.remove(FluidRegistry.getFluid(fluid));
+	public static FuelGrade getFuelGrade(Fluid f){
+		if(f != null)
+			return fuelGrades.get(f);
+		return null;
+	}
+
+	public static boolean isAero(Fluid f){
+		return getFuelGrade(f) == FuelGrade.AERO;
+	}
+
+	public static void addFuel(Fluid f, FuelGrade g, long power){
+		if(f != null && power > 0){
+			combustionEnergies.put(f, power);
+			fuelGrades.put(f, g);
+		}
+	}
+
+	public static boolean hasFuelRecipe(Fluid f){
+		if(f == null) return false;
+		return combustionEnergies.containsKey(f);
+	}
+
+	public static void addFuel(String f, FuelGrade g, long power){
+		if(FluidRegistry.isFluidRegistered(f)){
+			addFuel(FluidRegistry.getFluid(f), g, power);
+		}
+	}
+
+	public static void removeFuel(Fluid f){
+		if(f != null){
+			combustionEnergies.remove(f);
+			fuelGrades.remove(f);
+		}
+	}
+
+	public static void removeFuel(String f){
+		if(FluidRegistry.isFluidRegistered(f)){
+			removeFuel(FluidRegistry.getFluid(f));
 		}
 	}
 }

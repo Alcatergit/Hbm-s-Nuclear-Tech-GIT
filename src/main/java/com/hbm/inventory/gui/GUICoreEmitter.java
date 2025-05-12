@@ -64,7 +64,7 @@ public class GUICoreEmitter extends GuiInfoContainer {
 		String[] output = new String[] { "Output: " + Library.getShortNumber(emitter.prev) + "SPK" };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 79, guiTop + 14, 8, 39, mouseX, mouseY, output);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 13, guiTop + 20, 16, 52, emitter.tank, ModForgeFluids.cryogel);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 13, guiTop + 20, 16, 52, emitter.tank, ModForgeFluids.CRYOGEL);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 49, guiTop + 20, 16, 52, emitter.power, TileEntityCoreEmitter.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

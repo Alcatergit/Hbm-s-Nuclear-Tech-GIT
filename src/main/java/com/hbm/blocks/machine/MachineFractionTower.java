@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
-import com.hbm.inventory.RefineryRecipes;
+import com.hbm.inventory.FractionRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
@@ -88,7 +88,7 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 						}
 					} else {
 						Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
-						if(RefineryRecipes.getFractions(type) == null){
+						if(FractionRecipes.getFractions(type) == null){
 							if(world.isRemote){
 								player.sendMessage(new TextComponentTranslation("chat.fractioning.norecipe", type.getLocalizedName(new FluidStack(type, 1))));
 							}

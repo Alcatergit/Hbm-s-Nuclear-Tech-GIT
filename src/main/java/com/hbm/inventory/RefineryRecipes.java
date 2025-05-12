@@ -1,15 +1,12 @@
 package com.hbm.inventory;
 
 import java.util.LinkedHashMap;
-import java.util.HashMap;
-import java.util.Map;
 import com.hbm.util.Tuple.Pair;
 
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.items.ModItems;
 import com.hbm.items.ItemEnums.EnumTarType;
-import com.hbm.util.Tuple.Quartet;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
@@ -17,39 +14,42 @@ import net.minecraftforge.fluids.FluidStack;
 
 public class RefineryRecipes {
 
-	public static final int heavy_frac_bitu = 30;
-	public static final int heavy_frac_smear = 70;
-	public static final int smear_frac_heat = 60;
-	public static final int smear_frac_lube = 40;
-	public static final int napht_frac_heat = 40;
-	public static final int napht_frac_diesel = 60;
-	public static final int light_frac_diesel = 40;
-	public static final int light_frac_kero = 60;
-	
-	public static Map<Fluid, Quartet<Fluid, Fluid, Integer, Integer>> fractions = new HashMap<>();
-
 	public static LinkedHashMap<Fluid, Pair<FluidStack[], ItemStack>> refineryRecipesMap = new LinkedHashMap<>();
 	
 	public static void registerRefineryRecipes() {
-		refineryRecipesMap.put(ModForgeFluids.hotoil, new Pair(new FluidStack[]{ 
-			new FluidStack(ModForgeFluids.heavyoil, 50), 
-			new FluidStack(ModForgeFluids.naphtha, 25),
-			new FluidStack(ModForgeFluids.lightoil, 15),
-			new FluidStack(ModForgeFluids.petroleum, 10) }, 
+		refineryRecipesMap.put(ModForgeFluids.HOTOIL, new Pair(new FluidStack[]{
+			new FluidStack(ModForgeFluids.HEAVYOIL, 50),
+			new FluidStack(ModForgeFluids.NAPHTHA, 25),
+			new FluidStack(ModForgeFluids.LIGHTOIL, 15),
+			new FluidStack(ModForgeFluids.PETROLEUM, 10) },
 			new ItemStack(ModItems.sulfur, 1)));
 		
-		refineryRecipesMap.put(ModForgeFluids.hotcrackoil, new Pair(new FluidStack[]{ 
-			new FluidStack(ModForgeFluids.naphtha, 40), 
-			new FluidStack(ModForgeFluids.lightoil, 30),
-			new FluidStack(ModForgeFluids.aromatics, 15),
-			new FluidStack(ModForgeFluids.unsaturateds, 15)	},
-				DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)));
+		refineryRecipesMap.put(ModForgeFluids.HOTCRACKOIL, new Pair(new FluidStack[]{
+			new FluidStack(ModForgeFluids.NAPHTHA, 40),
+			new FluidStack(ModForgeFluids.LIGHTOIL, 30),
+			new FluidStack(ModForgeFluids.AROMATICS, 15),
+			new FluidStack(ModForgeFluids.UNSATURATEDS, 15)	},
+			DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)));
 
-		refineryRecipesMap.put(ModForgeFluids.toxic_fluid, new Pair(new FluidStack[]{ 
-			new FluidStack(ModForgeFluids.wastefluid, 50),
-			new FluidStack(ModForgeFluids.wastegas, 40),
-			new FluidStack(ModForgeFluids.corium_fluid, 4), 
-			new FluidStack(ModForgeFluids.watz, 1)}, 
+		refineryRecipesMap.put(ModForgeFluids.HOTOIL_DS, new Pair(new FluidStack[]{
+			new FluidStack(ModForgeFluids.HEAVYOIL,		30),
+			new FluidStack(ModForgeFluids.NAPHTHA_DS,	35),
+			new FluidStack(ModForgeFluids.LIGHTOIL_DS,	20),
+			new FluidStack(ModForgeFluids.UNSATURATEDS,	15) },
+			DictFrame.fromOne(ModItems.oil_tar, EnumTarType.PARAFFIN)));
+		
+		refineryRecipesMap.put(ModForgeFluids.HOTCRACKOIL_DS, new Pair(new FluidStack[]{
+			new FluidStack(ModForgeFluids.NAPHTHA_DS,		35),
+			new FluidStack(ModForgeFluids.LIGHTOIL_DS,		35),
+			new FluidStack(ModForgeFluids.AROMATICS,		15),
+			new FluidStack(ModForgeFluids.UNSATURATEDS,		15)},
+			DictFrame.fromOne(ModItems.oil_tar, EnumTarType.PARAFFIN)));
+
+		refineryRecipesMap.put(ModForgeFluids.TOXIC_FLUID, new Pair(new FluidStack[]{
+			new FluidStack(ModForgeFluids.WASTEFLUID, 50),
+			new FluidStack(ModForgeFluids.WASTEGAS, 40),
+			new FluidStack(ModForgeFluids.CORIUM_FLUID, 4),
+			new FluidStack(ModForgeFluids.WATZ, 1)},
 			new ItemStack(ModItems.nuclear_waste_tiny, 1)));
 	}
 
@@ -57,19 +57,5 @@ public class RefineryRecipes {
 		if(f != null)
 			return refineryRecipesMap.get(f);
 		return null;
-	}
-	
-	public static void registerFractions() {
-		fractions.put(ModForgeFluids.heavyoil, new Quartet<>(ModForgeFluids.bitumen, ModForgeFluids.smear, heavy_frac_bitu, heavy_frac_smear));
-		fractions.put(ModForgeFluids.smear, new Quartet<>(ModForgeFluids.heatingoil, ModForgeFluids.lubricant, smear_frac_heat, smear_frac_lube));
-		fractions.put(ModForgeFluids.naphtha, new Quartet<>(ModForgeFluids.heatingoil, ModForgeFluids.diesel, napht_frac_heat, napht_frac_diesel));
-		fractions.put(ModForgeFluids.lightoil, new Quartet<>(ModForgeFluids.diesel, ModForgeFluids.kerosene, light_frac_diesel, light_frac_kero));
-		fractions.put(ModForgeFluids.coalcreosote, new Quartet<>(ModForgeFluids.coaloil, ModForgeFluids.bitumen, 10, 90));
-		fractions.put(ModForgeFluids.coaloil, new Quartet<>(ModForgeFluids.coalgas, ModForgeFluids.oil, 30, 70));
-
-	}
-	
-	public static Quartet<Fluid, Fluid, Integer, Integer> getFractions(Fluid oil) {
-		return fractions.get(oil);
 	}
 }

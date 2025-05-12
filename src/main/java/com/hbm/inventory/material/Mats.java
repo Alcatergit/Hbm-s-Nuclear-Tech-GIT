@@ -127,7 +127,8 @@ public class Mats {
 	public static final NTMMaterial MAT_DNT			= makeSmeltable(_AS + 15,DNT,		0x7582B9, 0x16000E, 0x455289).setShapes(INGOT, DUST, DENSEWIRE, BLOCK);
 	public static final NTMMaterial MAT_FLUX		= makeAdditive(_AS + 10,	df("Flux"),0xF1E0BB, 0x6F6256, 0xDECCAD).setShapes(DUST);
 	public static final NTMMaterial MAT_SLAG		= makeSmeltable(_AS + 11,SLAG,		0x554940, 0x34281F, 0x6C6562).setShapes(BLOCK);
-	
+	public static final NTMMaterial MAT_METEOR		= makeAdditive(_AS + 14,	METEOR,		0x474747, 0x474747, 0xFFAAAA).setShapes(DUST);
+
 	@Deprecated public static NTMMaterial makeSmeltable(int id, DictFrame dict, int color) { return makeSmeltable(id, dict, color, color, color); }
 	@Deprecated public static NTMMaterial makeAdditive(int id, DictFrame dict, int color) { return makeAdditive(id, dict, color, color, color); }
 

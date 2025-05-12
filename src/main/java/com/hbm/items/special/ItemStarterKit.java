@@ -7,7 +7,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
-import com.hbm.items.machine.ItemFluidTank;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.handler.ArmorUtil;
@@ -411,7 +410,7 @@ public class ItemStarterKit extends Item {
 			player.inventory.addItemStackToInventory(new ItemStack(Item.getItemFromBlock(ModBlocks.nuke_prototype), 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.igniter, 1));
 			for(int i = 0; i < 4; i ++)
-				player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.sas3));
+				player.inventory.addItemStackToInventory(ItemCell.getFullCell(ModForgeFluids.SAS3));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.rod_quad_uranium, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.rod_quad_uranium, 1));
 			player.inventory.addItemStackToInventory(new ItemStack(ModItems.rod_quad_lead, 1));

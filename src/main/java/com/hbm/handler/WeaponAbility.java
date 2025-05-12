@@ -256,7 +256,7 @@ public abstract class WeaponAbility {
 				if(living instanceof EntitySkeleton) {
 					living.entityDropItem(new ItemStack(Items.SKULL, 1, 0), 0.0F);
 				} else if(living instanceof EntityWitherSkeleton){
-					living.entityDropItem(ItemCell.getFullCell(ModForgeFluids.amat), 0.0F);
+					living.entityDropItem(ItemCell.getFullCell(ModForgeFluids.AMAT), 0.0F);
 				} else if(living instanceof EntityZombie) {
 					living.entityDropItem(new ItemStack(Items.SKULL, 1, 2), 0.0F);
 				} else if(living instanceof EntityCreeper) {

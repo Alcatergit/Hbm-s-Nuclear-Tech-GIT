@@ -4,7 +4,6 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.control_panel.*;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -26,7 +25,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.items.CapabilityItemHandler;
 
 import java.util.*;
 
@@ -81,7 +79,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 			FFUtils.fillFromFluidContainer(inventory, tank, 2, 3);
 			FFUtils.fillFluidContainer(inventory, tank, 4, 5);
 			
-			if(tank.getFluid() != null && (tank.getFluid().getFluid() == ModForgeFluids.amat || tank.getFluid().getFluid() == ModForgeFluids.aschrab)) {
+			if(tank.getFluid() != null && (tank.getFluid().getFluid() == ModForgeFluids.AMAT || tank.getFluid().getFluid() == ModForgeFluids.ASCHRAB)) {
 				world.destroyBlock(pos, false);
 				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
 			}

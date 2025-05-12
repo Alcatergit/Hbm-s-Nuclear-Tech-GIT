@@ -49,7 +49,7 @@ public class GUIMiningLaser extends GuiInfoContainer {
 				" -Scream (4xSpeed, 4xCylces, 20xConsumption)",
 				" -Nullifier"};
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 87, guiTop + 31, 8, 8, guiLeft + 141, guiTop + 39 + 16, text);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 123 - 52, 7, 52, laser.tank, ModForgeFluids.oil);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 123 - 52, 7, 52, laser.tank, ModForgeFluids.OIL);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 

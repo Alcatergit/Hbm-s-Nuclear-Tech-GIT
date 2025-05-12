@@ -41,13 +41,8 @@ public class ItemScraps extends ItemAutogen {
 		MaterialStack contents = getMats(stack);
 		
 		if(contents != null) {
-			
-			if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("liquid")) {
-				list.add(Mats.formatAmount(contents.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
-				if(contents.material.smeltable == contents.material.smeltable.ADDITIVE) list.add("§4Additive, not castable!");
-			} else {
-				list.add(I18nUtil.resolveKey(contents.material.getTranslationKey()) + ", " + Mats.formatAmount(contents.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
-			}
+			if(contents.material.smeltable == contents.material.smeltable.ADDITIVE)
+				list.add("§4Additive, not castable!");
 		}
 	}
 	

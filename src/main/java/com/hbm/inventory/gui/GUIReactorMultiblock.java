@@ -101,11 +101,11 @@ public class GUIReactorMultiblock extends GuiInfoContainer {
 
 		String s = "0";
 		
-		if(diFurnace.tankTypes[2] == ModForgeFluids.steam){
+		if(diFurnace.tankTypes[2] == ModForgeFluids.STEAM){
 			s = "1x";
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.HOTSTEAM){
 			s = "10x";
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.SUPERHOTSTEAM){
 			s = "100x";
 		}
 		
@@ -142,14 +142,14 @@ public class GUIReactorMultiblock extends GuiInfoContainer {
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			int c = 0;
 			
-			if(diFurnace.tankTypes[2] == ModForgeFluids.steam){
-				diFurnace.tankTypes[2] = ModForgeFluids.hotsteam;
+			if(diFurnace.tankTypes[2] == ModForgeFluids.STEAM){
+				diFurnace.tankTypes[2] = ModForgeFluids.HOTSTEAM;
 				c = 1;
-			} else if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
-				diFurnace.tankTypes[2] = ModForgeFluids.superhotsteam;
+			} else if(diFurnace.tankTypes[2] == ModForgeFluids.HOTSTEAM){
+				diFurnace.tankTypes[2] = ModForgeFluids.SUPERHOTSTEAM;
 				c = 2;
-			} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
-				diFurnace.tankTypes[2] = ModForgeFluids.steam;
+			} else if(diFurnace.tankTypes[2] == ModForgeFluids.SUPERHOTSTEAM){
+				diFurnace.tankTypes[2] = ModForgeFluids.STEAM;
 				c = 0;
 			}
 			
@@ -208,11 +208,11 @@ public class GUIReactorMultiblock extends GuiInfoContainer {
 		else
 			drawTexturedModalRect(guiLeft + 67, guiTop + 18, 230, 50 + (s - 8) * 18, 22, 18);
 		
-		if(diFurnace.tankTypes[2] == ModForgeFluids.steam){
+		if(diFurnace.tankTypes[2] == ModForgeFluids.STEAM){
 			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 176, 18, 14, 18);
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.hotsteam){
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.HOTSTEAM){
 			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 190, 18, 14, 18);
-		} else if(diFurnace.tankTypes[2] == ModForgeFluids.superhotsteam){
+		} else if(diFurnace.tankTypes[2] == ModForgeFluids.SUPERHOTSTEAM){
 			drawTexturedModalRect(guiLeft + 5, guiTop + 107, 204, 18, 14, 18);
 		}
 		

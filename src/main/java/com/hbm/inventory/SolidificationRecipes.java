@@ -4,10 +4,8 @@ package com.hbm.inventory;
 import java.util.HashMap;
 
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ItemEnums;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.util.Tuple.Pair;
 
 import net.minecraftforge.fluids.Fluid;
@@ -17,10 +15,6 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidRegistry;
-import org.lwjgl.Sys;
-
-import java.io.IOException;
-import java.util.Map;
 
 public class SolidificationRecipes {
 
@@ -59,52 +53,52 @@ public class SolidificationRecipes {
 
         registerRecipe(FluidRegistry.WATER,		    1000,			Blocks.ICE);
         registerRecipe(FluidRegistry.LAVA,		    1000,			Blocks.OBSIDIAN);
-        registerRecipe(ModForgeFluids.mercury,		125,			ModItems.nugget_mercury);
-        registerRecipe(ModForgeFluids.biogas,		250,			ModItems.biomass_compressed);
+        registerRecipe(ModForgeFluids.MERCURY,		125,			ModItems.nugget_mercury);
+        registerRecipe(ModForgeFluids.BIOGAS,		250,			ModItems.biomass_compressed);
 //        registerRecipe(SALIENT,		1280,			new ItemStack(ModItems.bio_wafer, 8)); //4 (food val) * 2 (sat mod) * 2 (constant) * 10 (quanta) * 8 (batch size)
-        registerRecipe(ModForgeFluids.enderjuice,	250,			Items.ENDER_PEARL);
+        registerRecipe(ModForgeFluids.ENDERJUICE,	250,			Items.ENDER_PEARL);
 //        registerRecipe(REDMUD,		1000,			Items.IRON_INGOT);
 //        registerRecipe(SLOP,		250,			ModBlocks.ore_oil_sand);
 
-        registerRecipe(ModForgeFluids.oil,				SF_OIL,			OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
-        registerRecipe(ModForgeFluids.crackoil,		    SF_CRACK,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRACK));
-        registerRecipe(ModForgeFluids.coaloil,			SF_COALOIL,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.COAL));
-        registerRecipe(ModForgeFluids.heavyoil,		    SF_HEAVY,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
-//        registerRecipe(HEAVYOIL_VACUUM,	SF_HEAVY,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
-        registerRecipe(ModForgeFluids.bitumen,			SF_BITUMEN,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
-        registerRecipe(ModForgeFluids.coalcreosote,	    SF_CREOSOTE,	OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.COAL));
-        registerRecipe(ModForgeFluids.woodoil,			SF_WOOD,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.WOOD));
-        registerRecipe(ModForgeFluids.lubricant,		SF_LUBE,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.PARAFFIN));
+        registerRecipe(ModForgeFluids.OIL,				SF_OIL,			OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
+        registerRecipe(ModForgeFluids.CRACKOIL,		    SF_CRACK,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRACK));
+        registerRecipe(ModForgeFluids.COALOIL,			SF_COALOIL,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.COAL));
+        registerRecipe(ModForgeFluids.HEAVYOIL,		    SF_HEAVY,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
+        registerRecipe(ModForgeFluids.HEAVYOIL_VACUUM,	SF_HEAVY,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
+        registerRecipe(ModForgeFluids.BITUMEN,			SF_BITUMEN,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.CRUDE));
+        registerRecipe(ModForgeFluids.COALCREOSOTE,	    SF_CREOSOTE,	OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.COAL));
+        registerRecipe(ModForgeFluids.WOODOIL,			SF_WOOD,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.WOOD));
+        registerRecipe(ModForgeFluids.LUBRICANT,		SF_LUBE,		OreDictManager.DictFrame.fromOne(ModItems.oil_tar, ItemEnums.EnumTarType.PARAFFIN));
 
-        registerSFAuto(ModForgeFluids.smear);
-        registerSFAuto(ModForgeFluids.heatingoil);
-//        registerSFAuto(HEATINGOIL_VACUUM);
-        registerSFAuto(ModForgeFluids.reclaimed);
-        registerSFAuto(ModForgeFluids.petroil);
-        registerSFAuto(ModForgeFluids.naphtha);
-//        registerSFAuto(NAPHTHA_CRACK);
-        registerSFAuto(ModForgeFluids.diesel);
-//        registerSFAuto(DIESEL_REFORM);
-//        registerSFAuto(DIESEL_CRACK);
-//        registerSFAuto(DIESEL_CRACK_REFORM);
-        registerSFAuto(ModForgeFluids.lightoil);
-//        registerSFAuto(LIGHTOIL_CRACK);
-//        registerSFAuto(LIGHTOIL_VACUUM);
-        registerSFAuto(ModForgeFluids.kerosene);
-//        registerSFAuto(KEROSENE_REFORM);
-        registerSFAuto(ModForgeFluids.gas);
-//        registerSFAuto(SOURGAS);
-//        registerSFAuto(REFORMGAS);
-        registerSFAuto(ModForgeFluids.syngas);
-        registerSFAuto(ModForgeFluids.petroleum);
+        registerSFAuto(ModForgeFluids.SMEAR);
+        registerSFAuto(ModForgeFluids.HEATINGOIL);
+        registerSFAuto(ModForgeFluids.HEATINGOIL_VACUUM);
+        registerSFAuto(ModForgeFluids.RECLAIMED);
+        registerSFAuto(ModForgeFluids.PETROIL);
+        registerSFAuto(ModForgeFluids.NAPHTHA);
+        registerSFAuto(ModForgeFluids.NAPHTHA_CRACK);
+        registerSFAuto(ModForgeFluids.DIESEL);
+        registerSFAuto(ModForgeFluids.DIESEL_REFORM);
+        registerSFAuto(ModForgeFluids.DIESEL_CRACK);
+        registerSFAuto(ModForgeFluids.DIESEL_CRACK_REFORM);
+        registerSFAuto(ModForgeFluids.LIGHTOIL);
+        registerSFAuto(ModForgeFluids.LIGHTOIL_CRACK);
+        registerSFAuto(ModForgeFluids.LIGHTOIL_VACUUM);
+        registerSFAuto(ModForgeFluids.KEROSENE);
+        registerSFAuto(ModForgeFluids.KEROSENE_REFORM);
+        registerSFAuto(ModForgeFluids.GAS);
+        registerSFAuto(ModForgeFluids.SOURGAS);
+        registerSFAuto(ModForgeFluids.REFORMGAS);
+        registerSFAuto(ModForgeFluids.SYNGAS);
+        registerSFAuto(ModForgeFluids.PETROLEUM);
 //        registerSFAuto(LPG);
-        registerSFAuto(ModForgeFluids.biogas);
-        registerSFAuto(ModForgeFluids.biogas);
-        registerSFAuto(ModForgeFluids.aromatics);
-        registerSFAuto(ModForgeFluids.unsaturateds);
-//        registerSFAuto(REFORMATE);
-//        registerSFAuto(XYLENE);
-        registerSF(ModForgeFluids.balefire, 24_000L, ModItems.solid_fuel_bf); //holy shit this is energy dense*/
+        registerSFAuto(ModForgeFluids.BIOGAS);
+        registerSFAuto(ModForgeFluids.BIOGAS);
+        registerSFAuto(ModForgeFluids.AROMATICS);
+        registerSFAuto(ModForgeFluids.UNSATURATEDS);
+        registerSFAuto(ModForgeFluids.REFORMATE);
+        registerSFAuto(ModForgeFluids.XYLENE);
+        registerSF(ModForgeFluids.BALEFIRE, 24_000L, ModItems.solid_fuel_bf); //holy shit this is energy dense*/
 
     }
 
@@ -112,11 +106,11 @@ public class SolidificationRecipes {
         registerSF(fluid, 900L, ModItems.solid_fuel); //3200 burntime * 1.5 burntime bonus * 300 TU/t
     }
     private static void registerSF(Fluid fluid, long tuPerSF, Item fuel) {
-        int tuPermBucket = FluidCombustionRecipes.getFlameEnergy(fluid);
+        long tuPermBucket = FluidFlameRecipes.getHeatEnergy(fluid);
         if(tuPermBucket == 0) return;
         double penalty = 1.25D;
 
-        int mB = (int) (1000L * tuPerSF * penalty / (long)tuPermBucket);
+        int mB = (int) (1000L * tuPerSF * penalty / tuPermBucket);
 
         if(mB > 10_000) mB -= (mB % 1000);
         else if(mB > 1_000) mB -= (mB % 100);

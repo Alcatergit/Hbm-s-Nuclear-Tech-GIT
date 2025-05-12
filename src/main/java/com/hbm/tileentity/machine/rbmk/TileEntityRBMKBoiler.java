@@ -1,7 +1,5 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
@@ -46,7 +44,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		super(0);
 		feed = new FluidTank(10000*20);
 		steam = new FluidTank(1000000*20);
-		steamType = ModForgeFluids.steam;
+		steamType = ModForgeFluids.STEAM;
 	}
 
 	public void getDiagData(NBTTagCompound nbt) {
@@ -101,19 +99,19 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	}
 
 	public int makeLossless(int water, Fluid type){ //rounds down to the lower base 10 so it stays int
-		if(type == ModForgeFluids.ultrahotsteam)
+		if(type == ModForgeFluids.ULTRAHOTSTEAM)
 			return ((int)(water * 0.1)) * 10;
 		return water;
 	}
 	
 	public double getHeatFromSteam(Fluid type) {
-		if(type == ModForgeFluids.steam){
+		if(type == ModForgeFluids.STEAM){
 			return 100D;
-		} else if(type == ModForgeFluids.hotsteam){
+		} else if(type == ModForgeFluids.HOTSTEAM){
 			return 300D;
-		} else if(type == ModForgeFluids.superhotsteam){
+		} else if(type == ModForgeFluids.SUPERHOTSTEAM){
 			return 450D;
-		} else if(type == ModForgeFluids.ultrahotsteam){
+		} else if(type == ModForgeFluids.ULTRAHOTSTEAM){
 			return 600D;
 		} else {
 			return 0D;
@@ -121,13 +119,13 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	}
 	
 	public double getFactorFromSteam(Fluid type) {
-		if(type == ModForgeFluids.steam){
+		if(type == ModForgeFluids.STEAM){
 			return 1D;
-		} else if(type == ModForgeFluids.hotsteam){
+		} else if(type == ModForgeFluids.HOTSTEAM){
 			return 10D;
-		} else if(type == ModForgeFluids.superhotsteam){
+		} else if(type == ModForgeFluids.SUPERHOTSTEAM){
 			return 100D;
-		} else if(type == ModForgeFluids.ultrahotsteam){
+		} else if(type == ModForgeFluids.ULTRAHOTSTEAM){
 			return 1000D;
 		} else {
 			return 0D;
@@ -170,7 +168,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		steam.readFromNBT(nbt.getCompoundTag("steam"));
 		steamType = FluidRegistry.getFluid(nbt.getString("steamType"));
 		if (this.steamType == null) {
-			this.steamType = ModForgeFluids.steam;
+			this.steamType = ModForgeFluids.STEAM;
 		}
 	}
 	
@@ -195,19 +193,19 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		if(data.hasKey("compression")) {
 			int newAmount = 0;
 			if (this.steamType == null) {
-				this.steamType = ModForgeFluids.steam;
+				this.steamType = ModForgeFluids.STEAM;
 			}
-			if(steamType == ModForgeFluids.steam){
-				steamType = ModForgeFluids.hotsteam;
+			if(steamType == ModForgeFluids.STEAM){
+				steamType = ModForgeFluids.HOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
-			} else if(steamType == ModForgeFluids.hotsteam){
-				steamType = ModForgeFluids.superhotsteam;
+			} else if(steamType == ModForgeFluids.HOTSTEAM){
+				steamType = ModForgeFluids.SUPERHOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
-			} else if(steamType == ModForgeFluids.superhotsteam){
-				steamType = ModForgeFluids.ultrahotsteam;
+			} else if(steamType == ModForgeFluids.SUPERHOTSTEAM){
+				steamType = ModForgeFluids.ULTRAHOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
-			} else if(steamType == ModForgeFluids.ultrahotsteam){
-				steamType = ModForgeFluids.steam;
+			} else if(steamType == ModForgeFluids.ULTRAHOTSTEAM){
+				steamType = ModForgeFluids.STEAM;
 				newAmount = steam.getFluidAmount()*1000;
 			}
 			if(newAmount > 0){
@@ -225,7 +223,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		if(nbt.hasKey("steamType2")){
 			this.steamType = FluidRegistry.getFluid(nbt.getString("steamType2"));
 			if (this.steamType == null) {
-				this.steamType = ModForgeFluids.steam;
+				this.steamType = ModForgeFluids.STEAM;
 			}
 		} else {
 			super.networkUnpack(nbt);

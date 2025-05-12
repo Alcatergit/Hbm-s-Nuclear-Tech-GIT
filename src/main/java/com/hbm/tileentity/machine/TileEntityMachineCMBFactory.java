@@ -13,7 +13,6 @@ import com.hbm.tileentity.TileEntityMachineBase;
 import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,8 +28,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityMachineCMBFactory extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
@@ -40,7 +37,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 	public static final long maxPower = 100000000;
 	public static final int processSpeed = 200;
 	public FluidTank tank;
-	public Fluid tankType = ModForgeFluids.watz;
+	public Fluid tankType = ModForgeFluids.WATZ;
 	public boolean needsUpdate = false;
 
 	private static final int[] slots_top = new int[] {1, 3};
@@ -76,7 +73,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
 				return true;
 		if(i == 2)
-			if(FFUtils.containsFluid(itemStack, ModForgeFluids.watz))
+			if(FFUtils.containsFluid(itemStack, ModForgeFluids.WATZ))
 				return true;
 		return false;
 	}
@@ -94,7 +91,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 				return true;
 			break;
 		case 2:
-			if(FFUtils.containsFluid(stack, ModForgeFluids.watz))
+			if(FFUtils.containsFluid(stack, ModForgeFluids.WATZ))
 				return true;
 			break;
 		case 3:
@@ -238,7 +235,7 @@ public class TileEntityMachineCMBFactory extends TileEntityMachineBase implement
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return stack.getFluid() == ModForgeFluids.watz;
+		return stack.getFluid() == ModForgeFluids.WATZ;
 	}
 	
 	@Override

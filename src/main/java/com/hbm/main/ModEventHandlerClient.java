@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.hbm.forgefluid.ModForgeFluids;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -23,7 +24,6 @@ import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
 import com.hbm.capability.HbmCapability;
-import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
@@ -47,7 +47,6 @@ import com.hbm.interfaces.IItemHUD;
 import com.hbm.interfaces.IPostRender;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.gui.GUIArmorTable;
@@ -67,7 +66,6 @@ import com.hbm.items.machine.ItemRBMKPellet;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
-import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemGuideBook;
@@ -673,111 +671,9 @@ public class ModEventHandlerClient {
 		DSmokeRenderer.sprites[7] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke8"));
 		ParticleDSmokeFX.sprites = DSmokeRenderer.sprites;
 
-
-		registerSpriteFluid(evt, "steam");
-		registerSpriteFluid(evt, "hotsteam");
-		registerSpriteFluid(evt, "superhotsteam");
-		registerSpriteFluid(evt, "ultrahotsteam");
-		registerSpriteFluid(evt, "coolant");
-		registerSpriteFluid(evt, "hotcoolant");
-
-		registerSpriteFluid(evt, "heavywater");
-		registerSpriteFluid(evt, "deuterium");
-		registerSpriteFluid(evt, "tritium");
-
-		registerSpriteFluid(evt, "oil");
-		registerSpriteFluid(evt, "hotoil");
-
-		registerSpriteFluid(evt, "crackoil");
-		registerSpriteFluid(evt, "hotcrackoil");
-
-		registerSpriteFluid(evt, "heavyoil");
-		registerSpriteFluid(evt, "bitumen");
-		registerSpriteFluid(evt, "smear");
-		registerSpriteFluid(evt, "heatingoil");
-
-		registerSpriteFluid(evt, "reclaimed");
-		registerSpriteFluid(evt, "petroil");
-
-		registerSpriteFluid(evt, "fracksol");
-
-		registerSpriteFluid(evt, "lubricant");
-
-		// Yes yes I know, I spelled 'naphtha' wrong.
-		registerSpriteFluid(evt, "naphtha");
-		registerSpriteFluid(evt, "diesel");
-
-		registerSpriteFluid(evt, "lightoil");
-		registerSpriteFluid(evt, "kerosene");
-
-		registerSpriteFluid(evt, "gas");
-		registerSpriteFluid(evt, "petroleum");
-
-		registerSpriteFluid(evt, "aromatics");
-		registerSpriteFluid(evt, "unsaturateds");
-
-		registerSpriteFluid(evt, "biogas");
-		registerSpriteFluid(evt, "biofuel");
-
-		registerSpriteFluid(evt, "ethanol");
-		registerSpriteFluid(evt, "fishoil");
-		registerSpriteFluid(evt, "sunfloweroil");
-		registerSpriteFluid(evt, "colloid");
-
-		registerSpriteFluid(evt, "nitan");
-
-		registerSpriteFluid(evt, "uf6");
-		registerSpriteFluid(evt, "puf6");
-		registerSpriteFluid(evt, "sas3");
-
-		registerSpriteFluid(evt, "amat");
-		registerSpriteFluid(evt, "aschrab");
-
-		registerSpriteFluid(evt, "acid");
-		registerSpriteFluid(evt, "sulfuric_acid");
-		registerSpriteFluid(evt, "nitric_acid");
-		registerSpriteFluid(evt, "solvent");
-		registerSpriteFluid(evt, "radiosolvent");
-		registerSpriteFluid(evt, "nitroglycerin");
-		registerSpriteFluid(evt, "liquid_osmiridium");
-		registerSpriteFluid(evt, "watz_still");
-		registerSpriteFluid(evt, "watz_flowing");
-		registerSpriteFluid(evt, "cryogel");
-
-		registerSpriteFluid(evt, "hydrogen");
-		registerSpriteFluid(evt, "oxygen");
-		registerSpriteFluid(evt, "xenon");
-		registerSpriteFluid(evt, "balefire");
-
-		registerSpriteFluid(evt, "mercury");
-		
-		registerSpriteFluid(evt, "plasma_dt");
-		registerSpriteFluid(evt, "plasma_hd");
-		registerSpriteFluid(evt, "plasma_ht");
-		registerSpriteFluid(evt, "plasma_put");
-		registerSpriteFluid(evt, "plasma_xm");
-		registerSpriteFluid(evt, "plasma_bf");
-		registerSpriteFluid(evt, "ic2uu_matter");
-		
-		registerSpriteFluid(evt, "gasoline");
-		registerSpriteFluid(evt, "experience");
-		registerSpriteFluid(evt, "ender");
-		registerSpriteFluid(evt, "spentsteam");
-		registerSpriteFluid(evt, "pain");
-		registerSpriteFluid(evt, "wastefluid");
-		registerSpriteFluid(evt, "wastegas");
-
-		registerSpriteFluid(evt, "iongel");
-		registerSpriteFluid(evt, "chlorine");
-		registerSpriteFluid(evt, "phosgene");
-		registerSpriteFluid(evt, "woodoil");
-		registerSpriteFluid(evt, "coalcreosote");
-		registerSpriteFluid(evt, "coaloil");
-		registerSpriteFluid(evt, "coalgas");
-		registerSpriteFluid(evt, "coalgas_leaded");
-		registerSpriteFluid(evt, "petroil_leaded");
-		registerSpriteFluid(evt, "gasoline_leaded");
-		registerSpriteFluid(evt, "syngas");
+		for(String fluid : ModForgeFluids.noBlockFluidNames){
+			registerSpriteFluid(evt, fluid);
+		}
 
 		contrail = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID + ":particle/contrail"));
 		particle_base = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/particle_base"));

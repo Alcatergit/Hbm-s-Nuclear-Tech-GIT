@@ -107,13 +107,13 @@ public class ContainerMachineReactorSmall extends Container {
 			this.seleniumEngine.compression = data;
 			switch(data){
 			case 0:
-				this.seleniumEngine.tankTypes[2] = ModForgeFluids.steam;
+				this.seleniumEngine.tankTypes[2] = ModForgeFluids.STEAM;
 				break;
 			case 1:
-				this.seleniumEngine.tankTypes[2] = ModForgeFluids.hotsteam;
+				this.seleniumEngine.tankTypes[2] = ModForgeFluids.HOTSTEAM;
 				break;
 			case 2:
-				this.seleniumEngine.tankTypes[2] = ModForgeFluids.superhotsteam;
+				this.seleniumEngine.tankTypes[2] = ModForgeFluids.SUPERHOTSTEAM;
 				break;
 			default:
 				break;

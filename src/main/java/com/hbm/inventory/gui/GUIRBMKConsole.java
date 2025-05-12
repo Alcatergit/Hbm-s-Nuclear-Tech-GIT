@@ -381,13 +381,13 @@ public class GUIRBMKConsole extends GuiScreen {
 
 				Fluid fluid = FluidRegistry.getFluid(col.data.getString("type"));
 				
-				if(fluid == ModForgeFluids.steam)
+				if(fluid == ModForgeFluids.STEAM)
 					drawTexturedModalRect(guiLeft + x + 4, guiTop + y + 1, 44, 183, 2, 2);
-				if(fluid == ModForgeFluids.hotsteam)
+				if(fluid == ModForgeFluids.HOTSTEAM)
 					drawTexturedModalRect(guiLeft + x + 4, guiTop + y + 3, 44, 185, 2, 2);
-				if(fluid == ModForgeFluids.superhotsteam)
+				if(fluid == ModForgeFluids.SUPERHOTSTEAM)
 					drawTexturedModalRect(guiLeft + x + 4, guiTop + y + 5, 44, 187, 2, 2);
-				if(fluid == ModForgeFluids.ultrahotsteam)
+				if(fluid == ModForgeFluids.ULTRAHOTSTEAM)
 					drawTexturedModalRect(guiLeft + x + 4, guiTop + y + 7, 44, 189, 2, 2);
 				
 				break;

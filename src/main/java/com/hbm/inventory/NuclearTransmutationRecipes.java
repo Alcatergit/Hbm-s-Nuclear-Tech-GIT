@@ -52,7 +52,7 @@ public class NuclearTransmutationRecipes {
 		return null;
 	}
 
-	public static long getEnergy(ItemStack stack) {
+	public static long getCombustionEnergy(ItemStack stack) {
 		if(stack == null || stack.isEmpty())
 			return -1;
 

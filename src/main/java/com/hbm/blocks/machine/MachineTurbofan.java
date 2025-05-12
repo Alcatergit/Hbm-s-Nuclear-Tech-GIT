@@ -7,7 +7,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.MainRegistry;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.inventory.EngineRecipes.FuelGrade;
+import com.hbm.inventory.FluidCombustionRecipes.FuelGrade;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
 

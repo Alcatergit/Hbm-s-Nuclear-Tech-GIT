@@ -7,7 +7,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.inventory.FluidFlameRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -19,7 +19,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -82,10 +81,10 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 	@Override
 	public void updateFiringTick() {
 		
-		if(this.tank.getFluid() != null && FluidCombustionRecipes.hasFuelRecipe(tank.getFluid().getFluid()) && this.tank.getFluidAmount() >= drain) {
+		if(this.tank.getFluid() != null && FluidFlameRecipes.hasFuelRecipe(tank.getFluid().getFluid()) && this.tank.getFluidAmount() >= drain) {
 			
 			BulletConfiguration conf = BulletConfigSyncingUtil.pullConfig(BulletConfigSyncingUtil.FLA_NORMAL);
-			this.spawnBullet(conf, FluidCombustionRecipes.getFlameEnergy(tank.getFluid().getFluid()) * 0.002F);
+			this.spawnBullet(conf, FluidFlameRecipes.getHeatEnergy(tank.getFluid().getFluid()) * 0.002F);
 			this.tank.drain(drain, true);
 			
 			Vec3 pos = new Vec3(this.getTurretPos());
@@ -116,8 +115,8 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tank), new TargetPoint(world.provider.getDimension(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), 10));
 			for(int i = 1; i < 10; i++) {
 				if(inventory.getStackInSlot(i).getItem() == ModItems.ammo_fuel) {
-					if((this.tank.getFluid() == null || tank.getFluid().getFluid() == ModForgeFluids.diesel) && this.tank.getFluidAmount() + 1000 <= this.tank.getCapacity()) {
-						this.tank.fill(new FluidStack(ModForgeFluids.diesel, 1000), true);
+					if((this.tank.getFluid() == null || tank.getFluid().getFluid() == ModForgeFluids.DIESEL) && this.tank.getFluidAmount() + 1000 <= this.tank.getCapacity()) {
+						this.tank.fill(new FluidStack(ModForgeFluids.DIESEL, 1000), true);
 						inventory.getStackInSlot(i).shrink(1);
 						if(inventory.getStackInSlot(i).isEmpty())
 							inventory.setStackInSlot(i, ItemStack.EMPTY);
@@ -151,7 +150,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource == null || !FluidCombustionRecipes.hasFuelRecipe(resource.getFluid()))
+		if(resource == null || !FluidFlameRecipes.hasFuelRecipe(resource.getFluid()))
 			return 0;
 		return tank.fill(resource, doFill);
 	}

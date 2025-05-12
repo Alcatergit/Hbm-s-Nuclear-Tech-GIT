@@ -33,7 +33,7 @@ public class SILEXRecipes {
 	
 	public static void register() {
 
-		itemTranslation.put(new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.uf6)), new ComparableStack(ModItems.ingot_uranium));
+		itemTranslation.put(new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.UF6)), new ComparableStack(ModItems.ingot_uranium));
 		dictTranslation.put(U.dust(), U.ingot());
 		recipes.put(U.ingot(), new SILEXRecipe(900, 100, EnumWavelengths.UV)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_u235), 1))
@@ -50,7 +50,7 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_am242), 6))
 				);
 
-		itemTranslation.put(new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.puf6)), new ComparableStack(ModItems.ingot_plutonium));
+		itemTranslation.put(new NbtComparableStack(ItemFluidIcon.getStack(ModForgeFluids.PUF6)), new ComparableStack(ModItems.ingot_plutonium));
 		dictTranslation.put(PU.dust(), PU.ingot());
 		recipes.put(PU.ingot(), new SILEXRecipe(900, 100, EnumWavelengths.VISIBLE)
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_pu238), 3))
