@@ -121,10 +121,8 @@ public class FFUtils {
 		RenderHelper.bindBlockTexture();
 		if(fluid != null) {
 			TextureAtlasSprite liquidIcon = getTextureFromFluid(fluid);
-			if(liquidIcon != null) {
-				drawFull(fluid, guiLeft, guiTop, zLevel, liquidIcon, sizeY, sizeX, offsetX, offsetY, sizeY);
-			}
-		}
+            drawFull(fluid, guiLeft, guiTop, zLevel, liquidIcon, sizeY, sizeX, offsetX, offsetY, sizeY);
+        }
 	}
 
 	/**

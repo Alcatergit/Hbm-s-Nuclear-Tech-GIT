@@ -68,7 +68,7 @@ public class CokerRecipes {
         else if(mB > 100) mB -= (mB % 10);
 
         FluidStack byproduct = outputFluid == null ? null : new FluidStack(outputFluid, Math.max(10, mB / 10));
-        System.out.println("COKER RECIPE "+fluid.getName()+" "+ mB+" "+tuPerBucket + " "+ outputFluid.getName());
+
         if(mB > 16000) return;
 
         registerRecipe(fluid, mB, fuel, byproduct);

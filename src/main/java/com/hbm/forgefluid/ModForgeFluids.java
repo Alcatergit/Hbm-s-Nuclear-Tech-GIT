@@ -43,6 +43,7 @@ public class ModForgeFluids {
 	public static Fluid ULTRAHOTSTEAM = 		createFluid("ultrahotsteam").setTemperature(600 + 273);
 	public static Fluid COOLANT = 				createFluid("coolant").setTemperature(203);
 	public static Fluid HOTCOOLANT = 			createFluid("hotcoolant").setTemperature(400 + 273);
+	public static Fluid PERFLUOROMETHYL =		createFluid("perfluoromethyl").setTemperature(15 + 273);
 
 	public static Fluid HEAVYWATER = 			createFluid("heavywater");
 	public static Fluid DEUTERIUM = 			createFluid("deuterium");
@@ -183,6 +184,7 @@ public class ModForgeFluids {
 		registerOrGet(ULTRAHOTSTEAM,"ultrahotsteam");
 		registerOrGet(COOLANT,"coolant");
 		registerOrGet(HOTCOOLANT,"hotcoolant");
+		registerOrGet(PERFLUOROMETHYL,"perfluoromethyl");
 
 		registerOrGet(HEAVYWATER,"heavywater");
 		registerOrGet(DEUTERIUM,"deuterium");

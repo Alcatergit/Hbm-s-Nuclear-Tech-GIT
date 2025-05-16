@@ -33,6 +33,7 @@ import com.hbm.handler.guncfg.GunGaussFactory;
 import com.hbm.handler.guncfg.GunGrenadeFactory;
 import com.hbm.handler.guncfg.GunOSIPRFactory;
 import com.hbm.handler.guncfg.GunRocketFactory;
+import com.hbm.items.ItemEnums.*;
 import com.hbm.items.armor.ArmorAJR;
 import com.hbm.items.armor.ArmorAJRO;
 import com.hbm.items.armor.ArmorRPA;
@@ -110,43 +111,12 @@ import com.hbm.items.gear.ModHoe;
 import com.hbm.items.gear.ModSword;
 import com.hbm.items.gear.RedstoneSword;
 import com.hbm.items.gear.WeaponSpecial;
-import com.hbm.items.machine.ItemAssemblyTemplate;
-import com.hbm.items.machine.ItemBattery;
-import com.hbm.items.machine.ItemBlades;
-import com.hbm.items.machine.ItemCapacitor;
-import com.hbm.items.machine.ItemCassette;
-import com.hbm.items.machine.ItemCatalyst;
-import com.hbm.items.machine.ItemChemistryIcon;
-import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.items.machine.ItemCrucibleTemplate;
-import com.hbm.items.machine.ItemFFFluidDuct;
-import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.machine.ItemFluidTank;
-import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.items.machine.ItemFuelRod;
-import com.hbm.items.machine.ItemLens;
-import com.hbm.items.machine.ItemMold;
-import com.hbm.items.machine.ItemFWatzCore;
-import com.hbm.items.machine.ItemFELCrystal;
+import com.hbm.items.machine.*;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
-import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
-import com.hbm.items.machine.ItemPileRod;
-import com.hbm.items.machine.ItemRBMKLid;
-import com.hbm.items.machine.ItemRBMKPellet;
-import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.items.machine.ItemRBMKRod.EnumBurnFunc;
 import com.hbm.items.machine.ItemRBMKRod.EnumDepleteFunc;
-import com.hbm.items.machine.ItemReactorSensor;
-import com.hbm.items.machine.ItemRTGPellet;
-import com.hbm.items.machine.ItemDrillbit;
 import com.hbm.items.machine.ItemDrillbit.EnumDrillType;
-import com.hbm.items.machine.ItemSatChip;
-import com.hbm.items.machine.ItemStamp;
-import com.hbm.items.machine.ItemTemplateFolder;
-import com.hbm.items.machine.ItemTurretBiometry;
-import com.hbm.items.machine.ItemTurretChip;
-import com.hbm.items.machine.ItemScraps;
 import com.hbm.items.special.*;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemAnalyzer;
@@ -1051,6 +1021,7 @@ public class ModItems {
 	public static final Item ingot_beryllium = new ItemBase("ingot_beryllium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_lead = new ItemBase("ingot_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_asbestos = new ItemBase("ingot_asbestos").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_silicon = new ItemBase("ingot_silicon").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_magnetized_tungsten = new ItemBase("ingot_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_combine_steel = new ItemCustomLore("ingot_combine_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_dura_steel = new ItemCustomLore("ingot_dura_steel").setCreativeTab(MainRegistry.partsTab);
@@ -1067,6 +1038,7 @@ public class ModItems {
 	public static final Item ingot_saturnite = new ItemCustomLore("ingot_saturnite").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_ferrouranium = new ItemBase("ingot_ferrouranium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_starmetal = new ItemCustomLore("ingot_starmetal").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_bscco = new ItemCustomLore("ingot_bscco").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_osmiridium = new ItemCustomLore("ingot_osmiridium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_euphemium = new ItemCustomLore("ingot_euphemium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_dineutronium = new ItemCustomLore("ingot_dineutronium").setCreativeTab(MainRegistry.partsTab);
@@ -1074,6 +1046,7 @@ public class ModItems {
 	public static final Item ingot_bismuth = new ItemCustomLore("ingot_bismuth").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_arsenic = new ItemCustomLore("ingot_arsenic").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_zirconium = new ItemBase("ingot_zirconium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item ingot_calcium = new ItemBase("ingot_calcium").setCreativeTab(MainRegistry.partsTab);
 
 	public static final Item ingot_th232 = new ItemCustomLore("ingot_th232").setCreativeTab(MainRegistry.partsTab);
 	public static final Item ingot_uranium = new ItemCustomLore("ingot_uranium").setCreativeTab(MainRegistry.partsTab);
@@ -1174,6 +1147,7 @@ public class ModItems {
 	public static final Item billet_ac227 = new ItemCustomLore("billet_ac227").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_gh336 = new ItemCustomLore("billet_gh336").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_beryllium = new ItemBase("billet_beryllium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item billet_silicon = new ItemBase("billet_silicon").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_bismuth = new ItemBase("billet_bismuth").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_zirconium = new ItemBase("billet_zirconium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item billet_zfb_bismuth = new ItemCustomLore("billet_zfb_bismuth").setCreativeTab(MainRegistry.partsTab);
@@ -1235,6 +1209,7 @@ public class ModItems {
 	public static final Item nugget_hes = new ItemCustomLore("nugget_hes").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_lead = new ItemCustomLore("nugget_lead").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_beryllium = new ItemBase("nugget_beryllium").setCreativeTab(MainRegistry.partsTab);
+	public static final Item nugget_silicon = new ItemBase("nugget_silicon").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_cadmium = new ItemBase("nugget_cadmium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_bismuth = new ItemBase("nugget_bismuth").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_arsenic = new ItemCustomLore("nugget_arsenic").setCreativeTab(MainRegistry.partsTab);
@@ -1247,6 +1222,7 @@ public class ModItems {
 	public static final Item nugget_euphemium = new ItemCustomLore("nugget_euphemium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_dineutronium = new ItemCustomLore("nugget_dineutronium").setCreativeTab(MainRegistry.partsTab);
 	
+	public static final Item nugget_niobium = new ItemBase("nugget_niobium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_actinium = new ItemBase("nugget_actinium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_ac227 = new ItemCustomLore("nugget_ac227").setCreativeTab(MainRegistry.partsTab);
 	public static final Item nugget_cobalt = new ItemCustomLore("nugget_cobalt").setCreativeTab(MainRegistry.partsTab);
@@ -1300,6 +1276,7 @@ public class ModItems {
 	public static final Item powder_lithium = new ItemCustomLore("powder_lithium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_lithium_tiny = new ItemCustomLore("powder_lithium_tiny").setCreativeTab(MainRegistry.partsTab);
 	public static final Item redstone_depleted = new ItemBase("redstone_depleted").setCreativeTab(MainRegistry.partsTab);
+	public static final Item powder_calcium = new ItemBase("powder_calcium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_quartz = new ItemBase("powder_quartz").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_borax = new ItemBase("powder_borax").setCreativeTab(MainRegistry.partsTab);
 	public static final Item powder_dura_steel = new ItemCustomLore("powder_dura_steel").setCreativeTab(MainRegistry.partsTab);
@@ -1708,9 +1685,7 @@ public class ModItems {
 	public static final Item turbine_titanium = new ItemBase("turbine_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item blade_tungsten = new ItemBase("blade_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item turbine_tungsten = new ItemBase("turbine_tungsten").setCreativeTab(MainRegistry.partsTab);
-	public static final Item bolt_tungsten = new ItemBase("bolt_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item board_copper = new ItemBase("board_copper").setCreativeTab(MainRegistry.partsTab);
-	public static final Item bolt_dura_steel = new ItemBase("bolt_dura_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item pipes_steel = new ItemBase("pipes_steel").setCreativeTab(MainRegistry.partsTab);
 	public static final Item drill_titanium = new ItemBase("drill_titanium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item bolt_compound = new ItemBase("bolt_compound").setCreativeTab(MainRegistry.partsTab);
@@ -1730,7 +1705,7 @@ public class ModItems {
 	
 	
 	//Fuels
-	public static final Item oil_tar = new ItemFuelEnum("oil_tar", 1200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item oil_tar = new ItemEnumMulti(EnumTarType.class, "oil_tar").setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel = new ItemFuel("solid_fuel", 3200).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto = new ItemFuel("solid_fuel_presto", 6400).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto_triplet = new ItemFuel("solid_fuel_presto_triplet", 19200).setCreativeTab(MainRegistry.partsTab);
@@ -1739,7 +1714,7 @@ public class ModItems {
 	public static final Item solid_fuel_presto_bf = new ItemFuel("solid_fuel_presto_bf", 64000).setCreativeTab(MainRegistry.partsTab);
 	public static final Item solid_fuel_presto_triplet_bf = new ItemFuel("solid_fuel_presto_triplet_bf", 192000).setCreativeTab(MainRegistry.partsTab);
 	public static final Item briquette_lignite = new ItemFuel("briquette_lignite", 1600).setCreativeTab(MainRegistry.partsTab);
-	public static final Item coke = new ItemFuelEnum("coke", 3200).setCreativeTab(MainRegistry.partsTab);
+	public static final Item coke = new ItemEnumMulti(EnumCokeType.class, "coke").setCreativeTab(MainRegistry.partsTab);
 	public static final Item lignite = new ItemFuel("lignite", 1200).setCreativeTab(MainRegistry.partsTab);
 	
 	//Fragments
@@ -2295,6 +2270,7 @@ public class ModItems {
 	//Circuits
 	public static final Item upgrade_template = new ItemCustomLore("upgrade_template").setMaxStackSize(1).setCreativeTab(MainRegistry.partsTab);
 	public static final Item deuterium_filter = new ItemBase("deuterium_filter").setCreativeTab(MainRegistry.partsTab);
+	public static final Item circuit = new ItemCircuit("circuit").setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_raw = new ItemBase("circuit_raw").setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_aluminium = new ItemBase("circuit_aluminium").setCreativeTab(MainRegistry.partsTab);
 	public static final Item circuit_copper = new ItemBase("circuit_copper").setCreativeTab(MainRegistry.partsTab);
@@ -2338,32 +2314,22 @@ public class ModItems {
 	public static final Item plate_welded = new ItemAutogen("plate_welded", MaterialShapes.WELDEDPLATE).setCreativeTab(MainRegistry.partsTab);
 	public static final Item heavy_component = new ItemAutogen("heavy_component", MaterialShapes.HEAVY_COMPONENT).setCreativeTab(MainRegistry.partsTab);
 	public static final Item wire_dense = new ItemAutogen("wire_dense", MaterialShapes.DENSEWIRE).setCreativeTab(MainRegistry.partsTab);
+	public static final Item wire = new ItemAutogen("wire", MaterialShapes.WIRE).setCreativeTab(MainRegistry.partsTab);
 	public static final Item shell = new ItemAutogen("shell", MaterialShapes.SHELL).setCreativeTab(MainRegistry.partsTab);
 	public static final Item pipe = new ItemAutogen("pipe", MaterialShapes.PIPE).setCreativeTab(MainRegistry.partsTab);
 	public static final Item bolt = new ItemAutogen("bolt", MaterialShapes.BOLT).setCreativeTab(MainRegistry.partsTab);
 	public static final Item scraps = new ItemScraps("scraps").setCreativeTab(MainRegistry.partsTab);
 		
 	//Wires and things
-	public static final Item wire_advanced_alloy = new ItemBase("wire_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_advanced_alloy = new ItemBase("coil_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_advanced_torus = new ItemBase("coil_advanced_torus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_gold = new ItemBase("wire_gold").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_gold = new ItemBase("coil_gold").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_gold_torus = new ItemBase("coil_gold_torus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_red_copper = new ItemBase("wire_red_copper").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_tungsten = new ItemCustomLore("wire_tungsten").setCreativeTab(MainRegistry.partsTab);
-	public static final Item coil_tungsten = new ItemBase("coil_tungsten").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_aluminium = new ItemBase("wire_aluminium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_copper = new ItemBase("wire_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper = new ItemBase("coil_copper").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_copper_torus = new ItemBase("coil_copper_torus").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_schrabidium = new ItemCustomLore("wire_schrabidium").setCreativeTab(MainRegistry.partsTab);
-	public static final Item wire_magnetized_tungsten = new ItemCustomLore("wire_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_advanced_alloy = new ItemBase("coil_advanced_alloy").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_advanced_torus = new ItemBase("coil_advanced_torus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_gold = new ItemBase("coil_gold").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_gold_torus = new ItemBase("coil_gold_torus").setCreativeTab(MainRegistry.partsTab);
+	public static final Item coil_tungsten = new ItemBase("coil_tungsten").setCreativeTab(MainRegistry.partsTab);
 	public static final Item coil_magnetized_tungsten = new ItemCustomLore("coil_magnetized_tungsten").setCreativeTab(MainRegistry.partsTab);
-	
-	
-	
-	
+
 	//Gun ammo assemblies and ammo
 	public static final Item assembly_iron = new ItemBase("assembly_iron").setCreativeTab(MainRegistry.partsTab);
 	public static final Item assembly_steel = new ItemBase("assembly_steel").setCreativeTab(MainRegistry.partsTab);

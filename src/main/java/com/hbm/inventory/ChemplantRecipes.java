@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static com.hbm.inventory.material.Mats.MAT_GOLD;
+import static com.hbm.inventory.material.Mats.MAT_SCHRABIDIUM;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
@@ -131,9 +133,9 @@ public class ChemplantRecipes {
 		
 		makeRecipe(440, "RADIOSOLVENT", null, new FluidStack[]{ new FluidStack(ModForgeFluids.SOLVENT, 500), new FluidStack(ModForgeFluids.WATZ, 500) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.RADIOSOLVENT, 1000) }, 50);
 		
-		makeRecipe(450, "CIRCUIT_4", new AStack[] { new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.wire_gold, 4), new OreDictStack(LAPIS.dust(), 1), new OreDictStack(ANY_PLASTIC.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.ACID, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1) }, null, 200);
+		makeRecipe(450, "CIRCUIT_4", new AStack[] { new ComparableStack(ModItems.circuit_red_copper, 1), new ComparableStack(ModItems.wire, 4, MAT_GOLD.id), new OreDictStack(LAPIS.dust(), 1), new OreDictStack(ANY_PLASTIC.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.ACID, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_gold, 1) }, null, 200);
 		
-		makeRecipe(460, "CIRCUIT_5", new AStack[] { new ComparableStack(ModItems.circuit_gold, 1), new ComparableStack(ModItems.wire_schrabidium, 4), new OreDictStack(DIAMOND.dust(), 1), new OreDictStack(DESH.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.ACID, 800), new FluidStack(ModForgeFluids.PETROLEUM, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_schrabidium, 1) }, null, 250);
+		makeRecipe(460, "CIRCUIT_5", new AStack[] { new ComparableStack(ModItems.circuit_gold, 1), new ComparableStack(ModItems.wire, 4, MAT_SCHRABIDIUM.id), new OreDictStack(DIAMOND.dust(), 1), new OreDictStack(DESH.ingot(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.ACID, 800), new FluidStack(ModForgeFluids.PETROLEUM, 400) }, new AStack[] { new ComparableStack(ModItems.circuit_schrabidium, 1) }, null, 250);
 		
 		makeRecipe(470, "POLYMER", new AStack[] { new OreDictStack(COAL.gem(), 2), new OreDictStack(F.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.PETROLEUM, 600) }, new AStack[] { new ComparableStack(ModItems.ingot_polymer, 1) }, null, 100);
 		

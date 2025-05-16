@@ -62,12 +62,7 @@ public class EntityTaintCrab extends EntityCyberCrab {
 	protected Item getDropItem() {
 		return ModItems.coil_advanced_alloy;
 	}
-	
-	@Override
-	protected void dropRareDrop(int p_70600_1_) {
-		this.dropItem(ModItems.coil_magnetized_tungsten, 1);
-	}
-	
+
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 		EntityBulletBase bullet = new EntityBulletBase(world, BulletConfigSyncingUtil.BMG50_STAR, this);

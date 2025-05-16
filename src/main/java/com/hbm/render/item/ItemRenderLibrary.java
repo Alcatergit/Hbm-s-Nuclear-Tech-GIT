@@ -690,6 +690,24 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.combination_oven_tex);  ResourceManager.combination_oven.renderAll();
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_soldering_station), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1, 0);
+				GL11.glScaled(5, 5, 5);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.soldering_station_tex);
+				ResourceManager.soldering_station.renderAll();
+			}});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_arc_welder), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(4, 4, 4);
+			}
+			public void renderCommon() {
+				bindTexture(ResourceManager.arc_welder_tex);
+				ResourceManager.arc_welder.renderAll();
+			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.tesla), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3, 0);

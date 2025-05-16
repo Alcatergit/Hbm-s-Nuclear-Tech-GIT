@@ -6,6 +6,7 @@ import java.util.LinkedHashMap;
 import com.hbm.items.ModItems;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 
 import net.minecraft.init.Items;
@@ -15,6 +16,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
+
+import static com.hbm.inventory.OreDictManager.F;
 
 public class MixerRecipes {
 
@@ -35,7 +38,7 @@ public class MixerRecipes {
 			AStack[] itemInputs = ChemplantRecipes.recipeItemInputs.get(i);
 			AStack itemInput = null;
 			if(itemInputs != null)
-				if(itemInputs.length == 0 ||itemInputs.length > 1){
+				if(itemInputs.length != 1){
 					continue;
 				} else {
 					itemInput = itemInputs[0];
@@ -55,6 +58,16 @@ public class MixerRecipes {
 		addRecipe(new FluidStack(ModForgeFluids.PHOSGENE, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.UNSATURATEDS, 500), new FluidStack(ModForgeFluids.CHLORINE, 500)}, null, 20);
 		addRecipe(new FluidStack(ModForgeFluids.IONGEL, 1000), new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000), new FluidStack(ModForgeFluids.HYDROGEN, 200) }, new ComparableStack(ModItems.pellet_charged), 50);
 		addRecipe(new FluidStack(ModForgeFluids.SYNGAS, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.COALOIL, 500), new FluidStack(ModForgeFluids.STEAM, 500) }, null, 50);
+
+		addRecipe(new FluidStack(ModForgeFluids.PETROIL_LEADED, 12000), new FluidStack[]{ new FluidStack(ModForgeFluids.PETROIL, 10_000) }, new ComparableStack(ModItems.antiknock, 1), 40);
+		addRecipe(new FluidStack(ModForgeFluids.GASOLINE_LEADED, 12000), new FluidStack[]{ new FluidStack(ModForgeFluids.GASOLINE, 10_000) }, new ComparableStack(ModItems.antiknock, 1), 40);
+		addRecipe(new FluidStack(ModForgeFluids.COALGAS_LEADED, 12000), new FluidStack[]{ new FluidStack(ModForgeFluids.COALGAS, 10_000) }, new ComparableStack(ModItems.antiknock, 1), 40);
+
+		addRecipe(new FluidStack(ModForgeFluids.DIESEL_REFORM, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.DIESEL, 900), new FluidStack(ModForgeFluids.REFORMATE, 100) }, null, 50);
+		addRecipe(new FluidStack(ModForgeFluids.DIESEL_CRACK_REFORM, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.DIESEL_CRACK, 900), new FluidStack(ModForgeFluids.REFORMATE, 100) }, null, 50);
+		addRecipe(new FluidStack(ModForgeFluids.KEROSENE_REFORM, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.KEROSENE, 900), new FluidStack(ModForgeFluids.REFORMATE, 100) }, null, 50);
+		addRecipe(new FluidStack(ModForgeFluids.PERFLUOROMETHYL, 1000), new FluidStack[]{ new FluidStack(ModForgeFluids.PETROLEUM, 1000), new FluidStack(ModForgeFluids.UNSATURATEDS, 500) }, new OreDictStack(F.dust()), 20);
+
 	}
 
 	public static void addRecipe(FluidStack output, FluidStack[] inputs, AStack inputItem, int duration){

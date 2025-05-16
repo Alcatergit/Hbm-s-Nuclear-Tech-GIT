@@ -1,5 +1,6 @@
 package com.hbm.inventory.material;
 
+import static com.hbm.inventory.OreDictManager.*;
 import static com.hbm.inventory.material.Mats.*;
 import static com.hbm.inventory.material.MaterialShapes.*;
 
@@ -12,6 +13,7 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.items.ModItems;
 
+import com.hbm.items.machine.ItemCircuit;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -57,6 +59,18 @@ public class MatDistribution {
 		registerEntry(Blocks.DROPPER, MAT_STONE, BLOCK.q(7), MAT_REDSTONE, INGOT.q(1));
 		registerEntry(Blocks.OBSERVER, MAT_STONE, BLOCK.q(7), MAT_REDSTONE, INGOT.q(2));
 
+		registerOre(KEY_SAND,			Mats.MAT_SILICON, MaterialShapes.NUGGET.q(1));
+		registerEntry(new ComparableStack(Items.FLINT),		Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
+		registerOre(QUARTZ.gem(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(3));
+		registerOre(QUARTZ.dust(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(3));
+		registerOre(QUARTZ.block(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(12));
+		registerOre(FIBER.ingot(),		Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
+		registerOre(FIBER.block(),		Mats.MAT_SILICON, MaterialShapes.INGOT.q(9, 2));
+		registerOre(ASBESTOS.ingot(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
+		registerOre(ASBESTOS.dust(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
+		registerOre(ASBESTOS.block(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(9, 2));
+
+
 		registerEntry(Blocks.MOSSY_COBBLESTONE, MAT_STONE, BLOCK.q(1), MAT_CARBON, QUANTUM.q(4));
 		registerOre("oreDiamond", MAT_STONE, BLOCK.q(1), MAT_CARBON, INGOT.q(1));
 
@@ -81,7 +95,9 @@ public class MatDistribution {
 		registerEntry(Blocks.PISTON, MAT_STONE, INGOT.q(4), MAT_IRON, INGOT.q(1), MAT_REDSTONE, DUST.q(1), MAT_CARBON, QUANTUM.q(21));
 		registerEntry(Blocks.STICKY_PISTON, MAT_STONE, INGOT.q(4), MAT_IRON, INGOT.q(1), MAT_REDSTONE, DUST.q(1), MAT_CARBON, QUANTUM.q(21));
 
-		registerEntry(Items.BONE, MAT_CARBON, QUANTUM.q(2));
+		registerOre("bone", MAT_CALCIUM, QUANTUM.q(3), MAT_CARBON, QUANTUM.q(3));
+		registerEntry(new ItemStack(Items.DYE, 1, 15), MAT_CALCIUM, QUANTUM.q(1));
+		registerEntry(Blocks.BONE_BLOCK, MAT_CALCIUM, QUANTUM.q(27), MAT_CARBON, QUANTUM.q(27));
 		registerOre("dye", MAT_CARBON, QUANTUM.q(1));
 		registerEntry(Items.STRING, MAT_CARBON, QUANTUM.q(3));
 		registerEntry(Items.CAULDRON, MAT_IRON, QUANTUM.q(7));
@@ -99,14 +115,14 @@ public class MatDistribution {
 		registerEntry(ModItems.blade_titanium,				MAT_TITANIUM,		INGOT.q(2));
 		registerEntry(ModItems.blade_tungsten,				MAT_TUNGSTEN,		INGOT.q(2));
 
-		registerEntry(ModItems.blades_aluminum,				MAT_ALUMINIUM,		INGOT.q(5));
-		registerEntry(ModItems.blades_gold,					MAT_GOLD,			INGOT.q(5));
-		registerEntry(ModItems.blades_iron,					MAT_IRON,			INGOT.q(5));
-		registerEntry(ModItems.blades_steel,				MAT_STEEL,			INGOT.q(5));
-		registerEntry(ModItems.blades_titanium,				MAT_TITANIUM, 		INGOT.q(5));
-		registerEntry(ModItems.blades_advanced_alloy,		MAT_ALLOY,			INGOT.q(5));
-		registerEntry(ModItems.blades_combine_steel,		MAT_CMB,			INGOT.q(5));
-		registerEntry(ModItems.blades_schrabidium,			MAT_SCHRABIDIUM,	INGOT.q(5));
+		registerEntry(ModItems.blades_aluminum,				MAT_ALUMINIUM,		INGOT.q(4));
+		registerEntry(ModItems.blades_gold,					MAT_GOLD,			INGOT.q(4));
+		registerEntry(ModItems.blades_iron,					MAT_IRON,			INGOT.q(4));
+		registerEntry(ModItems.blades_steel,				MAT_STEEL,			INGOT.q(4));
+		registerEntry(ModItems.blades_titanium,				MAT_TITANIUM, 		INGOT.q(4));
+		registerEntry(ModItems.blades_advanced_alloy,		MAT_ALLOY,			INGOT.q(4));
+		registerEntry(ModItems.blades_combine_steel,		MAT_CMB,			INGOT.q(4));
+		registerEntry(ModItems.blades_schrabidium,			MAT_SCHRABIDIUM,	INGOT.q(4));
 
 		registerEntry(ModItems.stamp_stone_flat,			MAT_STONE,			INGOT.q(3), MAT_REDSTONE, DUST.q(1));
 		registerEntry(ModItems.stamp_iron_flat,				MAT_IRON,			INGOT.q(3), MAT_REDSTONE, DUST.q(1));
@@ -178,6 +194,8 @@ public class MatDistribution {
 
 		registerOre(OreDictManager.HEMATITE.ore(), MAT_HEMATITE, INGOT.q(1));
 		registerOre(OreDictManager.MALACHITE.ore(), MAT_MALACHITE, INGOT.q(1));
+
+		registerEntry(OreDictManager.DictFrame.fromOne(ModItems.circuit, ItemCircuit.EnumCircuitType.SILICON), MAT_SILICON, NUGGET.q(6));
 
 		// registerEntry(DictFrame.fromOne(ModBlocks.stone_resource, EnumStoneType.LIMESTONE), MAT_FLUX, DUST.q(10));
 		registerEntry(ModItems.powder_flux, MAT_FLUX, DUST.q(1));

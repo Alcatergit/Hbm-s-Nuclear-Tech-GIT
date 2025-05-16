@@ -36,6 +36,8 @@ public class JEIConfig implements IModPlugin {
 	public static final String FOUNDRYSMELT = "hbm.foundrysmelt";
 	public static final String FOUNDRYMIX = "hbm.foundrymix";
 	public static final String FOUNDRYPOUR = "hbm.foundrypour";
+	public static final String ARCWELDER = "hbm.arcwelder";
+	public static final String SOLDERINGSTATION = "hbm.solderingstation";
 	public static final String BOILER = "hbm.boiler";
 	public static final String LIQUEFACTION = "hbm.liquefaction";
 	public static final String SOLIDIFCATION = "hbm.solidification";
@@ -106,6 +108,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYSMELT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYMIX);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_crucible), FOUNDRYPOUR);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_arc_welder), ARCWELDER);
+		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_soldering_station), SOLDERINGSTATION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_electric_off), BOILER);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_boiler_rtg_off), BOILER);
@@ -161,6 +165,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getFoundrySmeltRecipes(), FOUNDRYSMELT);
 		registry.addRecipes(JeiRecipes.getFoundryMixRecipes(), FOUNDRYMIX);
 		registry.addRecipes(JeiRecipes.getFoundryPourRecipes(), FOUNDRYPOUR);
+		registry.addRecipes(JeiRecipes.getArcWelderRecipes(), ARCWELDER);
+		registry.addRecipes(JeiRecipes.getSolderingRecipes(), SOLDERINGSTATION);
 		registry.addRecipes(JeiRecipes.getBoilerRecipes(), BOILER);
 		registry.addRecipes(JeiRecipes.getLiquefactionRecipes(), LIQUEFACTION);
 		registry.addRecipes(JeiRecipes.getSolidificationRecipes(), SOLIDIFCATION);
@@ -211,6 +217,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineBoiler.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerElectric.class, 61, 34, 17, 35, BOILER);
 		registry.addRecipeClickArea(GUIMachineBoilerRTG.class, 61, 34, 17, 17, BOILER);
+		registry.addRecipeClickArea(GUIMachineArcWelder.class, 70, 35, 35, 17, ARCWELDER);
+		registry.addRecipeClickArea(GUIMachineSolderingStation.class, 70, 26, 35, 17, SOLDERINGSTATION);
 		registry.addRecipeClickArea(GUILiquefactor.class, 52, 34, 18, 55, LIQUEFACTION);
 		registry.addRecipeClickArea(GUISolidifier.class, 52, 34, 18, 55, SOLIDIFCATION);
 		registry.addRecipeClickArea(GUIMachineCentrifuge.class, 35, 9, 106, 40, CENTRIFUGE);
@@ -316,6 +324,8 @@ public class JEIConfig implements IModPlugin {
 				new FoundrySmeltRecipeHandler(help),
 				new FoundryMixRecipeHandler(help),
 				new FoundryPourRecipeHandler(help),
+				new ArcWelderRecipeHandler(help),
+				new SolderingRecipeHandler(help),
 				new BoilerRecipeHandler(help),
 				new SolidificationRecipeHandler(help),
 				new LiquefactionRecipeHandler(help),

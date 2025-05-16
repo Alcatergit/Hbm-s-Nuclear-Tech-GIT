@@ -18,60 +18,7 @@ public class FluidTypeHandler {
 
 	private static Map<String, FluidProperties> fluidProperties = new HashMap<String, FluidProperties>();
 	public static final FluidProperties NONE = new FluidProperties(0, 0, 0, EnumSymbol.NONE);
-	
-	public static FluidProperties getProperties(Fluid f){
-		if(f == null)
-			return NONE;
-		FluidProperties p = fluidProperties.get(f.getName());
-		return p != null ? p : NONE;
-	}
-	
-	public static FluidProperties getProperties(FluidStack f){
-		if(f == null)
-			return NONE;
-		return getProperties(f.getFluid());
-	}
 
-	public static float getDFCEfficiency(Fluid f){
-		FluidProperties prop = getProperties(f);
-		return prop.dfcFuel;
-	}
-	
-	public static boolean isAntimatter(Fluid f){
-		return containsTrait(f, FluidTrait.AMAT);
-	}
-	
-	public static boolean isCorrosivePlastic(Fluid f){
-		return containsTrait(f, FluidTrait.CORROSIVE) || containsTrait(f, FluidTrait.CORROSIVE_2);
-	}
-	
-	public static boolean isCorrosiveIron(Fluid f){
-		return containsTrait(f, FluidTrait.CORROSIVE_2);
-	}
-	
-	public static boolean isHot(Fluid f){
-		if(f == null)
-			return false;
-		return f.getTemperature() >= 373;
-	}
-
-	public static boolean noID(Fluid f){
-		return containsTrait(f, FluidTrait.NO_ID);
-	}
-
-	public static boolean noContainer(Fluid f){
-		return containsTrait(f, FluidTrait.NO_CONTAINER);
-	}
-	
-	public static boolean containsTrait(Fluid f, FluidTrait t){
-		if(f == null)
-			return false;
-		FluidProperties p = fluidProperties.get(f.getName());
-		if(p == null)
-			return false;
-		return p.traits.contains(t);
-	}
-	
 	//Using strings so it's possible to specify properties for fluids from other mods
 	public static void registerFluidProperties(){
 		fluidProperties.put(FluidRegistry.WATER.getName(), new FluidProperties(0, 0, 0, EnumSymbol.NONE));
@@ -82,7 +29,8 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.ULTRAHOTSTEAM.getName(), new FluidProperties(0, 0, 4, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.COOLANT.getName(), new FluidProperties(1, 0, 0, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.HOTCOOLANT.getName(), new FluidProperties(1, 0, 4, EnumSymbol.NONE));
-		
+		fluidProperties.put(ModForgeFluids.PERFLUOROMETHYL.getName(), new FluidProperties(1, 0, 1, EnumSymbol.NONE));
+
 		fluidProperties.put(FluidRegistry.LAVA.getName(), new FluidProperties(4, 0, 0, EnumSymbol.NOWATER));
 		
 		fluidProperties.put(ModForgeFluids.HEAVYWATER.getName(), new FluidProperties(1, 0, 0, EnumSymbol.NONE));
@@ -346,5 +294,59 @@ public class FluidTypeHandler {
 		CORROSIVE_2,
 		NO_CONTAINER,
 		NO_ID;
+	}
+
+
+	public static FluidProperties getProperties(Fluid f){
+		if(f == null)
+			return NONE;
+		FluidProperties p = fluidProperties.get(f.getName());
+		return p != null ? p : NONE;
+	}
+
+	public static FluidProperties getProperties(FluidStack f){
+		if(f == null)
+			return NONE;
+		return getProperties(f.getFluid());
+	}
+
+	public static float getDFCEfficiency(Fluid f){
+		FluidProperties prop = getProperties(f);
+		return prop.dfcFuel;
+	}
+
+	public static boolean isAntimatter(Fluid f){
+		return containsTrait(f, FluidTrait.AMAT);
+	}
+
+	public static boolean isCorrosivePlastic(Fluid f){
+		return containsTrait(f, FluidTrait.CORROSIVE) || containsTrait(f, FluidTrait.CORROSIVE_2);
+	}
+
+	public static boolean isCorrosiveIron(Fluid f){
+		return containsTrait(f, FluidTrait.CORROSIVE_2);
+	}
+
+	public static boolean isHot(Fluid f){
+		if(f == null)
+			return false;
+		return f.getTemperature() >= 373;
+	}
+
+	public static boolean noID(Fluid f){
+		return containsTrait(f, FluidTrait.NO_ID);
+	}
+
+	public static boolean noContainer(Fluid f){
+		return containsTrait(f, FluidTrait.NO_CONTAINER);
+	}
+
+	public static boolean containsTrait(Fluid f, FluidTrait t){
+		if(f == null)
+			return false;
+		FluidProperties p = fluidProperties.get(f.getName());
+		if(p == null)
+			return false;
+		return p.traits.contains(t);
 	}
 }

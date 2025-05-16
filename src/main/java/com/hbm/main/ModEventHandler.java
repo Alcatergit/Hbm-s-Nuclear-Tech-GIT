@@ -9,14 +9,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Random;
 
 import net.minecraft.entity.item.EntityArmorStand;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -1019,9 +1013,8 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void clientJoinServer(PlayerLoggedInEvent e) {
-		if(e.player instanceof EntityPlayerMP){
-			EntityPlayerMP playerMP = (EntityPlayerMP)e.player;
-			PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(AssemblerRecipes.recipeList, AssemblerRecipes.hidden), playerMP);
+		if(e.player instanceof EntityPlayerMP playerMP){
+            PacketDispatcher.sendTo(new AssemblerRecipeSyncPacket(AssemblerRecipes.recipeList, AssemblerRecipes.hidden), playerMP);
 			JetpackHandler.playerLoggedIn(e);
 			IHBMData props = HbmCapability.getData(e.player);
 
@@ -1036,7 +1029,7 @@ public class ModEventHandler {
 				e.player.sendMessage(new TextComponentTranslation("chat.newver", HTTPHandler.versionNumber));
 				e.player.sendMessage(new TextComponentTranslation("chat.curver", RefStrings.VERSION));
 
-				if(HTTPHandler.changes != ""){
+				if(!Objects.equals(HTTPHandler.changes, "")){
 					String[] lines = HTTPHandler.changes.split("\\$");
 					e.player.sendMessage(new TextComponentString("§6[Some of the new Features]§r"));//RefStrings.CHANGELOG
 					for(String w: lines){

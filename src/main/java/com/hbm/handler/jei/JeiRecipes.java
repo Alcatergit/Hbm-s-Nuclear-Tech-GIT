@@ -64,6 +64,8 @@ public class JeiRecipes {
 	private static List<FoundrySmeltRecipe> foundrySmeltRecipes = null;
 	private static List<FoundryMixRecipe> foundryMixRecipes = null;
 	private static List<FoundryPourRecipe> foundryPourRecipes = null;
+	private static List<ArcWelderRecipe> arcWelderRecipes = null;
+	private static List<SolderingRecipe> solderingRecipes = null;
 	private static List<BoilerRecipe> boilerRecipes = null;
 	private static List<LiquefactionRecipe> liquefactionRecipes = null;
 	private static List<SolidificationRecipe> solidificationRecipes = null;
@@ -163,23 +165,17 @@ public class JeiRecipes {
 	
 	public static class PressRecipe implements IRecipeWrapper {
 
-		private final List<ItemStack> stamps;
-		private final List<ItemStack> input;
+		private final List<List<ItemStack>> inputs;
 		private final ItemStack output;
 		
-		public PressRecipe(List<ItemStack> stamps, List<ItemStack> input, ItemStack output) {
-			this.stamps = stamps;
-			this.input = input;
+		public PressRecipe(List<List<ItemStack>> inputs, ItemStack output) {
+			this.inputs = inputs;
 			this.output = output; 
 		}
-		
-		public List<ItemStack> getStamps() {
-			return stamps;
-		}
-		
+
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInputs(VanillaTypes.ITEM, input);
+			ingredients.setInputLists(VanillaTypes.ITEM, inputs);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 		
@@ -281,6 +277,84 @@ public class JeiRecipes {
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 
+	}
+
+	public static class ArcWelderRecipe implements IRecipeWrapper {
+
+		private final List<List<ItemStack>> inputs;
+		private final ItemStack output;
+		private final int duration;
+		private final long consumption;
+		public final int itemLen;
+
+		public ArcWelderRecipe(List<AStack> inputs, ItemStack output, int duration, long consumption, int itemLen) {
+			List<List<ItemStack>> list = new ArrayList<>(inputs.size());
+			for(AStack s : inputs)
+				list.add(s.getStackList());// list of inputs and their list of possible items
+			this.inputs = list;
+			this.output = output;
+			this.duration = duration;
+			this.consumption = consumption;
+			this.itemLen = itemLen;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputLists(VanillaTypes.ITEM, Library.copyItemStackListList(inputs));
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+
+		@Override
+		public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+			FontRenderer fontRenderer = minecraft.fontRenderer;
+
+			String timeText = duration/20D+"s";
+			fontRenderer.drawString(timeText, 123-fontRenderer.getStringWidth(timeText), 4, 0x555555);
+			String powerText = Library.getShortNumber(consumption*20)+"HE/s";
+			fontRenderer.drawString(powerText, 123-fontRenderer.getStringWidth(powerText), 43, 0x555555);
+			GlStateManager.color(1, 1, 1, 1);
+		}
+	}
+
+	public static class SolderingRecipe implements IRecipeWrapper {
+
+		private final List<List<ItemStack>> inputs;
+		private final ItemStack output;
+		private final int duration;
+		private final long consumption;
+		public final int toppingCount;
+		public final int pcbCount;
+		public final int solderCount;
+
+		public SolderingRecipe(List<AStack> inputs, ItemStack output, int duration, long consumption, int toppingCount, int pcbCount, int solderCount) {
+			List<List<ItemStack>> list = new ArrayList<>(inputs.size());
+			for(AStack s : inputs)
+				list.add(s.getStackList());// list of inputs and their list of possible items
+			this.inputs = list;
+			this.output = output;
+			this.duration = duration;
+			this.consumption = consumption;
+			this.toppingCount = toppingCount;
+			this.pcbCount = pcbCount;
+			this.solderCount = solderCount;
+		}
+
+		@Override
+		public void getIngredients(IIngredients ingredients) {
+			ingredients.setInputLists(VanillaTypes.ITEM, Library.copyItemStackListList(inputs));
+			ingredients.setOutput(VanillaTypes.ITEM, output);
+		}
+
+		@Override
+		public void drawInfo(Minecraft minecraft, int recipeWidth, int recipeHeight, int mouseX, int mouseY) {
+			FontRenderer fontRenderer = minecraft.fontRenderer;
+
+			String timeText = duration/20D+"s";
+			fontRenderer.drawString(timeText, 123-fontRenderer.getStringWidth(timeText), 4, 0x555555);
+			String powerText = Library.getShortNumber(consumption*20)+"HE/s";
+			fontRenderer.drawString(powerText, 123-fontRenderer.getStringWidth(powerText), 43, 0x555555);
+			GlStateManager.color(1, 1, 1, 1);
+		}
 	}
 	
 	public static class BoilerRecipe implements IRecipeWrapper {
@@ -942,8 +1016,10 @@ public class JeiRecipes {
 		pressRecipes = new ArrayList<PressRecipe>();
 		
 		for(Map.Entry<Pair<PressRecipes.PressType, AStack>, ItemStack> entry : PressRecipes.pressRecipes.entrySet()){
-
-			pressRecipes.add(new PressRecipe(PressRecipes.getStampList(entry.getKey().getKey()), entry.getKey().getValue().getStackList(), entry.getValue()));
+			List<List<ItemStack>> inputs = new ArrayList<>();
+			inputs.add(entry.getKey().getValue().getStackList());
+			inputs.add(PressRecipes.getStampList(entry.getKey().getKey()));
+			pressRecipes.add(new PressRecipe(inputs, entry.getValue()));
 		}
 		
 		return pressRecipes;
@@ -1036,6 +1112,34 @@ public class JeiRecipes {
 			}
 		}
 		return foundryPourRecipes;
+	}
+
+	public static List<ArcWelderRecipe> getArcWelderRecipes() {
+		if(arcWelderRecipes != null)
+			return arcWelderRecipes;
+		arcWelderRecipes = new ArrayList<ArcWelderRecipe>();
+
+		for(ArcWelderRecipes.ArcWelderRecipe recipe : ArcWelderRecipes.recipes) {
+			List<AStack> recipeItemList = new ArrayList<>(Arrays.asList(recipe.ingredients));
+			if(recipe.fluid != null) recipeItemList.add(new NbtComparableStack(ItemFluidIcon.getStackWithQuantity(recipe.fluid)));
+			arcWelderRecipes.add(new ArcWelderRecipe(recipeItemList, recipe.output, recipe.duration, recipe.consumption, recipe.ingredients.length));
+		}
+		return arcWelderRecipes;
+	}
+
+	public static List<SolderingRecipe> getSolderingRecipes() {
+		if(solderingRecipes != null)
+			return solderingRecipes;
+		solderingRecipes = new ArrayList<SolderingRecipe>();
+
+		for(SolderingRecipes.SolderingRecipe recipe : SolderingRecipes.recipes){
+			List<AStack> recipeItemList = new ArrayList<>(Arrays.asList(recipe.toppings));
+			recipeItemList.addAll(Arrays.asList(recipe.pcb));
+			recipeItemList.addAll(Arrays.asList(recipe.solder));
+			if(recipe.fluid != null) recipeItemList.add(new NbtComparableStack(ItemFluidIcon.getStackWithQuantity(recipe.fluid)));
+			solderingRecipes.add(new SolderingRecipe(recipeItemList, recipe.output, recipe.duration, recipe.consumption, recipe.toppings.length, recipe.pcb.length, recipe.solder.length));
+		}
+		return solderingRecipes;
 	}
 
 	public static List<RBMKFuelRecipe> getRBMKFuelRecipes() {

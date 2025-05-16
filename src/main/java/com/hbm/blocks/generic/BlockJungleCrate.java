@@ -15,6 +15,8 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
+import static com.hbm.inventory.material.Mats.MAT_GOLD;
+
 public class BlockJungleCrate extends Block {
 
 	public BlockJungleCrate(Material materialIn, String s) {
@@ -32,7 +34,7 @@ public class BlockJungleCrate extends Block {
 		drops.add(new ItemStack(Items.GOLD_INGOT, 4 + rand.nextInt(4)));
 		drops.add(new ItemStack(Items.GOLD_NUGGET, 8 + rand.nextInt(10)));
 		drops.add(new ItemStack(ModItems.powder_gold, 2 + rand.nextInt(3)));
-		drops.add(new ItemStack(ModItems.wire_gold, 2 + rand.nextInt(2)));
+		drops.add(new ItemStack(ModItems.wire, 2 + rand.nextInt(2), MAT_GOLD.id));
 
         if(rand.nextInt(2) == 0)
         	drops.add(new ItemStack(ModItems.plate_gold, 1 + rand.nextInt(2)));

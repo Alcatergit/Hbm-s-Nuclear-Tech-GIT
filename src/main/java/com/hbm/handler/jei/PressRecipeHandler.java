@@ -60,12 +60,10 @@ public class PressRecipeHandler implements IRecipeCategory<PressRecipe> {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
 		guiItemStacks.init(0, true, 1, 37);
-		guiItemStacks.init(1, false, 64, 19);
-		//Stamp
-		guiItemStacks.init(2, true, 1, 1);
-		
+		guiItemStacks.init(1, true, 1, 1);
+		guiItemStacks.init(2, false, 64, 19);
+
 		guiItemStacks.set(ingredients);
-		guiItemStacks.set(2, recipeWrapper.getStamps());
 	}
 
 }

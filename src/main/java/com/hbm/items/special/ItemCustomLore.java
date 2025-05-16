@@ -462,8 +462,6 @@ public class ItemCustomLore extends Item {
 			this == ModItems.powder_schrabidate || 
 			this == ModItems.powder_schrabidium || 
 
-			this == ModItems.wire_schrabidium || 
-
 			this == ModItems.plate_schrabidium || 
 			this == ModItems.plate_saturnite || 
 			

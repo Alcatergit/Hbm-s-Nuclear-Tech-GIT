@@ -54,7 +54,6 @@ public class BlockGasFlammable extends BlockGasBase {
 
 			if(rand.nextInt(20) == 0 && world.isAirBlock(pos.down())) {
 				world.setBlockToAir(pos);
-				return;
 			}
 		}
 	}
@@ -69,8 +68,7 @@ public class BlockGasFlammable extends BlockGasBase {
 			IBlockState b = world.getBlockState(posN);
 			
 			if(isFireSource(b)) {
-				world.scheduleUpdate(pos, this, 2);
-				return;
+				combust(world, pos);
 			}
 		}
 	}

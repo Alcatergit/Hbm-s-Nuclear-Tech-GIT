@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.entity.item.EntityMovingPackage;
+import com.hbm.inventory.*;
 import com.hbm.tileentity.network.*;
+import com.hbm.world.feature.OreLayer3D;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -223,45 +225,7 @@ import com.hbm.handler.HbmKeybinds;
 import com.hbm.handler.MultiblockBBHandler;
 import com.hbm.handler.crt.NTMCraftTweaker;
 import com.hbm.hazard.HazardRegistry;
-import com.hbm.inventory.AnvilRecipes;
-import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.MixerRecipes;
-import com.hbm.inventory.BreederRecipes;
-import com.hbm.inventory.CrackRecipes;
-import com.hbm.inventory.CentrifugeRecipes;
-import com.hbm.inventory.CrucibleRecipes;
-import com.hbm.inventory.CrystallizerRecipes;
-import com.hbm.inventory.CyclotronRecipes;
-import com.hbm.inventory.CombinationRecipes;
-import com.hbm.inventory.HadronRecipes;
-import com.hbm.inventory.MagicRecipes;
-import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.material.MatDistribution;
-import com.hbm.inventory.RefineryRecipes;
-import com.hbm.inventory.FractionRecipes;
-import com.hbm.inventory.WasteDrumRecipes;
-import com.hbm.inventory.SILEXRecipes;
-import com.hbm.inventory.ShredderRecipes;
-import com.hbm.inventory.RBMKOutgasserRecipes;
-import com.hbm.inventory.RBMKFuelRecipes;
-import com.hbm.inventory.DFCRecipes;
-import com.hbm.inventory.DiFurnaceRecipes;
-import com.hbm.inventory.PotionRecipes;
-import com.hbm.inventory.SAFERecipes;
-import com.hbm.inventory.StorageDrumRecipes;
-import com.hbm.inventory.NuclearTransmutationRecipes;
-import com.hbm.inventory.HeatRecipes;
-import com.hbm.inventory.FluidCombustionRecipes;
-import com.hbm.inventory.PressRecipes;
-import com.hbm.inventory.FluidFlameRecipes;
-import com.hbm.inventory.SolidificationRecipes;
-import com.hbm.inventory.LiquefactionRecipes;
-import com.hbm.inventory.ReformingRecipes;
-import com.hbm.inventory.HydrotreatingRecipes;
-import com.hbm.inventory.CokerRecipes;
-import com.hbm.inventory.VacuumDistillRecipes;
-import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlRegistry;
 import com.hbm.items.ModItems;
@@ -824,6 +788,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCondenser.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_condenser"));
 		GameRegistry.registerTileEntity(TileEntityMachineLiquefactor.class, new ResourceLocation(RefStrings.MODID, "tileentity_liquefactor"));
 		GameRegistry.registerTileEntity(TileEntityMachineSolidifier.class, new ResourceLocation(RefStrings.MODID, "tileentity_solidifier"));
+		GameRegistry.registerTileEntity(TileEntityMachineSolderingStation.class, new ResourceLocation(RefStrings.MODID, "tileentity_soldering_station"));
+		GameRegistry.registerTileEntity(TileEntityMachineArcWelder.class, new ResourceLocation(RefStrings.MODID, "tileentity_arc_welder"));
 		GameRegistry.registerTileEntity(TileEntityChungus.class, new ResourceLocation(RefStrings.MODID, "tileentity_chungus"));
 		GameRegistry.registerTileEntity(TileEntitySpacer.class, new ResourceLocation(RefStrings.MODID, "tileentity_spacer"));
 		GameRegistry.registerTileEntity(TileEntityMachineFractionTower.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_frac_tower"));
@@ -1105,6 +1071,8 @@ public class MainRegistry {
 		MixerRecipes.copyChemplantRecipes();
 		MixerRecipes.registerRecipes();
 		CrackRecipes.registerRecipes();
+		SolderingRecipes.registerDefaults();
+		ArcWelderRecipes.registerDefaults();
 		ExplosionNukeGeneric.loadSoliniumFromFile();
 		CyclotronRecipes.register();
 		CombinationRecipes.registerDefaults();
@@ -1149,8 +1117,9 @@ public class MainRegistry {
 		if(World.MAX_ENTITY_RADIUS < 5)
 			World.MAX_ENTITY_RADIUS = 5;
 		MinecraftForge.EVENT_BUS.register(new SchistStratum(ModBlocks.stone_gneiss, 0.01D, 5, 8, 30)); //DecorateBiomeEvent.Pre
-		MinecraftForge.EVENT_BUS.register(new SchistStratum(ModBlocks.ore_hematite, 0.02D, 5.5, 5, 45)); //DecorateBiomeEvent.Pre
-		
+		MinecraftForge.EVENT_BUS.register(new OreLayer3D(ModBlocks.ore_hematite).setScaleH(0.05D).setScaleV(0.1D).setThreshold(230));
+		MinecraftForge.EVENT_BUS.register(new OreLayer3D(ModBlocks.ore_malachite).setScaleH(0.03D).setScaleV(0.15D).setThreshold(300));
+
 		NTMCraftTweaker.applyPostInitActions();
 		AssemblerRecipes.generateList();
 		HeatRecipes.setFluidsForRBMKLoader();

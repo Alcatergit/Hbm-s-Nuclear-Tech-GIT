@@ -111,7 +111,7 @@ public class CyclotronRecipes {
 
 	public static Object[] getOutput(ItemStack stack, ItemStack box) {
 
-		if(stack == null || stack.getItem() == null || box == null || stack.isEmpty() || box.isEmpty())
+		if(stack == null || box == null || stack.isEmpty() || box.isEmpty())
 			return null;
 
 		HashMap<Object, ItemStack> pool = null;

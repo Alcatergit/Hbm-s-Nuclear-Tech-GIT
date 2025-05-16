@@ -34,14 +34,4 @@ public class EntityTeslaCrab extends EntityCyberCrab {
     	
         super.onLivingUpdate();
     }
-
-    @Override
-	protected Item getDropItem(){
-        return ModItems.wire_advanced_alloy;
-    }
-
-    protected void dropRareDrop(int p_70600_1_) {
-    	this.dropItem(ModItems.coil_copper, 1);
-    }
-
 }
