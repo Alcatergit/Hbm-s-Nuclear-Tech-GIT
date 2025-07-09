@@ -153,19 +153,7 @@ import com.hbm.blocks.machine.rbmk.RBMKCooler;
 import com.hbm.blocks.machine.rbmk.RBMKHeater;
 import com.hbm.blocks.machine.rbmk.RBMKCraneConsole;
 import com.hbm.blocks.network.*;
-import com.hbm.blocks.network.energy.BlockCable;
-import com.hbm.blocks.network.energy.CableSwitch;
-import com.hbm.blocks.network.energy.CableDiode;
-import com.hbm.blocks.network.energy.CableDetector;
-import com.hbm.blocks.network.energy.PowerDetector;
-import com.hbm.blocks.network.energy.PylonRedWire;
-import com.hbm.blocks.network.energy.PylonLarge;
-import com.hbm.blocks.network.energy.Substation;
-import com.hbm.blocks.network.energy.WireCoated;
-import com.hbm.blocks.network.energy.WireCoatedRadResistant;
-import com.hbm.blocks.network.energy.BlockConverterRfHe;
-import com.hbm.blocks.network.energy.BlockConverterHeRf;
-import com.hbm.blocks.network.energy.BlockCableGauge;
+import com.hbm.blocks.network.energy.*;
 import com.hbm.blocks.test.KeypadTest;
 import com.hbm.blocks.test.TestObjTester;
 import com.hbm.blocks.test.TestRender;
@@ -831,6 +819,7 @@ public class ModBlocks {
 	public static final Block cable_diode = new CableDiode(Material.IRON, "cable_diode").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block red_cable_gauge = new BlockCableGauge(Material.IRON, "red_cable_gauge").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 		
+	public static final Block red_connector = new ConnectorRedWire(Material.IRON, "red_connector").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block red_pylon = new PylonRedWire(Material.IRON, "red_pylon").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block red_pylon_large = new PylonLarge(Material.IRON, "red_pylon_large").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block substation = new Substation(Material.IRON,"substation").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);

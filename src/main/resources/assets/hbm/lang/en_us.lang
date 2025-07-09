@@ -4917,6 +4917,7 @@ tile.red_barrel.name=Explosive Barrel
 tile.red_cable.name=Red Copper Cable
 tile.red_cable_gauge.desc=Cable that displays how much power$moves within the network per second.$Split networks connected by energy$storage blocks are considered as one shared network.
 tile.red_cable_gauge.name=Power Gauge
+tile.red_connector.name=Electricity Connector
 tile.red_pylon.desc=§6Connection Type: §eSingle$§6Connection Range: §e25m
 tile.red_pylon.name=Electricity Pole
 tile.red_pylon_large.desc=§6Connection Type: §eQuadruple$§6Connection Range: §e100m$§6This pylon requires a substation!

@@ -229,6 +229,7 @@ public class ResourceManager {
 	//Cables
 	public static final IModelCustom cable_neo = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/blocks/cable_neo.obj"));
 
+	public static final IModelCustom connector = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/network/connector.obj"));
 	//Big Cables
 	public static final IModelCustom pylon_large = AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/network/pylon_large.obj"));
 	public static final IModelCustom substation = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/network/substation.obj"));
@@ -681,6 +682,8 @@ public class ResourceManager {
 	
 	//Cable
 	public static final ResourceLocation cable_neo_tex = new ResourceLocation(RefStrings.MODID, "textures/blocks/cable_neo.png");
+
+	public static final ResourceLocation connector_tex = new ResourceLocation(RefStrings.MODID, "textures/models/network/connector.png");
 
 	//Large Cable
 	public static final ResourceLocation pylon_large_tex = new ResourceLocation(RefStrings.MODID, "textures/models/network/pylon_large.png");

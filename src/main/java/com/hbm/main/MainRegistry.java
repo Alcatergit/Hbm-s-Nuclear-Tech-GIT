@@ -605,6 +605,7 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityMachineBoilerElectric.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_boiler_electric"));
 		GameRegistry.registerTileEntity(TileEntityMachineBoilerRTG.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_boiler_rtg"));
 		GameRegistry.registerTileEntity(TileEntityMachineEPress.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_epress"));
+		GameRegistry.registerTileEntity(TileEntityConnector.class, new ResourceLocation(RefStrings.MODID, "tileentity_connector_redwire"));
 		GameRegistry.registerTileEntity(TileEntityPylon.class, new ResourceLocation(RefStrings.MODID, "tileentity_pylon_red_wire"));
 		GameRegistry.registerTileEntity(TileEntityPylonLarge.class, new ResourceLocation(RefStrings.MODID, "tileentity_pylon_large"));
 		GameRegistry.registerTileEntity(TileEntitySubstation.class, new ResourceLocation(RefStrings.MODID, "tileentity_pylon_substation"));
