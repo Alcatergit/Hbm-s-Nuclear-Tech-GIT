@@ -166,7 +166,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		if(loadDelay > 20)
 			loadDelay = 0;
 		
-		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType() == ModForgeFluids.ACID && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
+		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType().getName().equals(ModForgeFluids.ACID.getName()) && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
 			SILEXRecipe recipe = SILEXRecipes.getOutput(inventory.getStackInSlot(0));
 			
 			if(recipe == null)
@@ -310,7 +310,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && (resource.getFluid() == ModForgeFluids.ACID || fluidConversion.containsKey(resource.getFluid()))){
+		if(resource != null && (resource.getFluid().getName().equals(ModForgeFluids.ACID.getName()) || fluidConversion.containsKey(resource.getFluid()))){
 			return tank.fill(resource, doFill);
 		}
 		return 0;
