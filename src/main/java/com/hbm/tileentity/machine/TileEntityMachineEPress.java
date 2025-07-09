@@ -104,7 +104,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 			this.updateStandardConnections(world, pos);
 			power = Library.chargeTEFromItems(inventory, 0, power, maxPower);
 			
-			if(power >= 100 && !(world.getStrongPower(pos) > 0)) {
+			if(power >= 100 && !(world.getRedstonePowerFromNeighbors(pos) > 0)) {
 
 				int speed = 25;
 				

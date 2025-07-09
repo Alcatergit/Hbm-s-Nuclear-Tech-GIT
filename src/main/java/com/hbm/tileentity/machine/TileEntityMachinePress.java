@@ -104,7 +104,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 				if(power > 0)
 					power--;
 			}
-			if(!(world.getStrongPower(pos) > 0)) {
+			if(!(world.getRedstonePowerFromNeighbors(pos) > 0)) {
 				if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
 					this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
 					ItemStack copy = inventory.getStackInSlot(0).copy();

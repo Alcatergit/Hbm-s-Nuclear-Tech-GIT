@@ -313,7 +313,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	
 	public short getRelevantMode() {
 		
-		if(world.getStrongPower(pos) > 0) {
+		if(world.getRedstonePowerFromNeighbors(pos) > 0) {
 			return this.redHigh;
 		} else {
 			return this.redLow;

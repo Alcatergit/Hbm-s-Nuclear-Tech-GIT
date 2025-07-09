@@ -176,7 +176,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 				for(int x = -1; x <= 1; x++) {
 					for(int z = -1; z <= 1; z++) {
 
-						if(world.getStrongPower(mPos.setPos(pos.getX() + x, pos.getY(), pos.getZ() + z)) > 0) {
+						if(world.getRedstonePowerFromNeighbors(mPos.setPos(pos.getX() + x, pos.getY(), pos.getZ() + z)) > 0) {
 							launch();
 							break outer;
 						}

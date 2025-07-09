@@ -11,7 +11,7 @@ public class TileEntityChlorineSeal extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if(!world.isRemote && world.getStrongPower(pos) > 0)
+		if(!world.isRemote && world.getRedstonePowerFromNeighbors(pos) > 0)
 			spread(new BlockPos.MutableBlockPos(pos), 0);
 	}
 	

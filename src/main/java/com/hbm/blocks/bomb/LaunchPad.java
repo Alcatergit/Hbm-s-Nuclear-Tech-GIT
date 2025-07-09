@@ -92,7 +92,7 @@ public class LaunchPad extends BlockContainer implements IBomb {
 
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (worldIn.getStrongPower(pos) > 0 && !worldIn.isRemote) {
+		if (worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			this.explode(worldIn, pos);
 		}
 	}

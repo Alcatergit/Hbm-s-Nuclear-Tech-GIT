@@ -52,7 +52,7 @@ public class BlockSemtex extends Block implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos){
-		if(worldIn.getStrongPower(pos) > 0){
+		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0){
 			this.explode(worldIn, pos);
 		}
 	}
