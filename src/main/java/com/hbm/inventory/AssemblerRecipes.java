@@ -870,7 +870,7 @@ public class AssemblerRecipes {
 
 		makeRecipe(new ComparableStack(ModBlocks.machine_condenser_powered, 1), new AStack[] {
 				new OreDictStack(STEEL.plateWelded(), 8),
-				new OreDictStack(ANY_RESISTANTALLOY.plate(), 24 /* TODO: 4 plateWelded when they work */),
+				new OreDictStack(ANY_RESISTANTALLOY.ingot(), 24 /* TODO: 4 plateWelded when they work */),
                 new OreDictStack(CU.plate(), 16),
 				new ComparableStack(ModItems.motor_desh, 3),
 				new OreDictStack(STEEL.pipe(), 24),
