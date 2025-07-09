@@ -71,7 +71,7 @@ public class MachineCondenserPowered extends BlockDummyable implements ILookOver
         TileEntityCondenserPowered tower = (TileEntityCondenserPowered) te;
         List<String> text = new ArrayList<>();
 
-        text.add(BobMathUtil.getShortNumber(tower.power) + "HE / " + BobMathUtil.getShortNumberNew(TileEntityCondenserPowered.maxPower) + "HE");
+        text.add(BobMathUtil.getShortNumberNew(tower.power) + "HE / " + BobMathUtil.getShortNumberNew(TileEntityCondenserPowered.maxPower) + "HE");
 
         for(int i = 0; i < tower.tanks.length; i++)
             text.add((i < 1 ? (TextFormatting.GREEN + "-> ") : (TextFormatting.RED + "<- ")) + TextFormatting.RESET + (tower.tanks[i].getFluid() != null ? tower.tanks[i].getFluid().getLocalizedName() : "None") + ": " + String.format(Locale.US, "%,d", tower.tanks[i].getFluidAmount()) + "/" + String.format(Locale.US, "%,d", tower.tanks[i].getCapacity()) + "mB");
