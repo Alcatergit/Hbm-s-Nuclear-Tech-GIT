@@ -155,7 +155,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(i == 2)
 			if(stack.getItem() instanceof IBatteryItem){
 				IBatteryItem batteryItem = ((IBatteryItem)stack.getItem());
-				if(batteryItem.getCharge(stack) < batteryItem.getMaxCharge() && batteryItem.getChargeRate() > 0){
+				if(batteryItem.getCharge(stack) < batteryItem.getMaxCharge(stack) && batteryItem.getChargeRate() > 0){
 					return true;
 				}
 			}
@@ -186,7 +186,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		ItemStack itemStackFill = inventory.getStackInSlot(2);
 		if(itemStackFill.getItem() instanceof IBatteryItem) {
 			IBatteryItem itemFill = ((IBatteryItem)itemStackFill.getItem());
-			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge()) {
+			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge(itemStackFill)) {
 				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
 					inventory.setStackInSlot(3, itemStackFill);
 					inventory.setStackInSlot(2, ItemStack.EMPTY);

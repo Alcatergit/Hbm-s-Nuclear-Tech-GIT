@@ -165,7 +165,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		long power = getCharge(stack);
-    	list.add("Charge: " + getColor(power, maxPower) + Library.getShortNumber(power) + " §2/ " + Library.getShortNumber(maxPower));
+    	list.add("Charge: " + getColor(power, getMaxCharge(stack)) + Library.getShortNumber(power) + " §2/ " + Library.getShortNumber(getMaxCharge(stack)));
 
 		list.add(TextFormatting.GOLD + I18nUtil.resolveKey("armor.fullSetBonus"));
 

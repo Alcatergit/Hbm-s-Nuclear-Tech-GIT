@@ -1901,7 +1901,7 @@ public class ModEventHandlerClient {
 				
 				ItemStack[] mods = ArmorModHandler.pryMods(stack);
 				
-				for(int i = 0; i < 8; i++) {
+				for(int i = 0; i < ArmorModHandler.MOD_SLOTS; i++) {
 					
 					if(mods[i] != null && mods[i].getItem() instanceof ItemArmorMod) {
 						

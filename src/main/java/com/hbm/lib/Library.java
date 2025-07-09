@@ -306,7 +306,7 @@ public class Library {
 			IBatteryItem battery = (IBatteryItem) inventory.getStackInSlot(index).getItem();
 			ItemStack stack = inventory.getStackInSlot(index);
 			
-			long batMax = battery.getMaxCharge();
+			long batMax = battery.getMaxCharge(stack);
 			long batCharge = battery.getCharge(stack);
 			long batRate = battery.getChargeRate();
 			
