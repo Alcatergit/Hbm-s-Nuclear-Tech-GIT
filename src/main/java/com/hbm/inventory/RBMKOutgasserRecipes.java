@@ -191,7 +191,7 @@ public class RBMKOutgasserRecipes {
 		for(String key : dictKeys) {
 			OreDictStack oreStack = new OreDictStack(key);
 			if(rbmkOutgasserRecipes.containsKey(oreStack)){
-				return (int)rbmkOutgasserRecipes.get(oreStack)[1];
+				return (int)rbmkOutgasserRecipes.get(oreStack)[0];
 			}
 		}
 		return -1;
