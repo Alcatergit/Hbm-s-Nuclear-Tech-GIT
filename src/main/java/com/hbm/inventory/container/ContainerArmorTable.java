@@ -75,7 +75,7 @@ public class ContainerArmorTable extends Container {
 		//player armor slots for easy accessibility
 		for(int i = 0; i < 4; ++i) {
 			final int k = i;
-			this.addSlotToContainer(new Slot(inventory, inventory.getSizeInventory() - 1 - i, -17 + 22, 36 + i * 18) {
+			this.addSlotToContainer(new Slot(inventory, inventory.getSizeInventory() - 2 - i, -17 + 22, 36 + i * 18) {
 
 				public int getSlotStackLimit() {
 					return 1;
