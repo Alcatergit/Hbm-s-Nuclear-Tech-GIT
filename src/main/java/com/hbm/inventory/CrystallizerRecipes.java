@@ -37,7 +37,7 @@ public class CrystallizerRecipes {
 	//'Object' is either a ComparableStack or the String for the ore dict
 	private static LinkedHashMap<Object, ItemStack> itemOutputRecipes = new LinkedHashMap<Object, ItemStack>();
 	private static HashMap<Object, FluidStack> fluidInputRecipes = new HashMap<Object, FluidStack>();
-	private static HashSet<Fluid> allowedFluids = new HashSet<Fluid>();
+	private static HashSet<String> allowedFluids = new HashSet<>();
 	private static List<CrystallizerRecipe> jeiCrystalRecipes = null;
 
 	public static void register() {
@@ -130,7 +130,7 @@ public class CrystallizerRecipes {
 	public static void addRecipe(Object itemInput, FluidStack fluidInput, ItemStack itemOutput){
 		itemOutputRecipes.put(itemInput, itemOutput);
 		fluidInputRecipes.put(itemInput, fluidInput);
-		allowedFluids.add(fluidInput.getFluid());
+		allowedFluids.add(fluidInput.getFluid().getName());
 	}
 
 
@@ -178,7 +178,7 @@ public class CrystallizerRecipes {
 
 	public static boolean isAllowedFluid(Fluid f){
 		if(f != null){
-			return allowedFluids.contains(f);
+			return allowedFluids.contains(f.getName());
 		}
 		return false;
 	}
