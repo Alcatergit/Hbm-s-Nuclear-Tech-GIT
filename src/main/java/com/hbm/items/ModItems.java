@@ -377,7 +377,8 @@ public class ModItems {
 	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item protection_charm = new ItemModCharm("protection_charm").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setCreativeTab(MainRegistry.consumableTab);
-		
+	public static final Item neutrino_lens = new ItemModLens("neutrino_lens").setCreativeTab(MainRegistry.consumableTab);
+
 	//Stamps
 	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 16);
 	public static final Item stamp_stone_plate = new ItemStamp("stamp_stone_plate", 16);

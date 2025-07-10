@@ -1,21 +1,17 @@
 package com.hbm.inventory.gui;
 
-import java.util.Arrays;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
+import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.BedrockOreRegistry;
+import com.hbm.items.ISatChip;
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.SatLaserPacket;
-import com.hbm.blocks.ModBlocks;
-import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.render.RenderHelper;
 import com.hbm.saveddata.satellites.Satellite.InterfaceActions;
 import com.hbm.saveddata.satellites.Satellite.Interfaces;
-
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -25,12 +21,15 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.block.Block;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class GUIScreenSatInterface extends GuiScreen {
 	
@@ -61,7 +60,7 @@ public class GUIScreenSatInterface extends GuiScreen {
     			
     			int x = this.x - guiLeft + i - 8 - 100;
     			int z = this.z - guiTop + j - 8 - 100;
-    			PacketDispatcher.wrapper.sendToServer(new SatLaserPacket(x, z, ItemSatInterface.getFreq(player.getHeldItemMainhand())));
+    			PacketDispatcher.wrapper.sendToServer(new SatLaserPacket(x, z, ISatChip.getFreqS(player.getHeldItemMainhand())));
     		}
     	}
     }

@@ -11,6 +11,7 @@ import java.util.Random;
 
 import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.render.entity.item.RenderMovingPackage;
+import com.hbm.render.util.RenderOverhead;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
@@ -2073,6 +2074,15 @@ public class ClientProxy extends ServerProxy {
 			}
 			return;
 		}
+
+        if("marker".equals(type)) {
+            int color = data.getInteger("color");
+            String label = data.getString("label");
+            int expires = data.getInteger("expires");
+            double dist = data.getDouble("dist");
+
+            RenderOverhead.queuedMarkers.put(new BlockPos(x, y, z),  new RenderOverhead.Marker(color).setDist(dist).setExpire(expires > 0 ? System.currentTimeMillis() + expires : 0).withLabel(label.isEmpty() ? null : label));
+        }
 
 		if("foundry".equals(type)) {
 			int color = data.getInteger("color");

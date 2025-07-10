@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import java.util.Set;
 
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.util.*;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -145,12 +146,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.CrucibleRecipes;
 import com.hbm.inventory.BreederRecipes;
-import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
-import com.hbm.util.ContaminationUtil;
-import com.hbm.util.BobMathUtil;
-import com.hbm.util.I18nUtil;
-import com.hbm.util.ItemStackUtil;
 import com.hbm.hazard.HazardSystem;
 
 import glmath.glm.vec._2.Vec2;
@@ -1093,6 +1089,8 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
+		Clock.update();
+
 		HbmShaderManager2.createInvMVP();
 		GlStateManager.enableDepth();
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
@@ -1242,13 +1240,16 @@ public class ModEventHandlerClient {
     		GL11.glPopMatrix();
 		}
 		
-		
-		if(ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player) && HbmCapability.getData(Minecraft.getMinecraft().player).getEnableHUD()) {
-			ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
-			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
+		if(HbmCapability.getData(Minecraft.getMinecraft().player).getEnableHUD()) {
+			RenderOverhead.renderMarkers(evt.getPartialTicks());
 
-			if(chestplate.thermal)
-				RenderOverhead.renderThermalSight(evt.getPartialTicks());
+			if (ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player)) {
+				ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
+				ArmorFSB chestplate = (ArmorFSB) plate.getItem();
+
+				if (chestplate.thermal)
+					RenderOverhead.renderThermalSight(evt.getPartialTicks());
+			}
 		}
 		
 		if(entity instanceof EntityPlayer){
