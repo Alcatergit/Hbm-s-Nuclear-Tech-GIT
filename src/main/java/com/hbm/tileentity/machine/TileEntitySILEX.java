@@ -166,7 +166,7 @@ public class TileEntitySILEX extends TileEntityMachineBase implements ITickable,
 		if(loadDelay > 20)
 			loadDelay = 0;
 		
-		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType().getName().equals(ModForgeFluids.ACID.getName()) && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
+		if(loadDelay == 0 && !inventory.getStackInSlot(0).isEmpty() && getTankType() != null && getTankType().getName().equals(ModForgeFluids.ACID.getName()) && (this.current == null || this.current.equals(new ComparableStack(inventory.getStackInSlot(0)).makeSingular()))) {
 			SILEXRecipe recipe = SILEXRecipes.getOutput(inventory.getStackInSlot(0));
 			
 			if(recipe == null)

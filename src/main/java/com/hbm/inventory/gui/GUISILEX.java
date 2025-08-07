@@ -84,7 +84,7 @@ public class GUISILEX extends GuiInfoContainer {
 
 		if(silex.tank.getFluidAmount() > 0) {
 			
-			if(silex.getTankType().getName().equals(ModForgeFluids.ACID.getName()) || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType())) {
+			if(silex.getTankType() != null && (silex.getTankType().getName().equals(ModForgeFluids.ACID.getName()) || TileEntitySILEX.fluidConversion.containsKey(silex.getTankType()))) {
 				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 118, 54, 9);
 			} else {
 				drawTexturedModalRect(guiLeft + 7, guiTop + 41, 176, 109, 54, 9);
