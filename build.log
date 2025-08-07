@@ -1,0 +1,4 @@
+
+> Configure project :
+Deprecated: Allowing insecure connections for repo 'jared maven' - add 'allowInsecureProtocol = true'
+Failed to read from buildscript.properties, as it did not exist!

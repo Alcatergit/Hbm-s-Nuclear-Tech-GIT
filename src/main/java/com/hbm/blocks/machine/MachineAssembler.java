@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -88,8 +89,8 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 
 		if(i == 0) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 5), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionEast, ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionEast"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionEast"), ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
@@ -125,8 +126,8 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 		}
 		if(i == 1) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 3), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionSouth, ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionSouth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionSouth"), ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
@@ -162,8 +163,8 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 		}
 		if(i == 2) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 4), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionWest, ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionWest"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionWest"), ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;
@@ -199,8 +200,8 @@ public class MachineAssembler extends BlockContainer implements IMultiBlock {
 		}
 		if(i == 3) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 2), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.assemblerDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.assemblerDimensionNorth, ModBlocks.dummy_block_assembler);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionNorth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("assemblerDimensionNorth"), ModBlocks.dummy_block_assembler);
 
 				//
 				DummyBlockAssembler.safeBreak = true;

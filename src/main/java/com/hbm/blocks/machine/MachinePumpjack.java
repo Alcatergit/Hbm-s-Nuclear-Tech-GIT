@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -117,8 +118,8 @@ public class MachinePumpjack extends BlockContainer implements IMultiBlock {
 		world.setBlockState(pos, state.withProperty(FACING, e));
 
 		if(i == 0) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.pumpjackDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.pumpjackDimensionEast, ModBlocks.dummy_block_pumpjack);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionEast"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionEast"), ModBlocks.dummy_block_pumpjack);
 
 				//
 				DummyBlockPumpjack.safeBreak = true;
@@ -153,8 +154,8 @@ public class MachinePumpjack extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if(i == 1) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.pumpjackDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.pumpjackDimensionSouth, ModBlocks.dummy_block_pumpjack);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionSouth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionSouth"), ModBlocks.dummy_block_pumpjack);
 
 				//
 				DummyBlockPumpjack.safeBreak = true;
@@ -189,8 +190,8 @@ public class MachinePumpjack extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if(i == 2) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.pumpjackDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.pumpjackDimensionWest, ModBlocks.dummy_block_pumpjack);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionWest"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionWest"), ModBlocks.dummy_block_pumpjack);
 
 				//
 				DummyBlockPumpjack.safeBreak = true;
@@ -225,8 +226,8 @@ public class MachinePumpjack extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if(i == 3) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.pumpjackDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.pumpjackDimensionNorth, ModBlocks.dummy_block_pumpjack);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionNorth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("pumpjackDimensionNorth"), ModBlocks.dummy_block_pumpjack);
 
 				//
 				DummyBlockPumpjack.safeBreak = true;

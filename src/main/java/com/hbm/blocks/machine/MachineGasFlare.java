@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -107,8 +108,8 @@ public class MachineGasFlare extends BlockContainer implements IMultiBlock {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.flareDimension)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.flareDimension, ModBlocks.dummy_block_flare);
+		if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("flareDimension"))) {
+			MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("flareDimension"), ModBlocks.dummy_block_flare);
 
 			DummyBlockFlare.safeBreak = true;
 			world.setBlockState(pos.add(0, 0, 1), ModBlocks.dummy_port_flare.getDefaultState());

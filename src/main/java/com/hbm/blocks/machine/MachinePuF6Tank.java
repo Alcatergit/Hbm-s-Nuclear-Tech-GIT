@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -86,8 +87,8 @@ public class MachinePuF6Tank extends BlockContainer implements IMultiBlock {
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-		if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.uf6Dimension)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.uf6Dimension, ModBlocks.dummy_block_puf6);
+		if (MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("uf6Dimension"))) {
+			MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("uf6Dimension"), ModBlocks.dummy_block_puf6);
 
 		} else {
 			world.destroyBlock(pos, true);

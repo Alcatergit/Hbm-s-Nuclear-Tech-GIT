@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -86,8 +87,8 @@ public class MachineCentrifuge extends BlockContainer implements IMultiBlock {
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
 
-		if (MultiblockHandler.checkSpace(world, pos, MultiblockHandler.centDimension)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.centDimension, ModBlocks.dummy_block_centrifuge);
+		if (MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("centDimension"))) {
+			MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("centDimension"), ModBlocks.dummy_block_centrifuge);
 
 		} else {
 			world.destroyBlock(pos, true);

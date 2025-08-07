@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -88,8 +89,8 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 		EnumFacing e = placer.getHorizontalFacing().getOpposite();
 		world.setBlockState(pos, state.withProperty(FACING, e));
 		if (e == EnumFacing.EAST) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionEast, ModBlocks.dummy_block_radgen);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("radGenDimensionEast"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("radGenDimensionEast"), ModBlocks.dummy_block_radgen);
 				
 				//
 				DummyBlockRadGen.safeBreak = true;
@@ -106,8 +107,8 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.SOUTH) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionSouth, ModBlocks.dummy_block_radgen);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("radGenDimensionSouth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("radGenDimensionSouth"), ModBlocks.dummy_block_radgen);
 				
 				//
 				DummyBlockRadGen.safeBreak = true;
@@ -124,8 +125,8 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.WEST) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionWest, ModBlocks.dummy_block_radgen);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("radGenDimensionWest"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("radGenDimensionWest"), ModBlocks.dummy_block_radgen);
 				
 				//
 				DummyBlockRadGen.safeBreak = true;
@@ -142,8 +143,8 @@ public class MachineRadGen extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.NORTH) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.radGenDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.radGenDimensionNorth, ModBlocks.dummy_block_radgen);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("radGenDimensionNorth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("radGenDimensionNorth"), ModBlocks.dummy_block_radgen);
 				
 				//
 				DummyBlockRadGen.safeBreak = true;

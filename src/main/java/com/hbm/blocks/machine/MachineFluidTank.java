@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -139,8 +140,8 @@ public class MachineFluidTank extends BlockContainer implements IMultiBlock {
 
 		if (i == 0) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, EnumFacing.EAST), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.fluidTankDimensionEW)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.fluidTankDimensionEW, ModBlocks.dummy_block_fluidtank);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionEW"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionEW"), ModBlocks.dummy_block_fluidtank);
 
 				//
 				DummyBlockFluidTank.safeBreak = true;
@@ -178,8 +179,8 @@ public class MachineFluidTank extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 1) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, EnumFacing.SOUTH), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.fluidTankDimensionNS)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.fluidTankDimensionNS, ModBlocks.dummy_block_fluidtank);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionNS"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionNS"), ModBlocks.dummy_block_fluidtank);
 
 				//
 				DummyBlockFluidTank.safeBreak = true;
@@ -223,8 +224,8 @@ public class MachineFluidTank extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 2) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, EnumFacing.WEST), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.fluidTankDimensionEW)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.fluidTankDimensionEW, ModBlocks.dummy_block_fluidtank);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionEW"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionEW"), ModBlocks.dummy_block_fluidtank);
 
 				//
 				DummyBlockFluidTank.safeBreak = true;
@@ -268,8 +269,8 @@ public class MachineFluidTank extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 3) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, EnumFacing.NORTH), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.fluidTankDimensionNS)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.fluidTankDimensionNS, ModBlocks.dummy_block_fluidtank);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionNS"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("fluidTankDimensionNS"), ModBlocks.dummy_block_fluidtank);
 
 				//
 				DummyBlockFluidTank.safeBreak = true;

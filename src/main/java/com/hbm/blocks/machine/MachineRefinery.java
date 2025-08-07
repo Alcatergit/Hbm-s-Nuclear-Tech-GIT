@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -106,8 +107,8 @@ public class MachineRefinery extends BlockContainer implements IMultiBlock {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.refineryDimensions)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.refineryDimensions, ModBlocks.dummy_block_refinery);
+		if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("refineryDimensions"))) {
+			MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("refineryDimensions"), ModBlocks.dummy_block_refinery);
 				
 			//
 			DummyBlockRefinery.safeBreak = true;

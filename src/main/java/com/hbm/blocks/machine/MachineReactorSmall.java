@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -91,7 +92,7 @@ public class MachineReactorSmall extends BlockContainer implements IMultiBlock {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.reactorSmallDimension)) {
+		if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("reactorSmallDimension"))) {
 
 			DummyBlockMachine.safeBreak = true;
 			world.setBlockState(pos.up(1), ModBlocks.dummy_block_reactor_small.getDefaultState());

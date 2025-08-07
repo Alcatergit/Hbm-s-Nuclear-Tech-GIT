@@ -2,6 +2,7 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityAMSLimiter;
@@ -68,8 +69,8 @@ public class BlockAMSLimiter extends BlockContainer implements IMultiBlock {
 
 		world.setBlockState(pos, state.withProperty(FACING, e));
 		if (e == EnumFacing.EAST) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.AMSLimiterDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.AMSLimiterDimensionEast, ModBlocks.dummy_block_ams_limiter);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionEast"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionEast"), ModBlocks.dummy_block_ams_limiter);
 				
 				//
 				DummyBlockAMSLimiter.safeBreak = true;
@@ -92,8 +93,8 @@ public class BlockAMSLimiter extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.SOUTH) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.AMSLimiterDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.AMSLimiterDimensionSouth, ModBlocks.dummy_block_ams_limiter);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionSouth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionSouth"), ModBlocks.dummy_block_ams_limiter);
 				
 				//
 				DummyBlockAMSLimiter.safeBreak = true;
@@ -116,8 +117,8 @@ public class BlockAMSLimiter extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.WEST) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.AMSLimiterDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.AMSLimiterDimensionWest, ModBlocks.dummy_block_ams_limiter);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionWest"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionWest"), ModBlocks.dummy_block_ams_limiter);
 				
 				//
 				DummyBlockAMSLimiter.safeBreak = true;
@@ -140,8 +141,8 @@ public class BlockAMSLimiter extends BlockContainer implements IMultiBlock {
 				world.destroyBlock(pos, true);
 		}
 		if (e == EnumFacing.NORTH) {
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.AMSLimiterDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.AMSLimiterDimensionNorth, ModBlocks.dummy_block_ams_limiter);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionNorth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("AMSLimiterDimensionNorth"), ModBlocks.dummy_block_ams_limiter);
 				
 				//
 				DummyBlockAMSLimiter.safeBreak = true;

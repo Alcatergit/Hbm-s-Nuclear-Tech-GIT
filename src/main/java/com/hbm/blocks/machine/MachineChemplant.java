@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
@@ -107,8 +108,8 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 		MutableBlockPos mbp = new BlockPos.MutableBlockPos();
 		if (i == 0) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 5), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionEast)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionEast, ModBlocks.dummy_block_chemplant);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionEast"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionEast"), ModBlocks.dummy_block_chemplant);
 
 				mbp.setPos(pos.getX()-1, pos.getY(), pos.getZ());
 				DummyBlockChemplant.safeBreak = true;
@@ -147,8 +148,8 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 1) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 3), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionSouth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionSouth, ModBlocks.dummy_block_chemplant);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionSouth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionSouth"), ModBlocks.dummy_block_chemplant);
 
 				//
 				DummyBlockChemplant.safeBreak = true;
@@ -188,8 +189,8 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 2) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 4), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionWest)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionWest, ModBlocks.dummy_block_chemplant);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionWest"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionWest"), ModBlocks.dummy_block_chemplant);
 
 				//
 				DummyBlockChemplant.safeBreak = true;
@@ -229,8 +230,8 @@ public class MachineChemplant extends BlockContainer implements IMultiBlock {
 		}
 		if (i == 3) {
 			world.setBlockState(pos, world.getBlockState(pos).withProperty(FACING, 2), 2);
-			if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.chemplantDimensionNorth)) {
-				MultiblockHandler.fillUp(world, pos, MultiblockHandler.chemplantDimensionNorth, ModBlocks.dummy_block_chemplant);
+			if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionNorth"))) {
+				MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("chemplantDimensionNorth"), ModBlocks.dummy_block_chemplant);
 
 				//
 				DummyBlockChemplant.safeBreak = true;

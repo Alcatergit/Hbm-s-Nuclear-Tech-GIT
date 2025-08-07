@@ -2,6 +2,7 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
+import com.hbm.handler.MultiblockRegistry;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
@@ -56,8 +57,8 @@ public class BlockAMSBase extends BlockContainer implements IMultiBlock {
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		if(MultiblockHandler.checkSpace(world, pos, MultiblockHandler.AMSBaseDimension)) {
-			MultiblockHandler.fillUp(world, pos, MultiblockHandler.AMSBaseDimension, ModBlocks.dummy_block_ams_base);
+		if(MultiblockHandler.checkSpace(world, pos, MultiblockRegistry.getDefinition("AMSBaseDimension"))) {
+			MultiblockHandler.fillUp(world, pos, MultiblockRegistry.getDefinition("AMSBaseDimension"), ModBlocks.dummy_block_ams_base);
 
 			DummyBlockAMSBase.safeBreak = true;
 			world.setBlockState(pos.add(1, 0, 0), ModBlocks.dummy_port_ams_base.getDefaultState());
