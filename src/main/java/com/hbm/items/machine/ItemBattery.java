@@ -132,7 +132,7 @@ public class ItemBattery extends Item implements IBatteryItem {
     	return 0;
     }
     
-    public long getMaxCharge() {
+    public long getMaxCharge(ItemStack stack) {
     	return maxCharge;
     }
     
@@ -162,7 +162,7 @@ public class ItemBattery extends Item implements IBatteryItem {
     	if(item instanceof ItemBattery) {
     		ItemStack stack = new ItemStack(item);
     		stack.setTagCompound(new NBTTagCompound());;
-    		stack.getTagCompound().setLong("charge", ((ItemBattery)item).getMaxCharge());
+    		stack.getTagCompound().setLong("charge", ((ItemBattery)item).getMaxCharge(stack));
     		return stack.copy();
     	}
     	
@@ -178,7 +178,7 @@ public class ItemBattery extends Item implements IBatteryItem {
 	
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
-		return 1D - (double)getCharge(stack) / (double)getMaxCharge();
+		return 1D - (double)getCharge(stack) / (double)getMaxCharge(stack);
 	}
 	
 }

@@ -77,7 +77,7 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) worldIn.getTileEntity(pos);
-		if(worldIn.getStrongPower(pos) > 0 && !worldIn.isRemote) {
+		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			int charges = entity.countCharges();
 			if(charges > 0) {
 				this.onPlayerDestroy(worldIn, pos, worldIn.getBlockState(pos));

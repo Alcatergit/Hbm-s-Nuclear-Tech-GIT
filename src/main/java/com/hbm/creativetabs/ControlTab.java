@@ -53,7 +53,7 @@ public class ControlTab extends CreativeTabs {
 			ItemStack full = stack.copy();
 
 			battery.setCharge(empty, 0);
-			battery.setCharge(full, battery.getMaxCharge());
+			battery.setCharge(full, battery.getMaxCharge(stack));
 
 			int index = list.indexOf(stack);
 

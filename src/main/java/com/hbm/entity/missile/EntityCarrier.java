@@ -2,8 +2,8 @@ package com.hbm.entity.missile;
 
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionLarge;
+import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemSatChip;
 import com.hbm.main.AdvancementManager;
 import com.hbm.saveddata.satellites.Satellite;
 
@@ -125,9 +125,9 @@ public class EntityCarrier extends EntityThrowable {
 					AdvancementManager.grantAchievement(p, AdvancementManager.achFOEQ);
 			}
 			
-			if(payload.getItem() instanceof ItemSatChip) {
+			if(payload.getItem() instanceof ISatChip) {
 				
-			    int freq = ItemSatChip.getFreq(payload);
+			    int freq = ISatChip.getFreqS(payload);
 		    	
 		    	Satellite.orbit(world, Satellite.getIDFromItem(payload.getItem()), freq, posX, posY, posZ);
 			}

@@ -173,7 +173,7 @@ public class TileEntityLaunchTable extends TileEntityLoadedBase implements ITick
 			for(int x = -4; x <= 4; x++) {
 				for(int z = -4; z <= 4; z++) {
 					
-					if(world.getStrongPower(pos.add(x, 0, z)) > 0 && canLaunch()) {
+					if(world.getRedstonePowerFromNeighbors(pos.add(x, 0, z)) > 0 && canLaunch()) {
 						launch();
 						break outer;
 					}

@@ -54,14 +54,14 @@ public class TileEntityVaultDoor extends TileEntityLockableBase implements ITick
 
 				for(int x = pos.getX() - 2; x <= xCoord + 2; x++)
 					for(int y = yCoord; y <= yCoord + 5; y++)
-						if(world.getStrongPower(new BlockPos(x, y, zCoord)) > 0) {
+						if(world.getRedstonePowerFromNeighbors(new BlockPos(x, y, zCoord)) > 0) {
 							flagX = true;
 							break;
 						}
 				
 				for(int z = zCoord - 2; z <= zCoord + 2; z++)
 					for(int y = yCoord; y <= yCoord + 5; y++)
-						if(world.getStrongPower(new BlockPos(xCoord, y, z)) > 0) {
+						if(world.getRedstonePowerFromNeighbors(new BlockPos(xCoord, y, z)) > 0) {
 							flagZ = true;
 							break;
 						}

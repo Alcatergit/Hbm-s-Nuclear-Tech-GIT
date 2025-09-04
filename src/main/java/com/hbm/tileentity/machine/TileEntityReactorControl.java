@@ -151,12 +151,12 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		}
         		
         		if(!redstoned) {
-        			if(world.getStrongPower(pos) > 0) {
+        			if(world.getRedstonePowerFromNeighbors(pos) > 0) {
         				redstoned = true;
         				reactor.retracting = !reactor.retracting;
         			}
         		} else {
-        			if(world.getStrongPower(pos) == 0) {
+        			if(world.getRedstonePowerFromNeighbors(pos) == 0) {
         				redstoned = false;
         			}
         		}
@@ -192,7 +192,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         			lastRods = rods;
         		
         		if(!redstoned) {
-        			if(world.getStrongPower(pos) > 0) {
+        			if(world.getRedstonePowerFromNeighbors(pos) > 0) {
         				redstoned = true;
         				
         				if(rods == 0)
@@ -201,7 +201,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         					rods = 0;
         			}
         		} else {
-        			if(world.getStrongPower(pos) == 0) {
+        			if(world.getRedstonePowerFromNeighbors(pos) == 0) {
         				redstoned = false;
         			}
         		}

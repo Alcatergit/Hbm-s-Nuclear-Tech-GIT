@@ -113,7 +113,7 @@ public class ItemToolAbilityPower extends ItemToolAbility implements IBatteryIte
     }
     
     @Override
-    public long getMaxCharge() {
+    public long getMaxCharge(ItemStack stack) {
     	return maxPower;
     }
     

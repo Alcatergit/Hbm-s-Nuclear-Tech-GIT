@@ -958,11 +958,20 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.turbine_tungsten, 5),
 				new ComparableStack(ModItems.turbine_titanium, 3),
 				new ComparableStack(ModItems.flywheel_beryllium, 1),
-				new OreDictStack(GOLD.wireDense(), 48),
+        new OreDictStack(GOLD.wireDense(), 48),
 				new OreDictStack(DURA.pipe(), 16),
 				new OreDictStack(STEEL.pipe(), 16)
 		}, 600);
 
+		makeRecipe(new ComparableStack(ModBlocks.machine_condenser_powered, 1), new AStack[] {
+				new OreDictStack(STEEL.plateWelded(), 8),
+				new OreDictStack(ANY_RESISTANTALLOY.ingot(), 24 /* TODO: 4 plateWelded when they work */),
+                new OreDictStack(CU.plate(), 16),
+				new ComparableStack(ModItems.motor_desh, 3),
+				new OreDictStack(STEEL.pipe(), 24),
+				new NbtComparableStack(ItemFluidCanister.getFullCanister(ModForgeFluids.LUBRICANT, 4))
+		}, 600);
+		
 		makeRecipe(new ComparableStack(ModBlocks.machine_silex, 1), new AStack[] {
 				new ComparableStack(ModBlocks.glass_quartz, 16),
 				new OreDictStack(STEEL.plateCast(), 8),

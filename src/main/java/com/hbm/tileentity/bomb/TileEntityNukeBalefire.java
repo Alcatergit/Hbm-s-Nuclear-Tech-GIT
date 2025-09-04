@@ -100,11 +100,11 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 	public int getBattery() {
 		
 		if(inventory.getStackInSlot(1).getItem() == ModItems.battery_spark &&
-				((IBatteryItem)ModItems.battery_spark).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_spark).getMaxCharge()) {
+				((IBatteryItem)ModItems.battery_spark).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_spark).getMaxCharge(inventory.getStackInSlot(1))) {
 			return 1;
 		}
 		if(inventory.getStackInSlot(1).getItem() == ModItems.battery_trixite &&
-				((IBatteryItem)ModItems.battery_trixite).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_trixite).getMaxCharge()) {
+				((IBatteryItem)ModItems.battery_trixite).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_trixite).getMaxCharge(inventory.getStackInSlot(1))) {
 			return 2;
 		}
 

@@ -29,7 +29,7 @@ public class ItemPotatos extends ItemBattery {
     			
     			if(p.getHeldItemMainhand() == stack || p.getHeldItemOffhand() == stack) {
     				
-    		    	float pitch = (float)getCharge(stack) / (float)this.getMaxCharge() * 0.5F + 0.5F;
+    		    	float pitch = (float)getCharge(stack) / (float)this.getMaxCharge(stack) * 0.5F + 0.5F;
     		    	
     				world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.potatOSRandom, SoundCategory.PLAYERS, 1.0F, pitch);
     				setTimer(stack, 200 + itemRand.nextInt(100));

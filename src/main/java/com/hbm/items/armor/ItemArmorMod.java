@@ -6,7 +6,6 @@ import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.ArmorModHandler;
-import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemCustomLore;
 
 import net.minecraft.client.util.ITooltipFlag;
@@ -69,6 +68,7 @@ public class ItemArmorMod extends ItemCustomLore {
 		case ArmorModHandler.cladding: list.add("  " + I18nUtil.resolveKey("desc.applicablecladding")); break;
 		case ArmorModHandler.kevlar: list.add("  " + I18nUtil.resolveKey("desc.applicableinsert")); break;
 		case ArmorModHandler.extra: list.add("  " + I18nUtil.resolveKey("desc.applicableextra")); break;
+		case ArmorModHandler.battery: list.add("  " + I18nUtil.resolveKey("armorMod.type.battery")); break;
 		}
 	}
 	

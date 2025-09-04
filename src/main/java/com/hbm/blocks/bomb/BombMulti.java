@@ -77,7 +77,7 @@ public class BombMulti extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		TileEntityBombMulti entity = (TileEntityBombMulti) worldIn.getTileEntity(pos);
-        if (worldIn.getStrongPower(pos) > 0)
+        if (worldIn.getRedstonePowerFromNeighbors(pos) > 0)
         {
         	if(/*entity.getExplosionType() != 0*/entity.isLoaded())
         	{
