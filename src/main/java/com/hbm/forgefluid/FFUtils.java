@@ -185,7 +185,7 @@ public class FFUtils {
 		}
 	}
 
-	public static void addFluidInfo(Fluid fluid, List<String> texts){
+	public static void addFluidInfo(Fluid fluid, List<String> texts, boolean isAdvanced){
 		int temp = fluid.getTemperature()-273;
 		if(temp != 27){
 			String tempColor = "";
@@ -275,6 +275,10 @@ public class FFUtils {
 			hasInfo = true;
 		}
 
+		if(isKeyPressed && isAdvanced){
+			texts.add("§bFluid Key: §3"+FluidRegistry.getDefaultFluidName(fluid));
+		}
+
 		if (hasInfo && !isKeyPressed) {
 			texts.add(I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
 		}
@@ -286,7 +290,7 @@ public class FFUtils {
 			if (fluid != null) {
 				texts.add(fluid.getLocalizedName(new FluidStack(fluid, 1)));
 				texts.add(amount + "/" + capacity + "mB");
-				addFluidInfo(fluid, texts);
+				addFluidInfo(fluid, texts, true);
 			} else {
 				texts.add(I18nUtil.resolveKey("desc.none"));
 				texts.add(amount + "/" + capacity + "mB");
@@ -962,6 +966,7 @@ public class FFUtils {
 			if(tanks[i] != null) {
 				NBTTagCompound tag = new NBTTagCompound();
 				tag.setByte("tank", (byte)i);
+				tag.setInteger("capa", tanks[i].getCapacity());
 				tanks[i].writeToNBT(tag);
 				list.appendTag(tag);
 			}
@@ -974,6 +979,7 @@ public class FFUtils {
 			NBTTagCompound tag = tankList.getCompoundTagAt(i);
 			byte b0 = tag.getByte("tank");
 			if(b0 >= 0 && b0 < tanks.length) {
+				tanks[b0].setCapacity(tag.getInteger("capa"));
 				tanks[b0].readFromNBT(tag);
 			}
 		}

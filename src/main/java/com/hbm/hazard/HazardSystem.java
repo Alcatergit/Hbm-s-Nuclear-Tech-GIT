@@ -33,25 +33,25 @@ public class HazardSystem {
 	/*
 	 * Map for items, either with wildcard meta or stuff that's expected to have a variety of damage values, like tools.
 	 */
-	public static final HashMap<Item, HazardData> itemMap = new HashMap();
+	public static final HashMap<Item, HazardData> itemMap = new HashMap<>();
 	/*
 	 * Very specific stacks with item and meta matching. ComparableStack does not support NBT matching, to scale hazards with NBT please use HazardModifiers.
 	 */
-	public static final HashMap<ComparableStack, HazardData> stackMap = new HashMap();
+	public static final HashMap<ComparableStack, HazardData> stackMap = new HashMap<>();
 	/*
 	 * For items that should, for whichever reason, be completely exempt from the hazard system.
 	 */
-	public static final HashSet<ComparableStack> stackBlacklist = new HashSet();
-	public static final HashSet<String> dictBlacklist = new HashSet();
+	public static final HashSet<ComparableStack> stackBlacklist = new HashSet<>();
+	public static final HashSet<String> dictBlacklist = new HashSet<>();
 	/*
 	 * List of hazard transformers, called in order before and after unrolling all the HazardEntries.
 	 */
-	public static final List<HazardTransformerBase> trafos = new ArrayList();
+	public static final List<HazardTransformerBase> trafos = new ArrayList<>();
 
 	/*
 	 * Map for Fluid entries using their unlocalized names.
 	 */
-	public static final HashMap<String, HazardData> fluidMap = new HashMap();
+	public static final HashMap<String, HazardData> fluidMap = new HashMap<>();
 	
 	public static void registerFluid(String o, HazardData data) {
 		if(o != null) fluidMap.put(o, data);
@@ -106,7 +106,7 @@ public class HazardSystem {
 	}
 
 	public static List<HazardEntry> getHazardsFromFluid(String f) {
-		List<HazardEntry> chronological = new ArrayList();
+		List<HazardEntry> chronological = new ArrayList<>();
 		if(fluidMap.containsKey(f))
 			chronological.addAll(fluidMap.get(f).entries);
 		return chronological;
@@ -131,10 +131,10 @@ public class HazardSystem {
 	public static List<HazardEntry> getHazardsFromStack(ItemStack stack) {
 		
 		if(stack == null || stack.isEmpty() || isItemBlacklisted(stack)) {
-			return new ArrayList();
+			return new ArrayList<>();
 		}
 		
-		List<HazardData> chronological = new ArrayList();
+		List<HazardData> chronological = new ArrayList<>();
 		
 		/// ORE DICT ///
 		int[] ids = OreDictionary.getOreIDs(stack);
@@ -154,7 +154,7 @@ public class HazardSystem {
 		if(stackMap.containsKey(comp))
 			chronological.add(stackMap.get(comp));
 		
-		List<HazardEntry> entries = new ArrayList();
+		List<HazardEntry> entries = new ArrayList<>();
 		
 		for(HazardTransformerBase trafo : trafos) {
 			trafo.transformPre(stack, entries);
@@ -229,7 +229,7 @@ public class HazardSystem {
 		for(int i = 0; i < inventorySize; i++) {
 			
 			ItemStack stack = player.inventory.getStackInSlot(i);
-			if(stack != null && !stack.isEmpty()) {
+			if(!stack.isEmpty()) {
 				applyHazards(stack, player);
 				
 				if(stack.getCount() == 0) {
@@ -245,7 +245,7 @@ public class HazardSystem {
 		for(EntityEquipmentSlot i : EntityEquipmentSlot.values()) {
 			ItemStack stack = entity.getItemStackFromSlot(i);
 
-			if(stack != null && !stack.isEmpty()) {
+			if(!stack.isEmpty()) {
 				applyHazards(stack, entity);
 			}
 		}
@@ -255,7 +255,7 @@ public class HazardSystem {
 		if(entity.isDead) return;
 		ItemStack stack = entity.getItem();
 		
-		if(stack == null || stack.isEmpty() || stack.getCount() <= 0) return;
+		if(stack.isEmpty() || stack.getCount() <= 0) return;
 		
 		List<HazardEntry> hazards = getHazardsFromStack(stack);
 		for(HazardEntry entry : hazards) {

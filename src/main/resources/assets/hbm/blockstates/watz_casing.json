@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "normal": { "model": "hbm:watz_casing" },
+    "tooled=false": { "model": "hbm:watz_casing" },
+    "tooled=true": {"model": "hbm:watz_casing_tooled" }
+  }
+}
+

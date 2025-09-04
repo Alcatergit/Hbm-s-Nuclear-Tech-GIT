@@ -1,6 +1,0 @@
-{
-    "parent": "block/cube_all",
-    "textures": {
-        "all": "hbm:blocks/tile_lab_cracked_double_slab"
-    }
-}

@@ -42,7 +42,6 @@ public class JEIConfig implements IModPlugin {
 	public static final String LIQUEFACTION = "hbm.liquefaction";
 	public static final String SOLIDIFCATION = "hbm.solidification";
 	public static final String CENTRIFUGE = "hbm.centrifuge";
-	public static final String CMB = "hbm.cmb_furnace";
 	public static final String GAS_CENT = "hbm.gas_centrifuge";
 	public static final String REACTOR = "hbm.reactor";
 	public static final String REFINERY = "hbm.refinery";
@@ -119,7 +118,6 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_liquefactor), LIQUEFACTION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_solidifier), SOLIDIFCATION);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_centrifuge), CENTRIFUGE);
-		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_combine_factory), CMB);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_gascent), GAS_CENT);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_reactor), REACTOR);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_waste_drum), WASTEDRUM);
@@ -171,7 +169,6 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getLiquefactionRecipes(), LIQUEFACTION);
 		registry.addRecipes(JeiRecipes.getSolidificationRecipes(), SOLIDIFCATION);
 		registry.addRecipes(CentrifugeRecipes.getCentrifugeRecipes(), CENTRIFUGE);
-		registry.addRecipes(JeiRecipes.getCMBRecipes(), CMB);
 		registry.addRecipes(JeiRecipes.getGasCentrifugeRecipes(), GAS_CENT);
 		registry.addRecipes(JeiRecipes.getReactorRecipes(), REACTOR);
 		registry.addRecipes(JeiRecipes.getWasteDrumRecipes(), WASTEDRUM);
@@ -222,7 +219,6 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUILiquefactor.class, 52, 34, 18, 55, LIQUEFACTION);
 		registry.addRecipeClickArea(GUISolidifier.class, 52, 34, 18, 55, SOLIDIFCATION);
 		registry.addRecipeClickArea(GUIMachineCentrifuge.class, 35, 9, 106, 40, CENTRIFUGE);
-		registry.addRecipeClickArea(GUIMachineCMBFactory.class, 111, 35, 21, 14, CMB);
 		registry.addRecipeClickArea(GUIMachineGasCent.class, 118, 36, 51, 13, GAS_CENT);
 		registry.addRecipeClickArea(GUIMachineReactor.class, 80, 35, 21, 14, REACTOR);
 		registry.addRecipeClickArea(GUIMachineRefinery.class, 79, 71, 71, 17, REFINERY);
@@ -341,7 +337,6 @@ public class JEIConfig implements IModPlugin {
 				new GasCentrifugeRecipeHandler(help),
 				new CyclotronRecipeHandler(help),
 				new TransmutationRecipeHandler(help),
-				new CMBFurnaceRecipeHandler(help),
 				new ReactorRecipeHandler(help),
 				new WasteDrumRecipeHandler(help),
 				new StorageDrumRecipeHandler(help),

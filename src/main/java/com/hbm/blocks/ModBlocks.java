@@ -46,86 +46,8 @@ import com.hbm.blocks.gas.BlockGasMonoxide;
 import com.hbm.blocks.gas.BlockGasRadon;
 import com.hbm.blocks.gas.BlockGasRadonDense;
 import com.hbm.blocks.gas.BlockGasRadonTomb;
-import com.hbm.blocks.generic.BMPowerBox;
-import com.hbm.blocks.generic.BarbedWire;
-import com.hbm.blocks.generic.BlockCableConnect;
-import com.hbm.blocks.generic.BlockAbsorber;
-import com.hbm.blocks.generic.BlockAmmoCrate;
-import com.hbm.blocks.generic.BlockBallsSpawner;
-import com.hbm.blocks.generic.BlockBeaconable;
-import com.hbm.blocks.generic.BlockBedrockOre;
-import com.hbm.blocks.generic.BlockBedrockOreTE;
-import com.hbm.blocks.generic.BlockCanCrate;
-import com.hbm.blocks.generic.BlockCap;
-import com.hbm.blocks.generic.BlockChain;
-import com.hbm.blocks.generic.BlockClorine;
-import com.hbm.blocks.generic.BlockClorineSeal;
-import com.hbm.blocks.generic.BlockCluster;
-import com.hbm.blocks.generic.BlockCoalBurning;
-import com.hbm.blocks.generic.BlockCoalOil;
-import com.hbm.blocks.generic.BlockControlPanel;
-import com.hbm.blocks.generic.BlockCrate;
-import com.hbm.blocks.generic.BlockDepth;
-import com.hbm.blocks.generic.BlockDepthOre;
-import com.hbm.blocks.generic.BlockDoorGeneric;
-import com.hbm.blocks.generic.BlockPowder;
-import com.hbm.blocks.generic.BlockGeysir;
-import com.hbm.blocks.generic.BlockGlyph;
-import com.hbm.blocks.generic.BlockGrate;
-import com.hbm.blocks.generic.BlockHazard;
-import com.hbm.blocks.generic.BlockFuel;
-import com.hbm.blocks.generic.BlockHazardMeta;
+import com.hbm.blocks.generic.*;
 import com.hbm.blocks.generic.BlockHazard.ExtDisplayEffect;
-import com.hbm.blocks.generic.BlockHazardFalling;
-import com.hbm.blocks.generic.BlockJungleCrate;
-import com.hbm.blocks.generic.BlockHydroreactive;
-import com.hbm.blocks.generic.BlockMarker;
-import com.hbm.blocks.generic.BlockMetalFence;
-import com.hbm.blocks.generic.BlockModDoor;
-import com.hbm.blocks.generic.BlockMush;
-import com.hbm.blocks.generic.BlockMushHuge;
-import com.hbm.blocks.generic.BlockDeadPlant;
-import com.hbm.blocks.generic.BlockNTMDirt;
-import com.hbm.blocks.generic.BlockNTMGlass;
-import com.hbm.blocks.generic.BlockNTMLadder;
-import com.hbm.blocks.generic.BlockNetherCoal;
-import com.hbm.blocks.generic.BlockNoDrop;
-import com.hbm.blocks.generic.BlockNuclearWaste;
-import com.hbm.blocks.generic.BlockNTMOre;
-import com.hbm.blocks.generic.BlockOutgas;
-import com.hbm.blocks.generic.BlockPinkLog;
-import com.hbm.blocks.generic.BlockGenericSlab;
-import com.hbm.blocks.generic.BlockGenericStairs;
-import com.hbm.blocks.generic.BlockPipe;
-import com.hbm.blocks.generic.BlockPlasma;
-import com.hbm.blocks.generic.BlockPorous;
-import com.hbm.blocks.generic.BlockClean;
-import com.hbm.blocks.generic.BlockRadResistant;
-import com.hbm.blocks.generic.BlockRailing;
-import com.hbm.blocks.generic.BlockRotatablePillar;
-import com.hbm.blocks.generic.BlockSmolder;
-import com.hbm.blocks.generic.BlockStorageCrate;
-import com.hbm.blocks.generic.BlockStorageCrateRadResistant;
-import com.hbm.blocks.generic.BlockVent;
-import com.hbm.blocks.generic.BlockWriting;
-import com.hbm.blocks.generic.DecoBlock;
-import com.hbm.blocks.generic.DecoBlockAlt;
-import com.hbm.blocks.generic.DecoPoleSatelliteReceiver;
-import com.hbm.blocks.generic.DecoPoleTop;
-import com.hbm.blocks.generic.DecoSteelPoles;
-import com.hbm.blocks.generic.DecoTapeRecorder;
-import com.hbm.blocks.generic.Guide;
-import com.hbm.blocks.generic.RedBarrel;
-import com.hbm.blocks.generic.ReinforcedLamp;
-import com.hbm.blocks.generic.Spikes;
-import com.hbm.blocks.generic.TrappedBrick;
-import com.hbm.blocks.generic.WasteGrassTall;
-import com.hbm.blocks.generic.WasteLeaves;
-import com.hbm.blocks.generic.WasteEarth;
-import com.hbm.blocks.generic.WasteSand;
-import com.hbm.blocks.generic.WasteLog;
-import com.hbm.blocks.generic.WasteIce;
-import com.hbm.blocks.generic.YellowBarrel;
 import com.hbm.blocks.machine.*;
 import com.hbm.blocks.machine.pile.BlockGraphite;
 import com.hbm.blocks.machine.pile.BlockGraphiteFuel;
@@ -196,12 +118,15 @@ import com.hbm.tileentity.DoorDecl;
 import com.hbm.hazard.HazardRegistry;
 import com.hbm.hazard.HazardSystem;
 
+import com.hbm.tileentity.machine.TileEntityMultiblock;
+import com.hbm.tileentity.machine.TileEntityWatzStruct;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.material.MaterialLiquid;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.SoundEvent;
@@ -251,6 +176,7 @@ public class ModBlocks {
 	public static final Block brick_concrete_marked = new BlockWriting(Material.ROCK, "brick_concrete_marked").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(1500.0F);
 	public static final Block reinforced_brick = new BlockRadResistant(Material.ROCK, "reinforced_brick").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(8000.0F);
 	public static final Block brick_compound = new BlockRadResistant(Material.ROCK, "brick_compound").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(10000.0F);
+	public static final Block brick_fire = new BlockBase(Material.ROCK, "brick_fire").setCreativeTab(MainRegistry.blockTab).setHardness(10.0F).setResistance(100.0F);
 	public static final Block brick_light = new BlockBase(Material.ROCK, "brick_light").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(1000.0F);
 	public static final Block brick_asbestos = new BlockOutgas(true, 20, true, "brick_asbestos").setHardness(15.0F).setCreativeTab(MainRegistry.blockTab).setResistance(1000.0F);
 	public static final Block reinforced_sand = new BlockBase(Material.ROCK, "reinforced_sand").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(400.0F);
@@ -297,6 +223,8 @@ public class ModBlocks {
 	public static final Block brick_concrete_broken_stairs = new BlockGenericStairs(brick_concrete_broken.getDefaultState(), "brick_concrete_broken_stairs").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(1125.0F);
 	public static final Block reinforced_brick_stairs = new BlockGenericStairs(reinforced_brick.getDefaultState(), "reinforced_brick_stairs").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(6000.0F);
 	public static final Block brick_compound_stairs = new BlockGenericStairs(brick_compound.getDefaultState(), "brick_compound_stairs").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(7500.0F);
+	public static final Block brick_fire_stairs = new BlockGenericStairs(brick_fire.getDefaultState(), "brick_fire_stairs").setCreativeTab(MainRegistry.blockTab).setResistance(75.0F);
+	public static final Block brick_light_stairs = new BlockGenericStairs(brick_light.getDefaultState(), "brick_light_stairs").setCreativeTab(MainRegistry.blockTab).setResistance(750.0F);
 	public static final Block brick_asbestos_stairs = new BlockGenericStairs(brick_asbestos.getDefaultState(), "brick_asbestos_stairs").setCreativeTab(MainRegistry.blockTab).setResistance(750.0F);
 	public static final Block reinforced_sand_stairs = new BlockGenericStairs(reinforced_sand.getDefaultState(), "reinforced_sand_stairs").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(300.0F);
 	public static final Block brick_obsidian_stairs = new BlockGenericStairs(brick_obsidian.getDefaultState(), "brick_obsidian_stairs").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(6000.0F);
@@ -336,6 +264,8 @@ public class ModBlocks {
 	public static final Block brick_concrete_broken_slab = new BlockGenericSlab(Material.ROCK, false, "brick_concrete_broken_slab").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(750.0F);
 	public static final Block reinforced_brick_slab = new BlockGenericSlab(Material.ROCK, false, "reinforced_brick_slab").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(4000.0F);
 	public static final Block brick_compound_slab = new BlockGenericSlab(Material.ROCK, false, "brick_compound_slab").setCreativeTab(MainRegistry.blockTab).setHardness(15.0F).setResistance(5000.0F);
+	public static final Block brick_fire_slab = new BlockGenericSlab(Material.ROCK, false, "brick_fire_slab").setCreativeTab(MainRegistry.blockTab).setResistance(50.0F);
+	public static final Block brick_light_slab = new BlockGenericSlab(Material.ROCK, false, "brick_light_slab").setCreativeTab(MainRegistry.blockTab).setResistance(500.0F);
 	public static final Block brick_asbestos_slab = new BlockGenericSlab(Material.ROCK, false, "brick_asbestos_slab").setCreativeTab(MainRegistry.blockTab).setResistance(500.0F);
 	public static final Block reinforced_sand_slab = new BlockGenericSlab(Material.ROCK, false, "reinforced_sand_slab").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(200.0F);
 	public static final Block brick_obsidian_slab = new BlockGenericSlab(Material.ROCK, false, "brick_obsidian_slab").setCreativeTab(MainRegistry.blockTab).setLightOpacity(15).setHardness(15.0F).setResistance(4000.0F);
@@ -1232,9 +1162,6 @@ public class ModBlocks {
 	public static final Block machine_schrabidium_transmutator = new MachineSchrabidiumTransmutator(Material.IRON, "machine_schrabidium_transmutator").setHardness(5.0F).setResistance(100.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final int guiID_schrabidium_transmutator = 30;
 	
-	public static final Block machine_combine_factory = new MachineCMBFactory(Material.IRON, "machine_combine_factory").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final int guiID_combine_factory = 35;
-	
 	public static final Block machine_teleporter = new MachineTeleporter(Material.IRON, "machine_teleporter").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	// public static final int guiID_machine_teleporter = 36;
 
@@ -1319,8 +1246,8 @@ public class ModBlocks {
 	//Launcher Components
 	public static final Block struct_launcher = new BlockBase(Material.IRON, "struct_launcher").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final Block struct_scaffold = new BlockBase(Material.IRON, "struct_scaffold").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
-	public static final Block struct_launcher_core = new BlockStruct(Material.IRON, "struct_launcher_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
-	public static final Block struct_launcher_core_large = new BlockStruct(Material.IRON, "struct_launcher_core_large").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_launcher_core = new BlockStruct(Material.IRON, "struct_launcher_core", TileEntityMultiblock.class).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
+	public static final Block struct_launcher_core_large = new BlockStruct(Material.IRON, "struct_launcher_core_large", TileEntityMultiblock.class).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final Block struct_soyuz_core = new BlockSoyuzStruct(Material.IRON, "struct_soyuz_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.missileTab);
 	public static final Block struct_iter_core = new BlockITERStruct(Material.IRON, "struct_iter_core").setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block struct_plasma_core = new BlockPlasmaStruct(Material.IRON, "struct_plasma_core").setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -1362,14 +1289,14 @@ public class ModBlocks {
 	public static final int guiID_plasma_heater = 101;
 	
 	//Watz Components
-	public static final Block watz_element = new BlockReactor(Material.IRON, "watz_element").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_control = new BlockReactor(Material.IRON, "watz_control").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block struct_watz_core = new BlockStruct(Material.IRON, "struct_watz_core", TileEntityWatzStruct.class).setLightLevel(1F).setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block watz_element = new BlockBase(Material.IRON, "watz_element").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
 	public static final Block watz_cooler = new BlockBase(Material.IRON, "watz_cooler").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_end = new BlockBase(Material.IRON, "watz_end").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_hatch = new WatzHatch(Material.IRON, "watz_hatch").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_conductor = new BlockCableConnect(Material.IRON, "watz_conductor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final Block watz_core = new WatzCore(Material.IRON, "watz_core").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
-	public static final int guiID_watz_multiblock = 32;
+	public static final Block watz_casing = new BlockToolConversion(Material.IRON, "watz_casing").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block watz = new Watz("watz").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	public static final Block watz_pump = new WatzPump("watz_pump").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
+	
+
 	
 	//Fwatz stuff
 	public static final Block fwatz_conductor = new BlockReactor(Material.IRON, "fwatz_conductor").setHardness(5.0F).setResistance(10.0F).setCreativeTab(MainRegistry.machineTab);
@@ -1520,33 +1447,11 @@ public class ModBlocks {
 	public static final Block control_panel_custom = new BlockControlPanel(Material.IRON, "control_panel_custom").setHardness(0.25F).setResistance(2.0F).setCreativeTab(MainRegistry.blockTab);
 
 	//Fluids
-	public static final Material fluidtoxic = new MaterialLiquid(MapColor.BLACK).setReplaceable();
 	public static Block toxic_block;
-
-	public static final Material fluidradwater = new MaterialLiquid(MapColor.GREEN).setReplaceable();
 	public static Block radwater_block;
-	
-	public static final Material fluidmud = (new MaterialLiquid(MapColor.ADOBE).setReplaceable());
 	public static Block mud_block;
-	
-	public static final Material fluidschrabidic = (new MaterialLiquid(MapColor.CYAN));
 	public static Block schrabidic_block;
-	
-	public static final Material fluidcorium = (new MaterialLiquid(MapColor.BROWN) {
-		
-		@Override
-		public boolean blocksMovement() {
-			return true;
-		}
-		
-		@Override
-		public Material setImmovableMobility() {
-			return super.setImmovableMobility();
-		}
-		
-	}.setImmovableMobility());
 	public static Block corium_block;
-	public static final Material fluidvolcanic = (new MaterialLiquid(MapColor.RED));
 	public static Block volcanic_lava_block;
 	
 	//Weird stuff

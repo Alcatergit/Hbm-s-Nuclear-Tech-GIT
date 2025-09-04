@@ -155,6 +155,7 @@ public class HbmWorldGen implements IWorldGenerator {
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.asbestosSpawn.get(dimID)), 4, 16, 16, ModBlocks.ore_asbestos);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.cinnebarSpawn.get(dimID)), 4, 8, 16, ModBlocks.ore_cinnebar);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.cobaltSpawn.get(dimID)), 4, 4, 8, ModBlocks.ore_cobalt);
+		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.coltanSpawn.get(dimID)), 4, 15, 40, ModBlocks.ore_coltan);
 		
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.ironClusterSpawn.get(dimID)), 6, 15, 45, ModBlocks.cluster_iron);
 		DungeonToolbox.generateOre(world, rand, i, j, parseInt(CompatibilityConfig.titaniumClusterSpawn.get(dimID)), 6, 15, 30, ModBlocks.cluster_titanium);

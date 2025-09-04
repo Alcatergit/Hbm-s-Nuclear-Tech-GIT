@@ -49,7 +49,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     public Fluid[] tankTypes;
 
-    public int amountToCool = 1;
+    public int amountToCool = 32_000;
     public int tickDelay = 1;
     public int heatGen;
     public int heatEnergy;
@@ -60,9 +60,9 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         this.tanks = new FluidTank[2];
         this.tankTypes = new Fluid[2];
 
-        this.tanks[0] = new FluidTank(ModForgeFluids.HOTCOOLANT, 0, 24_000);
+        this.tanks[0] = new FluidTank(ModForgeFluids.HOTCOOLANT, 0, 32_000);
         this.tankTypes[0] = ModForgeFluids.HOTCOOLANT;
-        this.tanks[1] = new FluidTank(ModForgeFluids.COOLANT, 0, 24_000);
+        this.tanks[1] = new FluidTank(ModForgeFluids.COOLANT, 0, 32_000);
         this.tankTypes[1] = ModForgeFluids.COOLANT;
     }
 
@@ -312,7 +312,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public void receiveControl(NBTTagCompound data) {
         if (data.hasKey("toCool")) this.amountToCool = Math.max(data.getInteger("toCool"), 1);
         if (data.hasKey("delay")) this.tickDelay = Math.max(data.getInteger("delay"), 1);
-
+        this.amountToCool = Math.max(this.amountToCool, tanks[0].getCapacity());
         markDirty();
     }
 }

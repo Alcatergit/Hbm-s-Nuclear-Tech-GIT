@@ -2,14 +2,21 @@ package com.hbm.main;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-import java.util.ArrayDeque;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.Set;
 
+import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.items.IDynamicModels;
+import com.hbm.items.IModelRegister;
+import com.hbm.items.ItemEnumMultiColor;
+import com.hbm.items.machine.*;
+import com.hbm.render.tileentity.RenderWatzMultiblock;
+import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -56,13 +63,7 @@ import com.hbm.items.armor.ItemArmorMod;
 import com.hbm.items.armor.JetpackBase;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.gear.RedstoneSword;
-import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.items.machine.ItemCassette.TrackType;
-import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.items.machine.ItemCrucibleTemplate;
-import com.hbm.items.machine.ItemFluidTank;
-import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.items.machine.ItemRBMKPellet;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
@@ -282,7 +283,7 @@ public class ModEventHandlerClient {
 			list[i] = e.getResourceLocation();
 			i++;
 		}
-		ModelLoader.registerItemVariants(ModItems.cell, list);
+		ModelLoader.registerItemVariants(ModItems.gas_canister, list);
 
 		for(Item item : ModItems.ALL_ITEMS) {
 			registerModel(item, 0);
@@ -290,6 +291,8 @@ public class ModEventHandlerClient {
 		for(Block block : ModBlocks.ALL_BLOCKS) {
 			registerBlockModel(block, 0);
 		}
+
+		IDynamicModels.registerModels();
 
 		registerBedrockOreModels();
 	}
@@ -320,6 +323,8 @@ public class ModEventHandlerClient {
 			return;
 
 		//Drillgon200: I hate myself for making this
+		if (item instanceof IModelRegister)
+            ((IModelRegister) item).registerModels();
 
 		if(item == ModItems.chemistry_icon) {
 			for(int i: ChemplantRecipes.recipeNames.keySet()){
@@ -394,6 +399,8 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void modelBaking(ModelBakeEvent evt) {
+
+		IDynamicModels.bakeModels(evt);
 
 		for(EnumCanister e : EnumCanister.values()) {
 			Object o = evt.getModelRegistry().getObject(e.getResourceLocation());
@@ -582,6 +589,7 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.cc_plasma_gun, reg);
 		swapModels(ModItems.gun_egon, reg);
 		swapModels(ModItems.jshotgun, reg);
+		swapModels(ModItems.boltgun, reg);
 		swapModels(ModItems.gun_ar15, reg);
 		
 		swapModels(ModItems.meteorite_sword_seared, reg);
@@ -661,6 +669,9 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void textureStitch(TextureStitchEvent.Pre evt) {
+
+		IDynamicModels.registerSprites(evt.getMap());
+
 		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
 		DSmokeRenderer.sprites[1] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke2"));
 		DSmokeRenderer.sprites[2] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke3"));
@@ -719,23 +730,6 @@ public class ModEventHandlerClient {
 		RenderStructureMarker.fusion[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fusion_core_side_alt");
 		RenderStructureMarker.fusion[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
 		RenderStructureMarker.fusion[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
-		
-		RenderStructureMarker.watz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
-		RenderStructureMarker.watz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
-		RenderStructureMarker.watz[1][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
-		RenderStructureMarker.watz[1][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_hatch");
-		RenderStructureMarker.watz[2][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_top");
-		RenderStructureMarker.watz[2][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_side");
-		RenderStructureMarker.watz[3][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
-		RenderStructureMarker.watz[3][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
-		RenderStructureMarker.watz[4][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_top");
-		RenderStructureMarker.watz[4][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_side");
-		RenderStructureMarker.watz[5][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
-		RenderStructureMarker.watz[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
-		RenderStructureMarker.watz[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
-		RenderStructureMarker.watz[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
-		RenderStructureMarker.watz[7][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
-		RenderStructureMarker.watz[7][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
 
 		RenderStructureMarker.fwatz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
 		RenderStructureMarker.fwatz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
@@ -758,6 +752,12 @@ public class ModEventHandlerClient {
 		RenderSoyuzMultiblock.blockIcons[0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
 		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete_smooth");
 		RenderSoyuzMultiblock.blockIcons[2] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
+
+		RenderWatzMultiblock.casingSprite = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_casing_tooled");
+		RenderWatzMultiblock.coolerSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_side");
+		RenderWatzMultiblock.coolerSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_top");
+		RenderWatzMultiblock.elementSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
+		RenderWatzMultiblock.elementSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
 	}
 
 	public static TextureAtlasSprite contrail;
@@ -1911,6 +1911,12 @@ public class ModEventHandlerClient {
 			}
 		}
 
+		/// Fluids ///
+		FluidStack f = FluidUtil.getFluidContained(stack);
+		if(f != null){
+			FFUtils.addFluidInfo(f.getFluid(), list, event.getFlags().isAdvanced());
+		}
+
 		/// NEUTRON RADS ///
 		ContaminationUtil.addNeutronRadInfo(stack, event.getEntityPlayer(), list, event.getFlags());
 
@@ -1950,7 +1956,7 @@ public class ModEventHandlerClient {
 		if(event.getFlags().isAdvanced()) {
 			List<String> names = ItemStackUtil.getOreDictNames(stack);
 			
-			if(names.size() > 0) {
+			if(!names.isEmpty()) {
 				list.add("§bOre Dict:");
 				for(String s : names) {
 					list.add("§3 - " + s);

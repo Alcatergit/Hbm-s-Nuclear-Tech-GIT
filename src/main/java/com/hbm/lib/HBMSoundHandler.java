@@ -270,7 +270,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent[] geigerSounds;
 	public static SoundEvent[] voiceSounds;
 
-	
+	public static SoundEvent boltgun;
 	
 	public static void init() {
 		
@@ -496,6 +496,8 @@ public final class HBMSoundHandler {
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6, geiger7, geiger8};
 		voiceSounds = new SoundEvent[]{voices1, voices2, voices3, voices4, voices5, voices6, voices7, voices8};
+
+		boltgun = register("item.boltgun");
 	}
 	
 	public static SoundEvent register(String name) {

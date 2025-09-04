@@ -45,11 +45,6 @@ public class ItemCapacitor extends Item {
 			int itemDura = getDura(stack);
 			tooltip.add(getColor(itemDura, dura) + itemDura + " §2/ " + dura);
 		}
-		if (this == ModItems.titanium_filter) {
-			tooltip.add("§e[Needed for Watz Reaction]");
-			int itemDura = getDura(stack);
-			tooltip.add(getColor(itemDura, dura) + itemDura/20 + " §2/ " + dura/20);
-		}
 	}
 	
 	@Override

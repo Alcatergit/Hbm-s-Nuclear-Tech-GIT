@@ -1,7 +1,0 @@
-{
-	"parent": "block/cube_column",
-	"textures": {
-		"end": "hbm:blocks/machine_cmb_top",
-		"side": "hbm:blocks/machine_cmb_side"
-	}
-}

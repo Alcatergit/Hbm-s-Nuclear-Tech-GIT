@@ -45,7 +45,7 @@ public class ItemFluidIcon extends Item {
 			if(stack.getTagCompound().getInteger("fill") > 0)
 				tooltip.add(stack.getTagCompound().getInteger("fill") + "mB");
 		Fluid f = getFluid(stack);
-        if(f != null) FFUtils.addFluidInfo(f, tooltip);
+        if(f != null) FFUtils.addFluidInfo(f, tooltip, flagIn.isAdvanced());
 	}
 	
 	@Override

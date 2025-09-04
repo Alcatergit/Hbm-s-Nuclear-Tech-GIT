@@ -61,6 +61,7 @@
     "item.spray": {"category": "player", "sounds": [{"name": "hbm:tool/spray", "stream": false}]},
     "item.repair": {"category": "player", "sounds": ["hbm:tool/repair1", "hbm:tool/repair2", "hbm:tool/repair3", "hbm:tool/repair4", "hbm:tool/repair5", "hbm:tool/repair6", "hbm:tool/repair7"]},
 	"item.vice": {"category": "player", "sounds": [{"name": "hbm:tool/vice", "stream": false}]},
+    "item.boltgun": {"category": "player", "sounds": [{"name": "hbm:tool/boltgun", "stream": false}]},
 
 	"music.recordlambdacore": {"category": "record", "sounds": [{"name": "hbm:music/recordlambdacore", "stream": false}]},
 	"music.recordsectorsweep": {"category": "record", "sounds": [{"name": "hbm:music/recordsectorsweep", "stream": false}]},

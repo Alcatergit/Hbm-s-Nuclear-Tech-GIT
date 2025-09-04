@@ -62,18 +62,15 @@ public class RBMKFuelCraftingHandler extends net.minecraftforge.registries.IForg
 		
 		boolean hasOne = false;
 
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
-				
-				ItemStack stack = inventory.getStackInRowAndColumn(j, i);
-				
-				if(!stack.isEmpty()) {
-					
-					if(!hasOne)
-						hasOne = true;
-					else
-						return false;
-				}
+		for(int i = 0; i < inventory.getSizeInventory(); ++i) {
+			ItemStack stack = inventory.getStackInSlot(i);
+
+			if(!stack.isEmpty()) {
+
+				if(!hasOne)
+					hasOne = true;
+				else
+					return false;
 			}
 		}
 		
@@ -82,14 +79,11 @@ public class RBMKFuelCraftingHandler extends net.minecraftforge.registries.IForg
 	
 	private ItemStack getFirstStack(InventoryCrafting inventory) {
 
-		for(int i = 0; i < 3; ++i) {
-			for(int j = 0; j < 3; ++j) {
+		for(int i = 0; i < inventory.getSizeInventory(); ++i) {
+			ItemStack stack = inventory.getStackInSlot(i);
 				
-				ItemStack stack = inventory.getStackInRowAndColumn(j, i);
-				
-				if(stack != null && !stack.isEmpty()) {
-					return stack;
-				}
+			if(!stack.isEmpty()) {
+				return stack;
 			}
 		}
 		

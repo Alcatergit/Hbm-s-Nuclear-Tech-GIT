@@ -47,7 +47,6 @@ public class EntityMissileVolcano extends EntityMissileBaseAdvanced {
 		list.add(new ItemStack(ModItems.plate_steel, 20));
 		list.add(new ItemStack(ModItems.plate_aluminium, 12));
 		list.add(new ItemStack(ModItems.thruster_large, 1));
-		list.add(new ItemStack(ModItems.circuit_targeting_tier4, 1));
 
 		return list;
 	}

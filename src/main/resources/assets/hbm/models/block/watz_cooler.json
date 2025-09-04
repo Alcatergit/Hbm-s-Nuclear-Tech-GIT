@@ -1,6 +1,7 @@
 {
-	"parent": "block/cube_all",
+	"parent": "block/cube_column",
 	"textures": {
-		"all": "hbm:blocks/watz_cooler"
+		"end": "hbm:blocks/watz_cooler_top",
+		"side": "hbm:blocks/watz_cooler_side"
 	}
 }

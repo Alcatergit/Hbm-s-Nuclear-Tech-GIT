@@ -131,8 +131,8 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
-        this.addStandardInfo((List)list);
-        super.addInformation(stack, worldIn, (List)list, flagIn);
+        this.addStandardInfo(list);
+        super.addInformation(stack, worldIn, list, flagIn);
     }
 
 	@Override
@@ -140,12 +140,10 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 		
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		
-		if(!(te instanceof TileEntityDiode))
+		if(!(te instanceof TileEntityDiode diode))
 			return;
-		
-		TileEntityDiode diode = (TileEntityDiode) te;
-		
-		List<String> text = new ArrayList();
+
+        List<String> text = new ArrayList<>();
 		text.add("Max.: " + Library.getShortNumber(diode.getMaxPower()*20) + "HE/s");
 		text.add("Priority: " + diode.priority.name());
 		
@@ -273,7 +271,7 @@ public class CableDiode extends BlockContainer implements IEnergyConnectorBlock,
 
 		@Override
 		public long getMaxPower() {
-			return (long) Math.pow(10, level) >> 1;
+			return Library.getMagnitude(level) >> 1;
 		}
 
 		@Override

@@ -68,6 +68,6 @@ public class ItemEnumMulti extends Item implements IHasCustomMetaModels {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		return (I18n.format(stack.getTranslationKey() + "_" + theEnum.getEnumConstants()[stack.getItemDamage()].toString().toLowerCase() + ".name")).trim();
+		return (I18n.format(stack.getTranslationKey() + "_" + EnumUtil.grabEnumSafely(theEnum,stack.getItemDamage()).toString().toLowerCase() + ".name")).trim();
 	}
 }

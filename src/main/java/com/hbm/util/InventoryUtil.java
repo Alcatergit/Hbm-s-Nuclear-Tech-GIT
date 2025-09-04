@@ -202,7 +202,8 @@ public class InventoryUtil {
 	 * @return whether the player has the required item stacks or not
 	 */
 	public static boolean doesPlayerHaveAStacks(EntityPlayer player, List<AStack> stacks, boolean shouldRemove) {
-		
+		if(player.capabilities.isCreativeMode) return true;
+
 		NonNullList<ItemStack> original = player.inventory.mainInventory;
 		ItemStack[] inventory = new ItemStack[original.size()];
 		AStack[] input = new AStack[stacks.size()];

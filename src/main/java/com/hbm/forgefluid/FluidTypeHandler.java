@@ -103,7 +103,7 @@ public class FluidTypeHandler {
 		fluidProperties.put(ModForgeFluids.NITROGLYCERIN.getName(), new FluidProperties(0, 4, 4, 1.5F, EnumSymbol.NONE));
 		fluidProperties.put(ModForgeFluids.LIQUID_OSMIRIDIUM.getName(),	new FluidProperties(5, 0, 5, 1.8F, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE_2));
 		
-		fluidProperties.put(ModForgeFluids.WATZ.getName(), new FluidProperties(4, 0, 3, 1.5F, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE_2));
+		fluidProperties.put(ModForgeFluids.MUD_FLUID.getName(), new FluidProperties(4, 0, 3, 1.5F, EnumSymbol.OXIDIZER, FluidTrait.CORROSIVE_2));
 		fluidProperties.put(ModForgeFluids.CRYOGEL.getName(), new FluidProperties(2, 0, 0, EnumSymbol.CROYGENIC));
 		
 		fluidProperties.put(ModForgeFluids.OXYGEN.getName(), new FluidProperties(3, 0, 0, 1.1F, EnumSymbol.CROYGENIC));

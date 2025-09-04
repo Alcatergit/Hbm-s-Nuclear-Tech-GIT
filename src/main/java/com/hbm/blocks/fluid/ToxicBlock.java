@@ -12,11 +12,13 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockStone;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
@@ -25,9 +27,11 @@ import net.minecraftforge.fluids.Fluid;
 public class ToxicBlock extends BlockFluidClassic {
 
 	private DamageSource damageSource;
+	public int color;
 	
-	public ToxicBlock(Fluid fluid, Material material, DamageSource source, String s) {
-		super(fluid, material);
+	public ToxicBlock(Fluid fluid, DamageSource source, String s, int color) {
+		super(fluid, Material.WATER);
+		this.color = color;
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setCreativeTab(null);
@@ -36,6 +40,26 @@ public class ToxicBlock extends BlockFluidClassic {
 		this.displacements.put(this, false);
 		
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	@Override
+	public Vec3d getFogColor(World world, BlockPos pos, IBlockState state, Entity entity, Vec3d originalColor, float partialTicks) {
+		if (!isWithinFluid(world, pos, ActiveRenderInfo.projectViewFromEntity(entity, partialTicks)))
+		{
+			BlockPos otherPos = pos.down(densityDir);
+			IBlockState otherState = world.getBlockState(otherPos);
+			return otherState.getBlock().getFogColor(world, otherPos, otherState, entity, originalColor, partialTicks);
+		}
+		float red = (color >> 16 & 0xFF) / 255.0F;
+		float green = (color >> 8 & 0xFF) / 255.0F;
+		float blue = (color & 0xFF) / 255.0F;
+		return new Vec3d(red, green, blue);
+	}
+
+	private boolean isWithinFluid(IBlockAccess world, BlockPos pos, Vec3d vec) {
+		float filled = getFilledPercentage(world, pos);
+		return filled < 0 ? vec.y > pos.getY() + filled + 1
+				: vec.y < pos.getY() + filled;
 	}
 	
 	@Override
@@ -91,7 +115,7 @@ public class ToxicBlock extends BlockFluidClassic {
 	
 	public boolean reactToBlocks(World world, BlockPos pos) {
 		if(!world.isBlockLoaded(pos)) return false;
-		if(world.getBlockState(pos).getMaterial() != ModBlocks.fluidtoxic) {
+		if(world.getBlockState(pos).getMaterial() != Material.WATER) {
 			IBlockState state = world.getBlockState(pos);
 			if(state.getMaterial().isLiquid()) return true;
 			if(state.getBlock() instanceof BlockStone) return true;

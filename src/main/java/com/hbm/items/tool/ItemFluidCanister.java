@@ -24,10 +24,12 @@ import net.minecraft.util.NonNullList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.Sys;
 
 public class ItemFluidCanister extends Item implements IHasCustomModel {
 
@@ -84,9 +86,10 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
 			for(Fluid f : EnumCanister.getFluids()){
 				ItemStack stack = new ItemStack(this, 1, 0);
-				stack.setTagCompound(new NBTTagCompound());
-				if(f != null)
+				if(f != null) {
+					stack.setTagCompound(new NBTTagCompound());
 					stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, cap).writeToNBT(new NBTTagCompound()));
+				}
 				items.add(stack);
 			}
 		}
@@ -108,8 +111,7 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	public static boolean isFullCanister(ItemStack stack, Fluid fluid){
 		if(stack != null){
 			FluidStack f = FluidUtil.getFluidContained(stack);
-			if(stack.getItem() instanceof ItemFluidCanister && f != null && f.getFluid() == fluid && f.amount == ((ItemFluidCanister)stack.getItem()).cap)
-				return true;
+            return stack.getItem() instanceof ItemFluidCanister && f != null && f.getFluid() == fluid && f.amount == ((ItemFluidCanister) stack.getItem()).cap;
 		}
 		return false;
 	}
@@ -117,7 +119,7 @@ public class ItemFluidCanister extends Item implements IHasCustomModel {
 	public static ItemStack getFullCanister(Fluid f, int amount){
 		ItemStack stack = new ItemStack(ModItems.canister_generic, amount, 0);
 		stack.setTagCompound(new NBTTagCompound());
-		if(f != null && EnumCanister.contains(f))
+		if(EnumCanister.contains(f))
 			stack.getTagCompound().setTag(HbmFluidHandlerCanister.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
 		return stack;
 	}

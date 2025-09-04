@@ -19,9 +19,9 @@ public class Vec3
      * Static method for creating a new Vec3D given the three x,y,z values. This is only called from the other static
      * method which creates and places it in the list.
      */
-    public static Vec3 createVectorHelper(double p_72443_0_, double p_72443_2_, double p_72443_4_)
+    public static Vec3 createVectorHelper(double x, double y, double z)
     {
-        return new Vec3(p_72443_0_, p_72443_2_, p_72443_4_);
+        return new Vec3(x, y, z);
     }
 
     public static Vec3 createVectorHelper(Entity e)

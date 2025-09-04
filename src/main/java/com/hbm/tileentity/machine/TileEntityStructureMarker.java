@@ -20,7 +20,7 @@ public class TileEntityStructureMarker extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if(this.type > 4)
+		if(this.type > 3)
 			type = 0;
 
 		if(!world.isRemote)

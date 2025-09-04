@@ -9,11 +9,15 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Random;
 
+import com.hbm.blocks.machine.WatzPump;
 import com.hbm.entity.item.EntityMovingPackage;
+import com.hbm.items.IAnimatedItem;
 import com.hbm.render.entity.item.RenderMovingPackage;
+import com.hbm.render.item.*;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
+import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -360,31 +364,7 @@ import com.hbm.render.factories.RenderRubbleFactory;
 import com.hbm.render.factories.RenderSSmokeFactory;
 import com.hbm.render.factories.RenderTaintedCreeperFactory;
 import com.hbm.render.factories.ShrapnelRendererFactory;
-import com.hbm.render.item.AssemblyTemplateRender;
-import com.hbm.render.item.ChemTemplateRender;
-import com.hbm.render.item.CrucibleTemplateRender;
-import com.hbm.render.item.FFIdentifierRender;
-import com.hbm.render.item.FluidBarrelRender;
-import com.hbm.render.item.FluidCanisterRender;
-import com.hbm.render.item.FluidTankRender;
-import com.hbm.render.item.FluidTankLeadRender;
-import com.hbm.render.item.ItemRenderBase;
-import com.hbm.render.item.ItemRenderCell;
-import com.hbm.render.item.ItemRenderFFFluidDuct;
-import com.hbm.render.item.ItemRenderFluidIcon;
-import com.hbm.render.item.ItemRenderGasCanister;
-import com.hbm.render.item.ItemRenderLibrary;
-import com.hbm.render.item.ItemRenderMissile;
-import com.hbm.render.item.ItemRenderMissilePart;
-import com.hbm.render.item.ItemRenderMissileGeneric;
 import com.hbm.render.item.ItemRenderMissileGeneric.RenderMissileType;
-import com.hbm.render.item.ItemRenderMultitool;
-import com.hbm.render.item.ItemRenderObj;
-import com.hbm.render.item.ItemRenderShim;
-import com.hbm.render.item.ItemRendererHot;
-import com.hbm.render.item.ItemRendererMachine;
-import com.hbm.render.item.ItemRendererMeteorSword;
-import com.hbm.render.item.ItemRendererBedrockOre;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderBFLauncher;
 import com.hbm.render.item.weapon.ItemRenderBigSword;
@@ -776,6 +756,11 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRBMKRodReaSim.class, new RenderRBMKLid());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityBMPowerBox.class, new RenderBMPowerBox());
 		
+		//WATZ
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWatz.class, new RenderWatz());
+		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityWatzStruct.class, new RenderWatzMultiblock());
+		ClientRegistry.bindTileEntitySpecialRenderer(WatzPump.TileEntityWatzPump.class, new RenderWatzPump());
+
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineBAT9000.class, new RenderBAT9000());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineOrbus.class, new RenderOrbus());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityChungus.class, new RenderChungus());
@@ -2031,6 +2016,18 @@ public class ClientProxy extends ServerProxy {
 					}
 				}
 			}
+			if("generic".equals(mode)) {
+				ItemStack stack = player.getHeldItem(hand);
+
+				if(!stack.isEmpty() && stack.getItem() instanceof IAnimatedItem) {
+					IAnimatedItem item = (IAnimatedItem) stack.getItem();
+					BusAnimation anim = item.getAnimation(data, stack);
+
+					if(anim != null) {
+						HbmAnimations.hotbar[slot] = new Animation(player.getHeldItem(hand).getItem().getTranslationKey(), System.currentTimeMillis(), anim);
+					}
+				}
+			}
 			return;
 		}
 		
@@ -2308,6 +2305,7 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_egon.setTileEntityItemStackRenderer(new ItemRenderGunEgon());
 		ModItems.jshotgun.setTileEntityItemStackRenderer(new ItemRenderJShotgun());
 		ModItems.gun_ar15.setTileEntityItemStackRenderer(new ItemRenderWeaponAR15());
+		ModItems.boltgun.setTileEntityItemStackRenderer(new ItemRenderBoltgun());
 		
 		ModItems.meteorite_sword_seared.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(1.0F, 0.5F, 0.0F));
 		ModItems.meteorite_sword_reforged.setTileEntityItemStackRenderer(new ItemRendererMeteorSword(0.5F, 1.0F, 1.0F));

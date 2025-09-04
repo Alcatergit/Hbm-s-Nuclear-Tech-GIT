@@ -66,7 +66,7 @@ public class RenderITERMultiblock extends TileEntitySpecialRenderer<TileEntityIT
 	            	case 4: active = glass; break;
 	            	}
 
-	            	SmallBlockPronter.renderSmolBlockAt(active, ix - 6F, iy + 3, iz - 7F);
+	            	SmallBlockPronter.renderSimpleBlockAt(active, ix - 6F, iy + 3, iz - 7F);
 	            }
 	        }
         }

@@ -6,6 +6,8 @@ import java.util.HashSet;
 import java.util.List;
 
 //i love you
+import static com.hbm.inventory.material.MaterialShapes.CASTPLATE;
+import static com.hbm.inventory.material.MaterialShapes.WELDEDPLATE;
 import static com.hbm.items.ModItems.*;
 import static com.hbm.blocks.ModBlocks.*;
 import static com.hbm.inventory.OreDictManager.DictFrame.*;
@@ -90,7 +92,6 @@ public class OreDictManager {
 	public static final String KEY_TOOL_HANDDRILL = "ntmhanddrill";
 	public static final String KEY_TOOL_CHEMISTRYSET = "ntmchemistryset";
 
-	public static final String KEY_CIRCUIT_BISMUTH = "circuitVersatile";
 
 	/*
 	 * MATERIALS
@@ -138,6 +139,7 @@ public class OreDictManager {
 	public static final DictFrame SRN = new DictFrame("Schraranium");
 	public static final DictFrame GH336 = new DictFrame("Ghiorsium336", "Gh336");
 	public static final DictFrame NEO = new DictFrame("Neoveline");
+	public static final DictFrame MUD = new DictFrame("WatzMud");
 
 	//Fuels
 	public static final DictFrame THF = new DictFrame("ThoriumFuel");
@@ -442,6 +444,7 @@ public class OreDictManager {
 		PB209	.rad(HazardRegistry.pb209).hot(7).toxic(2).blinding(50F).cont(HazardRegistry.pb209).nugget(nugget_pb209).billet(billet_pb209).ingot(ingot_pb209).dust(powder_pb209).dustSmall(powder_pb209_tiny);
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
 		NEO 	.rad(HazardRegistry.radspice).hot(15).toxic(2).blinding(50F).hydro(4F).cont(HazardRegistry.radspice).nugget(nugget_radspice).ingot(ingot_radspice).dust(powder_radspice).dustSmall(powder_radspice_tiny).block(block_radspice);
+		MUD 	.rad(HazardRegistry.mud)																					.ingot(ingot_mud);
 
 		AUSTRALIUM													.nugget(nugget_australium)								.ingot(ingot_australium)	.dust(powder_australium)								.block(block_australium)																				.ore(ore_australium);
 		REIIUM														.nugget(nugget_reiium)									.ingot(ingot_reiium)		.dust(powder_reiium)									.block(block_reiium)																					.ore(ore_reiium);
@@ -485,16 +488,14 @@ public class OreDictManager {
 		//OreDictionary.registerOre(KEY_TOOL_CHEMISTRYSET, new ItemStack(chemistry_set, 1, OreDictionary.WILDCARD_VALUE));
 		//OreDictionary.registerOre(KEY_TOOL_CHEMISTRYSET, new ItemStack(chemistry_set_boron, 1, OreDictionary.WILDCARD_VALUE));
 
-		OreDictionary.registerOre(KEY_CIRCUIT_BISMUTH, circuit_bismuth);
-		OreDictionary.registerOre(KEY_CIRCUIT_BISMUTH, circuit_arsenic);
         //if this isn't implemented when fracking tower becomes real, yell at me
 		OreDictionary.registerOre("itemRubber", ingot_rubber);
 
 		for(NTMMaterial mat : Mats.orderedList) {
 			if(mat.smeltable == SmeltingBehavior.SMELTABLE) {
 				registerAutoGen(mat, MaterialShapes.BOLT, bolt, HazardRegistry.bolt);
-				registerAutoGen(mat, MaterialShapes.CASTPLATE, plate_cast, HazardRegistry.plateCast);
-				registerAutoGen(mat, MaterialShapes.WELDEDPLATE, plate_welded, HazardRegistry.plateWeld);
+				registerAutoGen(mat, CASTPLATE, plate_cast, HazardRegistry.plateCast);
+				registerAutoGen(mat, WELDEDPLATE, plate_welded, HazardRegistry.plateWeld);
 				registerAutoGen(mat, MaterialShapes.HEAVY_COMPONENT, heavy_component, HazardRegistry.heavyComp);
 				registerAutoGen(mat, MaterialShapes.DENSEWIRE, wire_dense, HazardRegistry.wireDense);
 				registerAutoGen(mat, MaterialShapes.SHELL, shell, HazardRegistry.shell);
@@ -604,7 +605,7 @@ public class OreDictManager {
 		ANY_RUBBER.addPrefix(INGOT, true);
 		ANY_PLASTIC.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(BLOCK, true);
 		ANY_HARDPLASTIC.addPrefix(INGOT, true);
-		ANY_RESISTANTALLOY.addPrefix(INGOT, true).addPrefix(DUST, true);
+		ANY_RESISTANTALLOY.addPrefix(INGOT, true).addPrefix(DUST, true).addPrefix(PLATECAST, true).addPrefix(PLATEWELDED, true).addPrefix(HEAVY_COMPONENT, true).addPrefix(BLOCK, true);
 		ANY_TAR.addPrefix(ANY, false);
 	}
 	
