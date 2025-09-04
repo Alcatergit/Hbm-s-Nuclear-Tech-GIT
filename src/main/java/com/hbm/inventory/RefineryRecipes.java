@@ -49,7 +49,7 @@ public class RefineryRecipes {
 			new FluidStack(ModForgeFluids.WASTEFLUID, 50),
 			new FluidStack(ModForgeFluids.WASTEGAS, 40),
 			new FluidStack(ModForgeFluids.CORIUM_FLUID, 4),
-			new FluidStack(ModForgeFluids.WATZ, 1)},
+			new FluidStack(ModForgeFluids.MUD_FLUID, 1)},
 			new ItemStack(ModItems.nuclear_waste_tiny, 1)));
 	}
 

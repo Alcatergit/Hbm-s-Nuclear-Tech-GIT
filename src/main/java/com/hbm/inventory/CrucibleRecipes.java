@@ -97,16 +97,13 @@ public class CrucibleRecipes {
 				.inputs(new MaterialStack(Mats.MAT_TUNGSTEN, i), new MaterialStack(Mats.MAT_SCHRABIDIUM, n))
 				.outputs(new MaterialStack(Mats.MAT_MAGTUNG, i)));
 		
-		// recipes.put(11, new CrucibleRecipe(11, "crucible.cmb", 3, new ItemStack(ModItems.ingot_combine_steel))
-		// 		.inputs(new MaterialStack(Mats.MAT_MAGTUNG, n * 6), new MaterialStack(Mats.MAT_MUD, n * 3))
-		// 		.outputs(new MaterialStack(Mats.MAT_CMB, i)));
-		
-
+		recipes.put(11, new CrucibleRecipe(11, "crucible.cmb", 3, new ItemStack(ModItems.ingot_combine_steel))
+		 		.inputs(new MaterialStack(Mats.MAT_MUD, i), new MaterialStack(Mats.MAT_MAGTUNG, n * 6), new MaterialStack(Mats.MAT_ALLOY, n * 3))
+		 		.outputs(new MaterialStack(Mats.MAT_CMB, i)));
 
 		recipes.put(12, new CrucibleRecipe(12, "crucible.bscco", 3, new ItemStack(ModItems.ingot_bscco))
 				.inputs(new MaterialStack(Mats.MAT_BISMUTH, n * 2), new MaterialStack(Mats.MAT_STRONTIUM, n * 2), new MaterialStack(Mats.MAT_CALCIUM, n * 2), new MaterialStack(Mats.MAT_COPPER, n * 3))
 				.outputs(new MaterialStack(Mats.MAT_BSCCO, i)));
-		// registerMoldsForNEI();
 	}
 
 	public static String getName(ItemStack stack){

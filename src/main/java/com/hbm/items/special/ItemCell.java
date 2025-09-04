@@ -107,9 +107,10 @@ public class ItemCell extends Item {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
 			for(Fluid f : EnumCell.getFluids()) {
 				ItemStack stack = new ItemStack(this, 1, 0);
-				stack.setTagCompound(new NBTTagCompound());
-				if(f != null)
+				if(f != null) {
+					stack.setTagCompound(new NBTTagCompound());
 					stack.getTagCompound().setTag(HbmFluidHandlerCell.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
+				}
 				items.add(stack);
 			}
 		}

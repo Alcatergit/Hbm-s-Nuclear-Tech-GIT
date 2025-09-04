@@ -197,7 +197,7 @@ public class TileEntitySolarBoiler extends TileEntity implements INBTPacketRecei
             
             int inputOps = tanks[0].getFluidAmount() / inputAmount;
             int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / outputAmount;
-            int tempOps = (int) Math.floor(this.heat / heatReq);
+            int tempOps = (int) (double) (this.heat / heatReq);
             int ops = Math.min(inputOps, Math.min(outputOps, tempOps));
             
             tanks[0].drain(inputAmount * ops, true);

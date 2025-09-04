@@ -216,17 +216,16 @@ public class EntityEffectHandler {
 			
 			int contagion = HbmLivingProps.getContagion(entity);
 			
-			if(entity instanceof EntityPlayer) {
-				
-				EntityPlayer player = (EntityPlayer) entity;
-				int randSlot = rand.nextInt(player.inventory.mainInventory.size());
+			if(entity instanceof EntityPlayer player) {
+
+                int randSlot = rand.nextInt(player.inventory.mainInventory.size());
 				ItemStack stack = player.inventory.getStackInSlot(randSlot);
 				
 				if(rand.nextInt(100) == 0) {
 					stack = player.inventory.armorInventory.get(rand.nextInt(4));
 				}
 				
-				if(stack != null && !ArmorUtil.checkForHazmatOnly(player) && !ArmorRegistry.hasProtection(player, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
+				if(!stack.isEmpty() && !ArmorUtil.checkForHazmatOnly(player) && !ArmorRegistry.hasProtection(player, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
 					
 					if(contagion > 0) {
 						
@@ -245,7 +244,8 @@ public class EntityEffectHandler {
 			}
 			
 			if(contagion > 0) {
-				HbmLivingProps.setContagion(entity, contagion - 1);
+				contagion--;
+				HbmLivingProps.setContagion(entity, contagion);
 				
 				//aerial transmission only happens once a second 5 minutes into the contagion
 				if(contagion < (2 * hour + 55 * minute) && contagion % 20 == 0) {
@@ -256,9 +256,8 @@ public class EntityEffectHandler {
 					
 					for(Entity ent : list) {
 						
-						if(ent instanceof EntityLivingBase) {
-							EntityLivingBase living = (EntityLivingBase) ent;
-							if(HbmLivingProps.getContagion(living) <= 0 && !ArmorUtil.checkForHazmatOnly(living) && !ArmorRegistry.hasProtection(living, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
+						if(ent instanceof EntityLivingBase living) {
+                            if(HbmLivingProps.getContagion(living) <= 0 && !ArmorUtil.checkForHazmatOnly(living) && !ArmorRegistry.hasProtection(living, EntityEquipmentSlot.HEAD, ArmorRegistry.HazardClass.BACTERIA)) {
 								HbmLivingProps.setContagion(living, 3 * hour);
 							}
 						}
@@ -280,7 +279,7 @@ public class EntityEffectHandler {
 				}
 				
 				//two hours in, give 'em the full blast
-				if(contagion < 1 * hour && rand.nextInt(100) == 0) {
+				if(contagion < hour && rand.nextInt(100) == 0) {
 					entity.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 100, 0));
 					entity.addPotionEffect(new PotionEffect(MobEffects.WEAKNESS, 300, 4));
 				}
@@ -401,7 +400,6 @@ public class EntityEffectHandler {
 	}
 
 	private static boolean canVomit(Entity e) {
-		if(e.isCreatureType(EnumCreatureType.WATER_CREATURE, false)) return false;
-		return true;
-	}
+        return !e.isCreatureType(EnumCreatureType.WATER_CREATURE, false);
+    }
 }

@@ -36,7 +36,6 @@ public class BombConfig {
 	public static int falloutRange = 100;
 	public static int fChunkSpeed = 5;
 	public static int falloutMS = 40;
-	public static boolean spawnFire = false;
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear = false;
 	public static boolean enableNukeClouds = true;
@@ -151,9 +150,6 @@ public class BombConfig {
 		Property falloutMSProp = config.get(CATEGORY_NUKE, "6.04_falloutTime", 30);
 		falloutMSProp.setComment("Maximum amount of milliseconds per tick allocated for fallout chunk processing");
 		falloutMS = falloutMSProp.getInt();
-		Property spawnFireP = config.get(CATEGORY_NUKE, "6.05_falloutFireSpawn", false);
-		spawnFireP.setComment("Weither to spawn fire after the nuke. Is off to increase TPS");
-		spawnFire = spawnFireP.getBoolean();
 		//Whether fallout and nuclear radiation is enabled at all
 		Property disableNuclearP = config.get(CATEGORY_NUKE, "6.06_disableNuclear", false);
 		disableNuclearP.setComment("Disable the nuclear part of nukes");

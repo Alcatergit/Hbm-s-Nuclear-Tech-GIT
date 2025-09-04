@@ -1,10 +1,8 @@
 package com.hbm.forgefluid;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.fluid.CoriumBlock;
@@ -33,7 +31,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class ModForgeFluids {
 
 	public static List<String> noBlockFluidNames = new ArrayList<String>();
-	public static HashMap<Fluid, String> noBlockFluids = new HashMap<Fluid, String>();
 	public static HashMap<Fluid, Integer> fluidColors = new HashMap<Fluid, Integer>();
 	
 	public static Fluid SPENTSTEAM = 			createFluid("spentsteam").setTemperature(40 + 273);
@@ -139,7 +136,6 @@ public class ModForgeFluids {
 	public static Fluid NITROGLYCERIN = 		createFluid("nitroglycerin");
 	
 	public static Fluid LIQUID_OSMIRIDIUM = 	createFluid("liquid_osmiridium").setTemperature(573);
-	public static Fluid WATZ = 					createFluidFlowing("watz").setDensity(2500).setViscosity(3000).setLuminosity(5).setTemperature(2773);
 	public static Fluid CRYOGEL = 				createFluid("cryogel").setTemperature(50);
 
 	public static Fluid HYDROGEN = 				createFluid("hydrogen");
@@ -177,151 +173,149 @@ public class ModForgeFluids {
 
 	public static void init() {
 
-		registerOrGet(SPENTSTEAM,"spentsteam");
-		registerOrGet(STEAM,"steam");
-		registerOrGet(HOTSTEAM,"hotsteam");
-		registerOrGet(SUPERHOTSTEAM,"superhotsteam");
-		registerOrGet(ULTRAHOTSTEAM,"ultrahotsteam");
-		registerOrGet(COOLANT,"coolant");
-		registerOrGet(HOTCOOLANT,"hotcoolant");
-		registerOrGet(PERFLUOROMETHYL,"perfluoromethyl");
+		SPENTSTEAM = 				registerOrGet(SPENTSTEAM,"spentsteam").setGaseous(true);
+		STEAM = 					registerOrGet(STEAM,"steam").setGaseous(true);
+		HOTSTEAM = 					registerOrGet(HOTSTEAM,"hotsteam").setGaseous(true);
+		SUPERHOTSTEAM =				registerOrGet(SUPERHOTSTEAM,"superhotsteam").setGaseous(true);
+		ULTRAHOTSTEAM = 			registerOrGet(ULTRAHOTSTEAM,"ultrahotsteam").setGaseous(true);
+		COOLANT = 					registerOrGet(COOLANT,"coolant");
+		HOTCOOLANT = 				registerOrGet(HOTCOOLANT,"hotcoolant");
+		PERFLUOROMETHYL = 			registerOrGet(PERFLUOROMETHYL,"perfluoromethyl");
 
-		registerOrGet(HEAVYWATER,"heavywater");
-		registerOrGet(DEUTERIUM,"deuterium");
-		registerOrGet(TRITIUM,"tritium");
+		HEAVYWATER = 				registerOrGet(HEAVYWATER,"heavywater");
+		DEUTERIUM = 				registerOrGet(DEUTERIUM,"deuterium").setGaseous(true);
+		TRITIUM = 					registerOrGet(TRITIUM,"tritium").setGaseous(true);
 
-		registerOrGet(OIL,"oil");
-		registerOrGet(HOTOIL,"hotoil");
-		registerOrGet(CRACKOIL,"crackoil");
-		registerOrGet(HOTCRACKOIL,"hotcrackoil");
-		registerOrGet(OIL_DS,"oil_ds");
-		registerOrGet(HOTOIL_DS,"hotoil_ds");
-		registerOrGet(CRACKOIL_DS,"crackoil_ds");
-		registerOrGet(HOTCRACKOIL_DS,"hotcrackoil_ds");
-		registerOrGet(OIL_COKER,"oil_coker");
-		
-		registerOrGet(HEAVYOIL,"heavyoil");
-		registerOrGet(HEAVYOIL_VACUUM,"heavyoil_vacuum");
-		registerOrGet(BITUMEN,"bitumen");
-		registerOrGet(SMEAR,"smear");
-		registerOrGet(HEATINGOIL,"heatingoil");
-		registerOrGet(HEATINGOIL_VACUUM,"heatingoil_vacuum");
+		OIL = 						registerOrGet(OIL,"oil");
+		HOTOIL = 					registerOrGet(HOTOIL,"hotoil");
+		CRACKOIL = 					registerOrGet(CRACKOIL,"crackoil");
+		HOTCRACKOIL = 				registerOrGet(HOTCRACKOIL,"hotcrackoil");
+		OIL_DS = 					registerOrGet(OIL_DS,"oil_ds");
+		HOTOIL_DS = 				registerOrGet(HOTOIL_DS,"hotoil_ds");
+		CRACKOIL_DS = 				registerOrGet(CRACKOIL_DS,"crackoil_ds");
+		HOTCRACKOIL_DS = 			registerOrGet(HOTCRACKOIL_DS,"hotcrackoil_ds");
+		OIL_COKER = 				registerOrGet(OIL_COKER,"oil_coker");
 
-		registerOrGet(RECLAIMED,"reclaimed");
-		registerOrGet(PETROIL,"petroil");
+		HEAVYOIL = 					registerOrGet(HEAVYOIL,"heavyoil");
+		HEAVYOIL_VACUUM = 			registerOrGet(HEAVYOIL_VACUUM,"heavyoil_vacuum");
+		BITUMEN = 					registerOrGet(BITUMEN,"bitumen");
+		SMEAR = 					registerOrGet(SMEAR,"smear");
+		HEATINGOIL = 				registerOrGet(HEATINGOIL,"heatingoil");
+		HEATINGOIL_VACUUM = 		registerOrGet(HEATINGOIL_VACUUM,"heatingoil_vacuum");
 
-		registerOrGet(FRACKSOL,"fracksol");
+		RECLAIMED = 				registerOrGet(RECLAIMED,"reclaimed");
+		PETROIL = 					registerOrGet(PETROIL,"petroil");
 
-		registerOrGet(LUBRICANT,"lubricant");
+		FRACKSOL = 					registerOrGet(FRACKSOL,"fracksol");
 
-		registerOrGet(NAPHTHA,"naphtha");
-		registerOrGet(NAPHTHA_CRACK,"naphtha_crack");
-		registerOrGet(NAPHTHA_DS,"naphtha_ds");
-		registerOrGet(NAPHTHA_COKER,"naphtha_coker");
-		
-		registerOrGet(DIESEL,"diesel");
-		registerOrGet(DIESEL_CRACK,"diesel_crack");
-		registerOrGet(DIESEL_REFORM,"diesel_reform");
-		registerOrGet(DIESEL_CRACK_REFORM,"diesel_crack_reform");
+		LUBRICANT = 				registerOrGet(LUBRICANT,"lubricant");
 
-		registerOrGet(LIGHTOIL,"lightoil");
-		registerOrGet(LIGHTOIL_CRACK,"lightoil_crack");
-		registerOrGet(LIGHTOIL_DS,"lightoil_ds");
-		registerOrGet(LIGHTOIL_VACUUM,"lightoil_vacuum");
-		
-		registerOrGet(KEROSENE,"kerosene");
-		registerOrGet(KEROSENE_REFORM,"kerosene_reform");
+		NAPHTHA = 					registerOrGet(NAPHTHA,"naphtha");
+		NAPHTHA_CRACK = 			registerOrGet(NAPHTHA_CRACK,"naphtha_crack");
+		NAPHTHA_DS = 				registerOrGet(NAPHTHA_DS,"naphtha_ds");
+		NAPHTHA_COKER = 			registerOrGet(NAPHTHA_COKER,"naphtha_coker");
 
-		registerOrGet(GAS,"gas");
-		registerOrGet(GAS_COKER,"gas_coker");
-		registerOrGet(PETROLEUM,"petroleum");
+		DIESEL = 					registerOrGet(DIESEL,"diesel");
+		DIESEL_CRACK = 				registerOrGet(DIESEL_CRACK,"diesel_crack");
+		DIESEL_REFORM = 			registerOrGet(DIESEL_REFORM,"diesel_reform");
+		DIESEL_CRACK_REFORM = 		registerOrGet(DIESEL_CRACK_REFORM,"diesel_crack_reform");
 
-		registerOrGet(AROMATICS,"aromatics");
-		registerOrGet(UNSATURATEDS,"unsaturateds");
-		registerOrGet(XYLENE,"xylene");
+		LIGHTOIL = 					registerOrGet(LIGHTOIL,"lightoil");
+		LIGHTOIL_CRACK = 			registerOrGet(LIGHTOIL_CRACK,"lightoil_crack");
+		LIGHTOIL_DS = 				registerOrGet(LIGHTOIL_DS,"lightoil_ds");
+		LIGHTOIL_VACUUM = 			registerOrGet(LIGHTOIL_VACUUM,"lightoil_vacuum");
 
-		registerOrGet(CHLORINE, "chlorine");
-		registerOrGet(PHOSGENE, "phosgene");
-		registerOrGet(WOODOIL, "woodoil");
-		registerOrGet(COALCREOSOTE, "coalcreosote");
-		registerOrGet(COALOIL, "coaloil");
-		registerOrGet(COALGAS, "coalgas");
-		registerOrGet(COALGAS_LEADED, "coalgas_leaded");
-		registerOrGet(PETROIL_LEADED, "petroil_leaded");
-		registerOrGet(GASOLINE_LEADED, "gasoline_leaded");
-		registerOrGet(SYNGAS, "syngas");
-		registerOrGet(IONGEL, "iongel");
-		
-		registerOrGet(REFORMATE, "reformate");
-		registerOrGet(REFORMGAS, "reformgas");
+		KEROSENE = 					registerOrGet(KEROSENE,"kerosene");
+		KEROSENE_REFORM = 			registerOrGet(KEROSENE_REFORM,"kerosene_reform");
 
-		registerOrGet(BIOGAS, "biogas");
-		registerOrGet(BIOFUEL, "biofuel");
-		registerOrGet(SOURGAS, "sourgas");
+		GAS = 						registerOrGet(GAS,"gas").setGaseous(true);
+		GAS_COKER = 				registerOrGet(GAS_COKER,"gas_coker").setGaseous(true);
+		PETROLEUM = 				registerOrGet(PETROLEUM,"petroleum").setGaseous(true);
 
-		registerOrGet(ETHANOL, "ethanol");
-		registerOrGet(FISHOIL, "fishoil");
-		registerOrGet(SUNFLOWEROIL, "sunfloweroil");
-		registerOrGet(COLLOID, "colloid");
+		AROMATICS = 				registerOrGet(AROMATICS,"aromatics");
+		UNSATURATEDS = 				registerOrGet(UNSATURATEDS,"unsaturateds");
+		XYLENE = 					registerOrGet(XYLENE,"xylene").setGaseous(true);
 
-		registerOrGet(NITAN, "nitan");
+		CHLORINE = 					registerOrGet(CHLORINE, "chlorine").setGaseous(true);
+		PHOSGENE = 					registerOrGet(PHOSGENE, "phosgene").setGaseous(true);
+		WOODOIL = 					registerOrGet(WOODOIL, "woodoil");
+		COALCREOSOTE = 				registerOrGet(COALCREOSOTE, "coalcreosote");
+		COALOIL = 					registerOrGet(COALOIL, "coaloil");
+		COALGAS = 					registerOrGet(COALGAS, "coalgas").setGaseous(true);
+		COALGAS_LEADED = 			registerOrGet(COALGAS_LEADED, "coalgas_leaded").setGaseous(true);
+		PETROIL_LEADED = 			registerOrGet(PETROIL_LEADED, "petroil_leaded");
+		GASOLINE_LEADED = 			registerOrGet(GASOLINE_LEADED, "gasoline_leaded");
+		SYNGAS = 					registerOrGet(SYNGAS, "syngas").setGaseous(true);
 
-		registerOrGet(UF6, "uf6");
-		registerOrGet(PUF6, "puf6");
-		registerOrGet(SAS3, "sas3");
+		REFORMATE = 				registerOrGet(REFORMATE, "reformate");
+		REFORMGAS = 				registerOrGet(REFORMGAS, "reformgas").setGaseous(true);
 
-		registerOrGet(AMAT, "amat");
-		registerOrGet(ASCHRAB, "aschrab");
+		BIOGAS = 					registerOrGet(BIOGAS, "biogas").setGaseous(true);
+		BIOFUEL = 					registerOrGet(BIOFUEL, "biofuel");
+		SOURGAS = 					registerOrGet(SOURGAS, "sourgas").setGaseous(true);
 
-		registerOrGet(ACID, "acid");
-		registerOrGet(SULFURIC_ACID, "sulfuric_acid");
-		registerOrGet(NITRIC_ACID, "nitric_acid");
-		registerOrGet(SOLVENT, "solvent");
-		registerOrGet(RADIOSOLVENT, "radiosolvent");
-		registerOrGet(NITROGLYCERIN, "nitroglycerin");
+		ETHANOL = 					registerOrGet(ETHANOL, "ethanol");
+		FISHOIL = 					registerOrGet(FISHOIL, "fishoil");
+		SUNFLOWEROIL = 				registerOrGet(SUNFLOWEROIL, "sunfloweroil");
+		COLLOID = 					registerOrGet(COLLOID, "colloid");
 
-		registerOrGet(LIQUID_OSMIRIDIUM, "liquid_osmiridium");
-		registerOrGet(WATZ, "watz");
-		registerOrGet(CRYOGEL, "cryogel");
+		NITAN = 					registerOrGet(NITAN, "nitan");
 
-		registerOrGet(HYDROGEN, "hydrogen");
-		registerOrGet(OXYGEN, "oxygen");
-		registerOrGet(XENON, "xenon");
-		registerOrGet(BALEFIRE, "balefire");
+		UF6 = 						registerOrGet(UF6, "uf6").setGaseous(true);
+		PUF6 = 						registerOrGet(PUF6, "puf6").setGaseous(true);
+		SAS3 = 						registerOrGet(SAS3, "sas3").setGaseous(true);
 
-		registerOrGet(MERCURY, "mercury");
+		AMAT = 						registerOrGet(AMAT, "amat");
+		ASCHRAB = 					registerOrGet(ASCHRAB, "aschrab");
 
-		registerOrGet(PLASMA_DT, "plasma_dt");
-		registerOrGet(PLASMA_HD, "plasma_hd");
-		registerOrGet(PLASMA_HT, "plasma_ht");
-		registerOrGet(PLASMA_PUT, "plasma_put");
-		registerOrGet(PLASMA_MX, "plasma_xm");
-		registerOrGet(PLASMA_BF, "plasma_bf");
+		ACID = 						registerOrGet(ACID, "acid");
+		SULFURIC_ACID = 			registerOrGet(SULFURIC_ACID, "sulfuric_acid");
+		NITRIC_ACID = 				registerOrGet(NITRIC_ACID, "nitric_acid");
+		SOLVENT = 					registerOrGet(SOLVENT, "solvent");
+		RADIOSOLVENT = 				registerOrGet(RADIOSOLVENT, "radiosolvent");
+		NITROGLYCERIN = 			registerOrGet(NITROGLYCERIN, "nitroglycerin");
+
+		LIQUID_OSMIRIDIUM = 		registerOrGet(LIQUID_OSMIRIDIUM, "liquid_osmiridium");
+		CRYOGEL = 					registerOrGet(CRYOGEL, "cryogel");
+
+		HYDROGEN = 					registerOrGet(HYDROGEN, "hydrogen").setGaseous(true);
+		OXYGEN = 					registerOrGet(OXYGEN, "oxygen").setGaseous(true);
+		XENON = 					registerOrGet(XENON, "xenon").setGaseous(true);
+		BALEFIRE = 					registerOrGet(BALEFIRE, "balefire");
+
+		MERCURY = 					registerOrGet(MERCURY, "mercury");
+
+		PLASMA_DT = 				registerOrGet(PLASMA_DT, "plasma_dt").setGaseous(true);
+		PLASMA_HD = 				registerOrGet(PLASMA_HD, "plasma_hd").setGaseous(true);
+		PLASMA_HT = 				registerOrGet(PLASMA_HT, "plasma_ht").setGaseous(true);
+		PLASMA_PUT = 				registerOrGet(PLASMA_PUT, "plasma_put").setGaseous(true);
+		PLASMA_MX = 				registerOrGet(PLASMA_MX, "plasma_xm").setGaseous(true);
+		PLASMA_BF = 				registerOrGet(PLASMA_BF, "plasma_bf").setGaseous(true);
 
 
-		registerOrGet(IONGEL, "iongel");
-		registerOrGet(UU_MATTER, "ic2uu_matter");
-		
-		registerOrGet(PAIN,"pain");
-		registerOrGet(WASTEFLUID,"wastefluid");
-		registerOrGet(WASTEGAS,"wastegas");
-		registerOrGet(GASOLINE,"gasoline");
-		registerOrGet(EXPERIENCE,"experience");
-		registerOrGet(ENDERJUICE,"ender");
+		IONGEL = 					registerOrGet(IONGEL, "iongel");
+		UU_MATTER = 				registerOrGet(UU_MATTER, "ic2uu_matter");
 
-		registerOrGet(TOXIC_FLUID,"toxic_fluid");
-		registerOrGet(RADWATER_FLUID,"radwater_fluid");
-		registerOrGet(MUD_FLUID,"mud_fluid");
-		registerOrGet(SCHRABIDIC,"schrabidic");
-		registerOrGet(CORIUM_FLUID,"corium_fluid");
-		registerOrGet(VOLCANIC_LAVA_FLUID,"volcanic_lava_fluid");
+		PAIN = 						registerOrGet(PAIN,"pain");
+		WASTEFLUID = 				registerOrGet(WASTEFLUID,"wastefluid");
+		WASTEGAS = 					registerOrGet(WASTEGAS,"wastegas");
+		GASOLINE = 					registerOrGet(GASOLINE,"gasoline");
+		EXPERIENCE = 				registerOrGet(EXPERIENCE,"experience");
+		ENDERJUICE = 				registerOrGet(ENDERJUICE,"ender");
 
-		ModBlocks.toxic_block = new ToxicBlock(ModForgeFluids.TOXIC_FLUID, ModBlocks.fluidtoxic, ModDamageSource.radiation, "toxic_block").setResistance(500F);
-		ModBlocks.radwater_block = new RadWaterBlock(ModForgeFluids.RADWATER_FLUID, ModBlocks.fluidradwater, ModDamageSource.radiation, "radwater_block").setResistance(500F);
-		ModBlocks.mud_block = new MudBlock(ModForgeFluids.MUD_FLUID, ModBlocks.fluidmud, ModDamageSource.mudPoisoning, "mud_block").setResistance(500F);
-		ModBlocks.schrabidic_block = new SchrabidicBlock(SCHRABIDIC, ModBlocks.fluidschrabidic.setReplaceable(), ModDamageSource.radiation, "schrabidic_block").setResistance(500F);
-		ModBlocks.corium_block = new CoriumBlock(CORIUM_FLUID, ModBlocks.fluidcorium, "corium_block").setResistance(500F);
-		ModBlocks.volcanic_lava_block = new VolcanicBlock(VOLCANIC_LAVA_FLUID, ModBlocks.fluidvolcanic, "volcanic_lava_block").setResistance(500F);
+		TOXIC_FLUID = 				registerOrGet(TOXIC_FLUID,"toxic_fluid");
+		RADWATER_FLUID = 			registerOrGet(RADWATER_FLUID,"radwater_fluid");
+		MUD_FLUID = 				registerOrGet(MUD_FLUID,"mud_fluid");
+		SCHRABIDIC = 				registerOrGet(SCHRABIDIC,"schrabidic").setLuminosity(15);
+		CORIUM_FLUID = 				registerOrGet(CORIUM_FLUID,"corium_fluid");
+		VOLCANIC_LAVA_FLUID = 		registerOrGet(VOLCANIC_LAVA_FLUID,"volcanic_lava_fluid");
+
+		ModBlocks.toxic_block = new ToxicBlock(TOXIC_FLUID, ModDamageSource.radiation, "toxic_block", 0x232323).setResistance(500F);
+		ModBlocks.radwater_block = new RadWaterBlock(RADWATER_FLUID, ModDamageSource.radiation, "radwater_block", 0x3F7A97).setResistance(500F);
+		ModBlocks.mud_block = new MudBlock(MUD_FLUID, ModDamageSource.mudPoisoning, "mud_block", 0x98F500).setResistance(500F);
+		ModBlocks.schrabidic_block = new SchrabidicBlock(SCHRABIDIC, ModDamageSource.radiation, "schrabidic_block", 0x005151).setResistance(500F);
+		ModBlocks.corium_block = new CoriumBlock(CORIUM_FLUID, "corium_block", 0x383838).setResistance(500F);
+		ModBlocks.volcanic_lava_block = new VolcanicBlock(VOLCANIC_LAVA_FLUID, "volcanic_lava_block", 0xC42509).setResistance(500F);
 		TOXIC_FLUID.setBlock(ModBlocks.toxic_block);
 		RADWATER_FLUID.setBlock(ModBlocks.radwater_block);
 		MUD_FLUID.setBlock(ModBlocks.mud_block);
@@ -341,31 +335,164 @@ public class ModForgeFluids {
 	//been searching for an hour now and I have found no way to make your own custom mod container.
 	//Would it have killed them to add a simple event there?!?
 	public static void setFromRegistry() {
-		for(Map.Entry<Fluid, String> entry : noBlockFluids.entrySet()) {
-			loadFluid(entry.getKey(), entry.getValue());
-		}
+		SPENTSTEAM = 			loadFluid("spentsteam");
+		STEAM = 				loadFluid("steam");
+		HOTSTEAM = 				loadFluid("hotsteam");
+		SUPERHOTSTEAM =			loadFluid("superhotsteam");
+		ULTRAHOTSTEAM = 		loadFluid("ultrahotsteam");
+		COOLANT = 				loadFluid("coolant");
+		HOTCOOLANT = 			loadFluid("hotcoolant");
+		PERFLUOROMETHYL = 		loadFluid("perfluoromethyl");
+
+		HEAVYWATER = 			loadFluid("heavywater");
+		DEUTERIUM = 			loadFluid("deuterium");
+		TRITIUM = 				loadFluid("tritium");
+
+		OIL = 					loadFluid("oil");
+		HOTOIL = 				loadFluid("hotoil");
+		CRACKOIL = 				loadFluid("crackoil");
+		HOTCRACKOIL = 			loadFluid("hotcrackoil");
+		OIL_DS = 				loadFluid("oil_ds");
+		HOTOIL_DS = 			loadFluid("hotoil_ds");
+		CRACKOIL_DS = 			loadFluid("crackoil_ds");
+		HOTCRACKOIL_DS = 		loadFluid("hotcrackoil_ds");
+		OIL_COKER = 			loadFluid("oil_coker");
+
+		HEAVYOIL = 				loadFluid("heavyoil");
+		HEAVYOIL_VACUUM = 		loadFluid("heavyoil_vacuum");
+		BITUMEN = 				loadFluid("bitumen");
+		SMEAR = 				loadFluid("smear");
+		HEATINGOIL = 			loadFluid("heatingoil");
+		HEATINGOIL_VACUUM = 	loadFluid("heatingoil_vacuum");
+
+		RECLAIMED = 			loadFluid("reclaimed");
+		PETROIL = 				loadFluid("petroil");
+
+		FRACKSOL = 				loadFluid("fracksol");
+
+		LUBRICANT = 			loadFluid("lubricant");
+
+		NAPHTHA = 				loadFluid("naphtha");
+		NAPHTHA_CRACK = 		loadFluid("naphtha_crack");
+		NAPHTHA_DS = 			loadFluid("naphtha_ds");
+		NAPHTHA_COKER = 		loadFluid("naphtha_coker");
+
+		DIESEL = 				loadFluid("diesel");
+		DIESEL_CRACK = 			loadFluid("diesel_crack");
+		DIESEL_REFORM = 		loadFluid("diesel_reform");
+		DIESEL_CRACK_REFORM = 	loadFluid("diesel_crack_reform");
+
+		LIGHTOIL = 				loadFluid("lightoil");
+		LIGHTOIL_CRACK = 		loadFluid("lightoil_crack");
+		LIGHTOIL_DS = 			loadFluid("lightoil_ds");
+		LIGHTOIL_VACUUM = 		loadFluid("lightoil_vacuum");
+
+		KEROSENE = 				loadFluid("kerosene");
+		KEROSENE_REFORM = 		loadFluid("kerosene_reform");
+
+		GAS = 					loadFluid("gas");
+		GAS_COKER = 			loadFluid("gas_coker");
+		PETROLEUM = 			loadFluid("petroleum");
+
+		AROMATICS = 			loadFluid("aromatics");
+		UNSATURATEDS = 			loadFluid("unsaturateds");
+		XYLENE = 				loadFluid("xylene");
+
+		CHLORINE = 				loadFluid("chlorine");
+		PHOSGENE = 				loadFluid("phosgene");
+		WOODOIL = 				loadFluid("woodoil");
+		COALCREOSOTE = 			loadFluid("coalcreosote");
+		COALOIL = 				loadFluid("coaloil");
+		COALGAS = 				loadFluid("coalgas");
+		COALGAS_LEADED = 		loadFluid("coalgas_leaded");
+		PETROIL_LEADED = 		loadFluid("petroil_leaded");
+		GASOLINE_LEADED = 		loadFluid("gasoline_leaded");
+		SYNGAS = 				loadFluid("syngas");
+
+		REFORMATE = 			loadFluid("reformate");
+		REFORMGAS = 			loadFluid("reformgas");
+
+		BIOGAS = 				loadFluid("biogas");
+		BIOFUEL = 				loadFluid("biofuel");
+		SOURGAS = 				loadFluid("sourgas");
+
+		ETHANOL = 				loadFluid("ethanol");
+		FISHOIL = 				loadFluid("fishoil");
+		SUNFLOWEROIL = 			loadFluid("sunfloweroil");
+		COLLOID = 				loadFluid("colloid");
+
+		NITAN = 				loadFluid("nitan");
+
+		UF6 = 					loadFluid("uf6");
+		PUF6 = 					loadFluid("puf6");
+		SAS3 = 					loadFluid("sas3");
+
+		AMAT = 					loadFluid("amat");
+		ASCHRAB = 				loadFluid("aschrab");
+
+		ACID = 					loadFluid("acid");
+		SULFURIC_ACID = 		loadFluid("sulfuric_acid");
+		NITRIC_ACID = 			loadFluid("nitric_acid");
+		SOLVENT = 				loadFluid("solvent");
+		RADIOSOLVENT = 			loadFluid("radiosolvent");
+		NITROGLYCERIN = 		loadFluid("nitroglycerin");
+
+		LIQUID_OSMIRIDIUM = 	loadFluid("liquid_osmiridium");
+		CRYOGEL = 				loadFluid("cryogel");
+
+		HYDROGEN = 				loadFluid("hydrogen");
+		OXYGEN = 				loadFluid("oxygen");
+		XENON = 				loadFluid("xenon");
+		BALEFIRE = 				loadFluid("balefire");
+
+		MERCURY = 				loadFluid("mercury");
+
+		PLASMA_DT = 			loadFluid("plasma_dt");
+		PLASMA_HD = 			loadFluid("plasma_hd");
+		PLASMA_HT = 			loadFluid("plasma_ht");
+		PLASMA_PUT =			loadFluid("plasma_put");
+		PLASMA_MX = 			loadFluid("plasma_xm");
+		PLASMA_BF = 			loadFluid("plasma_bf");
+
+
+		IONGEL = 				loadFluid("iongel");
+		UU_MATTER = 			loadFluid("ic2uu_matter");
+
+		PAIN = 					loadFluid("pain");
+		WASTEFLUID = 			loadFluid("wastefluid");
+		WASTEGAS = 				loadFluid("wastegas");
+		GASOLINE = 				loadFluid("gasoline");
+		EXPERIENCE = 			loadFluid("experience");
+		ENDERJUICE =			loadFluid("ender");
+
+		TOXIC_FLUID = 			loadFluid("toxic_fluid");
+		RADWATER_FLUID = 		loadFluid("radwater_fluid");
+		MUD_FLUID = 			loadFluid("mud_fluid");
+		SCHRABIDIC = 			loadFluid("schrabidic");
+		CORIUM_FLUID = 			loadFluid("corium_fluid");
+		VOLCANIC_LAVA_FLUID = 	loadFluid("volcanic_lava_fluid");
 	}
 
 	public static Fluid createFluid(String name){
 		noBlockFluidNames.add(name);
-		return new Fluid(name, new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name), null, Color.WHITE);
+		return new Fluid(name, new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name));
 	}
 
 	public static Fluid createFluidFlowing(String name){
 		noBlockFluidNames.add(name+"_still");
 		noBlockFluidNames.add(name+"_flowing");
-		return new Fluid(name, new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name+"_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name+"_flowing"), null, Color.WHITE);
+		return new Fluid(name, new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name+"_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/"+name+"_flowing"));
 	}
 
-	public static void loadFluid(Fluid f, String name){
-		f = FluidRegistry.getFluid(name);
+	public static Fluid loadFluid(String name){
+		return FluidRegistry.getFluid(name);
 	}
 
-	public static void registerOrGet(Fluid f, String name){
-		if(!FluidRegistry.registerFluid(f)) {
-			f = FluidRegistry.getFluid(name);
-			noBlockFluids.put(f, name);
+	public static Fluid registerOrGet(Fluid f, String name){
+		if(!FluidRegistry.registerFluid(f)){
+			return FluidRegistry.getFluid(name);
 		}
+		return f;
 	}
 
 	@SubscribeEvent

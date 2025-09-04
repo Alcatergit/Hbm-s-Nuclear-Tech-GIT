@@ -71,6 +71,7 @@ public class LiquefactionRecipes {
 //        addRecipe(new ComparableStack(Blocks.TALLGRASS, 1, 1),	100, Fluids.SEEDSLURRY);
 //        addRecipe(new ComparableStack(Blocks.TALLGRASS, 1, 2),	100, Fluids.SEEDSLURRY);
 //        addRecipe(new ComparableStack(Blocks.VINE),				100, Fluids.SEEDSLURRY);
+        addRecipe(MUD.ingot(),	    ModForgeFluids.MUD_FLUID, 16_000);
     }
 
     public static void addRecipe(Object input, Fluid fluid, int amount){

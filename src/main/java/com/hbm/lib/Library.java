@@ -187,6 +187,10 @@ public class Library {
 		return getShortNumber(new BigDecimal(l));
 	}
 
+	public static long getMagnitude(int mag){
+		return new BigDecimal(10).pow(mag).longValue();
+	}
+
 	public static Map<Integer, String> numbersMap = null;
 	
 
@@ -243,14 +247,9 @@ public class Library {
 		ResourceLocation path = null;
 		ResourceLocation actualPath = null;
 		TextureAtlasSprite sprite = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(stack.getItem(), stack.getMetadata());
-		if(sprite != null){
-			path = new ResourceLocation(sprite.getIconName()+".png");
-			actualPath = new ResourceLocation(path.getNamespace(), "textures/"+path.getPath());
-		} else {
-			path = new ResourceLocation(stack.getItem().getRegistryName()+".png");
-			actualPath = new ResourceLocation(path.getNamespace(), "textures/items/"+path.getPath());
-		}
-		return getColorFromResourceLocation(actualPath);
+        path = new ResourceLocation(sprite.getIconName() + ".png");
+        actualPath = new ResourceLocation(path.getNamespace(), "textures/"+path.getPath());
+        return getColorFromResourceLocation(actualPath);
 	}
 
 	public static int getColorFromResourceLocation(ResourceLocation r){
@@ -329,10 +328,12 @@ public class Library {
 
 		boolean flag = true;
 
-		for(int i = 0; i < array.length; i++) {
-			if(array[i] != null)
-				flag = false;
-		}
+        for (Object o : array) {
+            if (o != null) {
+                flag = false;
+                break;
+            }
+        }
 
 		return flag;
 	}
@@ -374,9 +375,8 @@ public class Library {
 
 				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityHunterChopper) {
 					double d5 = entityplayer1.getDistanceSq(x, y, z);
-					double d6 = radius;
 
-					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+                    if ((radius < 0.0D || d5 < radius * radius) && (d4 == -1.0D || d5 < d4)) {
 						d4 = d5;
 						entity = (EntityHunterChopper)entityplayer1;
 					}
@@ -395,9 +395,8 @@ public class Library {
 
 				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityChopperMine) {
 					double d5 = entityplayer1.getDistanceSq(x, y, z);
-					double d6 = radius;
 
-					if ((radius < 0.0D || d5 < d6 * d6) && (d4 == -1.0D || d5 < d4)) {
+                    if ((radius < 0.0D || d5 < radius * radius) && (d4 == -1.0D || d5 < d4)) {
 						d4 = d5;
 						entity = (EntityChopperMine)entityplayer1;
 					}
@@ -424,18 +423,13 @@ public class Library {
 	}
 	
 	public static AxisAlignedBB rotateAABB(AxisAlignedBB box, EnumFacing facing){
-		switch(facing){
-		case NORTH:
-			return new AxisAlignedBB(box.minX, box.minY, 1-box.minZ, box.maxX, box.maxY, 1-box.maxZ);
-		case SOUTH:
-			return box;
-		case EAST:
-			return new AxisAlignedBB(box.minZ, box.minY, box.minX, box.maxZ, box.maxY, box.maxX);
-		case WEST:
-			return new AxisAlignedBB(1-box.minZ, box.minY, box.minX, 1-box.maxZ, box.maxY, box.maxX);
-		default:
-			return box;
-		}
+        return switch (facing) {
+            case NORTH -> new AxisAlignedBB(box.minX, box.minY, 1 - box.minZ, box.maxX, box.maxY, 1 - box.maxZ);
+            case SOUTH -> box;
+            case EAST -> new AxisAlignedBB(box.minZ, box.minY, box.minX, box.maxZ, box.maxY, box.maxX);
+            case WEST -> new AxisAlignedBB(1 - box.minZ, box.minY, box.minX, 1 - box.maxZ, box.maxY, box.maxX);
+            default -> box;
+        };
 	}
 	
 	public static RayTraceResult rayTraceIncludeEntities(EntityPlayer player, double d, float f) {

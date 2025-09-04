@@ -252,7 +252,7 @@ public class TileEntityMachineHydrotreater extends TileEntityMachineBase impleme
     public int fill(FluidStack resource, boolean doFill) {
         if(resource == null) return 0;
 
-        if(HydrotreatingRecipes.getOutput(resource.getFluid()) != null && (tanks[0].getFluid() != null || resource.isFluidEqual(tanks[0].getFluid()))) {
+        if(HydrotreatingRecipes.getOutput(resource.getFluid()) != null && (tanks[0].getFluid() == null || resource.isFluidEqual(tanks[0].getFluid()))) {
             return tanks[0].fill(resource, doFill);
         }
         if(tanks[0].getFluid() != null){

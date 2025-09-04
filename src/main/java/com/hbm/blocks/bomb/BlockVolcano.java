@@ -113,7 +113,7 @@ public class BlockVolcano extends Block {
 		for(int i = 0; i < 3; i++) {
 			EntityShrapnel frag = new EntityShrapnel(world);
 			frag.setLocationAndAngles(x + 0.5, y + 1.5, z + 0.5, 0.0F, 0.0F);
-			frag.motionY = 1D + rand.nextDouble();
+			frag.motionY = 2D + rand.nextDouble();
 			frag.motionX = rand.nextGaussian() * 0.2D;
 			frag.motionZ = rand.nextGaussian() * 0.2D;
 			frag.setVolcano(true);

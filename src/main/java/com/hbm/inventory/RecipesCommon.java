@@ -74,7 +74,7 @@ public class RecipesCommon {
 		public boolean isApplicable(ComparableStack comp) {
 			
 			if(this instanceof ComparableStack) {
-				return ((ComparableStack)this).equals(comp);
+				return this.equals(comp);
 			}
 
 			if(this instanceof OreDictStack) {
@@ -105,6 +105,12 @@ public class RecipesCommon {
 		@Override
 		public String toString() {
 			return "AStack: size, " + stacksize;
+		}
+
+		public ItemStack extractForCyclingDisplay(int cycle) {
+			List<ItemStack> list = getStackList();
+			cycle *= 50;
+			return list.get((int)(System.currentTimeMillis() % (cycle * list.size()) / cycle));
 		}
 	}
 
@@ -145,6 +151,11 @@ public class RecipesCommon {
 		public ComparableStack(Item item, int stacksize) {
 			this(item);
 			this.stacksize = stacksize;
+		}
+
+		public ComparableStack(Item item, int stacksize, Enum meta) {
+			this(item, stacksize);
+			this.meta = meta.ordinal();
 		}
 		
 		public ComparableStack(Item item, int stacksize, int meta) {
@@ -475,6 +486,53 @@ public class RecipesCommon {
 		@Override
 		public String toString() {
 			return "OreDictStack: name, " + name + ", stacksize, " + stacksize;
+		}
+	}
+
+	public static class MetaBlock {
+
+		public Block block;
+		public int meta;
+
+		public MetaBlock(Block block, int meta) {
+			this.block = block;
+			this.meta = meta;
+		}
+
+		@Override
+		public int hashCode() {
+			final int prime = 31;
+			int result = 1;
+			result = prime * result + Block.REGISTRY.getNameForObject(block).hashCode();
+			result = prime * result + meta;
+			return result;
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if(this == obj)
+				return true;
+			if(obj == null)
+				return false;
+			if(getClass() != obj.getClass())
+				return false;
+			MetaBlock other = (MetaBlock) obj;
+			if(block == null) {
+				if(other.block != null)
+					return false;
+			} else if(!block.equals(other.block))
+				return false;
+			if(meta != other.meta)
+				return false;
+			return true;
+		}
+
+		public MetaBlock(Block block) {
+			this(block, 0);
+		}
+
+		@Deprecated public int getID() {
+			return hashCode();
 		}
 	}
 }

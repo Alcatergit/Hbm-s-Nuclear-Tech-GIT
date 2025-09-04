@@ -1,6 +1,0 @@
-{
-	"variants": {
-		"activated=true": { "model": "hbm:watz_control" },
-     	   	"activated=false": { "model": "hbm:watz_control" }
-	}
-}

@@ -7,11 +7,12 @@ import com.hbm.lib.RefStrings;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class MudFluid extends Fluid {
 
 	public MudFluid(){
-		super("mud_fluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_flowing"), Color.white);
+		super("mud_fluid", new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_still"), new ResourceLocation(RefStrings.MODID, "blocks/forgefluid/mud_flowing"));
 	}
-
 }

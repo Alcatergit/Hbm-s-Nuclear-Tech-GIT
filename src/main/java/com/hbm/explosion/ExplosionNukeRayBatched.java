@@ -26,12 +26,12 @@ import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 public class ExplosionNukeRayBatched {
 
 	public HashMap<ChunkPos, BitSet> perChunk = new HashMap<ChunkPos, BitSet>();
-	public List<ChunkPos> orderedChunks = new ArrayList();
-	private CoordComparator comparator = new CoordComparator();
+	public List<ChunkPos> orderedChunks = new ArrayList<>();
+	private final CoordComparator comparator = new CoordComparator();
 	public boolean isContained = true;
-	int posX;
-	int posY;
-	int posZ;
+	double posX;
+	double posY;
+	double posZ;
 	World world;
 
 	int strength;
@@ -48,7 +48,7 @@ public class ExplosionNukeRayBatched {
 	public boolean isAusf3Complete = false;
 	public int rayCheckInterval = 100;
 
-	public ExplosionNukeRayBatched(World world, int x, int y, int z, int strength, int radius) {
+	public ExplosionNukeRayBatched(World world, double x, double y, double z, int strength, int radius) {
 		this.world = world;
 		this.posX = x;
 		this.posY = y;
@@ -93,13 +93,10 @@ public class ExplosionNukeRayBatched {
 
 	public void addPos(int x, int y, int z){
 		chunk = new ChunkPos(x >> 4, z >> 4);
-		BitSet hitPositions = perChunk.get(chunk);
-				
-		if(hitPositions == null) {
-			hitPositions = new BitSet(65536);
-			perChunk.put(chunk, hitPositions); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
-		}
-		hitPositions.set(((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart()));
+        BitSet hitPositions = perChunk.computeIfAbsent(chunk, k -> new BitSet(65536));
+
+        //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
+        hitPositions.set(((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart()));
 	}
 
 	int age = 0;
@@ -118,7 +115,7 @@ public class ExplosionNukeRayBatched {
 		float rayStrength;
 		Vec3 vec;
 		age++;
-		if(age == 120){
+		if(age == 1200){
 			System.out.println("NTM C "+raysProcessed+" "+Math.round(10000D * 100D*gspNum/(double)gspNumMax)/10000D+"% "+gspNum+"/"+gspNumMax);
 			age = 0;
 		}
@@ -126,7 +123,7 @@ public class ExplosionNukeRayBatched {
 			// Get Cartesian coordinates for spherical coordinates
 			vec = this.getSpherical2cartesian();
 
-			radius = (int)Math.ceil(this.radius);
+			radius = (int) (double) this.radius;
 			rayStrength = strength * 0.3F;
 
 			//Finding the end of the ray
@@ -149,7 +146,7 @@ public class ExplosionNukeRayBatched {
 				if(b.getExplosionResistance(null) >= 2_000_000)
 					break;
 
-				rayStrength -= Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1;
+				rayStrength -= (float) (Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1);
 
 				//save block positions in to-destroy-boolean[] until rayStrength is 0 
 				if(rayStrength > 0){
@@ -194,13 +191,13 @@ public class ExplosionNukeRayBatched {
 		@Override
 		public int compare(ChunkPos o1, ChunkPos o2) {
 
-			int chunkX = ExplosionNukeRayBatched.this.posX >> 4;
-			int chunkZ = ExplosionNukeRayBatched.this.posZ >> 4;
+			int chunkX = (int)ExplosionNukeRayBatched.this.posX >> 4;
+			int chunkZ = (int)ExplosionNukeRayBatched.this.posZ >> 4;
 
-			int diff1 = Math.abs((chunkX - (int) (o1.getXStart() >> 4))) + Math.abs((chunkZ - (int) (o1.getZStart() >> 4)));
-			int diff2 = Math.abs((chunkX - (int) (o2.getXStart() >> 4))) + Math.abs((chunkZ - (int) (o2.getZStart() >> 4)));
+			int diff1 = Math.abs((chunkX - (o1.getXStart() >> 4))) + Math.abs((chunkZ - (o1.getZStart() >> 4)));
+			int diff2 = Math.abs((chunkX - (o2.getXStart() >> 4))) + Math.abs((chunkZ - (o2.getZStart() >> 4)));
 			
-			return diff1 > diff2 ? 1 : diff1 < diff2 ? -1 : 0;
+			return Integer.compare(diff1, diff2);
 		}
 	}
 
@@ -253,9 +250,9 @@ public class ExplosionNukeRayBatched {
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		radius = nbt.getInteger("radius");
 		strength = nbt.getInteger("strength");
-		posX = nbt.getInteger("posX");
-		posY = nbt.getInteger("posY");
-		posZ = nbt.getInteger("posZ");
+		posX = nbt.getDouble("posX");
+		posY = nbt.getDouble("posY");
+		posZ = nbt.getDouble("posZ");
 		gspNumMax = (int)(2.5 * Math.PI * Math.pow(strength, 2));
 		rayCheckInterval = 10000/radius;
 
@@ -281,9 +278,9 @@ public class ExplosionNukeRayBatched {
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("radius", radius);
 		nbt.setInteger("strength", strength);
-		nbt.setInteger("posX", posX);
-		nbt.setInteger("posY", posY);
-		nbt.setInteger("posZ", posZ);
+		nbt.setDouble("posX", posX);
+		nbt.setDouble("posY", posY);
+		nbt.setDouble("posZ", posZ);
 		
 		if(BombConfig.enableNukeNBTSaving){
 			nbt.setInteger("gspNum", gspNum);

@@ -50,7 +50,7 @@ public class MachineRecipes {
 			list.add(new GasCentOutput(4, new ItemStack(ModItems.nugget_pu240), 3));
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.fluorite), 4));
 			return list;
-		} else if(fluid == ModForgeFluids.WATZ){
+		} else if(fluid == ModForgeFluids.MUD_FLUID){
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_solinium), 1));
 			list.add(new GasCentOutput(1, new ItemStack(ModItems.nugget_uranium), 2));
 			list.add(new GasCentOutput(5, new ItemStack(ModItems.powder_lead), 3));
@@ -113,7 +113,7 @@ public class MachineRecipes {
 			return 100;
 		else if(fluid == ModForgeFluids.PUF6)
 			return 100;
-		else if(fluid == ModForgeFluids.WATZ)
+		else if(fluid == ModForgeFluids.MUD_FLUID)
 			return 1000;
 		else if(fluid == ModForgeFluids.SAS3)
 			return 100;

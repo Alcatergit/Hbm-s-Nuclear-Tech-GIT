@@ -52,7 +52,7 @@ public class BlockMarker extends BlockContainer {
 		if(world.isRemote)
 		{
 			int i = ((TileEntityStructureMarker)world.getTileEntity(pos)).type + 1;
-			if(i > 4)
+			if(i > 3)
 				i = 0;
 			if(i == 0)
 		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.factory"));
@@ -61,14 +61,12 @@ public class BlockMarker extends BlockContainer {
 			if(i == 2)
 		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.nuclearc"));
 			if(i == 3)
-		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.watz"));
-			if(i == 4)
 		        player.sendMessage(new TextComponentTranslation("chat.structuremarker.safe"));
 			return true;
 		} else if(!player.isSneaking())
 		{
 			if(world.getTileEntity(pos) != null && world.getTileEntity(pos) instanceof TileEntityStructureMarker) {
-				((TileEntityStructureMarker)world.getTileEntity(pos)).type ++;
+				((TileEntityStructureMarker)world.getTileEntity(pos)).type++;
 			}
 			return true;
 		} else {
@@ -224,24 +222,12 @@ public class BlockMarker extends BlockContainer {
     {
         IBlockState iblockstate = this.getDefaultState();
 
-        switch (meta)
-        {
-            case 1:
-                iblockstate = iblockstate.withProperty(FACING, EnumFacing.EAST);
-                break;
-            case 2:
-                iblockstate = iblockstate.withProperty(FACING, EnumFacing.WEST);
-                break;
-            case 3:
-                iblockstate = iblockstate.withProperty(FACING, EnumFacing.SOUTH);
-                break;
-            case 4:
-                iblockstate = iblockstate.withProperty(FACING, EnumFacing.NORTH);
-                break;
-            case 5:
-            default:
-                iblockstate = iblockstate.withProperty(FACING, EnumFacing.UP);
-        }
+        iblockstate = switch (meta) {
+            case 1 -> iblockstate.withProperty(FACING, EnumFacing.EAST);
+            case 2 -> iblockstate.withProperty(FACING, EnumFacing.WEST);
+            case 3 -> iblockstate.withProperty(FACING, EnumFacing.SOUTH);
+            default -> iblockstate.withProperty(FACING, EnumFacing.UP);
+        };
 
         return iblockstate;
     }
@@ -250,37 +236,25 @@ public class BlockMarker extends BlockContainer {
     {
         int i = 0;
 
-        switch ((EnumFacing)state.getValue(FACING))
-        {
-            case EAST:
-                i = i | 1;
-                break;
-            case WEST:
-                i = i | 2;
-                break;
-            case SOUTH:
-                i = i | 3;
-                break;
-            case NORTH:
-                i = i | 4;
-                break;
-            case DOWN:
-            case UP:
-            default:
-                i = i | 5;
-        }
+        i = switch (state.getValue(FACING)) {
+            case EAST -> i | 1;
+            case WEST -> i | 2;
+            case SOUTH -> i | 3;
+            case NORTH -> i | 4;
+            default -> i | 5;
+        };
 
         return i;
     }
 
     public IBlockState withRotation(IBlockState state, Rotation rot)
     {
-        return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
+        return state.withProperty(FACING, rot.rotate(state.getValue(FACING)));
     }
 
     public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
     {
-        return state.withRotation(mirrorIn.toRotation((EnumFacing)state.getValue(FACING)));
+        return state.withRotation(mirrorIn.toRotation(state.getValue(FACING)));
     }
 
     protected BlockStateContainer createBlockState()

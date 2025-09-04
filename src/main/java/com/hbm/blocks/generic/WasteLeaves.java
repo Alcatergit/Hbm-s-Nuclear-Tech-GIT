@@ -27,19 +27,20 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class WasteLeaves extends BlockOldLeaf {
 
 	public WasteLeaves(String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK).withProperty(CHECK_DECAY, Boolean.valueOf(false)).withProperty(DECAYABLE, Boolean.valueOf(false)));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK).withProperty(CHECK_DECAY, Boolean.FALSE).withProperty(DECAYABLE, Boolean.FALSE));
 		this.setTickRandomly(false);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	@Override
-	protected BlockStateContainer createBlockState(){
+	protected @NotNull BlockStateContainer createBlockState(){
 		return new BlockStateContainer(this, VARIANT, CHECK_DECAY, DECAYABLE);
 	}
 
@@ -65,12 +66,10 @@ public class WasteLeaves extends BlockOldLeaf {
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
-    	return;
     }
 
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random){
-    	return;
     }
 
 	@Override
@@ -88,30 +87,30 @@ public class WasteLeaves extends BlockOldLeaf {
 		return null;
 	}
 
-	public NonNullList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune){
-		NonNullList<ItemStack> output = NonNullList.create();
-		output.add(new ItemStack(ModBlocks.waste_leaves, fortune+1));
-		return output;
-	}
-
 	@Override
 	protected int getSaplingDropChance(IBlockState state){
 		return 0;
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune){
-		return;
+	public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, float chance, int fortune){
 	}
 
 	@Override
 	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance){
-		return;
+		if(worldIn.rand.nextInt(chance) == 0) {
+			spawnAsEntity(worldIn, pos, new ItemStack(ModItems.nuclear_waste_tiny));
+		}
 	}
 
 	@Override
-	public BlockPlanks.EnumType getWoodType(int meta){
+	public BlockPlanks.@NotNull EnumType getWoodType(int meta){
 		return BlockPlanks.EnumType.OAK;
+	}
+
+	@Override
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
+		items.add(new ItemStack(this, 1, BlockPlanks.EnumType.OAK.getMetadata()));
 	}
 
 	@Override
@@ -126,13 +125,8 @@ public class WasteLeaves extends BlockOldLeaf {
 	}
 
 	@Override
-  	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		this.leavesFancy = !Blocks.LEAVES.isOpaqueCube(blockState);
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
-	}
-
-	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
-		return;
 	}
 }

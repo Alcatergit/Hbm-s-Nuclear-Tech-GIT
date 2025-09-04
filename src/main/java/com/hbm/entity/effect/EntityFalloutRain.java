@@ -61,7 +61,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	public boolean doFlood = false;
 	public boolean doDrop = false;
 	public int waterLevel = 0;
-	public boolean spawnFire = false;
 
 	private Ticket loaderTicket;
 
@@ -93,7 +92,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
 			this.waterLevel = world.getSeaLevel() - this.waterLevel;
 		}
-		this.spawnFire = BombConfig.spawnFire;
 	}
 
 	public EntityFalloutRain(World p_i1582_1_, int maxage) {
@@ -376,10 +374,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			if(y == contactHeight-1 && bblock != ModBlocks.fallout && Math.abs(rand.nextGaussian() * (dist * dist) / (s0 * s0)) < 0.05 && rand.nextDouble() < 0.05 && ModBlocks.fallout.canPlaceBlockAt(world, pos.up())) {
 				placeBlockFromDist(dist, ModBlocks.fallout, pos.up());
-			}
-
-			if(spawnFire && dist < s2 && bblock.isFlammable(world, pos, EnumFacing.UP) && world.isAirBlock(pos.up())) {
-				world.setBlockState(pos.up(), Blocks.FIRE.getDefaultState());
 			}
 
 			if(bblock == ModBlocks.waste_leaves){

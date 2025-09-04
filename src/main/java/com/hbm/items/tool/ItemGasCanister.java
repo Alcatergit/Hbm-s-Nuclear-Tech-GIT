@@ -97,9 +97,10 @@ public class ItemGasCanister extends Item implements IHasCustomModel {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
 			for(Fluid f : EnumGasCanister.getFluids()){
 				ItemStack stack = new ItemStack(this, 1, 0);
-				stack.setTagCompound(new NBTTagCompound());
-				if(f != null)
+				if(f != null) {
+					stack.setTagCompound(new NBTTagCompound());
 					stack.getTagCompound().setTag(HbmFluidHandlerGasCanister.FLUID_NBT_KEY, new FluidStack(f, cap).writeToNBT(new NBTTagCompound()));
+				}
 				items.add(stack);
 			}
 		}

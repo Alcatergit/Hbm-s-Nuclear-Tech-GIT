@@ -12,8 +12,6 @@ import net.minecraft.item.Item;
 
 public class MachineGenerator extends Block {
 
-	
-	
 	public MachineGenerator(Material m, String s) {
 		super(m);
 		this.setTranslationKey(s);
@@ -22,10 +20,4 @@ public class MachineGenerator extends Block {
 
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-
-	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return ModItems.circuit_targeting_tier3;
-	}
-	
 }

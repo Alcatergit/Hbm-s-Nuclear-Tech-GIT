@@ -309,41 +309,30 @@ public class ItemRBMKRod extends Item {
 	
 	public String getFuncDescription(ItemStack stack) {
 
-		String function;
-		
-		switch(this.function) {
-		case PASSIVE: function = TextFormatting.RED + "" + selfRate;
-			break;
-		case LOG_TEN: function = "log10(%1$s + 1) * %2$s";
-			break;
-		case PLATEU: function = "(1 - e^(-%1$s / 25)) * %2$s";
-			break;
-		case ARCH: function = "(%1$s - %1$s² / "+archLength+") * %2$s";
-			break;
-		case SIGMOID: function = "%2$s / (1 + e^(-0.1 * %1$s + 5)";
-			break;
-		case SQUARE_ROOT: function = "sqrt(%1$s) * %2$s";
-			break;
-		case LINEAR: function = "%1$s * %2$s";
-			break;
-		case QUADRATIC: function = "%1$s² * %2$s";
-			break;
-		case EXPERIMENTAL: function = "%1$s * (sin(%1$s) + 1) * %2$s";
-			break;
-		default: function = "ERROR";
-		}
-		
-		double enrichment = getEnrichment(stack);
+		String function = switch (this.function) {
+            case PASSIVE -> TextFormatting.RED + "" + selfRate;
+            case LOG_TEN -> "log10(%1$s + 1) * %2$s";
+            case PLATEU -> "(1 - e^(-%1$s / 25)) * %2$s";
+            case ARCH -> "(%1$s - %1$s² / " + archLength + ") * %2$s";
+            case SIGMOID -> "%2$s / (1 + e^(-0.1 * %1$s + 5)";
+            case SQUARE_ROOT -> "sqrt(%1$s) * %2$s";
+            case LINEAR -> "%1$s * %2$s";
+            case QUADRATIC -> "%1$s² * %2$s";
+            case EXPERIMENTAL -> "%1$s * (sin(%1$s) + 1) * %2$s";
+            default -> "ERROR";
+        };
+
+        double enrichment = getEnrichment(stack);
 		
 		if(enrichment < 1) {
 			enrichment = reactivityModByEnrichment(enrichment);
 			String reactivity = TextFormatting.YELLOW + "" + ((int)(this.reactivity * enrichment * 1000D) / 1000D) + TextFormatting.WHITE;
 			String enrichmentPer = TextFormatting.GOLD + " (" + ((int)(enrichment * 1000D) / 10D) + "%)";
 			
-			return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + "" + TextFormatting.WHITE + ")" : "x", reactivity).concat(enrichmentPer);
+			return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + TextFormatting.WHITE + ")" : "x", reactivity).concat(enrichmentPer);
 		}
 		
-		return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + "" + TextFormatting.WHITE + ")" : "x", reactivity);
+		return String.format(function, selfRate > 0 ? "(x" + TextFormatting.RED + " + " + selfRate + TextFormatting.WHITE + ")" : "x", reactivity);
 	}
 
 	public static enum EnumDepleteFunc {
@@ -417,8 +406,8 @@ public class ItemRBMKRod extends Item {
 			list.add(TextFormatting.BLUE + I18nUtil.resolveKey("trait.rbmx.splitsInto", I18nUtil.resolveKey(rType.unlocalized + ".x")));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.fluxFunc", TextFormatting.WHITE + getFuncDescription(stack)));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.funcType", I18nUtil.resolveKey(this.function.title)));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonGen", TextFormatting.WHITE + "x * " + xGen));
-			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² / " + xBurn));
+			list.add(TextFormatting.LIGHT_PURPLE + I18nUtil.resolveKey("trait.rbmx.xenonGen", TextFormatting.WHITE + "x * " + xGen));
+			list.add(TextFormatting.LIGHT_PURPLE + I18nUtil.resolveKey("trait.rbmx.xenonBurn", TextFormatting.WHITE + "x² / " + xBurn));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.heat", heat + "°C"));
 			list.add(TextFormatting.GOLD + I18nUtil.resolveKey("trait.rbmx.diffusion", diffusion + "¹/²"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("trait.rbmx.skinTemp", ((int)(getHullHeat(stack) * 10D) / 10D) + "m"));

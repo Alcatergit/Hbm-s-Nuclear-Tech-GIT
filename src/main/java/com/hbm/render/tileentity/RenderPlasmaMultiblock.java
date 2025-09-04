@@ -53,14 +53,14 @@ public class RenderPlasmaMultiblock extends TileEntitySpecialRenderer<TileEntity
 	            	if(iy == 5 && ix > 3)
 	            		break;
 	            	
-	            	SmallBlockPronter.renderSmolBlockAt(RenderStructureMarker.fusion[1][1], ix, iy, iz);
+	            	SmallBlockPronter.renderSimpleBlockAt(RenderStructureMarker.fusion[1][1], ix, iy, iz);
 	            }
 	        }
         }
         
         for(int i = 10; i <= 11; i++)
             for(int j = 2; j <= 3; j++)
-            	SmallBlockPronter.renderSmolBlockAt(RenderStructureMarker.fusion[1][1], i, j, 0);
+            	SmallBlockPronter.renderSimpleBlockAt(RenderStructureMarker.fusion[1][1], i, j, 0);
         
         RenderHelper.draw();
 

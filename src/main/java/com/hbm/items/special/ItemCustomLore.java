@@ -464,8 +464,7 @@ public class ItemCustomLore extends Item {
 
 			this == ModItems.plate_schrabidium || 
 			this == ModItems.plate_saturnite || 
-			
-			this == ModItems.circuit_schrabidium || 
+
 			this == ModItems.gun_revolver_schrabidium_ammo || 
 			this == ModItems.powder_unobtainium || 
 			this == ModItems.nugget_unobtainium || 

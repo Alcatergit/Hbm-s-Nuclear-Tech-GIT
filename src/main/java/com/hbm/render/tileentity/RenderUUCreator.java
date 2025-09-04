@@ -20,7 +20,7 @@ public class RenderUUCreator extends TileEntitySpecialRenderer<TileEntityMachine
 		
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.uu_creator_tex);
-		ResourceManager.uu_creator.renderAll();
+		ResourceManager.watz.renderAll();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		
 		GL11.glPopMatrix();
