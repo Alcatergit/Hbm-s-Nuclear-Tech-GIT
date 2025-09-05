@@ -13,6 +13,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityTurretRichard extends TileEntityTurretBaseNT {
 
@@ -159,7 +160,7 @@ public class TileEntityTurretRichard extends TileEntityTurretBaseNT {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setInteger("loaded", this.loaded);
 		return super.writeToNBT(nbt);
 	}

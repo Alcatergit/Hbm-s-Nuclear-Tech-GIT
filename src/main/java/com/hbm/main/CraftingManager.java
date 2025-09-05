@@ -1691,11 +1691,6 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModBlocks.machine_telelinker), new Object[] { "PSP", "SCS", "PSP", 'P', STEEL.plate(), 'S', ALLOY.ingot(), 'C', ModItems.turret_biometry });
 		addRecipeAuto(new ItemStack(ModBlocks.machine_keyforge), new Object[] { "PCP", "WSW", "WSW", 'P', STEEL.plate(), 'S', W.ingot(), 'C', ModItems.padlock, 'W', KEY_PLANKS });
 		addRecipeAuto(new ItemStack(ModItems.sat_chip), new Object[] { "WWW", "CIC", "WWW", 'W', new ItemStack(ModItems.wire, 1, MAT_MINGRADE.id), 'C', DictFrame.fromOne(ModItems.circuit, EnumCircuitType.ADVANCED), 'I', ANY_PLASTIC.ingot() });
-		addRecipeAuto(new ItemStack(ModItems.sat_mapper), new Object[] { "H", "B", 'H', ModItems.sat_head_mapper, 'B', ModItems.sat_base });
-		addRecipeAuto(new ItemStack(ModItems.sat_scanner), new Object[] { "H", "B", 'H', ModItems.sat_head_scanner, 'B', ModItems.sat_base });
-		addRecipeAuto(new ItemStack(ModItems.sat_radar), new Object[] { "H", "B", 'H', ModItems.sat_head_radar, 'B', ModItems.sat_base });
-		addRecipeAuto(new ItemStack(ModItems.sat_laser), new Object[] { "H", "B", 'H', ModItems.sat_head_laser, 'B', ModItems.sat_base });
-		addRecipeAuto(new ItemStack(ModItems.sat_resonator), new Object[] { "H", "B", 'H', ModItems.sat_head_resonator, 'B', ModItems.sat_base });
 		addShapelessAuto(new ItemStack(ModItems.sat_mapper), new Object[] { ModBlocks.sat_mapper });
 		addShapelessAuto(new ItemStack(ModItems.sat_scanner), new Object[] { ModBlocks.sat_scanner });
 		addShapelessAuto(new ItemStack(ModItems.sat_radar), new Object[] { ModBlocks.sat_radar });
@@ -2317,9 +2312,10 @@ public class CraftingManager {
 		addRecipeAuto(new ItemStack(ModItems.pads_static, 1), new Object[] { "CDC", "ISI", "CDC", 'C', CU.plate(), 'D', ModItems.ducttape, 'I', ModItems.plate_polymer, 'S', ModItems.pads_slime });
 
 		//Batteries
-		addRecipeAuto(new ItemStack(ModItems.armor_battery, 1), new Object[] { "PCP", "PCP", "PCP", 'P', STEEL.plate(), 'C', /*ModBlocks.capacitor_gold*/ Blocks.GOLD_BLOCK }); // TODO: fix recipe when capacitors are ported
-		addRecipeAuto(new ItemStack(ModItems.armor_battery_mk2, 1), new Object[] { "PCP", "PCP", "PCP", 'P', ANY_PLASTIC.ingot(), 'C', /*ModBlocks.capacitor_niobium*/ ModBlocks.block_niobium });
-		addRecipeAuto(new ItemStack(ModItems.armor_battery_mk3, 1), new Object[] { "PCP", "PCP", "PCP", 'P', GOLD.plate(), 'C', /*ModBlocks.capacitor_tantalium*/ ModBlocks.block_tantalium });
+		addRecipeAuto(new ItemStack(ModItems.armor_battery, 1), new Object[] { "W W", "PCP", "PCP", 'W', GOLD.wire(), 'P', AL.plateCast(), 'C', ModBlocks.machine_desh_battery });
+		addRecipeAuto(new ItemStack(ModItems.armor_battery_mk2, 1), new Object[] { "W W", "PCP", "PCP", 'W', GOLD.wire(), 'P', STEEL.plateCast(), 'C', ModBlocks.machine_saturnite_battery });
+		addRecipeAuto(new ItemStack(ModItems.armor_battery_mk3, 1), new Object[] { "W W", "PCP", "PCP", 'W', GOLD.wire(), 'P', GOLD.plateCast(), 'C', ModBlocks.machine_schrabidium_battery });
+		addRecipeAuto(new ItemStack(ModItems.armor_battery_mk4, 1), new Object[] { "W W", "PCP", "PCP", 'W', GOLD.wire(), 'P', ModItems.plate_euphemium, 'C', ModBlocks.machine_euphemium_battery });
 
 		//Special Mods
 		addRecipeAuto(new ItemStack(ModItems.horseshoe_magnet, 1), new Object[] { "L L", "I I", "ILI", 'L', ModItems.lodestone, 'I', IRON.ingot() });

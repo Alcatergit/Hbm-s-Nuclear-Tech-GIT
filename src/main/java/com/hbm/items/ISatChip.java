@@ -21,7 +21,6 @@ public interface ISatChip {
 
     default int getFreq(ItemStack stack) {
         if(stack.getTagCompound() == null) {
-            stack.setTagCompound(new NBTTagCompound());
             return 0;
         }
         return stack.getTagCompound().getInteger("freq");

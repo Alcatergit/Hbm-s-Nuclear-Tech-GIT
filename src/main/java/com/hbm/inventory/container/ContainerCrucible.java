@@ -8,6 +8,7 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class ContainerCrucible extends Container {
 	
@@ -38,36 +39,36 @@ public class ContainerCrucible extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(EntityPlayer playerIn, int par2) {
-		ItemStack var3 = ItemStack.EMPTY;
-		Slot var4 = (Slot) this.inventorySlots.get(par2);
-		
-		if (var4 != null && var4.getHasStack())
+	public @NotNull ItemStack transferStackInSlot(@NotNull EntityPlayer playerIn, int index) {
+		ItemStack stack = ItemStack.EMPTY;
+		Slot slot = this.inventorySlots.get(index);
+
+		if (slot != null && slot.getHasStack())
 		{
-			ItemStack var5 = var4.getStack();
-			var3 = var5.copy();
-			
-            if (par2 <= 1) {
-				if (!this.mergeItemStack(var5, 2, this.inventorySlots.size(), true))
-				{
+			ItemStack slotStack = slot.getStack();
+			stack = slotStack.copy();
+			if(index > 10) {
+				if (crucible.isItemValidForSlot(0, stack)) {
+					if (!this.mergeItemStack(slotStack, 0, 1, false))
+						return ItemStack.EMPTY;
+				} else if (!this.mergeItemStack(slotStack, 1, 11, false)) {
 					return ItemStack.EMPTY;
 				}
+			} else if (!this.mergeItemStack(slotStack, 11, this.inventorySlots.size(), false)) {
+				return ItemStack.EMPTY;
 			}
-			else if (!this.mergeItemStack(var5, 0, 1, false))
-				if (!this.mergeItemStack(var5, 1, 2, false))
-					return ItemStack.EMPTY;
-			
-			if (var5.getCount() == 0)
+
+			if (slotStack.isEmpty())
 			{
-				var4.putStack(ItemStack.EMPTY);
+				slot.putStack(ItemStack.EMPTY);
 			}
 			else
 			{
-				var4.onSlotChanged();
+				slot.onSlotChanged();
 			}
 		}
 		
-		return var3;
+		return stack;
 	}
 
 	@Override

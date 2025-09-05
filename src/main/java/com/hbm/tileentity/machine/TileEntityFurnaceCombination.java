@@ -40,6 +40,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityFurnaceCombination extends TileEntityMachineBase implements IGUIProvider, IFluidHandler, ITickable, ITankPacketAcceptor {
 
@@ -262,7 +263,7 @@ public class TileEntityFurnaceCombination extends TileEntityMachineBase implemen
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("prog", progress);
 		nbt.setInteger("heat", heat);

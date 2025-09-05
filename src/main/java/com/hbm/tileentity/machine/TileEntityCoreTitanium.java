@@ -20,6 +20,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITickable, IEnergyUser, INBTPacketReceiver {
 
@@ -52,7 +53,7 @@ public class TileEntityCoreTitanium extends TileEntityMachineBase implements ITi
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("cookTime", progress);
 		compound.setInteger("speed", this.progressStep);
 		compound.setLong("power", power);

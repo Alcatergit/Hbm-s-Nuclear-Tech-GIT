@@ -140,7 +140,7 @@ public class ContaminationUtil {
 
 
 		double res = Library.roundFloat((1D-ContaminationUtil.calculateRadiationMod(player))*100D, 6);
-		double resKoeff = ((long)(HazmatRegistry.getResistance(player) * 100D)) / 100D;
+		double resKoeff = ((long)(HazmatRegistry.getResistance(player) * 1000D)) / 1000D;
 
 		double rec = ((long)(env* (100-res)/100D * 1000D))/ 1000D;
 

@@ -43,6 +43,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityITER extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
@@ -309,7 +310,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("water", tanks[0].writeToNBT(new NBTTagCompound()));
 		compound.setTag("steam", tanks[1].writeToNBT(new NBTTagCompound()));
 		compound.setTag("plasma", plasma.writeToNBT(new NBTTagCompound()));

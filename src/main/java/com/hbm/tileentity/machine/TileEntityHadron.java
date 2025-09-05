@@ -33,6 +33,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityHadron extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -232,7 +233,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("isOn", isOn);
 		compound.setLong("power", power);
 		compound.setBoolean("analysis", analysisOnly);

@@ -11,6 +11,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 
@@ -93,7 +94,7 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setByte("color", (byte) this.color.getMetadata());
 		return super.writeToNBT(compound);
 	}

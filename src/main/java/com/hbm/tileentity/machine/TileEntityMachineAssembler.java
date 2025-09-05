@@ -38,6 +38,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineAssembler extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -88,7 +89,7 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setBoolean("progressing", this.isProgressing);
 		nbt.setLong("powerTime", power);

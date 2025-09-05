@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineElectricFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -56,7 +57,7 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setInteger("cookTime", dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());

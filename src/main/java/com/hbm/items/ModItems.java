@@ -322,13 +322,17 @@ public class ModItems {
 	public static final Item decontamination_module = new ItemModMedal("decontamination_module", 0.05F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item medal_liquidator = new ItemModMedal("medal_liquidator", 0.5F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item medal_ghoul = new ItemModMedal("medal_ghoul", 2.5F).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set = new ItemModServos("servo_set").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item servo_set_desh = new ItemModServos("servo_set_desh").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item armor_battery = new ItemModBattery(1.25D, "armor_battery").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item armor_battery_mk2 = new ItemModBattery(1.5D, "armor_battery_mk2").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item armor_battery_mk3 = new ItemModBattery(2D, "armor_battery_mk3").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item armor_battery_mk4 = new ItemModBattery(10D, "armor_battery_mk4").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item pocket_ptsd = new ItemModRadar("pocket_ptsd", 1000).setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item v1 = new ItemModV1("v1").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item protection_charm = new ItemModCharm("protection_charm").setCreativeTab(MainRegistry.consumableTab);
-	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setCreativeTab(MainRegistry.consumableTab);
-	public static final Item neutrino_lens = new ItemModLens("neutrino_lens").setCreativeTab(MainRegistry.consumableTab);
+	public static final Item protection_charm = new ItemModCharm("protection_charm").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item meteor_charm = new ItemModCharm("meteor_charm").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item neutrino_lens = new ItemModLens("neutrino_lens").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 
 	//Stamps
 	public static final Item stamp_stone_flat = new ItemStamp("stamp_stone_flat", 16);
@@ -1674,10 +1678,6 @@ public class ModItems {
 	public static final Item cap_star = new ItemBase("cap_star").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item ring_pull = new ItemBase("ring_pull").setCreativeTab(MainRegistry.consumableTab);
 
-	public static final Item armor_battery = new ItemModBattery(1.25D, "armor_battery");
-	public static final Item armor_battery_mk2 = new ItemModBattery(1.5D, "armor_battery_mk2");
-	public static final Item armor_battery_mk3 = new ItemModBattery(2D, "armor_battery_mk3");
-	
 	public static final Item bomb_waffle = new ItemFoodBase(20, 0, true, "bomb_waffle").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item schnitzel_vegan = new ItemFoodBase(3, 6, true, "schnitzel_vegan").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item cotton_candy = new ItemFoodBase(5, 0, true, "cotton_candy").setCreativeTab(MainRegistry.consumableTab).setFull3D();

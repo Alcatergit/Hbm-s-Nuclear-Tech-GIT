@@ -47,6 +47,7 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
@@ -617,7 +618,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("coolant", coolant.writeToNBT(new NBTTagCompound()));
 		compound.setTag("amat", amat.writeToNBT(new NBTTagCompound()));
 

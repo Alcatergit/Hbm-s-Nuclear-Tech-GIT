@@ -20,6 +20,7 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineArcFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -64,7 +65,7 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setInteger("cookTime", dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());

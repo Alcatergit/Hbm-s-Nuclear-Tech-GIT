@@ -61,8 +61,8 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 				tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
 				postConvert(convert);
 
-				networkPack();
 				fillFluidInit(tanks[1]);
+				networkPack();
 			}
 		}
 	}

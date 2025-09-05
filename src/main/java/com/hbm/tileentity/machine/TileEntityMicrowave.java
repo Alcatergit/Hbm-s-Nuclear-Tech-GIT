@@ -13,6 +13,7 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMicrowave extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -82,7 +83,7 @@ public class TileEntityMicrowave extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", power);
 		compound.setInteger("speed", speed);
 		return super.writeToNBT(compound);

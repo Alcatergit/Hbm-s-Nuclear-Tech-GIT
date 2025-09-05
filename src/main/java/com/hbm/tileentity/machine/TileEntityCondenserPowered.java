@@ -12,6 +12,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
 public class TileEntityCondenserPowered extends TileEntityCondenser implements IEnergyUser {
+
     public boolean isLoaded = true;
 
     public long power;
@@ -167,7 +168,7 @@ public class TileEntityCondenserPowered extends TileEntityCondenser implements I
 
     @Override
     public void onChunkUnload() {
-        super.onChunkUnload();
         this.isLoaded = false;
+        super.onChunkUnload();
     }
 }

@@ -13,6 +13,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineReactor extends TileEntityMachineBase implements ITickable {
 
@@ -69,7 +70,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		nbt.setShort("powerTime", (short) charge);
 		nbt.setShort("heat", (short) heat);

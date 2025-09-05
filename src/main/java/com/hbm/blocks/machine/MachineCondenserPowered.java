@@ -2,6 +2,7 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityCondenserPowered;
@@ -12,6 +13,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistry;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -66,15 +70,14 @@ public class MachineCondenserPowered extends BlockDummyable implements ILookOver
 
         TileEntity te = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 
-        if(!(te instanceof TileEntityCondenserPowered)) return;
+        if(!(te instanceof TileEntityCondenserPowered tower)) return;
 
-        TileEntityCondenserPowered tower = (TileEntityCondenserPowered) te;
         List<String> text = new ArrayList<>();
 
         text.add(BobMathUtil.getShortNumberNew(tower.power) + "HE / " + BobMathUtil.getShortNumberNew(TileEntityCondenserPowered.maxPower) + "HE");
 
-        for(int i = 0; i < tower.tanks.length; i++)
-            text.add((i < 1 ? (TextFormatting.GREEN + "-> ") : (TextFormatting.RED + "<- ")) + TextFormatting.RESET + (tower.tanks[i].getFluid() != null ? tower.tanks[i].getFluid().getLocalizedName() : "None") + ": " + String.format(Locale.US, "%,d", tower.tanks[i].getFluidAmount()) + "/" + String.format(Locale.US, "%,d", tower.tanks[i].getCapacity()) + "mB");
+        text.add(TextFormatting.GREEN + "-> " + TextFormatting.RESET + ModForgeFluids.SPENTSTEAM.getLocalizedName(new FluidStack(ModForgeFluids.SPENTSTEAM, 1)) + ": " + String.format(Locale.US, "%,d", tower.tanks[0].getFluidAmount()) + "/" + String.format(Locale.US, "%,d", tower.tanks[0].getCapacity()) + "mB");
+        text.add(TextFormatting.RED + "<- " + TextFormatting.RESET + FluidRegistry.WATER.getLocalizedName(new FluidStack(FluidRegistry.WATER, 1)) + ": " + String.format(Locale.US, "%,d", tower.tanks[1].getFluidAmount()) + "/" + String.format(Locale.US, "%,d", tower.tanks[1].getCapacity()) + "mB");
 
         ILookOverlay.printGeneric(event, getLocalizedName(), 0xffff00, 0x404000, text);
     }

@@ -30,6 +30,7 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineBoilerElectric extends TileEntityMachineBase implements ITickable, IFluidHandler, IEnergyUser, ITankPacketAcceptor {
 
@@ -100,7 +101,7 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("heat", heat);
 		nbt.setLong("power", power);
 		nbt.setTag("inventory", inventory.serializeNBT());

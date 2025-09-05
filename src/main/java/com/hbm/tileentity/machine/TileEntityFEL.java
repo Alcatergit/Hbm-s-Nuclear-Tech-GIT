@@ -39,6 +39,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import com.hbm.lib.ForgeDirection;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityFEL extends TileEntityMachineBase implements ITickable, IEnergyUser {
 	
@@ -282,7 +283,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
 		nbt.setLong("power", this.power);

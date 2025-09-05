@@ -864,22 +864,21 @@ public class ModEventHandler {
 			
 			entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, SoundEvents.ENTITY_ZOMBIE_BREAK_DOOR_WOOD, SoundCategory.HOSTILE, 2.0F, 0.95F + entity.world.rand.nextFloat() * 0.2F);
 			
-			EntityPlayer attacker = (EntityPlayer) ((EntityDamageSource)event.getSource()).getImmediateSource();
-			
-			if(attacker.getDistanceSq(entity) < 100) {
+			EntityPlayer attacker = (EntityPlayer) event.getSource().getImmediateSource();
+
+            assert attacker != null;
+            if(attacker.getDistanceSq(entity) < 100) {
 				attacker.heal(entity.getMaxHealth() * 0.25F);
 			}
 		}
 		
-		if(entity instanceof EntityPlayer) {
-			
-			EntityPlayer player = (EntityPlayer) entity;
-			
-			for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+		if(entity instanceof EntityPlayer player) {
+
+            for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
 				
 				ItemStack stack = player.inventory.getStackInSlot(i);
 				
-				if(stack != null && stack.getItem() == ModItems.detonator_deadman) {
+				if(stack.getItem() == ModItems.detonator_deadman) {
 					
 					if(stack.getTagCompound() != null) {
 						
@@ -895,7 +894,7 @@ public class ModEventHandler {
 								MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + x + " / " + y + " / " + z + " by dead man's switch from " + player.getDisplayName() + "!");
 						}
 						
-						player.inventory.setInventorySlotContents(i, null);
+						player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
 					}
 				}
 			}

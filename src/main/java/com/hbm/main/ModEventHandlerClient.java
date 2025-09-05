@@ -1883,7 +1883,7 @@ public class ModEventHandlerClient {
 
 		/// CLADDING ///
 		double rad = HazmatRegistry.getResistance(stack);
-		rad = ((int) (rad * 100)) / 100D;
+		rad = ((int) (rad * 1000)) / 1000D;
 		if(rad > 0)
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.radResistance", rad));
 		

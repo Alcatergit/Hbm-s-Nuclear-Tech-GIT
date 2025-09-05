@@ -15,6 +15,7 @@ import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITickable {
 
@@ -70,7 +71,7 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setShort("cookTime", (short) dualCookTime);
 		compound.setTag("inventory", this.inventory.serializeNBT());
 		return super.writeToNBT(compound);

@@ -8,6 +8,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteSavedData;
 import com.hbm.saveddata.satellites.SatelliteScanner;
+
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -19,9 +20,13 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class ItemModLens extends ItemArmorMod implements ISatChip {
+
+    public static int countLimit = 100;
+    public static HashMap<Block, Object[]> blockList = new HashMap<>();
 
     public ItemModLens(String s) {
         super(ArmorModHandler.extra, true, false, false, false, s);
@@ -40,13 +45,38 @@ public class ItemModLens extends ItemArmorMod implements ISatChip {
         list.add(TextFormatting.AQUA + "  " + stack.getDisplayName() + " (Freq: " + getFreq(stack) + ")");
     }
 
+    public static void initBlockList(){
+        blockList.put(ModBlocks.ore_oil, new Object[]{300, "Oil", 0xa0a0a0});
+        blockList.put(ModBlocks.ore_bedrock_oil, new Object[]{10, "Bedrock Oil", 0xa0a0a0});
+        blockList.put(ModBlocks.ore_coltan, new Object[]{5, "Coltan", 0xffbd54});
+        blockList.put(ModBlocks.ore_asbestos, new Object[]{10, "Asbestos", 0xfffbf7});
+        blockList.put(ModBlocks.stone_gneiss, new Object[]{5000, "Schist", 0x8080ff});
+        blockList.put(ModBlocks.ore_reiium, new Object[]{10, "Reiium", 0xbe0000});
+        blockList.put(ModBlocks.ore_weidanium, new Object[]{10, "Weidanium", 0xff3f00});
+        blockList.put(ModBlocks.ore_australium, new Object[]{10, "Australium", 0xffff00});
+        blockList.put(ModBlocks.ore_verticium, new Object[]{10, "Verticium", 0x00ff00});
+        blockList.put(ModBlocks.ore_unobtainium, new Object[]{10, "Unobtainium", 0x0059ff});
+        blockList.put(ModBlocks.ore_daffergon, new Object[]{10, "Daffergon", 0xa500ff});
+        blockList.put(Blocks.END_PORTAL_FRAME, new Object[]{1, "End Portal", 0x40b080});
+        blockList.put(ModBlocks.basalt_gem, new Object[]{1, "Volcano Gem", 0xff5000});
+        blockList.put(ModBlocks.volcano_core, new Object[]{1, "Volcano Core", 0xff4000});
+        blockList.put(ModBlocks.pink_log, new Object[]{1, "Pink Log", 0xff00ff});
+        blockList.put(ModBlocks.crate_ammo, new Object[]{1, null, 0x800000});
+        blockList.put(ModBlocks.crate_can, new Object[]{1, null, 0x800000});
+        blockList.put(ModBlocks.ore_schrabidium, new Object[]{1, "Schrabidium", 0x00d0ff});
+        blockList.put(ModBlocks.ore_gneiss_schrabidium, new Object[]{1, "Schrabidium", 0x00d0ff});
+        blockList.put(ModBlocks.ore_nether_schrabidium, new Object[]{1, "Schrabidium", 0x00d0ff});
+        blockList.put(ModBlocks.ore_nether_plutonium, new Object[]{1, "Plutonium", 0x002b38});
+        blockList.put(ModBlocks.ore_bedrock_block, new Object[]{10, "Bedrock Ore", 0xff5900});
+        blockList.put(ModBlocks.taint, new Object[]{4, "TAINT", 0x00ff74});
+    }
+
     @Override
     public void modUpdate(EntityLivingBase entity, ItemStack armor) {
         World world = entity.world;
         if(world.isRemote) return;
-        if(!(entity instanceof EntityPlayerMP)) return;
+        if(!(entity instanceof EntityPlayerMP player)) return;
 
-        EntityPlayerMP player = (EntityPlayerMP) entity;
         ItemStack lens = ArmorModHandler.pryMods(armor)[ArmorModHandler.extra];
 
         if(lens == null) return;
@@ -79,29 +109,19 @@ public class ItemModLens extends ItemArmorMod implements ISatChip {
                         int aX = (chunkX << 4) + ix;
                         int aZ = (chunkZ << 4) + iz;
 
-                        if(addIf(ModBlocks.ore_oil, b, 300, aX, seg, aZ, "Oil", 0xa0a0a0, player)) hits++;
-                        if(addIf(ModBlocks.ore_bedrock_oil, b, 300, aX, seg, aZ, "Bedrock Oil", 0xa0a0a0, player)) hits++;
-                        if(addIf(ModBlocks.ore_coltan, b, 5, aX, seg, aZ, "Coltan", 0xa0a000, player)) hits++;
-                        if(addIf(ModBlocks.stone_gneiss, b, 5000, aX, seg, aZ, "Schist", 0x8080ff, player)) hits++;
-                        if(addIf(ModBlocks.ore_australium, b, 1000, aX, seg, aZ, "Australium", 0xffff00, player)) hits++;
-                        if(addIf(Blocks.END_PORTAL_FRAME, b, 1, aX, seg, aZ, "End Portal", 0x40b080, player)) hits++;
-                        if(addIf(ModBlocks.volcano_core, b, 1, aX, seg, aZ, "Volcano Core", 0xff4000, player)) hits++;
-                        if(addIf(ModBlocks.pink_log, b, 1, aX, seg, aZ, "Pink Log", 0xff00ff, player)) hits++;
-                        if(addIf(ModBlocks.crate_ammo, b, 1, aX, seg, aZ, null, 0x800000, player)) hits++;
-                        if(addIf(ModBlocks.crate_can, b, 1, aX, seg, aZ, null, 0x800000, player)) hits++;
-                        if(addIf(ModBlocks.ore_bedrock_block, b, 1, aX, seg, aZ, "Bedrock Ore", 0xff0000, player)) hits++;
-                        if(addIf(ModBlocks.ore_bedrock_oil, b, 1, aX, seg, aZ, "Bedrock Ore", 0xff0000, player)) hits++;
+                        Object[] highlightData = blockList.get(b);
+                        if(highlightData != null && addIf((Integer) highlightData[0], aX, seg, aZ, (String) highlightData[1],(Integer)  highlightData[2], player)) hits++;
 
-                        if(hits > 100) return;
+                        if(hits > countLimit) return;
                     }
                 }
             }
         }
     }
 
-    private boolean addIf(Block target, Block b, int chance, int x, int y, int z, String label, int color, EntityPlayerMP player) {
+    private boolean addIf(int chance, int x, int y, int z, String label, int color, EntityPlayerMP player) {
 
-        if(target == b && player.getRNG().nextInt(chance) == 0) {
+        if(chance == 1 || player.getRNG().nextInt(chance) == 0) {
             NBTTagCompound data = new NBTTagCompound();
             data.setString("type", "marker");
             data.setInteger("color", color);

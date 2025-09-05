@@ -46,6 +46,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase implements IEnergyUser, IControllable, IControlReceiver, ITickable {
 
@@ -118,7 +119,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setLong("power", this.power);
 		nbt.setBoolean("isOn", this.isOn);
 		nbt.setBoolean("targetPlayers", this.targetPlayers);

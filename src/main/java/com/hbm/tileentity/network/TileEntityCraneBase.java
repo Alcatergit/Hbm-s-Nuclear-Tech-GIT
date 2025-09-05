@@ -10,6 +10,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class TileEntityCraneBase extends TileEntityMachineBase implements ITickable {
 
@@ -137,7 +138,7 @@ public abstract class TileEntityCraneBase extends TileEntityMachineBase implemen
     }
 
     @Override
-    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         if (outputOverride != null) {
             nbt.setByte("CraneOutputOverride", (byte) outputOverride.ordinal());

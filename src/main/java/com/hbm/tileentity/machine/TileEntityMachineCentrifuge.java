@@ -21,6 +21,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -86,7 +87,7 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setShort("progressTime", (short) progress);
 		return super.writeToNBT(compound);

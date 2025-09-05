@@ -17,6 +17,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 	static List<Integer> configs = new ArrayList<>();
@@ -171,7 +172,7 @@ public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setInteger("loaded", loaded);
 		return super.writeToNBT(nbt);
 	}

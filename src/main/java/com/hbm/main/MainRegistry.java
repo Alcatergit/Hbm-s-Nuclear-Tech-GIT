@@ -11,6 +11,7 @@ import com.hbm.blocks.machine.WatzPump;
 import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.handler.*;
 import com.hbm.inventory.*;
+import com.hbm.items.armor.ItemModLens;
 import com.hbm.tileentity.network.*;
 import com.hbm.world.feature.OreLayer3D;
 import org.apache.logging.log4j.Logger;
@@ -1120,6 +1121,7 @@ public class MainRegistry {
 		NTMCraftTweaker.applyPostInitActions();
 		AssemblerRecipes.generateList();
 		HeatRecipes.setFluidsForRBMKLoader();
+		ItemModLens.initBlockList();
 		if(event.getSide() == Side.CLIENT) {
 			BedrockOreRegistry.registerOreColors();
 			ModForgeFluids.registerFluidColors();

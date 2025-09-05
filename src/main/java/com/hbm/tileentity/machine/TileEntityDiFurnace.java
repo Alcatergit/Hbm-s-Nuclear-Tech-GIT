@@ -12,6 +12,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityDiFurnace extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
@@ -41,7 +42,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("dualPower", this.dualPower);
 		compound.setInteger("cookTime", this.dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());
