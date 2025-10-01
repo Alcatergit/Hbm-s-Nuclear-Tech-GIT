@@ -184,13 +184,8 @@ public class ModelT45Chest extends ModelBiped {
 		
 		@Override
 		public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
-			if (entity instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) entity;
-				if (player.isSneaking()) {
-					this.isSneak = true;
-				} else {
-					this.isSneak = false;
-				}
+			if (entity instanceof EntityPlayer player) {
+                this.isSneak = player.isSneaking();
 			}
 
 			super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
@@ -212,11 +207,9 @@ public class ModelT45Chest extends ModelBiped {
 			this.rightarm.rotateAngleX = this.bipedRightArm.rotateAngleX;
 			this.rightarm.rotateAngleY = this.bipedRightArm.rotateAngleY;
 			this.rightarm.rotateAngleZ = this.bipedRightArm.rotateAngleZ;
-			
-			if(entity instanceof EntityZombie) {
-	            boolean armsRaised = false;
-	            if(entity instanceof EntityZombie)
-	                armsRaised = ((EntityZombie)entity).isArmsRaised();
+
+			if(entity instanceof EntityZombie zombie) {
+				boolean armsRaised = zombie.isArmsRaised();
 
 	            this.leftarm.rotateAngleY = (float)(8 * Math.PI / 180D);
 	            this.rightarm.rotateAngleY = -(float)(8 * Math.PI / 180D);
@@ -262,6 +255,11 @@ public class ModelT45Chest extends ModelBiped {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
 			GL11.glScalef(1.13F, 1.13F, 1.13F);
+			if(this.isChild) {
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+				GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+			}
 			this.leftarm.render(par7);
 			GL11.glPopMatrix();
 		}
@@ -270,6 +268,11 @@ public class ModelT45Chest extends ModelBiped {
 			setRotationAngles(par2, par3, par4, par5, par6, par7, par1Entity);
 			GL11.glPushMatrix();
 			GL11.glScalef(1.13F, 1.13F, 1.13F);
+			if(this.isChild) {
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+				GL11.glTranslatef(0.0F, 16.0F * par7, 0.0F);
+				GL11.glScalef(0.75F, 0.75F, 0.75F);
+			}
 			this.rightarm.render(par7);
 			GL11.glPopMatrix();
 		}

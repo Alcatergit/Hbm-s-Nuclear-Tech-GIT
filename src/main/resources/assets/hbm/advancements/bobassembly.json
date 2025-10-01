@@ -17,7 +17,7 @@
             "conditions": {
                 "items": [
                     {
-                        "item": "hbm:circuit_copper"
+                        "item": "hbm:circuit"
                     }
                 ]
             }

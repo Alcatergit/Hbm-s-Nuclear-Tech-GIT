@@ -337,9 +337,8 @@ public class FFUtils {
 		TileEntity te = world.getTileEntity(toFill);
 
 		if(te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
-			if(te instanceof TileEntityDummy) {
-				TileEntityDummy ted = (TileEntityDummy)te;
-				if(world.getTileEntity(ted.target) == tileEntity) {
+			if(te instanceof TileEntityDummy ted) {
+                if(world.getTileEntity(ted.target) == tileEntity) {
 					return false;
 				}
 			}
@@ -379,7 +378,7 @@ public class FFUtils {
 
 		if(slots.getStackInSlot(slot1).getItem() == ModItems.fluid_barrel_infinite && tank.getFluid() != null) {
 
-			return tank.fill(new FluidStack(tank.getFluid(), Integer.MAX_VALUE), true) > 0 ? true : false;
+			return tank.fill(new FluidStack(tank.getFluid(), Integer.MAX_VALUE), true) > 0;
 		}
 		if(FluidUtil.getFluidContained(slots.getStackInSlot(slot1)) == null) {
 
@@ -529,8 +528,7 @@ public class FFUtils {
 			return true;
 		if(FluidContainerRegistry.hasFluid(stack.getItem())) {
 			fluid = FluidContainerRegistry.getFluidFromItem(stack.getItem());
-			if(fluid != null && fluidRestrictor.apply(fluid))
-				return true;
+            return fluid != null && fluidRestrictor.apply(fluid);
 		}
 		return false;
 	}
@@ -566,9 +564,8 @@ public class FFUtils {
 			return fillItemAndMove(slots, slot1, slot2, tank, ifhi, fStack, stack, true);
 		}
 
-		if(stack.getItem() instanceof IItemFluidHandler) {
-			IItemFluidHandler handler = (IItemFluidHandler)stack.getItem();
-			FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
+		if(stack.getItem() instanceof IItemFluidHandler handler) {
+            FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
 			return fillItemAndMove(slots, slot1, slot2, tank, handler, contained, stack, true);
 		}
 

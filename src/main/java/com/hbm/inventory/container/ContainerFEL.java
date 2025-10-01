@@ -42,12 +42,12 @@ public class ContainerFEL extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 
-			if(par2 == 0) {
+			if(par2 <= 1) {
 				if(!this.mergeItemStack(var5, 1, this.inventorySlots.size(), false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if(!this.mergeItemStack(var5, 0, 1, false))
+				if(!this.mergeItemStack(var5, 0, 2, false))
 					return ItemStack.EMPTY;
 			}
 

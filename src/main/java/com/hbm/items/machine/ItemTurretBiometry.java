@@ -54,7 +54,6 @@ public class ItemTurretBiometry extends Item {
 	
 	public static String[] getNames(ItemStack stack) {
 		if(stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
 			return null;
 		}
 		

@@ -48,12 +48,12 @@ private TileEntityLaunchPad diFurnace;
 			var3 = var5.copy();
 			
             if (par2 <= 2) {
-				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
-				return ItemStack.EMPTY;
+			} else if (!this.mergeItemStack(var5, 0, 3, false)){
+                return ItemStack.EMPTY;
 			}
             
 			if (var5.isEmpty())

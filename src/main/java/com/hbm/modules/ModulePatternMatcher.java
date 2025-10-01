@@ -126,13 +126,14 @@ public class ModulePatternMatcher {
             modes[index] = mode = MODE_EXACT;
         }
 
-        switch(mode) {
-            case MODE_EXACT: return input.isItemEqual(filter) && ItemStack.areItemStackTagsEqual(input, filter);
-            case MODE_WILDCARD: return input.getItem() == filter.getItem() && ItemStack.areItemStackTagsEqual(input, filter);
-            default:
+        return switch (mode) {
+            case MODE_EXACT -> input.isItemEqual(filter) && ItemStack.areItemStackTagsEqual(input, filter);
+            case MODE_WILDCARD -> input.getItem() == filter.getItem() && ItemStack.areItemStackTagsEqual(input, filter);
+            default -> {
                 List<String> keys = ItemStackUtil.getOreDictNames(input);
-                return keys.contains(mode);
-        }
+                yield keys.contains(mode);
+            }
+        };
     }
 
     public void readFromNBT(NBTTagCompound nbt) {

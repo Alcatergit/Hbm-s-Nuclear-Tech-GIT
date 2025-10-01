@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_centrifuge_1.desc"
 		}
 	},
-	"parent": "hbm:progress_polymer",
+	"parent": "hbm:x_progress_polymer",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

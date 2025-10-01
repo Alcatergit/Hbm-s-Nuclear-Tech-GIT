@@ -49,8 +49,8 @@ public class DesertAtom003
 	Block Block17 = ModBlocks.ore_schrabidium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
-	Block Block20 = ModBlocks.machine_uf6_tank;
-	Block Block21 = ModBlocks.machine_puf6_tank;
+    Block Block20 = ModBlocks.barrel_iron;
+    Block Block21 = ModBlocks.barrel_corroded;
 	Block Block22 = ModBlocks.reinforced_brick;
 	Block Block23 = ModBlocks.waste_earth;
 	Block Block24 = ModBlocks.deco_lead;
@@ -379,10 +379,10 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 25, y + 4, z + 7), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 26, y + 4, z + 7), Block19.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 27, y + 4, z + 7), Block19.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 28, y + 4, z + 7), Block20.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 29, y + 4, z + 7), Block20.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 30, y + 4, z + 7), Block21.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 31, y + 4, z + 7), Block21.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 28, y + 4, z + 7), Block20.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 29, y + 4, z + 7), Block20.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 30, y + 4, z + 7), Block21.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 31, y + 4, z + 7), Block21.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 32, y + 4, z + 7), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 33, y + 4, z + 7), Block22.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 34, y + 4, z + 7), Block23.getDefaultState(), 3);

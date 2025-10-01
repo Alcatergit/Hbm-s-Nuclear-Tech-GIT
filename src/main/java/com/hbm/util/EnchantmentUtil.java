@@ -3,6 +3,7 @@ package com.hbm.util;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.enchantment.Enchantment;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagList;
 
 public class EnchantmentUtil {
 
@@ -11,8 +12,21 @@ public class EnchantmentUtil {
 		stack.addEnchantment(enchantment, level);
 	}
 
-	public static void removeEnchantment(ItemStack stack, Enchantment enchantment) {
-		if(stack.getEnchantmentTagList() == null || !stack.hasTagCompound())
+    public static boolean hasEnchantment(ItemStack stack, Enchantment enchantment){
+        if(!stack.isEmpty() && stack.hasTagCompound()){
+            NBTTagList enchants = stack.getEnchantmentTagList();
+            for(int i=0 ; i < enchants.tagCount(); i++) {
+                if(enchants.getCompoundTagAt(i).getShort("id") == Enchantment.getEnchantmentID(enchantment))
+                   return true;
+            }
+        }
+        return false;
+    }
+
+
+    public static void removeEnchantment(ItemStack stack, Enchantment enchantment) {
+
+        if(!stack.hasTagCompound())
 			return;
 		
 		int i = 0;

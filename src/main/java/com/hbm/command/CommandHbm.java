@@ -5,12 +5,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL20;
 import com.google.common.collect.Lists;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.HbmShaderManager2;
-import com.hbm.handler.HbmShaderManager2.Shader;
+import com.hbm.lib.HbmWorldGen;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
@@ -76,7 +74,7 @@ public class CommandHbm extends CommandBase {
 			if("subcommands".equals(args[0])) {
 				return Lists.newArrayList("gen").stream().filter(s -> s.startsWith(args[1])).collect(Collectors.toList());
 			} else if("gen".equals(args[0])) {
-				return Lists.newArrayList("antenna", "relay", "dud", "silo", "factory", "barrel", "vertibird", "vertibird_crashed", "satellite", "spaceship", "sellafield", "radio", "bunker", "desert_atom", "library", "geysir_water", "geysir_vapor", "geysir_chlorine").stream().filter(s ->  s.startsWith(args[1])).collect(Collectors.toList());
+				return Lists.newArrayList("antenna", "relay", "dud", "silo", "factory", "barrel", "vertibird", "vertibird_crashed", "satellite", "spaceship", "sellafield", "radio", "bunker", "desert_atom", "meteor_dungeon", "jungle_dungeon", "library", "geysir_water", "geysir_vapor", "geysir_chlorine").stream().filter(s ->  s.startsWith(args[1])).collect(Collectors.toList());
 			}
 		}
 		return Collections.emptyList();
@@ -86,7 +84,7 @@ public class CommandHbm extends CommandBase {
 	public void execute(MinecraftServer server, ICommandSender sender, String[] args) throws CommandException {
 		if(args.length == 0) {
 			throw new CommandException(getUsage(sender));
-		} else if(args.length > 0) {
+		} else {
 			if("subcommands".equals(args[0])) {
 				doSubcommandCommand(server, sender, args);
 				return;
@@ -284,9 +282,9 @@ public class CommandHbm extends CommandBase {
 			if("gen".equals(args[1])){
 				StringBuilder builder = new StringBuilder();
 				builder.append("Info for command: gen\n\n");
-				builder.append("Generates a structure at the block under your current position. Generation can be forced.\n\n");
+				builder.append("Generates a structure at the block under your current position. Generation can be forced with 'f' at the end.\n\n");
 				builder.append("Available structures:\n\n");
-				builder.append("antenna      relay\ndud           silo\nfactory      barrel\nvertibird     vertibird_crashed\nsatellite      spaceship\nsellafield     radio\nbunker       desert_atom\nlibrary      geysir_water\ngeysir_vapor      geysir_chlorine");
+				builder.append("antenna      relay\ndud           silo\nfactory      barrel\nvertibird     vertibird_crashed\nsatellite      spaceship\nsellafield     radio\nbunker       desert_atom\nmeteor_dungeon      jungle_dungeon\nlibrary      geysir_water\ngeysir_vapor      geysir_chlorine");
 				//builder.delete(builder.length() - 1, builder.length());
 				sender.sendMessage(new TextComponentTranslation(builder.toString()));
 			} else {
@@ -294,6 +292,12 @@ public class CommandHbm extends CommandBase {
 			}
 		}
 	}
+
+    protected void sendFeedback(ICommandSender sender, String thing, boolean worked){
+        Vec3d senderPos = sender.getPositionVector();
+        if(worked) sender.sendMessage(new TextComponentTranslation("§aSuccessfully generated "+thing+" at x="+(int)senderPos.x+" z="+(int)senderPos.z));
+        else sender.sendMessage(new TextComponentTranslation("§cFailed to generate "+thing+" at x="+(int)senderPos.x+" z="+(int)senderPos.z));
+    }
 
 	protected void doGenCommand(MinecraftServer server, ICommandSender sender, String[] args) {
 		if(args.length > 1) {
@@ -307,62 +311,66 @@ public class CommandHbm extends CommandBase {
 				force = true;
 
 			if("antenna".equals(args[1])) {
-				new Antenna().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Antenna().generate(world, rand, genPos, force));
 			} else if("relay".equals(args[1])) {
-				new Relay().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Relay().generate(world, rand, genPos, force));
 			} else if("dud".equals(args[1])){
-				new Dud().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Dud().generate(world, rand, genPos, force));
 			} else if("silo".equals(args[1])){
-				new Silo().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Silo().generate(world, rand, genPos, force));
 			} else if("factory".equals(args[1])){
-				new Factory().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Factory().generate(world, rand, genPos, force));
 			} else if("barrel".equals(args[1])){
-				new Barrel().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Barrel().generate(world, rand, genPos, force));
 			} else if("vertibird".equals(args[1])){
-				new Vertibird().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Vertibird().generate(world, rand, genPos, force));
 			} else if("vertibird_crashed".equals(args[1])){
-				new CrashedVertibird().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new CrashedVertibird().generate(world, rand, genPos, force));
 			} else if("satellite".equals(args[1])){
-				new Satellite().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Satellite().generate(world, rand, genPos, force));
 			} else if("spaceship".equals(args[1])){
-				new Spaceship().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Spaceship().generate(world, rand, genPos, force));
 			} else if("sellafield".equals(args[1])){
 				double r = rand.nextInt(15) + 10;
 				if (rand.nextInt(50) == 0)
 					r = 50;
 
-				new Sellafield().generate(world, (int)senderPos.x, (int)senderPos.z, r, r * 0.35D);
+                sendFeedback(sender, args[1], new Sellafield().generate(world, (int)senderPos.x, (int)senderPos.z, r, r * 0.35D));
 			} else if("radio".equals(args[1])){
-				new Radio01().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Radio01().generate(world, rand, genPos, force));
 			} else if("bunker".equals(args[1])){
-				new Bunker().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new Bunker().generate(world, rand, genPos, force));
 			} else if("desert_atom".equals(args[1])){
-				new DesertAtom001().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new DesertAtom001().generate(world, rand, genPos, force));
 			} else if("library".equals(args[1])){
-				new LibraryDungeon().generate(world, rand, genPos, force);
+                sendFeedback(sender, args[1], new LibraryDungeon().generate(world, rand, genPos, force));
+            } else if("meteor_dungeon".equals(args[1])){
+                HbmWorldGen.generateMeteorDungeon(world, (int) senderPos.x, (int) senderPos.z, rand);
+                sendFeedback(sender, args[1], true);
+            } else if("jungle_dungeon".equals(args[1])){
+                HbmWorldGen.generateJungleDungeon(world, (int) senderPos.x, (int) senderPos.z, rand);
+                sendFeedback(sender, args[1], true);
 			} else if("geysir_water".equals(args[1])){
 				if(force){
-					new GeyserLarge().generate(world, rand, genPos);
+                    sendFeedback(sender, args[1], new GeyserLarge().generate(world, rand, genPos));
 				} else {
-					if (world.getBlockState(genPos.down()).getBlock() == Blocks.SAND)
-						new GeyserLarge().generate(world, rand, genPos);
+                    sendFeedback(sender, args[1], world.getBlockState(genPos.down()).getBlock() == Blocks.SAND && new GeyserLarge().generate(world, rand, genPos));
 				}
 			} else if("geysir_vapor".equals(args[1])){
 				if(force){
-					world.setBlockState(genPos.down(), ModBlocks.geysir_vapor.getDefaultState());
+                    sendFeedback(sender, args[1], world.setBlockState(genPos.down(), ModBlocks.geysir_vapor.getDefaultState()));
 				} else {
-					if (world.getBlockState(genPos.down()).getBlock() == Blocks.STONE)
-						world.setBlockState(genPos.down(), ModBlocks.geysir_vapor.getDefaultState());
+                    sendFeedback(sender, args[1], world.getBlockState(genPos.down()).getBlock() == Blocks.STONE && world.setBlockState(genPos.down(), ModBlocks.geysir_vapor.getDefaultState()));
 				}
 			} else if("geysir_chlorine".equals(args[1])){
 				if(force){
-					new Geyser().generate(world, rand, genPos);
+                    sendFeedback(sender, args[1], new Geyser().generate(world, rand, genPos));
 				} else {
-					if (world.getBlockState(genPos.down()).getBlock() == Blocks.GRASS)
-						new Geyser().generate(world, rand, genPos);
+                    sendFeedback(sender, args[1], world.getBlockState(genPos.down()).getBlock() == Blocks.GRASS && new Geyser().generate(world, rand, genPos));
 				}
-			}
+			} else {
+                sender.sendMessage(new TextComponentTranslation("Structure "+args[1]+" not found"));
+            }
 		}
 	}
-
 }

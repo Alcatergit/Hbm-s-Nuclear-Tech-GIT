@@ -238,6 +238,7 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 
 		for(EntityPlayer player : players) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
+            player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_creeper));
 		}
 
 		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow)(p_70645_1_.getImmediateSource())).shootingEntity == null)) {

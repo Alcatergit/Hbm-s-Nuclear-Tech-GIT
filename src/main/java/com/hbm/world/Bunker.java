@@ -50,6 +50,7 @@ public class Bunker extends WorldGenerator
 
 	public boolean LocationIsValidSpawn(World world, BlockPos pos)
  {
+	 	if(pos.getY() < 25) return false;
 		IBlockState checkBlockState = world.getBlockState(pos.down());
 		Block checkBlock = checkBlockState.getBlock();
 		Block blockAbove = world.getBlockState(pos).getBlock();
@@ -77,25 +78,14 @@ public class Bunker extends WorldGenerator
 		return false;
 	}
 
-	@Override
-	public boolean generate(World world, Random rand, BlockPos pos)
-	{
-		return generate(world, rand, pos, false);
+    @Override
+    public boolean generate(World world, Random rand, BlockPos pos) {
+        return generate(world, rand, pos, false);
+    }
 
-	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
-
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-       return true;
-
-	}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+    }
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

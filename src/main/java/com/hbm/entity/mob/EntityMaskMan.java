@@ -106,6 +106,7 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 			
 		for(EntityPlayer player : players) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bossMaskman);
+            player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_maskman));
 		}
 	}
 	
@@ -146,7 +147,6 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 			ArmorUtil.installGasMaskFilter(mask, new ItemStack(ModItems.gas_mask_filter_combo));
 			
 			this.entityDropItem(mask, 0F);
-			this.dropItem(ModItems.coin_maskman, 1);
 			this.dropItem(ModItems.v1, 1);
 			this.dropItem(Items.SKULL, 1);
 		}

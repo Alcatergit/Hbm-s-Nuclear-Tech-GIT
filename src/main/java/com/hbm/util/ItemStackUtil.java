@@ -172,12 +172,12 @@ public class ItemStackUtil {
 	 */
 	public static List<String> getOreDictNames(ItemStack stack) {
 		List<String> list = new ArrayList();
-		
-		int ids[] = OreDictionary.getOreIDs(stack);
-		for(int i : ids) {
-			list.add(OreDictionary.getOreName(i));
+		if(!stack.isEmpty()) {
+			int[] ids = OreDictionary.getOreIDs(stack);
+			for (int i : ids) {
+				list.add(OreDictionary.getOreName(i));
+			}
 		}
-		
 		return list;
 	}
 }

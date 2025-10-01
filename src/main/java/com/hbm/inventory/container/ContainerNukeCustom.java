@@ -71,12 +71,12 @@ public class ContainerNukeCustom extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 26) {
-				if (!this.mergeItemStack(var5, 27, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 27, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if (!this.mergeItemStack(var5, 0, 27, true))
+				if (!this.mergeItemStack(var5, 0, 27, false))
 					return ItemStack.EMPTY;
 			}
             

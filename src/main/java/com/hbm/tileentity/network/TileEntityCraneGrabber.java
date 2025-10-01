@@ -57,7 +57,8 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
             if(tickCounter >= this.delay && !this.world.isBlockPowered(pos)) {
                 tickCounter = 0;
                 int amount = 1;
-                if(inventory.getStackInSlot(9) != null && !inventory.getStackInSlot(9).isEmpty()){
+                inventory.getStackInSlot(9);
+                if(!inventory.getStackInSlot(9).isEmpty()){
                     if(inventory.getStackInSlot(9).getItem() == ModItems.upgrade_stack_1) {
                         amount = 4;
                     } else if(inventory.getStackInSlot(9).getItem() == ModItems.upgrade_stack_2){
@@ -67,7 +68,8 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
                     }
                 }
                 this.delay = 20;
-                if(inventory.getStackInSlot(10) != null && !inventory.getStackInSlot(10).isEmpty()){
+                inventory.getStackInSlot(10);
+                if(!inventory.getStackInSlot(10).isEmpty()){
                     if(inventory.getStackInSlot(10).getItem() == ModItems.upgrade_ejector_1) {
                         this.delay = 10;
                     } else if(inventory.getStackInSlot(10).getItem() == ModItems.upgrade_ejector_2){
@@ -147,8 +149,8 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
                 outputStack.setCount(fillAmount);
 
                 ItemStack rest = chest.insertItem(i, outputStack, true);
-                if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
-                    stack.shrink(outputStack.getCount());
+                if(rest.getCount() < outputStack.getCount()){
+                    stack.shrink(outputStack.getCount()-rest.getCount());
                     chest.insertItem(i, outputStack, false);
                 }
             }

@@ -13,6 +13,7 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.HbmWorldUtility;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 	
@@ -20,9 +21,9 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	private static long lastSeed;
 
 	@Override
-	public boolean matches(InventoryCrafting inventory, World world) {
+	public boolean matches(@NotNull InventoryCrafting inventory, @NotNull World world) {
 		
-		if(world == null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
+		if(HbmWorldUtility.getProviderWorld(world.provider) == null)
 			return false;
 		
 		if(MKURecipe == null || world.getSeed() != lastSeed)
@@ -47,7 +48,7 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	public static void generateRecipe(World world) {
 		Random rand = new Random(world.getSeed());
 		
-		if(lastSeed == world.getSeed() && MKURecipe != null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
+		if(lastSeed == world.getSeed() && MKURecipe != null || world.provider == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
 			return;
 		
 		lastSeed = world.getSeed();
@@ -75,12 +76,12 @@ public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegi
 	}
 
 	@Override
-	public ItemStack getCraftingResult(InventoryCrafting inventory) {
+	public @NotNull ItemStack getCraftingResult(@NotNull InventoryCrafting inventory) {
 		return getRecipeOutput();
 	}
 
 	@Override
-	public ItemStack getRecipeOutput() {
+	public @NotNull ItemStack getRecipeOutput() {
 		return new ItemStack(ModItems.syringe_mkunicorn);
 	}
 

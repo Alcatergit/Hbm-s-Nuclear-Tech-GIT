@@ -73,7 +73,6 @@ import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
 import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
 import com.hbm.tileentity.machine.TileEntityMachinePlasmaHeater;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
-import com.hbm.tileentity.machine.TileEntityMachinePuF6Tank;
 import com.hbm.tileentity.machine.TileEntityMachineRTG;
 import com.hbm.tileentity.machine.TileEntityMachineRadGen;
 import com.hbm.tileentity.machine.TileEntityMachineRadar;
@@ -89,7 +88,6 @@ import com.hbm.tileentity.machine.TileEntityMachineSiren;
 import com.hbm.tileentity.machine.TileEntityMachineTeleLinker;
 import com.hbm.tileentity.machine.TileEntityMachineTurbine;
 import com.hbm.tileentity.machine.TileEntityMachineTurbofan;
-import com.hbm.tileentity.machine.TileEntityMachineUF6Tank;
 import com.hbm.tileentity.machine.TileEntityMicrowave;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
@@ -250,16 +248,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_gascent:
 			if(entity instanceof TileEntityMachineGasCent) {
 				return new ContainerMachineGasCent(player.inventory, (TileEntityMachineGasCent) entity);
-			}
-			return null;
-		case ModBlocks.guiID_uf6_tank:
-			if(entity instanceof TileEntityMachineUF6Tank) {
-				return new ContainerUF6Tank(player.inventory, (TileEntityMachineUF6Tank) entity);
-			}
-			return null;
-		case ModBlocks.guiID_puf6_tank:
-			if(entity instanceof TileEntityMachinePuF6Tank) {
-				return new ContainerPuF6Tank(player.inventory, (TileEntityMachinePuF6Tank) entity);
 			}
 			return null;
 		case ModBlocks.guiID_railgun:
@@ -854,16 +842,6 @@ public class GuiHandler implements IGuiHandler {
 		case ModBlocks.guiID_gascent:
 			if(entity instanceof TileEntityMachineGasCent) {
 				return new GUIMachineGasCent(player.inventory, (TileEntityMachineGasCent) entity);
-			}
-			return null;
-		case ModBlocks.guiID_uf6_tank:
-			if(entity instanceof TileEntityMachineUF6Tank) {
-				return new GUIMachineUF6Tank(player.inventory, (TileEntityMachineUF6Tank) entity);
-			}
-			return null;
-		case ModBlocks.guiID_puf6_tank:
-			if(entity instanceof TileEntityMachinePuF6Tank) {
-				return new GUIMachinePuF6Tank(player.inventory, (TileEntityMachinePuF6Tank) entity);
 			}
 			return null;
 		case ModBlocks.guiID_railgun:

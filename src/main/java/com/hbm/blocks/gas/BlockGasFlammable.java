@@ -68,7 +68,7 @@ public class BlockGasFlammable extends BlockGasBase {
 			IBlockState b = world.getBlockState(posN);
 			
 			if(isFireSource(b)) {
-				combust(world, pos);
+				world.scheduleUpdate(pos, this, 2);
 			}
 		}
 	}

@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ore_bedrock_enriched"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_bedrock_ore_e"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_bedrock_ore_e.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_bedrock_ore",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ore_bedrock_enriched"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 10
+    }
+}

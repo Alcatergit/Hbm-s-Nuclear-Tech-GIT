@@ -30,10 +30,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
+import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
+
 
 public class RenderTorex extends Render<EntityNukeTorex> {
 
-	public static final IRenderFactory<EntityNukeTorex> FACTORY = man -> new RenderTorex(man);
+	public static final IRenderFactory<EntityNukeTorex> FACTORY = RenderTorex::new;
 	
 	private static final ResourceLocation cloudlet = new ResourceLocation(RefStrings.MODID + ":textures/particle/particle_base.png");
 	private static final ResourceLocation flare = new ResourceLocation(RefStrings.MODID + ":textures/particle/flare.png");
@@ -79,14 +81,14 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		EntityPlayer player = MainRegistry.proxy.me();
 
 		double dist = player.getDistance(cloud);
-		double shockwaveDistance = dist - cloud.ticksExisted * 1.5;
-		if(shockwaveDistance > 10 || shockwaveDistance < 0) return;
-		amplitude = Math.min(amplitude, 125);
-		int duration = ((int)(amplitude * Math.min(1, (amplitude * amplitude)/(dist * dist))));
+		double shockwaveDistance = dist - cloud.ticksExisted * shockSpeed;
+		if(shockwaveDistance > shockSpeed * 2 || shockwaveDistance < 0) return;
+		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude, 0.8F + cloud.world.rand.nextFloat() * 0.2F);
+		int duration = (int)(40 * Math.min(1.5, (amplitude * amplitude)/(dist * dist)));
+		if(duration < 15) return;
 		int swingTimer = duration<<1;
-		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude * 10F, 0.8F + cloud.world.rand.nextFloat() * 0.2F);
-		
-		if(player.getDisplayName().equals("Vic4Games")) {
+
+		if(player.getDisplayName().toString().equals("Vic4Games")) {
 			player.hurtTime = swingTimer<<1;
 			player.maxHurtTime = duration<<1;
 		} else {
@@ -96,19 +98,15 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		player.attackedAtYaw = 0F;
 	}
 	
-	private Comparator cloudSorter = new Comparator() {
+	private final Comparator cloudSorter = (arg0, arg1) -> {
+        Cloudlet first = (Cloudlet) arg0;
+        Cloudlet second = (Cloudlet) arg1;
+        EntityPlayer player = MainRegistry.proxy.me();
+        double dist1 = player.getDistanceSq(first.posX, first.posY, first.posZ);
+        double dist2 = player.getDistanceSq(second.posX, second.posY, second.posZ);
 
-		@Override
-		public int compare(Object arg0, Object arg1) {
-			Cloudlet first = (Cloudlet) arg0;
-			Cloudlet second = (Cloudlet) arg1;
-			EntityPlayer player = MainRegistry.proxy.me();
-			double dist1 = player.getDistanceSq(first.posX, first.posY, first.posZ);
-			double dist2 = player.getDistanceSq(second.posX, second.posY, second.posZ);
-			
-			return dist1 > dist2 ? -1 : dist1 == dist2 ? 0 : 1;
-		}
-	};
+        return Double.compare(dist2, dist1);
+    };
 
 	private void cloudletWrapper(EntityNukeTorex cloud, float partialTicks) {
 
@@ -127,7 +125,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 		
-		ArrayList<Cloudlet> cloudlets = new ArrayList(cloud.cloudlets);
+		ArrayList<Cloudlet> cloudlets = new ArrayList<>(cloud.cloudlets);
 		cloudlets.sort(cloudSorter);
 		
 		for(Cloudlet cloudlet : cloudlets) {
@@ -194,7 +192,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		float f4 = ActiveRenderInfo.getRotationXY();
 		float f5 = ActiveRenderInfo.getRotationXZ();
 
-		float brightness = cloud.type == cloud.type.CONDENSATION ? 0.9F : 0.75F * cloud.colorMod;
+		float brightness = cloud.type == EntityNukeTorex.TorexType.CONDENSATION ? 0.9F : 0.75F * cloud.colorMod;
 		Vec3 color = cloud.getInterpColor(partialTicks);
 		float r, g, b;
 		r =  Math.max(0.15F, (float)color.xCoord * brightness);

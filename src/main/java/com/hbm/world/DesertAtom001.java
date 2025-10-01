@@ -41,8 +41,8 @@ public class DesertAtom001 extends WorldGenerator
 	Block Block17 = ModBlocks.ore_schrabidium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
-	Block Block20 = ModBlocks.machine_uf6_tank;
-	Block Block21 = ModBlocks.machine_puf6_tank;
+	Block Block20 = ModBlocks.barrel_iron;
+	Block Block21 = ModBlocks.barrel_corroded;
 	Block Block22 = ModBlocks.reinforced_brick;
 	Block Block23 = ModBlocks.waste_earth;
 	Block Block24 = ModBlocks.deco_lead;
@@ -95,23 +95,14 @@ public class DesertAtom001 extends WorldGenerator
 		return false;
 	}
 
-	@Override
-	public boolean generate(World world, Random rand, BlockPos pos)
-	{
-		return generate(world, rand, pos, false);
-	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
+    @Override
+    public boolean generate(World world, Random rand, BlockPos pos) {
+        return generate(world, rand, pos, false);
+    }
 
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-       return true;
-	}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+    }
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

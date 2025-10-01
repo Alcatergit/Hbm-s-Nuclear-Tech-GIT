@@ -10,10 +10,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import vazkii.quark.api.IDropoffManager;
 
-public class TileEntitySafe extends TileEntityLockableBase {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
+public class TileEntitySafe extends TileEntityLockableBase implements IDropoffManager {
 
 	public ItemStackHandler inventory;
 	
@@ -27,6 +30,10 @@ public class TileEntitySafe extends TileEntityLockableBase {
 				super.onContentsChanged(slot);
 			}
 		};
+	}
+
+	public boolean acceptsDropoff(EntityPlayer player) {
+		return true;
 	}
 
 	public boolean canAccess(EntityPlayer player) {

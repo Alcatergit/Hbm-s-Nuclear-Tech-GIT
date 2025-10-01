@@ -56,22 +56,14 @@ public class Barrel extends WorldGenerator {
 		return false;
 	}
 
-	@Override
-	public boolean generate(World world, Random rand, BlockPos pos) {
-		return generate(world, rand, pos, false);
+    @Override
+    public boolean generate(World world, Random rand, BlockPos pos) {
+        return generate(world, rand, pos, false);
+    }
 
-	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-		int i = rand.nextInt(1);
-
-		if (i == 0) {
-			generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-		return true;
-
-	}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+    }
 	
 	Block Block1 = ModBlocks.reinforced_brick;
 	Block Block2 = ModBlocks.sellafield_slaked;

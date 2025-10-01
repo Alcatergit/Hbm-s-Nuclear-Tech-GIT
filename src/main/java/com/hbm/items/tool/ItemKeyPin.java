@@ -36,7 +36,6 @@ public class ItemKeyPin extends Item {
 	
 	public static int getPins(ItemStack stack) {
 		if(stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 		return stack.getTagCompound().getInteger("pins");

@@ -14,37 +14,34 @@ public class ScrapsCraftingHandler extends net.minecraftforge.registries.IForgeR
 
 	@Override
 	public boolean matches(InventoryCrafting inventory, World world) {
-
-		for(int i = 0; i < inventory.getSizeInventory(); ++i) {
+        MaterialStack mat = null;
+        for(int i = 0; i < inventory.getSizeInventory(); ++i) {
 			ItemStack stack = inventory.getStackInSlot(i);
 
 			if(stack.isEmpty()) continue;
-            if(stack.getItem() != ModItems.scraps) return false;
+            if(mat != null || stack.getItem() != ModItems.scraps) return false;
 
-			MaterialStack mat = ItemScraps.getMats(stack);
-            return mat != null && mat.amount >= 2;
+			mat = ItemScraps.getMats(stack);
         }
-		
-		return false;
+		return mat != null && mat.amount >= 2;
 	}
 
 	@Override
 	public @NotNull ItemStack getCraftingResult(InventoryCrafting inventory) {
-
-		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+        MaterialStack mat = null;
+        for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			
 			if(stack.isEmpty()) continue;
-			if(stack.getItem() != ModItems.scraps) return ItemStack.EMPTY;
+			if(mat != null || stack.getItem() != ModItems.scraps) return ItemStack.EMPTY;
 
-			MaterialStack mat = ItemScraps.getMats(stack);
+			mat = ItemScraps.getMats(stack);
             if(mat == null || mat.amount < 2) return ItemStack.EMPTY;
-
-			ItemStack scrap = ItemScraps.create(new MaterialStack(mat.material, mat.amount >> 1));
-			scrap.setCount(2);
-			return scrap;
 		}
-		return ItemStack.EMPTY;
+        if(mat == null) return ItemStack.EMPTY;
+        ItemStack scrap = ItemScraps.create(new MaterialStack(mat.material, mat.amount >> 1));
+        scrap.setCount(2);
+        return scrap;
 	}
 
 	@Override

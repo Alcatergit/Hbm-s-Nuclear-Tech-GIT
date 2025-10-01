@@ -52,7 +52,7 @@ public class ContainerLaunchTable extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 7) {
-				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}

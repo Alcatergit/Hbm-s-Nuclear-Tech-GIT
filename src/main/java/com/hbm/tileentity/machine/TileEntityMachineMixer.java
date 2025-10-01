@@ -56,7 +56,8 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	public boolean uuMixer = false;
 	public static final int uuConsumption = 1_000_000;
 	public static final long uuMaxPower = 200_000_000;
-	
+	public static final int normalConsumption = 50;
+
 	public FluidTank[] tanks;
 	private final UpgradeManager upgradeManager = new UpgradeManager();
 
@@ -98,9 +99,9 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			this.consumption = getConsumption();
 
 			this.consumption *= (speedLevel+1);
-			this.consumption /= (powerLevel+1);
 			this.consumption *= (overLevel * 3 + 1);
-			
+			this.consumption /= (powerLevel+1);
+
 			for(DirPos pos : getConPos()) {
 				this.trySubscribe(world, pos.getPos(), pos.getDir());
 			}
@@ -109,7 +110,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			
 			if(this.wasOn) {
 				this.progress++;
-				this.power -= this.getConsumption();
+				this.power -= this.consumption;
 				
 				this.processTime -= this.processTime * speedLevel / 4;
 				this.processTime /= (overLevel + 1);
@@ -254,16 +255,13 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	
 	public boolean canProcess() {
 		//Enought Power?
-		if(this.power < getConsumption()) return false;
+		if(this.power < this.consumption) return false;
 
 		//Mixing uu matter?
 		if(uuMixer){
 			this.processTime = 200;
-			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.UU_MATTER, MachineConfig.uuMixerFluidRatio))){
-				return true;
-			}
-			return false;
-		}
+            return outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.UU_MATTER, MachineConfig.uuMixerFluidRatio));
+        }
 
 		//has recipe?
 		if(!MixerRecipes.hasMixerRecipe(outputFluid)) {
@@ -320,7 +318,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	
 	public int getConsumption() {
 		if(uuMixer) return uuConsumption;
-		return consumption;
+		return normalConsumption;
 	}
 	
 	protected DirPos[] getConPos() {

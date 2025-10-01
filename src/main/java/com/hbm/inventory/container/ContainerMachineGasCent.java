@@ -19,31 +19,30 @@ public class ContainerMachineGasCent extends Container {
 		diFurnace = tedf;
 
 		//Battery
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 53));
-		//Fluid ID IO
-		//Drillgon200 - Don't need you anymore.
-		//this.addSlotToContainer(new Slot(tedf, 1, 35, 17));
-		//this.addSlotToContainer(new SlotMachineOutput(invPlayer.player, tedf, 2, 35, 53));
-		//Fluid IO
-		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 62, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 62, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 152, 71));
+
+        this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 87, 15));
+        this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 109, 15));
+        //Fluid IO
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 10, 16));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 4, 10, 65));
 		//Output
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 134, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 152, 17));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 7, 134, 53));
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 8, 152, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 5, 89, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 6, 107, 53));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 7, 89, 71));
+		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 8, 107, 71));
 		
 		for(int i = 0; i < 3; i++)
 		{
 			for(int j = 0; j < 9; j++)
 			{
-				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 84 + i * 18));
+				this.addSlotToContainer(new Slot(invPlayer, j + i * 9 + 9, 8 + j * 18, 122 + i * 18));
 			}
 		}
 		
 		for(int i = 0; i < 9; i++)
 		{
-			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142));
+			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 180));
 		}
 	}
 	

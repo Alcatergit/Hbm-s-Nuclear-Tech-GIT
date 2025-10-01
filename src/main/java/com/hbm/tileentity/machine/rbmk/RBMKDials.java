@@ -215,7 +215,7 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 	public static int shittyWorkaroundParseInt(String s, int def) {
 		try {
 			return Integer.parseInt(s);
-		} catch(Exception ex) { }
+		} catch(Exception ignored) { }
 		return def;
 	}
 }

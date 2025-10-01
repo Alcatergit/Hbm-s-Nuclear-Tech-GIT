@@ -22,7 +22,6 @@ import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineCoal;
 import com.hbm.tileentity.machine.TileEntityMachineDiesel;
 import com.hbm.tileentity.machine.TileEntityMachineElectricFurnace;
-import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 import com.hbm.tileentity.machine.TileEntityMachineGenerator;
 import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
@@ -147,13 +146,6 @@ public class AuxGaugePacket implements IMessage {
 							reactor.coreHeat = m.value;
 						if(m.id == 3)
 							reactor.hullHeat = m.value;
-					} else if(te instanceof TileEntityMachineGasCent) {
-						TileEntityMachineGasCent cent = (TileEntityMachineGasCent) te;
-
-						if(m.id == 0)
-							cent.progress = m.value;
-						if(m.id == 1)
-							cent.isProgressing = m.value == 1;
 					} else if(te instanceof TileEntityMachineCentrifuge) {
 						TileEntityMachineCentrifuge cent = (TileEntityMachineCentrifuge) te;
 

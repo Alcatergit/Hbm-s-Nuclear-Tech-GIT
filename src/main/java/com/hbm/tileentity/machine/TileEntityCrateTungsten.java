@@ -6,7 +6,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.ILaserable;
-import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
@@ -18,19 +17,21 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import vazkii.quark.api.IDropoffManager;
 
-public class TileEntityCrateTungsten extends TileEntityLockableBase implements ITickable, ILaserable, INBTPacketReceiver {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
+public class TileEntityCrateTungsten extends TileEntityLockableBase implements IDropoffManager, ITickable, ILaserable, INBTPacketReceiver {
 
 	public ItemStackHandler inventory;
 
-	private Random rand = new Random();
+	private final Random rand = new Random();
 
 	public int heatTimer = 0;
 	public int age = 0;
@@ -43,6 +44,10 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 				markDirty();
 			}
 		};
+	}
+
+	public boolean acceptsDropoff(EntityPlayer player) {
+		return true;
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {

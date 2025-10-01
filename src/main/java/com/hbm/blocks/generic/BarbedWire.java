@@ -116,7 +116,7 @@ public class BarbedWire extends Block {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
+
 	@Override
     public AxisAlignedBB getCollisionBoundingBox(IBlockState blockState, IBlockAccess worldIn, BlockPos pos)
     {

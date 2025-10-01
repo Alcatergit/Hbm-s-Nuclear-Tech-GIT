@@ -42,9 +42,7 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
     public void update() {
         super.update();
         if(!world.isRemote) {
-
             tryFillTe();
-
         }
     }
 
@@ -52,11 +50,9 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
         EnumFacing outputSide = getOutputSide();
         TileEntity te = world.getTileEntity(pos.offset(outputSide));
 
-        int meta = this.getBlockMetadata();
         if(te != null){
-            ICapabilityProvider capte = te;
-            if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
+            if(te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
+                IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
             
                 for(int i = 0; i < inventory.getSlots(); i++) {
                     tryFillContainerCap(cap, i);
@@ -97,8 +93,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
                 outputStack.setCount(fillAmount);
 
                 ItemStack rest = chest.insertItem(i, outputStack, true);
-                if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
-                    stack.shrink(outputStack.getCount());
+                if(rest.getCount() < outputStack.getCount()){
+                    stack.shrink(outputStack.getCount()-rest.getCount());
                     chest.insertItem(i, outputStack, false);
                 }
             }
@@ -118,4 +114,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
         return new GUICraneInserter(player.inventory, this);
     }
 
+    @Override
+    public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ,17, 18, 19, 20};
+    }
 }

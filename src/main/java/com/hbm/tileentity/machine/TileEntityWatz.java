@@ -15,6 +15,7 @@ import com.hbm.items.machine.ItemWatzPellet.EnumWatzType;
 import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
@@ -169,6 +170,12 @@ public class TileEntityWatz extends TileEntityMachineBase implements  ITickable,
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 250));
 				MainRegistry.proxy.effectNT(data);
 
+                List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class,
+                        new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).grow(50, 10, 50));
+
+                for(EntityPlayer player : players) {
+                    AdvancementManager.grantAchievement(player, AdvancementManager.progress_watz_boom);
+                }
 			}
 		}
 	}

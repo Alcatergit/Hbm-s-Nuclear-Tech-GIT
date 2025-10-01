@@ -48,7 +48,7 @@ public class ContainerNukeN2 extends Container {
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
 		ItemStack var3 = ItemStack.EMPTY;
-		Slot var4 = (Slot) this.inventorySlots.get(par2);
+		Slot var4 = this.inventorySlots.get(par2);
 		
 		if (var4 != null && var4.getHasStack())
 		{
@@ -56,12 +56,15 @@ public class ContainerNukeN2 extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 11) {
-				if (!this.mergeItemStack(var5, 12, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 12, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
 			} else {
-				return ItemStack.EMPTY;
+				if (!this.mergeItemStack(var5, 0, 12, false))
+				{
+					return ItemStack.EMPTY;
+				}
 			}
             
 			if (var5.isEmpty())

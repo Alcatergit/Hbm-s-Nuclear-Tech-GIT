@@ -69,7 +69,7 @@ public class BlockVolcano extends Block {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
-		if(!world.isRemote) {
+		if(!world.isRemote && world.isAreaLoaded(pos, 20)) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();

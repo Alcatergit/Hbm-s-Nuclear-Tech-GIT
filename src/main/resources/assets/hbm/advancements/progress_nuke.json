@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:nuke_man"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_nuke"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_nuke.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_u235",
+	"criteria": {
+        "impossible": {
+			"trigger": "minecraft:impossible"
+		}
+    },
+    "rewards": {
+        "experience": 470
+    }
+}

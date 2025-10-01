@@ -1,5 +1,8 @@
 package com.hbm.tileentity.machine;
 
+import net.minecraftforge.fml.common.Optional;
+import vazkii.quark.api.IDropoffManager;
+
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
@@ -13,7 +16,8 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCrateIron extends TileEntityLockableBase {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
+public class TileEntityCrateIron extends TileEntityLockableBase implements IDropoffManager {
 
 	public ItemStackHandler inventory;
 	
@@ -91,5 +95,9 @@ public class TileEntityCrateIron extends TileEntityLockableBase {
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+	}
+
+	public boolean acceptsDropoff(EntityPlayer player) {
+		return true;
 	}
 }

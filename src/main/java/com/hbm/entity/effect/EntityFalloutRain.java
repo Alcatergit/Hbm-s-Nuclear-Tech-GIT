@@ -8,7 +8,6 @@ import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
@@ -78,7 +77,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	private final List<Long> outerChunksToProcess = new ArrayList<>();
 	private int falloutTickNumber = 0;
 
-	public int falloutBallRadius = 0;
 
 	public EntityFalloutRain(World world) {
 		super(world);
@@ -100,7 +98,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		this.isImmuneToFire = true;
 	}
 
-	private static int getInt(Object e){
+	public static int getInt(Object e){
 		if(e == null)
 			return 0;
 		return (int)e;
@@ -124,7 +122,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void entityInit() {
 		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-		this.dataManager.register(SCALE, Integer.valueOf(0));
+		this.dataManager.register(SCALE, 0);
 	}
 
 	@Override
@@ -257,22 +255,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			falloutTickNumber++;
 
 			if(this.isDead) {
-				if(falloutBallRadius > 0){
-					EntityFalloutUnderGround falloutBall = new EntityFalloutUnderGround(this.world);
-					falloutBall.posX = this.posX;
-					falloutBall.posY = this.posY;
-					falloutBall.posZ = this.posZ;
-					falloutBall.setScale(falloutBallRadius);
-					this.world.spawnEntity(falloutBall);
-				}
 				unloadAllChunks();
 				this.done = true;
 				if(RadiationConfig.rain > 0 && doFlood) {
-					if((doFallout && getScale() > 100) || (doFlood && getScale() > 50)){
+					if((doFallout && getScale() > 120) || (doFlood && getScale() > 100)){
 						world.getWorldInfo().setRaining(true);
 						world.getWorldInfo().setRainTime(RadiationConfig.rain);
 					}
-					if((doFallout && getScale() > 150) || (doFlood && getScale() > 100)){
+					if((doFallout && getScale() > 150) || (doFlood && getScale() > 120)){
 						world.getWorldInfo().setThundering(true);
 						world.getWorldInfo().setThunderTime(RadiationConfig.rain);
 						AuxSavedData.setThunder(world, RadiationConfig.rain);
@@ -569,8 +559,8 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				continue;
 			}
 			else if(bblock == ModBlocks.ore_uranium) {
-				if(dist <= s6){
-					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+				if(dist <= s5){
+					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s6)
 						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
 					else
 						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
@@ -695,14 +685,14 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 				return;
 			}
 		}
-		int[] gapData = null;
+		int[] gapData;
 		if(doFallout)
 			gapData = doFallout(pos, dist);
 		else
 			gapData = doNoFallout(pos, dist);
 
 		if(dist < fallingRadius){
-			if(doDrop && gapData != null && gapData[0] == 1)
+			if(doDrop && gapData[0] == 1)
 				letFall(world, pos, gapData[1], gapData[2]);
 			if(doFlood)
 				flood(pos);
@@ -716,7 +706,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		setScale(nbt.getInteger("scale"), nbt.getInteger("dropRadius"));
-		falloutBallRadius = nbt.getInteger("fBall");
 		if(nbt.hasKey("chunks"))
 			chunksToProcess.addAll(readChunksFromIntArray(nbt.getIntArray("chunks")));
 		if(nbt.hasKey("outerChunks"))
@@ -742,7 +731,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setInteger("scale", getScale());
-		nbt.setInteger("fBall", falloutBallRadius);
 		nbt.setInteger("dropRadius", fallingRadius);
 		nbt.setBoolean("doFallout", doFallout);
 		nbt.setBoolean("doFlood", doFlood);
@@ -761,7 +749,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 	}
 
 	public void setScale(int i, int craterRadius) {
-		this.dataManager.set(SCALE, Integer.valueOf(i));
+		this.dataManager.set(SCALE, i);
 		this.s0 = 0.8D * i;
 		this.s1 = 0.65D * i;
 		this.s2 = 0.5D * i;
@@ -769,7 +757,7 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		this.s4 = 0.3D * i;
 		this.s5 = 0.2D * i;
 		this.s6 = 0.1D * i;
-		this.fallingRadius = craterRadius;
+		this.fallingRadius = craterRadius > 15 ? craterRadius : 0;
 		this.doDrop = this.fallingRadius > 20;
 	}
 

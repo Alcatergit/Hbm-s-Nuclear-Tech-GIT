@@ -2,15 +2,18 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
+import com.hbm.blocks.bomb.BlockCrashedBomb;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
 import api.hbm.block.IToolable;
 import api.hbm.block.IToolable.ToolType;
+import com.hbm.util.EnchantmentUtil;
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Enchantments;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumActionResult;
@@ -56,7 +59,12 @@ public class ItemTooling extends Item {
 		if(type == ToolType.SCREWDRIVER){
 			tooltip.add(I18nUtil.resolveKey("desc.screwdriver1"));
 			tooltip.add(I18nUtil.resolveKey("desc.screwdriver2"));
-		}
+		} else
+        if(type == ToolType.DEFUSER){
+            tooltip.add("§e"+I18nUtil.resolveKey("desc.defuser"));
+            if(EnchantmentUtil.hasEnchantment(stack, Enchantments.SILK_TOUCH)) tooltip.add("§a"+I18nUtil.resolveKey("desc.defuserChance",  0));
+            else tooltip.add("§c"+I18nUtil.resolveKey("desc.defuserChance",  this.getMaxDamage(stack) > 0 ? 100D/BlockCrashedBomb.chanceDefuse : 100D/BlockCrashedBomb.chanceDefuseDesh));
+        }
 	}
 
 	public ToolType getType(){

@@ -121,7 +121,7 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 			
 			double level = ((double) totalMass / (double) totalCap) * 0.875D;
 			
-			List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5 + level, pos.getZ() + 0.5).expand(1, 0, 1));
+			List<EntityLivingBase> living = world.getEntitiesWithinAABB(EntityLivingBase.class, new AxisAlignedBB(pos.getX() - 0.5, pos.getY() + 0.5, pos.getZ() - 0.5, pos.getX() + 1.5, pos.getY() + 0.5 + level, pos.getZ() + 1.5));
 			for(EntityLivingBase entity : living) {
 				entity.attackEntityFrom(DamageSource.LAVA, 5F);
 				entity.setFire(5);

@@ -178,6 +178,12 @@ public class SolderingRecipes {
 				new AStack[] {new ComparableStack(ModItems.upgrade_template), new OreDictStack(LI.dust(), 4)},
 				new AStack[] {}
 		));
+
+        recipes.add(new SolderingRecipe(new ItemStack(ModItems.upgrade_gc_speed), 400, 2_000,
+                new AStack[] {new ComparableStack(ModItems.circuit, 2, EnumCircuitType.ADVANCED.ordinal()), new ComparableStack(ModItems.circuit, 4, EnumCircuitType.CAPACITOR_TANTALIUM.ordinal())},
+                new AStack[] {new ComparableStack(ModItems.upgrade_template), new OreDictStack(UF.ingot(), 4)},
+                new AStack[] {}
+        ));
 		
 		addFirstUpgrade(ModItems.upgrade_speed_1, ModItems.upgrade_speed_2);
 		addSecondUpgrade(ModItems.upgrade_speed_2, ModItems.upgrade_speed_3);

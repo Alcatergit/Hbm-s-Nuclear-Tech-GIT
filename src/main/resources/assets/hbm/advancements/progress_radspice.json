@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:progress_au198",
+	"parent": "hbm:progress_srb",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

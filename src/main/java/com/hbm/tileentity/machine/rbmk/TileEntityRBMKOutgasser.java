@@ -222,7 +222,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-		return RBMKOutgasserRecipes.getOutput(itemStack) != null && i == 0;
+		return i == 0 && RBMKOutgasserRecipes.getOutput(itemStack) != null;
 	}
 
 	@Override

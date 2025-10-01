@@ -29,7 +29,7 @@ public class PotionRecipes {
 		addPotionRecipe(HbmPotion.taint, ModItems.syringe_taint, 30*20, 2*60*20, 15*20);
 		addPotionRecipe(HbmPotion.phosphorus, ModItems.crystal_phosphorus, 30*20, 2*60*20, 0);
 		addPotionRecipe(HbmPotion.bang, ModItems.coin_ufo, 30*20, 15*20, 2*30*20);
-		addPotionRecipe(HbmPotion.stability, ModItems.five_htp, 30*20, 2*60*20, 0);
+		addPotionRecipe(HbmPotion.stability, ModItems.five_htp, 60*20, 3*60*20, 0);
 		addPotionRecipe(HbmPotion.lead, ModItems.apple_lead1, 30*20, 2*60*20, 15*20);
 		addPotionRecipe(HbmPotion.telekinesis, ModBlocks.float_bomb, 30*20, 2*60*20, 15*20);
 	}

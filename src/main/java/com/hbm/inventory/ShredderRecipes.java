@@ -3,9 +3,11 @@ package com.hbm.inventory;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.inventory.material.Mats;
 import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.BedrockOreRegistry;
@@ -21,6 +23,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import static com.hbm.inventory.material.Mats.materialEntries;
+
 public class ShredderRecipes {
 
 	public static LinkedHashMap<ComparableStack, ItemStack> shredderRecipes = new LinkedHashMap<ComparableStack, ItemStack>();
@@ -29,79 +33,57 @@ public class ShredderRecipes {
 	public static void registerShredder() {
 		
 		String[] names = OreDictionary.getOreNames();
-		
-		for(int i = 0; i < names.length; i++) {
-			
-			String name = names[i];
-			
-			//if the dict contains invalid names, skip
-			if(name == null || name.isEmpty())
-				continue;
-			
-			List<ItemStack> matches = OreDictionary.getOres(name);
-			
-			//if the name isn't assigned to an ore, also skip
-			if(matches == null || matches.isEmpty())
-				continue;
 
-			if(name.length() > 5 && name.substring(0, 5).equals("ingot")) {
-				ItemStack dust = getDustByName(name.substring(5));
-				
-				if(dust != null && dust.getItem() != ModItems.scrap) {
+        for (String name : names) {
 
-					for(ItemStack stack : matches) {
-						shredderRecipes.put(new ComparableStack(stack), dust);
-					}
-				}
-			} else if(name.length() > 6 && name.substring(0, 6).equals("nugget")) {
-				ItemStack dust = getTinyDustByName(name.substring(6));
-				
-				if(dust != null && dust.getItem() != ModItems.scrap) {
+            //if the dict contains invalid names, skip
+            if (name == null || name.isEmpty())
+                continue;
 
-					for(ItemStack stack : matches) {
-						shredderRecipes.put(new ComparableStack(stack), dust);
-					}
-				}
-			} else if(name.length() > 3 && name.substring(0, 3).equals("ore")) {
-				ItemStack dust = getDustByName(name.substring(3));
-				
-				if(dust != null && dust.getItem() != ModItems.scrap) {
-					
-					dust.setCount(2);
+            List<ItemStack> matches = OreDictionary.getOres(name);
 
-					for(ItemStack stack : matches) {
-						shredderRecipes.put(new ComparableStack(stack), dust);
-					}
-				}
-			} else if(name.length() > 5 && name.substring(0, 5).equals("block")) {
-				ItemStack dust = getDustByName(name.substring(5));
-				
-				if(dust != null && dust.getItem() != ModItems.scrap) {
-					
-					dust.setCount(9);
+            //if the name isn't assigned to an ore, also skip
+            if (matches == null || matches.isEmpty())
+                continue;
 
-					for(ItemStack stack : matches) {
-						shredderRecipes.put(new ComparableStack(stack), dust);
-					}
-				}
-			} else if(name.length() > 3 && name.substring(0, 3).equals("gem")) {
-				ItemStack dust = getDustByName(name.substring(3));
-				
-				if(dust != null && dust.getItem() != ModItems.scrap) {
-
-					for(ItemStack stack : matches) {
-						shredderRecipes.put(new ComparableStack(stack), dust);
-					}
-				}
-			} else if(name.length() > 3 && name.substring(0, 4).equals("dust")) {
-
-				for(ItemStack stack : matches) {
-					if(stack != null && !stack.isEmpty() && Item.REGISTRY.getNameForObject(stack.getItem()) != null)
-						shredderRecipes.put(new ComparableStack(stack), new ItemStack(ModItems.dust));
-				}
-			}
-		}
+            boolean did = checkAndAdd(matches, name, "ingot", 1);
+            if(!did) did = checkAndAdd(matches, name, "nugget", 1, true);
+            if(!did) did = checkAndAdd(matches, name, "ore", 1);
+            if(!did) did = checkAndAdd(matches, name, "block", 9);
+            if(!did) did = checkAndAdd(matches, name, "gem", 1);
+            if(!did) did = checkAndAdd(matches, name, "plate", 1);
+            if(!did) did = checkAndAdd(matches, name, "billet", 6, true);
+            if(!did) did = checkAndAdd(matches, name, "wire", 1, true);
+            if(!did) did = checkAndAdd(matches, name, "bolt", 1, true);
+            if(!did) did = checkAndAdd(matches, name, "pipe", 3);
+            if(!did) did = checkAndAdd(matches, name, "shell", 4);
+            if(!did) did = checkAndAdd(matches, name, "wireDense", 1);
+            if(!did) did = checkAndAdd(matches, name, "plateTriple", 3);
+            if(!did) did = checkAndAdd(matches, name, "plateSextuple", 6);
+            if(!did) did = checkAndAdd(matches, name, "compressed", 2);
+            if(!did) did = checkAndAdd(matches, name, "componentHeavy", 768);
+            if(!did) checkAndAdd(matches, name, "dust", 1);
+        }
 	}
+
+    public static boolean checkAndAdd(List<ItemStack> matches, String name, String type, int count) {
+        return checkAndAdd(matches, name, type, count, false);
+    }
+    public static boolean checkAndAdd(List<ItemStack> matches, String name, String type, int count, boolean doTiny){
+        int length = type.length();
+        if (name.length() > length && name.substring(0, length).equals(type)) {
+            ItemStack dust = type.equals("dust") ? new ItemStack(ModItems.dust) : doTiny ? getTinyDustByName(name.substring(length)) : getDustByName(name.substring(length));
+
+            if (!dust.isEmpty() && dust.getItem() != ModItems.scrap) {
+                dust.setCount(count);
+                for (ItemStack stack : matches) {
+                    shredderRecipes.put(new ComparableStack(stack), dust);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 	
 	public static void registerOverrides() {
 
@@ -162,7 +144,6 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModBlocks.ore_tektite_osmiridium, new ItemStack(ModItems.powder_tektite, 1));
 		ShredderRecipes.setRecipe(ModBlocks.ore_rare, new ItemStack(ModItems.powder_desh_mix, 1));
 		ShredderRecipes.setRecipe(Blocks.DIAMOND_ORE, new ItemStack(ModBlocks.gravel_diamond, 2));
-		ShredderRecipes.setRecipe(ModBlocks.boxcar, new ItemStack(ModItems.powder_steel, 32));
 		ShredderRecipes.setRecipe(ModItems.ingot_schrabidate, new ItemStack(ModItems.powder_schrabidate, 1));
 		ShredderRecipes.setRecipe(ModBlocks.block_schrabidate, new ItemStack(ModItems.powder_schrabidate, 9));
 		ShredderRecipes.setRecipe(ModItems.coal_infernal, new ItemStack(ModItems.powder_coal, 3));
@@ -301,22 +282,30 @@ public class ShredderRecipes {
 		}
 
 		for(Integer oreMeta : BedrockOreRegistry.oreIndexes.keySet()) {
-			int type = ItemBedrockOre.getOutType(oreMeta);
-			if(type == 0 || type == 1){
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta), new ItemStack(ModItems.ore_bedrock_enriched, 2, oreMeta));
-				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 2));
+			if(ItemBedrockOre.getOutType(oreMeta) == 1){
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_centrifuged, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_separated, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
+				ShredderRecipes.setRecipe(new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), ItemBedrockOre.getOut(oreMeta, 1));
 			}
 		}
 		setRecipe("crystalEnder", "dustEnder");
 		setRecipe("crystalFluix", "dustFluix");
 		setRecipe("crystalCertusQuartz", "dustCertusQuartz");
 		setRecipe("enderpearl", "dustEnderPearl");
+        registerMaterialShredding();
 	}
+
+    public static void registerMaterialShredding(){
+        for(Map.Entry<ComparableStack, List<Mats.MaterialStack>> e: materialEntries.entrySet()){
+            ComparableStack item = e.getKey();
+            ItemStack out = Mats.matsToDust(e.getValue());
+            if(out != null) shredderRecipes.put(item, out);
+        }
+    }
 	
 	public static ItemStack getDustByName(String name) {
 		

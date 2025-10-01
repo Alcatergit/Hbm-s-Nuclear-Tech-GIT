@@ -13,6 +13,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemChemicalDye.EnumChemDye;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.ItemEnums.EnumTarType;
 import com.hbm.inventory.OreDictManager.DictFrame;
@@ -75,8 +76,9 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(Blocks.COBBLESTONE), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(ModBlocks.reinforced_stone));
 		addRecipe(new ComparableStack(ModBlocks.gravel_obsidian), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(ModBlocks.brick_obsidian));
 		addRecipe(REDSTONE.block(), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(ModItems.nugget_mercury));
-		
+
 		addRecipe(CINNABAR.gem(), new FluidStack(ModForgeFluids.SULFURIC_ACID, 500), new ItemStack(ModItems.nugget_mercury, 3));
+		addRecipe(KEY_DEAD_PLANT, new FluidStack(ModForgeFluids.SULFURIC_ACID, 500), new ItemStack(ModItems.nugget_cadmium, 1));
 		addRecipe(COAL.block(), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(ModBlocks.block_graphite));
 		addRecipe(new ComparableStack(ModBlocks.stone_gneiss), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(ModItems.powder_lithium));
 		
@@ -97,7 +99,7 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.SULFURIC_ACID, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.SULFURIC_ACID, 250), new ItemStack(Items.SLIME_BALL, 4));
-		addRecipe(new ComparableStack(ModItems.powder_lithium, 1), new FluidStack(ModForgeFluids.HEATINGOIL, 4000), new ItemStack(ModItems.crystal_redstone, 1));
+		addRecipe(new ComparableStack(ModItems.powder_lithium), new FluidStack(ModForgeFluids.HEATINGOIL, 4000), new ItemStack(ModItems.crystal_redstone, 1));
 		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.SULFURIC_ACID, 500), new ItemStack(ModItems.solid_fuel));
 		addRecipe(new ComparableStack(ModBlocks.block_fallout), new FluidStack(ModForgeFluids.CORIUM_FLUID, 8000), new ItemStack(ModItems.powder_balefire));
 		
@@ -118,13 +120,20 @@ public class CrystallizerRecipes {
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_separated, 1, oreMeta), new FluidStack(ModForgeFluids.SULFURIC_ACID, 500), new ItemStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta));
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_purified, 1, oreMeta), new FluidStack(ModForgeFluids.NITRIC_ACID, 250), new ItemStack(ModItems.ore_bedrock_nitrated, 1, oreMeta));
 			addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), new FluidStack(ModForgeFluids.SOLVENT, 100), new ItemStack(ModItems.ore_bedrock_seared, 1, oreMeta));
-			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.RADIOSOLVENT, 50), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
+			addRecipe(new ComparableStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), new FluidStack(ModForgeFluids.RADIOSOLVENT, 500), new ItemStack(ModItems.ore_bedrock_perfect, 1, oreMeta));
 		}
 
 		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRUDE)), new FluidStack(ModForgeFluids.CHLORINE, 250),		DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
 		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)), new FluidStack(ModForgeFluids.CHLORINE, 100),		DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
 		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.PARAFFIN)), new FluidStack(ModForgeFluids.CHLORINE, 100),	DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX));
 		addRecipe(new ComparableStack(DictFrame.fromOne(ModItems.oil_tar, EnumTarType.WAX)), new FluidStack(ModForgeFluids.IONGEL, 500), 	new ItemStack(ModItems.pellet_charged));
+
+        addRecipe(COAL.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),	DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.BLACK, 4));
+        addRecipe(TI.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),	DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.WHITE, 4));
+        addRecipe(IRON.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),	DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.RED, 4));
+        addRecipe(W.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),	DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.YELLOW, 4));
+        addRecipe(CU.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),	DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.GREEN, 4));
+        addRecipe(CO.dust(), new FluidStack(ModForgeFluids.LIGHTOIL, 100),   DictFrame.fromOne(ModItems.chemical_dye, EnumChemDye.BLUE, 4));
 	}
 
 	public static void addRecipe(Object itemInput, FluidStack fluidInput, ItemStack itemOutput){
@@ -136,7 +145,7 @@ public class CrystallizerRecipes {
 
 	public static ItemStack getOutputItem(ItemStack stack) {
 
-		if(stack == null || stack.getItem() == null || stack.isEmpty())
+		if(stack == null || stack.isEmpty())
 			return null;
 
 		ComparableStack comp = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
@@ -157,7 +166,7 @@ public class CrystallizerRecipes {
 
 	public static FluidStack getOutputFluid(ItemStack stack) {
 
-		if(stack == null || stack.getItem() == null || stack.isEmpty())
+		if(stack == null || stack.isEmpty())
 			return null;
 
 		ComparableStack comp = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
@@ -190,9 +199,8 @@ public class CrystallizerRecipes {
 
 		for(Entry<Object, ItemStack> entry : CrystallizerRecipes.itemOutputRecipes.entrySet()) {
 			List<ItemStack> ingredients;
-			if(entry.getKey() instanceof String) {
-				String oreKey = (String)entry.getKey();
-				ingredients = OreDictionary.getOres(oreKey);
+			if(entry.getKey() instanceof String oreKey) {
+                ingredients = OreDictionary.getOres(oreKey);
 			}else{
 				ItemStack stack = ((ComparableStack)entry.getKey()).toStack();
 				ingredients = new ArrayList<ItemStack>();

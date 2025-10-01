@@ -235,7 +235,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		
 		world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.firingSound, SoundCategory.PLAYERS, 1.0F, mainConfig.firingPitch);
 
-		if(player.getDisplayName().equals("Vic4Games")) {
+		if(player.getDisplayName().toString().equals("Vic4Games")) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("type", "justTilt");
 			nbt.setInteger("time", mainConfig.rateOfFire + 1);
@@ -281,8 +281,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 	}
 
 	protected EntityBulletBase getBulletEntity(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand){
-		EntityBulletBase bullet = new EntityBulletBase(world, config, player, hand);
-		return bullet;
+        return new EntityBulletBase(world, config, player, hand);
 	}
 	
 	protected void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand) {

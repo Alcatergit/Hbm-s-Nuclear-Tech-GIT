@@ -75,9 +75,8 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 
 		if(!world.isRemote) {
 			
-			if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
-				ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
-				this.fuelR = rod.fuelR;
+			if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod rod) {
+                this.fuelR = rod.fuelR;
 				this.fuelG = rod.fuelG;
 				this.fuelB = rod.fuelB;
 				this.cherenkovR = rod.cherenkovR;
@@ -186,10 +185,9 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		
-		if(te instanceof TileEntityRBMKBase) {
-			TileEntityRBMKBase base = (TileEntityRBMKBase) te;
-			
-			if(!base.hasLid())
+		if(te instanceof TileEntityRBMKBase base) {
+
+            if(!base.hasLid())
 				RadiationSavedData.incrementRad(world, pos, (float) (flux * 0.05F), Float.MAX_VALUE);
 			
 			if(base.isModerated()) {
@@ -198,25 +196,22 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		}
 
 		//burn baby burn
-		if(te instanceof TileEntityRBMKRod) {
-			TileEntityRBMKRod rod = (TileEntityRBMKRod)te;
-			
-			if(rod.inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
+		if(te instanceof TileEntityRBMKRod rod) {
+
+            if(rod.inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
 				rod.receiveFlux(stream, flux);
 				return 0;
 			}
 		}
-		if(te instanceof IRBMKFluxReceiver) {
-			IRBMKFluxReceiver rod = (IRBMKFluxReceiver)te;
-			rod.receiveFlux(stream, flux);
+		if(te instanceof IRBMKFluxReceiver rod) {
+            rod.receiveFlux(stream, flux);
 			return 0;
 		}
 		
 		//set neutrons to slow
-		if(te instanceof TileEntityRBMKControl) {
-			TileEntityRBMKControl control = (TileEntityRBMKControl)te;
-			
-			if(control.getMult() == 0.0D)
+		if(te instanceof TileEntityRBMKControl control) {
+
+            if(control.getMult() == 0.0D)
 				return 0;
 			
 			flux *= control.getMult();
@@ -293,11 +288,9 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
 		
-		if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
-			
-			ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
+		if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod rod) {
 
-			nbt.setString("f_yield", ItemRBMKRod.getYield(inventory.getStackInSlot(0)) + " / " + rod.yield + " (" + (ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0)) * 100) + "%)");
+            nbt.setString("f_yield", ItemRBMKRod.getYield(inventory.getStackInSlot(0)) + " / " + rod.yield + " (" + (ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0)) * 100) + "%)");
 			nbt.setString("f_xenon", ItemRBMKRod.getPoison(inventory.getStackInSlot(0)) + "%");
 			nbt.setString("f_heat", ItemRBMKRod.getCoreHeat(inventory.getStackInSlot(0)) + " / " + ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0))  + " / " + rod.meltingPoint);
 		}
@@ -340,7 +333,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				world.notifyBlockUpdate(pos.up(i), state, state, 3);
 			}
 			
-			int count = 1 + world.rand.nextInt(RBMKDials.getColumnHeight(world));
+			int count = 1 + world.rand.nextInt(RBMKDials.getColumnHeight(world)+1);
 			
 			for(int i = 0; i < count; i++) {
 				spawnDebris(DebrisType.FUEL);
@@ -420,9 +413,8 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	public Map<String, DataValue> getQueryData() {
 		Map<String, DataValue> data = super.getQueryData();
 
-		if (inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod) {
-			ItemRBMKRod rod = ((ItemRBMKRod)inventory.getStackInSlot(0).getItem());
-			data.put("rod_name", new DataValueString(rod.getTranslationKey()));
+		if (inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod rod) {
+            data.put("rod_name", new DataValueString(rod.getTranslationKey()));
 			data.put("enrichment", new DataValueFloat((float) ItemRBMKRod.getEnrichment(inventory.getStackInSlot(0))));
 			data.put("xenon", new DataValueFloat((float) ItemRBMKRod.getPoison(inventory.getStackInSlot(0))));
 			data.put("c_heat", new DataValueFloat((float) ItemRBMKRod.getHullHeat(inventory.getStackInSlot(0))));

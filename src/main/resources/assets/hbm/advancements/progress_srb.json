@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_schrabidate"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_srb"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_srb.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_schrabidium",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_schrabidate"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 300
+    }
+}

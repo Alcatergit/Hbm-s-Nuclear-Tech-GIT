@@ -15,6 +15,9 @@ import net.minecraft.world.World;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
+
 /*
  * Toroidial Convection Simulation Explosion Effect
  * Tor                             Ex
@@ -26,7 +29,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	
 	public static final int firstCondenseHeight = 130;
 	public static final int secondCondenseHeight = 170;
-	public static final int blastWaveHeadstart = 5;
 	public static final int maxCloudlets = 20_000;
 
 	//Nuke colors
@@ -51,7 +53,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public double rollerSize = 1;
 	public double heat = 1;
 	public double lastSpawnY = -1;
-	public ArrayList<Cloudlet> cloudlets = new ArrayList();
+	public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
 	public int maxAge = 1000;
 	public float humidity = -1;
 
@@ -65,7 +67,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	@Override
 	protected void entityInit() {
 		this.dataManager.register(SCALE, 1.0F);
-		this.dataManager.register(TYPE, Byte.valueOf((byte) 0));
+		this.dataManager.register(TYPE, (byte) 0);
 	}
 
 	@Override
@@ -131,13 +133,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 			
 			// spawn shock clouds
-			if(this.ticksExisted < 150) {
+			if(this.ticksExisted * shockSpeed < 160) {
 				
-				int cloudCount = Math.min(this.ticksExisted * 2, 100);
-				int shockLife = Math.max(400 - this.ticksExisted * 20, 50);
+				int cloudCount = (int) Math.min(this.ticksExisted * shockSpeed, 100);
+				int shockLife = (int) Math.max(s * 300 - this.ticksExisted * shockSpeed * 10, 60);
 				
 				for(int i = 0; i < cloudCount; i++) {
-					Vec3 vec = Vec3.createVectorHelper((this.ticksExisted + rand.nextDouble() * 2) * 1.5, 0, 0);
+					Vec3 vec = Vec3.createVectorHelper((this.ticksExisted + rand.nextDouble() * 2 - 2) * shockSpeed, 0, 0);
 					float rot = (float) (Math.PI * 2 * rand.nextDouble());
 					vec.rotateAroundY(rot);
 					this.cloudlets.add(new Cloudlet(vec.xCoord + posX, world.getHeight((int) (vec.xCoord + posX) + 1, (int) (vec.zCoord + posZ)), vec.zCoord + posZ, rot, 0, shockLife, TorexType.SHOCK)
@@ -147,7 +149,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			
 			// spawn ring clouds
 			if(this.ticksExisted < 200) {
-				lifetime *= s;
+				lifetime *= (int) s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
 					cloud.setScale((float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * s), (float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * 6 * cs * s));
@@ -155,12 +157,12 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				}
 			}
 
-			if(this.humidity > 0 && this.ticksExisted < 220){
+			if(this.humidity > 0 && this.ticksExisted * shockSpeed < 180){
 				// spawn lower condensation clouds
-				spawnCondensationClouds(this.ticksExisted, this.humidity, firstCondenseHeight, 80, 4, s, cs);
+				spawnCondensationClouds(this.ticksExisted * shockSpeed-8, this.humidity, firstCondenseHeight, 80, 4, s, cs);
 
 				// spawn upper condensation clouds
-				spawnCondensationClouds(this.ticksExisted, this.humidity, secondCondenseHeight, 80, 2, s, cs);
+				spawnCondensationClouds(this.ticksExisted * shockSpeed-8, this.humidity, secondCondenseHeight, 80, 2, s, cs);
 			}
 
 			cloudlets.removeIf(x -> x.isDead);
@@ -174,7 +176,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			convectionHeight = coreHeight + rollerSize;
 			
 			int maxHeat = (int) (50 * s * s);
-			heat = maxHeat - Math.pow((maxHeat * this.ticksExisted) / maxAge, 0.6);
+			heat = maxHeat - Math.pow((double) (maxHeat * this.ticksExisted) / maxAge, 0.6);
 		}
 		
 		if(!world.isRemote && this.ticksExisted > maxAge) {
@@ -182,16 +184,16 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		}
 	}
 
-	public void spawnCondensationClouds(int age, float humidity, int height, int count, int spreadAngle, double s, double cs){
-		if((posY + age) > height) {
+	public void spawnCondensationClouds(double range, float humidity, int height, int count, int spreadAngle, double s, double cs){
+		if(range > 0 && (posY + range) > height) {
 			
 			for(int i = 0; i < (int)(5 * humidity * count/(double)spreadAngle); i++) {
 				for(int j = 1; j < spreadAngle; j++) {
 					float angle = (float) (Math.PI * 2 * rand.nextDouble());
-					Vec3 vec = Vec3.createVectorHelper(0, age, 0);
-					vec.rotateAroundZ((float)Math.acos((height-posY)/(age))+(float)Math.toRadians(humidity*humidity*90*j*(0.1*rand.nextDouble()-0.05)));
+					Vec3 vec = Vec3.createVectorHelper(0, range, 0);
+					vec.rotateAroundZ((float)Math.acos((height-posY)/(range))+(float)Math.toRadians(humidity*humidity*90*j*(0.1*rand.nextDouble()-0.05)));
 					vec.rotateAroundY(angle);
-					Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord, angle, 0, (int) ((20 + age / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+					Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + vec.yCoord, posZ + vec.zCoord, angle, 0, (int) ((20 + range / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
 					cloud.setScale(3F * (float) (cs * s), 4F * (float) (cs * s));
 					cloudlets.add(cloud);
 				}
@@ -554,7 +556,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		}
 	}
 	
-	public static enum TorexType {
+	public enum TorexType {
 		STANDARD,
 		RING,
 		CONDENSATION,

@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.horizonsStart.desc"
 		}
 	},
-	"parent": "hbm:bossworm",
+	"parent": "hbm:bossufo",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

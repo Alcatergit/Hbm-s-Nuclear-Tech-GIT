@@ -68,24 +68,14 @@ public class CrashedVertibird extends WorldGenerator
 		return false;
 	}
 
-	@Override
-	public boolean generate(World world, Random rand, BlockPos pos)
-	{
-		return generate(world, rand, pos, false);
-	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
+    @Override
+    public boolean generate(World world, Random rand, BlockPos pos) {
+        return generate(world, rand, pos, false);
+    }
 
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-       return true;
-
-	}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+    }
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

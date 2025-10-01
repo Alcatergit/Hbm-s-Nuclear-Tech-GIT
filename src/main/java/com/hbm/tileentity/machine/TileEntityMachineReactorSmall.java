@@ -1,5 +1,6 @@
 package com.hbm.tileentity.machine;
 
+import java.util.HashMap;
 import java.util.List;
 
 import com.hbm.blocks.ModBlocks;
@@ -75,6 +76,8 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	// private static final int[] slots_side = new int[] { 0, 1, 2, 3, 4, 5, 6,
 	// 7, 8, 9, 10, 11, 12, 14, 16 };
 
+    public static HashMap<Item, Item> conversions = new HashMap<>();
+
 	private String customName;
 
 	public TileEntityMachineReactorSmall() {
@@ -94,8 +97,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 					if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
 						return true;
 				if(i == 14)
-					if(FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT))
-						return true;
+                    return FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT);
 				return false;
 			}
 
@@ -105,6 +107,13 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 					return super.insertItem(slot, stack, simulate);
 				return stack;
 			}
+
+            @Override
+            public ItemStack extractItem(int slot, int amount, boolean simulate) {
+                if(canExtractItem(slot, inventory.getStackInSlot(slot)))
+                    return super.extractItem(slot, amount, simulate);
+                return ItemStack.EMPTY;
+            }
 		};
 
 		tanks = new FluidTank[3];
@@ -119,7 +128,34 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 	}
 
-	public String getInventoryName() {
+    public static void setupConversions() {
+        if(!conversions.isEmpty()) return;
+        conversions.put(ModItems.rod_uranium_fuel, ModItems.rod_uranium_fuel_depleted);
+        conversions.put(ModItems.rod_thorium_fuel, ModItems.rod_thorium_fuel_depleted);
+        conversions.put(ModItems.rod_plutonium_fuel, ModItems.rod_plutonium_fuel_depleted);
+        conversions.put(ModItems.rod_mox_fuel, ModItems.rod_mox_fuel_depleted);
+        conversions.put(ModItems.rod_schrabidium, ModItems.rod_schrabidium_fuel_depleted);
+
+        conversions.put(ModItems.rod_dual_uranium_fuel, ModItems.rod_dual_uranium_fuel_depleted);
+        conversions.put(ModItems.rod_dual_thorium_fuel, ModItems.rod_dual_thorium_fuel_depleted);
+        conversions.put(ModItems.rod_dual_plutonium_fuel, ModItems.rod_dual_plutonium_fuel_depleted);
+        conversions.put(ModItems.rod_dual_mox_fuel, ModItems.rod_dual_mox_fuel_depleted);
+        conversions.put(ModItems.rod_dual_schrabidium_fuel, ModItems.rod_dual_schrabidium_fuel_depleted);
+
+        conversions.put(ModItems.rod_quad_uranium_fuel, ModItems.rod_quad_uranium_fuel_depleted);
+        conversions.put(ModItems.rod_quad_thorium_fuel, ModItems.rod_quad_thorium_fuel_depleted);
+        conversions.put(ModItems.rod_quad_plutonium_fuel, ModItems.rod_quad_plutonium_fuel_depleted);
+        conversions.put(ModItems.rod_quad_mox_fuel, ModItems.rod_quad_mox_fuel_depleted);
+        conversions.put(ModItems.rod_quad_schrabidium_fuel, ModItems.rod_quad_schrabidium_fuel_depleted);
+    }
+
+    public boolean canExtractItem(int slot, ItemStack stack){
+        if(slot == 12 || slot == 14) return false;
+        if(!stack.isEmpty()) return !conversions.containsKey(stack.getItem());
+        return true;
+    }
+
+    public String getInventoryName() {
 		return this.hasCustomInventoryName() ? this.customName : "container.reactorSmall";
 	}
 
@@ -321,13 +357,8 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 			return false;
 		}
 
-		boolean side4 = blocksRad(pos.add(0, 1, -1));
-		if(!side4){
-			return false;
-		}
-
-		return true;
-	}
+        return blocksRad(pos.add(0, 1, -1));
+    }
 
 	@SuppressWarnings("deprecation")
 	private boolean blocksRad(BlockPos pos) {
@@ -424,20 +455,17 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 				TileEntity tile = world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 
-				if(tile instanceof TileEntityMachineReactor) {
+				if(tile instanceof TileEntityMachineReactor reactor) {
 
-					TileEntityMachineReactor reactor = (TileEntityMachineReactor) tile;
-
-					if(reactor.charge <= 1 && this.hullHeat > 0) {
+                    if(reactor.charge <= 1 && this.hullHeat > 0) {
 						reactor.charge = 1;
 						reactor.heat = (int) Math.floor(hullHeat * 4 / maxHullHeat) + 1;
 					}
 				}
 			}
 
-		} else if(te instanceof TileEntityNukeFurnace) {
-			TileEntityNukeFurnace reactor = (TileEntityNukeFurnace) te;
-			if(reactor.dualPower < 1 && this.coreHeat > 0)
+		} else if(te instanceof TileEntityNukeFurnace reactor) {
+            if(reactor.dualPower < 1 && this.coreHeat > 0)
 				reactor.dualPower = 1;
 
 		} else if(b == ModBlocks.block_uranium) {
@@ -480,57 +508,15 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		}
 	}
 
+
 	private void onRunOut(int id) {
 
 		// System.out.println("aaa");
 
 		Item item = inventory.getStackInSlot(id).getItem();
-
-		if(item == ModItems.rod_uranium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_uranium_fuel_depleted));
-
-		} else if(item == ModItems.rod_thorium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_thorium_fuel_depleted));
-
-		} else if(item == ModItems.rod_plutonium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_plutonium_fuel_depleted));
-
-		} else if(item == ModItems.rod_mox_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_mox_fuel_depleted));
-
-		} else if(item == ModItems.rod_schrabidium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_schrabidium_fuel_depleted));
-
-		} else if(item == ModItems.rod_dual_uranium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_dual_uranium_fuel_depleted));
-
-		} else if(item == ModItems.rod_dual_thorium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_dual_thorium_fuel_depleted));
-
-		} else if(item == ModItems.rod_dual_plutonium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_dual_plutonium_fuel_depleted));
-
-		} else if(item == ModItems.rod_dual_mox_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_dual_mox_fuel_depleted));
-
-		} else if(item == ModItems.rod_dual_schrabidium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_dual_schrabidium_fuel_depleted));
-
-		} else if(item == ModItems.rod_quad_uranium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_quad_uranium_fuel_depleted));
-
-		} else if(item == ModItems.rod_quad_thorium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_quad_thorium_fuel_depleted));
-
-		} else if(item == ModItems.rod_quad_plutonium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_quad_plutonium_fuel_depleted));
-
-		} else if(item == ModItems.rod_quad_mox_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_quad_mox_fuel_depleted));
-
-		} else if(item == ModItems.rod_quad_schrabidium_fuel) {
-			inventory.setStackInSlot(id, new ItemStack(ModItems.rod_quad_schrabidium_fuel_depleted));
-		}
+        Item out = conversions.get(item);
+        if(out == null) return;
+        inventory.setStackInSlot(id, new ItemStack(out));
 	}
 
 	private int getNeightbourCount(int id) {

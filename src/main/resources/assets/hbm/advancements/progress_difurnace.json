@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_difurnace.desc"
 		}
 	},
-	"parent": "hbm:progress_anvil",
+	"parent": "hbm:progress_burnerpress",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

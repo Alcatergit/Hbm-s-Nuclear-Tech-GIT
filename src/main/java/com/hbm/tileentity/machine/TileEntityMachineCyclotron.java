@@ -52,7 +52,7 @@ import org.jetbrains.annotations.NotNull;
 public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public static final long maxPower = 100000000;
+	public static final long maxPower = 1_000_000_000;
 	public int consumption = 1000000;
 
 	public boolean isOn;

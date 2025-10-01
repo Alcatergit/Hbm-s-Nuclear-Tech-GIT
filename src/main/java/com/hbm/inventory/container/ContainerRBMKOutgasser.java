@@ -40,11 +40,11 @@ public class ContainerRBMKOutgasser extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 
-			if(par2 == 0) {
-				if(!this.mergeItemStack(var5, rbmk.inventory.getSlots(), this.inventorySlots.size(), true)) {
+			if(par2 <= 1) {
+				if(!this.mergeItemStack(var5, 2, this.inventorySlots.size(), false)) {
 					return ItemStack.EMPTY;
 				}
-			} else if(!this.mergeItemStack(var5, 0, 1, false)) {
+			} else if(!this.mergeItemStack(var5, 0, 2, false)) {
 				return ItemStack.EMPTY;
 			}
 

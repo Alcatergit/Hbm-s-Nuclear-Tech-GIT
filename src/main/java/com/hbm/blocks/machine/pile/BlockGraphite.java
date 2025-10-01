@@ -33,8 +33,7 @@ public class BlockGraphite extends BlockFuel implements IToolable {
 	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool) {
 		if(tool != ToolType.HAND_DRILL)
 			return false;
-		IBlockState state = world.getBlockState(new BlockPos(x, y, z));
-		
+
 		if(!world.isRemote) {
 			world.setBlockState(new BlockPos(x, y, z), ModBlocks.block_graphite_drilled.getDefaultState().withProperty(BlockGraphiteDrilledBase.AXIS, side.getAxis()));
 			PacketDispatcher.wrapper.sendToAllAround(new ParticleBurstPacket(x, y, z, Block.getIdFromBlock(this), 0), new TargetPoint(world.provider.getDimension(), x, y, z, 50));

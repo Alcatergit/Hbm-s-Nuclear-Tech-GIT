@@ -1,5 +1,7 @@
 package com.hbm.inventory.gui;
 
+import net.minecraft.client.gui.GuiButton;
+import net.minecraftforge.fml.common.Optional;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerCrateSteel;
@@ -11,8 +13,10 @@ import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import vazkii.quark.api.IChestButtonCallback;
 
-public class GUICrateSteel extends GuiContainer {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IChestButtonCallback", modid = "quark")})
+public class GUICrateSteel extends GuiContainer implements IChestButtonCallback {
 
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crate_steel.png");
 	private TileEntityCrateSteel diFurnace;
@@ -45,5 +49,10 @@ public class GUICrateSteel extends GuiContainer {
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+	}
+
+	@Override
+	public boolean onAddChestButton(GuiButton guiButton, int i) {
+		return true;
 	}
 }

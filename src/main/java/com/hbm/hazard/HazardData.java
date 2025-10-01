@@ -21,6 +21,14 @@ public class HazardData {
 	int mutexBits = 0b0000_0000_0000_0000_0000_0000_0000_0000;
 	
 	List<HazardEntry> entries = new ArrayList();
+
+	public List<HazardEntry> createMulList(float mul){
+		List<HazardEntry> entriesCopy = new ArrayList();
+		for(HazardEntry e: entries) {
+			entriesCopy.add(e.clone(mul));
+		}
+		return entriesCopy;
+	}
 	
 	public HazardData addEntry(HazardTypeBase hazard) {
 		return this.addEntry(hazard, 1F, false);
@@ -51,6 +59,6 @@ public class HazardData {
 	}
 
 	public boolean isEmpty(){
-		return entries.size()==0;
+		return entries.isEmpty();
 	}
 }

@@ -15,6 +15,7 @@ import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
+import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
 import com.hbm.blocks.ModBlocks;
@@ -22,6 +23,7 @@ import com.hbm.util.WeightedRandomObject;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
@@ -1034,14 +1036,46 @@ public class SILEXRecipes {
 				.addOut(new WeightedRandomObject(new ItemStack(Blocks.GRAVEL), 12))
 				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_mercury), 32))
 				);
-		recipes.put(OSMIRIDIUM.crystal(), new SILEXRecipe(900, 100, EnumWavelengths.GAMMA)
-				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_osmiridium), 90))
-				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_schrabidium), 8))
-				.addOut(new WeightedRandomObject(new ItemStack(ModItems.nugget_bismuth), 2))
-				);
-		
-		//crystals minerals
+
+        addRecipe(OSMIRIDIUM.crystal(), 1200, 100, EnumWavelengths.GAMMA, new Object[]{
+                ModItems.nugget_osmiridium, 90,
+                ModItems.nugget_schrabidium, 8,
+                ModItems.nugget_bismuth, 2});
+
+        for(Entry<Integer, String> entry : BedrockOreRegistry.oreIndexes.entrySet()) {
+            int oreMeta = entry.getKey();
+            String oreName = entry.getValue();
+
+            addRecipe(new ComparableStack(ModItems.ore_bedrock_cleaned, 1, oreMeta), 200, 100, EnumWavelengths.IR, new Object[]{
+                    new ItemStack(ModItems.ore_bedrock_separated, 1, oreMeta), 9,
+                    new ItemStack(Blocks.GRAVEL, 1), 1});
+            addRecipe(new ComparableStack(ModItems.ore_bedrock_deepcleaned, 1, oreMeta), 200, 100, EnumWavelengths.VISIBLE, new Object[]{
+                    new ItemStack(ModItems.ore_bedrock_purified, 1, oreMeta), 90,
+                    new ItemStack(Blocks.GRAVEL, 1), 9,
+                    BedrockOreRegistry.getNugget(oreName), 1});
+            addRecipe(new ComparableStack(ModItems.ore_bedrock_nitrated, 1, oreMeta), 200, 100, EnumWavelengths.UV, new Object[]{
+                    new ItemStack(ModItems.ore_bedrock_nitrocrystalline, 1, oreMeta), 90,
+                    new ItemStack(Blocks.GRAVEL, 1), 8,
+                    BedrockOreRegistry.getNugget(oreName), 2});
+            addRecipe(new ComparableStack(ModItems.ore_bedrock_seared, 1, oreMeta), 200, 100, EnumWavelengths.XRAY, new Object[]{
+                    new ItemStack(ModItems.ore_bedrock_exquisite, 1, oreMeta), 90,
+                    new ItemStack(Blocks.GRAVEL, 1), 6,
+                    BedrockOreRegistry.getNugget(oreName), 4});
+            addRecipe(new ComparableStack(ModItems.ore_bedrock_perfect, 1, oreMeta), 200, 100, EnumWavelengths.GAMMA, new Object[]{
+                    new ItemStack(ModItems.ore_bedrock_enriched, 1, oreMeta), 90,
+                    new ItemStack(Blocks.GRAVEL, 1), 2,
+                    BedrockOreRegistry.getNugget(oreName), 8});
+        }
 	}
+
+    public static void addRecipe(Object input, int fluid, int consum, EnumWavelengths wave, Object[] outputs){
+        SILEXRecipe rec = new SILEXRecipe(fluid, consum, wave);
+        for(int i=0; i < outputs.length; i+=2){
+            if(outputs[i] instanceof ItemStack) rec.addOut(new WeightedRandomObject(outputs[i], (Integer) outputs[i+1]));
+            else if(outputs[i] instanceof Item) rec.addOut(new WeightedRandomObject(new ItemStack((Item) outputs[i]), (Integer) outputs[i+1]));
+        }
+        recipes.put(input, rec);
+    }
 
 	public static void addRecipe(int wavelength, int solution, int consumption, ItemStack input, ItemStack[] outputItems, int[] outputWeights){
 		SILEXRecipe newRecipe = new SILEXRecipe(solution, consumption, EnumWavelengths.values()[wavelength]);
@@ -1057,7 +1091,7 @@ public class SILEXRecipes {
 	
 	public static SILEXRecipe getOutput(ItemStack stack) {
 		
-		if(stack == null || stack.getItem() == null)
+		if(stack == null || stack.isEmpty())
 			return null;
 		
 		ComparableStack comp = translateItem(stack);
@@ -1122,7 +1156,7 @@ public class SILEXRecipes {
 			
 			if(ingredient instanceof String) {
 				List<ItemStack> ingredients = OreDictionary.getOres((String)ingredient);
-				if(ingredients.size() > 0) {
+				if(!ingredients.isEmpty()) {
 					SILEXRecipe output = getOutput(ingredients.get(0));
 					if(output != null)
 						recipes.put(ingredients, output);

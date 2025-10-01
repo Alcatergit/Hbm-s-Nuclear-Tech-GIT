@@ -79,7 +79,15 @@ public class NTMMaterial {
 		this.moltenColor = color;
 		return this;
 	}
-	
+
+    public boolean hasDust(){
+        return shapes.contains(MaterialShapes.DUST);
+    }
+
+    public boolean hasTinyDust(){
+        return shapes.contains(MaterialShapes.DUSTTINY);
+    }
+
 	public ItemStack make(Item item, int amount) {
 		return new ItemStack(item, amount, this.id);
 	}

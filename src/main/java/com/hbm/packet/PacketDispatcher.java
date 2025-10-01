@@ -12,7 +12,7 @@ public class PacketDispatcher {
 	
 	public static final SimpleNetworkWrapper wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(RefStrings.MODID);
 	
-	public static final void registerPackets(){
+	public static void registerPackets(){
 		int i = 0;
 
 		//PressPacket

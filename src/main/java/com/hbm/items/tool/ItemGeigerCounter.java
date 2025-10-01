@@ -3,17 +3,12 @@ package com.hbm.items.tool;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.ArmorFSB;
-import com.hbm.items.weapon.ItemGunEgon;
-import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
-import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
 
 import baubles.api.BaubleType;
@@ -23,7 +18,6 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;

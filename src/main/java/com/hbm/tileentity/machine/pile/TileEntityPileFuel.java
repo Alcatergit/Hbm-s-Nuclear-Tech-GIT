@@ -24,7 +24,7 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 			react();
 			
 			if(this.heat >= maxHeat) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				world.setBlockToAir(pos);
 				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
 			}
 			
@@ -35,7 +35,7 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 	}
 	
 	private void dissipateHeat() {
-		this.heat -= heat * 0.05; //remove 5% of the stored heat per tick
+		this.heat -= (int) (heat * 0.05); //remove 5% of the stored heat per tick
 	}
 	
 	private void react() {
@@ -65,12 +65,14 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.heat = nbt.getInteger("heat");
+		if(nbt.hasKey("progress")) this.progress = nbt.getInteger("progress");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("heat", this.heat);
+		nbt.setInteger("progress", this.progress);
 		return nbt;
 	}
 }

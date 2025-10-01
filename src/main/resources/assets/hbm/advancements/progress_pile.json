@@ -1,7 +1,7 @@
 {
 	"display": {
 		"icon": {
-			"item": "hbm:block_graphite_fuel"
+			"item": "hbm:pile_rod_plutonium"
 		},
 		"title": {
 			"translate": "hbm.achievement.progress_pile"

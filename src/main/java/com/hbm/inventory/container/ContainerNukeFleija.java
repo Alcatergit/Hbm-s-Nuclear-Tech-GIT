@@ -55,11 +55,11 @@ public class ContainerNukeFleija extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 10) {
-				if (!this.mergeItemStack(var5, 11, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 11, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
+			} else if (!this.mergeItemStack(var5, 0, 11, false)){
 				return ItemStack.EMPTY;
 			}
             

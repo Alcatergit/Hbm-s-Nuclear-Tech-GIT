@@ -53,8 +53,8 @@ public class Silo extends WorldGenerator
 		};
 	}
 
-	public boolean LocationIsValidSpawn(World world, int x, int y, int z)
- {
+	public boolean LocationIsValidSpawn(World world, int x, int y, int z) {
+        if(y < 21) return false;
 		IBlockState checkBlockState = world.getBlockState(new BlockPos(x, y - 1, z));
 		Block checkBlock = checkBlockState.getBlock();
 		Block blockAbove = world.getBlockState(new BlockPos(x, y , z)).getBlock();
@@ -83,22 +83,13 @@ public class Silo extends WorldGenerator
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, BlockPos pos)
-	{
+	public boolean generate(World world, Random rand, BlockPos pos) {
 		return generate(world, rand, pos, false);
 
 	}
 	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
-
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-       return true;
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+       return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
 
 	}
 

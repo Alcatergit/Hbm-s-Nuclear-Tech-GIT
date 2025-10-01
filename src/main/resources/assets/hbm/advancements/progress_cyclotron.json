@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_cyclotron.desc"
 		}
 	},
-	"parent": "hbm:progress_bismuth",
+	"parent": "hbm:progress_desh",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

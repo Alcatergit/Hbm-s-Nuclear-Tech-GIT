@@ -53,9 +53,7 @@ public class ItemLens extends Item {
     }
 	
 	public static long getLensDamage(ItemStack stack) {
-		
 		if(!stack.hasTagCompound()) {
-			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 		
@@ -63,7 +61,6 @@ public class ItemLens extends Item {
 	}
 	
 	public static void setLensDamage(ItemStack stack, long damage) {
-		
 		if(!stack.hasTagCompound()) {
 			stack.setTagCompound(new NBTTagCompound());
 		}

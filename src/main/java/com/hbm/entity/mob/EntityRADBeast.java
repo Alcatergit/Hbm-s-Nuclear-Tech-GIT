@@ -52,8 +52,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     public EntityRADBeast makeLeader() {
     	this.setDropChance(EntityEquipmentSlot.MAINHAND, 1);
-    	this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.coin_radiation));
-        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(360.0D);
+    	this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(360.0D);
         this.heal(this.getMaxHealth());
     	return this;
     }
@@ -64,7 +63,8 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 	        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
 
 	        for(EntityPlayer player : players) {
-	        	AdvancementManager.grantAchievement(player, AdvancementManager.achMeltdown);
+	        	AdvancementManager.grantAchievement(player, AdvancementManager.bossMeltdown);
+                player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_radiation));
 	        }
         }
         super.onDeath(cause);
@@ -226,7 +226,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
             } else if(r == 1) {
                 this.dropItem(this.isWet() ? ModItems.waste_mox : ModItems.rod_mox_fuel_depleted, 1);
                 
-            } else if(r == 2) {
+            } else {
                 this.dropItem(this.isWet() ? ModItems.waste_plutonium : ModItems.rod_plutonium_fuel_depleted, 1);
                 
             }

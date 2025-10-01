@@ -321,7 +321,7 @@ public class Ruin001 extends WorldGenerator {
 		world.setBlockState(new BlockPos(x + 5, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(new BlockPos(x + 6, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(new BlockPos(x + 7, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
-		world.setBlockState(new BlockPos(x + 8, y + 3, z + 10), ModBlocks.crashed_balefire.getDefaultState().withProperty(BlockCrashedBomb.FACING, EnumFacing.EAST), 3);
+		world.setBlockState(new BlockPos(x + 8, y + 3, z + 10), ModBlocks.crashed_balefire.getDefaultState(), 3);
 		world.setBlockState(new BlockPos(x + 9, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(new BlockPos(x + 10, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);
 		world.setBlockState(new BlockPos(x + 11, y + 3, z + 10), Blocks.AIR.getDefaultState(), 3);

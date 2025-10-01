@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 
 import com.hbm.items.ModItems;
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.util.ContaminationUtil;

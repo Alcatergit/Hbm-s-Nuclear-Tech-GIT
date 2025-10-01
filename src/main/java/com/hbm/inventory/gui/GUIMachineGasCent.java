@@ -22,26 +22,21 @@ public class GUIMachineGasCent extends GuiInfoContainer {
 		diFurnace = tedf;
 
 		this.xSize = 176;
-		this.ySize = 168;
+		this.ySize = 204;
 	}
 	
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 45, guiTop + 69 - 52, 16, 52, diFurnace.tank);
-		
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 92, guiTop + 15, 28, 54, mouseX, mouseY, new String[] {String.valueOf((int)((double)diFurnace.progress / (double)TileEntityMachineGasCent.processingSpeed * 100D)) + "%"});
-		
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 51 - 34, 16, 34, diFurnace.power, TileEntityMachineGasCent.maxPower);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 34, guiTop + 15, 22, 52, diFurnace.tank);
+
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 16, 16, 52, diFurnace.power, TileEntityMachineGasCent.maxPower);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	
 	@Override
 	protected void drawGuiContainerForegroundLayer(int i, int j) {
-		String name = this.diFurnace.hasCustomInventoryName() ? this.diFurnace.getInventoryName() : I18n.format(this.diFurnace.getInventoryName());
-		
-		this.fontRenderer.drawString(name, this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, 6, 4210752);
 		this.fontRenderer.drawString(I18n.format("container.inventory"), 8, this.ySize - 96 + 2, 4210752);
 	}
 	
@@ -52,13 +47,14 @@ public class GUIMachineGasCent extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 
-		int i = (int)diFurnace.getPowerRemainingScaled(34);
-		drawTexturedModalRect(guiLeft + 8, guiTop + 51 - i, 176, 34 - i, 16, i);
+		int i = (int)diFurnace.getPowerRemainingScaled(52);
+		drawTexturedModalRect(guiLeft + 152, guiTop + 69 - i, 176, 52 - i, 16, i);
 
 		int j = (int)diFurnace.getCentrifugeProgressScaled(37);
-		drawTexturedModalRect(guiLeft + 95, guiTop + 55 - j, 192, 37 - j, 22, j);
+		drawTexturedModalRect(guiLeft + 88, guiTop + 36, 192, 0, j, 13);
 		
 
-		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 16, 52, 44, 97);
+		FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 6, 52, 34, 96);
+        FFUtils.drawLiquid(diFurnace.tank, guiLeft, guiTop, zLevel, 6, 52, 50, 96);
 	}
 }

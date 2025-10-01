@@ -34,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class WasteEarth extends Block {
 
-	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
+	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 7);
 	
 	public WasteEarth(Material materialIn, boolean tick, String s) {
 		super(materialIn);

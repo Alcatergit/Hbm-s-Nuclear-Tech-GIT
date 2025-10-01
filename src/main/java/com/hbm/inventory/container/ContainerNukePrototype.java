@@ -58,11 +58,11 @@ public class ContainerNukePrototype extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 13) {
-				if (!this.mergeItemStack(var5, 14, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 14, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
+			} else if (!this.mergeItemStack(var5, 0, 14, false)){
 				return ItemStack.EMPTY;
 			}
             

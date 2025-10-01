@@ -9,7 +9,7 @@
 		"description": {
 			"translate": "hbm.achievement.progress_fensu.desc"
 		},
-		"frame": "goal"
+		"frame": "challenge"
 	},
 	"parent": "hbm:progress_dineutronium",
 	"criteria": {

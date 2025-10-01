@@ -71,6 +71,11 @@ public class ContainerCraneGrabber extends Container {
     }
 
     @Override
+    public ItemStack transferStackInSlot(EntityPlayer player, int slot) {
+        return ItemStack.EMPTY;
+    }
+
+        @Override
     public boolean canInteractWith(EntityPlayer player) {
         return grabber.isUseableByPlayer(player);
     }

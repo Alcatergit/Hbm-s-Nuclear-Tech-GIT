@@ -20,7 +20,7 @@ public class UpgradeManager {
 			Item item = inv.getStackInSlot(i).getItem();
 			if (item instanceof ItemMachineUpgrade upgrade) {
                 if (!upgrade.type.mutex) {
-					if(upgrade.type == UpgradeType.SPEED)
+					if(upgrade.type == UpgradeType.SPEED || upgrade.type == UpgradeType.SCREAM)
 						upgrades.compute(upgrade.type, (type, level) -> level == null ? upgrade.getSpeed() : level + upgrade.getSpeed());
 					else
 						upgrades.compute(upgrade.type, (type, level) -> level == null ? upgrade.tier : level + upgrade.tier);

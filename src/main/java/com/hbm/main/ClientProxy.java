@@ -630,8 +630,6 @@ public class ClientProxy extends ServerProxy {
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntitySubstation.class, new RenderSubstation());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineCentrifuge.class, new RenderCentrifuge());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineGasCent.class, new RenderGasCent());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineUF6Tank.class, new RenderUF6Tank());
-		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachinePuF6Tank.class, new RenderPuF6Tank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityRailgun.class, new RenderRailgun());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineFluidTank.class, new RenderFluidTank());
 		ClientRegistry.bindTileEntitySpecialRenderer(TileEntityMachineRefinery.class, new RenderRefinery());
@@ -2346,7 +2344,17 @@ public class ClientProxy extends ServerProxy {
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			entry.getKey().setTileEntityItemStackRenderer(entry.getValue());
 		}
-	}
+
+        ModItems.titanium_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S1", ResourceManager.titanium_shield_tex, ResourceManager.titanium_shield_blank_tex));
+        ModItems.steel_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S2", ResourceManager.steel_shield_tex, ResourceManager.steel_shield_blank_tex));
+        ModItems.alloy_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S3", ResourceManager.alloy_shield_tex, ResourceManager.alloy_shield_blank_tex));
+        ModItems.elec_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S4", ResourceManager.elec_shield_tex, ResourceManager.elec_shield_blank_tex));
+        ModItems.desh_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S5", ResourceManager.desh_shield_tex, ResourceManager.desh_shield_blank_tex));
+        ModItems.cobalt_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S6", ResourceManager.cobalt_shield_tex, ResourceManager.cobalt_shield_blank_tex));
+        ModItems.starmetal_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S7", ResourceManager.starmetal_shield_tex, ResourceManager.starmetal_shield_blank_tex));
+        ModItems.cmb_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S8", ResourceManager.cmb_shield_tex, ResourceManager.cmb_shield_blank_tex));
+        ModItems.schrabidium_shield.setTileEntityItemStackRenderer(new ItemRenderShield("S9", ResourceManager.schrabidium_shield_tex, ResourceManager.schrabidium_shield_blank_tex));
+    }
 	
 	@Override
 	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float pitch) {

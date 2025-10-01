@@ -62,7 +62,7 @@ public class CellularDungeon {
 	public void generate(World world, int x, int y, int z, Random rand) {
 		if(world.isRemote)
 			return;
-		
+
 		x -= dimX * width / 2;
 		z -= dimZ * width / 2;
 

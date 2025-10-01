@@ -46,8 +46,8 @@ public class DesertAtom002
 	Block Block17 = ModBlocks.ore_nether_plutonium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
-	Block Block20 = ModBlocks.machine_uf6_tank;
-	Block Block21 = ModBlocks.machine_puf6_tank;
+    Block Block20 = ModBlocks.barrel_iron;
+    Block Block21 = ModBlocks.barrel_corroded;
 	Block Block22 = ModBlocks.reinforced_brick;
 	Block Block23 = ModBlocks.waste_earth;
 	Block Block24 = ModBlocks.deco_lead;

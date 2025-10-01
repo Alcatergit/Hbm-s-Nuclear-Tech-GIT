@@ -75,6 +75,21 @@ public class HazardSystem {
 		if(o instanceof ComparableStack)
 			stackMap.put((ComparableStack)o, data);
 	}
+
+	public static HazardData getHaz(Object o){
+		if(o == null) return null;
+		if(o instanceof String)
+			return oreMap.get((String)o);
+		if(o instanceof Item)
+			return itemMap.get((Item)o);
+		if(o instanceof Block)
+			return itemMap.get(Item.getItemFromBlock((Block)o));
+		if(o instanceof ItemStack)
+			return stackMap.get(new ComparableStack((ItemStack)o));
+		if(o instanceof ComparableStack)
+			return stackMap.get((ComparableStack)o);
+		return null;
+	}
 	
 	/**
 	 * Prevents the stack from returning any HazardData

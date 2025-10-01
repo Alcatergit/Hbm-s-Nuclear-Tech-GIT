@@ -46,10 +46,10 @@ public class RefineryRecipes {
 			DictFrame.fromOne(ModItems.oil_tar, EnumTarType.PARAFFIN)));
 
 		refineryRecipesMap.put(ModForgeFluids.TOXIC_FLUID, new Pair(new FluidStack[]{
-			new FluidStack(ModForgeFluids.WASTEFLUID, 50),
-			new FluidStack(ModForgeFluids.WASTEGAS, 40),
-			new FluidStack(ModForgeFluids.CORIUM_FLUID, 4),
-			new FluidStack(ModForgeFluids.MUD_FLUID, 1)},
+			new FluidStack(ModForgeFluids.COLLOID, 40),
+			new FluidStack(ModForgeFluids.WASTEFLUID, 25),
+			new FluidStack(ModForgeFluids.WASTEGAS, 20),
+			new FluidStack(ModForgeFluids.CORIUM_FLUID, 1)},
 			new ItemStack(ModItems.nuclear_waste_tiny, 1)));
 	}
 

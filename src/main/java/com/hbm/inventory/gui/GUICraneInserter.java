@@ -3,13 +3,18 @@ package com.hbm.inventory.gui;
 import com.hbm.inventory.container.ContainerCraneInserter;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.network.TileEntityCraneInserter;
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.common.Optional;
 import org.lwjgl.opengl.GL11;
+import vazkii.quark.api.IChestButtonCallback;
 
-public class GUICraneInserter extends GuiInfoContainer {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IChestButtonCallback", modid = "quark")})
+public class GUICraneInserter extends GuiInfoContainer implements IChestButtonCallback {
     private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crane_inserter.png");
     private TileEntityCraneInserter inserter;
 
@@ -40,5 +45,10 @@ public class GUICraneInserter extends GuiInfoContainer {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
         drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+    }
+
+    @Override
+    public boolean onAddChestButton(GuiButton guiButton, int i) {
+        return true;
     }
 }

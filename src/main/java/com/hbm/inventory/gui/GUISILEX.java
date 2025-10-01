@@ -98,7 +98,7 @@ public class GUISILEX extends GuiInfoContainer {
 		drawTexturedModalRect(guiLeft + 26, guiTop + 124 - f, 176, 109 - f, 16, f);
 
 		int i = silex.getFluidScaled(52);
-		drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType().getName().equals(ModForgeFluids.ACID.getName()) ? 43 : 50, i, 7);
+        if(silex.getTankType() != null) drawTexturedModalRect(guiLeft + 8, guiTop + 42, 176, silex.getTankType().getName().equals(ModForgeFluids.ACID.getName()) ? 43 : 50, i, 7);
 
 		if(silex.mode != EnumWavelengths.NULL) {
 			float freq = 0.0125F * (float)Math.pow(2, silex.mode.ordinal());

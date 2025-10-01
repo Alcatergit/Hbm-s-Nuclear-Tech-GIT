@@ -134,7 +134,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 		}
 		
 		//insert mold
-		if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() == ModItems.mold) {
+		if(!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == ModItems.mold) {
 			Mold mold = ((ItemMold) player.getHeldItem(hand).getItem()).getMold(player.getHeldItem(hand));
 			
 			if(mold.size == cast.getMoldSize()) {
@@ -158,7 +158,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 			}
 		}
 		//shovel scrap
-		if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemTool && ((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel")) {
+		if(!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() instanceof ItemTool && ((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel")) {
 			if(cast.amount > 0) {
 				ItemStack scrap = ItemScraps.create(new MaterialStack(cast.type, cast.amount));
 				if(!player.inventory.addItemStackToInventory(scrap)) {

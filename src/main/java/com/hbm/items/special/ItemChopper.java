@@ -118,7 +118,7 @@ public class ItemChopper extends Item {
 	}
 	
 	public Entity spawnCreature(World world, int dmg, double x, double y, double z) {
-		Entity entity = null;
+		EntityLiving entity = null;
 
 		if(this == ModItems.spawn_chopper)
 			entity = new EntityHunterChopper(world);
@@ -134,7 +134,7 @@ public class ItemChopper extends Item {
 		
 		if(entity != null) {
 
-			EntityLiving entityliving = (EntityLiving) entity;
+			EntityLiving entityliving = entity;
 			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
 			entityliving.rotationYawHead = entityliving.rotationYaw;
 			entityliving.renderYawOffset = entityliving.rotationYaw;

@@ -449,7 +449,8 @@ public class CompatibilityConfig {
 			"oreTh232",
 			"oreThorium232",
 			"oreVolcanic",
-			"oreSteel"
+			"oreSteel",
+            "oreNetherQuartz"
 		});
 	}
 

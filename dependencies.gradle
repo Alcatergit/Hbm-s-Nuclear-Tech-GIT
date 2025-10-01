@@ -43,8 +43,6 @@ dependencies {
 
     compileOnly rfg.deobf("curse.maven:opencomputers-223008:5274236")
 
-    //compileOnly rfg.deobf("dev.galacticraft:galacticraft-legacy:${version_gc}")
-
     compileOnly rfg.deobf("curse.maven:galacticraft-legacy-564236:4671122")
 
     compileOnly rfg.deobf("com.azanor.baubles:Baubles:${version_baubles}")
@@ -53,6 +51,9 @@ dependencies {
 
     compileOnly rfg.deobf("cofh:CoFHCore:1.12.2-${version_cofhcore}:universal")
 
+    compileOnly rfg.deobf("curse.maven:quark-243121:2924091")
+
+    compileOnly rfg.deobf("curse.maven:inventory-tweaks-223094:2482481")
 
     implementation rfg.deobf('curse.maven:had-enough-items-557549:5471944')
 

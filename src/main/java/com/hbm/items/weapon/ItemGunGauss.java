@@ -96,7 +96,7 @@ public class ItemGunGauss extends ItemGunBase {
 				} catch (Exception x){
 					x.printStackTrace();
 				}
-				r.entityHit.attackEntityFrom(ModDamageSource.causeTauDamage(player, null), damage);
+				r.entityHit.attackEntityFrom(ModDamageSource.causeTauDamage(player, player), damage);
 				break;
 			} else {
 				Vec3d normal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());

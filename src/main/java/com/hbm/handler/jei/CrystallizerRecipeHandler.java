@@ -20,22 +20,12 @@ import net.minecraft.util.ResourceLocation;
 
 public class CrystallizerRecipeHandler implements IRecipeCategory<CrystallizerRecipe> {
 
-	public static ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID + ":textures/gui/processing/gui_crystallizer.png");
+	public static ResourceLocation gui_rl = new ResourceLocation(RefStrings.MODID + ":textures/gui/jei/gui_nei_three_to_one.png");
 	
 	protected final IDrawable background;
-	protected final IDrawableStatic progressStatic;
-	protected final IDrawableAnimated progressAnimated;
-	protected final IDrawableStatic powerStatic;
-	protected final IDrawableAnimated powerAnimated;
 	
 	public CrystallizerRecipeHandler(IGuiHelper help) {
-		background = help.createDrawable(gui_rl, 6, 15, 155, 55);
-		
-		progressStatic = help.createDrawable(gui_rl, 192, 0, 22, 16);
-		progressAnimated = help.createAnimatedDrawable(progressStatic, 600, StartDirection.LEFT, false);
-		
-		powerStatic = help.createDrawable(gui_rl, 176, 0, 16, 34);
-		powerAnimated = help.createAnimatedDrawable(powerStatic, 60, StartDirection.TOP, true);
+		background = help.createDrawable(gui_rl, 52, 34, 90, 18);
 	}
 	
 	@Override
@@ -57,24 +47,16 @@ public class CrystallizerRecipeHandler implements IRecipeCategory<CrystallizerRe
 	public IDrawable getBackground() {
 		return background;
 	}
-	
-	@Override
-	public void drawExtras(Minecraft minecraft) {
-		powerAnimated.draw(minecraft, 2, 2);
-		progressAnimated.draw(minecraft, 98, 19);
-	}
 
 	@Override
 	public void setRecipe(IRecipeLayout recipeLayout, CrystallizerRecipe recipeWrapper, IIngredients ingredients) {
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		
-		guiItemStacks.init(0, true, 73, 19);
-		guiItemStacks.init(1, true, 37, 19);
-		guiItemStacks.init(2, false, 133, 19);
-		guiItemStacks.init(3, true, 1, 37);
+		guiItemStacks.init(0, true, 0, 0);
+		guiItemStacks.init(1, true, 18, 0);
+		guiItemStacks.init(2, false, 72, 0);
 		
 		guiItemStacks.set(ingredients);
-		guiItemStacks.set(3, JeiRecipes.getBatteries());
 	}
 
 }

@@ -11,7 +11,7 @@
 		},
 		"frame": "goal"
 	},
-	"parent": "hbm:progress_pu239",
+	"parent": "hbm:progress_transmut",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

@@ -8,18 +8,34 @@ import java.util.HashMap;
 
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
+import com.hbm.items.ModItems;
+import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.lib.Library;
 import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.util.WeightedRandomObject;
 
+import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.WeightedRandom;
+import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fluids.FluidStack;
+
+import static com.hbm.items.ModItems.*;
+import static com.hbm.items.ModItems.ore_bedrock_deepcleaned;
+import static com.hbm.items.ModItems.ore_bedrock_enriched;
+import static com.hbm.items.ModItems.ore_bedrock_exquisite;
+import static com.hbm.items.ModItems.ore_bedrock_nitrated;
+import static com.hbm.items.ModItems.ore_bedrock_nitrocrystalline;
+import static com.hbm.items.ModItems.ore_bedrock_perfect;
+import static com.hbm.items.ModItems.ore_bedrock_purified;
+import static com.hbm.items.ModItems.ore_bedrock_seared;
+import static com.hbm.items.ModItems.ore_bedrock_separated;
 
 //TODO: clean this shit up
 @Spaghetti("everything")
@@ -30,7 +46,6 @@ public class BedrockOreRegistry {
 
 	public static HashMap<String, String> oreResults = new HashMap();
 	public static HashMap<String, Integer> oreColors = new HashMap();
-	public static HashMap<String, String> oreNames = new HashMap();
 	public static HashMap<String, Integer> oreTiers = new HashMap();
 	
 	public static HashMap<Integer, List<WeightedRandomObject>> oreCasino = new HashMap();
@@ -38,23 +53,22 @@ public class BedrockOreRegistry {
 	public static void registerBedrockOres(){
 		collectBedrockOres();
 		fillOreCasino();
+        registerBedrockOreOreDict();
 	}
 
 	public static boolean is3DBlock(String ore){
 		boolean isBlock = false;
 		for(ItemStack item : OreDictionary.getOres(ore))
 			isBlock |= (item != null && !item.isEmpty() && item.getItem() instanceof ItemBlock);
-			if(isBlock) return true;
-		return false;
-	}
+        return isBlock;
+    }
 
 	public static boolean isActualItem(String ore){
 		boolean isActualItem = false;
 		for(ItemStack item : OreDictionary.getOres(ore))
 			isActualItem |= (item != null && !item.isEmpty() && item.getItem() != Items.AIR);
-			if(isActualItem) return true;
-		return false;
-	}
+        return isActualItem;
+    }
 
 	public static boolean tryRegister(int index, String oreName, String output){
 		if(OreDictionary.doesOreNameExist(output) && isActualItem(output)){
@@ -66,6 +80,39 @@ public class BedrockOreRegistry {
 		}
 		return false;
 	}
+
+    public static ItemStack getNugget(String oreName){
+        if(oreName.equals("oreLead") || oreName.equals("oreCopper")) return new ItemStack(ModItems.nugget_cadmium, 1);
+        if(oreName.equals("oreGold") || oreName.equals("oreTungsten")) return new ItemStack(ModItems.nugget_bismuth, 1);
+        if(oreName.equals("oreUranium")) return new ItemStack(ModItems.nugget_ra226, 1);
+        if(oreName.equals("oreThorium")) return new ItemStack(ModItems.nugget_technetium, 1);
+        if(oreName.equals("oreStarmetal")) return new ItemStack(ModItems.powder_meteorite_tiny, 1);
+        if(oreName.equals("oreRedstone")) return new ItemStack(ModItems.nugget_mercury, 1);
+        if(oreName.equals("oreRedPhosphorus")) return new ItemStack(ModItems.nugget_arsenic, 1);
+        if(oreName.equals("oreNeodymium")) return new ItemStack(ModItems.nugget_tantalium, 1);
+        if(oreName.equals("oreCertusQuartz")) return new ItemStack(ModItems.nugget_silicon, 1);
+        return new ItemStack(ModItems.dust, 1);
+    }
+
+    public static void registerBedrockOreOreDict(){
+        for(Map.Entry<Integer, String> e: oreIndexes.entrySet()) {
+                int oreMeta = e.getKey();
+                String name = e.getValue().substring(3);
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_centrifuged, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_cleaned, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_separated, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_deepcleaned, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_purified, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrated, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrocrystalline, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_seared, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_exquisite, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_perfect, 1, oreMeta));
+                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_enriched, 1, oreMeta));
+
+        }
+    }
 
 	public static void collectBedrockOres(){
 		int index = 0;
@@ -80,13 +127,13 @@ public class BedrockOreRegistry {
 					continue;
 				}
 
-				oreOutput = "dust"+resourceName;
+				oreOutput = "ingot"+resourceName;
 				if(tryRegister(index, oreName, oreOutput)){
 					index++;
 					continue;
 				}
 
-				oreOutput = "ingot"+resourceName;
+				oreOutput = "dust"+resourceName;
 				if(tryRegister(index, oreName, oreOutput)){
 					index++;
 					continue;
@@ -95,13 +142,6 @@ public class BedrockOreRegistry {
 				oreOutput = "item"+resourceName;
 				if(tryRegister(index, oreName, oreOutput)){
 					index++;
-					continue;
-				}
-
-				oreOutput = "food"+resourceName;
-				if(tryRegister(index, oreName, oreOutput)){
-					index++;
-					continue;
 				}
 			}
 		}
@@ -135,10 +175,10 @@ public class BedrockOreRegistry {
 		if(tier == 2) return 48;
 		if(tier == 3) return 32;
 		if(tier == 4) return 8;
-		if(tier == 5) return 2;
-		if(tier >= 6) return 1;
-		return 1;
-	}
+		if(tier == 5) return 4;
+        if(tier == 6) return 2;
+        return 1;
+    }
 
 	public static void fillOreCasino(){
 		for(Integer dimID : BedrockOreJsonConfig.dimOres.keySet()){
@@ -162,7 +202,7 @@ public class BedrockOreRegistry {
 		int tierCount = 0;
 		int tierSum = 0;
 		List<ItemStack> outputs = OreDictionary.getOres(oreName);
-		Block ore = null;
+		Block ore;
 		for(ItemStack stack : outputs){
 			ore = Block.getBlockFromItem(stack.getItem());
 			int tier = ore.getHarvestLevel(ore.getDefaultState());
@@ -172,7 +212,7 @@ public class BedrockOreRegistry {
 			}
 		}
 		if(tierCount > 0)
-			return (int)(tierSum/tierCount);
+			return tierSum/tierCount;
 		return 0;
 	}
 
@@ -183,7 +223,7 @@ public class BedrockOreRegistry {
 	public static void registerOreColors(){
 		for(Map.Entry<String, String> entry : oreResults.entrySet()) {
 			List<ItemStack> oreResult = OreDictionary.getOres(entry.getValue());
-			if(oreResult.size() > 0){
+			if(!oreResult.isEmpty()){
 				int color = Library.getColorFromItemStack(oreResult.get(0));
 				oreColors.put(entry.getKey(), color);
 			}
@@ -196,7 +236,7 @@ public class BedrockOreRegistry {
 		for(String entry : OreDictionary.getOreNames()) {
 			if(!entry.startsWith("ore")) continue;
 			List<ItemStack> oreResult = OreDictionary.getOres(entry);
-			if(oreResult.size() > 0){
+			if(!oreResult.isEmpty()){
 				int color = Library.getColorFromItemStack(oreResult.get(0));
 				oreScanColors.put(entry, color);
 			}
@@ -211,7 +251,7 @@ public class BedrockOreRegistry {
 
 	public static ItemStack getResource(String ore){
 		List<ItemStack> outputs = OreDictionary.getOres(oreResults.get(ore));
-		if(outputs.size() > 0) return outputs.get(0);
+		if(!outputs.isEmpty()) return outputs.get(0);
 		return new ItemStack(Items.AIR);
 	}
 

@@ -31,32 +31,19 @@ public class LibraryDungeon extends WorldGenerator
 	{
 		IBlockState blockAboveState = world.getBlockState(pos.up(8));
 		IBlockState blockBelow = world.getBlockState(pos.down());
-		
-		if(blockAboveState.getMaterial().isSolid() && blockBelow.getMaterial().isSolid() && pos.getY() - 1 > 4)
-		{
-			return true;
-		}
-		return false;
-	}
+
+        return blockAboveState.getMaterial().isSolid() && blockBelow.getMaterial().isSolid() && pos.getY() - 1 > 4;
+    }
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		return generate(world, rand, pos, false);
 	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
 
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
-
-       return true;
-
-	}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+    }
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

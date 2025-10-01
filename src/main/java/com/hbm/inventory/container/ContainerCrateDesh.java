@@ -2,6 +2,7 @@ package com.hbm.inventory.container;
 
 import com.hbm.tileentity.machine.TileEntityCrateDesh;
 
+import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -9,6 +10,7 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
+@ChestContainer(rowSize = 13) //Inventory-Tweaks
 public class ContainerCrateDesh extends Container {
 
 	private TileEntityCrateDesh crate;
@@ -43,7 +45,7 @@ public class ContainerCrateDesh extends Container {
 			var3 = var5.copy();
 
 			if(par2 <= crate.inventory.getSlots() - 1) {
-				if(!this.mergeItemStack(var5, crate.inventory.getSlots(), this.inventorySlots.size(), true)) {
+				if(!this.mergeItemStack(var5, crate.inventory.getSlots(), this.inventorySlots.size(), false)) {
 					return ItemStack.EMPTY;
 				}
 			} else if(!this.mergeItemStack(var5, 0, crate.inventory.getSlots(), false)) {

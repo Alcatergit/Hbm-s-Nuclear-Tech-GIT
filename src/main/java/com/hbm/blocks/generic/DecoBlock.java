@@ -113,11 +113,6 @@ public class DecoBlock extends BlockContainer {
 	}
 	
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return super.getItemDropped(state, rand, fortune);
-	}
-	
-	@Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos) {
 		EnumFacing te = state.getValue(FACING);
 		if(this == ModBlocks.steel_wall)

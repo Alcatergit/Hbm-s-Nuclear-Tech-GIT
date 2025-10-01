@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_bedrock_ore.desc"
 		}
 	},
-	"parent": "hbm:progress_oexcavator",
+	"parent": "hbm:progress_excavator",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

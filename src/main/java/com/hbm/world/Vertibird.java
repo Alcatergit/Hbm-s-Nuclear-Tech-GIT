@@ -33,8 +33,11 @@ public class Vertibird extends WorldGenerator
 	{
 		return new Block[]
 		{
-			Blocks.SAND,
-			Blocks.SANDSTONE,
+            Blocks.GRASS,
+            Blocks.DIRT,
+            Blocks.STONE,
+            Blocks.SAND,
+            Blocks.SANDSTONE,
 		};
 	}
 
@@ -74,19 +77,11 @@ public class Vertibird extends WorldGenerator
 		return generate(world, rand, pos, false);
 
 	}
-	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
-	{
-		int i = rand.nextInt(1);
 
-		if(i == 0)
-		{
-		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-		}
+    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+        return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
 
-       return true;
-
-	}
+    }
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

@@ -167,7 +167,7 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 			}
 			age++;
 			if(age == 1200){
-				System.out.println("NTM F "+currentSample+" "+Math.round(10000D * 100D*currentSample/(double)this.maxSamples)/10000D+"% "+currentSample+"/"+this.maxSamples);
+//				System.out.println("NTM F "+currentSample+" "+Math.round(10000D * 100D*currentSample/(double)this.maxSamples)/10000D+"% "+currentSample+"/"+this.maxSamples);
 				age = 0;
 			}
 			MutableBlockPos pos = new BlockPos.MutableBlockPos();
@@ -435,7 +435,7 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 	}
 
 	public void setScale(int i) {
-		this.dataManager.set(SCALE, Integer.valueOf(i));
+		this.dataManager.set(SCALE, i);
 		s0 = 0.84 * i;
 		s1 = 0.74 * i;
 		s2 = 0.64 * i;

@@ -46,14 +46,13 @@ public class BedrockOreJsonConfig {
 	public static void setDefaults() {
 		addEntry(0, 15, Arrays.asList(
 			"orePlutonium", 
-			"oreQuartz", 
+			"oreNetherQuartz",
 			"oreInfernalCoal", 
 			"oreRedPhosphorus", 
 			"oreSchrabidium", 
 			"oreNeodymium", 
 			"oreNitanium",
 			"oreDesh",
-			"oreCheese",
 			"oreMercury",
 			"oreCarbon", 
 			"oreCrystal", 
@@ -85,15 +84,14 @@ public class BedrockOreJsonConfig {
 			"oreAdrite"
 		), true);
 		addEntry(-6, 30, Arrays.asList(//Mining Dim
-			"orePlutonium", 
-			"oreQuartz", 
-			"oreInfernalCoal", 
+			"orePlutonium",
+            "oreNetherQuartz",
+            "oreInfernalCoal",
 			"oreRedPhosphorus", 
 			"oreSchrabidium", 
 			"oreNeodymium", 
 			"oreNitanium",
 			"oreDesh",
-			"oreCheese",
 			"oreMercury",
 			"oreCarbon", 
 			"oreCrystal", 

@@ -99,13 +99,8 @@ public class ItemAMSCore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-		if(this == ModItems.ams_core_thingy && MainRegistry.polaroidID == 11)
-    	{
-    		return true;
-    	}
-    	
-    	return false;
-	}
+        return this == ModItems.ams_core_thingy && MainRegistry.polaroidID == 11;
+    }
 	
 	public static int getPowerBase(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemAMSCore))

@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_silex.desc"
 		}
 	},
-	"parent": "hbm:progress_crystalizer",
+	"parent": "hbm:progress_pu239",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

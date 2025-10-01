@@ -49,11 +49,11 @@ private TileEntityNukeBoy nukeBoy;
 			var3 = var5.copy();
 			
             if (par2 <= 4) {
-				if (!this.mergeItemStack(var5, 5, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 5, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
+			} else if (!this.mergeItemStack(var5, 0, 5, false)){
 				return ItemStack.EMPTY;
 			}
             

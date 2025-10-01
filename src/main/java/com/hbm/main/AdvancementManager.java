@@ -22,7 +22,6 @@ public class AdvancementManager {
 	public static Advancement achRadDeath;
 
 	public static Advancement achSacrifice;
-	public static Advancement achPotato;
 	public static Advancement achSpace;
 	public static Advancement achFOEQ;
 	public static Advancement achFiend;
@@ -44,9 +43,11 @@ public class AdvancementManager {
 	public static Advancement achSomeWounds;
 	public static Advancement progress_dfc;
 	public static Advancement progress_rbmk_boom;
-	
-	
-	public static Advancement bossCreeper;
+    public static Advancement progress_watz_boom;
+    public static Advancement progress_nuke;
+
+
+    public static Advancement bossCreeper;
 	public static Advancement bossMeltdown;
 	public static Advancement bossMaskman;
 	public static Advancement bossWorm;
@@ -84,8 +85,10 @@ public class AdvancementManager {
 		achSomeWounds = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsomewounds"));
 		progress_dfc = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_dfc"));
 		progress_rbmk_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_rbmk_boom"));
-		
-		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
+        progress_watz_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_watz_boom"));
+        progress_nuke = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_nuke"));
+
+        bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "x_bosscreeper"));
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));
 		bossMaskman = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmaskman"));
 		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossworm"));

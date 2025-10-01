@@ -10,15 +10,15 @@ public class FusionRecipes {
 
 	public static int getByproductChance(Fluid plasma) {
 		if(plasma == ModForgeFluids.PLASMA_DT){
-			return 1200; 
+			return 600;
 		} else if(plasma == ModForgeFluids.PLASMA_HD){
 			return 1200;
 		} else if(plasma == ModForgeFluids.PLASMA_HT){
-			return 1200;
+			return 900;
 		} else if(plasma == ModForgeFluids.PLASMA_MX){
-			return 2400;
+			return 1200;
 		} else if(plasma == ModForgeFluids.PLASMA_PUT){
-			return 2400;
+			return 1000;
 		} else if(plasma == ModForgeFluids.PLASMA_BF){
 			return 150;
 		}

@@ -31,6 +31,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.jetbrains.annotations.NotNull;
 
 public class ItemCell extends Item {
 
@@ -85,6 +86,12 @@ public class ItemCell extends Item {
 	}
 
 	@Override
+	public @NotNull ItemStack getContainerItem(@NotNull ItemStack itemStack) {
+		if(isEmptyCell(itemStack)) return ItemStack.EMPTY;
+		return super.getContainerItem(itemStack);
+	}
+
+	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		return isFullOrEmpty(stack) ? 64 : 1;
 	}
@@ -129,15 +136,12 @@ public class ItemCell extends Item {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		if(stack.getTagCompound() == null)
-			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerCell(stack, 1000);
 	}
 
 	public static boolean isFullCell(ItemStack stack, Fluid fluid) {
 		if(stack != null) {
-			if(stack.getItem() instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == 1000)
-				return true;
+            return stack.getItem() instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == 1000;
 		}
 		return false;
 	}
@@ -146,19 +150,15 @@ public class ItemCell extends Item {
 		if(stack != null) {
 			if(stack.getItem() == ModItems.cell && stack.getTagCompound() != null) {
 				FluidStack s = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerCell.FLUID_NBT_KEY));
-				if(s == null || s.amount <= 0)
-					return true;
-			} else if (stack.getItem() == ModItems.cell && stack.getTagCompound() == null){
-				return true;
-			}
+                return s == null || s.amount <= 0;
+			} else return stack.getItem() == ModItems.cell && stack.getTagCompound() == null;
 		}
 		return false;
 	}
 
 	public static boolean hasFluid(ItemStack stack, Fluid f) {
 		if(stack != null) {
-			if(stack.getItem() == ModItems.cell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == f)
-				return true;
+            return stack.getItem() == ModItems.cell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == f;
 		}
 		return false;
 	}

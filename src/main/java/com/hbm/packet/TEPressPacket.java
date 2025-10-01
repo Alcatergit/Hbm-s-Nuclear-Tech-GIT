@@ -20,6 +20,8 @@ public class TEPressPacket implements IMessage {
 	int z;
 	int item;
 	int meta;
+    int stampItem;
+    int stampMeta;
 	int progress;
 
 	public TEPressPacket()
@@ -27,17 +29,23 @@ public class TEPressPacket implements IMessage {
 		
 	}
 
-	public TEPressPacket(int x, int y, int z, ItemStack stack, int progress)
+	public TEPressPacket(int x, int y, int z, ItemStack stack, ItemStack stamp, int progress)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.item = 0;
 		this.meta = 0;
-		if(stack != null) {
+        this.stampItem = 0;
+        this.stampMeta = 0;
+        if(stack != null && !stack.isEmpty()) {
 			this.item = Item.getIdFromItem(stack.getItem());
 			this.meta = stack.getItemDamage();
 		}
+        if(stamp != null && !stamp.isEmpty()) {
+            this.stampItem = Item.getIdFromItem(stamp.getItem());
+            this.stampMeta = stamp.getItemDamage();
+        }
 		this.progress = progress;
 	}
 
@@ -48,7 +56,9 @@ public class TEPressPacket implements IMessage {
 		z = buf.readInt();
 		item = buf.readInt();
 		meta = buf.readInt();
-		progress = buf.readInt();
+        stampItem = buf.readInt();
+        stampMeta = buf.readInt();
+        progress = buf.readInt();
 	}
 
 	@Override
@@ -58,7 +68,9 @@ public class TEPressPacket implements IMessage {
 		buf.writeInt(z);
 		buf.writeInt(item);
 		buf.writeInt(meta);
-		buf.writeInt(progress);
+        buf.writeInt(stampItem);
+        buf.writeInt(stampMeta);
+        buf.writeInt(progress);
 	}
 
 	public static class Handler implements IMessageHandler<TEPressPacket, IMessage> {
@@ -69,19 +81,21 @@ public class TEPressPacket implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-				if (te != null && te instanceof TileEntityMachinePress) {
-						
-					TileEntityMachinePress gen = (TileEntityMachinePress) te;
-					gen.item = m.item;
+				if (te != null && te instanceof TileEntityMachinePress gen) {
+
+                    gen.item = m.item;
 					gen.meta = m.meta;
-					gen.progress = m.progress;
+                    gen.stampItem = m.stampItem;
+                    gen.stampMeta = m.stampMeta;
+                    gen.progress = m.progress;
 				}
-				if (te != null && te instanceof TileEntityMachineEPress) {
-						
-					TileEntityMachineEPress gen = (TileEntityMachineEPress) te;
-					gen.item = m.item;
+				if (te != null && te instanceof TileEntityMachineEPress gen) {
+
+                    gen.item = m.item;
 					gen.meta = m.meta;
-					gen.progress = m.progress;
+                    gen.stampItem = m.stampItem;
+                    gen.stampMeta = m.stampMeta;
+                    gen.progress = m.progress;
 				}
 			});
 			

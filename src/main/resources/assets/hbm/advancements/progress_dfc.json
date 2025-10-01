@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_dfc.desc"
 		}
 	},
-	"parent": "hbm:progress_dineutronium",
+	"parent": "hbm:progress_osmiridium",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

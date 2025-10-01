@@ -2,6 +2,7 @@ package com.hbm.items.weapon;
 
 import java.util.List;
 
+import com.hbm.config.BombConfig;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
@@ -41,13 +42,32 @@ public class ItemAmmo extends Item {
 
 		//NUKES
 		if(this == ModItems.ammo_nuke_low) {
-			list.add(TextFormatting.RED + "- " + I18nUtil.resolveKey("ammo.trait.dblast"));
+			list.add(TextFormatting.YELLOW + " "+ I18nUtil.resolveKey("desc.radius", 20));
+			if(!BombConfig.disableNuclear){
+				list.add(TextFormatting.DARK_GREEN + "["+I18nUtil.resolveKey("trait.fallout")+"]");
+				list.add(" " + TextFormatting.GREEN +I18nUtil.resolveKey("desc.radius",(int)20*(1+BombConfig.falloutRange/100)));
+			}
+		}
+		if(this == ModItems.ammo_nuke) {
+			list.add(TextFormatting.YELLOW + " "+ I18nUtil.resolveKey("desc.radius", 35));
+			if(!BombConfig.disableNuclear){
+				list.add(TextFormatting.DARK_GREEN + "["+I18nUtil.resolveKey("trait.fallout")+"]");
+				list.add(" " + TextFormatting.GREEN +I18nUtil.resolveKey("desc.radius",(int)35*(1+BombConfig.falloutRange/100)));
+			}
 		}
 		if(this == ModItems.ammo_nuke_high) {
-			list.add(TextFormatting.BLUE + "+ " + I18nUtil.resolveKey("ammo.trait.blast"));
-			list.add(TextFormatting.BLUE + "+ " + I18nUtil.resolveKey("ammo.trait.fallout"));
+			list.add(TextFormatting.YELLOW + " "+ I18nUtil.resolveKey("desc.radius", 50));
+			if(!BombConfig.disableNuclear){
+				list.add(TextFormatting.DARK_GREEN + "["+I18nUtil.resolveKey("trait.fallout")+"]");
+				list.add(" " + TextFormatting.GREEN +I18nUtil.resolveKey("desc.radius",(int)50*(1+BombConfig.falloutRange/100)));
+			}
 		}
 		if(this == ModItems.ammo_nuke_tots) {
+			list.add(TextFormatting.YELLOW + " "+ I18nUtil.resolveKey("desc.radius", 10));
+			if(!BombConfig.disableNuclear){
+				list.add(TextFormatting.DARK_GREEN + "["+I18nUtil.resolveKey("trait.fallout")+"]");
+				list.add(" " + TextFormatting.GREEN +I18nUtil.resolveKey("desc.radius",(int)10*(1+BombConfig.falloutRange/100)));
+			}
 			list.add(TextFormatting.BLUE + "+ " + I18nUtil.resolveKey("ammo.trait.incbomb"));
 			list.add(TextFormatting.YELLOW + "* " + I18nUtil.resolveKey("ammo.trait.fun"));
 			list.add(TextFormatting.RED + "- " + I18nUtil.resolveKey("ammo.trait.daccuracy"));

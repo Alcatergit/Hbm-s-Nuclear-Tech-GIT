@@ -136,9 +136,8 @@ public class ItemGunEgon extends ItemGunBase {
 			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+1);
 			Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
-			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && CompatibilityConfig.isWarDim(world)){
-				EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
-				if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
+			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase ent && CompatibilityConfig.isWarDim(world)){
+                if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
 					return;
 				}
 				this.charge = this.charge * this.chargeScaling;

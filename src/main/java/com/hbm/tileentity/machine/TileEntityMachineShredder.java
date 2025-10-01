@@ -71,8 +71,7 @@ public class TileEntityMachineShredder extends TileEntityMachineBase implements 
 		if(slot >= 9 && slot <= 26)
 			return true;
 		if(slot >= 27 && slot <= 29){
-			if(itemStack.getItemDamage() == itemStack.getMaxDamage() && itemStack.getMaxDamage() > 0)
-				return true;
+            return itemStack.getItemDamage() == itemStack.getMaxDamage() && itemStack.getMaxDamage() > 0;
 		}
 		return false;
 	}

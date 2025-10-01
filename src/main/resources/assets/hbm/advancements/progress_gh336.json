@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_gh336"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_gh336"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_gh336.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_schrabidium",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:nugget_gh336"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 300
+    }
+}

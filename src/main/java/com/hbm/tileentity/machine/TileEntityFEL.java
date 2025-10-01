@@ -73,10 +73,9 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 			
 			if(this.isOn && !(inventory.getStackInSlot(1).getCount() == 0)) {
 				
-				if(inventory.getStackInSlot(1).getItem() instanceof ItemFELCrystal) {
-					
-					ItemFELCrystal crystal = (ItemFELCrystal) inventory.getStackInSlot(1).getItem();
-					this.mode = crystal.wavelength;
+				if(inventory.getStackInSlot(1).getItem() instanceof ItemFELCrystal crystal) {
+
+                    this.mode = crystal.wavelength;
 					
 				} else { this.mode = EnumWavelengths.NULL; }
 				
@@ -142,18 +141,15 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 							BlockPos silex_pos = new BlockPos(x + dir.offsetX, yCoord, z + dir.offsetZ);
 							TileEntity te = world.getTileEntity(silex_pos);
 						
-							if(te instanceof TileEntitySILEX) {
-								TileEntitySILEX silex = (TileEntitySILEX) te;
-								int meta = silex.getBlockMetadata() - BlockDummyable.offset;
+							if(te instanceof TileEntitySILEX silex) {
+                                int meta = silex.getBlockMetadata() - BlockDummyable.offset;
 								if(rotationIsValid(meta, this.getBlockMetadata() - BlockDummyable.offset) && i >= 5 && silexSpacing == false	) {
 									if(silex.mode != this.mode) {
 										silex.mode = this.mode;
 										this.missingValidSilex = false;
 										silexSpacing = true;
-										continue;
 									} 
 								} else {
-									MachineSILEX silexBlock = (MachineSILEX)silex.getBlockType();
 									world.setBlockToAir(silex_pos);
 									world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Item.getItemFromBlock(ModBlocks.machine_silex))));
 								} 
@@ -276,7 +272,9 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 		super.readFromNBT(nbt);
 		
 		this.power = nbt.getLong("power");
-		this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
+		try {
+			this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
+		}catch(IllegalArgumentException ignored){ this.mode = EnumWavelengths.NULL;}
 		this.isOn = nbt.getBoolean("isOn");
 		this.missingValidSilex = nbt.getBoolean("valid");
 		this.distance = nbt.getInteger("distance");

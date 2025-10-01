@@ -35,7 +35,7 @@ public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerIt
 
 	private FluidStack getFluid(){
 		if(!container.hasTagCompound()){
-			container.setTagCompound(new NBTTagCompound());
+			return null;
 		}
 		NBTTagCompound tag = container.getTagCompound();
 		if(!tag.hasKey(FLUID_NBT_KEY)){

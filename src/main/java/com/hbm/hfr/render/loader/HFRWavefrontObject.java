@@ -83,7 +83,7 @@ public class HFRWavefrontObject implements IModelCustom
                 lineCount++;
                 currentLine = currentLine.replaceAll("\\s+", " ").trim();
 
-                if (currentLine.startsWith("#") || currentLine.length() == 0)
+                if (currentLine.startsWith("#") || currentLine.isEmpty())
                 {
                     continue;
                 }
@@ -635,4 +635,8 @@ public class HFRWavefrontObject implements IModelCustom
 	public void tessellateAllExcept(com.hbm.render.amlfrom1710.Tessellator tes, String... excluded){
 		throw new RuntimeException("Tessellate not supported on HFR model");
 	}
+
+    public WavefrontObjVBO asVBO() {
+        return new WavefrontObjVBO(this);
+    }
 }

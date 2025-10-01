@@ -8,17 +8,22 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.hazard.modifier.*;
 import com.hbm.hazard.transformer.*;
 import com.hbm.hazard.type.*;
+import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.OreDictManager.DictFrame;
+import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.forgefluid.FluidTypeHandler;
 
 import com.hbm.items.machine.ItemWatzPellet;
+import com.hbm.items.special.ItemBedrockOre;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.Map;
 
 @SuppressWarnings("unused") //shut the fuck up
 public class HazardRegistry {
@@ -524,7 +529,8 @@ public class HazardRegistry {
 		HazardSystem.register(powder_coltan_ore, makeData(ASBESTOS, 3F));
 		
 		HazardSystem.register(ash_digamma, makeData(DIGAMMA, 0.001F));
-		HazardSystem.register(particle_digamma, makeData(RADIATION, 100F).addEntry(DIGAMMA, 0.3333F));
+        HazardSystem.register(digamma_matter, makeData(DIGAMMA, 0.2F));
+        HazardSystem.register(particle_digamma, makeData(RADIATION, 100F).addEntry(DIGAMMA, 0.3333F));
 		
 		HazardSystem.register(frozen_grass, makeData(CRYOGENIC, 3));
 		HazardSystem.register(frozen_log, makeData(CRYOGENIC, 2));
@@ -569,7 +575,11 @@ public class HazardRegistry {
 		registerHazItem(drillbit_tcalloy_diamond, 20 * tcalloy);
 		registerHazItem(drillbit_ferro, 24 * ferro);
 		registerHazItem(drillbit_ferro_diamond, 24 * ferro);
-		
+
+        registerHazItem(anvil_ferrouranium, ferro * 10);
+        registerHazItem(anvil_schrabidate, sb * 10);
+        HazardSystem.register(anvil_osmiridium, makeData(DIGAMMA, 0.4F));
+
 		//Fluid Hazards
 		for(Fluid entry : FluidRegistry.getRegisteredFluids().values()) {
 			if(FluidTypeHandler.noContainer(entry)) continue;
@@ -605,12 +615,39 @@ public class HazardRegistry {
 		
 		registerTrafos();
 	}
+
+	public static void registerBedrockOreHazards(){
+		for(Map.Entry<Integer, String> e : BedrockOreRegistry.oreIndexes.entrySet()) {
+			int oreMeta = e.getKey();
+			String output = BedrockOreRegistry.oreResults.get(e.getValue());
+			registerHazSameAsItem(new ItemStack(ore_bedrock, 1, oreMeta), output, 3.2f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_centrifuged, 1, oreMeta), output, 3f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_cleaned, 1, oreMeta), output, 2.8f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_separated, 1, oreMeta), output, 2.6f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_deepcleaned, 1, oreMeta), output, 2.4f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_purified, 1, oreMeta), output, 2.2f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_nitrated, 1, oreMeta), output, 2f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_nitrocrystalline, 1, oreMeta), output, 1.8f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_seared, 1, oreMeta), output, 1.6f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_exquisite, 1, oreMeta), output, 1.4f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_perfect, 1, oreMeta), output, 1.2f);
+			registerHazSameAsItem(new ItemStack(ore_bedrock_enriched, 1, oreMeta), output, 1f);
+		}
+	}
 	
 	public static void registerTrafos() {
 		HazardSystem.trafos.add(new HazardTransformerRadiationContainer());
 		HazardSystem.trafos.add(new HazardTransformerFluidContainer());
 		// if(!(GeneralConfig.enableLBSM && GeneralConfig.enableLBSMSafeCrates))	HazardSystem.trafos.add(new HazardTransformerRadiationContainer());
 		// if(!(GeneralConfig.enableLBSM && GeneralConfig.enableLBSMSafeMEDrives))	HazardSystem.trafos.add(new HazardTransformerRadiationME());
+	}
+
+	private static void registerHazSameAsItem(ItemStack item, String templateItem, float mul){
+		HazardData hazDat = HazardSystem.getHaz(templateItem);
+		if(hazDat == null || hazDat.isEmpty()) return;
+		HazardData copiedHazDat = new HazardData();
+		copiedHazDat.entries = hazDat.createMulList(mul);
+		HazardSystem.register(item, copiedHazDat);
 	}
 
 	private static void registerHazItem(Object item, float rads){

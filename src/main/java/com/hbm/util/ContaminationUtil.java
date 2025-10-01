@@ -36,6 +36,8 @@ import com.hbm.hazard.type.HazardTypeRadiation;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.item.EntityItemFrame;
+import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityMooshroom;
@@ -61,6 +63,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.World;
+
+import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
 
 public class ContaminationUtil {
 
@@ -88,7 +92,7 @@ public class ContaminationUtil {
 		if(e instanceof IRadiationImmune)
 			return;
 		
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return;
 
 		if(e instanceof EntityPlayer && (((EntityPlayer) e).capabilities.isCreativeMode || ((EntityPlayer) e).isSpectator()))
@@ -96,10 +100,8 @@ public class ContaminationUtil {
 		
 		if(e instanceof EntityPlayer && e.ticksExisted < 200)
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
 
-		f *= calculateRadiationMod(entity);
+        f *= calculateRadiationMod(entity);
 
 		if(entity.hasCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null)) {
 			HbmLivingCapability.IEntityHbmProps ent = entity.getCapability(HbmLivingCapability.EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null);
@@ -257,7 +259,7 @@ public class ContaminationUtil {
 		double rads = HbmLivingProps.getRadBuf(entity);
 		if(entity instanceof EntityPlayer)
 			 rads = rads + HbmLivingProps.getNeutron((EntityPlayer)entity)*20;
-		return (double)rads;
+		return rads;
 	}
 
 	public static double getNoNeutronPlayerRads(EntityLivingBase entity) {
@@ -430,6 +432,8 @@ public class ContaminationUtil {
 				e instanceof EntityZombieHorse ||
 				e instanceof EntitySkeletonHorse ||
 				e instanceof EntityArmorStand ||
+				e instanceof EntityItemFrame ||
+				e instanceof EntityIronGolem ||
 				e instanceof IRadiationImmune || checkConfigEntityImmunity(e);
 	}
 	
@@ -605,14 +609,13 @@ public class ContaminationUtil {
 				contaminate((EntityLivingBase)e, HazardType.DIGAMMA, ContaminationType.DIGAMMA, eDig);
 			}
 			
-			if(fire3d > 0.025) {
+			if(fire3d > 0.025 && res < 2) {
 				float fireDmg = fire3d;
-				fireDmg /= (float)(dmgLen * dmgLen * res * res);
+				fireDmg /= (float)(dmgLen * dmgLen * dmgLen);
 				if(fireDmg > 0.025){
-					if(fireDmg > 0.1 && e instanceof EntityPlayer) {
-						EntityPlayer p = (EntityPlayer) e;
-						
-						if(p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int)len) == 0) {
+					if(fireDmg > 0.1 && e instanceof EntityPlayer p) {
+
+                        if(p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int)len) == 0) {
 							p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
 						}
 
@@ -625,18 +628,15 @@ public class ContaminationUtil {
 				}
 			}
 
-			if(len < blastRange && blast3d > 0.025) {
-				float blastDmg = blast3d;
-				blastDmg /= (float)(dmgLen * dmgLen * res);
-				if(blastDmg > 0.025){
-					if(rad3d > 0)
-						e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
-					else
-						e.attackEntityFrom(ModDamageSource.blast, blastDmg);
+			if(blast3d > 0 && res < 10000 && len < blastRange) {
+				float blastDmg = blast3d / (float)(dmgLen * dmgLen * res);
+				if(blastDmg > 0.025 && blastRange - shockSpeed * 2 < len){
+					if(rad3d > 0) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
+					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
 				}
-				e.motionX += vec.xCoord * 0.005D * blastDmg;
-				e.motionY += vec.yCoord * 0.005D * blastDmg;
-				e.motionZ += vec.zCoord * 0.005D * blastDmg;
+				e.motionX += vec.xCoord * 0.0075D * blastDmg;
+				e.motionY += vec.yCoord * 0.0075D * blastDmg;
+				e.motionZ += vec.zCoord * 0.0075D * blastDmg;
 			}
 		}
 	}
@@ -698,11 +698,9 @@ public class ContaminationUtil {
 			HbmLivingProps.setRadEnv(entity, radEnv + amount);
 		}
 		
-		if(entity instanceof EntityPlayer) {
-			
-			EntityPlayer player = (EntityPlayer)entity;
-			
-			switch(cont) {
+		if(entity instanceof EntityPlayer player) {
+
+            switch(cont) {
 			case GOGGLES:			if(ArmorUtil.checkForGoggles(player))	return false; break;
 			case FARADAY:			if(ArmorUtil.checkForFaraday(player))	return false; break;
 			case HAZMAT:			if(ArmorUtil.checkForHazmat(player))	return false; break;

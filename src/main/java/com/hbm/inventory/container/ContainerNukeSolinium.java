@@ -53,11 +53,11 @@ public class ContainerNukeSolinium extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 8) {
-				if (!this.mergeItemStack(var5, 9, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 9, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
+			} else if (!this.mergeItemStack(var5, 0, 9, false)){
 				return ItemStack.EMPTY;
 			}
             

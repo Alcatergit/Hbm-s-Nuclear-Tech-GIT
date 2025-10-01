@@ -13,7 +13,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GUIMachineShredder extends GuiInfoContainer {
 
-	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_shredder.png");
+	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/processing/gui_shredder.png");
 	private TileEntityMachineShredder diFurnace;
 
 	public GUIMachineShredder(InventoryPlayer invPlayer, TileEntityMachineShredder tedf) {
@@ -21,7 +21,7 @@ public class GUIMachineShredder extends GuiInfoContainer {
 		diFurnace = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 222;
+		this.ySize = 233;
 	}
 	
 	@Override

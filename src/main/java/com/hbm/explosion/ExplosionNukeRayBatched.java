@@ -9,6 +9,7 @@ import java.util.List;
 
 import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.util.math.BlockPos;
@@ -44,11 +45,13 @@ public class ExplosionNukeRayBatched {
 
 	private static final int maxY = 255;
 	private static final int minY = 0;
+	public boolean ignoreWater = false;
 
 	public boolean isAusf3Complete = false;
 	public int rayCheckInterval = 100;
+	public int waterLevel;
 
-	public ExplosionNukeRayBatched(World world, double x, double y, double z, int strength, int radius) {
+	public ExplosionNukeRayBatched(World world, double x, double y, double z, int strength, int radius, boolean ignoreWater) {
 		this.world = world;
 		this.posX = x;
 		this.posY = y;
@@ -64,6 +67,13 @@ public class ExplosionNukeRayBatched {
 		this.gspX = Math.PI;
 		this.gspY = 0.0;
 		this.rayCheckInterval = 10000/radius;
+		this.ignoreWater = ignoreWater;
+		this.waterLevel = EntityFalloutRain.getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
+		if(this.waterLevel == 0){
+			this.waterLevel = world.getSeaLevel();
+		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
+			this.waterLevel = world.getSeaLevel() - this.waterLevel;
+		}
 	}
 
 	private void generateGspUp(){
@@ -99,6 +109,12 @@ public class ExplosionNukeRayBatched {
         hitPositions.set(((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart()));
 	}
 
+	public boolean waterCheck(Block b, int y){
+		if(b == Blocks.AIR) return false;
+		if(this.ignoreWater && y < this.waterLevel) return b != Blocks.WATER && b != Blocks.FLOWING_WATER;
+		return true;
+	}
+
 	int age = 0;
 	public void collectTip(int time) {
 		if(!CompatibilityConfig.isWarDim(world)){
@@ -116,7 +132,7 @@ public class ExplosionNukeRayBatched {
 		Vec3 vec;
 		age++;
 		if(age == 1200){
-			System.out.println("NTM C "+raysProcessed+" "+Math.round(10000D * 100D*gspNum/(double)gspNumMax)/10000D+"% "+gspNum+"/"+gspNumMax);
+//			System.out.println("NTM C "+raysProcessed+" "+Math.round(10000D * 100D*gspNum/(double)gspNumMax)/10000D+"% "+gspNum+"/"+gspNumMax);
 			age = 0;
 		}
 		while(this.gspNumMax >= this.gspNum){
@@ -150,7 +166,7 @@ public class ExplosionNukeRayBatched {
 
 				//save block positions in to-destroy-boolean[] until rayStrength is 0 
 				if(rayStrength > 0){
-					if(b != Blocks.AIR) {
+					if(waterCheck(b, iY)) {
 						//all-air chunks don't need to be buffered at all
 						addPos(iX, iY, iZ);
 					}
@@ -255,6 +271,13 @@ public class ExplosionNukeRayBatched {
 		posZ = nbt.getDouble("posZ");
 		gspNumMax = (int)(2.5 * Math.PI * Math.pow(strength, 2));
 		rayCheckInterval = 10000/radius;
+		if(nbt.hasKey("igW")) ignoreWater = nbt.getBoolean("igW");
+		this.waterLevel = EntityFalloutRain.getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
+		if(this.waterLevel == 0){
+			this.waterLevel = world.getSeaLevel();
+		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
+			this.waterLevel = world.getSeaLevel() - this.waterLevel;
+		}
 
 		if(nbt.hasKey("gspNum")){
 			gspNum = nbt.getInteger("gspNum");
@@ -281,6 +304,7 @@ public class ExplosionNukeRayBatched {
 		nbt.setDouble("posX", posX);
 		nbt.setDouble("posY", posY);
 		nbt.setDouble("posZ", posZ);
+		nbt.setBoolean("igW", ignoreWater);
 		
 		if(BombConfig.enableNukeNBTSaving){
 			nbt.setInteger("gspNum", gspNum);

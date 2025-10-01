@@ -112,15 +112,14 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
 
             if(mode != MODE_REDSTONE && tickCounter%10==0) {
                 tickCounter = 0;
-                int pack = 0;
-
-                switch(mode) {
-                    case MODE_1: pack = 1; break;
-                    case MODE_2: pack = 2; break;
-                    case MODE_4: pack = 4; break;
-                    case MODE_8: pack = 8; break;
-                    case MODE_16: pack = 16; break;
-                }
+                int pack = switch (mode) {
+                    case MODE_1 -> 1;
+                    case MODE_2 -> 2;
+                    case MODE_4 -> 4;
+                    case MODE_8 -> 8;
+                    case MODE_16 -> 16;
+                    default -> 0;
+                };
 
                 int fullStacks = 0;
 

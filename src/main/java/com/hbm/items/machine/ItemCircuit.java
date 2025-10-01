@@ -29,6 +29,5 @@ public class ItemCircuit extends ItemEnumMulti {
 		CONTROLLER,
 		CONTROLLER_ADVANCED,
 		CONTROLLER_QUANTUM,
-
 	}
 }

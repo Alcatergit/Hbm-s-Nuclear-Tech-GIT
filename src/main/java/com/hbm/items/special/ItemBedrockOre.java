@@ -97,7 +97,7 @@ public class ItemBedrockOre extends Item {
 			TileEntity te = worldIn.getTileEntity(pos);
 			if(te instanceof TileEntityBedrockOre){
 				ItemStack bedrockOreItem = player.getHeldItem(hand);
-				if(bedrockOreItem != null && bedrockOreItem.getItem() == ModItems.ore_bedrock){
+				if(!bedrockOreItem.isEmpty() && bedrockOreItem.getItem() == ModItems.ore_bedrock){
 					((TileEntityBedrockOre)te).setOre(getOreTag(bedrockOreItem));
 				}
 			}

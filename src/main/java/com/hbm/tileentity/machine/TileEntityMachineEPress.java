@@ -27,12 +27,15 @@ import org.jetbrains.annotations.NotNull;
 public class TileEntityMachineEPress extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public int progress = 0;
-	public long power = 0;
+    public int prevProgress = 0;
+    public long power = 0;
 	public final static int maxProgress = 200;
 	public final static long maxPower = 50000;
 	public int item;
 	public int meta;
-	boolean isRetracting = false;
+    public int stampItem;
+    public int stampMeta;
+    boolean isRetracting = false;
 
 	public TileEntityMachineEPress() {
 		super(4);
@@ -58,15 +61,13 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 		
 		if(i == 0 && stack.getItem() instanceof IBatteryItem)
 			return true;
-		
-		if(!(stack.getItem() instanceof ItemStamp) && i == 2)
-			return true;
-		return false;
-	}
+
+        return !(stack.getItem() instanceof ItemStamp) && i == 2;
+    }
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e){
-		return e.ordinal() == 0 ? new int[] { 3 } : new int[]{ 0, 1, 2 };
+		return new int[]{ 0, 1, 2, 3 };
 	}
 	
 	@Override
@@ -162,7 +163,9 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 			}
 
 			detectAndSendChanges();
-		}
+		} else {
+            prevProgress = progress;
+        }
 	}
 	
 	private int detectProgress;
@@ -189,7 +192,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 			detectItem = inventory.getStackInSlot(2).copy();
 		}
 		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), inventory.getStackInSlot(1), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(mark)
 			markDirty();
 		

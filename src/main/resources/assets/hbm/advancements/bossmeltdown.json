@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.bossMeltdown.desc"
 		}
 	},
-	"parent": "hbm:bosscreeper",
+	"parent": "hbm:x_bosscreeper",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

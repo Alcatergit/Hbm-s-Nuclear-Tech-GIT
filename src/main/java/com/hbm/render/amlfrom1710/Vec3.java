@@ -191,7 +191,7 @@ public class Vec3
      */
     public double length()
     {
-        return (double)MathHelper.sqrt(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
+        return MathHelper.sqrt(this.xCoord * this.xCoord + this.yCoord * this.yCoord + this.zCoord * this.zCoord);
     }
     
     public double lengthSquared(){

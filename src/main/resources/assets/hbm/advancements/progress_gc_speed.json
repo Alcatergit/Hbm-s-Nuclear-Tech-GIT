@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:upgrade_gc_speed"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_gc_speed"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_gc_speed.desc"
+		}
+	},
+	"parent": "hbm:progress_centrifuge_2",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:upgrade_gc_speed"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 36
+    }
+}

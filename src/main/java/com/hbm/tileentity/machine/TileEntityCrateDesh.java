@@ -1,23 +1,23 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
+import net.minecraftforge.fml.common.Optional;
+import vazkii.quark.api.IDropoffManager;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.items.ModItems;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityCrateDesh extends TileEntityLockableBase {
+@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
+public class TileEntityCrateDesh extends TileEntityLockableBase implements IDropoffManager {
 
 	public ItemStackHandler inventory;
 	private String customName;
@@ -29,6 +29,10 @@ public class TileEntityCrateDesh extends TileEntityLockableBase {
 				markDirty();
 			}
 		};
+	}
+
+	public boolean acceptsDropoff(EntityPlayer player) {
+		return true;
 	}
 
 	public boolean canAccess(EntityPlayer player) {

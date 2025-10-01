@@ -187,9 +187,8 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		TileEntity center = world.getTileEntity(pos);
 		for(EnumFacing e : EnumFacing.VALUES) {
 			TileEntity te = world.getTileEntity(pos.offset(e));
-			if(te instanceof IFluidPipeMk2) {
-				IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
-				if(pipe.getNetwork() != null)
+			if(te instanceof IFluidPipeMk2 pipe) {
+                if(pipe.getNetwork() != null)
 					pipe.getNetwork().destroy();
 			}
 		}
@@ -207,9 +206,8 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		for(EnumFacing e : EnumFacing.VALUES) {
 			BlockPos offset = pos.offset(e);
 			TileEntity te = world.getTileEntity(offset);
-			if(te instanceof IFluidPipeMk2) {
-				IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
-				if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
+			if(te instanceof IFluidPipeMk2 pipe) {
+                if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
 					otherNetworks.add(pipe.getNetwork());
 				}
 			}
@@ -220,7 +218,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			return;
 		} else {
 			FFPipeNetworkMk2 net = otherNetworks.remove(0);
-			while(otherNetworks.size() > 0)
+			while(!otherNetworks.isEmpty())
 				net = FFPipeNetworkMk2.mergeNetworks(net, otherNetworks.remove(0));
 			network = net;
 			net.tryAdd(this);

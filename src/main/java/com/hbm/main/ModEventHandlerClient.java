@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 
+import com.hbm.render.item.*;
 import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
 import com.hbm.items.IModelRegister;
@@ -97,27 +98,6 @@ import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.entity.DSmokeRenderer;
-import com.hbm.render.item.AssemblyTemplateBakedModel;
-import com.hbm.render.item.AssemblyTemplateRender;
-import com.hbm.render.item.BakedModelCustom;
-import com.hbm.render.item.BakedModelNoGui;
-import com.hbm.render.item.ChemTemplateBakedModel;
-import com.hbm.render.item.ChemTemplateRender;
-import com.hbm.render.item.CrucibleTemplateBakedModel;
-import com.hbm.render.item.CrucibleTemplateRender;
-import com.hbm.render.item.FFIdentifierModel;
-import com.hbm.render.item.FFIdentifierRender;
-import com.hbm.render.item.FluidBarrelBakedModel;
-import com.hbm.render.item.FluidBarrelRender;
-import com.hbm.render.item.FluidCanisterBakedModel;
-import com.hbm.render.item.FluidCanisterRender;
-import com.hbm.render.item.FluidTankLeadBakedModel;
-import com.hbm.render.item.FluidTankLeadRender;
-import com.hbm.render.item.FluidTankBakedModel;
-import com.hbm.render.item.FluidTankRender;
-import com.hbm.render.item.ItemRenderBase;
-import com.hbm.render.item.ItemRenderLibrary;
-import com.hbm.render.item.TEISRBase;
 import com.hbm.render.item.weapon.B92BakedModel;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
@@ -383,6 +363,10 @@ public class ModEventHandlerClient {
 			for(int i = 0; i < 4; i ++){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
+        } else if(item == Item.getItemFromBlock(ModBlocks.crashed_balefire)){
+            for(int i = 0; i < 4; i ++){
+                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
+            }
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, meta, ((IHasCustomModel) item).getResourceLocation());
 		} else if(item instanceof IHasCustomMetaModels) {
@@ -626,21 +610,17 @@ public class ModEventHandlerClient {
 
 	public static void swapModels(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
-		IBakedModel model = reg.getObject(loc);
-		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
-		if(render instanceof TEISRBase) {
-			((TEISRBase) render).itemModel = model;
-			reg.putObject(loc, new BakedModelCustom((TEISRBase) render));
+		if(item.getTileEntityItemStackRenderer() instanceof TEISRBase render) {
+            render.itemModel = reg.getObject(loc);
+			reg.putObject(loc, new BakedModelCustom(render));
 		}
 	}
 
 	public static void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
-		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
-		IBakedModel model = reg.getObject(loc);
-		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
-		if(render instanceof TEISRBase) {
-			((TEISRBase) render).itemModel = model;
-			reg.putObject(loc, new BakedModelNoGui((TEISRBase) render));
+        ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
+        if(item.getTileEntityItemStackRenderer() instanceof TEISRBase render) {
+            render.itemModel = reg.getObject(loc);
+			reg.putObject(loc, new BakedModelNoGui(render));
 		}
 	}
 	
@@ -747,7 +727,7 @@ public class ModEventHandlerClient {
 		RenderMultiblock.structScaffold = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
 		RenderSoyuzMultiblock.blockIcons[0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
-		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete_smooth");
+		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete");
 		RenderSoyuzMultiblock.blockIcons[2] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
 		RenderWatzMultiblock.casingSprite = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_casing_tooled");
@@ -852,9 +832,8 @@ public class ModEventHandlerClient {
 		} else {
 			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
 		}
-		if(e instanceof EntityLivingBase) {
-			EntityLivingBase living = (EntityLivingBase) e;
-			if(living.deathTime > 0 || living.hurtTime > 0) {
+		if(e instanceof EntityLivingBase living) {
+            if(living.deathTime > 0 || living.hurtTime > 0) {
 				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 0.0F, 0.0F, 0.3F);
 			} else {
 				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
@@ -995,12 +974,7 @@ public class ModEventHandlerClient {
 					}
 				}
 			}
-			Iterator<EntityLivingBase> itr = specialDeathEffectEntities.iterator();
-			while(itr.hasNext()){
-				Entity ent = itr.next();
-				if(ent.isDead)
-					itr.remove();
-			}
+            specialDeathEffectEntities.removeIf(ent -> ent.isDead);
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			if(player != null) {
 				boolean isHooked = player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand());
@@ -1045,7 +1019,7 @@ public class ModEventHandlerClient {
 			
 			ItemStack armor = player.inventory.armorItemInSlot(i);
 			
-			if(armor != null && ArmorModHandler.hasMods(armor)) {
+			if(!armor.isEmpty() && ArmorModHandler.hasMods(armor)) {
 				
 				for(ItemStack mod : ArmorModHandler.pryMods(armor)) {
 					
@@ -1056,7 +1030,7 @@ public class ModEventHandlerClient {
 			}
 			
 			//because armor that isn't ItemArmor doesn't render at all
-			if(armor != null && armor.getItem() instanceof JetpackBase) {
+			if(!armor.isEmpty() && armor.getItem() instanceof JetpackBase) {
 				((ItemArmorMod)armor.getItem()).modRender(event, armor);
 			}
 		}
@@ -1253,9 +1227,8 @@ public class ModEventHandlerClient {
 			}
 		}
 		
-		if(entity instanceof EntityPlayer){
-			EntityPlayer player = (EntityPlayer) entity;
-			net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
+		if(entity instanceof EntityPlayer player){
+            net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
 			BufferBuilder buf = tes.getBuffer();
 			if(player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
 				if(Mouse.isButtonDown(1) && ItemSwordCutter.startPos != null){
@@ -1539,11 +1512,11 @@ public class ModEventHandlerClient {
 			GlStateManager.disableBlend();
 		}
 		/// HANDLE GUN AND AMMO OVERLAYS ///
-		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 			((IItemHUD)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).renderHUD(event, event.getType(), player, player.getHeldItem(EnumHand.MAIN_HAND), EnumHand.MAIN_HAND);
 		}
 
-		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 			((IItemHUD)player.getHeldItem(EnumHand.OFF_HAND).getItem()).renderHUD(event, event.getType(), player, player.getHeldItem(EnumHand.OFF_HAND), EnumHand.OFF_HAND);
 		}
 
@@ -1574,7 +1547,7 @@ public class ModEventHandlerClient {
 			World world = mc.world;
 			RayTraceResult mop = mc.objectMouseOver;
 			
-			if(mop != null && mop.typeOfHit == mop.typeOfHit.BLOCK) {
+			if(mop != null && mop.typeOfHit == Type.BLOCK) {
 				if(world.getBlockState(mop.getBlockPos()).getBlock() instanceof ILookOverlay) {
 					((ILookOverlay) world.getBlockState(mop.getBlockPos()).getBlock()).printHook(event, world, mop.getBlockPos().getX(), mop.getBlockPos().getY(), mop.getBlockPos().getZ());
 				}
@@ -1594,9 +1567,8 @@ public class ModEventHandlerClient {
 				long time = System.currentTimeMillis() - animation.startMillis;
 
 				int duration = 0;
-				if(animation instanceof BlenderAnimation){
-					BlenderAnimation banim = ((BlenderAnimation)animation);
-					//duration = (int) Math.ceil(banim.wrapper.anim.length * (1F/Math.abs(banim.wrapper.speedScale)));
+				if(animation instanceof BlenderAnimation banim){
+                    //duration = (int) Math.ceil(banim.wrapper.anim.length * (1F/Math.abs(banim.wrapper.speedScale)));
 					EnumHand hand = i < 9 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 					if(!Minecraft.getMinecraft().player.getHeldItem(hand).getTranslationKey().equals(banim.key))
 						HbmAnimations.hotbar[i] = null;
@@ -1637,11 +1609,11 @@ public class ModEventHandlerClient {
 
 		ModelPlayer renderer = evt.getRenderer().getMainModel();
 		
-		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 			renderer.rightArmPose = ArmPose.BOW_AND_ARROW;
 			// renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
 		}
-		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 			renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 		}
 		JetpackHandler.preRenderPlayer(player);
@@ -1662,15 +1634,12 @@ public class ModEventHandlerClient {
 		if(specialDeathEffectEntities.contains(event.getEntity())){
 			event.setCanceled(true);
 		}
-		if(event.getEntity() instanceof AbstractClientPlayer && event.getRenderer().getMainModel() instanceof ModelBiped){
-			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
+		if(event.getEntity() instanceof AbstractClientPlayer player && event.getRenderer().getMainModel() instanceof ModelBiped renderer){
 
-			ModelBiped renderer = (ModelBiped) event.getRenderer().getMainModel();
-			
-			if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+            if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
-			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+			if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		}
@@ -1714,7 +1683,7 @@ public class ModEventHandlerClient {
 
 		boolean m1 = ItemGunBase.m1;
 		boolean m2 = ItemGunBase.m2;
-		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
 			if(event.getButton() == 0)
 				event.setCanceled(true);
@@ -1731,7 +1700,7 @@ public class ModEventHandlerClient {
 				item.startActionClient(player.getHeldItemMainhand(), player.world, player, false, EnumHand.MAIN_HAND);
 			}
 		}
-		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 
 			if(event.getButton() == 0)
 				event.setCanceled(true);

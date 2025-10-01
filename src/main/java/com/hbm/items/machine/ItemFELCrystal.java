@@ -49,7 +49,7 @@ public class ItemFELCrystal extends Item {
 		public int guiColor;
 		public TextFormatting textColor;
 
-		private EnumWavelengths(String name, String wavelength, int color, int guiColor, TextFormatting textColor) {
+		EnumWavelengths(String name, String wavelength, int color, int guiColor, TextFormatting textColor) {
 			this.name = name;
 			this.wavelengthRange = wavelength;
 			this.renderedBeamColor = color;

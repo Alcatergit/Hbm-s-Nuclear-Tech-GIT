@@ -658,6 +658,16 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.RED_SANDSTONE.getDefaultState());
 				return;
 			}
+
+			if(b.getBlock() == ModBlocks.waste_snow) {
+				world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.waste_snow_block) {
+				world.setBlockState(pos, Blocks.SNOW.getDefaultState());
+				return;
+			}
 			
 			if(b.getBlock() == ModBlocks.waste_gravel) {
 				world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());

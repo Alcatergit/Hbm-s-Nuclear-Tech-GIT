@@ -12,6 +12,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.*;
 import java.util.Map.Entry;
 
+import com.hbm.items.gear.ModShield;
 import net.minecraft.entity.item.EntityArmorStand;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.logging.log4j.Level;
@@ -669,6 +670,19 @@ public class ModEventHandler {
 			}
 		}
 
+        if(e instanceof EntityPlayer player){
+            if(player.isActiveItemStackBlocking()){
+                ItemStack mainHand = player.getHeldItemMainhand();
+                ItemStack offHand = player.getHeldItemOffhand();
+                Entity cause = event.getSource().getImmediateSource();
+                if(!mainHand.isEmpty() && mainHand.getItem() instanceof ModShield shield){
+                    shield.handleImpact(shield, cause, event.getAmount());
+                } else if(!offHand.isEmpty() && offHand.getItem() instanceof ModShield shield){
+                    shield.handleImpact(shield, cause, event.getAmount());
+                }
+            }
+        }
+
 		ArmorFSB.handleAttack(event);
 	}
 	
@@ -811,7 +825,7 @@ public class ModEventHandler {
 			
 			ItemStack stack = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
 			
-			if(stack != null && stack.getItem() instanceof ItemArmor && ArmorModHandler.hasMods(stack)) {
+			if(!stack.isEmpty() && stack.getItem() instanceof ItemArmor && ArmorModHandler.hasMods(stack)) {
 				
 				ItemStack revive = ArmorModHandler.pryMods(stack)[ArmorModHandler.extra];
 				
@@ -1071,15 +1085,13 @@ public class ModEventHandler {
 			event.setOutput(event.getLeft().copy());
 
             Map<Enchantment, Integer> mapright = EnchantmentHelper.getEnchantments(event.getRight());
-            Iterator<Entry<Enchantment, Integer>> itr = mapright.entrySet().iterator();
 
-            while(itr.hasNext()) {
-            	Entry<Enchantment, Integer> entry = itr.next();
-            	Enchantment e = entry.getKey();
-            	int j = entry.getValue();
+            for (Entry<Enchantment, Integer> entry : mapright.entrySet()) {
+                Enchantment e = entry.getKey();
+                int j = entry.getValue();
 
-            	EnchantmentUtil.removeEnchantment(event.getOutput(), e);
-            	EnchantmentUtil.addEnchantment(event.getOutput(), e, j);
+                EnchantmentUtil.removeEnchantment(event.getOutput(), e);
+                EnchantmentUtil.addEnchantment(event.getOutput(), e, j);
             }
 
             event.setCost(10);
@@ -1161,7 +1173,7 @@ public class ModEventHandler {
 		
 		ItemStack stack = event.getItem();
 		
-		if(stack != null && stack.getItem() instanceof ItemFood) {
+		if(!stack.isEmpty() && stack.getItem() instanceof ItemFood) {
 			
 			if(stack.hasTagCompound() && stack.getTagCompound().getBoolean("ntmCyanide")) {
 				for(int i = 0; i < 10; i++) {

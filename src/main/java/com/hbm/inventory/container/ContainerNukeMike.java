@@ -52,11 +52,11 @@ private TileEntityNukeMike nukeMike;
 			var3 = var5.copy();
 			
             if (par2 <= 7) {
-				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), true))
+				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else {
+			} else if (!this.mergeItemStack(var5, 0, 8, false)){
 				return ItemStack.EMPTY;
 			}
             

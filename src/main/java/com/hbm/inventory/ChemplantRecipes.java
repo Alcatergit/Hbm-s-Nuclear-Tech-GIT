@@ -151,7 +151,7 @@ public class ChemplantRecipes {
 
 		makeRecipe(520, "C4", new AStack[] { new OreDictStack(KNO.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.UNSATURATEDS, 500) }, new AStack[] { new ComparableStack(ModItems.ingot_c4, 4) }, null, 150);
 
-		makeRecipe(530, "HEAVY_ELECTROLYSIS", null, new FluidStack[]{ new FluidStack(ModForgeFluids.HEAVYWATER, 8000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.DEUTERIUM, 400), new FluidStack(ModForgeFluids.OXYGEN, 400) }, 150);
+		makeRecipe(530, "HEAVY_ELECTROLYSIS", null, new FluidStack[]{ new FluidStack(ModForgeFluids.HEAVYWATER, 2000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.DEUTERIUM, 200), new FluidStack(ModForgeFluids.OXYGEN, 100) }, 150);
 		
 		makeRecipe(540, "DEUTERIUM", new AStack[] { new OreDictStack(S.dust(), 2) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 4000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.DEUTERIUM, 500) }, 200);
 		
@@ -191,7 +191,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(710, "SOLID_FUEL", new AStack[] {new ComparableStack(ModItems.solid_fuel, 2), new OreDictStack(KNO.dust(), 1), new OreDictStack(REDSTONE.dust(), 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.PETROLEUM, 200) }, new AStack[] { new ComparableStack(ModItems.rocket_fuel, 4) }, null, 200);
 		
-		makeRecipe(720, "ELECTROLYSIS", null, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 8000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.HYDROGEN, 800), new FluidStack(ModForgeFluids.OXYGEN, 800) }, 150);
+		makeRecipe(720, "ELECTROLYSIS", null, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 2000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.HYDROGEN, 200), new FluidStack(ModForgeFluids.OXYGEN, 100) }, 150);
 		
 		makeRecipe(730, "XENON", null, null, null, new FluidStack[]{ new FluidStack(ModForgeFluids.XENON, 50) }, 300);
 		
@@ -211,7 +211,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(810, "COLTAN_CRYSTAL", null, new FluidStack[]{ new FluidStack(ModForgeFluids.PAIN, 1000), new FluidStack(ModForgeFluids.ACID, 500) }, new AStack[] { new ComparableStack(ModItems.gem_tantalium, 1), new ComparableStack(ModItems.dust, 3) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 250) }, 80);
 		
-		makeRecipe(820, "ARSENIC", new AStack[] { new ComparableStack(ModItems.scrap_oil, 64) }, new FluidStack[]{ new FluidStack(ModForgeFluids.SULFURIC_ACID, 1000) }, new AStack[] { new ComparableStack(ModItems.nugget_arsenic, 1), new ComparableStack(ModItems.sulfur, 2) }, new FluidStack[]{ new FluidStack(ModForgeFluids.HEAVYOIL, 1500) }, 1200);
+		makeRecipe(820, "ARSENIC", new AStack[] { new ComparableStack(ModItems.scrap_oil, 16) }, new FluidStack[]{ new FluidStack(ModForgeFluids.RADIOSOLVENT, 1000) }, new AStack[] { new ComparableStack(ModItems.nugget_arsenic, 1) }, null, 1200);
 
 		makeRecipe(830, "VIT_LIQUID", new AStack[] {new ComparableStack(ModBlocks.sand_lead, 1) }, new FluidStack[]{ new FluidStack(ModForgeFluids.WASTEFLUID, 1000) }, new AStack[] {new ComparableStack(ModItems.nuclear_waste_vitrified, 1) }, null, 100);
 		

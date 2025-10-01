@@ -36,7 +36,7 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 
 	public long power;
 	public int heat = 2000;
-	public static final long maxPower = 10000;
+	public static final long maxPower = 50000;
 	public static final int maxHeat = 80000;
 	public int age = 0;
 	boolean needsUpdate = false;
@@ -84,8 +84,7 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 	
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 		if(i == 4)
-			if(stack != null && stack.getItem() instanceof IBatteryItem)
-				return true;
+            return stack != null && stack.getItem() instanceof IBatteryItem;
 		return false;
 	}
 	
@@ -144,18 +143,21 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 				needsUpdate = true;
 
 			Object[] outs;
-			if(tanks[0].getFluid() != null)
-				outs = HeatRecipes.getBoilerOutput(tanks[0].getFluid().getFluid());
-			else
+			int usage = 150;
+			if(tanks[0].getFluid() != null) {
+				Fluid f = tanks[0].getFluid().getFluid();
+				outs = HeatRecipes.getBoilerOutput(f);
+				usage = HeatRecipes.getRequiredHeat(f)<<2;
+			}else {
 				outs = HeatRecipes.getBoilerOutput(null);
-
+			}
 			if(heat > 2000) {
 				heat -= 30;
 			}
 
 			if(power > 0) {
-				heat += Math.min(((double) power / (double) maxPower * 300), 150);
-				power = Math.max(power-150, 0);
+				heat += (int) Math.min(((double) power / (double) maxPower * 300), 150);
+				power = Math.max(power-usage, 0);
 			} else {
 				heat -= 100;
 			}
@@ -174,8 +176,8 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 
 			if(outs != null) {
 
-				for(int i = 0; i < (heat / ((Integer) outs[3]).intValue()); i++) {
-					if(tanks[0].getFluidAmount() >= ((Integer) outs[2]).intValue()*5 && tanks[1].getFluidAmount() + ((Integer) outs[1]).intValue()*5 <= tanks[1].getCapacity()) {
+				for(int i = 0; i < (heat / (Integer) outs[3]); i++) {
+					if(tanks[0].getFluidAmount() >= (Integer) outs[2] *5 && tanks[1].getFluidAmount() + (Integer) outs[1] *5 <= tanks[1].getCapacity()) {
 						tanks[0].drain(((Integer) outs[2])*5, true);
 						tanks[1].fill(new FluidStack((Fluid) outs[0], ((Integer) outs[1]*5)), true);
 						if(i == 0)
@@ -214,11 +216,8 @@ public class TileEntityMachineBoilerElectric extends TileEntityMachineBase imple
 	}
 
 	protected boolean inputValidForTank(int tank, int slot) {
-		if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
-			return true;
-		}
-		return false;
-	}
+        return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+    }
 
 	@Override
 	public void recievePacket(NBTTagCompound[] tags) {

@@ -11,7 +11,7 @@
 		},
 		"frame": "challenge"
 	},
-	"parent": "hbm:progress_silex",
+	"parent": "hbm:progress_pu241",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

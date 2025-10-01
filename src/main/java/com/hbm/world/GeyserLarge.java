@@ -12,15 +12,9 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class GeyserLarge extends WorldGenerator {
 
+    @Override
 	public boolean generate(World world, Random rand, BlockPos pos) {
-		int i = rand.nextInt(1);
-
-		if (i == 0) {
-			generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ());
-		}
-
-		return true;
-
+		return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ());
 	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z) {

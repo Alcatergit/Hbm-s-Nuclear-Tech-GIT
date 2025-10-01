@@ -80,7 +80,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -143,9 +143,8 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 				}
 			}
 
-			if(this.isOn && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore) {
-				ItemFWatzCore itemCore = (ItemFWatzCore)inventory.getStackInSlot(2).getItem();
-				if(cooldown) {
+			if(this.isOn && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore itemCore) {
+                if(cooldown) {
 					
 					tanks[0].fill(new FluidStack(tankTypes[0], itemCore.coolantRefill), true);
 
@@ -161,6 +160,9 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 						tanks[2].drain(itemCore.aschrabDrain, true);
 						needsUpdate = true;
 						power += itemCore.powerOutput;
+
+						if(world.rand.nextInt(2048) == 0)
+							tryGrowCore();
 					}
 
 					if(power > maxPower)
@@ -169,9 +171,6 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 					if(tanks[0].getFluidAmount() <= 0) {
 						cooldown = true;
 					}
-
-					if(world.rand.nextInt(4096) == 0)
-						tryGrowCore();
 				}
 			}
 
@@ -251,9 +250,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(tanks[tank] != null) {
-			if(inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
-				return true;
-			}
+            return inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

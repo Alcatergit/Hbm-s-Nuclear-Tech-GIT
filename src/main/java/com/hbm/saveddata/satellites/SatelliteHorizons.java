@@ -4,6 +4,7 @@ import com.hbm.entity.projectile.EntityTom;
 import com.hbm.main.AdvancementManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
@@ -21,7 +22,7 @@ public class SatelliteHorizons extends Satellite {
 
 	public void onOrbit(World world, double x, double y, double z) {
 
-		for(EntityPlayer p : world.playerEntities)
+		for(EntityPlayer p : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x + 0.5, 100 + 0.5, z + 0.5, x + 0.5, 100 + 0.5, z + 0.5).grow(100, 100, 100)))
 			AdvancementManager.grantAchievement(p, AdvancementManager.horizonsStart);
 	}
 	
@@ -49,8 +50,8 @@ public class SatelliteHorizons extends Satellite {
 		
 		world.spawnEntity(tom);
 
-		for(EntityPlayer p : world.playerEntities)
-			AdvancementManager.grantAchievement(p, AdvancementManager.horizonsEnd);
+		for(EntityPlayer p : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(x + 0.5, 100 + 0.5, z + 0.5, x + 0.5, 100 + 0.5, z + 0.5).grow(5000, 100, 5000)))
+			AdvancementManager.grantAchievement(p, AdvancementManager.horizonsBonus);
 		
 		//not necessary but JUST to make sure
 		if(!world.isRemote) {

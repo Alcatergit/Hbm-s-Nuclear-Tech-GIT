@@ -18,13 +18,20 @@ public class TileEntityNukeN2 extends TileEntity {
 
 	public ItemStackHandler inventory;
 	private String customName;
-	
-	public TileEntityNukeN2() {
+    public int charges = 0;
+
+    public TileEntityNukeN2() {
 		inventory = new ItemStackHandler(12){
 			@Override
 			protected void onContentsChanged(int slot) {
 				markDirty();
+                charges = countCharges();
 				super.onContentsChanged(slot);
+			}
+
+			@Override
+			public int getSlotLimit(int slot) {
+				return 1;
 			}
 		};
 	}
@@ -52,8 +59,10 @@ public class TileEntityNukeN2 extends TileEntity {
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		if(compound.hasKey("inventory"))
-			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		if(compound.hasKey("inventory")) {
+            inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+            charges = countCharges();
+        }
 		super.readFromNBT(compound);
 	}
 	
@@ -63,7 +72,7 @@ public class TileEntityNukeN2 extends TileEntity {
 		return super.writeToNBT(compound);
 	}
 
-public int countCharges() {
+    public int countCharges() {
 		int charges = 0;
 		for(int i = 0; i < 12; i++){
 			if(inventory.getStackInSlot(i).getItem() == ModItems.n2_charge)
@@ -73,7 +82,7 @@ public int countCharges() {
 	}
 
 	
-public boolean isReady() {
+    public boolean isReady() {
 		return countCharges() > 0;
 	}
 	

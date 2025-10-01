@@ -51,14 +51,13 @@ public abstract class TileEntityPileBase extends TileEntity implements ITickable
 			
 			TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 			
-			if(te instanceof IPileNeutronReceiver) {
+			if(te instanceof IPileNeutronReceiver rec) {
 				
 				//this part throttles neutron efficiency for reactions that are way too close, efficiency reaches 100% after 2.5 meters
 				float mult = Math.min((float)i / 2.5F, 1F);
 				int n = (int)(flux * mult);
-				
-				IPileNeutronReceiver rec = (IPileNeutronReceiver) te;
-				rec.receiveNeutrons(n);
+
+                rec.receiveNeutrons(n);
 				return;
 			}
 		}

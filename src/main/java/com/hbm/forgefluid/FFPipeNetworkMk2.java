@@ -47,8 +47,8 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 				itr.remove();
 				continue;
 			}
-			if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
-				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+			if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP)){
+				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, EnumFacing.UP);
 				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0){
 					handlers.add(h);
 				}
@@ -112,7 +112,7 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 				if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 					fillables.remove(te.getPos());
 				}
-			} catch(Throwable t){
+			} catch(Throwable ignored){
 			}
 		}
 	}
@@ -157,9 +157,8 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 
 	public static FFPipeNetworkMk2 buildNetwork(TileEntity te) {
 		FFPipeNetworkMk2 net = null;
-		if(te instanceof IFluidPipeMk2) {
-			IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
-			if(pipe.getNetwork() != null)
+		if(te instanceof IFluidPipeMk2 pipe) {
+            if(pipe.getNetwork() != null)
 				return pipe.getNetwork();
 			Fluid type = pipe.getType();
 
@@ -168,12 +167,12 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			List<FFPipeNetworkMk2> toMerge = new ArrayList<FFPipeNetworkMk2>();
 			iteratePipes(pipes, consumers, toMerge, te, type);
 
-			if(toMerge.size() > 0)
+			if(!toMerge.isEmpty())
 				net = toMerge.remove(0);
 			else
 				net = new FFPipeNetworkMk2(pipe);
 			
-			while(toMerge.size() > 0)
+			while(!toMerge.isEmpty())
 				mergeNetworks(net, toMerge.remove(0));
 			
 			for(IFluidPipeMk2 p : pipes.values())
@@ -191,9 +190,8 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		if(te == null)
 			return;
 
-		if(te instanceof IFluidPipeMk2) {
-			IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
-			if(pipe.getType() == type && pipe.isValidForBuilding()) {
+		if(te instanceof IFluidPipeMk2 pipe) {
+            if(pipe.getType() == type && pipe.isValidForBuilding()) {
 				if(pipe.getNetwork() == null) {
 					if(!pipes.containsKey(te.getPos())) {
 						pipes.put(te.getPos(), pipe);
