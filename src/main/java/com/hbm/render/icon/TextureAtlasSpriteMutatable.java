@@ -85,7 +85,7 @@ public class TextureAtlasSpriteMutatable extends TextureAtlasSprite {
                     frames.add(new AnimationFrame(i, -1));
                 }
 
-                this.setAnimationMetadata(new AnimationMetadataSection(frames, this.width, this.height, animationMetadataSection.getFrameTime(), animationMetadataSection.isInterpolate()));;
+                this.setAnimationMetadata(new AnimationMetadataSection(frames, this.width, this.height, animationMetadataSection.getFrameTime(), animationMetadataSection.isInterpolate()));
             }
         }
     }

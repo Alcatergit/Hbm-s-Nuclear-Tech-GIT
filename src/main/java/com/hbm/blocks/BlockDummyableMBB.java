@@ -46,7 +46,7 @@ public abstract class BlockDummyableMBB extends BlockDummyable {
 						}
 						AxisAlignedBB blockBB = clampToPos(box, pos).offset(-pos.getX(), -pos.getY(), -pos.getZ());
 						if(volume(blockBB) == 0){
-							if(blockBBs.size() == 0)
+							if(blockBBs.isEmpty())
 								blocks.remove(pos);
 							continue;
 						} else if(FULL_BLOCK_AABB.equals(blockBB)){
@@ -97,7 +97,7 @@ public abstract class BlockDummyableMBB extends BlockDummyable {
 						}
 						AxisAlignedBB blockBB = clampToPos(box, pos).offset(-pos.getX(), -pos.getY(), -pos.getZ());
 						if(volume(blockBB) == 0){
-							if(blockBBs.size() == 0)
+							if(blockBBs.isEmpty())
 								blocks.remove(pos);
 							continue;
 						} else if(FULL_BLOCK_AABB.equals(blockBB)){
@@ -137,13 +137,12 @@ public abstract class BlockDummyableMBB extends BlockDummyable {
 	}
 	
 	public AxisAlignedBB clampToPos(AxisAlignedBB box, BlockPos pos) {
-		AxisAlignedBB b = new AxisAlignedBB(MathHelper.clamp(box.minX, pos.getX(), pos.getX() + 1),
-				MathHelper.clamp(box.minY, pos.getY(), pos.getY() + 1),
-				MathHelper.clamp(box.minZ, pos.getZ(), pos.getZ() + 1),
-				MathHelper.clamp(box.maxX, pos.getX(), pos.getX() + 1),
-				MathHelper.clamp(box.maxY, pos.getY(), pos.getY() + 1),
-				MathHelper.clamp(box.maxZ, pos.getZ(), pos.getZ() + 1));
-		return b;
+        return new AxisAlignedBB(MathHelper.clamp(box.minX, pos.getX(), pos.getX() + 1),
+                MathHelper.clamp(box.minY, pos.getY(), pos.getY() + 1),
+                MathHelper.clamp(box.minZ, pos.getZ(), pos.getZ() + 1),
+                MathHelper.clamp(box.maxX, pos.getX(), pos.getX() + 1),
+                MathHelper.clamp(box.maxY, pos.getY(), pos.getY() + 1),
+                MathHelper.clamp(box.maxZ, pos.getZ(), pos.getZ() + 1));
 	}
 	
 	public double volume(AxisAlignedBB box){

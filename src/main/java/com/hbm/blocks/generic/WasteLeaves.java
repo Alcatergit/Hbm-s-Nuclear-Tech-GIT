@@ -1,17 +1,13 @@
 package com.hbm.blocks.generic;
 
 import java.util.Random;
-import java.util.ArrayList;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockOldLeaf;
-import net.minecraft.block.SoundType;
-import net.minecraft.block.material.Material;
+import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.creativetab.CreativeTabs;
@@ -29,39 +25,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
-public class WasteLeaves extends BlockOldLeaf {
+public class WasteLeaves extends BlockLeaves {
 
-	public WasteLeaves(String s) {
+    public static final PropertyEnum<BlockPlanks.EnumType> VARIANT = PropertyEnum.create("variant", BlockPlanks.EnumType.class);
+
+    public WasteLeaves(String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK).withProperty(CHECK_DECAY, Boolean.FALSE).withProperty(DECAYABLE, Boolean.FALSE));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK));
 		this.setTickRandomly(false);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
-	@Override
-	protected @NotNull BlockStateContainer createBlockState(){
-		return new BlockStateContainer(this, VARIANT, CHECK_DECAY, DECAYABLE);
-	}
-
-	@Override
-	public int getMetaFromState(IBlockState state) {
-		int i = 0;
-
-		if (!state.getValue(DECAYABLE)) {
-			i |= 4;
-		}
-
-		if (state.getValue(CHECK_DECAY)) {
-			i |= 8;
-		}
-
-		return i;
-	}
-
     @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, VARIANT);
     }
 
     @Override
@@ -70,6 +48,10 @@ public class WasteLeaves extends BlockOldLeaf {
 
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random){
+    }
+
+    @Override
+    public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
     }
 
 	@Override
@@ -84,7 +66,7 @@ public class WasteLeaves extends BlockOldLeaf {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune){
 		if(rand.nextInt(4) == 0)
 			return Item.getItemFromBlock(Blocks.DEADBUSH);
-		return null;
+		return Items.AIR;
 	}
 
 	@Override
@@ -104,16 +86,34 @@ public class WasteLeaves extends BlockOldLeaf {
 	}
 
 	@Override
-	public BlockPlanks.@NotNull EnumType getWoodType(int meta){
-		return BlockPlanks.EnumType.OAK;
-	}
-
-	@Override
 	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
-		items.add(new ItemStack(this, 1, BlockPlanks.EnumType.OAK.getMetadata()));
+        for(BlockPlanks.EnumType type : BlockPlanks.EnumType.values()){
+		    items.add(new ItemStack(this, 1, type.getMetadata()));
+        }
 	}
 
-	@Override
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(VARIANT, this.getWoodType(meta));
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return state.getValue(VARIANT).getMetadata();
+    }
+
+    @Override
+    public BlockPlanks.EnumType getWoodType(int meta) {
+        return BlockPlanks.EnumType.byMetadata(meta);
+    }
+
+    @Override
+    public int damageDropped(IBlockState state) {
+        return state.getValue(VARIANT).getMetadata();
+    }
+
+
+    @Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return Blocks.LEAVES.getRenderLayer();
@@ -129,4 +129,9 @@ public class WasteLeaves extends BlockOldLeaf {
 		this.leavesFancy = !Blocks.LEAVES.isOpaqueCube(blockState);
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
+
+    @Override
+    public NonNullList<ItemStack> onSheared(ItemStack item, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
+        return NonNullList.withSize(1, new ItemStack(this, 1, world.getBlockState(pos).getValue(VARIANT).getMetadata()));
+    }
 }

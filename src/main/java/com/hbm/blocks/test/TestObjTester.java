@@ -147,10 +147,8 @@ public class TestObjTester extends BlockContainer implements IBomb {
     		ex.doExplosionB(false);*/
     	} else {
     		TileEntity te = world.getTileEntity(pos);
-    		if(te instanceof TileEntityObjTester){
-    			//((TileEntityObjTester)te).fireAge = 0;
-    		}
-    		try {
+            //((TileEntityObjTester)te).fireAge = 0;
+            try {
     			//Minecraft.getMinecraft().effectRenderer.addEffect(new PhysicsTestParticle(world, pos.getX()+2.5, pos.getY() + 3, pos.getZ() + 5.55));
     		}catch (Exception x){
     			x.printStackTrace();

@@ -24,13 +24,8 @@ public class BlockAbsorber extends Block {
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-	
-	@Override
-	public int tickRate(World worldIn) {
-		return 10;
-	}
 
-	@Override
+    @Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		RadiationSavedData.decrementRad(world, pos, absorb);
 

@@ -31,7 +31,7 @@ public class ItemFELCrystal extends Item {
 		list.add(wavelength.textColor + I18nUtil.resolveKey(wavelength.name) + " - " + wavelength.textColor + I18nUtil.resolveKey(this.wavelength.wavelengthRange));
 	}
 
-	public static enum EnumWavelengths{
+	public enum EnumWavelengths{
 		NULL("la creatura", "6 dollar", 0x010101, 0x010101, TextFormatting.WHITE), //why do you exist?
 
 		RADIO("wavelengths.name.radio", "wavelengths.waveRange.radio", 0x3E8010, 0x80FF00, TextFormatting.YELLOW),
@@ -45,9 +45,9 @@ public class ItemFELCrystal extends Item {
 
 		public String name = "";
 		public String wavelengthRange = "";
-		public int renderedBeamColor;
-		public int guiColor;
-		public TextFormatting textColor;
+		public final int renderedBeamColor;
+		public final int guiColor;
+		public final TextFormatting textColor;
 
 		EnumWavelengths(String name, String wavelength, int color, int guiColor, TextFormatting textColor) {
 			this.name = name;

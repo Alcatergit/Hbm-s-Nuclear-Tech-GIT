@@ -31,11 +31,9 @@ public class RBMKFuelCraftingHandler extends net.minecraftforge.registries.IForg
 		
 		ItemStack stack = getFirstStack(inventory);
 		
-		if(stack.getItem() instanceof ItemRBMKRod) {
-			
-			ItemRBMKRod rod = (ItemRBMKRod)stack.getItem();
-			
-			if(rod.pellet == null)
+		if(stack.getItem() instanceof ItemRBMKRod rod) {
+
+            if(rod.pellet == null)
 				return ItemStack.EMPTY;
 			
 			if(ItemRBMKRod.getEnrichment(stack) > 0.99D)

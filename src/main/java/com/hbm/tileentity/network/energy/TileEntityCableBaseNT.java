@@ -1,7 +1,6 @@
 package com.hbm.tileentity.network.energy;
 
 import com.hbm.lib.ForgeDirection;
-import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyConductor;
 import api.hbm.energy.IPowerNet;
@@ -72,12 +71,7 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 		return (this.network == null || !this.network.isValid()) && !this.isInvalid();
 	}
 
-	@Override
-	public boolean canConnect(ForgeDirection dir) {
-		return dir != ForgeDirection.UNKNOWN;
-	}
-
-	@Override
+    @Override
 	public long getPower() {
 		return 0;
 	}

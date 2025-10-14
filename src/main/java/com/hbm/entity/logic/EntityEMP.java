@@ -2,7 +2,6 @@ package com.hbm.entity.logic;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.NoClassDefFoundError;
 
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;

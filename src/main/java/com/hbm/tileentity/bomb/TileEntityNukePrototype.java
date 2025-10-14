@@ -36,7 +36,7 @@ public class TileEntityNukePrototype extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -66,27 +66,22 @@ public class TileEntityNukePrototype extends TileEntity {
 	}
 	
 	public boolean isReady() {
-		
-			if(ItemCell.isFullCell(inventory.getStackInSlot(0), ModForgeFluids.SAS3) &&
-			ItemCell.isFullCell(inventory.getStackInSlot(1), ModForgeFluids.SAS3) &&
-			inventory.getStackInSlot(2).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(3).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(4).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(5).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(6).getItem() == ModItems.rod_quad_neptunium && 
-			inventory.getStackInSlot(7).getItem() == ModItems.rod_quad_neptunium && 
-			inventory.getStackInSlot(8).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(9).getItem() == ModItems.rod_quad_lead && 
-			inventory.getStackInSlot(10).getItem() == ModItems.rod_quad_uranium && 
-			inventory.getStackInSlot(11).getItem() == ModItems.rod_quad_uranium && 
-			ItemCell.isFullCell(inventory.getStackInSlot(12), ModForgeFluids.SAS3) &&
-			ItemCell.isFullCell(inventory.getStackInSlot(13), ModForgeFluids.SAS3))
-			{
-				return true;
-			}
-		
-		return false;
-	}
+
+        return ItemCell.isFullCell(inventory.getStackInSlot(0), ModForgeFluids.SAS3) &&
+                ItemCell.isFullCell(inventory.getStackInSlot(1), ModForgeFluids.SAS3) &&
+                inventory.getStackInSlot(2).getItem() == ModItems.rod_quad_uranium &&
+                inventory.getStackInSlot(3).getItem() == ModItems.rod_quad_uranium &&
+                inventory.getStackInSlot(4).getItem() == ModItems.rod_quad_lead &&
+                inventory.getStackInSlot(5).getItem() == ModItems.rod_quad_lead &&
+                inventory.getStackInSlot(6).getItem() == ModItems.rod_quad_neptunium &&
+                inventory.getStackInSlot(7).getItem() == ModItems.rod_quad_neptunium &&
+                inventory.getStackInSlot(8).getItem() == ModItems.rod_quad_lead &&
+                inventory.getStackInSlot(9).getItem() == ModItems.rod_quad_lead &&
+                inventory.getStackInSlot(10).getItem() == ModItems.rod_quad_uranium &&
+                inventory.getStackInSlot(11).getItem() == ModItems.rod_quad_uranium &&
+                ItemCell.isFullCell(inventory.getStackInSlot(12), ModForgeFluids.SAS3) &&
+                ItemCell.isFullCell(inventory.getStackInSlot(13), ModForgeFluids.SAS3);
+    }
 	
 	public void clearSlots() {
 		for(int i = 0; i < inventory.getSlots(); i++)

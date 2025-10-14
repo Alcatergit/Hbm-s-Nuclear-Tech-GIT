@@ -11,10 +11,10 @@ public abstract class ParticleFirstPerson extends Particle {
 	
 	public abstract ParticleType getType();
 	
-	public static enum ParticleType {
+	public enum ParticleType {
 		TAU,
 		GLUON,
-		CRUCIBLE;
-	}
+		CRUCIBLE
+    }
 
 }

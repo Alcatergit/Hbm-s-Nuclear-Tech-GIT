@@ -19,11 +19,11 @@ import static com.hbm.inventory.material.Mats.*;
 
 
 import com.hbm.items.tool.ItemGasCanister;
+import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -48,12 +48,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.JsonToNBT;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
-import org.checkerframework.checker.units.qual.C;
 
 public class AssemblerRecipes {
 
@@ -607,7 +603,7 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModBlocks.turret_cwis, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 6), new OreDictStack(MINGRADE.ingot(), 8), new OreDictStack(STEEL.plate(), 10), new OreDictStack(TI.plate(), 4), new ComparableStack(ModItems.hull_small_aluminium, 2), new ComparableStack(ModItems.pipes_steel, 6), new ComparableStack(ModItems.motor, 4), new ComparableStack(ModItems.circuit, 2, EnumCircuitType.ADVANCED), new ComparableStack(ModItems.magnetron, 3), }, 400);
 		makeRecipe(new ComparableStack(ModBlocks.turret_cheapo, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 4), new OreDictStack(IRON.plate(), 4), new ComparableStack(ModItems.pipes_steel, 3), new ComparableStack(ModItems.motor, 3), new ComparableStack(ModItems.circuit, 4, EnumCircuitType.CHIP)}, 200);
 
-		makeRecipe(new ComparableStack(ModItems.gun_defabricator, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 2), new OreDictStack(ANY_PLASTIC.ingot(), 8), new OreDictStack(IRON.plate(), 5), new ComparableStack(ModItems.mechanism_special, 3), new ComparableStack(Items.DIAMOND, 1), new ComparableStack(ModItems.plate_dalekanium, 3), }, 200);
+		makeRecipe(new ComparableStack(ModItems.gun_defabricator, 1), new AStack[] { new OreDictStack(STEEL.ingot(), 2), new OreDictStack(ANY_PLASTIC.ingot(), 8), new OreDictStack(IRON.plateWelded(), 5), new ComparableStack(ModItems.mechanism_special, 3), new ComparableStack(ModItems.laser_crystal_dem, 1), new ComparableStack(ModItems.plate_dalekanium, 3), }, 200);
 		makeRecipe(new ComparableStack(ModItems.gun_osipr_ammo, 24), new AStack[] { new OreDictStack(STEEL.plate(), 2), new ComparableStack(Items.REDSTONE, 1), new ComparableStack(Items.GLOWSTONE_DUST, 1), }, 50);
 		makeRecipe(new ComparableStack(ModItems.gun_osipr_ammo2, 1), new AStack[] { new OreDictStack(CMB.plate(), 4), new ComparableStack(Items.REDSTONE, 7), new ComparableStack(ModItems.powder_power, 3), }, 200);
 		
@@ -1148,7 +1144,7 @@ public class AssemblerRecipes {
 			
 			while((currentLine = read.readLine()) != null){
 				lineCount ++;
-				if(currentLine.startsWith("#") || currentLine.length() == 0)
+				if(currentLine.startsWith("#") || currentLine.isEmpty())
 					continue;
 				if(currentLine.startsWith("remove"))
 					parseRemoval(currentLine, lineCount);
@@ -1225,7 +1221,7 @@ public class AssemblerRecipes {
 		if(recipes.containsKey(output)){
 			MainRegistry.logger.log(Level.WARN, "Found duplicate assembler recipe outputs! This is not allowed! Line number: " + line + " Skipping...");
 		}
-		recipes.put((ComparableStack) output, input.toArray(new AStack[input.size()]));
+		recipes.put((ComparableStack) output, input.toArray(new AStack[0]));
 		time.put((ComparableStack) output, recipeTime);
 		recipeList.add((ComparableStack) output);
 	}
@@ -1264,7 +1260,7 @@ public class AssemblerRecipes {
 				break;
 			idx += part.length()+1;
 		}
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 	private static AStack parseAStack(String s, int maxSize){

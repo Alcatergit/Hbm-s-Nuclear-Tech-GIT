@@ -114,7 +114,7 @@ public class ItemMissile extends Item {
 		LEGENDARY("rarity.legendary"),
 		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK("rarity.strange");
 		
-		String name;
+		final String name;
 		
 		Rarity(String name) {
 			this.name = name;

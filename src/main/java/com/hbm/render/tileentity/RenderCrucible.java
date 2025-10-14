@@ -39,7 +39,7 @@ public class RenderCrucible extends TileEntitySpecialRenderer<TileEntityCrucible
         ResourceManager.crucible_heat.renderAll();
         
         if(!crucible.recipeStack.isEmpty() || !crucible.wasteStack.isEmpty()) {
-            int totalCap = crucible.recipeZCapacity + crucible.wasteZCapacity;
+            int totalCap = TileEntityCrucible.recipeZCapacity + TileEntityCrucible.wasteZCapacity;
             int totalMass = 0;
 
             for(MaterialStack stack : crucible.recipeStack) totalMass += stack.amount;

@@ -45,7 +45,7 @@ public class RenderPylon extends TileEntitySpecialRenderer<TileEntityPylon> {
 			this.pylon.renderAll(0.0625F);
 		GL11.glPopMatrix();
 
-		this.renderPowerLines(pyl, x, y, z);
+		renderPowerLines(pyl, x, y, z);
 	}
 
 	public static void renderPowerLines(TileEntityPylonBase pyl, double x, double y, double z) {

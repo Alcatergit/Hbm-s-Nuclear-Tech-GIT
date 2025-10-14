@@ -1,13 +1,11 @@
 package com.hbm.tileentity.machine;
 
 import api.hbm.block.IToolable.ToolType;
-import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemTooling;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +32,7 @@ public class TileEntityLockableBase extends TileEntity {
 	public void lock() {
 		
 		if(lock == 0) {
-			MainRegistry.logger.error("A block has been set to locked state before setting pins, this should not happen and may cause errors! " + this.toString());
+			MainRegistry.logger.error("A block has been set to locked state before setting pins, this should not happen and may cause errors! " + this);
 		}
 		if(isLocked == false)
 			markDirty();

@@ -4,7 +4,6 @@ import java.util.List;
 
 import com.hbm.util.I18nUtil;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
@@ -204,14 +203,8 @@ public class BlockDoorGeneric extends BlockDummyable implements IRadResistantBlo
 		return false;
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		float hardness = this.getExplosionResistance(null);
-		if(this.isRadResistant){
-			tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
-		}
-		if(hardness > 50){
-			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
-		}
-	}
+    @Override
+    public boolean isRadResistant(){
+        return this.isRadResistant;
+    }
 }

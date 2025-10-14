@@ -97,8 +97,4 @@ public class ReinforcedLamp extends Block implements IRadResistantBlock {
 		super.breakBlock(worldIn, pos, state);
 	}
 
-	@Override
-	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		return true;
-	}
 }

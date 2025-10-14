@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 
 public class EntityRocket extends Entity implements IProjectile {
 
-	private static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityBullet.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityRocket.class, DataSerializers.BOOLEAN);
 	
 	private int field_145791_d = -1;
     private int field_145792_e = -1;
@@ -397,7 +397,6 @@ public class EntityRocket extends Entity implements IProjectile {
 
             //for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
-                ;
             }
 
             /*while (this.rotationPitch - this.prevRotationPitch >= 180.0F)

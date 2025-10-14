@@ -197,13 +197,9 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		if(i == 0){
 			return true;
 		}
-		
-		if(i == 2){
-			return true;
-		}
-		
-		return false;
-	}
+
+        return i == 2;
+    }
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
@@ -215,11 +211,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		if(slot == 1){
 			return true;
 		}
-		
-		if(slot == 3){
-			return true;
-		}
-		
-		return false;
-	}
+
+        return slot == 3;
+    }
 }

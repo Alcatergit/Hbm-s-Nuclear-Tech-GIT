@@ -1,7 +1,6 @@
 package com.hbm.handler;
 
 import java.io.*;
-import java.net.MalformedURLException;
 import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.URLConnection;

@@ -27,12 +27,12 @@ public class B92BakedModel implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return type != TransformType.GUI ? false : ItemRenderGunAnim.INSTANCE.b92ItemModel.isAmbientOcclusion();
+		return type == TransformType.GUI && ItemRenderGunAnim.INSTANCE.b92ItemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return type != TransformType.GUI ? false :ItemRenderGunAnim.INSTANCE.b92ItemModel.isGui3d();
+		return type == TransformType.GUI && ItemRenderGunAnim.INSTANCE.b92ItemModel.isGui3d();
 	}
 
 	@Override

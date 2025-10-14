@@ -18,20 +18,19 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 
 public class BeamPronter {
 	
-	public static enum EnumWaveType {
+	public enum EnumWaveType {
 		RANDOM,
 		SPIRAL,
 		STRAIGHT
 	}
 	
-	public static enum EnumBeamType {
+	public enum EnumBeamType {
 		SOLID,
 		LINE
 	}

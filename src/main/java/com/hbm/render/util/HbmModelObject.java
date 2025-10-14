@@ -80,7 +80,7 @@ public class HbmModelObject implements IModelCustom {
                 lineCount++;
                 currentLine = currentLine.replaceAll("\\s+", " ").trim();
 
-                if (currentLine.startsWith("#") || currentLine.length() == 0)
+                if (currentLine.startsWith("#") || currentLine.isEmpty())
                 {
                     continue;
                 }
@@ -258,9 +258,9 @@ public class HbmModelObject implements IModelCustom {
             boolean skipPart=false;
             for (String excludedGroupName : excludedGroupNames)
             {
-                if (excludedGroupName.equalsIgnoreCase(groupObject.name))
-                {
-                    skipPart=true;
+                if (excludedGroupName.equalsIgnoreCase(groupObject.name)) {
+                    skipPart = true;
+                    break;
                 }
             }
             if(!skipPart)
@@ -279,9 +279,9 @@ public class HbmModelObject implements IModelCustom {
             exclude=false;
             for (String excludedGroupName : excludedGroupNames)
             {
-                if (excludedGroupName.equalsIgnoreCase(groupObject.name))
-                {
-                    exclude=true;
+                if (excludedGroupName.equalsIgnoreCase(groupObject.name)) {
+                    exclude = true;
+                    break;
                 }
             }
             if(!exclude)
@@ -498,7 +498,7 @@ public class HbmModelObject implements IModelCustom {
         {
             String trimmedLine = line.substring(line.indexOf(" ") + 1);
 
-            if (trimmedLine.length() > 0)
+            if (!trimmedLine.isEmpty())
             {
                 group = new HbmGroupObject(trimmedLine);
             }

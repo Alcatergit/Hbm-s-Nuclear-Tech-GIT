@@ -96,8 +96,7 @@ public class ParticleTauMuzzleLightning extends ParticleFirstPerson {
 			Vec3d current = positions.get(i);
 			Vec3d next = positions.get(i+1);
 			Vec3d axis = next.subtract(current);
-			Vec3d toPlayer = current;
-			Vec3d pos1 = axis.crossProduct(toPlayer).normalize().scale(particleScale*Math.max(fade, 0.75));
+            Vec3d pos1 = axis.crossProduct(current).normalize().scale(particleScale*Math.max(fade, 0.75));
 			Vec3d pos2 = pos1.scale(-1);
 			float al = i == 0 || i == 9 ? 0.5F : 1;
 			buffer.pos(pos1.x + current.x, pos1.y + current.y, pos1.z + current.z).tex(randU, 0).color(1.0F, 0.7F, 0.1F, fade*al).endVertex();

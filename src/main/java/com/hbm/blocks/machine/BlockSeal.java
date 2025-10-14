@@ -248,7 +248,7 @@ public class BlockSeal extends Block implements IBomb {
 	
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean activated = (meta & 1) == 1 ? true : false;
+		boolean activated = (meta & 1) == 1;
 		meta = meta >> 1;
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 

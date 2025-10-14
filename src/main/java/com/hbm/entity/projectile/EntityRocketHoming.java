@@ -41,7 +41,7 @@ import net.minecraft.world.World;
 
 public class EntityRocketHoming extends Entity implements IProjectile {
 
-	public static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityMissileBaseAdvanced.class, DataSerializers.BOOLEAN);
+	public static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityRocketHoming.class, DataSerializers.BOOLEAN);
 	
 	private int field_145791_d = -1;
     private int field_145792_e = -1;
@@ -409,7 +409,6 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
             //for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
-                ;
             }
 
             /*while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
@@ -487,9 +486,8 @@ public class EntityRocketHoming extends Entity implements IProjectile {
     		double vecProd = rel.x * path.x + rel.y * path.y + rel.z * path.z;
     		double bot = rel.length() * path.length();
     		double angle = Math.acos(vecProd / bot) * 180 / Math.PI;
-    		
-    		if(angle <= acceptance);
-    			if(e.height * e.width * e.width >= 0.5D)
+
+            if(e.height * e.width * e.width >= 0.5D)
     				if(!Library.isObstructed(world, e.posX, e.posY, e.posZ, posX, posY, posZ))
     					targetable.put(e, angle);
     	}

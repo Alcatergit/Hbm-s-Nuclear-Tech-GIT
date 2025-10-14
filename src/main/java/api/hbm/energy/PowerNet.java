@@ -91,14 +91,12 @@ public class PowerNet implements IPowerNet {
 
 	@Override
 	public List<IEnergyConductor> getLinks() {
-		List<IEnergyConductor> linkList = new ArrayList();
-		linkList.addAll(this.links.values());
+        List<IEnergyConductor> linkList = new ArrayList(this.links.values());
 		return linkList;
 	}
 
 	public HashMap<Integer, Integer> getProxies() {
-		HashMap<Integer, Integer> proxyCopy = new HashMap(proxies);
-		return proxyCopy;
+        return (HashMap<Integer, Integer>) new HashMap(proxies);
 	}
 
 	@Override

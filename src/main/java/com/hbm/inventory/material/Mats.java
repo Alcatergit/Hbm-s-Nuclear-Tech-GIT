@@ -6,10 +6,9 @@ import static com.hbm.inventory.material.MaterialShapes.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 
-import com.hbm.inventory.OreDictManager.DictFrame;
-import com.hbm.inventory.RecipesCommon;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 import com.hbm.items.ModItems;
@@ -169,7 +168,7 @@ public class Mats {
 				
 				if(oreEntries != null) {
 					list.addAll(oreEntries);
-					break outer;
+					break;
 				}
 				
 				for(Entry<String, MaterialShapes> prefixEntry : prefixByName.entrySet()) {
@@ -204,7 +203,7 @@ public class Mats {
 	public static List<MaterialStack> getSmeltingMaterialsFromItem(ItemStack stack) {
 		List<MaterialStack> baseMats = getMaterialsFromItem(stack);
 		if(baseMats.isEmpty()) return baseMats;
-		List<MaterialStack> smelting = new ArrayList();
+		List<MaterialStack> smelting = new ArrayList<>();
 		baseMats.forEach(x -> smelting.add(new MaterialStack(x.material.smeltsInto, (int) (x.amount * x.material.convOut / x.material.convIn))));
 		return smelting;
 	}
@@ -241,6 +240,23 @@ public class Mats {
             }
         }
         return null;
+    }
+
+    public static List<MaterialStack> sum(List<List<MaterialStack>> mats, float factor){
+        HashMap<NTMMaterial, Integer> sumMats = new HashMap<>();
+        for(List<MaterialStack> matList : mats){
+            for(MaterialStack mat : matList) {
+                Integer amount = sumMats.get(mat.material);
+                if(amount == null) amount = 0;
+                amount += mat.amount;
+                sumMats.put(mat.material, amount);
+            }
+        }
+        List<MaterialStack> list = new ArrayList<>();
+        for(Map.Entry<NTMMaterial, Integer> e: sumMats.entrySet()){
+            list.add(new MaterialStack(e.getKey(), (int) (e.getValue() / factor)));
+        }
+        return list;
     }
 	
 	public static class MaterialStack {

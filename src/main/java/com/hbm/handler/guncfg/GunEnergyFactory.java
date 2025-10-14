@@ -416,7 +416,7 @@ public class GunEnergyFactory {
 		bullet.dmgMax = 25000;
 
 		bullet.style = BulletConfiguration.STYLE_BOLT;
-		bullet.trail = bullet.BOLT_ZOMG;
+		bullet.trail = BulletConfiguration.BOLT_ZOMG;
 
 		bullet.effects = new ArrayList<>();
 		bullet.effects.add(new PotionEffect(HbmPotion.bang, 10 * 20, 0));

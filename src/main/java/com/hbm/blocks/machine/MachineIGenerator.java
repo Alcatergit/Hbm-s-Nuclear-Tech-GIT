@@ -83,11 +83,8 @@ public class MachineIGenerator extends BlockDummyable {
 			return false;
 		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o, new int [] {3,-2,1,1,-1,3}, x, y, z, dir))
 			return false;
-		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o, new int [] {4,-2,1,1,1,0}, x, y, z, dir))
-			return false;
-		
-		return true;
-	}
+        return MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o, y + dir.offsetY * o, z + dir.offsetZ * o, new int[]{4, -2, 1, 1, 1, 0}, x, y, z, dir);
+    }
 	
 	@Override
 	protected void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {

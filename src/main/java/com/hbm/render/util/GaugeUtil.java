@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 
 public class GaugeUtil {
 
-	public static enum Gauge {
+	public enum Gauge {
 
 		ROUND_SMALL(new ResourceLocation(RefStrings.MODID + ":textures/gui/gauges/small_round.png"), 18, 18, 13),
 		ROUND_LARGE(new ResourceLocation(RefStrings.MODID + ":textures/gui/gauges/large_round.png"), 36, 36, 13),
@@ -22,12 +22,12 @@ public class GaugeUtil {
 		WIDE_LARGE(new ResourceLocation(RefStrings.MODID + ":textures/gui/gauges/large_wide.png"), 36, 24, 11),
 		BAR_SMALL(new ResourceLocation(RefStrings.MODID + ":textures/gui/gauges/small_bar.png"), 36, 12, 16);
 
-		ResourceLocation texture;
-		int width;
-		int height;
-		int count;
+		final ResourceLocation texture;
+		final int width;
+		final int height;
+		final int count;
 
-		private Gauge(ResourceLocation texture, int width, int height, int count) {
+		Gauge(ResourceLocation texture, int width, int height, int count) {
 			this.texture = texture;
 			this.width = width;
 			this.height = height;

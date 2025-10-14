@@ -76,7 +76,7 @@ public class TileEntityMachineSeleniumEngine extends TileEntityLoadedBase implem
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -210,9 +210,7 @@ public class TileEntityMachineSeleniumEngine extends TileEntityLoadedBase implem
 
 	protected boolean inputValidForTank(int tank, int slot){
 		if(this.tank != null){
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
-				return true;
-			}
+            return isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

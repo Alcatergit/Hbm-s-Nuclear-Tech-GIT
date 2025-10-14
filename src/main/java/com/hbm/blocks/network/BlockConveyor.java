@@ -61,11 +61,10 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 				dest.y - itemPos.y,
 				dest.z - itemPos.z);
 		double len = motion.length();
-		Vec3d ret = new Vec3d(
-				itemPos.x + motion.x / len * speed,
-				itemPos.y + motion.y / len * speed,
-				itemPos.z + motion.z / len * speed);
-		return ret;
+        return new Vec3d(
+                itemPos.x + motion.x / len * speed,
+                itemPos.y + motion.y / len * speed,
+                itemPos.z + motion.z / len * speed);
 	}
 
 

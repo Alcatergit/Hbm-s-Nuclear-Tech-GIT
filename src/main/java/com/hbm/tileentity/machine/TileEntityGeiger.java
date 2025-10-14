@@ -60,9 +60,7 @@ public class TileEntityGeiger extends TileEntity implements ITickable {
 	public int check() {
 		
 		RadiationSavedData data = RadiationSavedData.getData(world);
-		
-		int rads = (int)Math.ceil(data.getRadNumFromCoord(pos));
-		
-		return rads;
+
+        return (int)Math.ceil(data.getRadNumFromCoord(pos));
 	}
 }

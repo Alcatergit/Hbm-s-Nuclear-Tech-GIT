@@ -145,11 +145,8 @@ public class ItemWandD extends Item {
 	
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-		if(target.world.isRemote){
-			//DisintegrationParticleHandler.spawnGluonDisintegrateParticles(target);
-		} else {
-		}
-		return super.itemInteractionForEntity(stack, playerIn, target, hand);
+        //DisintegrationParticleHandler.spawnGluonDisintegrateParticles(target);
+        return super.itemInteractionForEntity(stack, playerIn, target, hand);
 	}
 	
 	@Override

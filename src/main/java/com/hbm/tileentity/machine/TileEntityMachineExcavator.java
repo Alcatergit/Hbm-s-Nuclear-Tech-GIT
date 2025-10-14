@@ -22,8 +22,6 @@ import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.Library;
 import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
@@ -51,7 +49,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.capabilities.Capability;
@@ -288,7 +285,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 			
 			boolean ignoreAll = true;
 			float combinedHardness = 0F;
-			BlockPos bedrockOre = null;
+			BlockPos bedrockOrePos = null;
 			bedrockDrilling = false;
 			
 			//Scanning to chgeck how much time it would take to break all of them at once
@@ -305,7 +302,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 						if(b == ModBlocks.ore_bedrock_block) {
 							double tierDiff = ((TileEntityBedrockOre)world.getTileEntity(drillPos)).tier / (double)installedTier;
 							combinedHardness = (int)(2 * 60 * 20 * tierDiff);
-							bedrockOre = new BlockPos(x, y, z);
+							bedrockOrePos = new BlockPos(x, y, z);
 							bedrockDrilling = true;
 							enableCrusher = false;
 							enableSilkTouch = false;
@@ -330,14 +327,14 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				
 				if(ticksWorked >= ticksToWork) {
 					
-					if(bedrockOre == null) {
+					if(bedrockOrePos == null) {
 						breakBlocks(ring);
 						buildWall(ring + 1, ring == radius && this.enableWalling);
 						if(ring == radius)
 							mineOresFromWall(ring + 1);
 						tryCollect(radius + 1);
 					} else {
-						collectBedrock(bedrockOre);
+						collectBedrock(bedrockOrePos);
 					}
 					ticksWorked = 0;
 				}
@@ -478,13 +475,12 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 				
 				ItemStack result = new ItemStack(Item.getItemFromBlock(b), 1, b.getMetaFromState(bState));
 					
-				if(result != null && !result.isEmpty()) {
+				if(!result.isEmpty()) {
 					items.clear();
 					items.add(result.copy());
 				}
-			} else if(b instanceof IDrillInteraction) {
-				IDrillInteraction in = (IDrillInteraction) b;
-				if(in.canBreak(world, drillPos.getX(), drillPos.getY(), drillPos.getZ(), bState, this)){
+			} else if(b instanceof IDrillInteraction in) {
+                if(in.canBreak(world, drillPos.getX(), drillPos.getY(), drillPos.getZ(), bState, this)){
 					ItemStack drop = in.extractResource(world, drillPos.getX(), drillPos.getY(), drillPos.getZ(), bState, this);
 					
 					if(drop != null) {
@@ -668,12 +664,10 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		if(te == null || !te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.toEnumFacing()))
 			return;
 		IItemHandler h = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, dir.toEnumFacing());
-		if(!(h instanceof IItemHandlerModifiable))
+		if(!(h instanceof IItemHandlerModifiable inv))
 			return;
-		
-		IItemHandlerModifiable inv = (IItemHandlerModifiable)h;
-		
-		for(EntityItem entityItem : items) {
+
+        for(EntityItem entityItem : items) {
 			if(entityItem.isDead) continue;
 			ItemStack stack = entityItem.getItem();
 			if(stack.getCount() <= 0 || stack.isEmpty()){
@@ -690,23 +684,26 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		}
 	}
 
+    public int getAdjustedAmount(int amount){
+        return (int) (amount * (1F-getFortuneLevel()/20F));
+    }
+
 	protected void collectBedrock(BlockPos pos) {
 		if(tank.getFluid() == null) return;
 		TileEntity oreTile = world.getTileEntity(pos);
-		if(oreTile instanceof TileEntityBedrockOre) {
-			TileEntityBedrockOre ore = (TileEntityBedrockOre) oreTile;
-			
-			if(ore.oreName == null)
-				return;
-			if(ore.tier > this.getInstalledDrill().tier)
-				return;
-			if(ore.acidRequirement != null) {
-				
-				if(ore.acidRequirement.getFluid() != tank.getFluid().getFluid() || ore.acidRequirement.amount > tank.getFluidAmount()) return;
-				
-				tank.drain(ore.acidRequirement.amount, true);
+		if(oreTile instanceof TileEntityBedrockOre ore) {
+            int minTi = Math.min(ore.tier, this.getInstalledDrill().tier);
+            int meta = BedrockOreRegistry.getRandomOreByTier(world.rand, minTi, world.provider.getDimension());
+            if(meta == -1) return;
+            if(ore.acidRequirement != null) {
+				if(ore.acidRequirement.getFluid() != tank.getFluid().getFluid()){
+                    int amount = getAdjustedAmount(ore.acidRequirement.amount);
+                    if(amount >= tank.getFluidAmount()) return;
+				    tank.drain(amount, true);
+                }
 			}
-			ItemStack bedrockOreStack = new ItemStack(ModItems.ore_bedrock, 1, BedrockOreRegistry.getOreIndex(ore.oreName));
+
+			ItemStack bedrockOreStack = new ItemStack(ModItems.ore_bedrock, 1, meta);
 			InventoryUtil.tryAddItemToInventory(inventory, 5, 13, bedrockOreStack);
 		}
 	}
@@ -729,9 +726,8 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		if(b instanceof BlockGasBase) return true;
 		float hardness = block.getBlockHardness(world, pos);
 		if(hardness < 0 || hardness > 3_500_000) return true;
-		if(block.getMaterial().isLiquid()) return true;
-		return false;
-	}
+        return block.getMaterial().isLiquid();
+    }
 
 	@Override
 	public void receiveControl(NBTTagCompound data) {
@@ -758,7 +754,7 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 	
 	public EnumDrillType getInstalledDrill() {
 		ItemStack slotItem = inventory.getStackInSlot(4);
-        if(slotItem != null && slotItem.getItem() instanceof ItemDrillbit) {
+        if(!slotItem.isEmpty() && slotItem.getItem() instanceof ItemDrillbit) {
 			return ((ItemDrillbit)slotItem.getItem()).drillType;
 		}
 		

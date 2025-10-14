@@ -49,11 +49,11 @@ public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 				color = 0;
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 			GlStateManager.color(red ? 1 : color, green ? 1 : color, blue ? 1 : color, 1f);
-			buf.pos(0 + o, 0 - o, 0).endVertex();;
-			buf.pos(0 + o, 0 + o, 0).endVertex();;
-			buf.pos(0 + o, 0 + o, 0 + distance).endVertex();;
-			buf.pos(0 + o, 0 - o, 0 + distance).endVertex();;
-			tessellator.draw();
+			buf.pos(0 + o, 0 - o, 0).endVertex();
+            buf.pos(0 + o, 0 + o, 0).endVertex();
+            buf.pos(0 + o, 0 + o, 0 + distance).endVertex();
+            buf.pos(0 + o, 0 - o, 0 + distance).endVertex();
+            tessellator.draw();
 			
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 			GlStateManager.color(red ? 1 : color, green ? 1 : color, blue ? 1 : color, 1f);

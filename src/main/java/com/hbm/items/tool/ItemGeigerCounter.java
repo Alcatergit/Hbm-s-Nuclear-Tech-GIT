@@ -90,7 +90,7 @@ public class ItemGeigerCounter extends Item implements IBauble {
 				if(480 < x){
 					list.add(8);
 				}
-				if(list.size() > 0){
+				if(!list.isEmpty()){
 					int r = list.get(world.rand.nextInt(list.size()));
 					
 					if(r > 0){

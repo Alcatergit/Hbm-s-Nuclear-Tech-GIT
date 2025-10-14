@@ -4,14 +4,9 @@ package com.hbm.entity.logic;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.config.BombConfig;
-import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
 
-import micdoodle8.mods.galacticraft.planets.mars.world.gen.BiomeMars;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.*;
 import net.minecraftforge.common.ForgeChunkManager;
@@ -21,21 +16,16 @@ import net.minecraft.util.math.ChunkPos;
 
 import org.apache.logging.log4j.Level;
 
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.config.BombConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityFalloutRain;
-import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.explosion.ExplosionNukeRayBatched;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Biomes;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -83,10 +73,9 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 		
 		float rads, fire, blast;
 		rads = 0;
-		
 		//radiate until there is fallout rain
 		if(fallout && falloutRain == null) {
-			rads = (float)(Math.pow(radius, 4) * (float)Math.pow(0.5, (double) 2 * this.ticksExisted / radius) + strength);
+			rads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double) 2 * this.ticksExisted / radius) + strength);
 			if(ticksExisted == 1){
 				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
                 if(radius > 60){

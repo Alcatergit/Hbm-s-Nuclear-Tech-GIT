@@ -46,7 +46,7 @@ public abstract class TileEntityPileBase extends TileEntity implements ITickable
 			if(b.getBlock() == ModBlocks.block_boron)
 				return;
 			
-			if(b == ModBlocks.block_graphite_rod && !b.getValue(BlockGraphiteRod.OUT))
+			if(b.getBlock() == ModBlocks.block_graphite_rod && !b.getValue(BlockGraphiteRod.OUT))
 				return;
 			
 			TileEntity te = world.getTileEntity(new BlockPos(x, y, z));

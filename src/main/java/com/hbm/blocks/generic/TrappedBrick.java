@@ -164,12 +164,12 @@ public class TrappedBrick extends BlockContainer {
 			}
 	}
 	
-	public static enum TrapType {
+	public enum TrapType {
 		ON_STEP,
 		DETECTOR
 	}
 
-	public static enum Trap {
+	public enum Trap {
 
 		FALLING_ROCKS(TrapType.DETECTOR),
 		FIRE(TrapType.ON_STEP),
@@ -187,9 +187,9 @@ public class TrappedBrick extends BlockContainer {
 		ZOMBIE(TrapType.DETECTOR),
 		SPIDERS(TrapType.DETECTOR);
 
-		public TrapType type;
+		public final TrapType type;
 
-		private Trap(TrapType type) {
+		Trap(TrapType type) {
 			this.type = type;
 		}
 

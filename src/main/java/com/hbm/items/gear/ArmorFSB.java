@@ -6,12 +6,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
-import javax.annotation.Nullable;
-
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemGeigerCounter;
 import com.hbm.config.PotionConfig;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.ClientProxy;
 import com.hbm.packet.KeybindPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -38,7 +35,6 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;

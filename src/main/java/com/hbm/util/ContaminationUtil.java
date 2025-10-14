@@ -7,14 +7,12 @@ import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
-import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.grenade.EntityGrenadeASchrab;
 import com.hbm.entity.grenade.EntityGrenadeNuclear;
@@ -41,17 +39,14 @@ import net.minecraft.entity.monster.EntityIronGolem;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.passive.EntityMooshroom;
-import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.passive.EntityZombieHorse;
 import net.minecraft.entity.passive.EntitySkeletonHorse;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Item;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.DamageSource;
@@ -281,12 +276,8 @@ public class ContaminationUtil {
 		if(stack == null)
 			return false;
 
-		if(HazardSystem.getRawRadsFromStack(stack) > 0){
-			return true;
-		}
-
-		return false;
-	}
+        return HazardSystem.getRawRadsFromStack(stack) > 0;
+    }
 
 	public static float getNeutronRads(ItemStack stack){
 		if(stack != null && !stack.isEmpty() && !isRadItem(stack)){
@@ -357,10 +348,8 @@ public class ContaminationUtil {
 	public static boolean isContaminated(ItemStack stack){
 		if(!stack.hasTagCompound())
 			return false;
-		if(stack.getTagCompound().hasKey(NTM_NEUTRON_NBT_KEY))
-			return true;
-		return false;
-	}
+        return stack.getTagCompound().hasKey(NTM_NEUTRON_NBT_KEY);
+    }
 	
 	public static String getPreffixFromRad(double rads) {
 
@@ -513,7 +502,7 @@ public class ContaminationUtil {
 	/// DIGAMMA ///
 	public static void applyDigammaData(Entity e, float f) {
 
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return;
 
 		if(e instanceof EntityQuackos || e instanceof EntityOcelot)
@@ -524,10 +513,8 @@ public class ContaminationUtil {
 		
 		if(e instanceof EntityPlayer && e.ticksExisted < 200)
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		
-		if(entity.isPotionActive(HbmPotion.stability))
+
+        if(entity.isPotionActive(HbmPotion.stability))
 			return;
 		
 		if(!(entity instanceof EntityPlayer && ArmorUtil.checkForDigamma((EntityPlayer) entity)))
@@ -536,7 +523,7 @@ public class ContaminationUtil {
 		
 	public static void applyDigammaDirect(Entity e, float f) {
 
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return;
 
 		if(e instanceof IRadiationImmune)
@@ -544,18 +531,16 @@ public class ContaminationUtil {
 		
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		HbmLivingProps.incrementDigamma(entity, f);
+
+        HbmLivingProps.incrementDigamma(entity, f);
 	}
 		
 	public static float getDigamma(Entity e) {
 
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return 0.0F;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		return HbmLivingProps.getDigamma(entity);
+
+        return HbmLivingProps.getDigamma(entity);
 	}
 
 	public static void radiate(World world, double x, double y, double z, double range, float rad3d) {
@@ -658,22 +643,18 @@ public class ContaminationUtil {
 			return true;
 		}
 
-		if(e instanceof EntityPlayer && (((EntityPlayer)e).isCreative() || ((EntityPlayer)e).isSpectator())) {
-			return true;
-		}
-
-		return false;
-	}
+        return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
+    }
 
 	
-	public static enum HazardType {
+	public enum HazardType {
 		MONOXIDE,
 		RADIATION,
 		NEUTRON,
 		DIGAMMA
 	}
 	
-	public static enum ContaminationType {
+	public enum ContaminationType {
 		GAS,				//filterable by gas mask
 		GAS_NON_REACTIVE,	//not filterable by gas mask
 		GOGGLES,			//preventable by goggles

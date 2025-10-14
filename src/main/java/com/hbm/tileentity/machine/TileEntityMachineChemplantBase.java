@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import api.hbm.energy.IEnergyUser;
@@ -11,12 +10,9 @@ import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.handler.MultiblockHandler;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.InventoryUtil;
 
-import net.minecraft.inventory.IInventory;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -32,7 +28,6 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
-import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
 import org.jetbrains.annotations.NotNull;
 
@@ -169,12 +164,8 @@ public abstract class TileEntityMachineChemplantBase extends TileEntityMachineBa
 			return false;
 		}
 
-		if(!hasSpaceForItems(itemOutputs, index)) {
-			return false;
-		}
-
-		return true;
-	}
+        return hasSpaceForItems(itemOutputs, index);
+    }
 
 	private void setupTanks(@Nullable FluidStack[] inputs, @Nullable FluidStack[] outputs, int index) {
 		if(inputs != null) {

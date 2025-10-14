@@ -19,7 +19,7 @@ public class HbmAnimations {
 	//animation is playing, though this will cancel the animation entirely.
 	public static final Animation[] hotbar = new Animation[10];
 
-	public static enum AnimType {
+	public enum AnimType {
 		RELOAD,		//animation for every reload cycle
 		CYCLE,		//animation for every firing cycle
 		ALT_CYCLE,	//animation for alt fire cycles

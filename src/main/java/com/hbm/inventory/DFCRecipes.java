@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map.Entry;
 
 import com.hbm.lib.Library;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 

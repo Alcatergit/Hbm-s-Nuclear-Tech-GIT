@@ -1,13 +1,9 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.Library;
 import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.util.EnumFacing;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;

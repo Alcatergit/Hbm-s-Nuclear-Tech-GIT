@@ -88,7 +88,7 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
             int mode = router.modes[i];
 
             //if the side is disabled or wildcard, skip
-            if(mode == router.MODE_NONE || mode == router.MODE_WILDCARD)
+            if(mode == TileEntityCraneRouter.MODE_NONE || mode == TileEntityCraneRouter.MODE_WILDCARD)
                 continue;
 
             boolean matchesFilter = false;
@@ -107,7 +107,7 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
             }
 
             //add dir if matches with whitelist on or doesn't match with blacklist on
-            if((mode == router.MODE_WHITELIST && matchesFilter) || (mode == router.MODE_BLACKLIST && !matchesFilter)) {
+            if((mode == TileEntityCraneRouter.MODE_WHITELIST && matchesFilter) || (mode == TileEntityCraneRouter.MODE_BLACKLIST && !matchesFilter)) {
                 validDirs.add(customEnumOrder[i]);
             }
         }
@@ -115,7 +115,7 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
         //if no valid dirs have yet been found, use wildcard
         if(validDirs.isEmpty()) {
             for(int i = 0; i<6; i++) {
-                if(router.modes[i] == router.MODE_WILDCARD) {
+                if(router.modes[i] == TileEntityCraneRouter.MODE_WILDCARD) {
                     validDirs.add(customEnumOrder[i]);
                 }
             }

@@ -137,8 +137,8 @@ public class DiFurnaceRecipes {
 	}
 
 	public static void removeRecipe(ItemStack output){
-		diRecipes.values().removeIf(value -> areItemStacksEqual(value,output));;
-	}
+		diRecipes.values().removeIf(value -> areItemStacksEqual(value,output));
+    }
 	public static void addFuel(AStack fuel, int power){
 		diFuels.put(fuel, power);
 	}
@@ -246,12 +246,12 @@ public class DiFurnaceRecipes {
 	}
 
 	public static List<ItemStack> getAlloyFuels() {
-		HashSet uniqueFuels = new HashSet<ItemStack>();
+//		HashSet uniqueFuels = new HashSet<ItemStack>();
 		ArrayList<ItemStack> fuels = new ArrayList<ItemStack>();
 		for(AStack entry : DiFurnaceRecipes.diFuels.keySet()){
 			fuels.addAll(entry.getStackList());
 		}
-		fuels.addAll(uniqueFuels);
+//		fuels.addAll(uniqueFuels);
 		return fuels;
 	}
 }

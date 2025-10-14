@@ -22,14 +22,6 @@ public class BlockGenericStairs extends BlockStairs {
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
-
-	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		float hardness = this.getExplosionResistance(null);
-		if(hardness > 50){
-			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
-		}
-	}
 	
 	@Override
 	public Block setSoundType(SoundType sound) {

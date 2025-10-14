@@ -104,7 +104,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -217,11 +217,8 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 	}
 
 	public boolean canLaunch() {
-		if(power >= maxPower * 0.75 && isMissileValid() && hasDesignator() && hasFuel() && clearingTimer == 0)
-			return true;
-
-		return false;
-	}
+        return power >= maxPower * 0.75 && isMissileValid() && hasDesignator() && hasFuel() && clearingTimer == 0;
+    }
 
 	public void launch() {
 
@@ -298,9 +295,7 @@ public class TileEntityCompactLauncher extends TileEntityLoadedBase implements I
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(tanks[tank] != null) {
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
-				return true;
-			}
+            return isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

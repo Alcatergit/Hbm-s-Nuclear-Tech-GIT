@@ -1,14 +1,11 @@
 package com.hbm.entity.effect;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.config.BombConfig;
-import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
-import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.saveddata.AuxSavedData;
 
 //Chunkloading stuff
 import java.util.ArrayList;
@@ -18,25 +15,12 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.blocks.generic.WasteLog;
 
+import net.minecraft.block.*;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraft.util.math.ChunkPos;
 
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.block.BlockHugeMushroom;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockDirt;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockGrass;
-import net.minecraft.block.BlockGravel;
-import net.minecraft.block.BlockIce;
-import net.minecraft.block.BlockSnow;
-import net.minecraft.block.BlockSnowBlock;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockStone;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
@@ -45,8 +29,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -67,6 +49,7 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 	private double s4;
 	private double s5;
 	private double s6;
+    private double s7;
 
 	private double phi;
 
@@ -241,9 +224,11 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(), ModBlocks.toxic_block.getDefaultState());
 				return;
 			
-			} else if(bblock instanceof BlockLeaves) {
+			} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
 				if(l > s1){
-					world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+                    BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                    if(type == null) type = BlockPlanks.EnumType.OAK;
+                    world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 				}else{
 					world.setBlockToAir(pos);
 				}
@@ -361,7 +346,7 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 
 			} else if(bblock == ModBlocks.ore_uranium) {
 				if(l <= s6){
-					if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0)
+					if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0 || l < s7)
 						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
 					else
 						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
@@ -443,7 +428,8 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 		s4 = 0.44 * i;
 		s5 = 0.34 * i;
 		s6 = 0.24 * i;
-		radius = i;
+        s7 = 0.05 * i;
+        radius = i;
 		maxSamples = (int)(Math.PI * Math.pow(i, 2));
 	}
 

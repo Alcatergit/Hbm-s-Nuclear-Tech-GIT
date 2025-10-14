@@ -34,15 +34,15 @@ public abstract class DataValue {
 		return val;
 	}
 	
-	public static enum DataType {
+	public enum DataType {
 		GENERIC(new float[]{0.5F, 0.5F, 0.5F}),
 		NUMBER(new float[]{0.4F, 0.6F, 0}),
 		STRING(new float[]{0, 1, 1}),
 		ENUM(new float[]{0.29F, 0, 0.5F});
 		
-		private float[] color;
+		private final float[] color;
 		
-		private DataType(float[] color){
+		DataType(float[] color){
 			this.color = color;
 		}
 		

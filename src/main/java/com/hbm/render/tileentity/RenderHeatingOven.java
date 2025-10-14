@@ -28,18 +28,16 @@ public class RenderHeatingOven extends TileEntitySpecialRenderer<TileEntityHeate
         }
         GL11.glRotatef(-90, 0F, 1F, 0F);
 
-        TileEntityHeaterOven oven = (TileEntityHeaterOven) tile;
-
         bindTexture(ResourceManager.heater_oven_tex);
         ResourceManager.heater_oven.renderPart("Main");
 
         GL11.glPushMatrix();
-        float door = oven.prevDoorAngle + (oven.doorAngle - oven.prevDoorAngle) * partialTicks;
+        float door = ((TileEntityHeaterOven) tile).prevDoorAngle + (((TileEntityHeaterOven) tile).doorAngle - ((TileEntityHeaterOven) tile).prevDoorAngle) * partialTicks;
         GL11.glTranslated(0, 0, door * 0.75D / 135D);
         ResourceManager.heater_oven.renderPart("Door");
         GL11.glPopMatrix();
 
-        if(oven.wasOn) {
+        if(((TileEntityHeaterOven) tile).wasOn) {
             GL11.glPushMatrix();
             GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 

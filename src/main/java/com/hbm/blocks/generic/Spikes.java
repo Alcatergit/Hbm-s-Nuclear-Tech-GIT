@@ -48,11 +48,8 @@ public class Spikes extends Block {
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}
-	@Override
-	public boolean isCollidable() {
-		return true;
-	}
-	@Override
+
+    @Override
 	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}

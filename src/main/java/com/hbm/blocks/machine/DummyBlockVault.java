@@ -134,13 +134,8 @@ public class DummyBlockVault extends BlockContainer implements IDummy, IBomb, IR
     	world.removeTileEntity(pos);
 		RadiationSystemNT.markChunkForRebuild(world, pos);
 	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
-	}
-	
-	@Override
+
+    @Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		return Items.AIR;
 	}

@@ -85,12 +85,11 @@ public class WeightedRandomChestContentFrom1710 extends WeightedRandom.Item
             aweightedrandomchestcontent1[i++] = p_92080_0_[j];
         }
 
-        WeightedRandomChestContentFrom1710[] aweightedrandomchestcontent2 = p_92080_1_;
         int k = p_92080_1_.length;
 
         for (int l = 0; l < k; ++l)
         {
-            WeightedRandomChestContentFrom1710 weightedrandomchestcontent1 = aweightedrandomchestcontent2[l];
+            WeightedRandomChestContentFrom1710 weightedrandomchestcontent1 = p_92080_1_[l];
             aweightedrandomchestcontent1[i++] = weightedrandomchestcontent1;
         }
 

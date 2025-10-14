@@ -28,19 +28,17 @@ public class RenderMachineForceField extends TileEntitySpecialRenderer<TileEntit
 		GL11.glRotatef(180, 0F, 1F, 0F);
         bindTexture(ResourceManager.radar_base_tex);
         ResourceManager.radar.renderPart("Base");
-        
-        TileEntityForceField ff = (TileEntityForceField)te;
 
         GL11.glTranslated(0, 0.5D, 0);
         
         //double rot = (System.currentTimeMillis() / 10D) % 360;
         
-        int segments = (int)(16 + ff.radius * 0.125);
+        int segments = (int)(16 + ((TileEntityForceField)te).radius * 0.125);
         
         bindTexture(ResourceManager.forcefield_top_tex);
 
-        if(ff.isOn && ff.health > 0 && ff.power > 0 && ff.cooldown == 0) {
-        	generateSphere(segments, segments * 2, ff.radius, ff.color);
+        if(((TileEntityForceField)te).isOn && ((TileEntityForceField)te).health > 0 && ((TileEntityForceField)te).power > 0 && ((TileEntityForceField)te).cooldown == 0) {
+        	generateSphere(segments, segments * 2, ((TileEntityForceField)te).radius, ((TileEntityForceField)te).color);
             
             double rot = (System.currentTimeMillis() * 0.5D) % 360;
     		GL11.glRotated(-rot, 0F, 1F, 0F);

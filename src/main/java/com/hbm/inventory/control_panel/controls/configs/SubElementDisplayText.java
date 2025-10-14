@@ -3,9 +3,6 @@ package com.hbm.inventory.control_panel.controls.configs;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.GuiControlEdit;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
 
 import java.util.HashMap;

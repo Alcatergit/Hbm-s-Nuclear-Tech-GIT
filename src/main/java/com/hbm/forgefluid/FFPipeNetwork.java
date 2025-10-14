@@ -110,8 +110,10 @@ public class FFPipeNetwork implements IFluidHandler {
 		
 		List<IFluidHandler> consumers = new ArrayList<IFluidHandler>();
 		for(ICapabilityProvider handle : this.fillables){
-			if(handle != null && handle.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null) && handle.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(new FluidStack(this.type, 1), false) > 0 && !consumers.contains(handle));
-				consumers.add(handle.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null));
+            if (handle != null && handle.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+                handle.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null).fill(new FluidStack(this.type, 1), false);
+            }
+            consumers.add(handle.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null));
 		}
 		int size = consumers.size();
 		if(size <= 0)
@@ -156,17 +158,10 @@ public class FFPipeNetwork implements IFluidHandler {
 				pipe.setNetwork(net);
 			}
 			merge.pipes.clear();
-			for (ICapabilityProvider fill : merge.fillables) {
-				net.fillables.add(fill);
-
-			}
+            net.fillables.addAll(merge.fillables);
 			merge.Destroy();
 			return net;
-		} else if(net != null) {
-			return net;
-		} else {
-			return null;
-		}
+		} else return net;
 	}
 
 	/**

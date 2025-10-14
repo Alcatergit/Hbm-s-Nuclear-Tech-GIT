@@ -22,7 +22,7 @@ public class ItemRenderMissileGeneric extends TEISRBase {
 	
 	protected RenderMissileType category;
 	
-	public static enum RenderMissileType {
+	public enum RenderMissileType {
 		TYPE_TIER0,
 		TYPE_TIER1,
 		TYPE_TIER2,

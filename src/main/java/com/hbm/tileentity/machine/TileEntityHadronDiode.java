@@ -103,7 +103,7 @@ public class TileEntityHadronDiode extends TileEntityTickingBase {
 		return super.writeToNBT(compound);
 	}
 
-	public static enum DiodeConfig {
+	public enum DiodeConfig {
 		NONE,
 		IN,
 		OUT

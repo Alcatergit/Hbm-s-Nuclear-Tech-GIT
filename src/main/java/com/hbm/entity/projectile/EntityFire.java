@@ -35,7 +35,7 @@ import net.minecraft.world.World;
 
 public class EntityFire extends Entity implements IProjectile {
 
-	private static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityBullet.class, DataSerializers.BOOLEAN);
+	private static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityFire.class, DataSerializers.BOOLEAN);
 	
 	private int field_145791_d = -1;
     private int field_145792_e = -1;

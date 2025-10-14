@@ -5,7 +5,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import static com.hbm.inventory.OreDictManager.*;
-import static com.hbm.inventory.material.Mats.*;
 
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
@@ -14,7 +13,6 @@ import com.hbm.items.machine.ItemCircuit;
 import com.hbm.util.Tuple.Pair;
 import com.hbm.items.ModItems;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 
@@ -29,7 +27,7 @@ import net.minecraftforge.oredict.OreDictionary;
 
 public class PressRecipes {
 
-	public static enum PressType {
+	public enum PressType {
 		NONE,
 		FLAT,
 		PLATE,
@@ -38,8 +36,8 @@ public class PressRecipes {
 		THREEFIFESEVEN,
 		FOURFOUR,
 		NINE,
-		FIVEZERO;
-	}
+		FIVEZERO
+    }
 
 	public static LinkedHashMap<Pair<PressType, AStack>, ItemStack> pressRecipes = new LinkedHashMap<Pair<PressType, AStack>, ItemStack>();
 

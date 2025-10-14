@@ -7,7 +7,6 @@ import com.hbm.tileentity.machine.TileEntityMachineRadar;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 public class RenderRadar extends TileEntitySpecialRenderer<TileEntityMachineRadar> {
 

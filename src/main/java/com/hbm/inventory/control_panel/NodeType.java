@@ -12,9 +12,9 @@ public enum NodeType {
 	//The outputs that get evaluated, such as broadcasting a new event or setting an arbitrary variable
 	OUTPUT(new float[]{1, 0, 0});
 	
-	private float[] color;
+	private final float[] color;
 	
-	private NodeType(float[] color){
+	NodeType(float[] color){
 		this.color = color;
 	}
 	

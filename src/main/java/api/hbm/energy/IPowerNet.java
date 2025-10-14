@@ -9,28 +9,28 @@ import java.util.List;
  */
 public interface IPowerNet {
 	
-	public void joinNetworks(IPowerNet network);
+	void joinNetworks(IPowerNet network);
 
-	public IPowerNet joinLink(IEnergyConductor conductor);
-	public void leaveLink(IEnergyConductor conductor);
+	IPowerNet joinLink(IEnergyConductor conductor);
+	void leaveLink(IEnergyConductor conductor);
 
-	public void subscribe(IEnergyConnector connector);
-	public void unsubscribe(IEnergyConnector connector);
-	public boolean isSubscribed(IEnergyConnector connector);
+	void subscribe(IEnergyConnector connector);
+	void unsubscribe(IEnergyConnector connector);
+	boolean isSubscribed(IEnergyConnector connector);
 
-	public void destroy();
+	void destroy();
 	
 	/**
 	 * When a link is removed, instead of destroying the network, causing it to be recreated from currently loaded conductors,
 	 * we re-evaluate it, creating new nets based on the previous links.
 	 */
-	public void reevaluate();
+    void reevaluate();
 	
-	public boolean isValid();
+	boolean isValid();
 
-	public List<IEnergyConductor> getLinks();
-	public List<IEnergyConnector> getSubscribers();
+	List<IEnergyConductor> getLinks();
+	List<IEnergyConnector> getSubscribers();
 	
-	public long transferPower(long power);
-	public long getTotalTransfer();
+	long transferPower(long power);
+	long getTotalTransfer();
 }

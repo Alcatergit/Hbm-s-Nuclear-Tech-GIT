@@ -73,8 +73,7 @@ public class CraneUnboxer extends BlockCraneBase implements IEnterableBlock {
 
     @Override
     public int getComparatorInputOverride(IBlockState blockState, World world, BlockPos pos) {
-        int redstoneSignal = blockState.getComparatorInputOverride(world, pos);
-        return redstoneSignal;
+        return blockState.getComparatorInputOverride(world, pos);
     }
 
     @Override

@@ -1,13 +1,10 @@
 package com.hbm.items;
 
 import java.util.HashSet;
-import java.util.List;
-import java.util.Locale;
 import java.util.Set;
 
 import com.hbm.interfaces.IHasCustomMetaModels;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.EnumUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;

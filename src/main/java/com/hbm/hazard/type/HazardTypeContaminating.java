@@ -8,7 +8,6 @@ import com.hbm.util.I18nUtil;
 import com.hbm.blocks.generic.BlockClean;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;

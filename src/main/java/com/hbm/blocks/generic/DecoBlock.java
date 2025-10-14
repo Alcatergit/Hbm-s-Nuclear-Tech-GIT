@@ -16,7 +16,6 @@ import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
@@ -67,10 +66,8 @@ public class DecoBlock extends BlockContainer {
 	
 	@Override
 	public boolean hasTileEntity(IBlockState state) {
-		if(this == ModBlocks.steel_scaffold || this == ModBlocks.steel_beam)
-			return false;
-		return true;
-	}
+        return this != ModBlocks.steel_scaffold && this != ModBlocks.steel_beam;
+    }
 	
 	@Override
 	public EnumBlockRenderType getRenderType(IBlockState state) {

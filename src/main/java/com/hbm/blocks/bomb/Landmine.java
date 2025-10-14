@@ -89,13 +89,9 @@ public class Landmine extends BlockContainer implements IBomb {
         	explode(world, pos);
         }
         
-		boolean flag = false;
+		boolean flag = !world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockFence);
 
-		if (!world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockFence)) {
-			flag = true;
-		}
-
-		if (flag) {
+        if (flag) {
 			this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
 			world.setBlockToAir(pos);
 		}

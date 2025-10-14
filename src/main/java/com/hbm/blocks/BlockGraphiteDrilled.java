@@ -34,7 +34,7 @@ public class BlockGraphiteDrilled extends BlockGraphiteDrilledBase {
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_plutonium, ModBlocks.block_graphite_plutonium)) return true;
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_source, ModBlocks.block_graphite_source)) return true;
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_boron, ModBlocks.block_graphite_rod)) return true;
-				if(checkInteraction(world, x, y, z, null, player, hand, ModItems.ingot_graphite, ModBlocks.block_graphite)) return true;
+                return checkInteraction(world, x, y, z, null, player, hand, ModItems.ingot_graphite, ModBlocks.block_graphite);
 			}
 		}
 		

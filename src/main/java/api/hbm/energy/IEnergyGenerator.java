@@ -12,17 +12,17 @@ public interface IEnergyGenerator extends IEnergyUser {
 	 * @param power
 	 */
 	@Override
-	public default long transferPower(long power) {
+    default long transferPower(long power) {
 		return power;
 	}
 
 	/* should stop making non-receivers from interfering by applying their weight which doesn't even matter */
 	@Override
-	public default long getTransferWeight() {
+    default long getTransferWeight() {
 		return 0;
 	}
 
-	public default void sendPower(World world, BlockPos pos){
+	default void sendPower(World world, BlockPos pos){
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS)
 			this.sendPower(world, pos.add(dir.offsetX, dir.offsetY, dir.offsetZ), dir);
 	}

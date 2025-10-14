@@ -64,7 +64,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -138,7 +138,7 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		maxCool = reactor.tanks[1].getCapacity();
         		maxSteam = reactor.tanks[2].getCapacity();
         		rods = reactor.rods;
-        		maxRods = reactor.rodsMax;
+        		maxRods = TileEntityMachineReactorSmall.rodsMax;
         		isOn = !reactor.retracting;
         		isLinked = true;
         		

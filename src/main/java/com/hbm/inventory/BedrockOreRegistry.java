@@ -9,50 +9,43 @@ import java.util.HashMap;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.lib.Library;
 import com.hbm.config.BedrockOreJsonConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.util.Tuple;
+import com.hbm.util.Tuple.Pair;
 import com.hbm.util.WeightedRandomObject;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.util.WeightedRandom;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.fluids.FluidStack;
+import org.lwjgl.Sys;
 
 import static com.hbm.items.ModItems.*;
-import static com.hbm.items.ModItems.ore_bedrock_deepcleaned;
-import static com.hbm.items.ModItems.ore_bedrock_enriched;
-import static com.hbm.items.ModItems.ore_bedrock_exquisite;
-import static com.hbm.items.ModItems.ore_bedrock_nitrated;
-import static com.hbm.items.ModItems.ore_bedrock_nitrocrystalline;
-import static com.hbm.items.ModItems.ore_bedrock_perfect;
-import static com.hbm.items.ModItems.ore_bedrock_purified;
-import static com.hbm.items.ModItems.ore_bedrock_seared;
-import static com.hbm.items.ModItems.ore_bedrock_separated;
 
 //TODO: clean this shit up
 @Spaghetti("everything")
 public class BedrockOreRegistry {
 
-	public static HashMap<Integer, String> oreIndexes = new HashMap();
-	public static HashMap<String, Integer> oreToIndexes = new HashMap();
+	public static HashMap<Integer, String> oreIndexes = new HashMap<>();
+	public static HashMap<String, Integer> oreToIndexes = new HashMap<>();
 
-	public static HashMap<String, String> oreResults = new HashMap();
-	public static HashMap<String, Integer> oreColors = new HashMap();
-	public static HashMap<String, Integer> oreTiers = new HashMap();
+	public static HashMap<String, String> oreResults = new HashMap<>();
+	public static HashMap<String, Integer> oreColors = new HashMap<>();
+	public static HashMap<String, Integer> oreTiers = new HashMap<>();
 	
-	public static HashMap<Integer, List<WeightedRandomObject>> oreCasino = new HashMap();
+	public static HashMap<Pair<Integer, Integer>, List<WeightedRandomObject>> oreCasino = new HashMap<>();
+
+    public static List<WeightedRandomObject> tierCasino = new ArrayList<>();
 
 	public static void registerBedrockOres(){
 		collectBedrockOres();
 		fillOreCasino();
+        fillTierCasino();
         registerBedrockOreOreDict();
 	}
 
@@ -96,21 +89,20 @@ public class BedrockOreRegistry {
 
     public static void registerBedrockOreOreDict(){
         for(Map.Entry<Integer, String> e: oreIndexes.entrySet()) {
-                int oreMeta = e.getKey();
-                String name = e.getValue().substring(3);
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_centrifuged, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_cleaned, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_separated, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_deepcleaned, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_purified, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrated, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrocrystalline, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_seared, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_exquisite, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_perfect, 1, oreMeta));
-                OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_enriched, 1, oreMeta));
-
+            int oreMeta = e.getKey();
+            String name = e.getValue().substring(3);
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_centrifuged, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_cleaned, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_separated, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_deepcleaned, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_purified, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrated, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_nitrocrystalline, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_seared, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_exquisite, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_perfect, 1, oreMeta));
+            OreDictionary.registerOre("bedrockOre"+name, new ItemStack(ore_bedrock_enriched, 1, oreMeta));
         }
     }
 
@@ -181,21 +173,30 @@ public class BedrockOreRegistry {
     }
 
 	public static void fillOreCasino(){
-		for(Integer dimID : BedrockOreJsonConfig.dimOres.keySet()){
-
-			List<WeightedRandomObject> oreWeights = new ArrayList();
-			for(String oreName : oreResults.keySet()){
-
-				if(BedrockOreJsonConfig.isOreAllowed(dimID, oreName))
-					oreWeights.add(new WeightedRandomObject(oreName, getTierWeight(getOreTier(oreName))));
-			}
-			oreCasino.put(dimID, oreWeights);
+        for(String oreName : oreResults.keySet()){
+            for(Integer dimID : BedrockOreJsonConfig.dimOres.keySet()){
+                if(BedrockOreJsonConfig.isOreAllowed(dimID, oreName)){
+                    addOreToCasino(dimID, oreTiers.get(oreName), oreName);
+                }
+            }
 		}
 	}
 
-	public static String rollOreName(int dimID, Random rand){
-		if(oreCasino.get(dimID).isEmpty()) return null;
-		return WeightedRandom.getRandomItem(rand, oreCasino.get(dimID)).asString();
+    public static void addOreToCasino(int dimID, int tier, String oreName){
+        List<WeightedRandomObject> oreWeights = oreCasino.computeIfAbsent(new Pair<>(dimID, tier), k -> new ArrayList<>());
+        oreWeights.add(new WeightedRandomObject(oreName, 1));
+    }
+
+    public static void fillTierCasino() {
+        for(int tier=1; tier<8; tier++){
+            tierCasino.add(new WeightedRandomObject(tier, getTierWeight(tier)));
+        }
+    }
+
+    public static int rollOreTier(Random rand){
+        Integer i = WeightedRandom.getRandomItem(rand, tierCasino).asInteger();
+        if(i == null) return -1;
+        return i;
 	}
 
 	public static int getDirectOreTier(String oreName){
@@ -215,6 +216,17 @@ public class BedrockOreRegistry {
 			return tierSum/tierCount;
 		return 0;
 	}
+
+    public static int getRandomOreByTier(Random rand, int tier, int dim){
+        List<WeightedRandomObject> oreWeights = oreCasino.get(new Pair<>(dim, tier));
+        if(oreWeights == null){
+            if(tier == 1) return -1;
+            return getRandomOreByTier(rand, tier-1, dim);
+        }
+        Integer i = oreToIndexes.get(WeightedRandom.getRandomItem(rand, oreWeights).asString());
+        if(i == null) return -1;
+        return i;
+    }
 
 	public static String getOreName(String oreName){
 		return oreName.substring(3).replaceAll("([A-Z])", " $1").trim();

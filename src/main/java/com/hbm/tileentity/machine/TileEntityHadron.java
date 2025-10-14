@@ -91,7 +91,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 			power = Library.chargeTEFromItems(inventory, 4, power, maxPower);
 			drawPower();
 
-			if(delay <= 0 && this.isOn && particles.size() < maxParticles && !inventory.getStackInSlot(0).isEmpty() && !inventory.getStackInSlot(1).isEmpty() && power >= maxPower * 0.75) {
+			if(delay <= 0 && this.isOn && particles.isEmpty() && !inventory.getStackInSlot(0).isEmpty() && !inventory.getStackInSlot(1).isEmpty() && power >= maxPower * 0.75) {
 				if(!hopperMode || (inventory.getStackInSlot(0).getCount() > 1 && inventory.getStackInSlot(1).getCount() > 1)) {
 					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata());
 					particles.add(new Particle(inventory.getStackInSlot(0), inventory.getStackInSlot(1), dir, pos.getX(), pos.getY(), pos.getZ()));
@@ -710,7 +710,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 				b == ModBlocks.hadron_analysis_glass;
 	}
 	
-	public static enum EnumHadronState {
+	public enum EnumHadronState {
 		IDLE(0x8080ff),
 		PROGRESS(0xffff00),
 		ANALYSIS(0xffff00),
@@ -730,14 +730,14 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 		ERROR_BRANCHING_TURN(0xff0000, true),
 		ERROR_GENERIC(0xff0000, true);
 
-		public int color;
-		public boolean showCoord;
+		public final int color;
+		public final boolean showCoord;
 		
-		private EnumHadronState(int color) {
+		EnumHadronState(int color) {
 			this(color, false);
 		}
 		
-		private EnumHadronState(int color, boolean showCoord) {
+		EnumHadronState(int color, boolean showCoord) {
 			this.color = color;
 			this.showCoord = showCoord;
 		}

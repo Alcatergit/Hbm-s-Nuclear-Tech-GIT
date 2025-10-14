@@ -10,12 +10,8 @@ public class MaterialGas extends Material {
 		this.setNoPushMobility();
 		this.setReplaceable();
 	}
-	
-	public boolean isSolid() {
-		return true;
-	}
 
-	public boolean getCanBlockGrass() {
+    public boolean getCanBlockGrass() {
 		return false;
 	}
 

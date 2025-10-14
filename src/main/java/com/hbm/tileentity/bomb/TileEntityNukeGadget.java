@@ -34,7 +34,7 @@ public class TileEntityNukeGadget extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -64,48 +64,25 @@ public class TileEntityNukeGadget extends TileEntity {
 	}
 	
 	public boolean exp1() {
-		if(inventory.getStackInSlot(1).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return inventory.getStackInSlot(1).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp2() {
-		if(inventory.getStackInSlot(2).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return inventory.getStackInSlot(2).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp3() {
-		if(inventory.getStackInSlot(3).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return inventory.getStackInSlot(3).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp4() {
-		if(inventory.getStackInSlot(4).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return inventory.getStackInSlot(4).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean isReady() {
 		if(this.exp1() == true && this.exp2() == true && this.exp3() == true && this.exp4() == true)
 		{
-			if(inventory.getStackInSlot(0).getItem() == ModItems.gadget_wireing && inventory.getStackInSlot(5).getItem() == ModItems.gadget_core)
-			{
-				return true;
-			}
+            return inventory.getStackInSlot(0).getItem() == ModItems.gadget_wireing && inventory.getStackInSlot(5).getItem() == ModItems.gadget_core;
 		}
 		
 		return false;

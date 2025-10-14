@@ -352,7 +352,7 @@ public abstract class EntityGrenadeBouncyBase extends Entity implements IProject
 	}
 
 	public EntityLivingBase getThrower() {
-		if (this.thrower == null && this.throwerName != null && this.throwerName.length() > 0) {
+		if (this.thrower == null && this.throwerName != null && !this.throwerName.isEmpty()) {
 			this.thrower = this.world.getPlayerEntityByName(this.throwerName);
 		}
 

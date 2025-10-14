@@ -252,11 +252,9 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 				}
 			}
 		}
-		if(world.isRemote){
-			//System.out.println(this + " " + this.getPos() + " " + changed);
-			//new Exception().printStackTrace();
-		}
-		return changed;
+        //System.out.println(this + " " + this.getPos() + " " + changed);
+        //new Exception().printStackTrace();
+        return changed;
 	}
 
 	public void updateConnections() {

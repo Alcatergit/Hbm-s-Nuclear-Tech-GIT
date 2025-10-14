@@ -76,10 +76,7 @@ public class ArmorModel extends ItemArmor {
 		if (this == ModItems.cape_schrabidium) {
 			return armorType == EntityEquipmentSlot.CHEST;
 		}
-		if (this == ModItems.hat) {
-			return armorType == EntityEquipmentSlot.HEAD;
-		}
-		return armorType == EntityEquipmentSlot.HEAD;
+        return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 	@SideOnly(Side.CLIENT)

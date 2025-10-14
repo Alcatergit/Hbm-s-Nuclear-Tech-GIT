@@ -18,7 +18,6 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.oredict.OreDictionary;
 
 import static com.hbm.inventory.OreDictManager.F;
-import static com.hbm.inventory.OreDictManager.KEY_DEAD_PLANT;
 
 public class MixerRecipes {
 

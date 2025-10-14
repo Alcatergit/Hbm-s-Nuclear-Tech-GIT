@@ -1,9 +1,5 @@
 package com.hbm.inventory;
 
-import static com.hbm.inventory.OreDictManager.CU;
-import static com.hbm.inventory.OreDictManager.IRON;
-import static com.hbm.inventory.OreDictManager.STEEL;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -25,7 +21,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
 import com.hbm.items.machine.ItemFluidTank;
 import crafttweaker.CraftTweakerAPI;
-import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
@@ -777,20 +772,20 @@ public class AnvilRecipes {
 		}
 		
 		public AnvilConstructionRecipe(AStack[] input, AnvilOutput output) {
-			for(AStack stack : input) this.input.add(stack);
+            this.input.addAll(Arrays.asList(input));
 			this.output.add(output);
 			this.setOverlay(OverlayType.CONSTRUCTION); //preferred overlay for many:1 conversions is construction
 		}
 		
 		public AnvilConstructionRecipe(AStack input, AnvilOutput[] output) {
 			this.input.add(input);
-			for(AnvilOutput out : output) this.output.add(out);
+            this.output.addAll(Arrays.asList(output));
 			this.setOverlay(OverlayType.RECYCLING); //preferred overlay for 1:many conversions is recycling
 		}
 		
 		public AnvilConstructionRecipe(AStack[] input, AnvilOutput[] output) {
-			for(AStack stack : input) this.input.add(stack);
-			for(AnvilOutput out : output) this.output.add(out);
+            this.input.addAll(Arrays.asList(input));
+            this.output.addAll(Arrays.asList(output));
 			this.setOverlay(OverlayType.NONE); //no preferred overlay for many:many conversions
 		}
 		
@@ -854,10 +849,10 @@ public class AnvilRecipes {
 		}
 	}
 	
-	public static enum OverlayType {
+	public enum OverlayType {
 		NONE,
 		CONSTRUCTION,
 		RECYCLING,
-		SMITHING;
-	}
+		SMITHING
+    }
 }

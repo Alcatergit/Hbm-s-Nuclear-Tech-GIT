@@ -140,7 +140,7 @@ public class ItemGunEgon extends ItemGunBase {
                 if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
 					return;
 				}
-				this.charge = this.charge * this.chargeScaling;
+				this.charge = this.charge * chargeScaling;
 				float damage = Math.min(ent.getHealth(), this.charge);
 				ent.getCombatTracker().trackDamage(ModDamageSource.gluon, ent.getHealth(), damage);
 				ent.setHealth(ent.getHealth()-damage);

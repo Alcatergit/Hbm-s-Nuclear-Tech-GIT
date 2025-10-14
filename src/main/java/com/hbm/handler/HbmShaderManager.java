@@ -456,14 +456,12 @@ public class HbmShaderManager {
 
 	}
 
-	public static interface FloatSupplier {
-		public float getAsFloat();
+	public interface FloatSupplier {
+		float getAsFloat();
 	}
 
 	public static boolean isActiveShader(int prog) {
-		if(GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) == prog)
-			return true;
-		return false;
-	}
+        return GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) == prog;
+    }
 
 }

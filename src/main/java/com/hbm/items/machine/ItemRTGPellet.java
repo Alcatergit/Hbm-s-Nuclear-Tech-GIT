@@ -153,7 +153,7 @@ public class ItemRTGPellet extends ItemBase {
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
 		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {
-			list.add("§aFuel left: "+((int)(instance.getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
+			list.add("§aFuel left: "+((int)(getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
 			list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
 			list.add("");
 			list.add(String.format("%s / %s ticks", instance.getLifespan(stack), instance.getMaxLifespan()));

@@ -495,8 +495,8 @@ public class EntityRainbow extends Entity implements IProjectile {
 	}
 
 	public void randomizeColor() {
-		this.getDataManager().set(RED, rand.nextInt(2) == 1 ? true : false);
-		this.getDataManager().set(GREEN, rand.nextInt(2) == 1 ? true : false);
-		this.getDataManager().set(BLUE, rand.nextInt(2) == 1 ? true : false);
+		this.getDataManager().set(RED, rand.nextInt(2) == 1);
+		this.getDataManager().set(GREEN, rand.nextInt(2) == 1);
+		this.getDataManager().set(BLUE, rand.nextInt(2) == 1);
 	}
 }

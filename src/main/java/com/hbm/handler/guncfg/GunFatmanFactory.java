@@ -15,13 +15,9 @@ import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class GunFatmanFactory {
 	
@@ -177,7 +173,7 @@ public static GunConfiguration getFatmanConfig() {
 		bullet.bulletsMin = 8;
 		bullet.bulletsMax = 8;
 		bullet.spread = 0.1F;
-		bullet.style = bullet.STYLE_GRENADE;
+		bullet.style = BulletConfiguration.STYLE_GRENADE;
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 

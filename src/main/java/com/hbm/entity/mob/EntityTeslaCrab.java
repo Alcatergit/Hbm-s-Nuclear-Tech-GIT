@@ -3,11 +3,9 @@ package com.hbm.entity.mob;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityTesla;
 
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.item.Item;
 import net.minecraft.world.World;
 
 public class EntityTeslaCrab extends EntityCyberCrab {

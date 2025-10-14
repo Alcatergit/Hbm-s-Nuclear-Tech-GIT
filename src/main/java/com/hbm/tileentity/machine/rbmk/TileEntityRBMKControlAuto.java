@@ -118,7 +118,7 @@ public class TileEntityRBMKControlAuto extends TileEntityRBMKControl implements 
 		this.markDirty();
 	}
 	
-	public static enum RBMKFunction {
+	public enum RBMKFunction {
 		LINEAR,
 		QUAD_UP,
 		QUAD_DOWN

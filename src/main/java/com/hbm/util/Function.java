@@ -21,10 +21,11 @@ public abstract class Function {
 	public abstract String getLabelForFuel();
 	public abstract String getDangerFromFuel();
 	
-	public Function withDiv(double div) { this.div = div; return this; };
-	public Function withOff(double off) { this.off = off; return this; };
-	
-	public double getX(double x) { return x / div + off; }
+	public Function withDiv(double div) { this.div = div; return this; }
+
+    public Function withOff(double off) { this.off = off; return this; }
+
+    public double getX(double x) { return x / div + off; }
 	public String getXName() { return getXName(false); }
 	public String getXName(boolean brackets) {
 		String x = "x";

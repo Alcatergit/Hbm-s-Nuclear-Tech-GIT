@@ -1,6 +1,5 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import com.hbm.lib.ItemStackHandlerWrapper;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
 

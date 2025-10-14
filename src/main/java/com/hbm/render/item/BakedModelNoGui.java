@@ -33,17 +33,17 @@ public class BakedModelNoGui implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return renderer.type != TransformType.GUI ? false : renderer.itemModel.isAmbientOcclusion();
+		return renderer.type == TransformType.GUI && renderer.itemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return renderer.type != TransformType.GUI ? false : renderer.itemModel.isGui3d();
+		return renderer.type == TransformType.GUI && renderer.itemModel.isGui3d();
 	}
 
 	@Override
 	public boolean isBuiltInRenderer() {
-		return renderer.type != TransformType.GUI ? true : renderer.itemModel.isBuiltInRenderer();
+		return renderer.type != TransformType.GUI || renderer.itemModel.isBuiltInRenderer();
 	}
 
 	@Override

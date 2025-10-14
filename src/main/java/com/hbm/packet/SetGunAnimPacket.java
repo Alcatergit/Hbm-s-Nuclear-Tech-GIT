@@ -47,7 +47,7 @@ public class SetGunAnimPacket implements IMessage {
 		buf.writeLong(time);
 		buf.writeInt(animIndex);
 		buf.writeFloat(speedMultiplier);
-		buf.writeBoolean(hand == EnumHand.MAIN_HAND ? true : false);
+		buf.writeBoolean(hand == EnumHand.MAIN_HAND);
 	}
 	
 	public static class Handler implements IMessageHandler<SetGunAnimPacket, IMessage> {

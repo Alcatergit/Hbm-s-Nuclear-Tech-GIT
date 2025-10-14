@@ -13,9 +13,7 @@ import com.hbm.tileentity.IGUIProvider;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Blocks;
 import net.minecraft.inventory.Container;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -23,7 +21,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -90,7 +87,7 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
                 List<EntityMovingItem> items = world.getEntitiesWithinAABB(EntityMovingItem.class, new AxisAlignedBB(x + 0.1875D, y + 0.1875D, z + 0.1875D, x + 0.8125D, y + 0.8125D, z + 0.8125D));
                 for(EntityMovingItem item : items){
                     ItemStack stack = item.getItemStack().copy();
-                    boolean match = this.matchesFilter(stack);
+                    boolean match = this.matcher.matchesFilter(inventory, stack);
                     if(this.isWhitelist && !match || !this.isWhitelist && match){
                         continue;
                     }
@@ -119,9 +116,8 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
         EnumFacing outputSide = getOutputSide();
         TileEntity te = world.getTileEntity(pos.offset(outputSide));
         if (te != null) {
-            ICapabilityProvider capte = te;
-            if (capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
+            if (te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
+                IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
 
                 return tryInsertItemCap(cap, stack);
             }
@@ -163,18 +159,6 @@ public class TileEntityCraneGrabber extends TileEntityCraneBase implements IGUIP
         this.isWhitelist = nbt.getBoolean("isWhitelist");
         this.matcher.modes = new String[this.matcher.modes.length];
         this.matcher.readFromNBT(nbt);
-    }
-
-    public boolean matchesFilter(ItemStack stack) {
-
-        for(int i = 0; i < 9; i++) {
-            ItemStack filter = inventory.getStackInSlot(i);
-
-            if(filter != null && this.matcher.isValidForFilter(filter, i, stack)) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public void nextMode(int i) {

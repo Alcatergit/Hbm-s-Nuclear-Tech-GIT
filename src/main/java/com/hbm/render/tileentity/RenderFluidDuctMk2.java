@@ -11,8 +11,6 @@ import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.Fluid;
 
 public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileEntitySpecialRenderer<T> {
 	

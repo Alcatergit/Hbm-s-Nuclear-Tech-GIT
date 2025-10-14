@@ -6,7 +6,6 @@ import com.hbm.entity.missile.EntityBobmazon;
 import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.inventory.gui.GUIScreenBobmazon.Offer;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemCatalog;
 import com.hbm.lib.ModDamageSource;
 
 import io.netty.buffer.ByteBuf;

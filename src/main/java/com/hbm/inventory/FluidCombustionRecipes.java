@@ -2,8 +2,6 @@ package com.hbm.inventory;
 
 import java.util.HashMap;
 
-import com.hbm.forgefluid.ModForgeFluids;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 
@@ -23,16 +21,16 @@ public class FluidCombustionRecipes {
 	
 	}
 
-	public static enum FuelGrade {
+	public enum FuelGrade {
 		LOW("trait.fuelgrade.low"),			//heating and industrial oil				< star engine, iGen
 		MEDIUM("trait.fuelgrade.medium"),	//petroil									< diesel generator
 		HIGH("trait.fuelgrade.high"),		//diesel, gasoline							< HP engine
 		AERO("trait.fuelgrade.aero"),	//kerosene and other light aviation fuels	< turbofan
 		GAS("trait.fuelgrade.gas");		//fuel gasses like NG, PG and syngas		< gas turbine
 		
-		private String grade;
+		private final String grade;
 		
-		private FuelGrade(String grade) {
+		FuelGrade(String grade) {
 			this.grade = grade;
 		}
 		

@@ -4,7 +4,6 @@ import java.util.*;
 import java.util.Map.Entry;
 
 import com.hbm.inventory.control_panel.nodes.NodeFunction;
-import com.hbm.main.MainRegistry;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 

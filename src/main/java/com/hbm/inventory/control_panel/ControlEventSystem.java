@@ -8,7 +8,6 @@ import java.util.Set;
 
 import com.hbm.lib.RefStrings;
 
-import com.hbm.main.MainRegistry;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;

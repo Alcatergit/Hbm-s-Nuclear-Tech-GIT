@@ -9,10 +9,8 @@ import api.hbm.block.ICrucibleAcceptor;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.Packet;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.World;
@@ -101,9 +99,8 @@ public abstract class TileEntityFoundryBase extends TileEntity implements ITicka
 	 */
 	public boolean standardCheck(World world, BlockPos p, ForgeDirection side, MaterialStack stack) {
 		if(this.type != null && this.type != stack.material && this.amount > 0) return false; //reject if there's already a different material
-		if(this.amount >= this.getCapacity()) return false; //reject if the buffer is already full
-		return true;
-	}
+        return this.amount < this.getCapacity(); //reject if the buffer is already full
+    }
 	
 	/**
 	 * Standardized adding of material via pouring or flowing. Does:<br>

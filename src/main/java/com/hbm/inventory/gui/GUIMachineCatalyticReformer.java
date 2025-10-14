@@ -36,7 +36,7 @@ public class GUIMachineCatalyticReformer extends GuiInfoContainer {
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 107, guiTop + 69 - 52, 16, 52, refinery.tanks[1]);
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 125, guiTop + 69 - 52, 16, 52, refinery.tanks[2]);
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 69 - 52, 16, 52, refinery.tanks[3]);
-        this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 69 - 52, 16, 52, refinery.power, refinery.maxPower);
+        this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 69 - 52, 16, 52, refinery.power, TileEntityMachineCatalyticReformer.maxPower);
 
         if(this.mc.player.inventory.getItemStack() == ItemStack.EMPTY && this.isMouseOverSlot(this.inventorySlots.getSlot(10), mouseX, mouseY) && !this.inventorySlots.getSlot(10).getHasStack()) {
             List<Object[]> lines = new ArrayList<>();

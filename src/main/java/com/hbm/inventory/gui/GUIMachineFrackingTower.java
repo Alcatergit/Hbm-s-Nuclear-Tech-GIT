@@ -4,7 +4,6 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerMachineFrackingTower;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.oil.TileEntityMachineFrackingTower;
-import com.hbm.tileentity.machine.oil.TileEntityMachinePumpjack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;

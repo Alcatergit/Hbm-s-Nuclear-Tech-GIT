@@ -8,7 +8,6 @@ import com.hbm.items.IAnimatedItem;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
@@ -33,12 +32,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.oredict.OreDictionary;
 
 import java.util.*;
 
 import static com.hbm.inventory.RecipesCommon.*;
-import static com.hbm.inventory.RecipesCommon.AStack;
 
 public class ItemBoltgun extends Item implements IAnimatedItem {
 

@@ -53,7 +53,7 @@ public class BlockCoalOil extends BlockOre {
 
     	ItemTool tool = (ItemTool)player.getHeldItemMainhand().getItem();
 
-    	if(tool.getToolMaterialName() != ToolMaterial.WOOD.toString()) {
+    	if(!tool.getToolMaterialName().equals(ToolMaterial.WOOD.toString())) {
 
     		if(world.rand.nextInt(10) == 0)
     			world.setBlockState(pos, Blocks.FIRE.getDefaultState());

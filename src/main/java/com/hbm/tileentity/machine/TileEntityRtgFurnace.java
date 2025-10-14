@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.machine.MachineRtgFurnace;
 import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.items.ModItems;
 import com.hbm.util.RTGUtil;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -12,9 +11,6 @@ import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITickable {
@@ -43,7 +39,7 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -163,14 +159,9 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 			}else{
 				dualCookTime = 0;
 			}
-			boolean trigger = true;
-			
-			if(hasPower() && canProcess() && this.dualCookTime == 0)
-			{
-				trigger = false;
-			}
-			
-			if(trigger)
+			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
+
+            if(trigger)
             {
                 flag1 = true;
                 MachineRtgFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);
@@ -196,11 +187,8 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 				return true;
 			}
 		}
-		if(slot == 4){
-			return true;
-		}
-		return false;
-	}
+        return slot == 4;
+    }
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
@@ -208,11 +196,8 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 			if(stack.getItem() instanceof ItemRTGPellet)
 				return true;
 		}
-		if(i == 0){
-			return true;
-		}
-		return false;
-	}
+        return i == 0;
+    }
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {

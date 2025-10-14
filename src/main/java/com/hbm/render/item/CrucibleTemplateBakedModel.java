@@ -26,12 +26,12 @@ public class CrucibleTemplateBakedModel implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return type == TransformType.GUI ? false : CrucibleTemplateRender.INSTANCE.itemModel.isAmbientOcclusion();
+		return type != TransformType.GUI && CrucibleTemplateRender.INSTANCE.itemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return type == TransformType.GUI ? false :CrucibleTemplateRender.INSTANCE.itemModel.isGui3d();
+		return type != TransformType.GUI && CrucibleTemplateRender.INSTANCE.itemModel.isGui3d();
 	}
 
 	@Override

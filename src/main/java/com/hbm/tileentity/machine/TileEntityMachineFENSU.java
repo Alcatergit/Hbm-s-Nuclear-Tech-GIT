@@ -1,10 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 
-import api.hbm.energy.IEnergyConductor;
-import api.hbm.energy.IEnergyConnector;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;

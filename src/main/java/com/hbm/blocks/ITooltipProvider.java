@@ -7,8 +7,6 @@ import org.lwjgl.input.Keyboard;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 
 public interface ITooltipProvider {

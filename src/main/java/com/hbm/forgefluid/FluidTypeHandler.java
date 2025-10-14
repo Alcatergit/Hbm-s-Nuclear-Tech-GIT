@@ -1,9 +1,6 @@
 package com.hbm.forgefluid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.hbm.inventory.FluidCombustionRecipes.FuelGrade;
 import com.hbm.inventory.FluidCombustionRecipes;
@@ -283,18 +280,17 @@ public class FluidTypeHandler {
 			this.reactivity = r;
 			this.dfcFuel = dfc;
 			this.symbol = symbol;
-			for(FluidTrait trait : traits)
-				this.traits.add(trait);
+            this.traits.addAll(Arrays.asList(traits));
 		}
 	}
 	
-	public static enum FluidTrait {
+	public enum FluidTrait {
 		AMAT,
 		CORROSIVE,
 		CORROSIVE_2,
 		NO_CONTAINER,
-		NO_ID;
-	}
+		NO_ID
+    }
 
 
 	public static FluidProperties getProperties(Fluid f){

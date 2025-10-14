@@ -29,8 +29,8 @@ public class ContainerMachineAssembler extends Container {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack != null && stack.getItem() instanceof ItemAssemblyTemplate;
-			};
-		});
+			}
+        });
 		//Output
 		this.addSlotToContainer(new SlotMachineOutput(te.inventory, 5, 134, 90));
 		//Input

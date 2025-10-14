@@ -25,10 +25,8 @@ public class DataValueString extends DataValue {
 
 	@Override
 	public boolean getBoolean(){
-		if(str.equals("true"))
-			return true;
-		return false;
-	}
+        return str.equals("true");
+    }
 
 	@Override
 	public String toString(){

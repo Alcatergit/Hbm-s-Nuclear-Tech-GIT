@@ -31,7 +31,7 @@ public class RenderCharger extends TileEntitySpecialRenderer<TileEntityCharger> 
 			GlStateManager.color(1, 1, 1, 1);
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 			 
-	        BeamPronter.prontBeam(Vec3.createVectorHelper(0, te.pointingUp ? te.range + 0.5 : -te.range - 0.5, 0), EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0x002038, 0x002038, 0, 1, 0F, 1, 0.499F);
+	        BeamPronter.prontBeam(Vec3.createVectorHelper(0, te.pointingUp ? TileEntityCharger.range + 0.5 : -TileEntityCharger.range - 0.5, 0), EnumWaveType.STRAIGHT, EnumBeamType.SOLID, 0x002038, 0x002038, 0, 1, 0F, 1, 0.499F);
 	        
 	        GL11.glPopMatrix();
        	}

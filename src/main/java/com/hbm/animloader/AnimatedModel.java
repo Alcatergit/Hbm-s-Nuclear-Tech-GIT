@@ -77,16 +77,15 @@ public class AnimatedModel {
 		float remappedTime = MathHelper.clamp(BobMathUtil.remap(diff, 0, activeAnim.anim.length, 0, numKeyFrames - 1), 0, numKeyFrames - 1);
 		float diffN = BobMathUtil.remap01_clamp(diff, 0, activeAnim.anim.length);
 		int index = (int) remappedTime;
-		int first = index;
-		int next;
+        int next;
 		if(index < numKeyFrames - 1) {
 			next = index + 1;
 		} else {
-			next = first;
+			next = index;
 		}
 		
-		renderWithIndex((float) fract(remappedTime), first, next, diffN, c);
-		controller.activeAnim.prevFrame = first;
+		renderWithIndex((float) fract(remappedTime), index, next, diffN, c);
+		controller.activeAnim.prevFrame = index;
 	}
 
 	protected void renderWithIndex(float inter, int firstIndex, int nextIndex, float diffN, IAnimatedModelCallback c) {
@@ -145,9 +144,9 @@ public class AnimatedModel {
 		return (float) (number - Math.floor(number));
 	}
 	
-	public static interface IAnimatedModelCallback {
+	public interface IAnimatedModelCallback {
 		//(prevFrame, currentFrame, model, diffN, modelName)
-		public boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName);
-		public default void postRender(int prevFrame, int currentFrame, int model, float diffN, String modelName){};
-	}
+        boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName);
+		default void postRender(int prevFrame, int currentFrame, int model, float diffN, String modelName){}
+    }
 }

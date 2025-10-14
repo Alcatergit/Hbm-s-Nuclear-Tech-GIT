@@ -6,10 +6,7 @@ import com.hbm.hazard.HazardEntry;
 import com.hbm.hazard.HazardSystem;
 import com.hbm.items.ModItems;
 
-import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
 

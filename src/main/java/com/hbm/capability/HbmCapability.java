@@ -18,14 +18,14 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class HbmCapability {
 
 	public interface IHBMData {
-		public boolean getKeyPressed(EnumKeybind key);
-		public void setKeyPressed(EnumKeybind key, boolean pressed);
-		public boolean getEnableBackpack();
-		public boolean getEnableHUD();
-		public void setEnableBackpack(boolean b);
-		public void setEnableHUD(boolean b);
+		boolean getKeyPressed(EnumKeybind key);
+		void setKeyPressed(EnumKeybind key, boolean pressed);
+		boolean getEnableBackpack();
+		boolean getEnableHUD();
+		void setEnableBackpack(boolean b);
+		void setEnableHUD(boolean b);
 		
-		public default boolean isJetpackActive() {
+		default boolean isJetpackActive() {
 			return getEnableBackpack() && getKeyPressed(EnumKeybind.JETPACK);
 		}
 	}

@@ -26,37 +26,36 @@ public class DSmokeRenderer extends Render<EntityDSmokeFX> {
 	public void doRender(EntityDSmokeFX p_76986_1_, double p_76986_2_, double p_76986_4_, double p_76986_6_, float p_76986_8_,
 			float p_76986_9_) {
 		if (p_76986_1_ instanceof EntityDSmokeFX) {
-			EntityDSmokeFX fx = (EntityDSmokeFX) p_76986_1_;
-			sprite = null;
-			if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
+            sprite = null;
+			if (((EntityDSmokeFX) p_76986_1_).particleAge <= ((EntityDSmokeFX) p_76986_1_).maxAge && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 7) {
 				sprite = sprites[7];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 7 && fx.particleAge >= fx.maxAge / 8 * 6) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 7 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 6) {
 				sprite = sprites[6];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 6 && fx.particleAge >= fx.maxAge / 8 * 5) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 6 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 5) {
 				sprite = sprites[5];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 5 && fx.particleAge >= fx.maxAge / 8 * 4) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 5 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 4) {
 				sprite = sprites[4];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 4 && fx.particleAge >= fx.maxAge / 8 * 3) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 4 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 3) {
 				sprite = sprites[3];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 3 && fx.particleAge >= fx.maxAge / 8 * 2) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 3 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 2) {
 				sprite = sprites[2];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 * 2 && fx.particleAge >= fx.maxAge / 8 * 1) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 2 && ((EntityDSmokeFX) p_76986_1_).particleAge >= ((EntityDSmokeFX) p_76986_1_).maxAge / 8 * 1) {
 				sprite = sprites[1];
 			}
 
-			if (fx.particleAge < fx.maxAge / 8 && fx.particleAge >= 0) {
+			if (((EntityDSmokeFX) p_76986_1_).particleAge < ((EntityDSmokeFX) p_76986_1_).maxAge / 8 && ((EntityDSmokeFX) p_76986_1_).particleAge >= 0) {
 				sprite = sprites[0];
 			}
 

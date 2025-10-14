@@ -3,11 +3,11 @@ package com.hbm.items;
 
 public class ItemEnums {
 
-	public static interface IEnumFurnaceFuel {
+	public interface IEnumFurnaceFuel {
 		int getBurnTime();
 	}
 
-	public static enum EnumCokeType implements IEnumFurnaceFuel {
+	public enum EnumCokeType implements IEnumFurnaceFuel {
 		COAL(1200),
 		LIGNITE(1000),
 		PETROLEUM(1400);
@@ -23,7 +23,7 @@ public class ItemEnums {
 		}
 	}
 
-	public static enum EnumTarType implements IEnumFurnaceFuel {
+	public enum EnumTarType implements IEnumFurnaceFuel {
 		CRUDE(800),
 		CRACK(1200),
 		COAL(1000),

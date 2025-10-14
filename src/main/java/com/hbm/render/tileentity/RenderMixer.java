@@ -11,8 +11,6 @@ import com.hbm.tileentity.machine.TileEntityMachineMixer;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraftforge.fluids.FluidTank;
 
 public class RenderMixer extends TileEntitySpecialRenderer<TileEntityMachineMixer> {
 

@@ -6,11 +6,8 @@ import com.hbm.blocks.generic.BlockStorageCrate;
 import com.hbm.blocks.generic.BlockStorageCrateRadResistant;
 import com.hbm.hazard.HazardEntry;
 import com.hbm.hazard.HazardRegistry;
-import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
 
 import net.minecraft.block.Block;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
 
 public class HazardTransformerRadiationContainer extends HazardTransformerBase {

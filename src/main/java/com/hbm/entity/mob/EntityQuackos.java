@@ -104,7 +104,7 @@ public class EntityQuackos extends EntityDuck {
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if(super.processInteract(player, hand)){
 			return true;
-		} else if(!this.world.isRemote && this.getPassengers().size() == 0) {
+		} else if(!this.world.isRemote && this.getPassengers().isEmpty()) {
 			player.startRiding(this);
 			return true;
 

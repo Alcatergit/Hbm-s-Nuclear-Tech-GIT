@@ -47,7 +47,7 @@ public enum ForgeDirection {
     	{0, 1, 2, 3, 4, 5, 6},
     };
 
-    private ForgeDirection(int x, int y, int z)
+    ForgeDirection(int x, int y, int z)
     {
         offsetX = x;
         offsetY = y;

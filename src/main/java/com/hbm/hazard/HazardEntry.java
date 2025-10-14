@@ -42,7 +42,7 @@ public class HazardEntry {
 	}
 	
 	public HazardEntry clone() {
-		return clone(1F);
+        return clone(1F);
 	}
 	
 	public HazardEntry clone(float mult) {

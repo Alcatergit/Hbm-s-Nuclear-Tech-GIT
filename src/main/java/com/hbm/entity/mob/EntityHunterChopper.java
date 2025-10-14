@@ -164,10 +164,8 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 				// 100.0D);
 				this.targetedEntity = Library.getClosestEntityForChopper(world, this.posX, this.posY, this.posZ, 250);
 
-				if (this.targetedEntity != null) {
-					//this.aggroCooldown = 20;
-				}
-			}
+                //this.aggroCooldown = 20;
+            }
 
 			double d4 = 64.0D;
 

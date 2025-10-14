@@ -86,12 +86,8 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 
 	public boolean hasEgg() {
 
-		if(inventory.getStackInSlot(0).getItem() == ModItems.egg_balefire) {
-			return true;
-		}
-
-		return false;
-	}
+        return inventory.getStackInSlot(0).getItem() == ModItems.egg_balefire;
+    }
 
 	public boolean hasBattery() {
 

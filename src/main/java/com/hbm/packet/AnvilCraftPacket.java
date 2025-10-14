@@ -5,7 +5,6 @@ import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AnvilRecipes.AnvilConstructionRecipe;
 import com.hbm.inventory.container.ContainerAnvil;
 import com.hbm.main.AdvancementManager;
-import com.hbm.main.MainRegistry;
 import com.hbm.util.InventoryUtil;
 
 import io.netty.buffer.ByteBuf;

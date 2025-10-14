@@ -34,7 +34,7 @@ public class TileEntityNukeBoy extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -63,11 +63,8 @@ public class TileEntityNukeBoy extends TileEntity {
 	}
 
 	public boolean isReady() {
-		if(inventory.getStackInSlot(0).getItem() == ModItems.boy_shielding && inventory.getStackInSlot(1).getItem() == ModItems.boy_target && inventory.getStackInSlot(2).getItem() == ModItems.boy_bullet && inventory.getStackInSlot(3).getItem() == ModItems.boy_propellant && inventory.getStackInSlot(4).getItem() == ModItems.boy_igniter) {
-			return true;
-		}
-		return false;
-	}
+        return inventory.getStackInSlot(0).getItem() == ModItems.boy_shielding && inventory.getStackInSlot(1).getItem() == ModItems.boy_target && inventory.getStackInSlot(2).getItem() == ModItems.boy_bullet && inventory.getStackInSlot(3).getItem() == ModItems.boy_propellant && inventory.getStackInSlot(4).getItem() == ModItems.boy_igniter;
+    }
 
 	public void clearSlots() {
 		for(int i = 0; i < inventory.getSlots(); i++) {

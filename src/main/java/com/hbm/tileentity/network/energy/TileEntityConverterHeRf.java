@@ -1,7 +1,5 @@
 package com.hbm.tileentity.network.energy;
 
-import java.lang.NoSuchMethodError;
-
 import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.config.GeneralConfig;
 import com.hbm.lib.ForgeDirection;

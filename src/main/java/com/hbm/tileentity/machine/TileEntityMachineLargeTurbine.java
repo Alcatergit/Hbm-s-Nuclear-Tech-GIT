@@ -145,8 +145,7 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null) {
 			FluidStack f = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));
-			if(f != null && f.getFluid() == types[tank])
-				return true;
+            return f != null && f.getFluid() == types[tank];
 		}
 		return false;
 	}

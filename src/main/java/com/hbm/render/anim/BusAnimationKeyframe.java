@@ -6,7 +6,7 @@ public class BusAnimationKeyframe {
 	// whether the next frame "snaps" to the intended value or has interpolation
 	// it's an enum so stuff like accelerated animations between just
 	// two frames could be implemented
-	public static enum InterpolationType {
+	public enum InterpolationType {
 		NONE, SMOOTH
 	}
 
@@ -15,7 +15,7 @@ public class BusAnimationKeyframe {
 	// state
 	// i.e. 5 with 15 being the previous would be 20 additive and 5 absolute,
 	// simple enough
-	public static enum StateType {
+	public enum StateType {
 		ADDITIVE, ABSOLTE
 	}
 

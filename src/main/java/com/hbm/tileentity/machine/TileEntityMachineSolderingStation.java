@@ -1,21 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import java.util.HashMap;
-import java.util.List;
-
 import api.hbm.energy.IEnergyUser;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.SolidificationRecipes;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.container.ContainerMachineSolderingStation;
 import com.hbm.inventory.gui.GUIMachineSolderingStation;
 import com.hbm.inventory.SolderingRecipes;
 import com.hbm.inventory.SolderingRecipes.SolderingRecipe;
-import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
@@ -23,7 +17,6 @@ import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;

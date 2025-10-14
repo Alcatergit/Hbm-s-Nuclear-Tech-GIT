@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.items.ModItems;
@@ -214,11 +213,8 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 			return false;
 		acidRequired = acidFluid.amount;
 
-		if(tank.getFluidAmount() < getRequiredAcid())
-			return false;
-
-		return true;
-	}
+        return tank.getFluidAmount() >= getRequiredAcid();
+    }
 
 	public int getRequiredAcid() {
 

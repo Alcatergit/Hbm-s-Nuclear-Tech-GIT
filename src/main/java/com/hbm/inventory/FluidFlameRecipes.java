@@ -2,8 +2,6 @@ package com.hbm.inventory;
 
 import java.util.HashMap;
 
-import com.hbm.forgefluid.ModForgeFluids;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 

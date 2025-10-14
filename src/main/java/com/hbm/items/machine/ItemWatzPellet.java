@@ -148,7 +148,7 @@ public class ItemWatzPellet extends ItemEnumMultiColor {
         setNBTDefaults(stack); //minimize the window where NBT screwups can happen
     }
 
-    public static enum EnumWatzType {
+    public enum EnumWatzType {
 
         SCHRABIDIUM(0x32FFFF, 0x005C5C, 2_000, 20D, 0.01D, new FunctionLinear(1.5D), new FunctionSqrtFalling(10D), null),
         HES(0x43EDFF, 0x004649, 1_750, 20D, 0.005D, new FunctionLinear(1.25D), new FunctionSqrtFalling(15D), null),
@@ -182,7 +182,7 @@ public class ItemWatzPellet extends ItemEnumMultiColor {
         public final Function heatDiv;    //reactivity(0) to reactivity(1) based on heat (temperature coefficient)
         public final Function absorbFunc;    //flux to heat (flux absobtion for non-active component)
 
-        private EnumWatzType(int colorLight, int colorDark, double passive, double heatEmission, double mudContent, Function burnFunction, Function heatDivisor, Function absorbFunction) {
+        EnumWatzType(int colorLight, int colorDark, double passive, double heatEmission, double mudContent, Function burnFunction, Function heatDivisor, Function absorbFunction) {
             this.colorLight = colorLight;
             this.colorDark = colorDark;
             this.passive = passive;

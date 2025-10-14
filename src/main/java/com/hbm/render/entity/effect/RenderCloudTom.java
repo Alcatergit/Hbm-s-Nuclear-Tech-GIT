@@ -39,9 +39,7 @@ public class RenderCloudTom extends Render<EntityCloudTom> {
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 
-		EntityCloudTom blast = (EntityCloudTom)entity;
-
-		double scale = blast.age + partialTicks;
+        double scale = ((EntityCloudTom)entity).age + partialTicks;
 
 		int segments = 16;
 		float angle = (float) Math.toRadians(360D/segments);
@@ -51,7 +49,7 @@ public class RenderCloudTom extends Render<EntityCloudTom> {
 		Tessellator tess = Tessellator.instance;
 		tess.startDrawingQuads();
 
-		bindTexture(this.getEntityTexture(blast));
+		bindTexture(this.getEntityTexture((EntityCloudTom)entity));
 
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GlStateManager.loadIdentity();
@@ -104,9 +102,9 @@ public class RenderCloudTom extends Render<EntityCloudTom> {
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
 		GL11.glPopMatrix();
-	};
-	
-	@Override
+	}
+
+    @Override
 	protected ResourceLocation getEntityTexture(EntityCloudTom entity) {
 		return ResourceManager.tomblast;
 	}

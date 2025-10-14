@@ -5,9 +5,7 @@ import java.util.Random;
 
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
 
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
 

@@ -77,9 +77,8 @@ public class Vbo {
 		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, vboId);
 		GLCompat.bufferData(GLCompat.GL_ARRAY_BUFFER, data, GLCompat.GL_STATIC_DRAW);
 		GLCompat.bindBuffer(GLCompat.GL_ARRAY_BUFFER, 0);
-		
-		Vbo vbo = new Vbo(vboId, GL11.GL_QUADS, vertices.length);
-		return vbo;
+
+        return new Vbo(vboId, GL11.GL_QUADS, vertices.length);
 	}
 	
 	public static class Vertex {

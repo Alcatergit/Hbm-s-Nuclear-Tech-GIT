@@ -13,12 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 public interface IToolable {
-	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool);
+	boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool);
 	default boolean onScrew(World world, EntityPlayer player, BlockPos pos, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool){
 		return onScrew(world, player, pos.getX(), pos.getY(), pos.getZ(), side, fX, fY, fZ, hand, tool);
-	};
+	}
 
-	public static enum ToolType {
+    enum ToolType {
 		SCREWDRIVER,
 		HAND_DRILL,
 		DEFUSER,
@@ -26,8 +26,8 @@ public interface IToolable {
 		TORCH,
 		BOLT;
 
-		public List<ItemStack> stacksForDisplay = new ArrayList();
-		private static HashMap<RecipesCommon.ComparableStack, ToolType> map = new HashMap();
+		public final List<ItemStack> stacksForDisplay = new ArrayList();
+		private static final HashMap<RecipesCommon.ComparableStack, ToolType> map = new HashMap();
 
 		public void register(ItemStack stack) {
 			stacksForDisplay.add(stack);

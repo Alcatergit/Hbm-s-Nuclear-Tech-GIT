@@ -3,8 +3,6 @@ package com.hbm.tileentity.network.energy;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.util.math.BlockPos;
-
 public class TileEntityPylonLarge extends TileEntityPylonBase {
 
 	@Override

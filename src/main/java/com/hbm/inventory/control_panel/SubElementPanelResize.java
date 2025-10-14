@@ -12,9 +12,6 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.config.*;
 import org.lwjgl.opengl.GL11;
 
-import java.util.ArrayList;
-import java.util.List;
-
 // placeholder gui until i make something better
 public class SubElementPanelResize extends SubElement {
 

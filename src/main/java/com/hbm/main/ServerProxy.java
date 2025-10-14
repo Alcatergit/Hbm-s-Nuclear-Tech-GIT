@@ -43,9 +43,9 @@ public class ServerProxy
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
 	
-	public void checkGLCaps(){};
-	
-	public File getDataDir(){
+	public void checkGLCaps(){}
+
+    public File getDataDir(){
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
 	}
 	
@@ -65,15 +65,15 @@ public class ServerProxy
 	
 	public float partialTicks(){
 		return 1;
-	};
-	
-	public void playSound(String sound, Object data) { }
+	}
+
+    public void playSound(String sound, Object data) { }
 	
 	public void displayTooltip(String msg) { }
 	
-	public void setRecoil(float rec){};
-	
-	public boolean isVanished(Entity e) {
+	public void setRecoil(float rec){}
+
+    public boolean isVanished(Entity e) {
 		return false;
 	}
 }

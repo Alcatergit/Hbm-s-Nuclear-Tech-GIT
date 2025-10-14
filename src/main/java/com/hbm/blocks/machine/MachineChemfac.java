@@ -46,7 +46,7 @@ public class MachineChemfac extends BlockDummyable {
 		z += dir.offsetZ * o;
 		ForgeDirection rot = dir.getRotation(ForgeDirection.DOWN);
 
-		this.safeRem = true;
+		safeRem = true;
 
 		for (int i = -3; i < 3; i++) {
 			this.makeExtra(world, x + rot.offsetX * 2 + dir.offsetX * i, y + 3, z + rot.offsetZ * 2 + dir.offsetZ * i);
@@ -59,7 +59,7 @@ public class MachineChemfac extends BlockDummyable {
 			this.makeExtra(world, x - rot.offsetX * 4 + dir.offsetX * i, y + 2, z - rot.offsetZ * 4 + dir.offsetZ * i);
 		}
 
-		this.safeRem = false;
+		safeRem = false;
 	}
 
 	@Override

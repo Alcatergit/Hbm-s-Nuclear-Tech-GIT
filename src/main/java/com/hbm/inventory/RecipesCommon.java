@@ -1,6 +1,7 @@
 package com.hbm.inventory;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.hbm.lib.Library;
@@ -129,14 +130,8 @@ public class RecipesCommon {
 			stacksize = 1;
 			return this;
 		}
-		
-		@Override
-		public AStack singulize() {
-			stacksize = 1;
-			return this;
-		}
-		
-		public ComparableStack(Item item) {
+
+        public ComparableStack(Item item) {
 			this.item = item;
 			this.stacksize = 1;
 			this.meta = 0;
@@ -187,7 +182,7 @@ public class RecipesCommon {
 		
 		@Override
 		public List<ItemStack> getStackList(){
-			return Arrays.asList(getStack());
+			return Collections.singletonList(getStack());
 		}
 		
 		public String[] getDictKeys() {
@@ -248,19 +243,15 @@ public class RecipesCommon {
 				return false;
 			if (meta != OreDictionary.WILDCARD_VALUE && other.meta != OreDictionary.WILDCARD_VALUE && meta != other.meta)
 				return false;
-			if (stacksize != other.stacksize)
-				return false;
-			return true;
-		}
+            return stacksize == other.stacksize;
+        }
 
 		@Override
 		public int compareTo(AStack stack) {
 
-			if(stack instanceof ComparableStack) {
+			if(stack instanceof ComparableStack comp) {
 
-				ComparableStack comp = (ComparableStack) stack;
-
-				int thisID = Item.getIdFromItem(item);
+                int thisID = Item.getIdFromItem(item);
 				int thatID = Item.getIdFromItem(comp.item);
 
 				if(thisID > thatID)
@@ -294,12 +285,9 @@ public class RecipesCommon {
 			
 			if(this.meta != OreDictionary.WILDCARD_VALUE && stack.getItemDamage() != this.meta)
 				return false;
-			
-			if(!ignoreSize && stack.getCount() < this.stacksize)
-				return false;
-			
-			return true;
-		}
+
+            return ignoreSize || stack.getCount() >= this.stacksize;
+        }
 		
 		@Override
 		public AStack copy() {
@@ -414,14 +402,8 @@ public class RecipesCommon {
 		public int hashCode() {
 			return (""+name+this.stacksize).hashCode();
 		}
-		
-		@Override
-		public AStack singulize() {
-			stacksize = 1;
-			return this;
-		}
 
-		@Override
+        @Override
 		public int compareTo(AStack stack) {
 
 			if(stack instanceof OreDictStack) {
@@ -473,10 +455,8 @@ public class RecipesCommon {
 					return false;
 			} else if (!name.equals(other.name))
 				return false;
-			if (stacksize != other.stacksize)
-				return false;
-			return true;
-		}
+            return stacksize == other.stacksize;
+        }
 
 		@Override
 		public AStack copy() {
@@ -522,10 +502,8 @@ public class RecipesCommon {
 					return false;
 			} else if(!block.equals(other.block))
 				return false;
-			if(meta != other.meta)
-				return false;
-			return true;
-		}
+            return meta == other.meta;
+        }
 
 		public MetaBlock(Block block) {
 			this(block, 0);

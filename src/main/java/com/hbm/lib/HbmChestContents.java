@@ -7,7 +7,6 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemBattery;
-import com.hbm.items.machine.ItemCircuit;
 import com.hbm.items.machine.ItemCircuit.EnumCircuitType;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.ItemBombCaller;

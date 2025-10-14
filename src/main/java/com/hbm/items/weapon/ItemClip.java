@@ -27,8 +27,8 @@ public class ItemClip extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
 		ItemStack stack = player.getHeldItem(handIn);
-		stack.shrink(1);;
-		if(stack.getCount() <= 0)
+		stack.shrink(1);
+        if(stack.getCount() <= 0)
 			stack.damageItem(5, player);
 		
 		//REVOLVERS

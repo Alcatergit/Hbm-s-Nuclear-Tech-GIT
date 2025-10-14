@@ -45,7 +45,7 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -206,14 +206,9 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 				dualCookTime = 0;
 			}
 			
-			boolean trigger = true;
-			
-			if(hasPower() && canProcess() && this.dualCookTime == 0)
-			{
-				trigger = false;
-			}
-			
-			if(trigger)
+			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
+
+            if(trigger)
             {
                 flag1 = true;
                 MachineNukeFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);

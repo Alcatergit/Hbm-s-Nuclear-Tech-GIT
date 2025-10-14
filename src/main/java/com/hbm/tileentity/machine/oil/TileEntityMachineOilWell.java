@@ -2,8 +2,6 @@ package com.hbm.tileentity.machine.oil;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.MachineConfig;
-import com.hbm.entity.particle.EntityGasFX;
-import com.hbm.explosion.ExplosionLarge;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -33,12 +31,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		return this.hasCustomInventoryName() ? this.getCustomName() : "container.oilWell";
 	}
 
-	@Override
-    public long getMaxPower() {
-        return 100000L;
-    }
-
-	@SuppressWarnings("deprecation")
+    @SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		int timer = MachineConfig.delayPerOperationDerrick;

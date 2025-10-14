@@ -26,12 +26,12 @@ public class AssemblyTemplateBakedModel implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return type == TransformType.GUI ? false : AssemblyTemplateRender.INSTANCE.itemModel.isAmbientOcclusion();
+		return type != TransformType.GUI && AssemblyTemplateRender.INSTANCE.itemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return type == TransformType.GUI ? false :AssemblyTemplateRender.INSTANCE.itemModel.isGui3d();
+		return type != TransformType.GUI && AssemblyTemplateRender.INSTANCE.itemModel.isGui3d();
 	}
 
 	@Override

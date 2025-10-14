@@ -48,7 +48,7 @@ public class ShredderRecipes {
 
             boolean did = checkAndAdd(matches, name, "ingot", 1);
             if(!did) did = checkAndAdd(matches, name, "nugget", 1, true);
-            if(!did) did = checkAndAdd(matches, name, "ore", 1);
+            if(!did) did = checkAndAdd(matches, name, "ore", 2);
             if(!did) did = checkAndAdd(matches, name, "block", 9);
             if(!did) did = checkAndAdd(matches, name, "gem", 1);
             if(!did) did = checkAndAdd(matches, name, "plate", 1);

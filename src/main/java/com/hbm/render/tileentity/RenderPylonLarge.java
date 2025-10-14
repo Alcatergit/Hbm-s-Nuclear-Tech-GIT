@@ -6,7 +6,6 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.network.energy.TileEntityPylonLarge;
 
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
 public class RenderPylonLarge extends TileEntitySpecialRenderer<TileEntityPylonLarge> {

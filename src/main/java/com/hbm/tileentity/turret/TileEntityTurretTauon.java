@@ -34,12 +34,7 @@ public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 		return "container.turretTauon";
 	}
 
-	@Override
-	public double getDecetorGrace(){
-		return 3D;
-	}
-
-	@Override
+    @Override
 	public double getTurretYawSpeed(){
 		return 9D;
 	}
@@ -91,8 +86,7 @@ public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 			
 			if(this.tPos != null) {
 				Vec3d pos = this.getTurretPos();
-				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
-				this.lastDist = length;
+                this.lastDist = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
 			}
 			
 			if(beam > 0)

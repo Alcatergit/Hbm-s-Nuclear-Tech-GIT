@@ -1,30 +1,20 @@
 package com.hbm.handler;
 
 import com.hbm.interfaces.IDummy;
-import com.hbm.main.MainRegistry;
-import com.hbm.packet.NBTPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityDummy;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 
 public class MultiblockHandler {
 
-	public enum EnumDirection { North, East, South, West };
-	//                            2      5     3      4
+	public enum EnumDirection { North, East, South, West }
+    //                            2      5     3      4
 	//                           -z     +x    +z     -x
 
 	public static int EnumToInt(EnumDirection dir) {

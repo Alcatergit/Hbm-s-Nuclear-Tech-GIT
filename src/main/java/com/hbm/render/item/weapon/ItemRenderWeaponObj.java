@@ -120,9 +120,9 @@ public class ItemRenderWeaponObj extends TEISRBase {
 
 			} else if(item.getItem() == ModItems.gun_ks23) {
 
-			} else if(item.getItem() == ModItems.gun_flamer) {
-
-			}
+			} else {
+                item.getItem();
+            }
 		case THIRD_PERSON_LEFT_HAND:
 		case THIRD_PERSON_RIGHT_HAND:
 			if(item.getItem() == ModItems.gun_hk69) {

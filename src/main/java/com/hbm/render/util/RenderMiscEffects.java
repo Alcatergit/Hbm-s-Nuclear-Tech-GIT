@@ -21,8 +21,7 @@ public class RenderMiscEffects {
         GL11.glPushMatrix();
     	float offset = Minecraft.getMinecraft().player.ticksExisted + interpol;
         GlStateManager.enableBlend();
-        float color = colorMod;
-        GlStateManager.color(color, color, color, 1.0F);
+        GlStateManager.color(colorMod, colorMod, colorMod, 1.0F);
         GlStateManager.depthFunc(GL11.GL_EQUAL);
         GlStateManager.depthMask(false);
 

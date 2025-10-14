@@ -157,7 +157,7 @@ public class Radiobox extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean state = (meta & 1) == 1 ? true : false;
+		boolean state = (meta & 1) == 1;
 		meta = meta >> 1;
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 

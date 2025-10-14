@@ -36,7 +36,7 @@ public class GUIMachineHydrotreater extends GuiInfoContainer {
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 69 - 52, 16, 52, hydrotreater.tanks[1]);
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 125, guiTop + 69 - 52, 16, 52, hydrotreater.tanks[2]);
         FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 69 - 52, 16, 52, hydrotreater.tanks[3]);
-        this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 69 - 52, 16, 52, hydrotreater.power, hydrotreater.maxPower);
+        this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 17, guiTop + 69 - 52, 16, 52, hydrotreater.power, TileEntityMachineHydrotreater.maxPower);
 
         if(this.mc.player.inventory.getItemStack().isEmpty() && this.isMouseOverSlot(this.inventorySlots.getSlot(10), mouseX, mouseY) && !this.inventorySlots.getSlot(10).getHasStack()) {
             List<Object[]> lines = new ArrayList<>();

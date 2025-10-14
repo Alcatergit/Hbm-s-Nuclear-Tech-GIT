@@ -8,7 +8,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.world.generator.DungeonToolbox;
 
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;

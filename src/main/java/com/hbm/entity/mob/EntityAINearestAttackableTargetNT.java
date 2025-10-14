@@ -29,7 +29,7 @@ public class EntityAINearestAttackableTargetNT extends EntityAITarget {
 		setMutexBits(1);
 
 		this.targetEntitySelector = entity -> {
-			return selector != null && !selector.apply(entity) ? false : !(entity instanceof EntityLivingBase) ? false : EntityAINearestAttackableTargetNT.this.isSuitableTarget((EntityLivingBase) entity, false);
+			return (selector == null || selector.apply(entity)) && entity instanceof EntityLivingBase && EntityAINearestAttackableTargetNT.this.isSuitableTarget((EntityLivingBase) entity, false);
 		};
 	}
 

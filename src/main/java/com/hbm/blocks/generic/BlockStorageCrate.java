@@ -36,7 +36,6 @@ import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -157,9 +156,9 @@ public class BlockStorageCrate extends BlockContainer {
 			InventoryHelper.spawnItemStack(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, drop);
 		}
 
-		this.dropInv = false;
+		dropInv = false;
 		boolean flag = world.setBlockToAir(pos);
-		this.dropInv = true;
+		dropInv = true;
 		
 		return flag;
 	}
@@ -171,7 +170,7 @@ public class BlockStorageCrate extends BlockContainer {
 	
 	@Override
 	public void breakBlock(World worldIn, BlockPos pos, IBlockState state){
-		if(this.dropInv){
+		if(dropInv){
 			InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
 		}
 		super.breakBlock(worldIn, pos, state);

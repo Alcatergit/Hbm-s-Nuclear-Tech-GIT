@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine.oil;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.FractionRecipes;
-import com.hbm.inventory.FractionRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.util.Tuple.Quartet;
 import com.hbm.tileentity.INBTPacketReceiver;

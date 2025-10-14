@@ -144,7 +144,7 @@ public class ItemBombCaller extends Item {
 		return getTypeFromStack(stack).ordinal() >= 4;
 	}
 
-	public static enum EnumCallerType {
+	public enum EnumCallerType {
 		CARPET, NAPALM, POISON, ORANGE, ATOMIC, STINGER, PIP, CLOUD, NONE
 	}
 

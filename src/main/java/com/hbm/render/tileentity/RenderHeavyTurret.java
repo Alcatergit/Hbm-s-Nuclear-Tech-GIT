@@ -7,7 +7,6 @@ import com.hbm.tileentity.turret.TileEntityTurretHeavy;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.tileentity.TileEntity;
 
 public class RenderHeavyTurret extends TileEntitySpecialRenderer<TileEntityTurretHeavy> {
 

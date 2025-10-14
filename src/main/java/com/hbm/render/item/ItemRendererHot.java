@@ -2,7 +2,6 @@ package com.hbm.render.item;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.special.ItemHot;
 import com.hbm.render.RenderHelper;
 
@@ -14,7 +13,6 @@ import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.client.ForgeHooksClient;
 
 public class ItemRendererHot extends TEISRBase {
 

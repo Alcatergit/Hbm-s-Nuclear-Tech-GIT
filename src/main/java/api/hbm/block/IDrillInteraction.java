@@ -16,7 +16,7 @@ public interface IDrillInteraction {
 	 * @param drill Might be a tool, tile entity or anything that breaks blocks
 	 * @return	
 	 */
-	public boolean canBreak(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
+    boolean canBreak(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
 	
 	/**
 	 * Returns an itemstack, usually when the block is not destroyed. Laser drills may drop this and mechanical drills will add it to their inventories.
@@ -27,7 +27,7 @@ public interface IDrillInteraction {
 	 * @param drill Might be a tool, tile entity or anything that breaks blocks
 	 * @return
 	 */
-	public ItemStack extractResource(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
+    ItemStack extractResource(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
 	
 	/**
 	 * The hardness that should be considered instead of the hardness value of the block itself
@@ -39,5 +39,5 @@ public interface IDrillInteraction {
 	 * @param drill
 	 * @return
 	 */
-	public float getRelativeHardness(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
+    float getRelativeHardness(World world, int x, int y, int z, IBlockState state, IMiningDrill drill);
 }

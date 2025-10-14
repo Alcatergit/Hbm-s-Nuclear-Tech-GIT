@@ -186,7 +186,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                                     }
                                     b1 = 1;
                                     this.mc.getTextureManager().bindTexture(RenderFallout.falloutTexture);
-                                    tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);;
+                                    tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                                 }
  
                                 f10 = ((this.rendererUpdateCount & 511) + partialTick) / 512.0F;

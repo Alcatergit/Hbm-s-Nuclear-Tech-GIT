@@ -102,12 +102,9 @@ public class MachinePlasmaHeater extends BlockDummyable {
 
 		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o , y + dir.offsetY * o, z + dir.offsetZ * o, new int[] {4, -3, 1, 1, 1, 1}, x, y, z, dir))
 			return false;
-		
-		if(!MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o , y + 2, z + dir.offsetZ * o, new int[] {0, 1, 10, -8, 0, 0}, x, y, z, dir))
-			return false;
 
-		return true;
-	}
+        return MultiblockHandlerXR.checkSpace(world, x + dir.offsetX * o, y + 2, z + dir.offsetZ * o, new int[]{0, 1, 10, -8, 0, 0}, x, y, z, dir);
+    }
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos1, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {

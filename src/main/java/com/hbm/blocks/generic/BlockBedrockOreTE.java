@@ -34,7 +34,7 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		return new TileEntityBedrockOre("oreIron");
+		return new TileEntityBedrockOre(1);
 	}
 
 	@Override
@@ -58,7 +58,6 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 		TileEntityBedrockOre ore = (TileEntityBedrockOre) te;
 
 		List<String> text = new ArrayList();
-		text.add(I18nUtil.resolveKey("desc.ore", BedrockOreRegistry.getOreName(ore.oreName)));
 		text.add(I18nUtil.resolveKey("desc.tier", ore.tier));
 		
 		if(ore.acidRequirement != null) {
@@ -69,46 +68,43 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 	}
 	
 	public static class TileEntityBedrockOre extends TileEntity {
-		
-		public String oreName;
-		public int color;
+
 		public int tier;
 		public FluidStack acidRequirement;
 		
 		public TileEntityBedrockOre() {
 		}
 
-		public TileEntityBedrockOre(String oreName) {
-			this.oreName = oreName;
-			this.color = BedrockOreRegistry.getOreColor(oreName);
-			this.tier = BedrockOreRegistry.getOreTier(oreName);
+		public TileEntityBedrockOre(int tier) {
+			this.tier = tier;
 			this.acidRequirement = BedrockOreRegistry.getFluidRequirement(this.tier);
 		}
 
 		public TileEntityBedrockOre setOre(String oreName){
-			this.oreName = oreName;
-			this.color = BedrockOreRegistry.getOreColor(oreName);
 			this.tier = BedrockOreRegistry.getOreTier(oreName);
 			this.acidRequirement = BedrockOreRegistry.getFluidRequirement(this.tier);
 			this.markDirty();
 			return this;
 		}
+
+        public TileEntityBedrockOre setTier(int tier){
+            this.tier = tier;
+            this.acidRequirement = BedrockOreRegistry.getFluidRequirement(this.tier);
+            this.markDirty();
+            return this;
+        }
 		
 		@Override
 		public void readFromNBT(NBTTagCompound nbt) {
 			super.readFromNBT(nbt);
-			this.oreName = nbt.getString("ore");
 			this.tier = nbt.getInteger("tier");
-			this.color = nbt.getInteger("color");
 			this.acidRequirement = FluidStack.loadFluidStackFromNBT(nbt);
 		}
 		
 		@Override
 		public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 			super.writeToNBT(nbt);
-			nbt.setString("ore", this.oreName);
 			nbt.setInteger("tier", this.tier);
-			nbt.setInteger("color", this.color);
 			if(this.acidRequirement != null)
 				this.acidRequirement.writeToNBT(nbt);
 			return nbt;

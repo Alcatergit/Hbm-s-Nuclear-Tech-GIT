@@ -423,13 +423,8 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return tanks[1].drain(maxDrain, doDrain);
 	}
-	
-	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		return true;
-	}
-	
-	@Override
+
+    @Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] { 2, 4 };
 	}

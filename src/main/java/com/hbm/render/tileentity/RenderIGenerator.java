@@ -32,8 +32,6 @@ public class RenderIGenerator extends TileEntitySpecialRenderer<TileEntityMachin
 		case 3: GL11.glRotatef(270, 0F, 1F, 0F); break;
 		case 5: GL11.glRotatef(0, 0F, 1F, 0F); break;
 		}
-		
-		TileEntityMachineIGenerator igen = (TileEntityMachineIGenerator)te;
 
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
@@ -42,7 +40,7 @@ public class RenderIGenerator extends TileEntitySpecialRenderer<TileEntityMachin
         bindTexture(ResourceManager.igen_tex);
         ResourceManager.igen.renderPart("Base");
         
-        float angle = igen.prevRotation + (igen.rotation - igen.prevRotation) * partialTicks;
+        float angle = ((TileEntityMachineIGenerator)te).prevRotation + (((TileEntityMachineIGenerator)te).rotation - ((TileEntityMachineIGenerator)te).prevRotation) * partialTicks;
         float px = 0.0625F;
         float sine = (float) Math.sin(Math.toRadians(angle));
         float cosine = (float) Math.cos(Math.toRadians(angle));
@@ -114,7 +112,7 @@ public class RenderIGenerator extends TileEntitySpecialRenderer<TileEntityMachin
 
         GL11.glTranslated(-0.75, 5.5625, -7);
         
-        if(igen.torque > 0) {
+        if(((TileEntityMachineIGenerator)te).torque > 0) {
 	        for(int i = 0; i < 2; i++) {
 		        BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0x8080ff, 0x0000ff, (int)te.getWorld().getTotalWorldTime() % 1000 + i, 5, px * 4, 0, 0);
 		        //BeamPronter.prontBeam(Vec3.createVectorHelper(1.5, 0, 0), EnumWaveType.RANDOM, EnumBeamType.LINE, 0xffffff, 0x0000ff, (int)te.getWorld().getTotalWorldTime() % 1000 + 2 + i, 5, px * 4, 0, 0);

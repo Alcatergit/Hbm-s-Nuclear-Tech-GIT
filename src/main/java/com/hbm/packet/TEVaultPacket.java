@@ -4,10 +4,12 @@ import com.hbm.interfaces.IDoor;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
 
+import com.hbm.tileentity.turret.TileEntityTurretBase;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
@@ -62,27 +64,25 @@ public class TEVaultPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEVaultPacket m, MessageContext ctx) {
-			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
+            Minecraft.getMinecraft().addScheduledTask(() -> {
+                BlockPos pos = new BlockPos(m.x, m.y, m.z);
+                World world = Minecraft.getMinecraft().world;
+                if(world.isBlockLoaded(pos)){
+                    TileEntity te = world.getTileEntity(pos);
+                    if (te != null && te instanceof TileEntityVaultDoor vault) {
+                        vault.state = IDoor.DoorState.values()[m.state];
+                        if(m.sysTime == 1)
+                            vault.sysTime = System.currentTimeMillis();
+                        vault.type = m.type;
+                    }
 
-			try {
-				if (te != null && te instanceof TileEntityVaultDoor) {
-
-					TileEntityVaultDoor vault = (TileEntityVaultDoor) te;
-					vault.state = IDoor.DoorState.values()[m.state];
-					if(m.sysTime == 1)
-						vault.sysTime = System.currentTimeMillis();
-					vault.type = m.type;
-				}
-				
-				if (te != null && te instanceof TileEntityBlastDoor) {
-
-					TileEntityBlastDoor vault = (TileEntityBlastDoor) te;
-					vault.state = IDoor.DoorState.values()[m.state];
-					if(m.sysTime == 1)
-						vault.sysTime = System.currentTimeMillis();
-				}
-			} catch (Exception x) {
-			}
+                    if (te != null && te instanceof TileEntityBlastDoor vault) {
+                        vault.state = IDoor.DoorState.values()[m.state];
+                        if(m.sysTime == 1)
+                            vault.sysTime = System.currentTimeMillis();
+                    }
+                }
+            });
 			return null;
 		}
 	}

@@ -44,12 +44,8 @@ public class TileEntityBMPowerBox extends TileEntity implements IControllable {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
 		readFromNBT(pkt.getNbtCompound());
 	}
-	
-	@Override
-	public void receiveEvent(BlockPos from, ControlEvent e){
-	}
 
-	@Override
+    @Override
 	public List<String> getOutEvents(){
 		return Arrays.asList("lever_toggle");
 	}

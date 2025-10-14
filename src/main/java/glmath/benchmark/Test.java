@@ -23,7 +23,7 @@ public class Test {
 
     public void out(final long maxTimeNS) {
       final double percent = ((double) timeNS) / ((double) maxTimeNS) * 100.0;
-      System.out.println(String.format("%-29s %15d ns %#6.2f%%", new Object[]{this.description, this.timeNS, percent}));
+      System.out.printf("%-29s %15d ns %#6.2f%%%n", new Object[]{this.description, this.timeNS, percent});
     }
   }
   protected final static int SIZE = 16;

@@ -16,7 +16,7 @@ public abstract class Satellite {
 	public static List<Class<? extends Satellite>> satellites = new ArrayList<Class<? extends Satellite>>();
 	public static HashMap<Item, Class<? extends Satellite>> itemToClass = new HashMap<Item, Class<? extends Satellite>>();
 	
-	public static enum InterfaceActions {
+	public enum InterfaceActions {
 		HAS_MAP,		//lets the interface display loaded chunks
 		CAN_CLICK,		//enables onClick events
 		SHOW_COORDS,	//enables coordinates as a mouse tooltip
@@ -24,11 +24,11 @@ public abstract class Satellite {
 		HAS_ORES		//like HAS_MAP but only shows ores
 	}
 	
-	public static enum CoordActions {
+	public enum CoordActions {
 		HAS_Y		//enables the Y-coord field which is disabled by default
 	}
 	
-	public static enum Interfaces {
+	public enum Interfaces {
 		NONE,		//does not interact with any sat interface (i.e. asteroid miners)
 		SAT_PANEL,	//allows to interact with the sat interface panel (for graphical applications)
 		SAT_COORD	//allows to interact with the sat coord remote (for teleportation or other coord related actions)
@@ -83,9 +83,8 @@ public abstract class Satellite {
 	public static int getIDFromItem(Item item) {
 		
 		Class<? extends Satellite> sat = itemToClass.get(item);
-		int i = satellites.indexOf(sat);
-		
-		return i;
+
+        return satellites.indexOf(sat);
 	}
 	
 	public int getID() {

@@ -492,7 +492,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	
 	private static HashBiMap<Item, IGenRTG> rtgPellets = HashBiMap.create();
 	
-	public static enum IGenRTG {
+	public enum IGenRTG {
 		RADIUM(ModItems.pellet_rtg_radium, 9, 3),
 		URANIUM(ModItems.pellet_rtg_weak, 9, 5),
 		PLUTONIUM(ModItems.pellet_rtg, 18, 10),
@@ -501,10 +501,10 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 		ACTINIUM(ModItems.pellet_rtg_actinium, 0, 20),
 		AMERICIUM(ModItems.pellet_rtg_americium, 0, 25);
 		
-		public int offset;
-		public int heat;
+		public final int offset;
+		public final int heat;
 		
-		private IGenRTG(Item item, int offset, int heat) {
+		IGenRTG(Item item, int offset, int heat) {
 			rtgPellets.put(item, this);
 			this.offset = offset;
 			this.heat = heat;

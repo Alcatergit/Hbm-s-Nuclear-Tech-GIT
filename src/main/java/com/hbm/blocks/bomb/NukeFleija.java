@@ -66,7 +66,7 @@ public class NukeFleija extends BlockContainer implements IBomb {
 		TileEntity tileentity = world.getTileEntity(pos);
 
 		if (tileentity instanceof TileEntityNukeFleija) {
-			InventoryHelper.dropInventoryItems(world, pos, (TileEntityNukeFleija) tileentity);
+			InventoryHelper.dropInventoryItems(world, pos, tileentity);
 
 			world.updateComparatorOutputLevel(pos, this);
 		}

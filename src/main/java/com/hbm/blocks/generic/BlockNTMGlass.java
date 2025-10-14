@@ -23,7 +23,7 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 	BlockRenderLayer layer;
 	boolean doesDrop = false;
 	boolean isRadResistant = false;
-	
+
 	public BlockNTMGlass(Material materialIn, BlockRenderLayer layer, String s) {
 		this(materialIn, layer, false, s);
 	}
@@ -89,15 +89,8 @@ public class BlockNTMGlass extends BlockBreakable implements IRadResistantBlock 
 		return this.isRadResistant;
 	}
 
-	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		super.addInformation(stack, player, tooltip, advanced);
-		float hardness = this.getExplosionResistance(null);
-		if(this.isRadResistant){
-			tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
-		}
-		if(hardness > 50){
-			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
-		}
-	}
+    @Override
+    public boolean isRadResistant(){
+        return this.isRadResistant;
+    }
 }

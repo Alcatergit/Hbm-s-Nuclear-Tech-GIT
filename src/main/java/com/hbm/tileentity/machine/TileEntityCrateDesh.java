@@ -61,7 +61,7 @@ public class TileEntityCrateDesh extends TileEntityLockableBase implements IDrop
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {

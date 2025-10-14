@@ -10,8 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.lang.NoClassDefFoundError;
 
+import net.minecraft.block.*;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.CompatibilityConfig;
@@ -21,29 +21,14 @@ import com.hbm.config.VersatileConfig;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
-import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.turret.TileEntityTurretBase;
 import api.hbm.energy.IEnergyUser;
 
 import cofh.redstoneflux.api.IEnergyProvider;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockLog;
-import net.minecraft.block.BlockHugeMushroom;
-import net.minecraft.block.BlockLiquid;
-import net.minecraft.block.BlockSand;
-import net.minecraft.block.BlockBush;
-import net.minecraft.block.BlockIce;
-import net.minecraft.block.BlockSnow;
-import net.minecraft.block.BlockSnowBlock;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -52,8 +37,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.world.GameType;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
@@ -67,16 +50,15 @@ public class ExplosionNukeGeneric {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int r = bombStartStrength;
-		int r2 = r * r;
+        int r2 = bombStartStrength * bombStartStrength;
 		int r22 = r2 / 2;
-		for (int xx = -r; xx < r; xx++) {
+		for (int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -r; yy < r; yy++) {
+			for (int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -r; zz < r; zz++) {
+				for (int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22) {
@@ -95,15 +77,14 @@ public class ExplosionNukeGeneric {
 		double d5;
 		double d6;
 		double d7;
-		double wat = radius;
 
-		// bombStartStrength *= 2.0F;
-		i = MathHelper.floor(x - wat - 1.0D);
-		j = MathHelper.floor(x + wat + 1.0D);
-		k = MathHelper.floor(y - wat - 1.0D);
-		int i2 = MathHelper.floor(y + wat + 1.0D);
-		int l = MathHelper.floor(z - wat - 1.0D);
-		int j2 = MathHelper.floor(z + wat + 1.0D);
+        // bombStartStrength *= 2.0F;
+		i = MathHelper.floor(x - (double) radius - 1.0D);
+		j = MathHelper.floor(x + (double) radius + 1.0D);
+		k = MathHelper.floor(y - (double) radius - 1.0D);
+		int i2 = MathHelper.floor(y + (double) radius + 1.0D);
+		int l = MathHelper.floor(z - (double) radius - 1.0D);
+		int j2 = MathHelper.floor(z + (double) radius + 1.0D);
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for (int i1 = 0; i1 < list.size(); ++i1) {
@@ -119,7 +100,7 @@ public class ExplosionNukeGeneric {
 				d6 = entity.posY + entity.getEyeHeight() - y;
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if (d9 < wat && !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
+				if (d9 < (double) radius && !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
@@ -208,16 +189,15 @@ public class ExplosionNukeGeneric {
 			return;
 		}
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int r = radius;
-		int r2 = r * r;
+        int r2 = radius * radius;
 		int r22 = r2 / 2;
-		for (int xx = -r; xx < r; xx++) {
+		for (int xx = -radius; xx < radius; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -r; yy < r; yy++) {
+			for (int yy = -radius; yy < radius; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -r; zz < r; zz++) {
+				for (int zz = -radius; zz < radius; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
@@ -368,16 +348,15 @@ public class ExplosionNukeGeneric {
 		int y = pos.getY();
 		int z = pos.getZ();
 		MutableBlockPos mpos = new BlockPos.MutableBlockPos(pos);
-		int r = radius;
-		int r2 = r * r;
+        int r2 = radius * radius;
 		int r22 = r2 / 2;
-		for (int xx = -r; xx < r; xx++) {
+		for (int xx = -radius; xx < radius; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -r; yy < r; yy++) {
+			for (int yy = -radius; yy < radius; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -r; zz < r; zz++) {
+				for (int zz = -radius; zz < radius; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
@@ -401,7 +380,7 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.GLASS || b == Blocks.STAINED_GLASS
 					|| b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR
-					|| b == Blocks.LEAVES || b == Blocks.LEAVES2) {
+					|| b instanceof BlockLeaves) {
 				world.setBlockToAir(pos);
 			}
 
@@ -558,7 +537,7 @@ public class ExplosionNukeGeneric {
 				
 				while((currentLine = read.readLine()) != null){
 					lineCount ++;
-					if(currentLine.startsWith("#") || currentLine.length() == 0)
+					if(currentLine.startsWith("#") || currentLine.isEmpty())
 						continue;
 					String[] blocks = currentLine.trim().split("|");
 					if(blocks.length != 2)

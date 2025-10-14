@@ -1,8 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerMixer;

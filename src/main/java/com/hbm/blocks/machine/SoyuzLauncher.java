@@ -126,11 +126,8 @@ public class SoyuzLauncher extends BlockDummyable {
 			return false;
 		if(!MultiblockHandlerXR.checkSpace(world, x, y, z, new int[] { 0, 4, 1, 1, -6, 8 }, x, y, z, dir))
 			return false;
-		if(!MultiblockHandlerXR.checkSpace(world, x, y, z, new int[] { 0, 4, 2, 2, 9, -5 }, x, y, z, dir))
-			return false;
-
-		return true;
-	}
+        return MultiblockHandlerXR.checkSpace(world, x, y, z, new int[]{0, 4, 2, 2, 9, -5}, x, y, z, dir);
+    }
 
 	@Override
 	public void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {

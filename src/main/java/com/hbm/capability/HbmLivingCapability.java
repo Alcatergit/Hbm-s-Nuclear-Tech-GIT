@@ -18,41 +18,41 @@ import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 public class HbmLivingCapability {
 	
 	public interface IEntityHbmProps {
-		public float getRads();
-		public void setRads(float rads);
-		public void increaseRads(float rads);
-		public void decreaseRads(float rads);
+		float getRads();
+		void setRads(float rads);
+		void increaseRads(float rads);
+		void decreaseRads(float rads);
 
-		public float getNeutrons();
-		public void setNeutrons(float rads);
+		float getNeutrons();
+		void setNeutrons(float rads);
 		
-		public float getRadsEnv();
-		public void setRadsEnv(float rads);
+		float getRadsEnv();
+		void setRadsEnv(float rads);
 		
-		public float getRadBuf();
-		public void setRadBuf(float buf);
+		float getRadBuf();
+		void setRadBuf(float buf);
 		
-		public float getDigamma();
-		public void setDigamma(float dig);
-		public void increaseDigamma(float dig);
-		public void decreaseDigamma(float dig);
+		float getDigamma();
+		void setDigamma(float dig);
+		void increaseDigamma(float dig);
+		void decreaseDigamma(float dig);
 		
-		public int getAsbestos();
-		public void setAsbestos(int asbestos);
+		int getAsbestos();
+		void setAsbestos(int asbestos);
 		
-		public int getBlacklung();
-		public void setBlacklung(int blacklung);
+		int getBlacklung();
+		void setBlacklung(int blacklung);
 		
-		public int getBombTimer();
-		public void setBombTimer(int bombTimer);
+		int getBombTimer();
+		void setBombTimer(int bombTimer);
 		
-		public int getContagion();
-		public void setContagion(int cont);
+		int getContagion();
+		void setContagion(int cont);
 		
-		public List<ContaminationEffect> getContaminationEffectList();
+		List<ContaminationEffect> getContaminationEffectList();
 		
-		public void saveNBTData(NBTTagCompound tag);
-		public void loadNBTData(NBTTagCompound tag);
+		void saveNBTData(NBTTagCompound tag);
+		void loadNBTData(NBTTagCompound tag);
 	}
 	
 	public static class EntityHbmProps implements IEntityHbmProps {

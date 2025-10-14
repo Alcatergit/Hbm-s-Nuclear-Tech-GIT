@@ -3,8 +3,6 @@ package com.hbm.packet;
 import java.io.IOException;
 
 import com.hbm.tileentity.INBTPacketReceiver;
-import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.tileentity.TileEntityTickingBase;
 
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;

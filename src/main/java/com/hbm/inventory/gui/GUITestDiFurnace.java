@@ -7,7 +7,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -59,7 +58,7 @@ public class GUITestDiFurnace extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-		drawCustomInfoStat(mouseX, mouseY, guiLeft + 43, guiTop + 17, 18, 54, mouseX, mouseY, new String[] {String.valueOf(diFurnace.getPowerRemainingScaled(100)) + "%"});
+		drawCustomInfoStat(mouseX, mouseY, guiLeft + 43, guiTop + 17, 18, 54, mouseX, mouseY, new String[] {diFurnace.getPowerRemainingScaled(100) + "%"});
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 }

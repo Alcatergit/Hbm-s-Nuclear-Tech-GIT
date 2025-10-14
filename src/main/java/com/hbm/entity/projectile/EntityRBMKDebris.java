@@ -3,7 +3,6 @@ package com.hbm.entity.projectile;
 import java.util.List;
 
 import com.hbm.items.ModItems;
-import com.hbm.potion.HbmPotion;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.RBMKDials;
@@ -12,7 +11,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.MoverType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -20,7 +18,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ReportedException;
 import net.minecraft.util.math.AxisAlignedBB;
@@ -367,12 +364,12 @@ public class EntityRBMKDebris extends Entity {
 		return dist < range * range;
 	}
 
-	public static enum DebrisType {
+	public enum DebrisType {
 		BLANK, //just a metal beam
 		ELEMENT, //the entire casing of a fuel assembly because fuck you
 		FUEL, //spicy
 		ROD, //solid boron rod
 		GRAPHITE, //spicy rock
-		LID; //the all destroying harbinger of annihilation
+		LID //the all destroying harbinger of annihilation
 	}
 }

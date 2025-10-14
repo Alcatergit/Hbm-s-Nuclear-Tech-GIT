@@ -36,7 +36,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	public final static long maxPower = 1000000000000L;
 	public boolean cooldown = false;
 
-	public FluidTank tanks[];
+	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
 	public boolean isOn = false;
@@ -88,11 +88,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
-		if(world.getTileEntity(pos) != this) {
-			return false;
-		} else {
-			return true;
-		}
+        return world.getTileEntity(pos) == this;
 	}
 
 	public int getSingularityType(){

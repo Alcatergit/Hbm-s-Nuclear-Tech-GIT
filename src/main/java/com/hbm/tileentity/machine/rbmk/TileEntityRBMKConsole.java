@@ -124,8 +124,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				}
 			}
 		}
-		Integer[] fuelIndices = fuelRods.toArray(new Integer[fuelRods.size()]);
-		Integer[] controlIndices = controlRods.toArray(new Integer[controlRods.size()]);
+		Integer[] fuelIndices = fuelRods.toArray(new Integer[0]);
+		Integer[] controlIndices = controlRods.toArray(new Integer[0]);
 		screens[0] = new RBMKScreen(ScreenType.COL_TEMP, fuelIndices, null);
 		screens[1] = new RBMKScreen(ScreenType.FUEL_TEMP, fuelIndices, null);
 		screens[2] = new RBMKScreen(ScreenType.ROD_EXTRACTION, controlIndices, null);
@@ -369,14 +369,12 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			int slot = data.getByte("toggle");
 			if(slot == 99){
 				int next = this.graph.type.ordinal() + 1;
-				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
-				this.graph.type = type;
+                this.graph.type = ScreenType.values()[next % ScreenType.values().length];
 				this.graph.dataBuffer = new int[lookbackLength];
 				Arrays.fill(this.graph.dataBuffer, 0);
 			} else {
 				int next = this.screens[slot].type.ordinal() + 1;
-				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
-				this.screens[slot].type = type;
+                this.screens[slot].type = ScreenType.values()[next % ScreenType.values().length];
 			}
 		}
 		
@@ -545,7 +543,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 	
-	public static enum ColumnType {
+	public enum ColumnType {
 		BLANK(0),
 		FUEL(10),
 		FUEL_SIM(90),
@@ -561,9 +559,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		COOLER(120),
 		HEATEX(130);
 		
-		public int offset;
+		public final int offset;
 		
-		private ColumnType(int offset) {
+		ColumnType(int offset) {
 			this.offset = offset;
 		}
 	}
@@ -601,7 +599,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 	
-	public static enum ScreenType {
+	public enum ScreenType {
 		NONE(0 * 18),
 		COL_TEMP(1 * 18),
 		FUEL_TEMP(5 * 18),
@@ -610,9 +608,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		FUEL_DEPLETION(3 * 18),
 		FUEL_POISON(4 * 18);
 		
-		public int offset;
+		public final int offset;
 		
-		private ScreenType(int offset) {
+		ScreenType(int offset) {
 			this.offset = offset;
 		}
 	}

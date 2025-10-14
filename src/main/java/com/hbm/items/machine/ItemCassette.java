@@ -21,17 +21,17 @@ public class ItemCassette extends Item {
 				100), BEEP_SIREN("Beep Siren", HBMSoundHandler.alarmBeep, SoundType.LOOP, 13882323, 100), CONTAINER_ALARM("Container Alarm", HBMSoundHandler.alarmContainer, SoundType.LOOP, 14727839, 100), SWEEP_SIREN("Sweep Siren", HBMSoundHandler.alarmSweep, SoundType.LOOP, 15592026, 500), STRIDER_SIREN("Missile Silo Siren", HBMSoundHandler.alarmStrider, SoundType.LOOP, 11250586, 500), AIR_RAID("Air Raid Siren", HBMSoundHandler.alarmAirRaid, SoundType.LOOP, 0xDF3795, 500), NOSTROMO_SIREN("Nostromo Self Destruct", HBMSoundHandler.alarmNostromo, SoundType.LOOP, 0x5dd800, 100), EAS_ALARM("EAS Alarm Screech", HBMSoundHandler.alarmEas, SoundType.LOOP, 0xb3a8c1, 50), APC_PASS("APC Pass", HBMSoundHandler.alarmAPCPass, SoundType.PASS, 3422163, 50), RAZORTRAIN("Razortrain Horn", HBMSoundHandler.alarmRazorTrain, SoundType.SOUND, 7819501, 250);
 
 		// Name of the track shown in GUI
-		private String title;
+		private final String title;
 		// Location of the sound
-		private SoundEvent location;
+		private final SoundEvent location;
 		// Sound type, whether the sound should be repeated or not
-		private SoundType type;
+		private final SoundType type;
 		// Color of the cassette
-		private int color;
+		private final int color;
 		// Range where the sound can be heard
-		private int volume;
+		private final int volume;
 
-		private TrackType(String name, SoundEvent loc, SoundType sound, int msa, int intensity) {
+		TrackType(String name, SoundEvent loc, SoundType sound, int msa, int intensity) {
 			title = name;
 			location = loc;
 			type = sound;
@@ -65,13 +65,13 @@ public class ItemCassette extends Item {
 			else
 				return TrackType.NULL;
 		}
-	};
+	}
 
-	public enum SoundType {
-		LOOP, PASS, SOUND;
-	};
+    public enum SoundType {
+		LOOP, PASS, SOUND
+    }
 
-	public ItemCassette(String s) {
+    public ItemCassette(String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHasSubtypes(true);

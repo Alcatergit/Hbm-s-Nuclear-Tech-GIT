@@ -62,11 +62,9 @@ public class Jglm {
 
     public static Mat4 translate(Mat4 mat, Vec3 vec3) {
 
-        Mat4 result = mat;
+        mat.c3 = mat.mult(new Vec4(vec3, 1.0f));
 
-        result.c3 = mat.mult(new Vec4(vec3, 1.0f));
-
-        return result;
+        return mat;
     }
 
     public static Quat angleAxis(float angle, Vec3 axis) {

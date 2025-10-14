@@ -6,9 +6,7 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-import com.hbm.potion.HbmPotion;
 import com.hbm.hazard.HazardSystem;
-import com.hbm.saveddata.RadiationSavedData;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
@@ -17,21 +15,11 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.util.EnumHand;
-import net.minecraft.init.MobEffects;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockNTMOre extends BlockOre {
 	
@@ -39,7 +27,7 @@ public class BlockNTMOre extends BlockOre {
 
 	public BlockNTMOre(String name, int harvestLvl, int xp) {
 		super();
-		this.xp = xp;
+		BlockNTMOre.xp = xp;
 		this.setTranslationKey(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);

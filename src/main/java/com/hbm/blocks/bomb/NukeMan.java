@@ -69,7 +69,7 @@ public class NukeMan extends BlockContainer implements IBomb {
 
             if (tileentity instanceof TileEntityNukeMan)
             {
-                InventoryHelper.dropInventoryItems(world, pos, (TileEntityNukeMan)tileentity);
+                InventoryHelper.dropInventoryItems(world, pos, tileentity);
                 
                 world.updateComparatorOutputLevel(pos, this);
             }

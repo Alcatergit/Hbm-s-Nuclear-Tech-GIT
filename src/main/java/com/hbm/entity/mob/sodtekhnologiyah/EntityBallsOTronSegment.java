@@ -47,10 +47,9 @@ public class EntityBallsOTronSegment extends EntityBallsOTronBase {
 
 		if((this.followed != null) && (getPartID() == 0)) {
 			//this.dataWatcher.updateObject(17, Byte.valueOf((byte) (((EntityBallsOTronHead) this.followed).isArmored() ? 1 : 0)));
-		} else if(this.targetedEntity != null) {
-			//this.dataWatcher.updateObject(17, Byte.valueOf(this.targetedEntity.getDataWatcher().getWatchableObjectByte(17)));
-		}
-		if(this.didCheck) {
+		}  //this.dataWatcher.updateObject(17, Byte.valueOf(this.targetedEntity.getDataWatcher().getWatchableObjectByte(17)));
+
+        if(this.didCheck) {
 			if(this.targetedEntity == null || !this.targetedEntity.isEntityAlive()) {
 				setHealth(getHealth() - 1999.0F);
 			}

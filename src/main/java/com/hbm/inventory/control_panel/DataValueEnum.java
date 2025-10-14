@@ -22,7 +22,7 @@ public class DataValueEnum<T extends Enum<T>> extends DataValue {
 
 	@Override
 	public boolean getBoolean(){
-		return value.toString().toLowerCase().equals("true") ? true : false;
+		return value.toString().toLowerCase().equals("true");
 	}
 
 	@Override

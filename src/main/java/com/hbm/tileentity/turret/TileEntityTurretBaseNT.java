@@ -764,13 +764,8 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	public int[] getAccessibleSlotsFromSide(EnumFacing e){
 		return new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	}
-	
-	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack){
-		return true;
-	}
-	
-	public boolean hasPower() {
+
+    public boolean hasPower() {
 		return this.getPower() >= this.getConsumption();
 	}
 	

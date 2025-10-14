@@ -255,11 +255,11 @@ public class RenderScreenOverlay {
 		L_CIRCUMFLEX(96, 122, 32),
 		L_RAD(0, 154, 32);
 		
-		public int x;
-		public int y;
-		public int size;
+		public final int x;
+		public final int y;
+		public final int size;
 		
-		private Crosshair(int x, int y, int size) {
+		Crosshair(int x, int y, int size) {
 			this.x = x;
 			this.y = y;
 			this.size = size;

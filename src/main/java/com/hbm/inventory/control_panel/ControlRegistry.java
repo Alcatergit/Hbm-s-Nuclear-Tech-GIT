@@ -45,8 +45,7 @@ public class ControlRegistry {
 	
 	public static List<Control> getAllControls(){
 		List<Control> l = new ArrayList<>(registry.size());
-		for(Control c : registry.values())
-			l.add(c);
+        l.addAll(registry.values());
 		return l;
 	}
 

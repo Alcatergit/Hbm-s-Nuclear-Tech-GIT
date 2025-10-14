@@ -74,8 +74,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 					if(FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT))
 						return true;
 				if(i == 11)
-					if(itemStack.getItem() instanceof IBatteryItem)
-						return true;
+                    return itemStack.getItem() instanceof IBatteryItem;
 				return false;
 			}
 			
@@ -392,7 +391,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {

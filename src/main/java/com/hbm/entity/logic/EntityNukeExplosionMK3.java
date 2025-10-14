@@ -8,7 +8,6 @@ import java.util.List;
 
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.lib.HBMSoundHandler;
@@ -19,7 +18,6 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.SoundCategory;
 
 import org.apache.logging.log4j.Level;
 
@@ -357,9 +355,7 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 				return false;
 			if(y != other.y)
 				return false;
-			if(z != other.z)
-				return false;
-			return true;
-		}
+            return z == other.z;
+        }
 	}
 }

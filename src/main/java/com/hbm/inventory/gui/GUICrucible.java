@@ -17,7 +17,6 @@ import com.hbm.tileentity.machine.TileEntityCrucible;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
@@ -40,8 +39,8 @@ public class GUICrucible extends GuiInfoContainer {
 		super.drawScreen(x, y, interp);
 		super.renderHoveredToolTip(x, y);
 		
-		this.drawCustomInfoStat(x, y, guiLeft + 125, guiTop + 80, 34, 7, x, y, new String[] { String.format(Locale.US, "%,d", crucible.progress) + " / " + String.format(Locale.US, "%,d", crucible.processTime) + "TU" });
-		this.drawCustomInfoStat(x, y, guiLeft + 125, guiTop + 89, 34, 7, x, y, new String[] { String.format(Locale.US, "%,d", crucible.heat) + " / " + String.format(Locale.US, "%,d", crucible.maxHeat) + "TU" });
+		this.drawCustomInfoStat(x, y, guiLeft + 125, guiTop + 80, 34, 7, x, y, new String[] { String.format(Locale.US, "%,d", crucible.progress) + " / " + String.format(Locale.US, "%,d", TileEntityCrucible.processTime) + "TU" });
+		this.drawCustomInfoStat(x, y, guiLeft + 125, guiTop + 89, 34, 7, x, y, new String[] { String.format(Locale.US, "%,d", crucible.heat) + " / " + String.format(Locale.US, "%,d", TileEntityCrucible.maxHeat) + "TU" });
 		drawStackInfo(crucible.wasteStack, x, y, 16, 16, "gui.crucible.side.smelt");
 		drawStackInfo(crucible.recipeStack, x, y, 61, 16, "gui.crucible.side.alloy");
 		
@@ -62,13 +61,13 @@ public class GUICrucible extends GuiInfoContainer {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
-		int pGauge = crucible.progress * 33 / crucible.processTime;
+		int pGauge = crucible.progress * 33 / TileEntityCrucible.processTime;
 		if(pGauge > 0) drawTexturedModalRect(guiLeft + 126, guiTop + 82, 176, 0, pGauge, 5);
-		int hGauge = crucible.heat * 33 / crucible.maxHeat;
+		int hGauge = crucible.heat * 33 / TileEntityCrucible.maxHeat;
 		if(hGauge > 0) drawTexturedModalRect(guiLeft + 126, guiTop + 91, 176, 5, hGauge, 5);
 
-		if(!crucible.recipeStack.isEmpty()) drawStack(crucible.recipeStack, crucible.recipeZCapacity, 62, 97);
-		if(!crucible.wasteStack.isEmpty()) drawStack(crucible.wasteStack, crucible.wasteZCapacity, 17, 97);
+		if(!crucible.recipeStack.isEmpty()) drawStack(crucible.recipeStack, TileEntityCrucible.recipeZCapacity, 62, 97);
+		if(!crucible.wasteStack.isEmpty()) drawStack(crucible.wasteStack, TileEntityCrucible.wasteZCapacity, 17, 97);
 		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);		
 	}
 	
@@ -84,7 +83,7 @@ public class GUICrucible extends GuiInfoContainer {
 				list.add("§e" + I18nUtil.resolveKey(sta.material.getTranslationKey()) + ": " + Mats.formatAmount(sta.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
 			}
 		}
-		String[] texts = list.toArray(new String[list.size()]);
+		String[] texts = list.toArray(new String[0]);
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + x, guiTop + y, 36, 81, mouseX, mouseY, texts);
 	}
 	

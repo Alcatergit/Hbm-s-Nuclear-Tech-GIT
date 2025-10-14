@@ -61,9 +61,7 @@ public class Keypad {
 				data[i] = buttons[i].cooldown;
 			}
 			data[12] = (byte) (isSettingCode ? 1 : 0);
-			for(int i = 0; i < 6; i ++){
-				data[13 + i] = code[i];
-			}
+            System.arraycopy(code, 0, data, 13, 6);
 			data[19] = successColorTicks;
 			data[20] = failColorTicks;
 			PacketDispatcher.wrapper.sendToAllAround(new KeypadClientPacket(te.getPos(), data), new TargetPoint(te.getWorld().provider.getDimension(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), 10));

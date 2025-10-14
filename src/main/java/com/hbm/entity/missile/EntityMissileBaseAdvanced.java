@@ -30,7 +30,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeChunkManager;
 import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -82,7 +81,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 	}
 
 	public void setAcceleration(double multiplier){
-		this.acceleration = multiplier;
+		acceleration = multiplier;
 	}
 
 	@Override

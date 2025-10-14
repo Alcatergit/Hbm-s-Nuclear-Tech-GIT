@@ -171,12 +171,7 @@ public class TileEntityCoreEmitter extends TileEntityMachineBase implements ITic
 		}
 	}
 
-	@Override
-	public boolean canConnect(ForgeDirection dir) {
-		return dir != ForgeDirection.UNKNOWN;
-	}
-
-	@Override
+    @Override
 	public String getName() {
 		return "container.dfcEmitter";
 	}

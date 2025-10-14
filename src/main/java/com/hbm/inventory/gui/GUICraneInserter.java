@@ -3,7 +3,6 @@ package com.hbm.inventory.gui;
 import com.hbm.inventory.container.ContainerCraneInserter;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.network.TileEntityCraneInserter;
-import invtweaks.api.container.ChestContainer;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.resources.I18n;

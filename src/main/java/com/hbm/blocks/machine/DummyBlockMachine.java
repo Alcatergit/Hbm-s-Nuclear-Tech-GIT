@@ -2,7 +2,6 @@ package com.hbm.blocks.machine;
 
 import java.util.Random;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityDummyPort;
@@ -86,12 +85,7 @@ public class DummyBlockMachine extends DummyOldBase {
 		return false;
 	}
 
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
-	}
-	
-	@Override
+    @Override
 	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}

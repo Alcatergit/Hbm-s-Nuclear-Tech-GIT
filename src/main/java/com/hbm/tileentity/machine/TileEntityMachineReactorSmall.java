@@ -9,6 +9,7 @@ import com.hbm.config.MobConfig;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
@@ -160,7 +161,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -281,7 +282,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 			getInteractions();
 
-			if(this.coreHeat > 0 && this.tanks[1].getFluidAmount() > 0 && this.hullHeat < this.maxHullHeat) {
+			if(this.coreHeat > 0 && this.tanks[1].getFluidAmount() > 0 && this.hullHeat < maxHullHeat) {
 				this.hullHeat += this.coreHeat * 0.175 * hullHeatMod;
 				this.coreHeat -= this.coreHeat * 0.1;
 
@@ -365,14 +366,11 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 		Block b = world.getBlockState(pos).getBlock();
 
-		if(b instanceof IRadResistantBlock)
-			return ((IRadResistantBlock)b).isRadResistant(world, pos);
-
-		if(b == Blocks.FLOWING_WATER || b == Blocks.WATER)
+        if(RadiationSystemNT.isRadResistant(world, b, pos))
 			return true;
 
-		return false;
-	}
+        return b == Blocks.FLOWING_WATER || b == Blocks.WATER;
+    }
 
 	private void generateSteam() {
 
@@ -548,9 +546,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null) {
-			if(isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
-				return true;
-			}
+            return isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

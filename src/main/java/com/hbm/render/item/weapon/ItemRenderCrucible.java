@@ -24,7 +24,6 @@ import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;

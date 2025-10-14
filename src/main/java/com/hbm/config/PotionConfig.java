@@ -3,7 +3,6 @@ package com.hbm.config;
 import java.util.HashSet;
 
 import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.common.config.Property;
 
 public class PotionConfig {
 

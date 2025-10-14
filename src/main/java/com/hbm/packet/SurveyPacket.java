@@ -1,6 +1,5 @@
 package com.hbm.packet;
 
-import com.hbm.capability.HbmLivingCapability;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 
 import io.netty.buffer.ByteBuf;

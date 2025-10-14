@@ -9,14 +9,12 @@ import com.hbm.lib.Library;
 import com.hbm.util.I18nUtil;
 import com.hbm.handler.ArmorUtil;
 
-import net.minecraft.block.material.Material;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 
 public class HazardTypeCryogenic extends HazardTypeBase {
 

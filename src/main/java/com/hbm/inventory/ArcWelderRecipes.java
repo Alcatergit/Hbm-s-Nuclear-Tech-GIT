@@ -1,6 +1,5 @@
 package com.hbm.inventory;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.hbm.inventory.OreDictManager.*;
@@ -14,7 +13,6 @@ import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.material.Mats;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemFluidIcon;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;

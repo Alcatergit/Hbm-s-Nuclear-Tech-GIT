@@ -48,11 +48,11 @@ public class GUIScreenRadioTorch extends GuiScreen {
 		if(radio instanceof TileEntityRadioTorchSender) {
 			this.texture = textureSender;
 			this.title = "container.rttySender";
-			this.isSender = true;
+			isSender = true;
 		} else {
 			this.texture = textureReceiver;
 			this.title = "container.rttyReceiver";
-			this.isSender = false;
+			isSender = false;
 		}
 	}
 
@@ -69,8 +69,8 @@ public class GUIScreenRadioTorch extends GuiScreen {
 		int in = radio instanceof TileEntityRadioTorchSender ? 18 : 0;
 
 		this.frequency = new GuiTextField(0, this.fontRenderer, guiLeft + 25 + oX, guiTop + 18 + oY, 90 - oX * 2, 14);
-		this.frequency.setTextColor(this.isSender ? bluTextColor : oraTextColor);
-		this.frequency.setDisabledTextColour(this.isSender ? bluTextColorDarker : oraTextColorDarker);
+		this.frequency.setTextColor(isSender ? bluTextColor : oraTextColor);
+		this.frequency.setDisabledTextColour(isSender ? bluTextColorDarker : oraTextColorDarker);
 		this.frequency.setEnableBackgroundDrawing(false);
 		this.frequency.setMaxStringLength(10);
 		this.frequency.setText(radio.channel == null ? "" : radio.channel);
@@ -79,8 +79,8 @@ public class GUIScreenRadioTorch extends GuiScreen {
 		
 		for(int i = 0; i < 16; i++) {
 			this.remap[i] = new GuiTextField(i+1, this.fontRenderer, guiLeft + 7 + (130 * (i / 8)) + oX + in, guiTop + 54 + (18 * (i % 8)) + oY, 90 - oX * 2, 14);
-			this.remap[i].setTextColor(this.isSender ? oraTextColor : bluTextColor);
-			this.remap[i].setDisabledTextColour(this.isSender ? oraTextColorDarker : bluTextColorDarker);
+			this.remap[i].setTextColor(isSender ? oraTextColor : bluTextColor);
+			this.remap[i].setDisabledTextColour(isSender ? oraTextColorDarker : bluTextColorDarker);
 			this.remap[i].setEnableBackgroundDrawing(false);
 			this.remap[i].setMaxStringLength(15);
 			this.remap[i].setText(radio.mapping[i] == null ? "" : radio.mapping[i]);
@@ -116,7 +116,7 @@ public class GUIScreenRadioTorch extends GuiScreen {
 
 	private void drawGuiContainerForegroundLayer(int x, int y) {
 		String name = I18nUtil.resolveKey(this.title);
-		this.fontRenderer.drawString(name, this.guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, this.guiTop + 6, this.isSender ? 4210752 : 0xE9E9E9);
+		this.fontRenderer.drawString(name, this.guiLeft + this.xSize / 2 - this.fontRenderer.getStringWidth(name) / 2, this.guiTop + 6, isSender ? 4210752 : 0xE9E9E9);
 	}
 
 	private void drawGuiContainerBackgroundLayer(float f, int mouseX, int mouseY) {

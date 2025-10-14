@@ -6,7 +6,6 @@ import com.hbm.tileentity.machine.TileEntityFactoryHatch;
 import com.hbm.tileentity.machine.TileEntityCoreAdvanced;
 import com.hbm.tileentity.machine.TileEntityCoreTitanium;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;

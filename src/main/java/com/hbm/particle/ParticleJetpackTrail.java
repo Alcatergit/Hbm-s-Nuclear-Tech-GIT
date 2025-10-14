@@ -29,7 +29,7 @@ public class ParticleJetpackTrail extends Particle {
 	}
 	
 	public void tryAddNewPos(Vec3d pos){
-		if(points.size() == 0){
+		if(points.isEmpty()){
 			points.add(pos);
 			ages.add(0);
 		} else {
@@ -68,13 +68,8 @@ public class ParticleJetpackTrail extends Particle {
 	public int getFXLayer() {
 		return 3;
 	}
-	
-	@Override
-	public boolean shouldDisableDepth() {
-		return false;
-	}
-	
-	@Override
+
+    @Override
 	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ) {
 		if(points.size() < 2)
 			return;

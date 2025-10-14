@@ -69,9 +69,7 @@ public class BlockToolConversion extends BlockBase implements IToolable, ILookOv
 
             List<AStack> list = new ArrayList();
 
-            for (AStack stack : entry.getValue().getKey()) {
-                list.add(stack);
-            }
+            list.addAll(Arrays.asList(entry.getValue().getKey()));
             list.add(new RecipesCommon.ComparableStack(entry.getKey().getValue().block, 1, entry.getKey().getValue().meta));
 
             Object[] inputInstance = list.toArray(new AStack[0]); // the instance has to match for the machine lookup to succeed

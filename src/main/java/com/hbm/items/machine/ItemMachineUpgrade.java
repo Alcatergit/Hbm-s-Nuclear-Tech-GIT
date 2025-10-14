@@ -318,6 +318,12 @@ public class ItemMachineUpgrade extends Item {
 			list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade22"));
 			list.add(" "+I18nUtil.resolveKey("desc.upgradeej6"));
 		}
+
+        if(this == ModItems.upgrade_gc_speed)
+        {
+            list.add(TextFormatting.GOLD+I18nUtil.resolveKey("desc.upgrade23"));
+            list.add(" "+I18nUtil.resolveKey("desc.upgradegc"));
+        }
 	}
 
 	public static final Set<Item> scrapItems = Sets.newHashSet(new Item[] {

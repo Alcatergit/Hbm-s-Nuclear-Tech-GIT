@@ -1,5 +1,7 @@
 package com.hbm.lib;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -15,6 +17,8 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.annotation.Nullable;
 
+import net.minecraft.init.Blocks;
+import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -55,7 +59,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
@@ -144,6 +147,29 @@ public class Library {
 		superuser.add(Drillgon);
 		superuser.add(Alcater);
 	}
+
+    public static void setFinalStatic(Class c, String variable, String variableObf, Object newValue){
+        setFinal(c, variable, variableObf, newValue, false);
+    }
+
+    public static void setPrivateFinalStatic(Class c, String variable, String variableObf, Object newValue){
+        setFinal(c, variable, variableObf, newValue, true);
+    }
+
+    public static void setFinal(Class c, String variable, String variableObf, Object newValue, boolean isHidden) {
+        try{
+            Field f = ReflectionHelper.findField(c, variable, variableObf);
+            if(isHidden) f.setAccessible(true);
+
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+
+            f.set(null, newValue);
+        } catch(Throwable ignored){
+            ignored.printStackTrace();
+        }
+    }
 
 	public static String getColor(long a, long b){
 		float fraction = 100F * a/b;
@@ -774,9 +800,8 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 		
 		if(te instanceof IEnergyConnector) {
 			IEnergyConnector con = (IEnergyConnector) te;
-			
-			if(con.canConnect(dir.getOpposite() /* machine's connecting side */))
-				return true;
+
+            return con.canConnect(dir.getOpposite() /* machine's connecting side */);
 		}
 		
 		return false;

@@ -7,7 +7,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
 
-import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -33,8 +32,7 @@ public class ItemTurretBiometry extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		String[] names = getNames(stack);
 		if(names != null)
-			for(int i = 0; i < names.length; i++)
-				tooltip.add(names[i]);
+            tooltip.addAll(Arrays.asList(names));
 	}
 	
 	@Override
@@ -47,9 +45,9 @@ public class ItemTurretBiometry extends Item {
 
     	world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
 		
-		player.swingArm(handIn);;
-		
-		return super.onItemRightClick(world, player, handIn);
+		player.swingArm(handIn);
+
+        return super.onItemRightClick(world, player, handIn);
 	}
 	
 	public static String[] getNames(ItemStack stack) {

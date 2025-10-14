@@ -2,7 +2,6 @@ package com.hbm.inventory.container;
 
 
 import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.items.ModItems;
 
 import com.hbm.tileentity.machine.oil.TileEntityMachineCatalyticReformer;
 import net.minecraft.entity.player.EntityPlayer;

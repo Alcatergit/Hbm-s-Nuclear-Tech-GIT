@@ -236,7 +236,7 @@ public class GUIAnvil extends GuiContainer {
 				OreDictStack input = (OreDictStack) stack;
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 				
-				if(ores.size() > 0) {
+				if(!ores.isEmpty()) {
 					ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 					list.add(">" + input.count() + "x " + inStack.getDisplayName());
 					
@@ -274,7 +274,7 @@ public class GUIAnvil extends GuiContainer {
 				OreDictStack input = (OreDictStack) stack;
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 				
-				if(ores.size() > 0) {
+				if(!ores.isEmpty()) {
 					for(ItemStack ore : ores) {
 						list.add(ore.getDisplayName().toLowerCase());
 					}

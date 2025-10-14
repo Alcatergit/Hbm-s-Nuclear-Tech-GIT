@@ -152,9 +152,8 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	private void fillFromContainers(TileEntity tile, int inputSlot, int tagetSlot){
 		int meta = this.getBlockMetadata();
 		if(tile != null && tile instanceof ICapabilityProvider) {
-			ICapabilityProvider capte = (ICapabilityProvider) tile;
-			if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
-				IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+            if(((ICapabilityProvider) tile).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
+				IItemHandler cap = ((ICapabilityProvider) tile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 				int[] slots;
 				if(tile instanceof TileEntityMachineBase){
 					slots = ((TileEntityMachineBase)tile).getAccessibleSlotsFromSide(MultiblockHandler.intToEnumFacing(meta).rotateY());
@@ -249,9 +248,8 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	private void exportIntoContainers(TileEntity tile, int slot){
 		int meta = this.getBlockMetadata();
 		if(tile != null && tile instanceof ICapabilityProvider) {
-			ICapabilityProvider capte = (ICapabilityProvider) tile;
-			if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
-				IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+            if(((ICapabilityProvider) tile).hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
+				IItemHandler cap = ((ICapabilityProvider) tile).getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 				tryFillContainerCap(cap, slot);
 			}
 		}

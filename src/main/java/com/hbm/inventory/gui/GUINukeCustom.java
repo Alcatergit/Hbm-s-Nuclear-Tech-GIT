@@ -2,7 +2,6 @@ package com.hbm.inventory.gui;
 
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.blocks.bomb.NukeCustom;
 import com.hbm.config.BombConfig;
 import com.hbm.inventory.container.ContainerNukeCustom;
 import com.hbm.lib.RefStrings;

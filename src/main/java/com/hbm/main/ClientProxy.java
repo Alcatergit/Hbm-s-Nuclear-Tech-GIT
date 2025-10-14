@@ -1031,11 +1031,7 @@ public class ClientProxy extends ServerProxy {
 		ModEventHandlerClient.swapModels(i, reg);
 	}
 
-	@Override
-	public void registerTileEntitySpecialRenderer() {
-		
-	}
-	@Override
+    @Override
 	public void particleControl(double x, double y, double z, int type) {
 		World world = Minecraft.getMinecraft().world;
 		
@@ -1088,7 +1084,7 @@ public class ClientProxy extends ServerProxy {
 	}
 	//version 2, now with strings!
 	@Override
-	public void spawnParticle(double x, double y, double z, String type, float args[]) {
+	public void spawnParticle(double x, double y, double z, String type, float[] args) {
 		World world = Minecraft.getMinecraft().world;
 		TextureManager man = Minecraft.getMinecraft().renderEngine;
 		
@@ -2389,13 +2385,8 @@ public class ClientProxy extends ServerProxy {
 		BobmazonOfferFactory.reset();
 		BobmazonOfferFactory.init();
 	}
-	
-	@Override
-	public void playSound(String sound, Object data) {
 
-	}
-	
-	@Override
+    @Override
 	public void displayTooltip(String msg) {
 		if(msg.startsWith("chat."))
 			msg = I18nUtil.resolveKey(msg);

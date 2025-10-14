@@ -1,5 +1,6 @@
 package com.hbm.inventory.material;
 
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Set;
@@ -14,7 +15,7 @@ import net.minecraft.item.ItemStack;
  * @author hbm
  *
  */
-public class NTMMaterial {
+public class NTMMaterial implements Comparable<NTMMaterial> {
 
 	public final int id;
 	public String[] names;
@@ -59,7 +60,7 @@ public class NTMMaterial {
 	
 	/** Shapes for autogen */
 	public NTMMaterial setShapes(MaterialShapes... shapes) {
-		for(MaterialShapes shape : shapes) this.shapes.add(shape);
+        this.shapes.addAll(Arrays.asList(shapes));
 		return this;
 	}
 	
@@ -96,11 +97,29 @@ public class NTMMaterial {
 		return make(item, 1);
 	}
 	
-	public static enum SmeltingBehavior {
+	public enum SmeltingBehavior {
 		NOT_SMELTABLE,	//anything that can't be smelted or otherwise doesn't belong in a smelter, like diamond. may also include things that are smeltable but turn into a different type
 		VAPORIZES,		//can't be smelted because the material would skadoodle
 		BREAKS,			//can't be smelted because the material doesn't survive the temperatures
 		SMELTABLE,		//mostly metal
 		ADDITIVE		//stuff like coal which isn't smeltable but can be put in a crucible anyway
 	}
+
+    @Override
+    public int hashCode() {
+        return id;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if(obj == null) return false;
+        if(!(obj instanceof NTMMaterial mat)) return false;
+        return this.id == mat.id;
+    }
+
+    @Override
+    public int compareTo(NTMMaterial mat){
+        if(mat == null) return 0;
+        return Integer.compare(this.id, mat.id);
+    }
 }

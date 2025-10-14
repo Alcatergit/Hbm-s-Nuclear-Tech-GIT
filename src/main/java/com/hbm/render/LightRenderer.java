@@ -10,10 +10,6 @@ import java.util.Set;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL15;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL21;
-import org.lwjgl.opengl.GL33;
 import org.lwjgl.util.glu.Project;
 import org.lwjgl.util.vector.Matrix4f;
 
@@ -781,13 +777,13 @@ public class LightRenderer {
 		
 	}
 	
-	private static interface ILight {
-		public AxisAlignedBB getBoundingBox();
-		public void addEntToRender(Entity e);
-		public void addTileToRender(TileEntity t);
-		public void addChunkToRender(RenderChunk r);
-		public boolean doesEnts();
-		public boolean doesTiles();
-		public boolean intersects(AxisAlignedBB box);
+	private interface ILight {
+		AxisAlignedBB getBoundingBox();
+		void addEntToRender(Entity e);
+		void addTileToRender(TileEntity t);
+		void addChunkToRender(RenderChunk r);
+		boolean doesEnts();
+		boolean doesTiles();
+		boolean intersects(AxisAlignedBB box);
 	}
 }

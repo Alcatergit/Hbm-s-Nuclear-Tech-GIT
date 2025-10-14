@@ -7,14 +7,10 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMold;
 import com.hbm.items.machine.ItemMold.Mold;
 
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -42,12 +38,8 @@ public abstract class TileEntityFoundryCastingBase extends TileEntityFoundryBase
 				super.onContentsChanged(slot);
 				markDirty();
 			}
-			
-			@Override
-			public int getSlotLimit(int slot) {
-				return 64;
-			}
-		};
+
+        };
 	}
 	
 	@Override

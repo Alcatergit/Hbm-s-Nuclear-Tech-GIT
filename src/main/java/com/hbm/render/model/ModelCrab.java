@@ -11,7 +11,7 @@ public class ModelCrab extends ModelBase {
 	int textureX = 64;
 	int textureY = 32;
 
-	public ModelRenderer modelcrabModel[];
+	public ModelRenderer[] modelcrabModel;
 
 	public ModelCrab() {
 		this.textureWidth = this.textureX;

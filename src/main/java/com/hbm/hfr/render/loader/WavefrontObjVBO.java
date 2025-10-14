@@ -4,7 +4,7 @@ import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.TextureCoordinate;
 import com.hbm.render.amlfrom1710.Vertex;
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11; import net.minecraft.client.renderer.GlStateManager;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 
 import java.nio.FloatBuffer;
@@ -82,13 +82,13 @@ public class WavefrontObjVBO implements IModelCustom {
 
     private void renderVBO(VBOBufferData data) {
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, data.vertexHandle);
-        GL11.glVertexPointer(VERTEX_SIZE, GL11.GL_FLOAT, 0, 0l);
+        GL11.glVertexPointer(VERTEX_SIZE, GL11.GL_FLOAT, 0, 0L);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, data.uvHandle);
-        GL11.glTexCoordPointer(UV_SIZE, GL11.GL_FLOAT, 0, 0l);
+        GL11.glTexCoordPointer(UV_SIZE, GL11.GL_FLOAT, 0, 0L);
 
         GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, data.normalHandle);
-        GL11.glNormalPointer(GL11.GL_FLOAT, 0, 0l);
+        GL11.glNormalPointer(GL11.GL_FLOAT, 0, 0L);
 
         GL11.glEnableClientState(GL11.GL_VERTEX_ARRAY);
         GL11.glEnableClientState(GL11.GL_TEXTURE_COORD_ARRAY);

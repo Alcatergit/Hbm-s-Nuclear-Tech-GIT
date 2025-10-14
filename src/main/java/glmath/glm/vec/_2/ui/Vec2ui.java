@@ -52,7 +52,7 @@ public class Vec2ui extends FuncRelational {
 
     public Vec2ui(Vec4 v) {
         x.value = (int) v.x;
-        y.value = (int) v.y;;
+        y.value = (int) v.y;
     }
 
     public Vec2ui set(int i) {

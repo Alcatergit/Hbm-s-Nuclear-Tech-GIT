@@ -8,8 +8,6 @@ import com.hbm.main.ResourceManager;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 
-import net.minecraft.util.ResourceLocation;
-
 public class RenderFrackingTower extends TileEntitySpecialRenderer<TileEntityMachineFrackingTower> {
 
         @Override

@@ -2,8 +2,8 @@ package com.hbm.inventory.gui;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.lang.Math;
 
 import com.hbm.inventory.container.ContainerMachineBattery;
 import com.hbm.lib.RefStrings;
@@ -64,10 +64,9 @@ public class GUIMachineBattery extends GuiInfoContainer {
 		priority.add(I18nUtil.resolveKey("battery.priority." + lang));
 		priority.add(I18nUtil.resolveKey("battery.priority.recommended"));
 		String[] desc = I18nUtil.resolveKeyArray("battery.priority." + lang + ".desc");
-		for(String s : desc) 
-			priority.add(s);
+        priority.addAll(Arrays.asList(desc));
 		
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 151, guiTop + 16, 16, 16, mouseX, mouseY, priority.toArray(new String[priority.size()]));
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 151, guiTop + 16, 16, 16, mouseX, mouseY, priority.toArray(new String[0]));
 
 		String[] text = I18nUtil.resolveKeyArray("desc.guimachbattery");
 				

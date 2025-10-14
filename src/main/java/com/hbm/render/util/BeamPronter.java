@@ -10,11 +10,11 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 public class BeamPronter {
 
-	public static enum EnumWaveType {
+	public enum EnumWaveType {
 		RANDOM, SPIRAL
 	}
 
-	public static enum EnumBeamType {
+	public enum EnumBeamType {
 		SOLID, LINE
 	}
 	

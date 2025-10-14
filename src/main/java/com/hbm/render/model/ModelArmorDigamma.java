@@ -4,7 +4,6 @@ import com.hbm.main.ResourceManager;
 import com.hbm.render.loader.ModelRendererObj;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 
 public class ModelArmorDigamma extends ModelArmorBase {

@@ -26,13 +26,11 @@ public class RenderFurnaceIron extends TileEntitySpecialRenderer<TileEntityFurna
 		}
 		
 		GL11.glTranslated(-0.5D, 0, -0.5D);
-		
-		TileEntityFurnaceIron furnace = (TileEntityFurnaceIron) tileEntity;
-		
-		bindTexture(ResourceManager.furnace_iron_tex);
+
+        bindTexture(ResourceManager.furnace_iron_tex);
 		ResourceManager.furnace_iron.renderPart("Main");
 		
-		if(furnace.wasOn) {
+		if(((TileEntityFurnaceIron) tileEntity).wasOn) {
 			GL11.glPushMatrix();
 			GL11.glPushAttrib(GL11.GL_LIGHTING_BIT);
 			

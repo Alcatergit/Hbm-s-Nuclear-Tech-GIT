@@ -71,7 +71,7 @@ public class ItemRenderBoltgun extends TEISRBase {
         }
 
         ResourceManager.boltgun.renderPart("Gun");
-        if (type != type.FIRST_PERSON_RIGHT_HAND && type != type.FIRST_PERSON_LEFT_HAND) {
+        if (type != TransformType.FIRST_PERSON_RIGHT_HAND && type != TransformType.FIRST_PERSON_LEFT_HAND) {
             ResourceManager.boltgun.renderPart("Barrel");
         }
         GL11.glShadeModel(GL11.GL_FLAT);

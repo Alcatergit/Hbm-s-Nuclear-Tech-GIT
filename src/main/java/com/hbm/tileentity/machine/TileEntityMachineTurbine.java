@@ -195,7 +195,7 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {

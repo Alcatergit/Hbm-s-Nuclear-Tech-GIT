@@ -12,11 +12,8 @@ public abstract class EntityBallsOTronBase extends EntityWormBase {
 	public int attackCounter = 0;
 
 	protected final Predicate<Entity> selector = ent -> {
-			if(ent instanceof EntityWormBase && ((EntityWormBase)ent).getUniqueWormID() == EntityBallsOTronBase.this.getUniqueWormID())
-				return false;
-
-			return true;
-		};
+        return !(ent instanceof EntityWormBase) || ((EntityWormBase) ent).getUniqueWormID() != EntityBallsOTronBase.this.getUniqueWormID();
+    };
 	
 	public EntityBallsOTronBase(World world) {
 		super(world);

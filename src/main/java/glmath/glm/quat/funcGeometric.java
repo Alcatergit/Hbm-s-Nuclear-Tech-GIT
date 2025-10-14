@@ -23,10 +23,9 @@ abstract class funcGeometric extends funcCommon {
 
     public static Quat angleAxis(float degAngle, Vec3 v, Quat res) {
 
-        float a = degAngle;
-        float s = (float) Math.sin(Math.toRadians(a) * 0.5f);
+        float s = (float) Math.sin(Math.toRadians(degAngle) * 0.5f);
 
-        res.w = (float) Math.cos(Math.toRadians(a) * 0.5f);
+        res.w = (float) Math.cos(Math.toRadians(degAngle) * 0.5f);
         res.x = v.x * s;
         res.y = v.y * s;
         res.z = v.z * s;

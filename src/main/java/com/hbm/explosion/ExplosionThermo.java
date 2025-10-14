@@ -352,19 +352,18 @@ public class ExplosionThermo {
 			return;
 		}
     	MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		
-    	int r = bound;
-    	int r2 = r*r;
+
+        int r2 = bound * bound;
     	int r22 = r2/2;
-    	for (int xx = -r; xx < r; xx++)
+    	for (int xx = -bound; xx < bound; xx++)
     	{
     		int X = xx+x;
     		int XX = xx*xx;
-    		for (int yy = -r; yy < r; yy++)
+    		for (int yy = -bound; yy < bound; yy++)
     		{
     			int Y = yy+y;
     			int YY = XX+yy*yy;
-    			for (int zz = -r; zz < r; zz++)
+    			for (int zz = -bound; zz < bound; zz++)
     			{
     				int Z = zz+z;
     				int ZZ = YY+zz*zz;

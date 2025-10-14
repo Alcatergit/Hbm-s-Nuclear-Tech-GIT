@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.config.WeaponConfig;
-import com.hbm.entity.particle.EntitySmokeFX;
-import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.items.ModItems;
@@ -14,19 +12,14 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import api.hbm.entity.IRadarDetectable;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 	

@@ -1,31 +1,14 @@
 package com.hbm.inventory;
 
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map.Entry;
 
-import com.hbm.blocks.BlockEnums.EnumStoneType;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.inventory.OreDictManager.DictFrame;
-import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
-import com.hbm.inventory.material.NTMMaterial;
-import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemMold;
-import com.hbm.items.machine.ItemMold.Mold;
-import com.hbm.util.Compat;
-import com.hbm.items.machine.ItemScraps;
 
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 public class CrucibleRecipes {
 

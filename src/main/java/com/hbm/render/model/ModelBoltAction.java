@@ -211,7 +211,7 @@ public class ModelBoltAction extends ModelBase {
         BufferBuilder buf = tessellator.getBuffer();
         buf.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
         buf.pos(-32F / 16F, 0 + 4F / 16F, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();
-        buf.pos(-150, 0, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();;
+        buf.pos(-150, 0, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();
         tessellator.draw();
         
         GlStateManager.enableLighting();

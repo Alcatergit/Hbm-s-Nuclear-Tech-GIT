@@ -1,9 +1,7 @@
 package com.hbm.blocks.generic;
 
-import java.util.Map;
 import java.util.Random;
 
-import com.hbm.blocks.BlockControlPanelType;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.ICustomSelectionBox;
 import com.hbm.inventory.control_panel.*;
@@ -15,12 +13,9 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityControlPanel;
 
 import net.minecraft.block.BlockContainer;
-import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.properties.PropertyDirection;
-import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;

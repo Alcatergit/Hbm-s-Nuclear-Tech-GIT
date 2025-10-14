@@ -46,9 +46,6 @@ public class GUIScreenSatInterface extends GuiScreen {
     	
     	this.player = player;
     }
-    
-    public void updateScreen() {
-    }
 
     protected void mouseClicked(int i, int j, int k) {
     	

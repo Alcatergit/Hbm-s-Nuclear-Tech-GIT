@@ -35,7 +35,7 @@ public class LightningGenerator {
 		subdivide(node, info.subdivisions, info.subdivMult, info.subdivRecurse-1, info.randAmount, info.randAmountSubdivMultiplier);
 		LightningNode child = node.children.get(0);
 		float value = 0;
-		while(child.children.size() > 0){
+		while(!child.children.isEmpty()){
 			value += 0.02F;
 			LightningNode next = child.children.get(0);
 			if(rand.nextFloat() < info.forkChance-value){
@@ -68,7 +68,7 @@ public class LightningGenerator {
 		if(recurse <= 0)
 			return;
 		child = n;
-		while(child.children.size() > 0){
+		while(!child.children.isEmpty()){
 			LightningNode next = child.children.get(0);
 			subdivide(child, (int)(subdivisions*subdivMult), subdivMult, recurse-1, randAmount*randAmountSubdivMultiplier, randAmountSubdivMultiplier);
 			child = next;
@@ -84,7 +84,7 @@ public class LightningGenerator {
 	public static void render(LightningNode n, Vec3d playerPos, float scale, float x, float y, float z, boolean fadeEnd, @Nullable IColorGetter c){
 		List<Vec3d> toRender = new ArrayList<>();
 		toRender.add(n.pos.add(x, y, z));
-		while(n.children.size() > 0){
+		while(!n.children.isEmpty()){
 			//Render forks
 			for(int i = 1; i < n.children.size(); i ++){
 				render(n.children.get(i), playerPos, scale*0.5F, x, y, z, fadeEnd, c);

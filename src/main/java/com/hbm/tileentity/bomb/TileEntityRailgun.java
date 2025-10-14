@@ -91,7 +91,7 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -196,13 +196,9 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 	public boolean canFire() {
 		
 		int required = RadiationConfig.railgunUse;
-		
-		if(inventory.getStackInSlot(2).getItem() == ModItems.charge_railgun && power >= required) {
-			return true;
-		}
-		
-		return false;
-	}
+
+        return inventory.getStackInSlot(2).getItem() == ModItems.charge_railgun && power >= required;
+    }
 	
 	public void tryFire() {
 		

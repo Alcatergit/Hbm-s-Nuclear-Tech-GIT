@@ -102,12 +102,7 @@ public class RadioTorchReceiver extends BlockContainer {
 		return true;
 	}
 
-	@Override
-	public boolean getWeakChanges(IBlockAccess world, BlockPos pos){
-		return false;
-	}
-	
-	@Override
+    @Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		TileEntityRadioTorchReceiver entity = (TileEntityRadioTorchReceiver) blockAccess.getTileEntity(pos);
         return entity.lastState;

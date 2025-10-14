@@ -12,7 +12,6 @@ import com.hbm.tileentity.TileEntityMachineBase;
 import api.hbm.energy.IEnergyUser;
 import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -116,17 +115,12 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		{
 			return true;
 		}
-		
-		if((inventory.getStackInSlot(2).isEmpty() || (itemStack.length > 0 && itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) && 
-				(inventory.getStackInSlot(3).isEmpty() || itemStack.length < 2 || (itemStack.length > 1 && itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) && 
-				(inventory.getStackInSlot(4).isEmpty() || itemStack.length < 3 || (itemStack.length > 2 && itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) && 
-				(inventory.getStackInSlot(5).isEmpty() || itemStack.length < 4 || (itemStack.length > 3 && itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize())))
-		{
-			return true;
-		}
-		
-		return false;
-	}
+
+        return (inventory.getStackInSlot(2).isEmpty() || (itemStack.length > 0 && itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) &&
+                (inventory.getStackInSlot(3).isEmpty() || itemStack.length < 2 || (itemStack.length > 1 && itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) &&
+                (inventory.getStackInSlot(4).isEmpty() || itemStack.length < 3 || (itemStack.length > 2 && itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) &&
+                (inventory.getStackInSlot(5).isEmpty() || itemStack.length < 4 || (itemStack.length > 3 && itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize()));
+    }
 	
 	private void processItem() {
 		if(canProcess()) {
@@ -268,12 +262,8 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 					this.power = 0;
 				}
 			}
-			
-			if(hasPower() && canProcess()){
-				isProgressing = true;
-			} else {
-				isProgressing = false;
-			}
+
+            isProgressing = hasPower() && canProcess();
 			
 			if(isProgressing){
 				progress += speed;

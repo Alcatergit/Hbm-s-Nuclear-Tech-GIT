@@ -134,11 +134,10 @@ public class ItemChopper extends Item {
 		
 		if(entity != null) {
 
-			EntityLiving entityliving = entity;
-			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
-			entityliving.rotationYawHead = entityliving.rotationYaw;
-			entityliving.renderYawOffset = entityliving.rotationYaw;
-			entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), (IEntityLivingData) null);
+            entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
+			entity.rotationYawHead = entity.rotationYaw;
+			entity.renderYawOffset = entity.rotationYaw;
+			entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), (IEntityLivingData) null);
 			world.spawnEntity(entity);
 		}
 

@@ -15,7 +15,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class CableDetector extends BlockContainer {
@@ -58,7 +57,7 @@ public class CableDetector extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(STATE, meta == 1 ? true : false);
+		return this.getDefaultState().withProperty(STATE, meta == 1);
 	}
 	
 	@Override

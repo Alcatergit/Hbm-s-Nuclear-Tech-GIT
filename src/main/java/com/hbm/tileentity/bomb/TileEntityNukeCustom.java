@@ -43,7 +43,7 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -382,7 +382,7 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 		return 65536.0D;
 	}
 	
-	public static enum EnumBombType {
+	public enum EnumBombType {
 		TNT("TNT"),
 		NUKE("Nuclear"),
 		HYDRO("Hydrogen"),
@@ -392,7 +392,7 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 		SOL("Solinium"),
 		EUPH("Anti Mass");
 
-		String name;
+		final String name;
 
 		EnumBombType(String name) {
 			this.name = name;
@@ -404,7 +404,7 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 		}
 	}
 
-	public static enum EnumEntryType {
+	public enum EnumEntryType {
 		ADD,
 		MULT
 	}

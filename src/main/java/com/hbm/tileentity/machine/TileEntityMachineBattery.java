@@ -5,20 +5,17 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.hbm.items.ModItems;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityMachineBase;
 
-import api.hbm.energy.IBatteryItem;
 import api.hbm.energy.IEnergyConductor;
 import api.hbm.energy.IEnergyConnector;
 import api.hbm.energy.IEnergyUser;
 import api.hbm.energy.IPowerNet;
 import api.hbm.energy.PowerNet;
 import api.hbm.energy.IBatteryItem;
-import net.minecraft.item.Item;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -26,8 +23,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.Optional;
 
 import li.cil.oc.api.machine.Arguments;
@@ -72,7 +67,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -156,9 +151,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(i == 2)
 			if(stack.getItem() instanceof IBatteryItem){
 				IBatteryItem batteryItem = ((IBatteryItem)stack.getItem());
-				if(batteryItem.getCharge(stack) < batteryItem.getMaxCharge(stack) && batteryItem.getChargeRate() > 0){
-					return true;
-				}
+                return batteryItem.getCharge(stack) < batteryItem.getMaxCharge(stack) && batteryItem.getChargeRate() > 0;
 			}
 		return false;
 	}
@@ -275,8 +268,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 
 		//send power to buffered consumers, independent of nets
 		if(this.power > 0 && (mode == mode_buffer || mode == mode_output)) {
-			List<IEnergyConnector> con = new ArrayList();
-			con.addAll(consumers);
+            List<IEnergyConnector> con = new ArrayList(consumers);
 			
 			if(PowerNet.trackingInstances == null) {
 				PowerNet.trackingInstances = new ArrayList();

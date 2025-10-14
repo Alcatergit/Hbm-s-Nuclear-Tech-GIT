@@ -7,7 +7,6 @@ import java.util.List;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.inventory.CombinationRecipes;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.inventory.container.ContainerCrucible;
 import com.hbm.inventory.gui.GUICrucible;
@@ -264,7 +263,7 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 	
 	protected void tryPullHeat() {
 		
-		if(this.heat >= this.maxHeat) return;
+		if(this.heat >= maxHeat) return;
 		
 		TileEntity con = world.getTileEntity(pos.down());
 		
@@ -280,8 +279,8 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 				diff = (int) Math.ceil(diff * diffusion);
 				source.useUpHeat(diff);
 				this.heat += diff;
-				if(this.heat > this.maxHeat)
-					this.heat = this.maxHeat;
+				if(this.heat > maxHeat)
+					this.heat = maxHeat;
 				return;
 			}
 		}

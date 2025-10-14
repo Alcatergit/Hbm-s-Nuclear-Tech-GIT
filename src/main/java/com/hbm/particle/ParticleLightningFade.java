@@ -1,7 +1,6 @@
 package com.hbm.particle;
 
 import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.LightningGenerator;

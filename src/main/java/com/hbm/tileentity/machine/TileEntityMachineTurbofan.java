@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 
 import com.hbm.entity.particle.EntitySSmokeFX;
-import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
@@ -17,7 +16,6 @@ import com.hbm.sound.AudioWrapper;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TETurbofanPacket;
 import com.hbm.tileentity.TileEntityLoadedBase;
@@ -31,7 +29,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
@@ -87,7 +84,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -363,9 +360,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(!inventory.getStackInSlot(slot).isEmpty()){
-			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
-				return true;	
-			}
+            return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

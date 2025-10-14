@@ -10,7 +10,6 @@ import java.util.List;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.items.ModItems;
 
 import com.hbm.items.machine.ItemCircuit;
@@ -56,16 +55,16 @@ public class MatDistribution {
 		registerEntry(Blocks.DROPPER, MAT_STONE, BLOCK.q(7), MAT_REDSTONE, INGOT.q(1));
 		registerEntry(Blocks.OBSERVER, MAT_STONE, BLOCK.q(7), MAT_REDSTONE, INGOT.q(2));
 
-		registerOre(KEY_SAND,			Mats.MAT_SILICON, MaterialShapes.NUGGET.q(1));
-		registerEntry(Items.FLINT,		Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
-		registerOre(QUARTZ.gem(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(3));
-		registerOre(QUARTZ.dust(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(3));
-		registerOre(QUARTZ.block(),		Mats.MAT_SILICON, MaterialShapes.NUGGET.q(12));
-		registerOre(FIBER.ingot(),		Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
-		registerOre(FIBER.block(),		Mats.MAT_SILICON, MaterialShapes.INGOT.q(9, 2));
-		registerOre(ASBESTOS.ingot(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
-		registerOre(ASBESTOS.dust(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(1, 2));
-		registerOre(ASBESTOS.block(),	Mats.MAT_SILICON, MaterialShapes.INGOT.q(9, 2));
+		registerOre(KEY_SAND,			MAT_SILICON, NUGGET.q(1));
+		registerEntry(Items.FLINT,		MAT_SILICON, INGOT.q(1, 2));
+		registerOre(QUARTZ.gem(),		MAT_SILICON, NUGGET.q(3));
+		registerOre(QUARTZ.dust(),		MAT_SILICON, NUGGET.q(3));
+		registerOre(QUARTZ.block(),		MAT_SILICON, NUGGET.q(12));
+		registerOre(FIBER.ingot(),		MAT_SILICON, INGOT.q(1, 2));
+		registerOre(FIBER.block(),		MAT_SILICON, INGOT.q(9, 2));
+		registerOre(ASBESTOS.ingot(),	MAT_SILICON, INGOT.q(1, 2));
+		registerOre(ASBESTOS.dust(),	MAT_SILICON, INGOT.q(1, 2));
+		registerOre(ASBESTOS.block(),	MAT_SILICON, INGOT.q(9, 2));
 
 
 		registerEntry(Blocks.MOSSY_COBBLESTONE, MAT_STONE, BLOCK.q(1), MAT_CARBON, QUANTUM.q(4));
@@ -379,7 +378,8 @@ public class MatDistribution {
 		registerEntry(ModBlocks.radiobox, MAT_STEEL, INGOT.q(6), MAT_STAR, INGOT.q(4), MAT_TUNGCAR, INGOT.q(2));
 
 		registerEntry(ModItems.can_key, MAT_ALUMINIUM, NUGGET.q(1));
-		registerEntry(ModItems.can_empty, MAT_ALUMINIUM, INGOT.q(2));
+        registerEntry(ModItems.ring_pull, MAT_ALUMINIUM, NUGGET.q(1));
+        registerEntry(ModItems.can_empty, MAT_ALUMINIUM, INGOT.q(2));
 
 		registerEntry(ModItems.key, MAT_STEEL, INGOT.q(1)+BOLT.q(2));
 		registerEntry(ModItems.padlock_rusty, MAT_IRON, INGOT.q(2), MAT_STEEL, BOLT.q(1));
@@ -421,8 +421,9 @@ public class MatDistribution {
         registerEntry(ModBlocks.tape_recorder, MAT_STEEL, INGOT.q(1), MAT_TUNGSTEN, INGOT.q(1, 2));
         registerEntry(ModBlocks.pole_satellite_receiver, MAT_STEEL, INGOT.q(5), MAT_MINGRADE, WIRE.q(1));
 
-        registerEntry(ModBlocks.door_bunker, MAT_STEEL, INGOT.q(4), MAT_LEAD, INGOT.q(2));
-        registerEntry(ModBlocks.door_metal, MAT_IRON, INGOT.q(4), MAT_STEEL, INGOT.q(2));
+        registerEntry(ModItems.door_bunker, MAT_STEEL, INGOT.q(4), MAT_LEAD, INGOT.q(2));
+        registerEntry(ModItems.door_metal, MAT_IRON, INGOT.q(4), MAT_STEEL, INGOT.q(2));
+        registerEntry(ModItems.door_office, MAT_IRON, INGOT.q(2), MAT_CARBON, QUANTUM.q(28));
 
         registerEntry(ModBlocks.machine_fluidtank, MAT_STEEL, INGOT.q(24));
         registerEntry(ModBlocks.machine_bat9000, MAT_STEEL, INGOT.q(30), MAT_TITANIUM, INGOT.q(12));
@@ -446,6 +447,8 @@ public class MatDistribution {
         registerEntry(Blocks.BREWING_STAND, MAT_STONE, BLOCK.q(3));
 
         registerEntry(ModBlocks.boxcar, MAT_STEEL, INGOT.q(32));
+        registerEntry(ModBlocks.ladder_red, MAT_STEEL, INGOT.q(1, 8));
+        registerEntry(ModBlocks.ladder_red_top, MAT_STEEL, INGOT.q(1, 8));
 
         registerEntry(ModBlocks.machine_fraction_tower, MAT_STEEL, INGOT.q(12)+QUANTUM.q(54));
         registerEntry(ModBlocks.fraction_spacer, MAT_STEEL, INGOT.q(6), MAT_IRON, QUANTUM.q(108));
@@ -468,6 +471,17 @@ public class MatDistribution {
         registerEntry(ModBlocks.anvil_lead, MAT_LEAD, INGOT.q(15));
 
         registerEntry(ModItems.gadget_wireing, MAT_GOLD, WIRE.q(12), MAT_IRON, INGOT.q(1));
+        registerEntry(ModItems.forge_fluid_identifier, MAT_IRON, INGOT.q(1));
+        registerEntry(ModItems.siren_track, MAT_STEEL, INGOT.q(1));
+
+        registerEntry(Blocks.QUARTZ_STAIRS, MAT_SILICON, NUGGET.q(9));
+        registerEntry(new ItemStack(Blocks.STONE_SLAB, 1, 7), MAT_SILICON, NUGGET.q(6));
+        registerEntry(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), MAT_SILICON, NUGGET.q(12));
+        registerEntry(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2), MAT_SILICON, NUGGET.q(12));
+
+
+
+//        registerAutoMats();
 	}
 	
 	public static void registerEntry(Object key, Object... matDef) {
@@ -504,6 +518,34 @@ public class MatDistribution {
 		
 		materialOreEntries.put(key, stacks);
 	}
+
+//    public static void registerAutoMats(){
+//        outer : for(IRecipe recipe : ForgeRegistries.RECIPES.getValuesCollection()) {
+//            if(recipe.isDynamic() || recipe.getRecipeOutput().isEmpty()) continue;
+//
+//            ItemStack out = recipe.getRecipeOutput();
+//            List<Ingredient> ingList = recipe.getIngredients();
+//            int noMatIngFound = 0;
+//            List<List<MaterialStack>> matCollection = new ArrayList<>();
+//            for(Ingredient ing : ingList){
+//                if(noMatIngFound > 1) continue outer;
+//                ItemStack[] candidates = ing.getMatchingStacks();
+//                if(candidates.length == 0){
+//                    noMatIngFound++;
+//                    continue outer;
+//                }
+//                List<MaterialStack> mats = getMaterialsFromItem(candidates[0]);
+//                if(mats.isEmpty()) {
+//                    noMatIngFound++;
+//                } else {
+//                    matCollection.add(mats);
+//                }
+//            }
+//            if(matCollection.isEmpty()) continue;
+//            registerEntry(out.copy(), Mats.sum(matCollection, out.getCount()));
+//            System.out.println("ADDED "+recipe.getRecipeOutput().getDisplayName());
+//        }
+//    }
 
 //	public static List<MaterialStack> getMaterialList(ItemStack stack, List<MaterialStack> materials){
 //		if(materials == null) materials = new ArrayList<MaterialStack>();

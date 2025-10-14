@@ -94,7 +94,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -229,10 +229,8 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 
 					int e = this.calcAvgHex(a, b);
 					int f = this.calcAvgHex(c, d);
-					
-					int g = this.calcAvgHex(e, f);
-					
-					this.color = g;
+
+                    this.color = this.calcAvgHex(e, f);
 
 					
 					for(int i = 8; i < 12; i++) {

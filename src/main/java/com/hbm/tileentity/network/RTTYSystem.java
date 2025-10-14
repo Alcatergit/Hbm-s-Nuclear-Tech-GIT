@@ -5,7 +5,6 @@ import java.util.Map.Entry;
 
 import com.hbm.util.Tuple.Pair;
 
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.world.World;
 
 public class RTTYSystem {
@@ -23,8 +22,7 @@ public class RTTYSystem {
 	
 	/** Returns the RTTY channel with that name, or null */
 	public static RTTYChannel listen(World world, String channelName) {
-		RTTYChannel channel = broadcast.get(new Pair(world, channelName));
-		return channel;
+        return broadcast.get(new Pair(world, channelName));
 	}
 	
 	/** Moves all new messages to the broadcast map, adding the appropriate timestamp and clearing the new message queue */
@@ -50,7 +48,7 @@ public class RTTYSystem {
 	}
 
 	/* Special objects for signifying specific signals to be used with RTTY machines (or telex) */
-	public static enum RTTYSpecialSignal {
+	public enum RTTYSpecialSignal {
 		BEGIN_TTY,		//start a new message block
 		STOP_TTY,		//end the message block
 		PRINT_BUFFER	//print message, literally, it makes a paper printout

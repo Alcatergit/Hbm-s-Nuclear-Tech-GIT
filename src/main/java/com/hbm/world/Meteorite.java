@@ -45,8 +45,7 @@ public class Meteorite {
 				return;
 			case 1:
 				//Large ore-only meteorite
-				List<ItemStack> list1 = new ArrayList<ItemStack>();
-				list1.addAll(this.getRandomOre(rand));
+                List<ItemStack> list1 = new ArrayList<ItemStack>(this.getRandomOre(rand));
 				int i = list1.size();
 				for(int j = 0; j < i; j++)
 					list1.add(new ItemStack(Blocks.STONE));
@@ -54,8 +53,7 @@ public class Meteorite {
 				return;
 			case 2:
 				//Medium ore-only meteorite
-				List<ItemStack> list2 = new ArrayList<ItemStack>();
-				list2.addAll(this.getRandomOre(rand));
+                List<ItemStack> list2 = new ArrayList<ItemStack>(this.getRandomOre(rand));
 				int k = list2.size() / 2;
 				for(int j = 0; j < k; j++)
 					list2.add(new ItemStack(Blocks.STONE));
@@ -63,8 +61,7 @@ public class Meteorite {
 				return;
 			case 3:
 				//Small pure ore meteorite
-				List<ItemStack> list3 = new ArrayList<ItemStack>();
-				list3.addAll(this.getRandomOre(rand));
+                List<ItemStack> list3 = new ArrayList<ItemStack>(this.getRandomOre(rand));
 				generateBox(world, rand, x, y, z, list3);
 				return;
 			case 4:

@@ -12,7 +12,6 @@ import javax.vecmath.Vector3f;
 
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL30;
 
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ClientProxy;
@@ -43,11 +42,11 @@ public class BakedModelUtil {
 	private static BufferBuilder buffer = new BufferBuilder(1024*16);
 	private static final int BYTES_PER_VERTEX = 4*3 + 4*1 + 4*2 + 2*2 + 2*2;
 	
-	public static enum DecalType {
+	public enum DecalType {
 		REGULAR,
 		VBO,
-		FLOW;
-	}
+		FLOW
+    }
 	
 	public static int[] generateDecalMesh(World world, Vec3d normal, float scale, float offsetX, float offsetY, float offsetZ, DecalType type){
 		return generateDecalMesh(world, normal, scale, offsetX, offsetY, offsetZ, type, null);

@@ -13,14 +13,14 @@ public interface ICrucibleAcceptor {
 	 * Also useful for entities like large crucibles since they are filled from the top.
 	 */
 	//public boolean canAcceptPour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack);
-	public boolean canAcceptPartialPour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack);
-	public MaterialStack pour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack);
+    boolean canAcceptPartialPour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack);
+	MaterialStack pour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack);
 
 	/*
 	 * Flowing: The "safe" transfer of metal using a channel or other means, usually from block to block and usually horizontally (but not necessarily).
 	 * May also be used for entities like minecarts that could be loaded from the side.
 	 */
 	//public boolean canAcceptFlow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack);
-	public boolean canAcceptPartialFlow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack);
-	public MaterialStack flow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack);
+    boolean canAcceptPartialFlow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack);
+	MaterialStack flow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack);
 }

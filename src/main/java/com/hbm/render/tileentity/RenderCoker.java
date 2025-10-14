@@ -1,7 +1,6 @@
 package com.hbm.render.tileentity;
 
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.machine.TileEntityFEL;
 import com.hbm.tileentity.machine.oil.TileEntityMachineCoker;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import org.lwjgl.opengl.GL11;

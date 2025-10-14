@@ -71,7 +71,7 @@ public class ItemWiring extends Item {
 							int distance = (int)MathHelper.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
 							player.sendMessage(new TextComponentTranslation("chat.wiring.tofar", distance, thisPylon.getMaxWireLength()));
 						}
-					} else if(pos == newPos){
+					} else if(pos.equals(newPos)){
 						if (world.isRemote)
 							player.sendMessage(new TextComponentTranslation("chat.wiring.noself"));
 					} else{

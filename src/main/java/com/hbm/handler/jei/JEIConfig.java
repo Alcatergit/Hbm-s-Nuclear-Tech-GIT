@@ -82,7 +82,9 @@ public class JEIConfig implements IModPlugin {
 			return;
 		registry.addRecipeRegistryPlugin(new HbmJeiRegistryPlugin());
 
-		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_electric_furnace_off), VanillaRecipeCategoryUid.SMELTING);
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_autocrafter), VanillaRecipeCategoryUid.CRAFTING);
+
+        registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_electric_furnace_off), VanillaRecipeCategoryUid.SMELTING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.furnace_iron), VanillaRecipeCategoryUid.SMELTING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.furnace_steel), VanillaRecipeCategoryUid.SMELTING);
 		registry.addRecipeCatalyst(new ItemStack(ModBlocks.machine_arc_furnace_off), VanillaRecipeCategoryUid.SMELTING);
@@ -202,7 +204,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipes(JeiRecipes.getSAFERecipes(), SAFE_REACTOR);
 		registry.addRecipes(DFCRecipes.getDFCRecipes(), DFC);
 
-		registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
+        registry.addRecipeClickArea(GUIAutocrafter.class, 97, 39, 17, 17, VanillaRecipeCategoryUid.CRAFTING);
+        registry.addRecipeClickArea(GUIMachineAssembler.class, 45, 83, 82, 30, ASSEMBLY);
 		registry.addRecipeClickArea(GUIMachineChemplant.class, 45, 90, 85, 15, CHEMPLANT);
 		registry.addRecipeClickArea(GUIMixer.class, 62, 36, 52, 44, MIXER);
 		registry.addRecipeClickArea(GUIMachineCyclotron.class, 50, 24, 40, 40, CYCLOTRON);
@@ -384,7 +387,7 @@ public class JEIConfig implements IModPlugin {
 			return ModItems.canister_generic.getTranslationKey() + (fluid == null ? "empty" : fluid.getFluid().getUnlocalizedName() + fluid.amount);
 		});
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.missile_custom, (ItemStack stack) -> {
-			return ModItems.missile_custom.getTranslationKey() + "w" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "warhead")) + "f" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "fuselage")) + "s" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "stability")) + "t" + Integer.toString(ItemCustomMissile.readFromNBT(stack, "thruster"));
+			return ModItems.missile_custom.getTranslationKey() + "w" + ItemCustomMissile.readFromNBT(stack, "warhead") + "f" + ItemCustomMissile.readFromNBT(stack, "fuselage") + "s" + ItemCustomMissile.readFromNBT(stack, "stability") + "t" + ItemCustomMissile.readFromNBT(stack, "thruster");
 		});
 		subtypeRegistry.registerSubtypeInterpreter(ModItems.fluid_icon, (ItemStack stack) -> {
 			if(stack.hasTagCompound()) {

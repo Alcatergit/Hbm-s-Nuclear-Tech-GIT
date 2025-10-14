@@ -1,8 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.machine.MachineCoal;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -24,7 +21,6 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -35,7 +31,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraftforge.items.CapabilityItemHandler;
 import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCoal extends TileEntityMachineBase implements ITickable, ITankPacketAcceptor, IEnergyGenerator, IFluidHandler {
@@ -83,10 +78,8 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		if(slot == 3)
-			return true;
-		return false;
-	}
+        return slot == 3;
+    }
 	
 	@Override
 	public void update() {
@@ -103,14 +96,9 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 			//Battery Item
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			
-			boolean trigger = true;
-			
-			if(isItemValid() && this.burnTime == 0)
-			{
-				trigger = false;
-			}
-			
-			if(trigger)
+			boolean trigger = !isItemValid() || this.burnTime != 0;
+
+            if(trigger)
             {
                 MachineCoal.updateBlockState(this.burnTime > 0, this.world, this.pos);
             }
@@ -158,19 +146,12 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 	
 	public boolean isItemValid() {
 
-		if(inventory.getStackInSlot(1) != ItemStack.EMPTY && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(1)) > 0)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return inventory.getStackInSlot(1) != ItemStack.EMPTY && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(1)) > 0;
+    }
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(inventory.getStackInSlot(slot) != null && !inventory.getStackInSlot(slot).isEmpty()){
-			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
-				return true;	
-			}
+            return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}

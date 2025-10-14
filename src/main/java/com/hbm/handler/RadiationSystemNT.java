@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.function.BooleanSupplier;
 
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
@@ -37,7 +34,6 @@ import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -68,7 +64,6 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
-import net.minecraftforge.fml.common.gameevent.TickEvent.ServerTickEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
@@ -204,11 +199,8 @@ public class RadiationSystemNT {
 		}
 		//Finally, check if the chunk has a sub chunk at the specified y level
 		SubChunkRadiationStorage sc = st.getForYLevel(pos.getY());
-		if(sc == null){
-			return false;
-		}
-		return true;
-	}
+        return sc != null;
+    }
 	
 	/**
 	 * Gets the sub chunk from the specified pos. Loads it if it doesn't exist
@@ -300,8 +292,7 @@ public class RadiationSystemNT {
 					updateRadSaveData(world);
 				}
 
-				List<Object> oList = new ArrayList<Object>();
-				oList.addAll(world.loadedEntityList);
+                List<Object> oList = new ArrayList<Object>(world.loadedEntityList);
 
 				for(Object e : oList) {
 					if(e instanceof EntityLivingBase) {
@@ -808,6 +799,12 @@ public class RadiationSystemNT {
 	
 	//Reduces array reallocations
 	private static RadPocket[] pocketsByBlock = null;
+
+    public static boolean isRadResistant(World world, Block block, BlockPos pos){
+        if(block instanceof IRadResistantBlock radBlock)
+            return radBlock.isRadResistant(world, pos);
+        return block.getExplosionResistance(null) >=  2_160_000;
+    }
 	
 	/**
 	 * Divides a 16x16x16 sub chunk into pockets that are separated by radiation resistant blocks.
@@ -849,7 +846,7 @@ public class RadiationSystemNT {
 
 						// If it's not a radiation resistant block, and there isn't currently a pocket here,
 						// do a flood fill pocket build
-						if (!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), new BlockPos(x, y, z).add(subChunkPos)))) {
+						if (!isRadResistant(chunk.getWorld(), block, new BlockPos(x, y, z).add(subChunkPos))) {
 							if (GeneralConfig.enableDebugMode) {
 								MainRegistry.logger.info("[Debug] Block " + block + " at " + new BlockPos(x, y, z).add(subChunkPos) + " was not rad resistant; add pocket");
 							}
@@ -918,7 +915,7 @@ public class RadiationSystemNT {
 
 		if(subChunk.pocketsByBlock != null)
 			pocketsByBlock = null;
-		subChunk.pockets = pockets.toArray(new RadPocket[pockets.size()]);
+		subChunk.pockets = pockets.toArray(new RadPocket[0]);
 
 		//Finally, put the newly built sub chunk into the chunk
 		st.setForYLevel(yIndex << 4, subChunk);
@@ -937,7 +934,7 @@ public class RadiationSystemNT {
 		BlockPos outPos = newPos.add(subChunkPos);
 		Block block = chunk.getWorld().getBlockState(outPos).getBlock();
 		//If the block isn't radiation resistant...
-		if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), outPos))){
+		if(!isRadResistant(chunk.getWorld(), block, outPos)){
 			if(!isSubChunkLoaded(chunk.getWorld(), outPos)){
 				//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 				//Chunk still needs to be loaded to propagate radiation into it
@@ -986,7 +983,7 @@ public class RadiationSystemNT {
 		while(!stack.isEmpty()){
 			BlockPos pos = stack.poll();
 			Block block = chunk.get(pos.getX(), pos.getY(), pos.getZ()).getBlock();
-			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, pos.add(subChunkWorldPos)))){
+			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || isRadResistant(world, block, pos.add(subChunkWorldPos))){
 				//If the block is radiation resistant or we've already flood filled here, continue
 				continue;
 			}
@@ -1004,7 +1001,7 @@ public class RadiationSystemNT {
 					//Will also attempt to load the chunk, which will cause neighbor data to be updated correctly if it's unloaded.
 					block = world.getBlockState(outPos).getBlock();
 					//If the block isn't radiation resistant...
-					if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, outPos))){
+					if(!isRadResistant(world, block, outPos)){
 						if(!isSubChunkLoaded(world, outPos)){
 							//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 							//Chunk still needs to be loaded to propagate radiation into it
@@ -1374,7 +1371,7 @@ public class RadiationSystemNT {
 			ByteBuffer data = ByteBuffer.wrap(tag.getByteArray("chunkRadData"));
 			//For each chunk, try to deserialize it
 			for(int i = 0; i < chunks.length; i ++){
-				boolean subChunkExists = data.get() == 1 ? true : false;
+				boolean subChunkExists = data.get() == 1;
 				if(subChunkExists){
 					//Y level could be implicitly defined with i, but this works too
 					int yLevel = data.getShort();
@@ -1390,7 +1387,7 @@ public class RadiationSystemNT {
 							parent.addActivePocket(st.pockets[j]);
 						}
 					}
-					boolean perBlockDataExists = data.get() == 1 ? true : false;
+					boolean perBlockDataExists = data.get() == 1;
 					if(perBlockDataExists){
 						//If the per block data exists, read indices sequentially and set each array slot to the rad pocket at that index
 						st.pocketsByBlock = new RadPocket[16*16*16];

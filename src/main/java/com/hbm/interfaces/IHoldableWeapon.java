@@ -10,11 +10,11 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IHoldableWeapon {
 
-	public Crosshair getCrosshair();
+	Crosshair getCrosshair();
 	
 	@SideOnly(Side.CLIENT)
-	public default boolean hasCustomHudElement(){return false;};
-	
-	@SideOnly(Side.CLIENT)
-	public default void renderHud(ScaledResolution res, GuiIngame gui, ItemStack stack, float partialTicks){};
+    default boolean hasCustomHudElement(){return false;}
+
+    @SideOnly(Side.CLIENT)
+    default void renderHud(ScaledResolution res, GuiIngame gui, ItemStack stack, float partialTicks){}
 }

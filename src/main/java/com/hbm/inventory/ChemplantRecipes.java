@@ -6,8 +6,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import static com.hbm.inventory.OreDictManager.*;
-import static com.hbm.inventory.material.Mats.MAT_GOLD;
-import static com.hbm.inventory.material.Mats.MAT_SCHRABIDIUM;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;

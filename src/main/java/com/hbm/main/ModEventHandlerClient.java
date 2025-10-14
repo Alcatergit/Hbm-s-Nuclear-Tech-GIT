@@ -8,18 +8,20 @@ import java.util.Map.Entry;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 
+import com.hbm.interfaces.*;
 import com.hbm.render.item.*;
 import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
 import com.hbm.items.IModelRegister;
-import com.hbm.items.ItemEnumMultiColor;
 import com.hbm.items.machine.*;
 import com.hbm.render.tileentity.RenderWatzMultiblock;
-import net.minecraft.block.material.Material;
-import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.block.*;
+import net.minecraft.client.renderer.*;
+import net.minecraft.client.renderer.block.statemap.StateMap;
+import net.minecraft.init.Blocks;
+import net.minecraft.item.ItemLeaves;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
-import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.Display;
@@ -48,14 +50,6 @@ import com.hbm.handler.HazmatRegistry;
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.JetpackHandler;
-import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.interfaces.ICustomSelectionBox;
-import com.hbm.interfaces.IHasCustomModel;
-import com.hbm.interfaces.IHasCustomMetaModels;
-import com.hbm.interfaces.IHoldableWeapon;
-import com.hbm.interfaces.IItemHUD;
-import com.hbm.interfaces.IPostRender;
-import com.hbm.interfaces.Spaghetti;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
@@ -132,7 +126,6 @@ import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.hazard.HazardSystem;
 
 import glmath.glm.vec._2.Vec2;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.AbstractClientPlayer;
@@ -142,18 +135,13 @@ import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
-import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
@@ -272,7 +260,7 @@ public class ModEventHandlerClient {
 		IDynamicModels.registerModels();
 
 		registerBedrockOreModels();
-	}
+    }
 
 	public static void registerBedrockOreModels(){
 		for(int i = 0; i < 300; i++) {
@@ -367,6 +355,16 @@ public class ModEventHandlerClient {
             for(int i = 0; i < 4; i ++){
                 ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
             }
+        } else if(item instanceof ItemLeaves leaf) {
+            boolean isOldLeaf = leaf.getBlock() == ModBlocks.ntmLeavesOld;
+            boolean isWasteLeaf = leaf.getBlock() == ModBlocks.waste_leaves;
+            for(BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
+                if(isWasteLeaf){
+                    ModelLoader.setCustomModelResourceLocation(leaf, type.ordinal(), new ModelResourceLocation("hbm:waste_leaves_" + type.name(), "inventory"));
+                } else if((isOldLeaf && type.ordinal() < 4) || (!isOldLeaf && type.ordinal() > 3)) {
+                    ModelLoader.setCustomModelResourceLocation(leaf, type.ordinal(), new ModelResourceLocation("minecraft:" + type.name() + "_leaves", "inventory"));
+                }
+            }
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, meta, ((IHasCustomModel) item).getResourceLocation());
 		} else if(item instanceof IHasCustomMetaModels) {
@@ -405,63 +403,53 @@ public class ModEventHandlerClient {
 		ResourceManager.init();
 		Object object1 = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
 		if(object1 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object1;
-			ItemRedstoneSwordRender.INSTANCE.itemModel = model;
+            ItemRedstoneSwordRender.INSTANCE.itemModel = (IBakedModel) object1;
 			evt.getModelRegistry().putObject(RedstoneSword.rsModel, new ItemRenderRedstoneSword());
 		}
 		Object object2 = evt.getModelRegistry().getObject(ItemAssemblyTemplate.location);
 		if(object2 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object2;
-			AssemblyTemplateRender.INSTANCE.itemModel = model;
+            AssemblyTemplateRender.INSTANCE.itemModel = (IBakedModel) object2;
 			evt.getModelRegistry().putObject(ItemAssemblyTemplate.location, new AssemblyTemplateBakedModel());
 		}
 
 		Object object3 = evt.getModelRegistry().getObject(GunB92.b92Model);
 		if(object3 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object3;
-			ItemRenderGunAnim.INSTANCE.b92ItemModel = model;
+            ItemRenderGunAnim.INSTANCE.b92ItemModel = (IBakedModel) object3;
 			evt.getModelRegistry().putObject(GunB92.b92Model, new B92BakedModel());
 		}
 		Object object4 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankModel);
 		if(object4 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object4;
-			FluidTankRender.INSTANCE.itemModel = model;
+            FluidTankRender.INSTANCE.itemModel = (IBakedModel) object4;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankModel, new FluidTankBakedModel());
 		}
 		Object object444 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankLeadModel);
 		if(object444 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object444;
-			FluidTankLeadRender.INSTANCE.itemModel = model;
+            FluidTankLeadRender.INSTANCE.itemModel = (IBakedModel) object444;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankLeadModel, new FluidTankLeadBakedModel());
 		}
 		Object object5 = evt.getModelRegistry().getObject(ItemFluidTank.fluidBarrelModel);
 		if(object5 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object5;
-			FluidBarrelRender.INSTANCE.itemModel = model;
+            FluidBarrelRender.INSTANCE.itemModel = (IBakedModel) object5;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidBarrelModel, new FluidBarrelBakedModel());
 		}
 		Object object6 = evt.getModelRegistry().getObject(ItemFluidCanister.fluidCanisterModel);
 		if(object6 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object6;
-			FluidCanisterRender.INSTANCE.itemModel = model;
+            FluidCanisterRender.INSTANCE.itemModel = (IBakedModel) object6;
 			evt.getModelRegistry().putObject(ItemFluidCanister.fluidCanisterModel, new FluidCanisterBakedModel());
 		}
 		Object object7 = evt.getModelRegistry().getObject(ItemChemistryTemplate.chemModel);
 		if(object7 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object7;
-			ChemTemplateRender.INSTANCE.itemModel = model;
+            ChemTemplateRender.INSTANCE.itemModel = (IBakedModel) object7;
 			evt.getModelRegistry().putObject(ItemChemistryTemplate.chemModel, new ChemTemplateBakedModel());
 		}
 		Object object8 = evt.getModelRegistry().getObject(ItemForgeFluidIdentifier.identifierModel);
 		if(object8 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object8;
-			FFIdentifierRender.INSTANCE.itemModel = model;
+            FFIdentifierRender.INSTANCE.itemModel = (IBakedModel) object8;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
 		}
 		Object object9 = evt.getModelRegistry().getObject(ItemCrucibleTemplate.cruciModel);
 		if(object9 instanceof IBakedModel) {
-			IBakedModel model = (IBakedModel) object9;
-			CrucibleTemplateRender.INSTANCE.itemModel = model;
+            CrucibleTemplateRender.INSTANCE.itemModel = (IBakedModel) object9;
 			evt.getModelRegistry().putObject(ItemCrucibleTemplate.cruciModel, new CrucibleTemplateBakedModel());
 		}
 
@@ -1364,10 +1352,8 @@ public class ModEventHandlerClient {
 				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 				if(chestplate.flashlightPosition != null && plate.hasTagCompound() && plate.getTagCompound().getBoolean("flActive")){
 					Vec3d start = chestplate.flashlightPosition.rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYaw)).add(player.getPositionEyes(partialTicks));
-					boolean volume = true;
-					if(player == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
-						volume = false;
-					LightRenderer.addFlashlight(start, start.add(player.getLook(partialTicks).scale(30)), 30, 200, ResourceManager.fl_cookie, volume, true, true, true);
+					boolean volume = player != Minecraft.getMinecraft().player || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0;
+                    LightRenderer.addFlashlight(start, start.add(player.getLook(partialTicks).scale(30)), 30, 200, ResourceManager.fl_cookie, volume, true, true, true);
 				}
 			}
 			
@@ -1834,7 +1820,11 @@ public class ModEventHandlerClient {
 		ItemStack stack = event.getItemStack();
 		List<String> list = event.getToolTip();
 
-		/// HAZMAT INFO ///
+        /// RAD SHIELDING ///
+        IRadResistantBlock.addShieldInfo(stack, list, event.getFlags());
+
+
+        /// HAZMAT INFO ///
 		List<HazardClass> hazInfo = ArmorRegistry.hazardClasses.get(stack.getItem());
 		
 		if(hazInfo != null) {
@@ -1896,8 +1886,9 @@ public class ModEventHandlerClient {
 		
 		/// BREEDING ///
 		BreederRecipes.addBreedingTips(stack, event.getEntityPlayer(), list, event.getFlags());
-		
-		//MKU
+
+
+        //MKU
 		if(stack.hasTagCompound()){
 			if(stack.getTagCompound().getBoolean("ntmContagion"))
 				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");

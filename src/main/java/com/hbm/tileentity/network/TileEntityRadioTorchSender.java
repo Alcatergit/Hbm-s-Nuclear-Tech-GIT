@@ -2,8 +2,6 @@ package com.hbm.tileentity.network;
 
 import com.hbm.tileentity.network.RTTYSystem;
 
-import net.minecraft.block.state.IBlockState;
-
 public class TileEntityRadioTorchSender extends TileEntityRadioTorchBase {
 
 	@Override

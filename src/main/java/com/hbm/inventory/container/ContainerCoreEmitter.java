@@ -93,7 +93,7 @@ public class ContainerCoreEmitter extends Container {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		if(id == 3)
-			nukeBoy.isOn = data > 0 ? true : false;
+			nukeBoy.isOn = data > 0;
 		if(id == 1){
 			if(Minecraft.getMinecraft().currentScreen instanceof GUICoreEmitter){
 				((GUICoreEmitter)Minecraft.getMinecraft().currentScreen).syncTextField(watts);

@@ -15,7 +15,6 @@ import com.hbm.inventory.RecipesCommon.OreDictStack;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFluidIcon;
-import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.items.special.ItemWasteLong;
 import com.hbm.items.special.ItemWasteShort;
 import com.hbm.blocks.ModBlocks;

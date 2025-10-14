@@ -45,9 +45,7 @@ public class ControlEvent {
 	public ControlEvent copy(){
 		ControlEvent evt = new ControlEvent(name);
 		//Set default values
-		for(Entry<String, DataValue> def : vars.entrySet()){
-			evt.vars.put(def.getKey(), def.getValue());
-		}
+        evt.vars.putAll(vars);
 		return evt;
 	}
 	

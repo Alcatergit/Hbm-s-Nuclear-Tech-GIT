@@ -48,13 +48,8 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 	protected List<Integer> getAmmoList() {
 		return null;
 	}
-	
-	@Override
-	public double getDecetorRange() {
-		return 32D;
-	}
-	
-	@Override
+
+    @Override
 	public double getDecetorGrace() {
 		return 2D;
 	}

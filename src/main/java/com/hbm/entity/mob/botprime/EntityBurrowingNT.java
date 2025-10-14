@@ -36,10 +36,10 @@ public class EntityBurrowingNT extends EntityCreature {
 		
 		if((!isEntityInsideOpaqueBlock()) && (!isInWater()) && (!isInLava())) {
 			drag = this.dragInAir;
-		} else if(this.getRNG().nextInt(100) == 0) {
-			//Block b = worldObj.getBlock((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ));
-			//this.playSound(b.stepSound.getStepResourcePath(), 5F, 1F);
-		}
+		} else {
+            this.getRNG().nextInt(100);//Block b = worldObj.getBlock((int)Math.floor(posX), (int)Math.floor(posY), (int)Math.floor(posZ));
+//this.playSound(b.stepSound.getStepResourcePath(), 5F, 1F);
+        }
 
         if (!getIsHead()) {
         	drag *= 0.9F;

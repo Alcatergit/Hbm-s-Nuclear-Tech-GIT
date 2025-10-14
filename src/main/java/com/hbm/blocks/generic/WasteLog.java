@@ -6,7 +6,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockLog;
 import net.minecraft.block.BlockRotatedPillar;
 import net.minecraft.block.SoundType;
@@ -70,17 +69,17 @@ public class WasteLog extends BlockRotatedPillar {
 	public IBlockState withSameRotationState(IBlockState state){
 		if(state == null)
 			return this.getDefaultState();
-		return this.getDefaultState().withProperty(super.AXIS, state.getValue(super.AXIS));
+		return this.getDefaultState().withProperty(AXIS, state.getValue(AXIS));
 	}
 
 	public IBlockState getSameRotationState(IBlockState state){
 		if(state == null)
 			return this.getDefaultState();
 		BlockLog.EnumAxis logAxis = state.getValue(BlockLog.LOG_AXIS);
-		if(logAxis == BlockLog.EnumAxis.Y) return this.getDefaultState().withProperty(super.AXIS, Axis.Y);
-		if(logAxis == BlockLog.EnumAxis.Z) return this.getDefaultState().withProperty(super.AXIS, Axis.Z);
+		if(logAxis == BlockLog.EnumAxis.Y) return this.getDefaultState().withProperty(AXIS, Axis.Y);
+		if(logAxis == BlockLog.EnumAxis.Z) return this.getDefaultState().withProperty(AXIS, Axis.Z);
 		if(logAxis == BlockLog.EnumAxis.X) return this.getDefaultState();
-		if(logAxis == BlockLog.EnumAxis.NONE) return this.getDefaultState().withProperty(super.AXIS, Axis.Y);
+		if(logAxis == BlockLog.EnumAxis.NONE) return this.getDefaultState().withProperty(AXIS, Axis.Y);
 		return null;
 	}
 }

@@ -192,7 +192,7 @@ public class TileEntityRBMKCraneConsole extends TileEntityMachineBase implements
 		tiltFront = 0;
 		tiltLeft = 0;
 		
-		if(players.size() > 0 && !isCraneLoading()) {
+		if(!players.isEmpty() && !isCraneLoading()) {
 			EntityPlayer player = players.get(0);
 			IHBMData props = HbmCapability.getData(player);
 

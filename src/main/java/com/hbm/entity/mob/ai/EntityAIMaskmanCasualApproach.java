@@ -72,10 +72,8 @@ public class EntityAIMaskmanCasualApproach extends EntityAIBase {
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-		return entitylivingbase == null ? false
-				: (!entitylivingbase.isEntityAlive() ? false
-				: (!this.longMemory ? !this.attacker.getNavigator().noPath()
-				: this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(entitylivingbase.posX), MathHelper.floor(entitylivingbase.posY), MathHelper.floor(entitylivingbase.posZ)))));
+		return entitylivingbase != null && (entitylivingbase.isEntityAlive() && (!this.longMemory ? !this.attacker.getNavigator().noPath()
+                : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(entitylivingbase.posX), MathHelper.floor(entitylivingbase.posY), MathHelper.floor(entitylivingbase.posZ)))));
 	}
 	
 	@Override

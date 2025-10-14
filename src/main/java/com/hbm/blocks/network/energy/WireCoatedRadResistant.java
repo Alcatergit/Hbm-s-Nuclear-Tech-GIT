@@ -29,13 +29,8 @@ public class WireCoatedRadResistant extends WireCoated implements IRadResistantB
 		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 		super.breakBlock(worldIn, pos, state);
 	}
-	
-	@Override
-	public boolean isRadResistant(World worldIn, BlockPos blockPos){
-		return true;
-	}
 
-	@Override
+    @Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
 		tooltip.add("§2[Radiation Shielding]§r");

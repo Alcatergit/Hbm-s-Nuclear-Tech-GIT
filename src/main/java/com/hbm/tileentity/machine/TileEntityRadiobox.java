@@ -7,7 +7,6 @@ import com.hbm.tileentity.TileEntityLoadedBase;
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;

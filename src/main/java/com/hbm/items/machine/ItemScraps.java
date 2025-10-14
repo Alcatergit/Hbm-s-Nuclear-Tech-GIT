@@ -2,22 +2,15 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
-import org.lwjgl.input.Keyboard;
-
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import net.minecraft.client.util.ITooltipFlag;
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemAutogen;
-import com.hbm.lib.RefStrings;
-import com.hbm.util.I18nUtil;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
@@ -41,7 +34,7 @@ public class ItemScraps extends ItemAutogen {
 		MaterialStack contents = getMats(stack);
 		
 		if(contents != null) {
-			if(contents.material.smeltable == contents.material.smeltable.ADDITIVE)
+			if(contents.material.smeltable == SmeltingBehavior.ADDITIVE)
 				list.add("§4Additive, not castable!");
 		}
 	}

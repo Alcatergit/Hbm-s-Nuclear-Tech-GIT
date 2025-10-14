@@ -1,12 +1,8 @@
 package com.hbm.blocks.generic;
 
-import java.util.ArrayList;
 import java.util.Random;
 
-import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.capability.HbmLivingProps;
-import com.hbm.capability.HbmLivingProps.ContaminationEffect;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.items.ModItems;
 import com.hbm.potion.HbmPotion;
@@ -20,7 +16,6 @@ import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
@@ -80,7 +75,7 @@ public class BlockPowder extends Block {
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
 		IBlockState state = world.getBlockState(pos.down());
 		Block block = state.getBlock();
-		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (block.isLeaves(state, world, pos.down()) ? true : (block == this && (state.getValue(META) & 7) == 7 ? true : state.isOpaqueCube() && state.getMaterial().blocksMovement())) : false;
+		return block != Blocks.ICE && block != Blocks.PACKED_ICE && (block.isLeaves(state, world, pos.down()) || (block == this && (state.getValue(META) & 7) == 7 || state.isOpaqueCube() && state.getMaterial().blocksMovement()));
 	}
 	
 	@Override

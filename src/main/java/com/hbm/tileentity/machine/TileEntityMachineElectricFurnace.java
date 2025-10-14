@@ -75,12 +75,9 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 		if(i == 0)
 			if(stack.getItem() instanceof IBatteryItem)
 				return true;
-		
-		if(i == 1)
-			return true;
-		
-		return false;
-	}
+
+        return i == 1;
+    }
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
@@ -92,11 +89,8 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 		if(slot == 0)
 			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
 				return true;
-		if(slot == 2)
-			return true;
-		
-		return false;
-	}
+        return slot == 2;
+    }
 	
 	public int getDiFurnaceProgressScaled(int i) {
 		return (dualCookTime * i) / processingSpeed;
@@ -193,14 +187,9 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 				dualCookTime = 0;
 			}
 			
-			boolean trigger = true;
-			
-			if(hasPower() && canProcess() && this.dualCookTime == 0)
-			{
-				trigger = false;
-			}
-			
-			if(trigger)
+			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
+
+            if(trigger)
             {
                 flag1 = true;
                 MachineElectricFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);

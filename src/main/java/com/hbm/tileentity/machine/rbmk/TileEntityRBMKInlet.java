@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.blocks.machine.rbmk.RBMKBase;
-import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.lib.ForgeDirection;
 
 import net.minecraft.block.Block;

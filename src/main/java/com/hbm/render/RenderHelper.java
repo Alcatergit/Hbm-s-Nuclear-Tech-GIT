@@ -23,7 +23,6 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.entity.missile.EntityCarrier;
 import com.hbm.entity.missile.EntityMissileCustom;
-import com.hbm.entity.missile.EntityMissileAntiBallistic;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.Library;
@@ -975,8 +974,7 @@ public class RenderHelper {
     		if(r_getRenderChunk == null)
 				r_getRenderChunk = ReflectionHelper.findMethod(ViewFrustum.class, "getRenderChunk", "func_178161_a", BlockPos.class);
 			ViewFrustum v = (ViewFrustum) r_viewFrustum.get(Minecraft.getMinecraft().renderGlobal);
-			RenderChunk r = (RenderChunk) r_getRenderChunk.invoke(v, pos);
-			return r;
+            return (RenderChunk) r_getRenderChunk.invoke(v, pos);
 		} catch(IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

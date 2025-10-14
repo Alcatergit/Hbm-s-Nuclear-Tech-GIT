@@ -453,7 +453,6 @@ public class EntityMiniMIRV extends Entity implements IProjectile {
 
             for (this.rotationPitch = (float)(Math.atan2(this.motionY, f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
-                ;
             }
 
             while (this.rotationPitch - this.prevRotationPitch >= 180.0F)

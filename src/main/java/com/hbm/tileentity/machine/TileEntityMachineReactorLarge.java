@@ -9,6 +9,7 @@ import com.hbm.config.MobConfig;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
@@ -124,7 +125,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {
@@ -344,14 +345,11 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		
 		Block b = world.getBlockState(pos).getBlock();
 		
-		if(b instanceof IRadResistantBlock)
+		if(RadiationSystemNT.isRadResistant(world, b, pos))
 			return true;
 
-		if(b == ModBlocks.reactor_hatch || b == ModBlocks.reactor_ejector || b == ModBlocks.reactor_inserter)
-			return true;
-		
-		return false;
-	}
+        return b == ModBlocks.reactor_hatch || b == ModBlocks.reactor_ejector || b == ModBlocks.reactor_inserter;
+    }
 	
 	private void caluclateSize() {
 		
@@ -567,9 +565,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(!inventory.getStackInSlot(slot).isEmpty() && tanks[tank] != null){
-			if(inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
-				return true;
-			}
+            return inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
 		}
 		return false;
 	}
@@ -886,12 +882,12 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		SCHRABIDIUM(2085000),
 		UNKNOWN(1);
 		
-		private ReactorFuelType(int i) {
+		ReactorFuelType(int i) {
 			heat = i;
 		}
 		
 		//Heat per nugget burned
-		private int heat;
+		private final int heat;
 		
 		public int getHeat() {
 			return heat;

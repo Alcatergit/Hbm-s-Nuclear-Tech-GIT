@@ -9,7 +9,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.lib.HBMSoundHandler;
@@ -19,7 +18,6 @@ import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
-import net.minecraft.init.Items;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,8 +27,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
@@ -379,9 +375,8 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 				stack.setStackInSlot(i, array.getStackInSlot(i).copy());
 			else
 				stack.setStackInSlot(i, ItemStack.EMPTY);
-		;
 
-		return stack;
+        return stack;
 	}
 
 	//Unloads output into chests
@@ -510,17 +505,6 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
 			return false;
 		else {
 			List<AStack> recipeIngredients = new ArrayList<>(AssemblerRecipes.getRecipeFromTempate(inventory.getStackInSlot(4))); //Loading Ingredients
-			Map<Integer, ItemStack> itemStackMap = new HashMap<Integer, ItemStack>();
-
-			for(int slot : allowedSlots) {
-				container.getStackInSlot(slot);
-				if (!container.getStackInSlot(slot).isEmpty()) {
-					itemStackMap.put(slot, container.getStackInSlot(slot).copy());
-				}
-			}
-			if(itemStackMap.isEmpty()){
-				return true;
-			}
 
             for (AStack recipeIngredient : recipeIngredients) {
 
@@ -532,45 +516,46 @@ public class TileEntityMachineAssembler extends TileEntityMachineBase implements
                 if (ingredientSlot < 6)
                     continue; // Ingredient filled or Assembler is full
 
-                int possibleAmount = inventory.getStackInSlot(ingredientSlot).getMaxStackSize() - inventory.getStackInSlot(ingredientSlot).getCount(); // how many items do we need to fill the stack?
+                int possibleAmount;
 
-                if (possibleAmount == 0) { // full
+                ItemStack assemblerItem = inventory.getStackInSlot(ingredientSlot);
+                if(assemblerItem.isEmpty())
+                    possibleAmount = nextIngredient.getStack().getMaxStackSize();
+                else
+                    possibleAmount = assemblerItem.getMaxStackSize() - assemblerItem.getCount(); // how many items do we need to fill the stack?
+
+                if (possibleAmount <= 0) { // full
                     System.out.println("This should never happen method getValidSlot broke");
                     continue;
                 }
                 // Ok now we know what we are looking for (nexIngredient) and where to put it (ingredientSlot) - So lets see if we find some of it in containers
-                for (Map.Entry<Integer, ItemStack> set : itemStackMap.entrySet()) {
-                    ItemStack stack = set.getValue();
-                    int slot = set.getKey();
+                for(int slot : allowedSlots) {
+                    ItemStack stack = container.getStackInSlot(slot);
+                    if(stack.isEmpty()) continue;
+
                     ItemStack compareStack = stack.copy();
                     compareStack.setCount(1);
-
                     if (nextIngredient.isApplicable(compareStack)) { // bingo found something
 
                         int foundCount = Math.min(stack.getCount(), possibleAmount);
                         if (te != null && !te.canExtractItem(slot, stack, foundCount))
                             continue;
-                        if (foundCount > 0) {
-                            possibleAmount -= foundCount;
-                            container.extractItem(slot, foundCount, false);
-                            inventory.getStackInSlot(ingredientSlot);
-                            if (inventory.getStackInSlot(ingredientSlot).isEmpty()) {
-
-                                stack.setCount(foundCount);
-                                inventory.setStackInSlot(ingredientSlot, stack);
-
-                            } else {
-                                inventory.getStackInSlot(ingredientSlot).grow(foundCount); // transfer complete
-                            }
-                            needsProcess = true;
-                        } else {
+                        ItemStack extractItem = container.extractItem(slot, foundCount, false);
+                        if(extractItem.isEmpty()) continue;
+                        if(inventory.getStackInSlot(ingredientSlot).isEmpty())
+                            inventory.setStackInSlot(ingredientSlot, extractItem.copy());
+                        else
+                            inventory.getStackInSlot(ingredientSlot).grow(extractItem.getCount());
+                        needsProcess = true;
+                        possibleAmount -= extractItem.getCount();
+                        if (possibleAmount <= 0) {
                             break; // ingredientSlot filled
                         }
                     }
                 }
             }
-			}
-			return true;
+        }
+        return true;
 	}
 
 	//boolean true: remove items, boolean false: simulation mode

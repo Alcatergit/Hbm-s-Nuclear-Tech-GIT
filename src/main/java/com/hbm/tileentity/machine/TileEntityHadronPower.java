@@ -4,7 +4,6 @@ import com.hbm.tileentity.TileEntityTickingBase;
 
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityHadronPower extends TileEntityTickingBase implements IEnergyUser {
 

@@ -68,7 +68,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     private boolean rockBreaker = false;
     
 	
-	public static enum EnumToolType {
+	public enum EnumToolType {
 		
 		PICKAXE(
 				Sets.newHashSet(new Material[] { Material.IRON, Material.ANVIL, Material.ROCK }),
@@ -86,11 +86,11 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
 				Sets.newHashSet(new Material[] { Material.GRASS, Material.IRON, Material.ANVIL, Material.ROCK, Material.CLAY, Material.SAND, Material.GROUND, Material.SNOW, Material.CRAFTED_SNOW })
 		);
 		
-		private EnumToolType(Set<Material> materials) {
+		EnumToolType(Set<Material> materials) {
 			this.materials = materials;
 		}
 		
-		private EnumToolType(Set<Material> materials, Set<Block> blocks) {
+		EnumToolType(Set<Material> materials, Set<Block> blocks) {
 			this.materials = materials;
 			this.blocks = blocks;
 		}
@@ -284,7 +284,7 @@ public class ItemToolAbility extends ItemTool implements IItemAbility, IDepthRoc
     @Override
     @SideOnly(Side.CLIENT)
     public boolean hasEffect(ItemStack stack) {
-    	return getCurrentAbility(stack) != null ? true : super.hasEffect(stack);
+    	return getCurrentAbility(stack) != null || super.hasEffect(stack);
     }
     
     @Override

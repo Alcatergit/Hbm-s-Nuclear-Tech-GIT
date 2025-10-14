@@ -1,6 +1,5 @@
 package com.hbm.inventory.container;
 
-import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
 
 import net.minecraft.entity.player.EntityPlayer;

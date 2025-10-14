@@ -1,7 +1,6 @@
 package com.hbm.blocks.generic;
 
 import java.util.List;
-import java.util.Random;
 
 import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
@@ -15,7 +14,6 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.IStringSerializable;
 import net.minecraft.world.World;
@@ -33,14 +31,6 @@ public class BlockGenericSlab extends BlockSlab {
 		this.isDouble = isDouble;
 		
 		ModBlocks.ALL_BLOCKS.add(this);
-	}
-
-	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		float hardness = this.getExplosionResistance(null);
-		if(hardness > 50){
-			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
-		}
 	}
 
 	@Override
@@ -99,7 +89,7 @@ public class BlockGenericSlab extends BlockSlab {
         return this.isDouble() ? new BlockStateContainer(this, new IProperty[] {VARIANT}) : new BlockStateContainer(this, new IProperty[] {HALF, VARIANT});
     }
 	
-	public static enum Variant implements IStringSerializable
+	public enum Variant implements IStringSerializable
     {
         DEFAULT;
 

@@ -15,7 +15,6 @@ import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.projectile.EntityRBMKDebris;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
-import com.hbm.items.machine.ItemRBMKRod;
 import com.hbm.config.MachineConfig;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.HBMSoundHandler;
@@ -148,7 +147,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			}
 		} else{ // gravity fall
 			if(this.jumpheight > 0){
-				this.downwardSpeed = this.downwardSpeed + this.gravity * 0.05F;
+				this.downwardSpeed = this.downwardSpeed + gravity * 0.05F;
 				this.jumpheight = this.jumpheight - this.downwardSpeed;
 			} else {
 				this.jumpheight = 0;

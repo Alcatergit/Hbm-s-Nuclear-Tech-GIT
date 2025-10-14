@@ -12,10 +12,8 @@ import com.hbm.tileentity.TileEntityProxyInventory;
 import com.hbm.tileentity.machine.TileEntityCrucible;
 
 import api.hbm.block.ICrucibleAcceptor;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -42,7 +40,7 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
         this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, -1.25D, -1D, 1.5D, 1.25D));
         this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, 1D, 1.25D, 1.5D, 1.25D));
         this.bounding.add(new AxisAlignedBB(1D, 0.5D, -1.25D, 1.25D, 1.5D, 1.25D));
-        this.FULL_BLOCK_AABB.setMaxY(0.999D); //item bounce prevention
+        FULL_BLOCK_AABB.setMaxY(0.999D); //item bounce prevention
 	}
 
 	@Override

@@ -99,21 +99,21 @@ public class JungleDungeonRoom extends CellularDungeonRoom {
 						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z, 3, 3, 1, Blocks.AIR.getDefaultState());
 				}
 
-				if(wall == EnumFacing.SOUTH) {
+                else if(wall == EnumFacing.SOUTH) {
 					DungeonToolbox.generateBox(world, x, y + 1, z + parent.width - 1, parent.width, parent.height - 2, 1, parent.wall);
 
 					if(door)
 						DungeonToolbox.generateBox(world, x + parent.width / 2 - 1, y + 1, z + parent.width - 1, 3, 3, 1, Blocks.AIR.getDefaultState());
 				}
 
-				if(wall == EnumFacing.WEST) {
+                else if(wall == EnumFacing.WEST) {
 					DungeonToolbox.generateBox(world, x, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 
 					if(door)
 						DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2 - 1, 1, 3, 3, Blocks.AIR.getDefaultState());
 				}
 
-				if(wall == EnumFacing.EAST) {
+                else if(wall == EnumFacing.EAST) {
 					DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 
 					if(door)

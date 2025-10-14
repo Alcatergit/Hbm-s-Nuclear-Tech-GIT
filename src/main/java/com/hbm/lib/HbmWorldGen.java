@@ -45,11 +45,9 @@ import com.hbm.world.generator.DungeonToolbox;
 import net.minecraft.block.BlockOldLog;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.BlockSkull;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.pattern.BlockMatcher;
 import net.minecraft.block.BlockRotatedPillar;
-import net.minecraft.init.Biomes;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityChest;
@@ -256,25 +254,25 @@ public class HbmWorldGen implements IWorldGenerator {
 		int dimBedrockOreFreq = parseInt(BedrockOreJsonConfig.dimOreRarity.get(dimID));
 		if (dimBedrockOreFreq > 0 && rand.nextInt(dimBedrockOreFreq) == 0) {
 			
-			String oreName = BedrockOreRegistry.rollOreName(dimID, rand);
-			if(oreName == null) return;
+			int tier = BedrockOreRegistry.rollOreTier(rand);
+			if(tier == -1) return;
 			int sqrsize = 2;
 			for(int v = sqrsize; v >= -sqrsize; v--) {
 				for(int w = sqrsize; w >= -sqrsize; w--) {
 					for(int y = 6; y >= 0; y--) {
 						if(rand.nextInt(4) == 0) continue;
-						placeBedrockOre(world, new BlockPos(i+8+w, y, j+8+v), oreName);
+						placeBedrockOre(world, new BlockPos(i+8+w, y, j+8+v), tier);
 					}
 				}
 			}
 		}
 	}
 	
-	private void placeBedrockOre(World world, BlockPos orePos, String oreName){
+	private void placeBedrockOre(World world, BlockPos orePos, int tier){
 		if(!isBedrock(world, orePos)) return;
 		world.setBlockState(orePos, ModBlocks.ore_bedrock_block.getDefaultState());
 		TileEntityBedrockOre bedrockOre = (TileEntityBedrockOre)world.getTileEntity(orePos);
-		bedrockOre.setOre(oreName);
+		bedrockOre.setTier(tier);
 	}
 
 	private boolean isBedrock(World world, BlockPos bPos){
@@ -537,6 +535,14 @@ public class HbmWorldGen implements IWorldGenerator {
                     generateJungleDungeon(world, x, z, rand);
 				}
 			}
+            if(biome.getTempCategory() != Biome.TempCategory.OCEAN){
+                int dimVaultStructure = parseInt(CompatibilityConfig.vaulttecStructure.get(dimID));
+                if(dimVaultStructure > 0 && rand.nextInt(dimVaultStructure) == 0) {
+                    int x = i + rand.nextInt(16);
+                    int z = j + rand.nextInt(16);
+                    generateVaultDungeon(world, x, z, rand);
+                }
+            }
 			if(biome.getTempCategory() == Biome.TempCategory.COLD){
 				int dimArcticStructure = parseInt(CompatibilityConfig.arcticStructure.get(dimID));
 				if (dimArcticStructure > 0 && rand.nextInt(dimArcticStructure) == 0) {
@@ -727,5 +733,13 @@ public class HbmWorldGen implements IWorldGenerator {
         for(int f = 0; f < 3; f++)
             world.setBlockState(new BlockPos(x, columnY + f, z), ModBlocks.deco_titanium.getDefaultState());
         world.setBlockState(new BlockPos(x, columnY + 3, z), Blocks.REDSTONE_BLOCK.getDefaultState());
+    }
+
+    public static void generateVaultDungeon(World world, int x, int z, Random rand) {
+        CellularDungeonFactory.vault.generate(world, x, 16, z, rand);
+
+        if(GeneralConfig.enableDebugMode)
+            MainRegistry.logger.info("[Debug] Successfully spawned vault dungeon at x=" + x + " y=10 z=" + z);
+
     }
 }

@@ -35,7 +35,7 @@ public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 	@Override
 	public void doRender(EntityGasFlameFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
 
-		if(textures.size() == 0){
+		if(textures.isEmpty()){
 			textures.put(ModItems.gasflame1, RenderHelper.getItemTexture(ModItems.gasflame1));
 			textures.put(ModItems.gasflame2, RenderHelper.getItemTexture(ModItems.gasflame2));
 			textures.put(ModItems.gasflame3, RenderHelper.getItemTexture(ModItems.gasflame3));

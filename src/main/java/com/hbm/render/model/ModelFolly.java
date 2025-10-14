@@ -275,11 +275,9 @@ public class ModelFolly extends ModelBase {
 			
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buf = tessellator.getBuffer();
-			boolean red = false;
+			boolean red = timer == 0;
 
-			if (timer == 0)
-				red = true;
-			buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+            buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 			
 			buf.pos(-32F / 16F, 0 + 4F / 16F, 0).color(red ? 1.0F : 0.0F, red ? 0.0F : 1.0F, 0.0F, 1.0F).endVertex();
 			buf.pos(-150, timer, 0).color(red ? 1.0F : 0.0F, red ? 0.0F : 1.0F, 0.0F, 1.0F).endVertex();

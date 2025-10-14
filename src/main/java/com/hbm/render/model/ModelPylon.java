@@ -9,7 +9,7 @@ public class ModelPylon extends ModelBase {
 	int textureX = 64;
 	int textureY = 128;
 
-	public ModelRenderer pylonModel[];
+	public ModelRenderer[] pylonModel;
 
 	public ModelPylon()
 	{

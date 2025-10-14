@@ -16,7 +16,6 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemicalDye.EnumChemDye;
 import com.hbm.items.machine.ItemFluidIcon;
 import com.hbm.items.ItemEnums.EnumTarType;
-import com.hbm.inventory.OreDictManager.DictFrame;
 
 import mezz.jei.api.ingredients.IIngredients;
 import mezz.jei.api.ingredients.VanillaTypes;

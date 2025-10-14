@@ -12,15 +12,11 @@ import com.hbm.potion.HbmPotion;
 import com.hbm.hazard.HazardSystem;
 
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.EnumHand;
-import net.minecraft.init.MobEffects;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
@@ -199,7 +195,7 @@ public class BlockHazard extends BlockBase {
         }
 	}
 	
-	public static enum ExtDisplayEffect {
+	public enum ExtDisplayEffect {
 		RADFOG,
 		SPARKS,
 		SCHRAB,

@@ -55,12 +55,7 @@ public class DummyBlockChemplant extends DummyOldBase {
 		return false;
 	}
 
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
-	}
-	
-	@Override
+    @Override
 	public boolean isBlockNormalCube(IBlockState state) {
 		return false;
 	}

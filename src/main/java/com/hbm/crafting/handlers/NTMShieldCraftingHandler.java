@@ -15,7 +15,7 @@ import java.util.Objects;
 public class NTMShieldCraftingHandler extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
     @Override
-    public boolean matches(InventoryCrafting inv, @NotNull World worldIn) {
+    public boolean matches(InventoryCrafting inv, World worldIn) {
         ItemStack shield = ItemStack.EMPTY;
         ItemStack banner = ItemStack.EMPTY;
 

@@ -7,8 +7,8 @@ public class AnimationWrapper {
 	public static final AnimationWrapper EMPTY = new AnimationWrapper(Animation.EMPTY){
 		public AnimationWrapper onEnd(EndResult res) {
 			return this;
-		};
-	};
+		}
+    };
 	
 	public Animation anim;
 	
@@ -64,8 +64,8 @@ public class AnimationWrapper {
 		REPEAT,
 		REPEAT_REVERSE,
 		START_NEW,
-		STAY;
-	}
+		STAY
+    }
 	
 	public static class EndResult {
 		

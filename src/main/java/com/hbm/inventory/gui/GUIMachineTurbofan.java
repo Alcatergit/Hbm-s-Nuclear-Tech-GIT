@@ -30,7 +30,7 @@ public class GUIMachineTurbofan extends GuiInfoContainer {
 		super.drawScreen(mouseX, mouseY, f);
 
 		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 35, guiTop + 16, 34, 52, turbofan.tank);
-		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 16, 16, 52, turbofan.power, turbofan.maxPower);
+		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 143, guiTop + 16, 16, 52, turbofan.power, TileEntityMachineTurbofan.maxPower);
 
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

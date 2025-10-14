@@ -14,6 +14,7 @@ import com.hbm.inventory.*;
 import com.hbm.items.armor.ItemModLens;
 import com.hbm.tileentity.network.*;
 import com.hbm.world.feature.OreLayer3D;
+import net.minecraft.block.*;
 import org.apache.logging.log4j.Logger;
 
 import com.hbm.blocks.ModBlocks;
@@ -258,9 +259,6 @@ import com.hbm.tileentity.bomb.TileEntityNukePrototype;
 import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
 import com.hbm.tileentity.bomb.TileEntityNukeTsar;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
-import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
-import com.hbm.tileentity.network.energy.TileEntityCableSwitch;
-import com.hbm.tileentity.network.energy.TileEntityMachineDetector;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2Solid;
@@ -319,7 +317,6 @@ import com.hbm.tileentity.turret.TileEntityTurretTauon;
 import com.hbm.world.feature.SchistStratum;
 import com.hbm.world.generator.CellularDungeonFactory;
 
-import net.minecraft.block.BlockDispenser;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.dispenser.BehaviorProjectileDispense;
 import net.minecraft.dispenser.IPosition;
@@ -473,9 +470,8 @@ public class MainRegistry {
 		if(generalOverride > 0 && generalOverride < 19) {
 			polaroidID = generalOverride;
 		} else {
-			polaroidID = rand.nextInt(18) + 1;
-			while(polaroidID == 4 || polaroidID == 9)
-				polaroidID = rand.nextInt(18) + 1;
+            do polaroidID = rand.nextInt(18) + 1;
+            while (polaroidID == 4 || polaroidID == 9);
 		}
 		
 		if(SharedMonsterAttributes.MAX_HEALTH.clampValue(Integer.MAX_VALUE) <= 2000){
@@ -486,7 +482,7 @@ public class MainRegistry {
 				modifiersField.setAccessible(true);
 				modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
 				f.set(SharedMonsterAttributes.MAX_HEALTH, Integer.MAX_VALUE);
-			} catch(Throwable e){}
+			} catch(Throwable ignored){}
 		}
 		proxy.checkGLCaps();
 		reloadConfig();
@@ -583,7 +579,6 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCableGauge.class, new ResourceLocation(RefStrings.MODID, "tileentity_cable_gauge"));
 		GameRegistry.registerTileEntity(TileEntityBedrockOre.class, new ResourceLocation(RefStrings.MODID, "tileentity_ore_bedrock"));
 		GameRegistry.registerTileEntity(TileEntityMachineBattery.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_battery"));
-		GameRegistry.registerTileEntity(TileEntityMachineTransformer.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_transformer"));
 		GameRegistry.registerTileEntity(TileEntityConverterHeRf.class, new ResourceLocation(RefStrings.MODID, "tileentity_converter_he_rf"));
 		GameRegistry.registerTileEntity(TileEntityConverterRfHe.class, new ResourceLocation(RefStrings.MODID, "tileentity_converter_rf_he"));
 		GameRegistry.registerTileEntity(TileEntityMachineTurbine.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_turbine"));
@@ -783,7 +778,8 @@ public class MainRegistry {
 		GameRegistry.registerTileEntity(TileEntityCondenser.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_condenser"));
 		GameRegistry.registerTileEntity(TileEntityMachineLiquefactor.class, new ResourceLocation(RefStrings.MODID, "tileentity_liquefactor"));
 		GameRegistry.registerTileEntity(TileEntityMachineSolidifier.class, new ResourceLocation(RefStrings.MODID, "tileentity_solidifier"));
-		GameRegistry.registerTileEntity(TileEntityMachineSolderingStation.class, new ResourceLocation(RefStrings.MODID, "tileentity_soldering_station"));
+        GameRegistry.registerTileEntity(TileEntityMachineAutocrafter.class, new ResourceLocation(RefStrings.MODID, "tileentity_machine_autocrafter"));
+        GameRegistry.registerTileEntity(TileEntityMachineSolderingStation.class, new ResourceLocation(RefStrings.MODID, "tileentity_soldering_station"));
 		GameRegistry.registerTileEntity(TileEntityMachineArcWelder.class, new ResourceLocation(RefStrings.MODID, "tileentity_arc_welder"));
 		GameRegistry.registerTileEntity(TileEntityChungus.class, new ResourceLocation(RefStrings.MODID, "tileentity_chungus"));
 		GameRegistry.registerTileEntity(TileEntitySpacer.class, new ResourceLocation(RefStrings.MODID, "tileentity_spacer"));

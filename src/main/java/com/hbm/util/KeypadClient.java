@@ -122,11 +122,8 @@ public class KeypadClient extends Keypad {
 		Vec3d vec1 = p.getPositionEyes(MainRegistry.proxy.partialTicks());
 		Vec3d vec2 = vec1.add(p.getLook(MainRegistry.proxy.partialTicks()).scale(3));
 		RayTraceResult r = mainBox.offset(pos).calculateIntercept(vec1, vec2);
-		if(r != null && r.typeOfHit != Type.MISS){
-			return true;
-		}
-		return false;
-	}
+        return r != null && r.typeOfHit != Type.MISS;
+    }
 	
 	public static void load(){
 		WavefrontObjDisplayList model = new WavefrontObjDisplayList(new WavefrontObject(new ResourceLocation(RefStrings.MODID, "models/keypad.obj")));

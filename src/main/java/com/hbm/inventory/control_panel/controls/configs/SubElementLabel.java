@@ -4,7 +4,6 @@ import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.inventory.control_panel.GuiControlEdit;
-import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 import net.minecraft.client.Minecraft;
@@ -12,13 +11,9 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.client.config.GuiSlider;
-import org.lwjgl.input.Keyboard;
 
 import java.util.HashMap;
 import java.util.Map;
-
-import static com.hbm.inventory.control_panel.DataValue.DataType.ENUM;
-import static com.hbm.inventory.control_panel.DataValue.DataType.NUMBER;
 
 public class SubElementLabel extends SubElementBaseConfig {
 

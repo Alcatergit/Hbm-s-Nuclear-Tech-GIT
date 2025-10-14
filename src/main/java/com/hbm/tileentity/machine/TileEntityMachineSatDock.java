@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.missile.EntityMinerRocket;
 import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemSatChip;
 import com.hbm.main.AdvancementManager;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteHorizons;

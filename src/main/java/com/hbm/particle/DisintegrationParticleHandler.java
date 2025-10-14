@@ -331,8 +331,7 @@ public class DisintegrationParticleHandler {
 		float f;
 		
 		for(f = yawOffset - prevYawOffset; f < -180.0F; f += 360.0F) {
-			;
-		}
+        }
 
 		while(f >= 180.0F) {
 			f -= 360.0F;

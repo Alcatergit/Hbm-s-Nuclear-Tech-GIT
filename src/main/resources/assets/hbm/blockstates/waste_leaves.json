@@ -1,8 +1,10 @@
 {
 	"variants": {
-		"check_decay=false,decayable=false,variant=oak": { "model": "hbm:waste_leaves" },
-		"check_decay=false,decayable=true,variant=oak": { "model": "hbm:waste_leaves" },
-		"check_decay=true,decayable=false,variant=oak": { "model": "hbm:waste_leaves" },
-		"check_decay=true,decayable=true,variant=oak": { "model": "hbm:waste_leaves" }
+		"variant=oak": { "model": "hbm:waste_leaves_oak" },
+		"variant=spruce": { "model": "hbm:waste_leaves_spruce" },
+		"variant=birch": { "model": "hbm:waste_leaves_birch" },
+		"variant=jungle": { "model": "hbm:waste_leaves_jungle" },
+		"variant=acacia": { "model": "hbm:waste_leaves_acacia" },
+		"variant=dark_oak": { "model": "hbm:waste_leaves_dark_oak" }
 	}
 }

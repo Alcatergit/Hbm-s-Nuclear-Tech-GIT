@@ -25,13 +25,14 @@ public class ParticleRenderLayer {
 			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 			Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		};
-		@Override
+		}
+
+        @Override
 		public void postRender(){
 			Tessellator.getInstance().draw();
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-		};
-	};
+		}
+    };
 	
 	public boolean isRegistered = false;
 	protected ArrayDeque<ParticleLayerBase> particles = Queues.newArrayDeque();

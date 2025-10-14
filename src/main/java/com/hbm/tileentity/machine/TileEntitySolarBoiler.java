@@ -116,8 +116,7 @@ public class TileEntitySolarBoiler extends TileEntity implements INBTPacketRecei
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain){
-        FluidStack drain = tanks[1].drain(maxDrain, doDrain);
-        return drain;
+        return tanks[1].drain(maxDrain, doDrain);
     }
 
     @Override

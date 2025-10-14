@@ -34,7 +34,6 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
 public class BlockFluidPipeMk2 extends BlockContainer implements IToolable, ILookOverlay {

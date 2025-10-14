@@ -359,13 +359,8 @@ public abstract class BlockDummyable extends BlockContainer implements ICopiable
 
 		return new AxisAlignedBB(aabb.minX, aabb.minY, aabb.minZ, aabb.maxX, aabb.maxY, aabb.maxZ).offset(x + 0.5, y + 0.5, z + 0.5);
 	}
-	
-	@Override
-	public EnumBlockRenderType getRenderType(IBlockState state) {
-		return EnumBlockRenderType.INVISIBLE;
-	}
-	
-	@Override
+
+    @Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
 	}

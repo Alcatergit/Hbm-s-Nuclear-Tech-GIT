@@ -206,9 +206,8 @@ public class BreederRecipes {
 			return null;
 		
 		ComparableStack sta = new ComparableStack(stack.getItem(), 1, stack.getItemDamage());
-		int[] ret = BreederRecipes.fuels.get(sta);
-		
-		return ret;
+
+        return BreederRecipes.fuels.get(sta);
 	}
 	
 	public static String getHEATString(String string, int heat) {

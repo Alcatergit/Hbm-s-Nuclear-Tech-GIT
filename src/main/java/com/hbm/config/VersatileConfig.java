@@ -1,10 +1,8 @@
 package com.hbm.config;
 
-import com.hbm.items.ModItems;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
 
 public class VersatileConfig {

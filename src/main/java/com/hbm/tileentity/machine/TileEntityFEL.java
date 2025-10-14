@@ -2,11 +2,9 @@ package com.hbm.tileentity.machine;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.lang.Math;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.machine.MachineSILEX;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
 import com.hbm.lib.Library;
@@ -23,7 +21,6 @@ import net.minecraft.util.ITickable;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
@@ -131,7 +128,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 						
 						IBlockState b = world.getBlockState(new BlockPos(x, y, z));
 						
-						if(!(b.getMaterial().isOpaque()) && b != Blocks.TNT) {
+						if(!(b.getMaterial().isOpaque()) && b.getBlock() != Blocks.TNT) {
 							this.distance = range;
 							silexSpacing = false;
 							continue;
@@ -239,12 +236,8 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 	public boolean rotationIsValid(int silexMeta, int felMeta) {
 		ForgeDirection silexDir = ForgeDirection.getOrientation(silexMeta);
 		ForgeDirection felDir = ForgeDirection.getOrientation(felMeta);
-		if(silexDir == felDir || silexDir == felDir.getOpposite()) {
-			return true;
-		}
-		 
-		return false;
-	}
+        return silexDir == felDir || silexDir == felDir.getOpposite();
+    }
 
 	@Override
 	public void networkUnpack(NBTTagCompound nbt) {

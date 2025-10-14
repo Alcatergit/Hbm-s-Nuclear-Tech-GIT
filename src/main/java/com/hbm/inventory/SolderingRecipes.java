@@ -1,6 +1,5 @@
 package com.hbm.inventory;
 
-import java.io.IOException;
 import java.util.*;
 
 import static com.hbm.inventory.OreDictManager.*;

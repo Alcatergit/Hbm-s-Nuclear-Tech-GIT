@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.inventory.control_panel.*;
-import com.hbm.main.MainRegistry;
-import net.minecraft.util.math.BlockPos;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.render.RenderHelper;

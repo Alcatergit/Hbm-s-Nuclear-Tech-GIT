@@ -8,7 +8,6 @@ import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.util.I18nUtil;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.entity.EntityLivingBase;
@@ -17,7 +16,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.math.BlockPos;
 
 public class HazardTypeUnstable extends HazardTypeBase {
 

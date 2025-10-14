@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.hbm.blocks.ICustomBlockItem;
 import com.hbm.blocks.generic.BlockModDoor;
+import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.config.BombConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockFuel;
@@ -62,6 +63,7 @@ import com.hbm.items.machine.ItemRBMKRod.EnumBurnFunc;
 import com.hbm.items.machine.ItemRBMKRod.EnumDepleteFunc;
 import com.hbm.items.machine.ItemDrillbit.EnumDrillType;
 import com.hbm.items.special.*;
+import com.hbm.items.special.ItemBook;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.*;
 import com.hbm.items.tool.ItemToolAbility.EnumToolType;
@@ -115,16 +117,14 @@ import com.hbm.tileentity.machine.rbmk.IRBMKFluxReceiver.NType;
 
 import api.hbm.block.IToolable.ToolType;
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
+import net.minecraft.item.*;
 import net.minecraft.item.Item.ToolMaterial;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
-import net.minecraft.item.ItemBlock;
-import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.DamageSource;
@@ -1742,8 +1742,8 @@ public class ModItems {
 	public static final Item can_mrsugar = new ItemEnergy("can_mrsugar").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item can_overcharge = new ItemEnergy("can_overcharge").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item can_luna = new ItemEnergy("can_luna").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
-	public static final Item can_bepis = new ItemEnergy("can_bepis").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);;
-	public static final Item can_breen = new ItemEnergy("can_breen").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
+	public static final Item can_bepis = new ItemEnergy("can_bepis").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
+    public static final Item can_breen = new ItemEnergy("can_breen").setContainerItem(ModItems.can_empty).setCreativeTab(MainRegistry.consumableTab);
 	
 	//Tools
 	public static final Item titanium_sword = new ItemSwordAbility(6.5F, 0, MainRegistry.enumToolMaterialTitanium, "titanium_sword").setMaxStackSize(1);
@@ -3479,6 +3479,9 @@ public class ModItems {
 				((ICustomBlockItem)block).registerItem();
 			} else if(block instanceof BlockFuel){
 				ForgeRegistries.ITEMS.register(new ItemFuelBlock(block).setRegistryName(block.getRegistryName()));
+            } else if(block instanceof BlockLeaves bLeaf){
+                if(block instanceof WasteLeaves wLeaf) ForgeRegistries.ITEMS.register(new ItemNTMLeaves(wLeaf).setRegistryName(block.getRegistryName()));
+                else ForgeRegistries.ITEMS.register(new ItemLeaves(bLeaf).setRegistryName(block.getRegistryName()).setTranslationKey("leaves"));
 			} else if(!(block instanceof BlockModDoor)){
 				ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}

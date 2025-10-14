@@ -303,9 +303,8 @@ public class FFUtils {
 	public static boolean hasEnoughFluid(FluidTank t, FluidStack f){
 		if(f == null || f.amount == 0) return true;
 		if(t == null || t.getFluid() == null) return false;
-		if(t.getFluid().isFluidEqual(f) && t.getFluidAmount() >= f.amount) return true;
-		return false;
-	}
+        return t.getFluid().isFluidEqual(f) && t.getFluidAmount() >= f.amount;
+    }
 
 	/**
 	 * Replacement method for the old method of transferring fluids out of a
@@ -951,8 +950,7 @@ public class FFUtils {
 			return true;
 		if(FluidContainerRegistry.hasFluid(stack.getItem())) {
 			contained = FluidContainerRegistry.getFluidFromItem(stack.getItem());
-			if(contained != null && contained.getFluid() == fluid)
-				return true;
+            return contained != null && contained.getFluid() == fluid;
 		}
 		return false;
 	}
@@ -995,11 +993,8 @@ public class FFUtils {
 		if(tank1.getFluid() == null ^ tank2.getFluid() == null) {
 			return false;
 		}
-		if(tank1.getFluid().amount == tank2.getFluid().amount && tank1.getFluid().getFluid() == tank2.getFluid().getFluid() && tank1.getCapacity() == tank2.getCapacity()) {
-			return true;
-		}
-		return false;
-	}
+        return tank1.getFluid().amount == tank2.getFluid().amount && tank1.getFluid().getFluid() == tank2.getFluid().getFluid() && tank1.getCapacity() == tank2.getCapacity();
+    }
 
 	public static FluidTank copyTank(FluidTank tank){
 		if(tank == null)
@@ -1011,11 +1006,8 @@ public class FFUtils {
 		TileEntity tileentity = world.getTileEntity(pos);
 		if(tileentity != null && tileentity instanceof IFluidPipe && ((IFluidPipe)tileentity).getNetworkTrue() == net)
 			return true;
-		if(tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing)) {
-			return true;
-		}
-		return false;
-	}
+        return tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
+    }
 
 	public static boolean checkFluidConnectablesMk2(World world, BlockPos pos, Fluid type, @Nullable EnumFacing facing){
 		TileEntity tileentity = world.getTileEntity(pos);

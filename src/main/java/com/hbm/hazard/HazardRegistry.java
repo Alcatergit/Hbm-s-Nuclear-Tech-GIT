@@ -10,12 +10,10 @@ import com.hbm.hazard.transformer.*;
 import com.hbm.hazard.type.*;
 import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.inventory.OreDictManager.DictFrame;
-import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.forgefluid.FluidTypeHandler;
 
 import com.hbm.items.machine.ItemWatzPellet;
-import com.hbm.items.special.ItemBedrockOre;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraft.init.Blocks;

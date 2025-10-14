@@ -26,8 +26,7 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 	}
 
 	public void setColor(int color) {
-		RBMKColor new_color = RBMKColor.values()[color];
-		this.color = new_color;
+        this.color = RBMKColor.values()[color];
 	}
 	public boolean isSameColor(int color) {
 		return this.color == RBMKColor.values()[color];
@@ -114,7 +113,7 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		return nbt;
 	}
 	
-	public static enum RBMKColor {
+	public enum RBMKColor {
 		RED,
 		YELLOW,
 		GREEN,

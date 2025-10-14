@@ -224,7 +224,7 @@ public class MachineArcFurnace extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean rods = (meta & 1) == 1 ? true : false;
+		boolean rods = (meta & 1) == 1;
 		meta = meta >> 1;
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 

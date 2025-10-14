@@ -2,7 +2,6 @@ package com.hbm.blocks.network.energy;
 
 import java.util.List;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ITooltipProvider;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;

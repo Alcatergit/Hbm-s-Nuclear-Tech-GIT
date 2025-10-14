@@ -196,7 +196,7 @@ public class SubElementNodeEditor extends SubElement {
 						return null;
 					});
 					if(sendEvents != null){
-						if(sendEvents.size() > 0)
+						if(!sendEvents.isEmpty())
 							list.addItems("Broadcast");
 					} else {
 						list.addItems("Cancel");

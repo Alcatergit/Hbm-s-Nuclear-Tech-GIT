@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
-import com.hbm.tileentity.INBTPacketReceiver;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.AxisAlignedBB;

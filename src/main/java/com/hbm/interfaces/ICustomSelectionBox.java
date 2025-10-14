@@ -7,5 +7,5 @@ import net.minecraft.world.World;
 
 public interface ICustomSelectionBox {
 
-	public boolean renderBox(World world, EntityPlayer player, IBlockState state, BlockPos pos, double x, double y, double z, float partialTicks);
+	boolean renderBox(World world, EntityPlayer player, IBlockState state, BlockPos pos, double x, double y, double z, float partialTicks);
 }

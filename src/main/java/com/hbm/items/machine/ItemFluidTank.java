@@ -3,7 +3,6 @@ package com.hbm.items.machine;
 import java.util.List;
 import java.util.Map.Entry;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.config.GeneralConfig;
@@ -180,11 +179,8 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 			if(f == null)
 				return true;
 			return f.amount == 1000 || f.amount == 0;
-		} else if(stack.getItem() == ModItems.fluid_barrel_full || stack.getItem() == ModItems.fluid_tank_full){
-			return true;
-		}
-		return false;
-	}
+		} else return stack.getItem() == ModItems.fluid_barrel_full || stack.getItem() == ModItems.fluid_tank_full;
+    }
 
 	public static boolean isEmptyTank(ItemStack out) {
         return out.getItem() == ModItems.fluid_tank_full && FluidUtil.getFluidContained(out) == null;
@@ -211,10 +207,8 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 	public static boolean isFullBarrel(ItemStack stack, Fluid fluid) {
 		FluidStack f = FluidUtil.getFluidContained(stack);
 
-		if(stack.getItem() == ModItems.fluid_barrel_full && f != null && f.getFluid() == fluid && f.amount == 16000)
-			return true;
-		return false;
-	}
+        return stack.getItem() == ModItems.fluid_barrel_full && f != null && f.getFluid() == fluid && f.amount == 16000;
+    }
 
 	private static NBTTagCompound safeFluidStackSerialization(FluidStack stack) {
 		NBTTagCompound nbt = new NBTTagCompound();

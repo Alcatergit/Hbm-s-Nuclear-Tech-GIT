@@ -221,10 +221,8 @@ public class BlockCrate extends BlockFalling {
     	
     	if(this == ModBlocks.crate_red) {
     		list.clear();
-    		
-    		for(int k = 0; k < redList.size(); k++) {
-    			list.add(redList.get(k));
-    		}
+
+            list.addAll(redList);
     	}
     	
     	for(ItemStack stack : list) {

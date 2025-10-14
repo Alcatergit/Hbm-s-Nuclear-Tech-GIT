@@ -18,8 +18,8 @@ public class TileEntityNukeMan extends TileEntity {
 		protected void onContentsChanged(int slot) {
 			super.onContentsChanged(slot);
 			markDirty();
-		};
-	};
+		}
+    };
 	private String customName;
 	
 	@Override
@@ -41,7 +41,7 @@ public class TileEntityNukeMan extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -60,50 +60,27 @@ public class TileEntityNukeMan extends TileEntity {
 	public boolean isReady() {
 		if(this.exp1() && this.exp2() && this.exp3() && this.exp4())
 		{
-			if(this.inventory.getStackInSlot(0) != ItemStack.EMPTY && this.inventory.getStackInSlot(5) != ItemStack.EMPTY && this.inventory.getStackInSlot(0).getItem() == ModItems.man_igniter && this.inventory.getStackInSlot(5).getItem() == ModItems.man_core)
-			{
-				return true;
-			}
+            return this.inventory.getStackInSlot(0) != ItemStack.EMPTY && this.inventory.getStackInSlot(5) != ItemStack.EMPTY && this.inventory.getStackInSlot(0).getItem() == ModItems.man_igniter && this.inventory.getStackInSlot(5).getItem() == ModItems.man_core;
 		}
 		
 		return false;
 	}
 	
 	public boolean exp1() {
-		if(this.inventory.getStackInSlot(1) != ItemStack.EMPTY && this.inventory.getStackInSlot(1).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return this.inventory.getStackInSlot(1) != ItemStack.EMPTY && this.inventory.getStackInSlot(1).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp2() {
-		if(this.inventory.getStackInSlot(2) != ItemStack.EMPTY && this.inventory.getStackInSlot(2).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return this.inventory.getStackInSlot(2) != ItemStack.EMPTY && this.inventory.getStackInSlot(2).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp3() {
-		if(this.inventory.getStackInSlot(3) != ItemStack.EMPTY && this.inventory.getStackInSlot(3).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return this.inventory.getStackInSlot(3) != ItemStack.EMPTY && this.inventory.getStackInSlot(3).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public boolean exp4() {
-		if(this.inventory.getStackInSlot(4) != ItemStack.EMPTY && this.inventory.getStackInSlot(4).getItem() == ModItems.gadget_explosive8)
-		{
-			return true;
-		}
-		
-		return false;
-	}
+        return this.inventory.getStackInSlot(4) != ItemStack.EMPTY && this.inventory.getStackInSlot(4).getItem() == ModItems.gadget_explosive8;
+    }
 	
 	public void clearSlots() {
 		for(int i = 0; i < inventory.getSlots(); i++)
@@ -124,7 +101,7 @@ public class TileEntityNukeMan extends TileEntity {
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? true : super.hasCapability(capability, facing);
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 	
 	@Override

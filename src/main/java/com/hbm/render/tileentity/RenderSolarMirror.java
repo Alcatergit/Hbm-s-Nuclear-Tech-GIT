@@ -26,21 +26,19 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
-        
-        TileEntitySolarMirror mirror = (TileEntitySolarMirror)te;
 
         bindTexture(ResourceManager.solar_mirror_tex);
         ResourceManager.solar_mirror.renderPart("Base");
 
         GL11.glTranslated(0, 1, 0);
 
-    	int dx = mirror.tX - mirror.getPos().getX();
-    	int dy = mirror.tY - mirror.getPos().getY();
-    	int dz = mirror.tZ - mirror.getPos().getZ();
+    	int dx = ((TileEntitySolarMirror)te).tX - ((TileEntitySolarMirror)te).getPos().getX();
+    	int dy = ((TileEntitySolarMirror)te).tY - ((TileEntitySolarMirror)te).getPos().getY();
+    	int dz = ((TileEntitySolarMirror)te).tZ - ((TileEntitySolarMirror)te).getPos().getZ();
 
     	double dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
 
-        if(mirror.tY >= mirror.getPos().getY()) {
+        if(((TileEntitySolarMirror)te).tY >= ((TileEntitySolarMirror)te).getPos().getY()) {
 
         	double pitch = Math.toDegrees(-Math.asin((dy + 0.5) / dist)) + 90;
         	double yaw = Math.toDegrees(-Math.atan2(dz, dx)) + 180;
@@ -52,7 +50,7 @@ public class RenderSolarMirror extends TileEntitySpecialRenderer<TileEntitySolar
         GL11.glTranslated(0, -1, 0);
         ResourceManager.solar_mirror.renderPart("Mirror");
 
-        if(mirror.isOn) {
+        if(((TileEntitySolarMirror)te).isOn) {
 			float min = 0.008F;
 	        float max = 0.008F;
 

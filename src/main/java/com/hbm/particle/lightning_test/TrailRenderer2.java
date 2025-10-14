@@ -165,7 +165,7 @@ public class TrailRenderer2 {
 		aux_buf.put((byte)(color[3]*255));
 	}
 	
-	public static interface IColorGetter {
-		public float[] color(float position);
+	public interface IColorGetter {
+		float[] color(float position);
 	}
 }

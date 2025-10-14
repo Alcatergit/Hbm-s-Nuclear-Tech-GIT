@@ -21,7 +21,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -140,11 +139,10 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
                 dest.y - itemPos.y,
                 dest.z - itemPos.z);
         double len = motion.length();
-        Vec3d ret = new Vec3d(
+        return new Vec3d(
                 itemPos.x + motion.x / len * speed,
                 itemPos.y + motion.y / len * speed,
                 itemPos.z + motion.z / len * speed);
-        return ret;
     }
 
     @Override
@@ -230,31 +228,6 @@ public class CraneSplitter extends BlockDummyable implements IConveyorBelt, IEnt
         moving.setPosition(snap.x, snap.y, snap.z);
         moving.setItemStacks(stacks);
         worldIn.spawnEntity(moving);
-    }
-
-    @Override
-    public boolean isOpaqueCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isBlockNormalCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(IBlockState state) {
-        return false;
-    }
-
-    @Override
-    public boolean isNormalCube(IBlockState state, IBlockAccess world, BlockPos pos) {
-        return false;
-    }
-
-    @Override
-    public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
-        return false;
     }
 
     @Override

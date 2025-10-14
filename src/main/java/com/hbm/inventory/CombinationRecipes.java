@@ -5,7 +5,6 @@ import java.util.HashMap;
 import static com.hbm.inventory.OreDictManager.*;
 
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.OreDictManager.DictFrame;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;

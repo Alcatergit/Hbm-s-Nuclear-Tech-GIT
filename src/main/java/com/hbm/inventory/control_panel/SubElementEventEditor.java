@@ -1,13 +1,9 @@
 package com.hbm.inventory.control_panel;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import akka.Main;
-import com.hbm.main.MainRegistry;
 import net.minecraft.client.gui.GuiButton;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 
 public class SubElementEventEditor extends SubElement {
@@ -116,7 +112,7 @@ public class SubElementEventEditor extends SubElement {
 			receiveButtons.get(i).visible = true;
 			receiveButtons.get(i).enabled = true;
 		}
-		if(sendButtons.size() > 0){
+		if(!sendButtons.isEmpty()){
 			idx = (currentSendPage-1)*3;
 			for(int i = idx; i < idx+3; i ++){
 				if(i >= sendButtons.size())

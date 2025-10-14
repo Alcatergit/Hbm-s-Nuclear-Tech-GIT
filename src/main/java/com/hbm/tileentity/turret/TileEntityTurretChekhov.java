@@ -12,7 +12,6 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityTurretChekhov extends TileEntityTurretBaseNT {

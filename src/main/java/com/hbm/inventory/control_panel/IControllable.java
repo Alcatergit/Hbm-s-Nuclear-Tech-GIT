@@ -18,6 +18,6 @@ public interface IControllable {
 	// -- a lazy fix for other controls that share a panel not receiving the broadcast event too.
 	default void receiveEvent(BlockPos from, ControlEvent e) {}
 	
-	public BlockPos getControlPos();
-	public World getControlWorld();
+	BlockPos getControlPos();
+	World getControlWorld();
 }

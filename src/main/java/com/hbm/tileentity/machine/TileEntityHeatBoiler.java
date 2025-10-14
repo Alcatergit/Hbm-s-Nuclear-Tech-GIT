@@ -117,8 +117,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain){
-        FluidStack drain = tanks[1].drain(maxDrain, doDrain);
-        return drain;
+        return tanks[1].drain(maxDrain, doDrain);
     }
 
     @Override
@@ -223,8 +222,8 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
                 diff = (int) Math.ceil(diff * diffusion);
                 source.useUpHeat(diff);
                 this.heat += diff;
-                if(this.heat > this.maxHeat)
-                    this.heat = this.maxHeat;
+                if(this.heat > maxHeat)
+                    this.heat = maxHeat;
                 return;
             }
         }

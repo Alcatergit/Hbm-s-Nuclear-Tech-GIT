@@ -105,11 +105,7 @@ public class ModelM65Blaze extends ModelBiped {
 
 		if(entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-			if (player.isSneaking()) {
-				this.isSneak = true;
-			} else {
-				this.isSneak = false;
-			}
+            this.isSneak = player.isSneaking();
 		}
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 		this.mask.rotationPointX = this.bipedHead.rotationPointX;

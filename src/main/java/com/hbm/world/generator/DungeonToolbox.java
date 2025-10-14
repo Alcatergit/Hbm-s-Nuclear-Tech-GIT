@@ -20,9 +20,7 @@ public class DungeonToolbox {
 			return;
 		
 		for(int i = x; i < x + sx; i++) {
-			
 			for(int j = y; j < y + sy; j++) {
-				
 				for(int k = z; k < z + sz; k++) {
 					
 					IBlockState b = getRandom(blocks, world.rand);
@@ -36,18 +34,100 @@ public class DungeonToolbox {
 
 	//i know it's copy paste, but it's a better strat than using a wrapper and generating single-entry lists for no good reason
 	public static void generateBox(World world, int x, int y, int z, int sx, int sy, int sz, IBlockState block) {
-		
 		for(int i = x; i < x + sx; i++) {
-			
 			for(int j = y; j < y + sy; j++) {
-				
 				for(int k = z; k < z + sz; k++) {
-					
 					world.setBlockState(new BlockPos(i, j, k), block, 2);
 				}
 			}
 		}
 	}
+
+    public static void generateBoxNoReplace(World world, int x, int y, int z, int sx, int sy, int sz, List<IBlockState> blocks) {
+
+        if(blocks.isEmpty())
+            return;
+
+        for(int i = x; i < x + sx; i++) {
+            for(int j = y; j < y + sy; j++) {
+                for(int k = z; k < z + sz; k++) {
+                    if(!world.isAirBlock(new BlockPos(i, j, k))) continue;
+                    IBlockState b = getRandom(blocks, world.rand);
+                    if(b == null)
+                        b = Blocks.AIR.getDefaultState();
+                    world.setBlockState(new BlockPos(i, j, k), b, 2);
+                }
+            }
+        }
+    }
+
+    //i know it's copy paste, but it's a better strat than using a wrapper and generating single-entry lists for no good reason
+    public static void generateBoxNoReplace(World world, int x, int y, int z, int sx, int sy, int sz, IBlockState block) {
+        for(int i = x; i < x + sx; i++) {
+            for(int j = y; j < y + sy; j++) {
+                for(int k = z; k < z + sz; k++) {
+                    if(!world.isAirBlock(new BlockPos(i, j, k))) continue;
+                    world.setBlockState(new BlockPos(i, j, k), block, 2);
+                }
+            }
+        }
+    }
+
+    public static void generateWalls(World world, int x, int y, int z, int sx, int sy, int sz, List<IBlockState> blocks) {
+        if(blocks.isEmpty())
+            return;
+
+        for(int i = 0; i < sx; i++) {
+            for(int j = 0; j < sy; j++) {
+                for(int k = 0; k < sz; k++) {
+                    if((i == 0 || i == sx-1) || (k == 0 || k == sz-1)) {
+                        IBlockState b = getRandom(blocks, world.rand);
+                        if(b == null)
+                            b = Blocks.AIR.getDefaultState();
+                        world.setBlockState(new BlockPos(x + i, y + j, z + k), b, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void generateWalls(World world, int x, int y, int z, int sx, int sy, int sz, IBlockState block) {
+        for(int i = 0; i < sx; i++) {
+            for(int j = 0; j < sy; j++) {
+                for(int k = 0; k < sz; k++) {
+                    if((i == 0 || i == sx-1) || (k == 0 || k == sz-1)) world.setBlockState(new BlockPos(x+i, y+j, z+k), block, 2);
+                }
+            }
+        }
+    }
+
+    public static void generateHollowBox(World world, int x, int y, int z, int sx, int sy, int sz, List<IBlockState> blocks) {
+        if(blocks.isEmpty())
+            return;
+
+        for(int i = 0; i < sx; i++) {
+            for(int j = 0; j < sy; j++) {
+                for(int k = 0; k < sz; k++) {
+                    if((i == 0 || i == sx-1) || (j == 0 || j == sy-1) || (k == 0 || k == sz-1)) {
+                        IBlockState b = getRandom(blocks, world.rand);
+                        if(b == null)
+                            b = Blocks.AIR.getDefaultState();
+                        world.setBlockState(new BlockPos(x + i, y + j, z + k), b, 2);
+                    }
+                }
+            }
+        }
+    }
+
+    public static void generateHollowBox(World world, int x, int y, int z, int sx, int sy, int sz, IBlockState block) {
+        for(int i = 0; i < sx; i++) {
+            for(int j = 0; j < sy; j++) {
+                for(int k = 0; k < sz; k++) {
+                    if((i == 0 || i == sx-1) || (j == 0 || j == sy-1) || (k == 0 || k == sz-1)) world.setBlockState(new BlockPos(x+i, y+j, z+k), block, 2);
+                }
+            }
+        }
+    }
 	
 	//now with vectors to provide handy rotations
 	public static void generateBox(World world, int x, int y, int z, Vec3 size, List<IBlockState> blocks) {
@@ -86,5 +166,4 @@ public class DungeonToolbox {
 			}
 		}
 	}
-	
 }

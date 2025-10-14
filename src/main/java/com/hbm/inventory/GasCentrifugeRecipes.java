@@ -10,8 +10,6 @@ import com.hbm.items.ModItems;
 
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
 
 //TODO: clean this shit up
 //Alcater: on it

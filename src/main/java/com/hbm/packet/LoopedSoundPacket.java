@@ -81,8 +81,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopChemplant.list.size(); i++)  {
-						if(SoundLoopChemplant.list.get(i).getTE() == te && !SoundLoopChemplant.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopChemplant.list.get(i).getTE() == te && !SoundLoopChemplant.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineChemplant)te).isProgressing)
@@ -93,8 +95,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopChemplant.list.size(); i++)  {
-						if(SoundLoopChemplant.list.get(i).getTE() == te && !SoundLoopChemplant.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopChemplant.list.get(i).getTE() == te && !SoundLoopChemplant.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineChemfac)te).isProgressing)
@@ -105,8 +109,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopFel.list.size(); i++)  {
-						if(SoundLoopFel.list.get(i).getTE() == te && !SoundLoopFel.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopFel.list.get(i).getTE() == te && !SoundLoopFel.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityFEL)te).isOn)
@@ -117,8 +123,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopFel.list.size(); i++)  {
-						if(SoundLoopFel.list.get(i).getTE() == te && !SoundLoopFel.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopFel.list.get(i).getTE() == te && !SoundLoopFel.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineMiningLaser)te).isOn)
@@ -129,8 +137,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopAssembler.list.size(); i++)  {
-						if(SoundLoopAssembler.list.get(i).getTE() == te && !SoundLoopAssembler.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopAssembler.list.get(i).getTE() == te && !SoundLoopAssembler.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineAssembler)te).isProgressing)
@@ -153,8 +163,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopTurbofan.list.size(); i++)  {
-						if(SoundLoopTurbofan.list.get(i).getTE() == te && !SoundLoopTurbofan.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopTurbofan.list.get(i).getTE() == te && !SoundLoopTurbofan.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineTurbofan)te).isRunning)
@@ -165,8 +177,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopBroadcaster.list.size(); i++)  {
-						if(SoundLoopBroadcaster.list.get(i).getTE() == te && !SoundLoopBroadcaster.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopBroadcaster.list.get(i).getTE() == te && !SoundLoopBroadcaster.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					int j = te.getPos().getX() + te.getPos().getY() + te.getPos().getZ();
@@ -195,8 +209,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {
-						if(SoundLoopCentrifuge.list.get(i).getTE() == te && !SoundLoopCentrifuge.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopCentrifuge.list.get(i).getTE() == te && !SoundLoopCentrifuge.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					
@@ -208,8 +224,10 @@ public class LoopedSoundPacket implements IMessage {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {
-						if(SoundLoopCentrifuge.list.get(i).getTE() == te && !SoundLoopCentrifuge.list.get(i).isDonePlaying())
-							flag = false;
+                        if (SoundLoopCentrifuge.list.get(i).getTE() == te && !SoundLoopCentrifuge.list.get(i).isDonePlaying()) {
+                            flag = false;
+                            break;
+                        }
 					}
 					
 					if(flag && te.getWorld().isRemote && ((TileEntityMachineGasCent)te).isProgressing)

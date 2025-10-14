@@ -62,7 +62,7 @@ public class TileEntitySafe extends TileEntityLockableBase implements IDropoffMa
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 
 	public void setCustomName(String name) {

@@ -33,7 +33,7 @@ public class EntityAITaintedCreeperSwell extends EntityAIBase {
     @Override
 	public void startExecuting()
     {
-        this.swellingCreeper.getNavigator().clearPath();;
+        this.swellingCreeper.getNavigator().clearPath();
         this.creeperAttackTarget = this.swellingCreeper.getAttackTarget();
     }
 

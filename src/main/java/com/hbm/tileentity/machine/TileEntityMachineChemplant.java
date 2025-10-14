@@ -4,18 +4,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.machine.MachineChemplant;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemChemistryTemplate;
 import com.hbm.lib.Library;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.FluidTankPacket;
@@ -556,28 +553,21 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 		if(Library.isArrayEmpty(fluids))
 			return true;
 		if(fluids.length == 2){
-			if((fluids[0] == null || fluids[0].amount <= tanks[0].getFluidAmount()) && (fluids[1] == null || fluids[1].amount <= tanks[1].getFluidAmount()))
-				return true;
+            return (fluids[0] == null || fluids[0].amount <= tanks[0].getFluidAmount()) && (fluids[1] == null || fluids[1].amount <= tanks[1].getFluidAmount());
 		}else{
-			if(fluids[0] == null || fluids[0].amount <= tanks[0].getFluidAmount())
-				return true;
+            return fluids[0] == null || fluids[0].amount <= tanks[0].getFluidAmount();
 		}
-
-		return false;
-	}
+    }
 
 	public boolean hasSpaceForFluids(FluidStack[] fluids) {
 		if(Library.isArrayEmpty(fluids))
 			return true;
 		if(fluids.length == 2){
-			if((fluids[0] == null || tanks[2].fill(fluids[0], false) == fluids[0].amount) && (fluids[1] == null || fluids[1] != null && tanks[3].fill(fluids[1], false) == fluids[1].amount))
-				return true;
+            return (fluids[0] == null || tanks[2].fill(fluids[0], false) == fluids[0].amount) && (fluids[1] == null || fluids[1] != null && tanks[3].fill(fluids[1], false) == fluids[1].amount);
 		}else{
-			if(fluids[0] == null || tanks[2].fill(fluids[0], false) == fluids[0].amount)
-				return true;
+            return fluids[0] == null || tanks[2].fill(fluids[0], false) == fluids[0].amount;
 		}
-		return false;
-	}
+    }
 
 	public void removeFluids(FluidStack[] fluids) {
 		if(Library.isArrayEmpty(fluids))
@@ -820,13 +810,11 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 
 				if(st.isApplicable(sta) && array.getStackInSlot(i).getCount() > 0) {
 					array.getStackInSlot(i).shrink(1);
-					;
 
-					if(array.getStackInSlot(i).isEmpty())
+                    if(array.getStackInSlot(i).isEmpty())
 						array.setStackInSlot(i, ItemStack.EMPTY);
-					;
 
-					return true;
+                    return true;
 				}
 			}
 		}

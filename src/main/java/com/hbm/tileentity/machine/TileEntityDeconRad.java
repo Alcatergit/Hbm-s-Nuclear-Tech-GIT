@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import java.util.List;
 
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
-import com.hbm.capability.HbmLivingProps;
 import com.hbm.potion.HbmPotion;
 import com.hbm.util.ContaminationUtil;
 
@@ -12,7 +11,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class TileEntityDeconRad extends TileEntity implements ITickable {
@@ -22,12 +20,12 @@ public class TileEntityDeconRad extends TileEntity implements ITickable {
 
 	public TileEntityDeconRad() {
 		super();
-		this.radRemove = 0.5F;
+		radRemove = 0.5F;
 	}
 
 	public TileEntityDeconRad(float rad) {
 		super();
-		this.radRemove = rad;
+		radRemove = rad;
 	}
 
 	@Override
@@ -43,8 +41,8 @@ public class TileEntityDeconRad extends TileEntity implements ITickable {
 						}
 					}
 					if(e.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null)){
-						if(this.radRemove > 0.0F){
-							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(this.radRemove);
+						if(radRemove > 0.0F){
+							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseRads(radRemove);
 						}
 					}
 					if(e instanceof EntityPlayer){

@@ -5,7 +5,6 @@ import java.util.Random;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.hazard.HazardSystem;
-import net.minecraft.item.Item;
 
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.SoundType;

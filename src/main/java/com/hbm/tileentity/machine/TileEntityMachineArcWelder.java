@@ -1,29 +1,21 @@
 package com.hbm.tileentity.machine;
 
-import java.util.HashMap;
-import java.util.List;
-
 import api.hbm.energy.IEnergyUser;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.blocks.ModBlocks;
-import com.hbm.inventory.SolderingRecipes;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMachineArcWelder;
 import com.hbm.inventory.gui.GUIMachineArcWelder;
 import com.hbm.inventory.ArcWelderRecipes;
 import com.hbm.inventory.ArcWelderRecipes.ArcWelderRecipe;
-import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.*;
-import com.hbm.util.I18nUtil;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;

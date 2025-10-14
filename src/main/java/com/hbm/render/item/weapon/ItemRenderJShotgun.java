@@ -5,7 +5,6 @@ import org.lwjgl.util.vector.Vector4f;
 
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
-import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunJShotty;
@@ -128,10 +127,8 @@ public class ItemRenderJShotgun extends TEISRBase {
 						if(diff > reload.anim.length)
 							done = true;
 					}
-					if(done && (modelName.startsWith("rightArm") || modelName.startsWith("leftArm") || modelName.startsWith("Boolet")))
-						return true;
-					return false;
-				}
+                    return done && (modelName.startsWith("rightArm") || modelName.startsWith("leftArm") || modelName.startsWith("Boolet"));
+                }
 			});
 			if(time > 0 && time < timeMax){
 				HbmShaderManager2.releaseShader();

@@ -6,7 +6,6 @@ import com.hbm.lib.RefStrings;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 public class ToxicFluid extends Fluid {
 

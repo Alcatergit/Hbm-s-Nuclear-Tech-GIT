@@ -9,7 +9,6 @@ import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
-import net.minecraft.util.ResourceLocation;
 
 public class RenderCable extends TileEntitySpecialRenderer<TileEntityCableBaseNT> {
 	

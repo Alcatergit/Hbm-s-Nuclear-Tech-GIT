@@ -10,83 +10,93 @@ import com.hbm.items.ModItems;
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
-import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.HbmWorldUtility;
 import net.minecraft.world.World;
-import org.jetbrains.annotations.NotNull;
 
 public class MKUCraftingHandler extends net.minecraftforge.registries.IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
-	
-	public static ItemStack[] MKURecipe;
-	private static long lastSeed;
 
-	@Override
-	public boolean matches(@NotNull InventoryCrafting inventory, @NotNull World world) {
-		
-		if(HbmWorldUtility.getProviderWorld(world.provider) == null)
-			return false;
-		
-		if(MKURecipe == null || world.getSeed() != lastSeed)
-			generateRecipe(world);
-		
-		for(int i = 0; i < 9; i++) {
-			ItemStack stack = inventory.getStackInRowAndColumn(i % 3, i / 3);
-			ItemStack recipe = MKURecipe[i];
-			
-			if(stack.isEmpty() && recipe == null)
-				continue;
-			
-			if(!stack.isEmpty() && recipe != null && stack.getItem() == recipe.getItem() && stack.getItemDamage() == recipe.getItemDamage())
-				continue;
-			
-			return false;
-		}
-		
-		return true;
-	}
-	
-	public static void generateRecipe(World world) {
-		Random rand = new Random(world.getSeed());
-		
-		if(lastSeed == world.getSeed() && MKURecipe != null || world.provider == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
-			return;
-		
-		lastSeed = world.getSeed();
-		
-		List<ItemStack> list = Arrays.asList(new ItemStack[] {
-				new ItemStack(ModItems.powder_iodine),
-				new ItemStack(ModItems.powder_fire),
-				new ItemStack(ModItems.dust),
-				new ItemStack(ModItems.nugget_mercury),
-				new ItemStack(ModItems.morning_glory),
-				new ItemStack(ModItems.syringe_metal_empty),
-				null,
-				null,
-				null
-		});
-		
-		Collections.shuffle(list, rand);
-		
-		MKURecipe = list.toArray(new ItemStack[9]);
-	}
-	
-	@Override
-	public boolean isDynamic(){
-		return true;
-	}
+    public static ItemStack[] MKURecipe;
+    private static long lastSeed;
 
-	@Override
-	public @NotNull ItemStack getCraftingResult(@NotNull InventoryCrafting inventory) {
-		return getRecipeOutput();
-	}
+    @Override
+    public boolean matches(InventoryCrafting inventory, World world) {
 
-	@Override
-	public @NotNull ItemStack getRecipeOutput() {
-		return new ItemStack(ModItems.syringe_mkunicorn);
-	}
+        if (world == null || world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null)
+            return false;
 
-	@Override
-	public boolean canFit(int width, int height){
-		return width >= 3 && height >= 3;
-	}
+        if (MKURecipe == null || world.getSeed() != lastSeed)
+            generateRecipe(world);
+
+        for (int i = 0; i < 9; i++) {
+            ItemStack stack = inventory.getStackInRowAndColumn(i % 3, i / 3);
+            ItemStack recipe = MKURecipe[i];
+
+            if (stack.isEmpty() && recipe == null)
+                continue;
+
+            if (!stack.isEmpty() && recipe != null && stack.getItem() == recipe.getItem() && stack.getItemDamage() == recipe.getItemDamage())
+                continue;
+
+            return false;
+        }
+
+        return true;
+    }
+
+    public static void generateRecipe(World world) {
+        if (world == null|| world.provider == null || world.getWorldInfo() == null || HbmWorldUtility.getProviderWorld(world.provider) == null || (lastSeed == world.getSeed() && MKURecipe != null))
+            return;
+
+        lastSeed = world.getSeed();
+
+        List<ItemStack> list = Arrays.asList(new ItemStack[]{
+                new ItemStack(ModItems.powder_iodine),
+                new ItemStack(ModItems.powder_fire),
+                new ItemStack(ModItems.dust),
+                new ItemStack(ModItems.nugget_mercury),
+                new ItemStack(ModItems.morning_glory),
+                new ItemStack(ModItems.syringe_metal_empty),
+                null,
+                null,
+                null
+        });
+
+        Collections.shuffle(list, new Random(world.getSeed()));
+
+        MKURecipe = list.toArray(new ItemStack[9]);
+    }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
+
+    @Override
+    public ItemStack getCraftingResult(InventoryCrafting inventory) {
+        return getRecipeOutput();
+    }
+
+    @Override
+    public ItemStack getRecipeOutput() {
+        return new ItemStack(ModItems.syringe_mkunicorn);
+    }
+
+    @Override
+    public boolean canFit(int width, int height) {
+        return width >= 3 && height >= 3;
+    }
+
+    public static void initMKU(World world){
+        if(MKURecipe == null) generateRecipe(world);
+    }
+
+    public static String printOrder(World world){
+        initMKU(world);
+        StringBuilder answer = new StringBuilder();
+        answer.append("§dMKU Recipe for Seed §f").append(world.getSeed()).append("§d:\n");
+        for(int i = 0; i < 9; i++) {
+            answer.append("§5(§d").append(i / 3 + 1).append("§5/§d").append(i % 3 + 1).append("§5): §f").append(MKURecipe[i] == null ? "-" : MKURecipe[i].getDisplayName()).append("\n");
+        }
+        return answer.toString();
+    }
 }

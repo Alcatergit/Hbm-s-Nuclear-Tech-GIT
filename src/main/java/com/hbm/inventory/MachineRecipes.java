@@ -1,15 +1,9 @@
 package com.hbm.inventory;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.Spaghetti;
-import com.hbm.items.ModItems;
 
-import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 
 //TODO: clean this shit up
 //Alcater: on it

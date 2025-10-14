@@ -2,7 +2,6 @@ package com.hbm.lib;
 
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.entity.projectile.EntityDischarge;
 import com.hbm.entity.projectile.EntityFire;
 import com.hbm.entity.projectile.EntityLN2;

@@ -9,9 +9,9 @@ public interface IDoor {
 	default boolean setTexture(String tex){
 		return false;
 	}
-	default void setTextureState(byte tex){};
+	default void setTextureState(byte tex){}
 
-	enum DoorState {
+    enum DoorState {
 		CLOSED,
 		OPEN,
 		CLOSING,

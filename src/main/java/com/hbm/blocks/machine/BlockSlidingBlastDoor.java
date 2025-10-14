@@ -5,14 +5,12 @@ import java.util.Random;
 
 import com.hbm.util.I18nUtil;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IAnimatedDoor;
 import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
 import com.hbm.tileentity.machine.TileEntitySlidingBlastDoor;
 import com.hbm.util.KeypadClient;
@@ -23,7 +21,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -73,11 +70,6 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
-		float hardness = this.getExplosionResistance(null);
-		tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
-		if(hardness > 50){
-			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
-		}
 		if(this == ModBlocks.sliding_blast_door){
 			tooltip.add(I18nUtil.resolveKey("desc.varwin"));
 		} else if(this == ModBlocks.sliding_blast_door_2){
@@ -172,12 +164,7 @@ public class BlockSlidingBlastDoor extends BlockDummyable implements IRadResista
 		return 0;
 	}
 
-	@Override
-	public boolean isOpaqueCube(IBlockState state) {
-		return false;
-	}
-
-	@Override
+    @Override
 	protected void fillSpace(World world, int x, int y, int z, ForgeDirection dir, int o) {
 		super.fillSpace(world, x, y, z, dir, o);
 		if(world.getBlockState(new BlockPos(x, y, z)).getBlock() == ModBlocks.sliding_blast_door_2) {

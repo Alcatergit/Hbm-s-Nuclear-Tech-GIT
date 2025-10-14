@@ -3,7 +3,6 @@ package com.hbm.blocks.generic;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityBMPowerBox;
@@ -118,7 +117,7 @@ public class BMPowerBox extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean on = (meta & 1) == 1 ? true : false;
+		boolean on = (meta & 1) == 1;
 		meta = meta >> 1;
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 

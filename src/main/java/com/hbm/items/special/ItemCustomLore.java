@@ -1,5 +1,6 @@
 package com.hbm.items.special;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 
@@ -42,9 +43,7 @@ public class ItemCustomLore extends Item {
 
 			String[] locs = loc.split("\\$");
 
-			for(String s : locs) {
-				list.add(s);
-			}
+            list.addAll(Arrays.asList(locs));
 		}
 		if(this == ModItems.powder_asbestos)
 		{
@@ -417,9 +416,7 @@ public class ItemCustomLore extends Item {
 			this == ModItems.powder_tennessine || 
 			this == ModItems.powder_xe135 || 
 			this == ModItems.powder_caesium || 
-			this == ModItems.powder_cs137 || 
-			this == ModItems.powder_cs137 || 
-			this == ModItems.powder_nitan_mix || 
+			this == ModItems.powder_cs137 ||
 			this == ModItems.powder_spark_mix || 
 			this == ModItems.powder_magic || 
 
@@ -438,10 +435,9 @@ public class ItemCustomLore extends Item {
 			this == ModItems.powder_daffergon || 
 			this == ModItems.ingot_daffergon || 
 			
-			this == ModItems.bathwater_mk3 || 
-			this == ModItems.plate_euphemium ||  
-			this == ModItems.rod_euphemium ||  
-			this == ModItems.rod_quad_euphemium || 
+			this == ModItems.bathwater_mk3 ||
+			this == ModItems.rod_euphemium ||
+			this == ModItems.rod_quad_euphemium ||
 			this == ModItems.rod_daffergon || 
 			this == ModItems.watch || 
 			this == ModItems.undefined) {

@@ -19,7 +19,6 @@ import com.hbm.util.I18nUtil;
 
 import api.hbm.block.ICrucibleAcceptor;
 import api.hbm.block.IToolable;
-import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;

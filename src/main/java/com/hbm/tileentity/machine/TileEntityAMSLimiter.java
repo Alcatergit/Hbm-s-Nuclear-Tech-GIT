@@ -77,7 +77,7 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && this.customName.length() > 0;
+		return this.customName != null && !this.customName.isEmpty();
 	}
 	
 	public void setCustomName(String name) {
@@ -304,10 +304,8 @@ public class TileEntityAMSLimiter extends TileEntity implements ITickable, IFlui
 	}
 	
 	public boolean isValidFluid(Fluid fluid){
-		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL))
-			return true;
-		return false;
-	}
+        return fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL);
+    }
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {

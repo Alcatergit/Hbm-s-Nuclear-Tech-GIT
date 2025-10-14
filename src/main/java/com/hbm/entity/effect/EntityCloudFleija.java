@@ -12,7 +12,7 @@ import net.minecraft.world.World;
 
 public class EntityCloudFleija extends Entity {
 
-	public static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityCloudFleijaRainbow.class, DataSerializers.VARINT);
+	public static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityCloudFleija.class, DataSerializers.VARINT);
 	
 	public int maxAge = 100;
 	public int age;

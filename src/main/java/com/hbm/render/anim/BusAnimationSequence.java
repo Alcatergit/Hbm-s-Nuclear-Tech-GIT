@@ -10,7 +10,7 @@ public class BusAnimationSequence {
 
 	//not actually useful for anything since the renderer usually handles
 	//this part, but it's nice to have for distinction just in case
-	public static enum EnumTransformation {
+	public enum EnumTransformation {
 		UNDEFINED,
 		ROTATION,
 		TRANSLATION,

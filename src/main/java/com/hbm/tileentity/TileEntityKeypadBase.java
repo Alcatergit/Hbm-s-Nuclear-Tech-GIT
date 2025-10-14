@@ -63,17 +63,7 @@ public class TileEntityKeypadBase extends TileEntity implements ITickable, IKeyp
 		return keypad;
 	}
 
-	@Override
-	public void keypadActivated() {
-		
-	}
-	
-	@Override
-	public void passwordSet() {
-		
-	}
-	
-	@Override
+    @Override
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		keypad.writeToNbt(compound);
 		return super.writeToNBT(compound);

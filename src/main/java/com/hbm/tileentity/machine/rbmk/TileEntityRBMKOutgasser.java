@@ -147,7 +147,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	public void fillFluidInit(FluidTank tank) {
 		fillFluid(this.pos.getX(), this.pos.getY() + RBMKDials.getColumnHeight(world) + 1, this.pos.getZ(), tank);
 		
-		if(world.getBlockState(pos.down()) == ModBlocks.rbmk_loader) {
+		if(world.getBlockState(pos.down()).getBlock() == ModBlocks.rbmk_loader) {
 
 			fillFluid(this.pos.getX() + 1, this.pos.getY() - 1, this.pos.getZ(), tank);
 			fillFluid(this.pos.getX() - 1, this.pos.getY() - 1, this.pos.getZ(), tank);
@@ -156,7 +156,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 			fillFluid(this.pos.getX(), this.pos.getY() - 2, this.pos.getZ(), tank);
 		}
 		
-		if(world.getBlockState(pos.down(2)) == ModBlocks.rbmk_loader) {
+		if(world.getBlockState(pos.down(2)).getBlock() == ModBlocks.rbmk_loader) {
 
 			fillFluid(this.pos.getX() + 1, this.pos.getY() - 2, this.pos.getZ(), tank);
 			fillFluid(this.pos.getX() - 1, this.pos.getY() - 2, this.pos.getZ(), tank);

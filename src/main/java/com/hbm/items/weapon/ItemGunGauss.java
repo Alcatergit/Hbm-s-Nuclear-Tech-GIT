@@ -213,7 +213,7 @@ public class ItemGunGauss extends ItemGunBase {
 	public static void doTauBeamFX(EntityPlayer player, float r, float g, float b, float a, int life, @Nullable Entity shooter){
 		ArrayList<Vec3d> hitPoints = new ArrayList<>(3);
 		doTauBeamHits(player.world, player.getPositionEyes(MainRegistry.proxy.partialTicks()), player.getLook(MainRegistry.proxy.partialTicks()), hitPoints, shooter);
-		Vec3d[] hps = hitPoints.toArray(new Vec3d[hitPoints.size()]);
+		Vec3d[] hps = hitPoints.toArray(new Vec3d[0]);
 		hps[0] = new Vec3d(-0.38, -0.22, 0.3).rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYawHead)).add(player.getPositionEyes(MainRegistry.proxy.partialTicks()));
 		ParticleTauBeam beam = new ParticleTauBeam(player.world, hps, 0.2F);
 		beam.color(r, g, b, a);

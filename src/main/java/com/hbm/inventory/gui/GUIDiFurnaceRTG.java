@@ -1,7 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.util.List;
-
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.inventory.container.ContainerDiFurnaceRTG;
@@ -11,7 +9,6 @@ import com.hbm.util.I18nUtil;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;

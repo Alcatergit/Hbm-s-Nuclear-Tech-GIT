@@ -6,10 +6,10 @@ import net.minecraftforge.fluids.Fluid;
 
 public interface IFluidPipeMk2 {
 
-	public Fluid getType();
-	public void setType(Fluid fluid);
-	public FFPipeNetworkMk2 getNetwork();
-	public void setNetwork(FFPipeNetworkMk2 net);
-	public void joinOrMakeNetwork();
-	public boolean isValidForBuilding();
+	Fluid getType();
+	void setType(Fluid fluid);
+	FFPipeNetworkMk2 getNetwork();
+	void setNetwork(FFPipeNetworkMk2 net);
+	void joinOrMakeNetwork();
+	boolean isValidForBuilding();
 }

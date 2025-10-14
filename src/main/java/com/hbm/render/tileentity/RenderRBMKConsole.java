@@ -50,17 +50,16 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 
 		///New part
-		TileEntityRBMKConsole console = (TileEntityRBMKConsole) te;
-		
-		Tessellator tess = Tessellator.getInstance();
+
+        Tessellator tess = Tessellator.getInstance();
 		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
-		for(int i = 0; i < console.columns.length; i++) {
+		for(int i = 0; i < ((TileEntityRBMKConsole) te).columns.length; i++) {
 			
-			RBMKColumn col = console.columns[i];
+			RBMKColumn col = ((TileEntityRBMKConsole) te).columns[i];
 			
 			if(col == null)
 				continue;
@@ -90,7 +89,7 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 		GlStateManager.color(1, 1, 1, 1);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
-		for(int i = 0; i < console.screens.length; i++) {
+		for(int i = 0; i < ((TileEntityRBMKConsole) te).screens.length; i++) {
 			
 			GL11.glPushMatrix();
 			
@@ -99,7 +98,7 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 			
 			GL11.glTranslatef(0, -0.75F * (i / 2), 0);
 			
-			RBMKScreen screen = console.screens[i];
+			RBMKScreen screen = ((TileEntityRBMKConsole) te).screens[i];
 			String text = screen.display;
 			
 			if(text != null && ! text.isEmpty()) {

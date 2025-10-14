@@ -6,7 +6,6 @@ import java.util.HashMap;
 import java.util.Set;
 import java.util.List;
 
-import com.hbm.items.ModItems;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.MaterialShapes;
@@ -17,7 +16,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.util.NonNullList;
 import net.minecraft.init.Blocks;
@@ -96,8 +94,8 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 	}
 	
 	public void registerMold(Mold mold) {
-		this.molds.add(mold);
-		this.moldById.put(mold.id, mold);
+		molds.add(mold);
+		moldById.put(mold.id, mold);
 	}
 
 	@Override

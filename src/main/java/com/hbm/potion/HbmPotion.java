@@ -4,7 +4,6 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.capability.HbmLivingCapability;
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.PotionConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.explosion.ExplosionLarge;
@@ -163,7 +162,7 @@ public class HbmPotion extends Potion {
 		if(this == lead) {
 
 			int k = 60;
-	        return k > 0 ? par1 % k == 0 : true;
+	        return k <= 0 || par1 % k == 0;
 		}
 		
 		return false;

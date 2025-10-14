@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
-import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.lib.HBMSoundHandler;
@@ -77,7 +75,7 @@ public class ItemDigammaDiagnostic extends Item implements IBauble {
 				if(6 < x){
 					list.add(8);
 				}
-				if(list.size() > 0){
+				if(!list.isEmpty()){
 					int r = list.get(world.rand.nextInt(list.size()));
 					
 					if(r > 0){

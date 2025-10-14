@@ -1,7 +1,5 @@
 package com.hbm.blocks.network.energy;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.network.energy.TileEntityConverterRfHe;

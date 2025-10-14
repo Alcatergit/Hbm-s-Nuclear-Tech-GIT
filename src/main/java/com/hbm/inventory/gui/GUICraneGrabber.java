@@ -39,7 +39,7 @@ public class GUICraneGrabber extends GuiInfoContainer {
 
         if(this.mc.player.getHeldItemMainhand().isEmpty()) {
             for(int i = 0; i < 9; ++i) {
-                Slot slot = (Slot) this.inventorySlots.inventorySlots.get(i);
+                Slot slot = this.inventorySlots.inventorySlots.get(i);
 
                 if(this.isMouseOverSlot(slot, x, y) && grabber.matcher.modes[i] != null) {
 

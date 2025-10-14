@@ -12,7 +12,7 @@ import net.minecraft.util.ResourceLocation;
 public class SoyuzPronter {
 
 	
-	public static enum SoyuzSkin {
+	public enum SoyuzSkin {
 		
 		SOYUZ(
 				ResourceManager.soyuz_engineblock,
@@ -54,17 +54,17 @@ public class SoyuzPronter {
 				ResourceManager.soyuz_authentic_boosterside
 		);
 		
-		public ResourceLocation engineblock;
-		public ResourceLocation bottomstage;
-		public ResourceLocation topstage;
-		public ResourceLocation payload;
-		public ResourceLocation payloadblocks;
-		public ResourceLocation les;
-		public ResourceLocation lesthrusters;
-		public ResourceLocation mainengines;
-		public ResourceLocation sideengines;
-		public ResourceLocation booster;
-		public ResourceLocation boosterside;
+		public final ResourceLocation engineblock;
+		public final ResourceLocation bottomstage;
+		public final ResourceLocation topstage;
+		public final ResourceLocation payload;
+		public final ResourceLocation payloadblocks;
+		public final ResourceLocation les;
+		public final ResourceLocation lesthrusters;
+		public final ResourceLocation mainengines;
+		public final ResourceLocation sideengines;
+		public final ResourceLocation booster;
+		public final ResourceLocation boosterside;
 		
 		SoyuzSkin(
 				ResourceLocation engineblock,

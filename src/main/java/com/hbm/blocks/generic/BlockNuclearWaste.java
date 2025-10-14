@@ -20,7 +20,7 @@ public class BlockNuclearWaste extends BlockHazard {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		ForgeDirection dir = ForgeDirection.getOrientation(rand.nextInt(6));
 		
-		if(rand.nextInt(2) == 0 && world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)) == Blocks.AIR) {
+		if(rand.nextInt(2) == 0 && world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock() == Blocks.AIR) {
 			world.setBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ), ModBlocks.gas_radon_dense.getDefaultState());
 		}
 		super.updateTick(world, pos, state, rand);

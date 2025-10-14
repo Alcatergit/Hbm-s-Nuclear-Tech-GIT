@@ -47,12 +47,7 @@ public class DummyBlockCraneSplitter extends BlockContainer implements IDummy {
             world.removeTileEntity(pos);
         }
 
-        @Override
-        public EnumBlockRenderType getRenderType(IBlockState state) {
-            return EnumBlockRenderType.INVISIBLE;
-        }
-
-        @Override
+    @Override
         public Item getItemDropped(IBlockState state, Random rand, int fortune) {
             return Items.AIR;
         }

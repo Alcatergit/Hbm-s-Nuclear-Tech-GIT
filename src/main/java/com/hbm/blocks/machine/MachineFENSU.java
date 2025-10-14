@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-import com.hbm.lib.Library;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.lib.Library;
@@ -113,8 +112,7 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 							name = "dyeSilver";
 						if(name.length() > 3 && name.startsWith("dye")){
 							try {
-								EnumDyeColor color = EnumDyeColor.valueOf(name.substring(3, name.length()).toUpperCase());
-								entity.color = color;
+                                entity.color = EnumDyeColor.valueOf(name.substring(3, name.length()).toUpperCase());
 								entity.markDirty();
 								world.notifyBlockUpdate(corePos, state, state, 2 | 4);
 								if(!player.isCreative())

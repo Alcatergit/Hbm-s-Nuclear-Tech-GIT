@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBoiler;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.packet.AuxGaugePacket;
@@ -20,7 +19,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.FluidUtil;
@@ -82,8 +80,7 @@ public class TileEntityMachineBoiler extends TileEntityMachineBase implements IT
 	
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
 		if(i == 4)
-			if(TileEntityFurnace.getItemBurnTime(stack) > 0)
-				return true;
+            return TileEntityFurnace.getItemBurnTime(stack) > 0;
 		return false;
 	}
 	
@@ -211,11 +208,8 @@ public class TileEntityMachineBoiler extends TileEntityMachineBase implements IT
 	}
 
 	protected boolean inputValidForTank(int tank, int slot) {
-		if(inventory.getStackInSlot(slot).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
-			return true;
-		}
-		return false;
-	}
+        return inventory.getStackInSlot(slot).hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null) && isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+    }
 	
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)

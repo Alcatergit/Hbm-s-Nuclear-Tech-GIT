@@ -180,13 +180,12 @@ public class GUIScreenGuide extends GuiScreen {
 				GL11.glPopMatrix();
 				
 				if(page.title != null) {
-					
-					float tScale = titleScale;
-					String titleLoc = I18nUtil.resolveKey(page.title);
+
+                    String titleLoc = I18nUtil.resolveKey(page.title);
 					
 					GL11.glPushMatrix();
-					GL11.glScalef(1F/tScale, 1F/tScale, 1F);
-					this.fontRenderer.drawString(titleLoc, (int)((guiLeft + 20 + i * sideOffset + ((width / 2) - (this.fontRenderer.getStringWidth(titleLoc) / 2 / tScale))) * tScale), (int)((guiTop + 20) * tScale), page.titleColor);
+					GL11.glScalef(1F/ titleScale, 1F/ titleScale, 1F);
+					this.fontRenderer.drawString(titleLoc, (int)((guiLeft + 20 + i * sideOffset + ((width / 2) - (this.fontRenderer.getStringWidth(titleLoc) / 2 / titleScale))) * titleScale), (int)((guiTop + 20) * titleScale), page.titleColor);
 					
 					GL11.glPopMatrix();
 				}

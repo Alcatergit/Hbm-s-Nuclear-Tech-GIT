@@ -46,7 +46,7 @@ public class TimedGenerator {
 	//Drillgon200: I mean, a standard java Runnable probably would have worked exactly the same.
 	public interface ITimedJob {
 
-		public void work();
+		void work();
 
 	}
 }

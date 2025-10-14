@@ -53,7 +53,7 @@ public class ParticleMobGib extends Particle {
 			mot = mot.scale(0.2F);
 			blood.color(0.5F, 0F, 0F);
 			blood.motion((float)mot.z, (float)mot.y, (float)mot.z);
-			blood.doDecal(rand.nextFloat() < 0.4F ? true : false);
+			blood.doDecal(rand.nextFloat() < 0.4F);
 			blood.doFlow(false);
 			ParticleBatchRenderer.addParticle(blood);
 		}

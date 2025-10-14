@@ -176,9 +176,8 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
 
         int meta = this.getBlockMetadata();
         if(te != null){
-            ICapabilityProvider capte = te;
-            if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
+            if(te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
+                IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
 
                 for(int i = 0; i < inventory.getSlots(); i++) {
                     tryFillContainerCap(cap, i);
@@ -230,11 +229,6 @@ public class TileEntityCraneBoxer extends TileEntityCraneBase implements IGUIPro
     @Override
     public int[] getAccessibleSlotsFromSide(EnumFacing e) {
         return allowed_slots;
-    }
-
-    @Override
-    public boolean isItemValidForSlot(int i, ItemStack itemStack) {
-        return true;
     }
 
     @Override

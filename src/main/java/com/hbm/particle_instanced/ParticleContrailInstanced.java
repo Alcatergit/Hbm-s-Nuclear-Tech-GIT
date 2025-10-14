@@ -38,9 +38,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		this.particleTexture = ModEventHandlerClient.contrail;
 		maxAge = 100 + rand.nextInt(20);
 
-		this.lowRed = red;
-		this.lowGreen = green;
-		this.lowBlue = blue;
+		lowRed = red;
+		lowGreen = green;
+		lowBlue = blue;
 
 		this.scale = scale;
 		initVals();
@@ -48,9 +48,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn, float flameRed, float flameGreen, float flameBlue, float red, float green, float blue, float scale) {
 		this(worldIn, posXIn, posYIn, posZIn, red, green, blue, scale);
-		this.flameRed = flameRed;
-		this.flameGreen = flameGreen;
-		this.flameBlue = flameBlue;
+		ParticleContrailInstanced.flameRed = flameRed;
+		ParticleContrailInstanced.flameGreen = flameGreen;
+		ParticleContrailInstanced.flameBlue = flameBlue;
 
 		this.doFlames = true;
 	}
@@ -93,23 +93,23 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		float pColor = 0;
 		if(index == 0){
 			if(doFlames){
-				pColor = this.lowRed + (this.flameRed-this.lowRed)*particleAlpha*0.1F;
+				pColor = lowRed + (flameRed- lowRed)*particleAlpha*0.1F;
 			} else {
-				pColor = this.lowRed;
+				pColor = lowRed;
 			}
 			this.particleRed = pColor;
 		} else if(index == 1){
 			if(doFlames){
-				pColor = this.lowGreen + (this.flameGreen-this.lowGreen)*particleAlpha*0.1F;
+				pColor = lowGreen + (flameGreen- lowGreen)*particleAlpha*0.1F;
 			} else {
-				pColor = this.lowGreen;
+				pColor = lowGreen;
 			}
 			this.particleGreen = pColor;
 		} else if(index == 2){
 			if(doFlames){
-				pColor = this.lowBlue + (this.flameBlue-this.lowBlue)*particleAlpha*0.1F;
+				pColor = lowBlue + (flameBlue- lowBlue)*particleAlpha*0.1F;
 			} else {
-				pColor = this.lowBlue;
+				pColor = lowBlue;
 			}
 			this.particleBlue = pColor;
 		}

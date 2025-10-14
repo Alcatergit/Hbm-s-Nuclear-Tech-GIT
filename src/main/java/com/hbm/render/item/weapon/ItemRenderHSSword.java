@@ -92,10 +92,8 @@ public class ItemRenderHSSword extends TEISRBase {
 			GL11.glRotated(180, 0, 1, 0);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.hs_sword_tex);
 			ResourceManager.hs_sword.render((prevFrame, currentFrame, model, diffN, modelName) -> {
-				if(modelName.equals("rightArm"))
-					return true;
-				return false;
-			});
+                return modelName.equals("rightArm");
+            });
 			break;
 		case GUI:
 			GL11.glTranslated(-1.15, 0, 0);
@@ -106,10 +104,8 @@ public class ItemRenderHSSword extends TEISRBase {
 
 			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.hs_sword_tex);
 			ResourceManager.hs_sword.render((prevFrame, currentFrame, model, diffN, modelName) -> {
-				if(modelName.equals("rightArm"))
-					return true;
-				return false;
-			});
+                return modelName.equals("rightArm");
+            });
 			break;
 		case NONE:
 			break;

@@ -65,12 +65,7 @@ public class RenderQuasar extends RenderBlackHole {
 		col[3] = alpha;
 	}
 
-	@Override
-	protected int steps() {
-		return 15;
-	}
-
-	@Override
+    @Override
 	protected ResourceLocation getEntityTexture(EntityBlackHole entity){
 		return super.getEntityTexture(entity);
 	}
