@@ -112,6 +112,7 @@ public class BedrockOreRegistry {
 			if(oreName.startsWith("ore") && is3DBlock(oreName) && !CompatibilityConfig.bedrockOreBlacklist.contains(oreName)){
 
 				String resourceName = oreName.substring(3);
+                if(resourceName.startsWith("Nether")) continue;
 				
 				String oreOutput = "gem"+resourceName;
 				if(tryRegister(index, oreName, oreOutput)){
@@ -223,9 +224,7 @@ public class BedrockOreRegistry {
             if(tier == 1) return -1;
             return getRandomOreByTier(rand, tier-1, dim);
         }
-        Integer i = oreToIndexes.get(WeightedRandom.getRandomItem(rand, oreWeights).asString());
-        if(i == null) return -1;
-        return i;
+        return getOreIndex(WeightedRandom.getRandomItem(rand, oreWeights).asString());
     }
 
 	public static String getOreName(String oreName){

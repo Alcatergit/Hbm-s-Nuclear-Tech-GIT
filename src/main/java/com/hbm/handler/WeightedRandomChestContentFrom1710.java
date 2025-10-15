@@ -3,9 +3,16 @@ package com.hbm.handler;
 import java.util.Arrays;
 import java.util.Random;
 
+import com.hbm.lib.HbmChestContents;
+import net.minecraft.block.BlockChest;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntityChest;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.WeightedRandom;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -35,6 +42,12 @@ public class WeightedRandomChestContentFrom1710 extends WeightedRandom.Item
         this.theMinimumChanceToGenerateItem = minChance;
         this.theMaximumChanceToGenerateItem = maxChance;
     }
+
+    public static void placeLootChest(World world, BlockPos pos, EnumFacing dir, int lootID){
+        world.setBlockState(pos, Blocks.CHEST.getDefaultState().withProperty(BlockChest.FACING, dir), 3);
+        WeightedRandomChestContentFrom1710.generateChestContents(world.rand, HbmChestContents.getLoot(lootID), world.getTileEntity(pos), 8);
+    }
+
 
     public static void generateChestContents(Random p_76293_0_, WeightedRandomChestContentFrom1710[] p_76293_1_, ICapabilityProvider p_76293_2_, int p_76293_3_){
     	if(p_76293_2_ != null && p_76293_2_.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null)){

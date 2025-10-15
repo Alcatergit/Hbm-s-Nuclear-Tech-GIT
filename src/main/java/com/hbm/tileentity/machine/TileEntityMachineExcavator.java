@@ -684,22 +684,21 @@ public class TileEntityMachineExcavator extends TileEntityMachineBase implements
 		}
 	}
 
-    public int getAdjustedAmount(int amount){
-        return (int) (amount * (1F-getFortuneLevel()/20F));
-    }
-
 	protected void collectBedrock(BlockPos pos) {
 		if(tank.getFluid() == null) return;
 		TileEntity oreTile = world.getTileEntity(pos);
 		if(oreTile instanceof TileEntityBedrockOre ore) {
-            int minTi = Math.min(ore.tier, this.getInstalledDrill().tier);
+            EnumDrillType drill = this.getInstalledDrill();
+            int minTi = Math.min(ore.tier, drill.tier);
             int meta = BedrockOreRegistry.getRandomOreByTier(world.rand, minTi, world.provider.getDimension());
             if(meta == -1) return;
             if(ore.acidRequirement != null) {
-				if(ore.acidRequirement.getFluid() != tank.getFluid().getFluid()){
-                    int amount = getAdjustedAmount(ore.acidRequirement.amount);
-                    if(amount >= tank.getFluidAmount()) return;
+				if(ore.acidRequirement.getFluid() == tank.getFluid().getFluid()){
+                    int amount = (int) (ore.acidRequirement.amount * (1F-(drill.fortune/16F)));
+                    if(amount > tank.getFluidAmount()) return;
 				    tank.drain(amount, true);
+                } else {
+                    return;
                 }
 			}
 

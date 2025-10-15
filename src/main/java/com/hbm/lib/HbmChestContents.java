@@ -339,35 +339,22 @@ public class HbmChestContents {
 	 **/
 
 	public static WeightedRandomChestContentFrom1710[] getLoot(int i) {
-		switch (i) {
-		case 1:
-			return modGeneric;
-		case 2:
-			return antenna;
-		case 3:
-			return expensive;
-		case 4:
-			return nukeTrash;
-		case 5:
-			return nuclear;
-		case 6:
-			return vertibird;
-		case 7:
-			return missile;
-		case 8:
-			return spaceship;
-		case 9:
-			return powder;
-		case 10:
-			return vault1;
-		case 11:
-			return vault2;
-		case 12:
-			return vault3;
-		case 13:
-			return vault4;
-		}
+        return switch (i) {
+            case 1 -> modGeneric;
+            case 2 -> antenna;
+            case 3 -> expensive;
+            case 4 -> nukeTrash;
+            case 5 -> nuclear;
+            case 6 -> vertibird;
+            case 7 -> missile;
+            case 8 -> spaceship;
+            case 9 -> powder;
+            case 10 -> vault1;
+            case 11 -> vault2;
+            case 12 -> vault3;
+            case 13 -> vault4;
+            default -> null;
+        };
 
-		return null;
-	}
+    }
 }

@@ -30,24 +30,30 @@ public class ItemDrillbit extends Item {
 		if(type == null) return;
 		list.add("§e"+I18nUtil.resolveKey("desc.speed")+" " + ((int) (type.speed * 100)) + "%");
 		list.add("§e"+I18nUtil.resolveKey("desc.tier", type.tier));
-		if(type.fortune > 0) list.add("§d"+I18nUtil.resolveKey("desc.fortune")+" " + type.fortune);
-		if(type.vein) list.add("§a"+I18nUtil.resolveKey("desc.veinminer"));
-		if(type.silk) list.add("§a"+I18nUtil.resolveKey("desc.silktouch"));
+		if(type.fortune > 0) {
+            list.add("§d" + I18nUtil.resolveKey("desc.fortune") + " " + type.fortune + " "+ I18nUtil.resolveKey("desc.fortuneBedrock", (int)(100F * type.fortune/20F)));
+        }
+		if(type.vein) {
+            list.add("§a" + I18nUtil.resolveKey("desc.veinminer"));
+        }
+		if(type.silk) {
+            list.add("§a" + I18nUtil.resolveKey("desc.silktouch"));
+        }
 	}
 	
 	public enum EnumDrillType {
 		STEEL			(1.0D, 1, 0, false, false),
-		STEEL_DIAMOND	(1.0D, 1, 1, false, true),
+		STEEL_DIAMOND	(0.8D, 1, 1, false, true),
 		HSS				(1.2D, 2, 0, true, false),
-		HSS_DIAMOND		(1.2D, 2, 2, true, true),
-		DESH			(1.5D, 3, 1, true, true),
-		DESH_DIAMOND	(1.5D, 3, 3, true, true),
-		TCALLOY			(2.0D, 4, 1, true, true),
-		TCALLOY_DIAMOND	(2.0D, 4, 4, true, true),
-		FERRO			(2.5D, 5, 1, true, true),
-		FERRO_DIAMOND	(2.5D, 5, 4, true, true),
-		DNT				(5.0D, 8, 1, true, true),
-		DNT_DIAMOND		(5.0D, 8, 5, true, true);
+		HSS_DIAMOND		(1.0D, 2, 2, true, true),
+		DESH			(1.5D, 3, 0, true, false),
+		DESH_DIAMOND	(1.2D, 3, 3, true, true),
+		TCALLOY			(2.0D, 4, 0, true, true),
+		TCALLOY_DIAMOND	(1.6D, 4, 4, true, true),
+		FERRO			(2.5D, 5, 0, true, true),
+		FERRO_DIAMOND	(2.0D, 5, 5, true, true),
+		DNT				(5.0D, 8, 0, true, true),
+		DNT_DIAMOND		(4.0D, 8, 6, true, true);
 		
 		public final double speed;
 		public final int tier;

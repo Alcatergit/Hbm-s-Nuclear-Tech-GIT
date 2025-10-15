@@ -52,12 +52,10 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 		
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 		
-		if(!(te instanceof TileEntityBedrockOre))
+		if(!(te instanceof TileEntityBedrockOre ore))
 			return;
-		
-		TileEntityBedrockOre ore = (TileEntityBedrockOre) te;
 
-		List<String> text = new ArrayList();
+        List<String> text = new ArrayList<>();
 		text.add(I18nUtil.resolveKey("desc.tier", ore.tier));
 		
 		if(ore.acidRequirement != null) {
@@ -99,6 +97,10 @@ public class BlockBedrockOreTE extends BlockContainer implements ILookOverlay {
 			super.readFromNBT(nbt);
 			this.tier = nbt.getInteger("tier");
 			this.acidRequirement = FluidStack.loadFluidStackFromNBT(nbt);
+            if(this.acidRequirement == null) {
+                this.acidRequirement = BedrockOreRegistry.getFluidRequirement(this.tier);
+                this.markDirty();
+            }
 		}
 		
 		@Override
