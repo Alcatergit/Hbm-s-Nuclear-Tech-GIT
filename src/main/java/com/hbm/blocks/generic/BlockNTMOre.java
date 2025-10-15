@@ -207,10 +207,10 @@ public class BlockNTMOre extends BlockOre {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty) {
-        	world.setBlockState(pos, ModBlocks.ore_oil_empty.getDefaultState());
-        	world.setBlockState(pos.down(), ModBlocks.ore_oil.getDefaultState());
-        }
+		if (this == ModBlocks.ore_oil && world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty) {
+			world.setBlockState(pos, ModBlocks.ore_oil_empty.getDefaultState());
+			world.setBlockState(pos.down(), ModBlocks.ore_oil.getDefaultState());
+		}
 	}
 	
 	@Override
