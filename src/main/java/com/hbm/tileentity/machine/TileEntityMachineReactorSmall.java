@@ -15,6 +15,7 @@ import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.ItemStackHandlerWrapper;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -45,6 +46,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineReactorSmall extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
@@ -82,40 +84,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 	private String customName;
 
 	public TileEntityMachineReactorSmall() {
-		inventory = new ItemStackHandler(16) {
-			@Override
-			protected void onContentsChanged(int slot) {
-				markDirty();
-				super.onContentsChanged(slot);
-			}
-
-			@Override
-			public boolean isItemValid(int i, ItemStack itemStack) {
-				if(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11)
-					if(itemStack.getItem() instanceof ItemFuelRod)
-						return true;
-				if(i == 12)
-					if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
-						return true;
-				if(i == 14)
-                    return FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT);
-				return false;
-			}
-
-			@Override
-			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
-				if(isItemValid(slot, stack))
-					return super.insertItem(slot, stack, simulate);
-				return stack;
-			}
-
-            @Override
-            public ItemStack extractItem(int slot, int amount, boolean simulate) {
-                if(canExtractItem(slot, inventory.getStackInSlot(slot)))
-                    return super.extractItem(slot, amount, simulate);
-                return ItemStack.EMPTY;
-            }
-		};
+		inventory = new ItemStackHandler(16);
 
 		tanks = new FluidTank[3];
 		tankTypes = new Fluid[3];
@@ -151,6 +120,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
     }
 
     public boolean canExtractItem(int slot, ItemStack stack){
+    	if(slot == 13 || slot == 15) return true;
         if(slot == 12 || slot == 14) return false;
         if(!stack.isEmpty()) return !conversions.containsKey(stack.getItem());
         return true;
@@ -496,7 +466,7 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 
 		for(int i = 0; i < decay; i++) {
 			ItemFuelRod rod = ((ItemFuelRod) inventory.getStackInSlot(id).getItem());
-			this.coreHeat += rod.getHeatPerTick() * coreHeatMod;
+			this.coreHeat += (int) (rod.getHeatPerTick() * coreHeatMod);
 			ItemFuelRod.setLifetime(inventory.getStackInSlot(id), ItemFuelRod.getLifeTime(inventory.getStackInSlot(id)) + 1);
 
 			if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(id)) > ((ItemFuelRod) inventory.getStackInSlot(id).getItem()).getMaxLifeTime()) {
@@ -755,14 +725,47 @@ public class TileEntityMachineReactorSmall extends TileEntity implements ITickab
 		return 65536.0D;
 	}
 
+    public boolean isItemValid(int i, ItemStack itemStack) {
+        if(i == 0 || i == 1 || i == 2 || i == 3 || i == 4 || i == 5 || i == 6 || i == 7 || i == 8 || i == 9 || i == 10 || i == 11)
+            if(itemStack.getItem() instanceof ItemFuelRod)
+                return true;
+        if(i == 12)
+            if(FFUtils.containsFluid(itemStack, FluidRegistry.WATER))
+                return true;
+        if(i == 14)
+            return FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT);
+        return false;
+    }
+
 	@Override
-	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+	public boolean hasCapability(@NotNull Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 
 	@Override
-	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
-		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY ? CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this) : super.getCapability(capability, facing);
+	public <T> T getCapability(@NotNull Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY)
+            if(facing == null)
+                return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
+            else return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory){
+                @Override
+                public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
+                    if(canExtractItem(slot, inventory.getStackInSlot(slot)))
+                        return super.extractItem(slot, amount, simulate);
+                    return ItemStack.EMPTY;
+                }
+
+                @Override
+                public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+                    if(isItemValid(slot, stack))
+                        return super.insertItem(slot, stack, simulate);
+                    return stack;
+                }
+            });
+        else if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)
+            return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+        else
+            return super.getCapability(capability, facing);
 	}
 
 	private int detectHeat;

@@ -2,7 +2,6 @@ package com.hbm.items.tool;
 
 import java.util.List;
 
-import com.hbm.interfaces.IFluidPipe;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
@@ -82,12 +81,6 @@ public class ItemAnalyzer extends Item {
 					
 					player.sendMessage(new TextComponentString(
 							"Electricity: " + ((IEnergyConnector)te).getPower() + " HE"));
-				}
-				
-				if(te instanceof IFluidPipe) {
-					
-					player.sendMessage(new TextComponentString(
-							"Duct Type: " + I18n.format(((IFluidPipe)te).getType().getUnlocalizedName())));
 				}
 				
 				if(te instanceof TileEntityPylonBase) {

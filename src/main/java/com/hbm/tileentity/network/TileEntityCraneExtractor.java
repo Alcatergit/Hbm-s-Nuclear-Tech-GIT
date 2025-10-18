@@ -140,7 +140,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                     for(int index : allowed_slots) {
                         ItemStack stack = inventory.getStackInSlot(index);
 
-                        if(stack != ItemStack.EMPTY && (sided == null || sided.canExtractItem(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
+                        if(stack != ItemStack.EMPTY && (sided == null || canExtract(sided, index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
 
                             boolean match = this.matchesFilter(stack);
 
@@ -170,6 +170,16 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
             this.matcher.writeToNBT(data);
             this.networkPack(data, 15);
         }
+    }
+
+    public static boolean canExtract(ISidedInventory sided, int index, ItemStack stack, EnumFacing dir){
+        boolean can = false;
+        try{
+            can = sided.canExtractItem(index, stack, dir);
+        } catch (IndexOutOfBoundsException e){
+            return false;
+        }
+        return can;
     }
 
     //Unloads output into chests. Capability version.

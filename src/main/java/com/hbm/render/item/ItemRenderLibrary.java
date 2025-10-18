@@ -496,7 +496,9 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GL11.glScaled(0.5, 0.5, 0.5);
 		        GlStateManager.disableCull();
-				bindTexture(ResourceManager.oilflare_tex); ResourceManager.oilflare.renderAll();
+                GlStateManager.shadeModel(GL11.GL_SMOOTH);
+                bindTexture(ResourceManager.oilflare_tex); ResourceManager.oilflare.renderAll();
+                GlStateManager.shadeModel(GL11.GL_FLAT);
 		        GlStateManager.enableCull();
 			}});
 

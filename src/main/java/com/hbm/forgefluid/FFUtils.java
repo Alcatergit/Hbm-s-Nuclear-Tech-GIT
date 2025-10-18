@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.google.common.base.Predicate;
-import com.hbm.interfaces.IFluidPipe;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.IFluidVisualConnectable;
 import com.hbm.interfaces.IItemFluidHandler;
@@ -39,6 +38,7 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -335,7 +335,7 @@ public class FFUtils {
 		}
 		TileEntity te = world.getTileEntity(toFill);
 
-		if(te != null && te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
+		if(te != null && safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
 			if(te instanceof TileEntityDummy ted) {
                 if(world.getTileEntity(ted.target) == tileEntity) {
 					return false;
@@ -1002,13 +1002,6 @@ public class FFUtils {
 		return new FluidTank(tank.getFluid() != null ? tank.getFluid().copy() : null, tank.getCapacity());
 	}
 
-	public static boolean checkFluidConnectables(World world, BlockPos pos, FFPipeNetwork net, @Nullable EnumFacing facing){
-		TileEntity tileentity = world.getTileEntity(pos);
-		if(tileentity != null && tileentity instanceof IFluidPipe && ((IFluidPipe)tileentity).getNetworkTrue() == net)
-			return true;
-        return tileentity != null && !(tileentity instanceof IFluidPipe) && tileentity.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, facing);
-    }
-
 	public static boolean checkFluidConnectablesMk2(World world, BlockPos pos, Fluid type, @Nullable EnumFacing facing){
 		TileEntity tileentity = world.getTileEntity(pos);
 		if(tileentity instanceof IFluidPipeMk2 && ((IFluidPipeMk2)tileentity).getType() == type)
@@ -1021,4 +1014,12 @@ public class FFUtils {
 			return ((IFluidVisualConnectable)block).shouldConnect(type);
 		return false;
 	}
+
+    public static boolean safeCheckCapa(TileEntity te, Capability<?> capability){
+        try{
+            return te.hasCapability(capability, null);
+        } catch (NullPointerException e) {
+            return false;
+        }
+    }
 }

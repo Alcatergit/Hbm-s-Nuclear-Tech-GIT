@@ -854,9 +854,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	
 	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
-		if(tags.length != 3){
-			return;
-		} else {
+		if(tags.length == 3){
 			tanks[0].readFromNBT(tags[0]);
 			tanks[1].readFromNBT(tags[1]);
 			tanks[2].readFromNBT(tags[2]);

@@ -223,9 +223,8 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
     public int fill(FluidStack resource, boolean doFill) {
         if(resource != null && resource.getFluid() == fluidType && resource.amount > 0) {
             return tank.fill(resource, doFill);
-        } else {
-            return 0;
         }
+        return 0;
     }
 
     @Nullable

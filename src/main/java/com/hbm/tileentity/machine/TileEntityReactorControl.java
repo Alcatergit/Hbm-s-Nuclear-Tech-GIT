@@ -164,10 +164,9 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		if(auto && (water < 100 || cool < 100 || coreHeat > (50000 * 0.95)) && fuel > 0) {
         			reactor.retracting = true;
         		}
-        	} else if(link != null && world.getTileEntity(link) instanceof TileEntityMachineReactorLarge && ((TileEntityMachineReactorLarge)world.getTileEntity(link)).checkBody()) {
-        		TileEntityMachineReactorLarge reactor = (TileEntityMachineReactorLarge)world.getTileEntity(link);
-        		
-        		hullHeat = reactor.hullHeat;
+        	} else if(link != null && world.getTileEntity(link) instanceof TileEntityMachineReactorLarge reactor && ((TileEntityMachineReactorLarge)world.getTileEntity(link)).checkBody()) {
+
+                hullHeat = reactor.hullHeat;
         		coreHeat = reactor.coreHeat;
         		fuel = reactor.fuel * 100 / Math.max(1, reactor.maxFuel);
         		water = reactor.tanks[0].getFluidAmount();
@@ -217,11 +216,11 @@ public class TileEntityReactorControl extends TileEntity implements ITickable {
         		water = 0;
         		cool = 0;
         		steam = 0;
-        		maxWater = 0;
-        		maxCool = 0;
-        		maxSteam = 0;
+        		maxWater = 1;
+        		maxCool = 1;
+        		maxSteam = 1;
         		rods = 0;
-        		maxRods = 0;
+        		maxRods = 1;
         		isOn = false;
         		compression = 0;
         		isLinked = false;

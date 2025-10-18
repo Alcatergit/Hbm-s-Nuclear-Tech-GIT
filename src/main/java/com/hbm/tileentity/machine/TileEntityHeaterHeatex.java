@@ -81,7 +81,6 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
             setFluidType();
 
             PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[]{tanks[0], tanks[1]}), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-            PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), tankTypes), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 
             this.heatEnergy *= 0.999;
 
@@ -106,10 +105,10 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
         ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 + rot.offsetX, 0, dir.offsetZ * 2 + rot.offsetZ), 12000);
-        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 - rot.offsetX, 0, dir.offsetZ * 2 - rot.offsetZ), 12000);
-        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 + rot.offsetX, 0, -dir.offsetZ * 2 + rot.offsetZ), 12000);
-        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 - rot.offsetX, 0, -dir.offsetZ * 2 - rot.offsetZ), 12000);
+        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 + rot.offsetX, 0, dir.offsetZ * 2 + rot.offsetZ), 32000);
+        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 - rot.offsetX, 0, dir.offsetZ * 2 - rot.offsetZ), 32000);
+        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 + rot.offsetX, 0, -dir.offsetZ * 2 + rot.offsetZ), 32000);
+        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 - rot.offsetX, 0, -dir.offsetZ * 2 - rot.offsetZ), 32000);
     }
 
     @Override
@@ -208,9 +207,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     @Override
     public void recievePacket(NBTTagCompound[] tags) {
-        if (tags.length != 2) {
-            return;
-        } else {
+        if (tags.length == 2) {
             tanks[0].readFromNBT(tags[0]);
             tanks[1].readFromNBT(tags[1]);
         }
@@ -226,7 +223,6 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         if (resource != null && resource.getFluid() == tankTypes[0] && resource.amount > 0) {
             return tanks[0].fill(resource, doFill);
         }
-
         return 0;
     }
 
@@ -253,8 +249,9 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
+            if(facing == null) return true;
             ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing() || facing == null) {
+            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing()) {
                 return true;
             }
         }
@@ -266,7 +263,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing() || facing == null) {
+            if (facing == null || facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing()) {
                 return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
             }
         }
@@ -313,7 +310,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public void receiveControl(NBTTagCompound data) {
         if (data.hasKey("toCool")) this.amountToCool = Math.max(data.getInteger("toCool"), 1);
         if (data.hasKey("delay")) this.tickDelay = Math.max(data.getInteger("delay"), 1);
-        this.amountToCool = Math.max(this.amountToCool, tanks[0].getCapacity());
+        this.amountToCool = Math.min(this.amountToCool, tanks[0].getCapacity());
         markDirty();
     }
 }

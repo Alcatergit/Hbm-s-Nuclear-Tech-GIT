@@ -219,8 +219,8 @@ public class JEIConfig implements IModPlugin {
 		registry.addRecipeClickArea(GUIMachineBoilerRTG.class, 61, 34, 17, 17, BOILER);
 		registry.addRecipeClickArea(GUIMachineArcWelder.class, 70, 35, 35, 17, ARCWELDER);
 		registry.addRecipeClickArea(GUIMachineSolderingStation.class, 70, 26, 35, 17, SOLDERINGSTATION);
-		registry.addRecipeClickArea(GUILiquefactor.class, 52, 34, 18, 55, LIQUEFACTION);
-		registry.addRecipeClickArea(GUISolidifier.class, 52, 34, 18, 55, SOLIDIFCATION);
+		registry.addRecipeClickArea(GUILiquefactor.class, 52, 34, 17, 55, LIQUEFACTION);
+		registry.addRecipeClickArea(GUISolidifier.class, 52, 34, 17, 55, SOLIDIFCATION);
 		registry.addRecipeClickArea(GUIMachineCentrifuge.class, 35, 9, 106, 40, CENTRIFUGE);
 		registry.addRecipeClickArea(GUIMachineGasCent.class, 88, 33, 35, 17, GAS_CENT);
 		registry.addRecipeClickArea(GUIMachineReactor.class, 80, 35, 21, 14, REACTOR);

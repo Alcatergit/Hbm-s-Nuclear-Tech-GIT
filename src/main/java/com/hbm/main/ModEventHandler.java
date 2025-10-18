@@ -25,7 +25,6 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.entity.mob.EntityCyberCrab;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.entity.projectile.EntityBurningFOEQ;
-import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.potion.HbmDetox;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.ArmorUtil;
@@ -177,18 +176,6 @@ public class ModEventHandler {
 			e.addCapability(ENT_HBM_PROP_ID, new HbmLivingCapability.EntityHbmPropsProvider());
 		if(e.getObject() instanceof EntityPlayer){
 			e.addCapability(DATA_LOC, new HbmCapability.HBMDataProvider());
-		}
-	}
-
-	@SubscribeEvent
-	public void worldUnload(WorldEvent.Unload e) {
-		Iterator<FFPipeNetwork> itr = MainRegistry.allPipeNetworks.iterator();
-		while(itr.hasNext()) {
-			FFPipeNetwork net = itr.next();
-			if(net.getNetworkWorld() == e.getWorld()) {
-				net.destroySoft();
-				itr.remove();
-			}
 		}
 	}
 
@@ -557,21 +544,6 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
-		if(!MainRegistry.allPipeNetworks.isEmpty() && !event.world.isRemote) {
-			Iterator<FFPipeNetwork> itr = MainRegistry.allPipeNetworks.iterator();
-			while(itr.hasNext()) {
-				FFPipeNetwork net = itr.next();
-				if(net.getNetworkWorld() != event.world)
-					continue;
-				if(net != null)
-					net.updateTick();
-				if(net.getPipes().isEmpty()) {
-					net.destroySoft();
-					itr.remove();
-				}
-
-			}
-		}
 		
 		if(event.world != null && !event.world.isRemote && event.world.getTotalWorldTime() % 100 == 97){
 			//Drillgon200: Retarded hack because I'm not convinced game rules are client sync'd

@@ -215,7 +215,6 @@ import com.hbm.entity.projectile.EntityTom;
 import com.hbm.entity.projectile.EntityWaterSplash;
 import com.hbm.entity.siege.SiegeTier;
 import com.hbm.explosion.ExplosionNukeGeneric;
-import com.hbm.forgefluid.FFPipeNetwork;
 import com.hbm.forgefluid.FluidContainerRegistry;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -368,8 +367,6 @@ public class MainRegistry {
 	public static MainRegistry instance;
 
 	public static Logger logger;
-
-	public static List<FFPipeNetwork> allPipeNetworks = new ArrayList<FFPipeNetwork>();
 
 	// Creative Tabs
 	// ingots, nuggets, wires, machine parts

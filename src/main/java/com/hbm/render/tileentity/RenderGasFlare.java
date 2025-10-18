@@ -23,8 +23,10 @@ public class RenderGasFlare extends TileEntitySpecialRenderer<TileEntityMachineG
         GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
-		bindTexture(ResourceManager.oilflare_tex);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        bindTexture(ResourceManager.oilflare_tex);
         ResourceManager.oilflare.renderAll();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();
