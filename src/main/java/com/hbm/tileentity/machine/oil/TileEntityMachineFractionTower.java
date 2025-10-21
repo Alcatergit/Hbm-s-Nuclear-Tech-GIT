@@ -60,10 +60,9 @@ public class TileEntityMachineFractionTower extends TileEntity  implements INBTP
 			TileEntity stack = world.getTileEntity(pos.up(3));
 			
 			
-			if(stack instanceof TileEntityMachineFractionTower) {
-				TileEntityMachineFractionTower frac = (TileEntityMachineFractionTower) stack;
-				
-				//make types equal
+			if(stack instanceof TileEntityMachineFractionTower frac) {
+
+                //make types equal
 				for(int i = 0; i < 3; i++) {
 					frac.setTankType(i, types[i]);
 				}

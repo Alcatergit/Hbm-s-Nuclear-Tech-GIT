@@ -21,12 +21,14 @@ public class RenderSmallTower extends TileEntitySpecialRenderer<TileEntityTowerS
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 		GlStateManager.enableLighting();
 		GlStateManager.disableCull();
+        GlStateManager.enableAlpha();
 		
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.tower_small_tex);
 		ResourceManager.tower_small.renderAll();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
-		
+
+        GlStateManager.disableAlpha();
 		GlStateManager.enableCull();
 		GL11.glPopMatrix();
 	}

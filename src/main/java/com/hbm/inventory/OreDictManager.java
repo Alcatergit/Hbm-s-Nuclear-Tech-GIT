@@ -336,8 +336,8 @@ public class OreDictManager {
 		CU																													.ingot(ingot_copper)		.dust(powder_copper)									.block(block_copper)							.crystal(crystal_copper)		.plate(plate_copper)	.ore(ore_copper, cluster_copper, ore_gneiss_copper, ore_meteor_copper);
 		W																													.ingot(ingot_tungsten)		.dust(powder_tungsten)									.block(block_tungsten)							.crystal(crystal_tungsten)								.ore(ore_tungsten, cluster_depth_tungsten, ore_nether_tungsten, ore_meteor_tungsten)	.oreNether(ore_nether_tungsten);
 		AL																													.ingot(ingot_aluminium)		.dust(powder_aluminium)									.block(block_aluminium)							.crystal(crystal_aluminium)		.plate(plate_aluminium)	.ore(ore_aluminium, cluster_aluminium, ore_meteor_aluminium);
-		PB .toxic(2)												.nugget(nugget_lead)									.ingot(ingot_lead)			.dust(powder_lead)										.block(block_lead)								.crystal(crystal_lead)			.plate(plate_lead)		.ore(ore_lead, ore_meteor_lead);
-		AS .toxic(16)												.nugget(nugget_arsenic)									.ingot(ingot_arsenic);
+		PB .toxic(1)		    									.nugget(nugget_lead)									.ingot(ingot_lead)			.dust(powder_lead)										.block(block_lead)								.crystal(crystal_lead)			.plate(plate_lead)		.ore(ore_lead, ore_meteor_lead);
+		AS .toxic(50)												.nugget(nugget_arsenic)									.ingot(ingot_arsenic);
 		CA																													.ingot(ingot_calcium)		.dust(powder_calcium);
 		CD															.nugget(nugget_cadmium)									.ingot(ingot_cadmium)		.dust(powder_cadmium)									.block(block_cadmium);
 		TA															.nugget(nugget_tantalium)								.ingot(ingot_tantalium)		.dust(powder_tantalium)									.block(block_tantalium)		.gem(gem_tantalium);
@@ -351,7 +351,7 @@ public class OreDictManager {
 		ZR															.nugget(nugget_zirconium)	.billet(billet_zirconium)	.ingot(ingot_zirconium)		.dust(powder_zirconium)									.block(block_zirconium)																					.ore(ore_depth_zirconium);
 		ND															.nugget(fragment_neodymium)								.ingot(ingot_neodymium)		.dust(powder_neodymium)	.dustSmall(powder_neodymium_tiny)																										.ore(ore_depth_nether_neodymium)	.oreNether(ore_depth_nether_neodymium);
 		CE															.nugget(fragment_cerium)								.ingot(ingot_cerium)		.dust(powder_cerium)	.dustSmall(powder_cerium_tiny);
-		BR																													.ingot(ingot_bromine)		.dust(powder_bromine);
+		BR.toxic(5)																										.ingot(ingot_bromine)		.dust(powder_bromine);
 		LI	.hydro(1F)																									.ingot(lithium)				.dust(powder_lithium)	.dustSmall(powder_lithium_tiny)	.block(block_lithium)							.crystal(crystal_lithium)								.ore(ore_gneiss_lithium, ore_meteor_lithium);
 		P_WHITE	.hot(5)																								.ingot(ingot_phosphorus)															.block(block_white_phosphorus);
 		P_RED	.hot(2)																															.dust(powder_fire)										.block(block_red_phosphorus)					.crystal(crystal_phosphorus)							.ore(ore_nether_fire);
@@ -426,7 +426,7 @@ public class OreDictManager {
 		//Rads
 		CO															.nugget(fragment_cobalt, nugget_cobalt)				    .ingot(ingot_cobalt)		.dust(powder_cobalt)	.dustSmall(powder_cobalt_tiny)	.block(block_cobalt)							.crystal(crystal_cobalt)								.ore(ore_cobalt, ore_nether_cobalt);
 		CO60	.rad(HazardRegistry.co60).hot(1).cont(HazardRegistry.co60).nugget(nugget_co60)	.billet(billet_co60)	.ingot(ingot_co60)			.dust(powder_co60) 		.dustSmall(powder_co60_tiny);
-		SR												.hydro(1F)	.nugget(nugget_strontium)							.ingot(ingot_strontium)		.dust(powder_strontium);
+		SR											    .hydro(1F)	.nugget(nugget_strontium)							.ingot(ingot_strontium)		.dust(powder_strontium);
 		SR90	.rad(HazardRegistry.sr90).hot(1F).hydro(1F).cont(HazardRegistry.sr90).nugget(nugget_sr90).billet(billet_sr90).ingot(ingot_sr90)	.dust(powder_sr90)		.dustSmall(powder_sr90_tiny);
 		I																													.ingot(ingot_iodine)		.dust(powder_iodine) 	.dustSmall(powder_iodine_tiny);
 		I131	.rad(HazardRegistry.i131)	.hot(1F).cont(HazardRegistry.i131)											.ingot(ingot_i131)			.dust(powder_i131)  	.dustSmall(powder_i131_tiny);
@@ -437,15 +437,15 @@ public class OreDictManager {
 		XE135	.rad(HazardRegistry.xe135)	.cryo(6F).cont(HazardRegistry.xe135)																		.dust(powder_xe135)		.dustSmall(powder_xe135_tiny);
 		TS		.rad(HazardRegistry.ts).cont(HazardRegistry.ts)																.ingot(ingot_tennessine)	.dust(powder_tennessine);
 		NP237	.rad(HazardRegistry.np237).hot(1).cont(HazardRegistry.np237).nugget(nugget_neptunium).billet(billet_neptunium).ingot(ingot_neptunium).dust(powder_neptunium)									.block(block_neptunium);
-		PO210	.rad(HazardRegistry.po210).hot(3).cont(HazardRegistry.po210).nugget(nugget_polonium).billet(billet_polonium).ingot(ingot_polonium)	.dust(powder_polonium)									.block(block_polonium);
+		PO210	.rad(HazardRegistry.po210).hot(3).toxic(6000).cont(HazardRegistry.po210).nugget(nugget_polonium).billet(billet_polonium).ingot(ingot_polonium)	.dust(powder_polonium)									.block(block_polonium);
 		TC99	.rad(HazardRegistry.tc99)							.nugget(nugget_technetium)	.billet(billet_technetium)	.ingot(ingot_technetium);
 		RA226	.rad(HazardRegistry.ra226).hydro(3F).cont(HazardRegistry.ra226).nugget(nugget_ra226).billet(billet_ra226).ingot(ingot_ra226)			.dust(powder_ra226)										.block(block_ra226);
 		AC227	.rad(HazardRegistry.ac227).cont(HazardRegistry.ac227).nugget(nugget_ac227)		.billet(billet_ac227)		.ingot(ingot_ac227)			.dust(powder_ac227)		.dustSmall(powder_ac227_tiny);
 		AU198	.rad(HazardRegistry.au198).hot(5).cont(HazardRegistry.au198).nugget(nugget_au198).billet(billet_au198)	.ingot(ingot_au198)			.dust(powder_au198)		.dustSmall(powder_au198_tiny)	.block(block_au198);
-		PB209	.rad(HazardRegistry.pb209).hot(7).toxic(2).blinding(50F).cont(HazardRegistry.pb209).nugget(nugget_pb209).billet(billet_pb209).ingot(ingot_pb209).dust(powder_pb209).dustSmall(powder_pb209_tiny);
+		PB209	.rad(HazardRegistry.pb209).hot(7).toxic(1).blinding(50F).cont(HazardRegistry.pb209).nugget(nugget_pb209).billet(billet_pb209).ingot(ingot_pb209).dust(powder_pb209).dustSmall(powder_pb209_tiny);
 		GH336	.rad(HazardRegistry.gh336)							.nugget(nugget_gh336)		.billet(billet_gh336)		.ingot(ingot_gh336);
-		NEO 	.rad(HazardRegistry.radspice).hot(15).toxic(2).blinding(50F).hydro(4F).cont(HazardRegistry.radspice).nugget(nugget_radspice).ingot(ingot_radspice).dust(powder_radspice).dustSmall(powder_radspice_tiny).block(block_radspice);
-		MUD 	.rad(HazardRegistry.mud)																					.ingot(ingot_mud);
+		NEO 	.rad(HazardRegistry.radspice).hot(15).toxic(1000).blinding(50F).hydro(4F).cont(HazardRegistry.radspice).nugget(nugget_radspice).ingot(ingot_radspice).dust(powder_radspice).dustSmall(powder_radspice_tiny).block(block_radspice);
+		MUD 	.rad(HazardRegistry.mud).toxic(200)																		.ingot(ingot_mud);
 
 		AUSTRALIUM													.nugget(nugget_australium)								.ingot(ingot_australium)	.dust(powder_australium)								.block(block_australium)																				.ore(ore_australium);
 		REIIUM														.nugget(nugget_reiium)									.ingot(ingot_reiium)		.dust(powder_reiium)									.block(block_reiium)																					.ore(ore_reiium);

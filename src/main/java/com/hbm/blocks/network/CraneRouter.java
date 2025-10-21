@@ -153,5 +153,4 @@ public class CraneRouter extends BlockContainer implements IEnterableBlock {
 
     @Override public boolean canPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { return false; }
     @Override public void onPackageEnter(World world, int x, int y, int z, EnumFacing dir, IConveyorPackage entity) { }
-
 }

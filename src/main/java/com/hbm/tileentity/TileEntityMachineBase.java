@@ -117,10 +117,11 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 
 		int count = 0;
 
-		for(EnumFacing dir : EnumFacing.VALUES)
-			if(world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler)
-				count++;
-
+		for(EnumFacing dir : EnumFacing.VALUES) {
+            if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler) {
+                count++;
+            }
+        }
 		return count;
 	}
 

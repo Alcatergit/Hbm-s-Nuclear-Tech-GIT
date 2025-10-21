@@ -1348,7 +1348,8 @@ public class JeiRecipes {
 			return crackingRecipes;
 		crackingRecipes = new ArrayList<CrackingRecipe>();
 
-		for(Fluid fluid : CrackRecipes.recipeFluids.keySet()){
+		for(String f : CrackRecipes.recipeFluids.keySet()){
+            Fluid fluid = FluidRegistry.getFluid(f);
 			FluidStack[] outputFluids = CrackRecipes.getOutputsFromFluid(fluid);
 			List<ItemStack> outputIcons = new ArrayList<ItemStack>();
 			for(FluidStack fluidStacks : outputFluids){
@@ -1368,11 +1369,11 @@ public class JeiRecipes {
 			return fractioningRecipes;
 		fractioningRecipes = new ArrayList<FractioningRecipe>();
 
-		for(Fluid fluid : FractionRecipes.fractions.keySet()){
-			Quartet<Fluid, Fluid, Integer, Integer> recipe = FractionRecipes.getFractions(fluid);
+		for(String f : FractionRecipes.fractions.keySet()){
+			Quartet<Fluid, Fluid, Integer, Integer> recipe = FractionRecipes.getFractions(f);
 			
 			fractioningRecipes.add(new FractioningRecipe(
-					ItemFluidIcon.getStackWithQuantity(fluid, 1000),
+					ItemFluidIcon.getStackWithQuantity(FluidRegistry.getFluid(f), 1000),
 					Arrays.asList(
 						ItemFluidIcon.getStackWithQuantity(recipe.getW(), recipe.getY() * 10),
 						ItemFluidIcon.getStackWithQuantity(recipe.getX(), recipe.getZ() * 10)

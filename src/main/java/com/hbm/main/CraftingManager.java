@@ -499,7 +499,7 @@ public class CraftingManager {
 	public static void addPowderCrafting() {
 		addShapelessAuto(new ItemStack(ModItems.powder_tcalloy, 1), new Object[] { STEEL.dust(), TC99.nugget() });
 		addShapelessAuto(new ItemStack(ModItems.powder_ice, 4), new Object[] { Items.SNOWBALL, KNO.dust(), REDSTONE.dust() });
-		addShapelessAuto(new ItemStack(ModItems.powder_poison, 4), new Object[] { Items.SPIDER_EYE, REDSTONE.dust(), "gemQuartz" });
+		addShapelessAuto(new ItemStack(ModItems.powder_poison, 4), new Object[] { Items.SPIDER_EYE, REDSTONE.dust(), QUARTZ.gem(), PO210.nugget() });
 		addShapelessAuto(new ItemStack(ModItems.powder_power, 5), new Object[] { REDSTONE.dust(), "dustGlowstone", DIAMOND.dust(), NP237.dust(),  MAGTUNG.dust() });
 		addShapelessAuto(new ItemStack(ModItems.ballistite, 3), new Object[] { Items.GUNPOWDER, KNO.dust(), Items.SUGAR });
 		addShapelessAuto(new ItemStack(Items.GUNPOWDER, 3), new Object[]{S.dust(), KNO.dust(), Items.COAL});
@@ -2761,10 +2761,15 @@ public class CraftingManager {
 			add1To9(mat.block(), ingot);
 			add9To1(mat.ingot(), block);
 		}
-		if(gem != null && block != null && ingot == null){
-			add1To9(mat.block(), gem);
-			add9To1(mat.gem(), block);
-		}
+        if(ingot == null && block != null) {
+            if(gem != null) {
+                add1To9(mat.block(), gem);
+                add9To1(mat.gem(), block);
+            } else if(dust != null) {
+                add1To9(mat.block(), dust);
+                add9To1(mat.dust(), block);
+            }
+        }
 		if(ingot != null && wire != null){
 			add9To1(mat.wire(), ingot);
 		}

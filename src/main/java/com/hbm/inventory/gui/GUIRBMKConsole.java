@@ -83,9 +83,9 @@ public class GUIRBMKConsole extends GuiScreen {
 		int size = 10;
 
 		if(guiLeft + 86 <= mouseX && guiLeft + 86 + 150 > mouseX && guiTop + 11 < mouseY && guiTop + 11 + 10150 >= mouseY) {
-			int index = ((mouseX - bX - guiLeft) / size + (mouseY - bY - guiTop) / size * 15);
+			int index = (mouseX - bX - guiLeft) / size + 15 * (mouseY - bY - guiTop) / size;
 			
-			if(index > 0 && index < console.columns.length) {
+			if(index >= 0 && index < console.columns.length) {
 				RBMKColumn col = console.columns[index];
 				
 				if(col != null) {

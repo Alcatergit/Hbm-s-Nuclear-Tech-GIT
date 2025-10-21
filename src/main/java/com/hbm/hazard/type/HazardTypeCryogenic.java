@@ -26,7 +26,7 @@ public class HazardTypeCryogenic extends HazardTypeBase {
 			reacher = Library.checkForHeld((EntityPlayer) livingCEntity, ModItems.reacher);
 		
 		if(!reacher){
-			boolean isProtected = livingCEntity instanceof EntityPlayer && ArmorUtil.checkForHazmat((EntityPlayer)livingCEntity);
+			boolean isProtected = livingCEntity instanceof EntityPlayer && ArmorUtil.checkForHazmat(livingCEntity);
 			if(!isProtected){
 				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 110, (int)level-1));
 				livingCEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 110, Math.min(4, (int)level-1)));

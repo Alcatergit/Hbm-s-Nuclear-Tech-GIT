@@ -185,8 +185,15 @@ public class FFUtils {
 		}
 	}
 
-	public static void addFluidInfo(Fluid fluid, List<String> texts, boolean isAdvanced){
-		int temp = fluid.getTemperature()-273;
+    public static void addFluidInfo(Fluid fluid, List<String> texts, boolean isAdvanced) {
+        addFluidInfo(fluid, texts, isAdvanced, "");
+    }
+
+    public static void addFluidInfo(Fluid fluid, List<String> texts, boolean isAdvanced, String indent){
+        boolean isKeyPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+        boolean hasInfo = false;
+
+        int temp = fluid.getTemperature()-273;
 		if(temp != 27){
 			String tempColor = "";
 			if(temp < -130) {
@@ -206,14 +213,16 @@ public class FFUtils {
 			} else {
 				tempColor = "§d";
 			}
-			texts.add(String.format("%s%d°C", tempColor, temp));
+			texts.add(indent+String.format("%s%d°C", tempColor, temp));
 		}
-		boolean hasInfo = false;
-		boolean isKeyPressed = Keyboard.isKeyDown(Keyboard.KEY_LSHIFT);
+
+        if(isKeyPressed && isAdvanced){
+            texts.add(indent+"§bFluid Key: §3"+FluidRegistry.getDefaultFluidName(fluid));
+        }
 
 		if (FluidTypeHandler.isAntimatter(fluid)) {
 			if(isKeyPressed){
-				texts.add("§4["+I18n.format("trait.antimatter")+"]");
+				texts.add(indent+"§4["+I18n.format("trait.antimatter")+"]");
 			}
 			hasInfo = true;
 		}
@@ -221,27 +230,27 @@ public class FFUtils {
 		if (FluidTypeHandler.isCorrosivePlastic(fluid)) {
 			if (FluidTypeHandler.isCorrosiveIron(fluid)) {
 				if(isKeyPressed){
-					texts.add("§2["+I18n.format("trait.corrosiveIron")+"]");
+					texts.add(indent+"§2["+I18n.format("trait.corrosiveIron")+"]");
 				}
 			} else if(isKeyPressed){
-				texts.add("§a["+I18n.format("trait.corrosivePlastic")+"]");
+				texts.add(indent+"§a["+I18n.format("trait.corrosivePlastic")+"]");
 			}
 			hasInfo = true;
 		}
 
 		if (FluidFlameRecipes.hasFuelRecipe(fluid)) {
 			if(isKeyPressed){
-				texts.add("§6["+I18n.format("trait.flammable")+"]");
-				texts.add(" "+I18n.format("trait.flammable.desc", Library.getShortNumber(FluidFlameRecipes.getHeatEnergy(fluid) * 1000L)));
+				texts.add(indent+"§6["+I18n.format("trait.flammable")+"]");
+				texts.add(indent+" "+I18n.format("trait.flammable.desc", Library.getShortNumber(FluidFlameRecipes.getHeatEnergy(fluid) * 1000L)));
 			}
 			hasInfo = true;
 		}
 		if (FluidCombustionRecipes.hasFuelRecipe(fluid)) {
 			if(isKeyPressed){
-				texts.add("§c["+I18n.format("trait.combustable")+"]");
+				texts.add(indent+"§c["+I18n.format("trait.combustable")+"]");
 				
-				texts.add(" "+I18n.format("trait.combustable.desc", Library.getShortNumber(FluidCombustionRecipes.getCombustionEnergy(fluid))));
-				texts.add(" "+I18n.format("trait.combustable.desc2", I18n.format(FluidCombustionRecipes.getFuelGrade(fluid).getGrade())));
+				texts.add(indent+" "+I18n.format("trait.combustable.desc", Library.getShortNumber(FluidCombustionRecipes.getCombustionEnergy(fluid))));
+				texts.add(indent+" "+I18n.format("trait.combustable.desc2", I18n.format(FluidCombustionRecipes.getFuelGrade(fluid).getGrade())));
 			}
 			hasInfo = true;
 		}
@@ -249,8 +258,8 @@ public class FFUtils {
 		if (HeatRecipes.hasCoolRecipe(fluid)) {
 			if(isKeyPressed){
 				String heat = Library.getShortNumber(HeatRecipes.getResultingHeat(fluid) * 1000 / HeatRecipes.getInputAmountCold(fluid));
-				texts.add("§4["+I18n.format("trait.coolable")+"]");
-				texts.add(" "+I18n.format("trait.coolable.desc", heat));
+				texts.add(indent+"§4["+I18n.format("trait.coolable")+"]");
+				texts.add(indent+" "+I18n.format("trait.coolable.desc", heat));
 			}
 			hasInfo = true;
 		}
@@ -258,8 +267,8 @@ public class FFUtils {
 		if (HeatRecipes.hasBoilRecipe(fluid)) {
 			if(isKeyPressed){
 				String heat = Library.getShortNumber(HeatRecipes.getRequiredHeat(fluid) * 1000 / HeatRecipes.getInputAmountHot(fluid));
-				texts.add("§3["+I18n.format("trait.boilable")+"]");
-				texts.add(" "+I18n.format("trait.boilable.desc", heat));
+				texts.add(indent+"§3["+I18n.format("trait.boilable")+"]");
+				texts.add(indent+" "+I18n.format("trait.boilable.desc", heat));
 			}
 			hasInfo = true;
 		}
@@ -268,19 +277,15 @@ public class FFUtils {
 
 		if(dfcEff >= 1){
 			if(isKeyPressed){
-				texts.add("§5["+I18n.format("trait.dfcFuel")+"]");
+				texts.add(indent+"§5["+I18n.format("trait.dfcFuel")+"]");
 				dfcEff = (dfcEff-1F);
-				texts.add(" "+I18n.format("trait.dfcFuel.desc", dfcEff >= 0 ? "+"+Library.getPercentage(dfcEff) : Library.getPercentage(dfcEff)));
+				texts.add(indent+" "+I18n.format("trait.dfcFuel.desc", dfcEff >= 0 ? "+"+Library.getPercentage(dfcEff) : Library.getPercentage(dfcEff)));
 			}
 			hasInfo = true;
 		}
 
-		if(isKeyPressed && isAdvanced){
-			texts.add("§bFluid Key: §3"+FluidRegistry.getDefaultFluidName(fluid));
-		}
-
 		if (hasInfo && !isKeyPressed) {
-			texts.add(I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
+			texts.add(indent+I18nUtil.resolveKey("desc.tooltip.hold", "LSHIFT"));
 		}
 	}
 
@@ -398,10 +403,9 @@ public class FFUtils {
 			return returnValue;
 		}
 		ItemStack stack = slots.getStackInSlot(slot1);
-		if(stack.getItem() instanceof IItemFluidHandler) {
+		if(stack.getItem() instanceof IItemFluidHandler handler) {
 			boolean returnValue = false;
-			IItemFluidHandler handler = (IItemFluidHandler)stack.getItem();
-			FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
+            FluidStack contained = handler.drain(stack, Integer.MAX_VALUE, false);
 			if(contained != null)
 				if(tank.getFluid() == null || contained.getFluid() == tank.getFluid().getFluid()) {
 					tank.fill(handler.drain(stack, Math.min(6000, tank.getCapacity() - tank.getFluidAmount()), true), true);

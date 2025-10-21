@@ -14,7 +14,6 @@ public class HazardTypeExplosive extends HazardTypeBase {
 
 	@Override
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
-
 		if(!target.world.isRemote && target.isBurning()) {
 			stack.setCount(0);
 			target.world.newExplosion(null, target.posX, target.posY + target.getEyeHeight() - target.getYOffset(), target.posZ, level, false, true);

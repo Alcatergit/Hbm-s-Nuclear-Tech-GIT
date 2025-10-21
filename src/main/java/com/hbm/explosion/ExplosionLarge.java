@@ -59,7 +59,7 @@ public class ExplosionLarge {
 			fx.motionZ = vec.z;
 			world.spawnEntity(fx);
 			
-			vec = vec.rotateYaw(360 / count);
+			vec = vec.rotateYaw((float) 360 / count);
 		}
 	}
 	

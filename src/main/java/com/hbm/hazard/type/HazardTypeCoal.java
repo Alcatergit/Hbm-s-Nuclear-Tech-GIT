@@ -3,6 +3,7 @@ package com.hbm.hazard.type;
 import java.util.List;
 
 import com.hbm.capability.HbmLivingProps;
+import com.hbm.config.GeneralConfig;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.util.ArmorRegistry;
@@ -19,11 +20,12 @@ public class HazardTypeCoal extends HazardTypeBase {
 
 	@Override
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
-		
-		if(!ArmorRegistry.hasProtection(target, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE))
-			HbmLivingProps.incrementBlackLung(target, (int) Math.min(level, 10));
+		if(!GeneralConfig.enableCoal) return;
+        level *= stack.getCount();
+		if(ArmorRegistry.hasProtection(target, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE))
+            ArmorUtil.damageGasMaskFilter(target, (int) level);
 		else
-			ArmorUtil.damageGasMaskFilter(target, (int) level);
+			HbmLivingProps.incrementBlackLung(target, (int) Math.min(level, 10));
 	}
 
 	@Override
@@ -31,7 +33,8 @@ public class HazardTypeCoal extends HazardTypeBase {
 
 	@Override
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-		list.add("§8[" + I18nUtil.resolveKey("trait.coal") + "]");
+        if(GeneralConfig.enableCoal) {
+            list.add("§8[" + I18nUtil.resolveKey("trait.coal") + "]");
+        }
 	}
-
 }

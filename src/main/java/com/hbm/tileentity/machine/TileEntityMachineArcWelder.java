@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import api.hbm.energy.IEnergyUser;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RecipesCommon.AStack;
@@ -281,17 +282,17 @@ public class TileEntityMachineArcWelder extends TileEntityMachineBase implements
 	}
 
 	private static final int[][] rotSlots = {
-			{1, 0, 3, 2},//from south
-			{3, 2, 1, 0},//from north
-			{0, 3, 2, 1},//from east
-			{2, 1, 0, 3} //from west
+			{3, 0, 1, 2},//from south
+			{1, 2, 3, 0},//from north
+			{0, 1, 2, 3},//from east
+			{2, 3, 0, 1} //from west
 	};
 
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {//S-W-N-E 0123
 		if(e.getIndex() == 0) return new int[] { 3 };
-		if(e.getIndex() == 1) return new int[] { };
-		return new int[] { rotSlots[this.getBlockMetadata()-12][e.getHorizontalIndex()] };
+		if(e.getIndex() == 1) return new int[] { 0, 1, 2 };
+		return new int[] { rotSlots[this.getBlockMetadata()-BlockDummyable.offset-2][e.getHorizontalIndex()] };
 	}
 
 	@Override
@@ -329,32 +330,6 @@ public class TileEntityMachineArcWelder extends TileEntityMachineBase implements
 	public double getMaxRenderDistanceSquared() {
 		return 65536.0D;
 	}
-
-//	@Override
-//	public boolean canProvideInfo(UpgradeType type, int level, boolean extendedInfo) {
-//		return type == UpgradeType.SPEED || type == UpgradeType.POWER;
-//	}
-//
-//	@Override
-//	public void provideInfo(UpgradeType type, int level, List<String> info, boolean extendedInfo) {
-//		info.add(IUpgradeInfoProvider.getStandardLabel(ModBlocks.machine_arc_welder));
-//		if(type == UpgradeType.SPEED) {
-//			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_DELAY, "-" + (level * 100 / 6) + "%"));
-//			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(this.KEY_CONSUMPTION, "+" + (level * 100) + "%"));
-//		}
-//		if(type == UpgradeType.POWER) {
-//			info.add(EnumChatFormatting.GREEN + I18nUtil.resolveKey(this.KEY_CONSUMPTION, "-" + (level * 100 / 6) + "%"));
-//			info.add(EnumChatFormatting.RED + I18nUtil.resolveKey(this.KEY_DELAY, "+" + (level * 100 / 3) + "%"));
-//		}
-//	}
-//
-//	@Override
-//	public HashMap<UpgradeType, Integer> getValidUpgrades() {
-//		HashMap<UpgradeType, Integer> upgrades = new HashMap<>();
-//		upgrades.put(UpgradeType.SPEED, 3);
-//		upgrades.put(UpgradeType.POWER, 3);
-//		return upgrades;
-//	}
 	
 
 	@Override

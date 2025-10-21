@@ -79,10 +79,9 @@ public class HeatBoiler extends BlockDummyable implements ILookOverlay, ITooltip
 
                 TileEntity te = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 
-                if(!(te instanceof TileEntityHeatBoiler))
+                if(!(te instanceof TileEntityHeatBoiler boiler))
                     return false;
 
-                TileEntityHeatBoiler boiler = (TileEntityHeatBoiler) te;
                 Fluid type = ItemForgeFluidIdentifier.getType(player.getHeldItem(hand));
                 if(!HeatRecipes.hasBoilRecipe(type)){
                     player.sendMessage(new TextComponentString("§cNo recipe found for §e"+type.getLocalizedName(new FluidStack(type, 1))));

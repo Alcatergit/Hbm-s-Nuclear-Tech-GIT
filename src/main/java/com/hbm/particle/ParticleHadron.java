@@ -41,8 +41,9 @@ public class ParticleHadron extends Particle {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.disableLighting();
-		GlStateManager.enableBlend();
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+        GlStateManager.enableAlpha();
+        GlStateManager.enableBlend();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		RenderHelper.disableStandardItemLighting();
@@ -65,7 +66,9 @@ public class ParticleHadron extends Particle {
         Tessellator.getInstance().draw();
         
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GlStateManager.enableLighting();
-	}
-
+        GlStateManager.disableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.enableLighting();
+        GlStateManager.depthMask(true);
+    }
 }

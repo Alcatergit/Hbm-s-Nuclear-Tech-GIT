@@ -238,7 +238,7 @@ public abstract class EntityMissileBaseAdvanced extends Entity implements IChunk
 			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
 			return;
 		}
-		this.getDataManager().set(HEALTH, Integer.valueOf(this.health));
+		this.getDataManager().set(HEALTH, this.health);
 		
 		double oldPosY = this.posY;
 		this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);

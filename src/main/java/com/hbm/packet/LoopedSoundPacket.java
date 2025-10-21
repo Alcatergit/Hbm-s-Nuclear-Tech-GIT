@@ -77,7 +77,7 @@ public class LoopedSoundPacket implements IMessage {
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);
 				
-				if (te != null && te instanceof TileEntityMachineChemplant) {
+				if (te != null && te instanceof TileEntityMachineChemplant plant) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopChemplant.list.size(); i++)  {
@@ -87,11 +87,11 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineChemplant)te).isProgressing)
+					if(flag && te.getWorld().isRemote && plant.isProgressing)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopChemplant(HBMSoundHandler.chemplantOperate, te));
 				}
 
-				if (te != null && te instanceof TileEntityMachineChemfac) {
+				if (te != null && te instanceof TileEntityMachineChemfac fac) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopChemplant.list.size(); i++)  {
@@ -101,11 +101,11 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineChemfac)te).isProgressing)
+					if(flag && te.getWorld().isRemote && fac.isProgressing)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopChemplant(HBMSoundHandler.chemplantOperate, te));
 				}
 
-				if (te != null && te instanceof TileEntityFEL) {
+				if (te != null && te instanceof TileEntityFEL fel) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopFel.list.size(); i++)  {
@@ -115,11 +115,11 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityFEL)te).isOn)
+					if(flag && te.getWorld().isRemote && fel.isOn)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopFel(HBMSoundHandler.fel, te));
 				}
 
-				if (te != null && te instanceof TileEntityMachineMiningLaser) {
+				if (te != null && te instanceof TileEntityMachineMiningLaser la) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopFel.list.size(); i++)  {
@@ -129,37 +129,25 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineMiningLaser)te).isOn)
+					if(flag && te.getWorld().isRemote && la.isOn)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopFel(HBMSoundHandler.fel, te));
 				}
 				
-				if (te != null && te instanceof TileEntityMachineAssembler) {
-					
-					boolean flag = true;
-					for(int i = 0; i < SoundLoopAssembler.list.size(); i++)  {
+				if (te != null && te instanceof TileEntityMachineAssembler ass) {
+
+                    boolean flag = true;
+                    for (int i = 0; i < SoundLoopAssembler.list.size(); i++) {
                         if (SoundLoopAssembler.list.get(i).getTE() == te && !SoundLoopAssembler.list.get(i).isDonePlaying()) {
                             flag = false;
                             break;
                         }
-					}
-					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineAssembler)te).isProgressing)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopAssembler(HBMSoundHandler.assemblerOperate, te));
-				}
-				
-			/*	if (te != null && te instanceof TileEntityMachineIGenerator) {
-					
-					boolean flag = true;
-					for(int i = 0; i < SoundLoopIGen.list.size(); i++)  {
-						if(SoundLoopIGen.list.get(i).getTE() == te && !SoundLoopIGen.list.get(i).isDonePlaying())
-							flag = false;
-					}
-					
-					if(flag && te.getWorldObj().isRemote && ((TileEntityMachineIGenerator)te).torque > 0)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopIGen(new ResourceLocation("hbm:block.igeneratorOperate"), te));
-				}
-				*/
-				if (te != null && te instanceof TileEntityMachineTurbofan) {
+                    }
+
+                    if (flag && te.getWorld().isRemote && ass.isProgressing)
+                        Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopAssembler(HBMSoundHandler.assemblerOperate, te));
+                }
+
+				if (te != null && te instanceof TileEntityMachineTurbofan fan) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopTurbofan.list.size(); i++)  {
@@ -169,7 +157,7 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineTurbofan)te).isRunning)
+					if(flag && te.getWorld().isRemote && fan.isRunning)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(HBMSoundHandler.turbofanOperate, te));
 				}
 				
@@ -185,27 +173,18 @@ public class LoopedSoundPacket implements IMessage {
 					
 					int j = te.getPos().getX() + te.getPos().getY() + te.getPos().getZ();
 					int rand = Math.abs(j) % 3 + 1;
-					SoundEvent sound;
-					switch(rand){
-					case 1:
-						sound = HBMSoundHandler.broadcast1;
-						break;
-					case 2:
-						sound = HBMSoundHandler.broadcast2;
-						break;
-					case 3:
-						sound = HBMSoundHandler.broadcast3;
-						break;
-					default:
-						sound = HBMSoundHandler.broadcast1;
-						break;
-					}
-					
-					if(flag && te.getWorld().isRemote)
+					SoundEvent sound = switch (rand) {
+                        case 1 -> HBMSoundHandler.broadcast1;
+                        case 2 -> HBMSoundHandler.broadcast2;
+                        case 3 -> HBMSoundHandler.broadcast3;
+                        default -> HBMSoundHandler.broadcast1;
+                    };
+
+                    if(flag && te.getWorld().isRemote)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
 				}
 				
-				if (te != null && te instanceof TileEntityMachineCentrifuge) {
+				if (te != null && te instanceof TileEntityMachineCentrifuge cen) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {
@@ -216,11 +195,11 @@ public class LoopedSoundPacket implements IMessage {
 					}
 					
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineCentrifuge)te).isProgressing)
+					if(flag && te.getWorld().isRemote && cen.isProgressing)
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(HBMSoundHandler.centrifugeOperate, te));
 				}
 				
-				if (te != null && te instanceof TileEntityMachineGasCent) {
+				if (te != null && te instanceof TileEntityMachineGasCent gasCent) {
 					
 					boolean flag = true;
 					for(int i = 0; i < SoundLoopCentrifuge.list.size(); i++)  {
@@ -230,12 +209,11 @@ public class LoopedSoundPacket implements IMessage {
                         }
 					}
 					
-					if(flag && te.getWorld().isRemote && ((TileEntityMachineGasCent)te).isProgressing)
+					if(flag && te.getWorld().isRemote && gasCent.isProgressing && !gasCent.hasMuffler())
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCentrifuge(HBMSoundHandler.centrifugeOperate, te));
 				}
 			});
-			
-			
+
 			return null;
 		}
 	}

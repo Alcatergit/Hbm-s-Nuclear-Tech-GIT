@@ -202,30 +202,26 @@ public class HazardRegistry {
 		registerHazItem(bomb_waffle, 5F);
 		registerHazItem(schnitzel_vegan, 600F);
 		registerHazItem(cotton_candy, 0.25F);
-		HazardSystem.register(apple_lead, makeData(TOXIC, 2F));
-		HazardSystem.register(apple_lead1, makeData(TOXIC, 4F));
-		HazardSystem.register(apple_lead2, makeData(TOXIC, 8F));
+		HazardSystem.register(apple_lead, makeData(TOXIC, 1F));
+		HazardSystem.register(apple_lead1, makeData(TOXIC, 8F));
+		HazardSystem.register(apple_lead2, makeData(TOXIC, 72F));
 		registerHazItem(apple_schrabidium, 12F, 0, 50F);
 		registerHazItem(apple_schrabidium1, 120F, 0, 50F);
 		registerHazItem(apple_schrabidium2, 1200F, 0, 50F);
 		registerHazItem(glowing_stew, 2F);
-		registerHazItem(balefire_scrambled, radspice * powder + bf, 6F, 30F, 0, 6);
-		registerHazItem(balefire_and_ham, 2 * radspice * powder + bf, 30F, 30F, 0, 6);
+		registerHazItem(balefire_scrambled, radspice * powder + bf, 6F, 30F, 1000, 6);
+		registerHazItem(balefire_and_ham, 2 * radspice * powder + bf, 30F, 30F, 2000, 6);
 
-		// HazardSystem.register(cell_tritium, makeData(RADIATION, 0.001F));
-		// HazardSystem.register(cell_sas3, makeData(RADIATION, sas3).addEntry(BLINDING, 60F));
-		// HazardSystem.register(cell_balefire, makeData(RADIATION, 50F));
 		HazardSystem.register(powder_balefire, makeData(RADIATION, bf * powder).addEntry(HOT, 6).addEntry(CONTAMINATING, 500));
 		registerHazItem(egg_balefire_shard, bf * nugget);
 		registerHazItem(egg_balefire, bf * ingot);
 
-		HazardSystem.register(powder_poison, makeData(TOXIC, 30F));
-		HazardSystem.register(powder_cloud, makeData(TOXIC, 14F));
-		HazardSystem.register(nugget_mercury, makeData(TOXIC, 2F));
-		HazardSystem.register(bottle_mercury, makeData(TOXIC, 6F));
-		HazardSystem.register(pellet_mercury, makeData(TOXIC, 25F));
+		HazardSystem.register(powder_poison, makeData(TOXIC, 12000F));
+		HazardSystem.register(powder_cloud, makeData(TOXIC, 8000F));
+		HazardSystem.register(nugget_mercury, makeData(TOXIC, 60F));
+		HazardSystem.register(pellet_mercury, makeData(TOXIC, 30F));
+
 		HazardSystem.register(powder_ice, makeData(CRYOGENIC, 5F));
-		
 		HazardSystem.register(thermo_unit_endo, makeData(CRYOGENIC, 2F));
 		HazardSystem.register(thermo_unit_exo, makeData(HOT, 10F));
 		registerHazItem(levitation_unit, sa326 * nugget * 2);
@@ -375,7 +371,7 @@ public class HazardRegistry {
 		
 		registerHazItem(pellet_rtg_depleted_bismuth, 1F);
 		registerHazItem(pellet_rtg_depleted_lead, 0.5F, 0, 0, 2, 0);
-		registerHazItem(pellet_rtg_depleted_mercury, 4.25F, 0, 0, 4, 0);
+		registerHazItem(pellet_rtg_depleted_mercury, 4.25F, 0, 0, 720, 0);
 		registerHazItem(pellet_rtg_depleted_neptunium, 3.75F, 5);
 		registerHazItem(pellet_rtg_depleted_zirconium, 2);
 		
@@ -388,7 +384,7 @@ public class HazardRegistry {
 		registerHazItem(pellet_rtg_americium, rtg * am241, 10);
 		registerHazItem(pellet_rtg_polonium, rtg * po210, 15);
 		registerHazItem(pellet_rtg_gold, rtg * au198, 15);
-		registerHazItem(pellet_rtg_lead, rtg * pb209, 15, 5, 4, 0);
+		registerHazItem(pellet_rtg_lead, rtg * pb209, 15, 5, 2, 0);
 		registerHazItem(pellet_rtg_balefire, rtg * bf * 2, 20);
 		
 		registerHazItem(pellet_charged, 420);
@@ -577,12 +573,10 @@ public class HazardRegistry {
         registerHazItem(anvil_ferrouranium, ferro * 10);
         registerHazItem(anvil_schrabidate, sb * 10);
         HazardSystem.register(anvil_osmiridium, makeData(DIGAMMA, 0.4F));
+        registerHazItem(glow_spawner, bf * 0.1F);
 
-		//Fluid Hazards
-		for(Fluid entry : FluidRegistry.getRegisteredFluids().values()) {
-			if(FluidTypeHandler.noContainer(entry)) continue;
-			registerFluidBasic(entry);
-		}
+        //Fluid Hazards
+
 		registerFluid("radwater_fluid", 4, 0);
 		registerFluid("hydrogen", 0, 0, 0, 4, 0);
 		registerFluid("deuterium", 0, 0, 0, 4, 0);
@@ -592,19 +586,24 @@ public class HazardRegistry {
 		registerFluid("sas3", 20, 50);
 		registerFluid("wastefluid", 80, 0);
 		registerFluid("wastegas", 70, 0);
-		registerFluid("toxic_fluid", 1000, 0);
-		registerFluid("watz", 400, 0, 8, 0, 0);
-		registerFluid("mud_fluid", 400, 0, 8, 0, 0);
-		registerFluid("radiosolvent", 200, 0, 2, 0, 0);
+		registerFluid("toxic_fluid", 1000, 0, 50, 0, 0);
+		registerFluid("mud_fluid", 400, 0, 800, 0, 0);
+		registerFluid("radiosolvent", 200, 0, 200, 0, 0);
 		registerFluid("schrabidic", 700, 20);
 		registerFluid("corium_fluid", 10000, 0);
-		registerFluid("mercury", 0, 0, 3, 0, 0);
-		registerFluid("gasoline", 0, 0, 2, 0, 0);
+		registerFluid("mercury", 0, 0, 2, 0, 0);
+		registerFluid("gasoline", 0, 0, 1, 0, 0);
 		registerFluid("balefire", 20000, 0);
 		registerFluid("liquid_osmiridium", 20, 0, 0, 0, 0.005F);
-		
-		registerFluid("poison", 0, 0, 7, 0, 0);
-		/*
+        registerFluid("iongel", 1, 0);
+
+        registerFluid("poison", 0, 0, 7000, 0, 0);
+        registerFluid("liquidlithium", 0, 0, 0, 5, 0);
+        registerFluid("liquidtritium", 0.5F, 0, 0, 4, 0);
+        registerFluid("liquiddeuterium", 0, 0, 0, 4, 0);
+        registerFluid("liquidhydrogen", 0, 0, 0, 4, 0);
+        registerFluid("nitroglycerin", 0, 0, 0, 10, 0);
+        /*
 		 * Blacklist
 		 */
 		// for(String ore : TH232.ores()) HazardSystem.blacklist(ore);
@@ -613,6 +612,13 @@ public class HazardRegistry {
 		
 		registerTrafos();
 	}
+
+    public static void registerFluidTemps(){
+        for(Fluid entry : FluidRegistry.getRegisteredFluids().values()) {
+            if(FluidTypeHandler.noContainer(entry)) continue;
+            registerFluidBasic(entry);
+        }
+    }
 
 	public static void registerBedrockOreHazards(){
 		for(Map.Entry<Integer, String> e : BedrockOreRegistry.oreIndexes.entrySet()) {

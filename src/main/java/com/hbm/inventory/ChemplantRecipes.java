@@ -161,7 +161,7 @@ public class ChemplantRecipes {
 		
 		makeRecipe(570, "YELLOWCAKE", new AStack[] { new OreDictStack(U.dust(), 1), new OreDictStack(S.dust(), 2) }, new FluidStack[]{ new FluidStack(ModForgeFluids.ACID, 500) }, new AStack[] { new ComparableStack(ModItems.powder_yellowcake, 1) }, null, 250);
 		
-		makeRecipe(580, "UF6", new AStack[] { new ComparableStack(ModItems.powder_yellowcake, 1), new OreDictStack(F.dust(), 3) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.UF6, 1000) }, 100);
+		makeRecipe(580, "UF6", new AStack[] { new ComparableStack(ModItems.powder_yellowcake, 1), new OreDictStack(F.dust(), 3) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000) }, new AStack[] { new ComparableStack(ModItems.sulfur, 2) }, new FluidStack[]{ new FluidStack(ModForgeFluids.UF6, 1000) }, 100);
 		
 		makeRecipe(590, "PUF6", new AStack[] { new OreDictStack(PU.dust(), 1), new OreDictStack(F.dust(), 3) }, new FluidStack[]{ new FluidStack(FluidRegistry.WATER, 1000) }, null, new FluidStack[]{ new FluidStack(ModForgeFluids.PUF6, 1000) }, 150);
 		

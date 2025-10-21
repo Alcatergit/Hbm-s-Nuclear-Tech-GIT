@@ -272,10 +272,15 @@ public class Library {
 	public static int getColorFromItemStack(ItemStack stack){
 		ResourceLocation path = null;
 		ResourceLocation actualPath = null;
-		TextureAtlasSprite sprite = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(stack.getItem(), stack.getMetadata());
-        path = new ResourceLocation(sprite.getIconName() + ".png");
-        actualPath = new ResourceLocation(path.getNamespace(), "textures/"+path.getPath());
-        return getColorFromResourceLocation(actualPath);
+        int color = 0;
+        try{
+            TextureAtlasSprite sprite = Minecraft.getMinecraft().getRenderItem().getItemModelMesher().getParticleIcon(stack.getItem(), stack.getMetadata());
+            path = new ResourceLocation(sprite.getIconName() + ".png");
+            actualPath = new ResourceLocation(path.getNamespace(), "textures/"+path.getPath());
+            return getColorFromResourceLocation(actualPath);
+        } catch (NullPointerException e) {
+            return 0;
+        }
 	}
 
 	public static int getColorFromResourceLocation(ResourceLocation r){

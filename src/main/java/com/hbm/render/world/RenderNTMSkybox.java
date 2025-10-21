@@ -1,5 +1,6 @@
 package com.hbm.render.world;
 
+import com.hbm.main.MainRegistry;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.capability.HbmLivingProps;
@@ -42,7 +43,11 @@ public class RenderNTMSkybox extends IRenderHandler { //why an abstract class us
 	public void render(float partialTicks, WorldClient world, Minecraft mc) {
 		
 		if(parent != null) {
-			parent.render(partialTicks, world, mc);
+            try {
+                parent.render(partialTicks, world, mc);
+            } catch (Exception e) {
+                MainRegistry.logger.warn("NTM SKY normal sky Background Rendering Crashed with: {}", String.valueOf(e));
+            }
 		} else{
 			RenderGlobal rg = Minecraft.getMinecraft().renderGlobal;
 			world.provider.setSkyRenderer(null);
@@ -73,7 +78,7 @@ public class RenderNTMSkybox extends IRenderHandler { //why an abstract class us
 		FMLClientHandler.instance().getClient().renderEngine.bindTexture(digammaStar);
 		
 		float digamma = HbmLivingProps.getDigamma(Minecraft.getMinecraft().player);
-		float var12 = 1F * (1 + digamma * 0.25F);
+		float var12 = 1 + digamma * 0.25F;
 		double dist = 100D - digamma * 2.5;
 		
 		Tessellator tessellator = Tessellator.getInstance();

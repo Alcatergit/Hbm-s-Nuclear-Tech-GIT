@@ -25,6 +25,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 
@@ -57,9 +58,9 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos1, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ){
-		if(!world.isRemote && !player.isSneaking()) {
+		if(!player.isSneaking()) {
 			
-			if(player.getHeldItem(hand).isEmpty() || player.getHeldItem(hand).getItem() == ModItems.forge_fluid_identifier) {
+			if(!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() instanceof ItemForgeFluidIdentifier) {
 				int[] pos = this.findCore(world, pos1.getX(), pos1.getY(), pos1.getZ());
 					
 				if(pos == null)
@@ -67,12 +68,10 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 				
 				TileEntity te = world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2]));
 				
-				if(!(te instanceof TileEntityMachineFractionTower))
+				if(!(te instanceof TileEntityMachineFractionTower frac))
 					return false;
-				
-				TileEntityMachineFractionTower frac = (TileEntityMachineFractionTower) te;
-				
-				if(player.getHeldItem(hand).isEmpty()) {
+
+                if(player.getHeldItem(hand).isEmpty()) {
 					if(world.isRemote){
 						player.sendMessage(new TextComponentTranslation("chat.fractioning.y", pos[1]));
 
@@ -93,10 +92,10 @@ public class MachineFractionTower extends BlockDummyable implements ILookOverlay
 							}
 							return false;
 						}
-						
-						frac.setTankType(0, type);
-						frac.markDirty();
-						if(world.isRemote){
+						if(!world.isRemote){
+						    frac.setTankType(0, type);
+						    frac.markDirty();
+                        } else {
 							player.sendMessage(new TextComponentTranslation("chat.fractioning.changedto", I18n.format(type.getUnlocalizedName())));
 						}
 					}

@@ -19,8 +19,7 @@ public class TileEntityDeconRad extends TileEntity implements ITickable {
 	private static final float decayRate = 0.9998074776F; //30m halflife
 
 	public TileEntityDeconRad() {
-		super();
-		radRemove = 0.5F;
+		this(0.5F);
 	}
 
 	public TileEntityDeconRad(float rad) {

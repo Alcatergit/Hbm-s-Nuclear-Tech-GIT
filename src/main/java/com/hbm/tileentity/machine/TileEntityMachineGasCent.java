@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.GasCentrifugeRecipes;
@@ -211,18 +212,25 @@ public class TileEntityMachineGasCent extends TileEntityMachineBase implements I
                 if(this.progress >= this.processTime) {
 					process();
 				}
-				
+                PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
+
 			} else {
 				isProgressing = false;
 				this.progress = 0;
 			}
 
-            if(countMufflers() == 0) PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
             detectAndSendChanges();
 		}
-
-		
 	}
+
+    public boolean hasMuffler() {
+        for(EnumFacing dir : EnumFacing.VALUES) {
+            if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler) {
+                return true;
+            }
+        }
+        return false;
+    }
 	
 	private long detectPower;
 	private int detectProgress;

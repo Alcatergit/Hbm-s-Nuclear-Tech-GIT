@@ -20,8 +20,7 @@ public class InventoryHelper {
 		if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
 			return;
 		IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		for (int i = 0; i < inventory.getSlots(); ++i)
-        {
+		for (int i = 0; i < inventory.getSlots(); ++i) {
             ItemStack itemstack = inventory.getStackInSlot(i);
 
             if (!itemstack.isEmpty())
@@ -30,6 +29,23 @@ public class InventoryHelper {
             }
         }
 	}
+
+    public static void dropInventoryItems(World world, BlockPos pos, ICapabilityProvider t, int from, int to) {
+        if(t == null)
+            return;
+        if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
+            return;
+        IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
+        for (int i = 0; i < inventory.getSlots(); ++i) {
+            if(i < from || i > to) continue;
+            ItemStack itemstack = inventory.getStackInSlot(i);
+
+            if (!itemstack.isEmpty())
+            {
+                spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), itemstack);
+            }
+        }
+    }
 	
 	public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack)
     {

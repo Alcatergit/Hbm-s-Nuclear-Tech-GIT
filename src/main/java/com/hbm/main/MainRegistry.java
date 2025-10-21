@@ -1043,6 +1043,7 @@ public class MainRegistry {
 		BlockCrate.setDrops();
 		BedrockOreRegistry.registerBedrockOres();
 		HazardRegistry.registerBedrockOreHazards();
+        HazardRegistry.registerFluidTemps();
 		FluidTypeHandler.registerFluidProperties();
 		CraftingManager.addBedrockOreSmelting();
 		ShredderRecipes.registerShredder();

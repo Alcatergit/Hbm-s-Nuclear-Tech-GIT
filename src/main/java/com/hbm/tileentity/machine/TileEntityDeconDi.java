@@ -12,8 +12,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 public class TileEntityDeconDi extends TileEntity implements ITickable {
 
 	private static float digammaRemove;
-	public TileEntityDeconDi(float dig) {
-		super();
+    public TileEntityDeconDi() {
+        this(0.001F);
+    }
+
+    public TileEntityDeconDi(float dig) {
+        super();
 		digammaRemove = dig;
 	}
 
