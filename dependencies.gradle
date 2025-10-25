@@ -55,6 +55,8 @@ dependencies {
 
     compileOnly rfg.deobf("curse.maven:inventory-tweaks-223094:2482481")
 
+    //compileOnly rfg.deobf("curse.maven:roboticparts-283377:3366534")
+
     implementation rfg.deobf('curse.maven:had-enough-items-557549:5471944')
 
     implementation 'com.google.guava:guava:31.0.1-jre'

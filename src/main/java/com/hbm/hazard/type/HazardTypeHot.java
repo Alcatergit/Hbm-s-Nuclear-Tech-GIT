@@ -19,9 +19,9 @@ public class HazardTypeHot extends HazardTypeBase {
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
 		
 		boolean reacher = false;
-		
-		if(target instanceof EntityPlayer && !GeneralConfig.enable528)
-			reacher = Library.checkForHeld((EntityPlayer) target, ModItems.reacher);
+
+        if(target instanceof EntityPlayer player && !GeneralConfig.enable528)
+            reacher = Library.checkForHeld(player, ModItems.reacher) || Library.checkForBauble(player, ModItems.reacher);
 		
 		if(!reacher && !target.isWet())
 			target.setFire((int) Math.ceil(level));

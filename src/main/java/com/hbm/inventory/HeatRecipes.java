@@ -9,7 +9,6 @@ import com.hbm.blocks.BlockBaseVisualFluidConnectable;
 import com.hbm.forgefluid.ModForgeFluids;
 
 import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidRegistry;
 
 public class HeatRecipes {
@@ -23,7 +22,6 @@ public class HeatRecipes {
 	public static HashMap<String, Integer> resultingTU = new HashMap<String, Integer>();
 	public static HashMap<String, Integer> inputAmountCold = new HashMap<String, Integer>();
 	public static HashMap<String, Integer> outputAmountCold = new HashMap<String, Integer>();
-
 	//for 100 mb
 	public static void registerHeatRecipes() {
 		addBoilRecipe(FluidRegistry.WATER, 1, ModForgeFluids.STEAM, 100, 100);
@@ -39,7 +37,7 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe(ModForgeFluids.COOLANT, 1, ModForgeFluids.HOTCOOLANT, 1, 500);
 
 		//Compat
-		addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
+        addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
 		addBoilRecipe("oil_medium", 1, "hotoil", 1, 300);
 		addBoilRecipe("oilgc", 1, "hotoil", 1, 300); //galacticraft
 		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft & industrialforegoing

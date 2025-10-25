@@ -5,7 +5,7 @@ import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityLoadedBase extends TileEntity implements ILoadedTile {
 	
-	public boolean isLoaded = true;
+	public boolean isLoaded = false;
 	
 	@Override
 	public boolean isLoaded() {
@@ -17,4 +17,10 @@ public class TileEntityLoadedBase extends TileEntity implements ILoadedTile {
 		super.onChunkUnload();
 		this.isLoaded = false;
 	}
+
+    @Override
+    public void onLoad() {
+        super.onLoad();
+        this.isLoaded = true;
+    }
 }

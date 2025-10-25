@@ -58,13 +58,13 @@ public class ContainerMachineGasFlare extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 			
-            if (par2 <= 4) {
-				if (!this.mergeItemStack(var5, 5, this.inventorySlots.size(), false))
+            if (par2 <= 5) {
+				if (!this.mergeItemStack(var5, 6, this.inventorySlots.size(), false))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 5, false))
+			else if (!this.mergeItemStack(var5, 0, 6, false))
 			{
 					return ItemStack.EMPTY;
 			}

@@ -51,39 +51,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5, y, z + 0.5);
         GlStateManager.disableLighting();
-		/*GL11.glPushMatrix();
-        GL11.glTranslated(x + 0.5D, y, z + 0.5D);
-        
-        //Drillgon200: Aha! I finally started using bob's tester block!
-        Quaternion identity = new Quaternion();
-        Quaternion q = new Quaternion(0, 0.7071068F, 0, 0.7071068F);
-        Quaternion a = identity;
-        Quaternion b = q;
-        float t = 0.5F;
-        
-        Quaternion r = new Quaternion();
-		float t_ = 1 - t;
-		float Wa, Wb;
-		float theta = (float) Math.acos(Quaternion.dot(a, b));
-		
-		float sn = (float) Math.sin(theta);
-		Wa = (float) (Math.sin(t_*theta) / sn);
-		Wb = (float) (Math.sin(t*theta) / sn);
-		if(sn == 0)
-			Wa = Wb = 1;
-		
-		r.x = Wa*a.x + Wb*b.x;
-		r.y = Wa*a.y + Wb*b.y;
-		r.z = Wa*a.z + Wb*b.z;
-		r.w = Wa*a.w + Wb*b.w;
-		
-		r.normalise(r);
-		//System.out.println(r);
-        
-        //System.out.println(q);
 
-        GL11.glPopMatrix();*/
-        
         GL11.glPushMatrix();
         GL11.glTranslated(0, 8, 0);
         Vec3d player = new Vec3d(x + 0.5, y + 8, z + 0.5);
@@ -91,34 +59,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.enableBlend();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
         bindTexture(ResourceManager.turbofan_blades_tex);
-        /* LightningGenInfo l = new LightningGenInfo();
-        l.randAmount = 0.7F;
-        l.subdivisions = 3;
-        l.forkChance = 0.6F;
-	    LightningNode n = LightningGenerator.generateLightning(new Vec3d(0, 10, 0), new Vec3d(0, 0, 0), l);
-	    ResourceManager.test_trail.use();
-	    GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 1F, 1F, 1F, 1F);
-	    //TrailRenderer2.draw(player, Arrays.asList(new Vec3d(0, 0, 0), new Vec3d(0, 1, 0), new Vec3d(1, 2, 0)), 0.2F);
-	    int bruh3 = GL11.glGenLists(1);
-	    
-	    GL11.glNewList(bruh3, GL11.GL_COMPILE);
-	    
-	    LightningGenerator.render(n, player, 0.05F);
-	    
-	    GL11.glEndList();
-	    
-	    GL11.glCallList(bruh3);
-	    
-	    HbmShaderManager2.bloomData.bindFramebuffer(false);
-	    float mult = 1F;
-	    GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.test_trail.getShaderId(), "duck"), 0.6F*mult, 0.8F*mult, 1F*mult, 1F);
-	    GL11.glCallList(bruh3);
-	    GL11.glCallList(bruh3);
-	    GL11.glCallList(bruh3);
-	    Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);
-	    HbmShaderManager2.releaseShader();
-	    GL11.glDeleteLists(bruh3, 1);*/
-	   
+
         GlStateManager.enableCull();
         GlStateManager.disableBlend();
         
@@ -129,16 +70,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         //Drillgon200: The thing is dead.
         bindTexture(ResourceManager.bobkotium_tex);
         ResourceManager.nikonium.renderAll();
-        /*HbmShaderManager2.bloomData.bindFramebuffer(false);
-        ResourceManager.bloom_test.use();
-        ResourceManager.nikonium.renderAll();
-        float aeug = (float) Math.sin((te.getWorld().getTotalWorldTime()+partialTicks)*0.15)*0.5F+0.65F;
-        float aeug2 = (float) Math.sin((te.getWorld().getTotalWorldTime()+partialTicks)*0.15+0.2)*0.5F+0.65F;
-        GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 1F*aeug, 0.2F*aeug2, 0, 1);
-        GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 2F*aeug, 1.3F*aeug, 1*aeug, 1);
-       // GL20.glUniform4f(GL20.glGetUniformLocation(ResourceManager.bloom_test.getShaderId(), "color"), 0F, 1F, 0, 1);
-        HbmShaderManager2.releaseShader();
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(false);*/
+
         
         
         GL11.glTranslated(0, 4, 0);
@@ -149,21 +81,21 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         Vec3d nor = new Vec3d(0, 1, 1).normalize();
         float[] plane = new float[]{(float)nor.x, (float)nor.y, (float)nor.z, -0.5F};
         GlStateManager.disableDepth();
-        HbmShaderManager2.distort(0.5F, () -> {
-        	for(Pair<Matrix4f, ModelRenderer> p : boxes){
-            	GL11.glPushMatrix();
-            	BufferBuilder buf = Tessellator.getInstance().getBuffer();
-            	buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
-            	for(ModelBox b : p.getRight().cubeList){
-            		VertexData[] dat = ModelRendererUtil.cutAndCapModelBox(b, plane, p.getLeft());
-            		//dat[0].tessellate(buf);
-            		dat[1].tessellate(buf, false);
-            		//dat[2].tessellate(buf, true);
-            	}
-            	Tessellator.getInstance().draw();
-            	GL11.glPopMatrix();
-            }
-        });
+//        HbmShaderManager2.distort(0.5F, () -> {
+//        	for(Pair<Matrix4f, ModelRenderer> p : boxes){
+//            	GL11.glPushMatrix();
+//            	BufferBuilder buf = Tessellator.getInstance().getBuffer();
+//            	buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_TEX);
+//            	for(ModelBox b : p.getRight().cubeList){
+//            		VertexData[] dat = ModelRendererUtil.cutAndCapModelBox(b, plane, p.getLeft());
+//            		//dat[0].tessellate(buf);
+//            		dat[1].tessellate(buf, false);
+//            		//dat[2].tessellate(buf, true);
+//            	}
+//            	Tessellator.getInstance().draw();
+//            	GL11.glPopMatrix();
+//            }
+//        });
         GlStateManager.enableDepth();
         GL11.glTranslated(0, -7, 0);
         GL11.glRotatef(90, 0, 1, 0);
@@ -220,42 +152,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
         GlStateManager.color(0.5F, 1F, 0.5F, 0.6F);
         GlStateManager.color(1, 1, 1);
-        
-        
-        /*bindTexture(ResourceManager.bfg_beam2);
-        GlStateManager.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL14.GL_MIRRORED_REPEAT);
-        
-        float time = te.getWorld().getTotalWorldTime() + partialTicks;
-        time *= 0.25;
-        
-        GL11.glScaled(1, 2, 1);
-        
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        for(int i = 0; i < 5; i ++){
-        	int offset = i*20;
-        	int texFlip = i % 2 == 1 ? 1 : 0;
-        	buf.pos(-25+offset, -1, 0).tex(0+texFlip+time, 0).endVertex();
-            buf.pos(-25+offset, 12, 0).tex(0+texFlip+time, 1).endVertex();
-            buf.pos(-5+offset, 12, 0).tex(1+texFlip+time, 1).endVertex();
-            buf.pos(-5+offset, -1, 0).tex(1+texFlip+time, 0).endVertex();
-        }
-        tes.draw();
-        GL11.glScaled(5, 1, 1);
-        
-        time *= 2;
-        
-        bindTexture(ResourceManager.bfg_beam1);
-        HbmShaderManager.useShader2(HbmShaderManager.bfg_beam);
-        GlStateManager.color(1F, 1F, 1F, 1F);
-        
-        buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-        buf.pos(-5, 4, 0).tex(0+time, 0).endVertex();
-        buf.pos(-5, 6, 0).tex(0+time, 1).endVertex();
-        buf.pos(15, 6, 0).tex(1+time, 1).endVertex();
-        buf.pos(15, 4, 0).tex(1+time, 0).endVertex();
-        tes.draw();
-        
-        HbmShaderManager.releaseShader2();*/
+
         
         int index = (int) ((System.currentTimeMillis()%1000000)/10F%64);
         float size = 1/8F;
@@ -267,22 +164,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
         int bruh = GL11.glGetInteger(GL11.GL_TEXTURE_BINDING_2D);
         GL13.glActiveTexture(GL13.GL_TEXTURE0);
         GlStateManager.bindTexture(bruh);
-        //HbmShaderManager2.bloomBuffers[6].bindFramebufferTexture();
-        
-       // buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
-       /* buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();
-        buf.pos(-1, 1, 0).tex(u+size, v).endVertex();
-        buf.pos(1, 1, 0).tex(u, v).endVertex();
-        buf.pos(1, -1, 0).tex(u, v+size).endVertex();
-        buf.pos(-1, -1, 0).tex(u+size, v+size).endVertex();
-        buf.pos(-1, 1, 0).tex(u+size, v).endVertex();
-        buf.pos(1, 1, 0).tex(u, v).endVertex();
-        buf.pos(1, -1, 0).tex(u, v+size).endVertex();*/
-        /*buf.pos(-1, -1, 0).tex(0, 0).endVertex();
-        buf.pos(-1, 1, 0).tex(0, 1).endVertex();
-        buf.pos(1, 1, 0).tex(1, 1).endVertex();
-        buf.pos(1, -1, 0).tex(1, 0).endVertex();
-        tes.draw();*/
+
         GlStateManager.disableBlend();
         ResourceManager.test.draw();
         GlStateManager.enableBlend();
@@ -313,53 +195,7 @@ public class RenderObjTester extends TileEntitySpecialRenderer<TileEntityObjTest
 		} else {
 			BeamPronter.gluonBeam(Vec3.createVectorHelper(0, 0, 0), Vec3.createVectorHelper(11, 0, 0), 0.8F);
 		}
-		
-		/*if(spikeV == -1){
-			FloatBuffer buffer = GLAllocation.createDirectFloatBuffer(16);
-			GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);
-			spikeV = LensSpikeVisibilityHandler.generate(buffer);
-		}
-		
-		FloatBuffer buffer = LensSpikeVisibilityHandler.getMatrixBuf(spikeV);
-		buffer.rewind();
-		GL11.glGetFloat(GL11.GL_MODELVIEW_MATRIX, buffer);*/
-		/*GL11.glTranslated(0, 5, 0);
-		AxisAlignedBB bb1 = new AxisAlignedBB(0, 0, 0, 1, 1, 1);
-		AxisAlignedBB bb2 = new AxisAlignedBB(0, 0, 0, 1, 1, 1).offset(-0.2, 0.7, 0.1);
-		Collider a = new AABBCollider(bb1, 1);
-		Collider b = new AABBCollider(bb2, 1);
-		GJKInfo info = GJK.colliding(null, null, a, b);
-		boolean c = info.result == Result.COLLIDING;
-		boolean doOffset = c && false;
-		GlStateManager.disableTexture2D();
-		GlStateManager.glLineWidth(4);
-		RenderGlobal.drawSelectionBoundingBox(bb1, 1, c?0:1, c?0:1, 1);
-		if(doOffset){
-			RenderGlobal.drawSelectionBoundingBox(bb2.offset(info.normal.toVec3d().scale(info.depth)), 1, c?0:1, c?0:1, 1);
-		} else {
-			RenderGlobal.drawSelectionBoundingBox(bb2, 1, c?0:1, c?0:1, 1);
-		}
-		if(c){
-			buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
-			Vec3 normal = info.normal.mult(info.depth);
-			buf.pos(info.contactPointA.xCoord, info.contactPointA.yCoord, info.contactPointA.zCoord).color(c?0F:1F, c?0F:1F, 1F, 1F).endVertex();
-			buf.pos(info.contactPointA.xCoord-normal.xCoord, info.contactPointA.yCoord-normal.yCoord, info.contactPointA.zCoord-normal.xCoord).color(c?0F:1F, c?0F:1F, 1F, 1F).endVertex();
-			
-			buf.pos(info.contactPointB.xCoord, info.contactPointB.yCoord, info.contactPointB.zCoord).color(c?0F:1F, 1F, c?0F:1F, 1F).endVertex();
-			buf.pos(info.contactPointB.xCoord+normal.xCoord, info.contactPointB.yCoord+normal.yCoord, info.contactPointB.zCoord+normal.xCoord).color(c?0F:1F, 1F, c?0F:1F, 1F).endVertex();
-			tes.draw();
-			
-			GL11.glPointSize(16);
-			buf.begin(GL11.GL_POINTS, DefaultVertexFormats.POSITION_COLOR);
-			buf.pos(info.contactPointA.xCoord, info.contactPointA.yCoord, info.contactPointA.zCoord).color(c?0F:1F, c?0F:1F, 1F, 1F).endVertex();
-			buf.pos(info.contactPointB.xCoord, info.contactPointB.yCoord, info.contactPointB.zCoord).color(c?0F:1F, 1F, c?0F:1F, 1F).endVertex();
-			tes.draw();
-		}*/
-		//List<BakedQuad> list = Minecraft.getMinecraft().getBlockRendererDispatcher().getModelForState(ModBlocks.yellow_barrel.getDefaultState()).getQuads(ModBlocks.yellow_barrel.getDefaultState(), null, 0);
-		//BakedQuad q = list.get(0);
-		//System.out.println(q.getVertexData());
-		//System.out.println(Float.intBitsToFloat(q.getVertexData()[5]));
-		
+
 		GlStateManager.enableTexture2D();
 		
         GlStateManager.enableCull();

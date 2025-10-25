@@ -29,6 +29,7 @@ import net.minecraftforge.items.ItemStackHandler;
 public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor
 {
     public ItemStackHandler inventory;
+    public static final int maxRecursions = 2000;
 
     public long power;
     public int warning;
@@ -166,7 +167,7 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
 
     public void succ1(int x, int y, int z, int recDepth) {
         BlockPos newPos = new BlockPos(x, y, z);
-        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && !processed.contains(newPos) && recDepth < 100) {
+        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && !processed.contains(newPos) && recDepth < maxRecursions) {
             processed.add(newPos);
             succInit1(x, y, z, recDepth+1);
         }
@@ -174,7 +175,7 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
 
     public void succ2(int x, int y, int z, int recDepth) {
         BlockPos newPos = new BlockPos(x, y, z);
-        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && processed.contains(newPos) && recDepth < 100) {
+        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && processed.contains(newPos) && recDepth < maxRecursions) {
             processed.remove(newPos);
             succInit2(x, y, z, recDepth+1);
         } else if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil || world.getBlockState(newPos).getBlock() == ModBlocks.ore_bedrock_oil) {

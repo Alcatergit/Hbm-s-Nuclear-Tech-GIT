@@ -38,16 +38,15 @@ public class RBMKOutgasserRecipes {
 		addRecipe(1200, LI.dust(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.TRITIUM, 800));
 		addRecipe(1500, LI.ingot(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.TRITIUM, 800));
 		addRecipe(10000, LI.block(), ItemFluidIcon.getStackWithQuantity(ModForgeFluids.TRITIUM, 8000));
-		addRecipe(6000, Blocks.BROWN_MUSHROOM, new ItemStack(ModBlocks.mush));
-		addRecipe(6000, Blocks.RED_MUSHROOM, new ItemStack(ModBlocks.mush));
+		addRecipe(6000, "mushroomAny", new ItemStack(ModBlocks.mush));
 		addRecipe(18000, Items.MUSHROOM_STEW, new ItemStack(ModItems.glowing_stew));
 		
 		addRecipe(360000 * HazardRegistry.nugget, GOLD.nugget(), new ItemStack(ModItems.nugget_au198));
-		addRecipe(360000 * HazardRegistry.powder_tiny, GOLD.dustTiny(), new ItemStack(ModItems.powder_au198_tiny));
+		addRecipe(360000 * HazardRegistry.nugget, GOLD.dustTiny(), new ItemStack(ModItems.powder_au198_tiny));
 		addRecipe(360000, GOLD.ingot(), new ItemStack(ModItems.ingot_au198));
-		addRecipe(360000 * HazardRegistry.powder, GOLD.dust(), new ItemStack(ModItems.powder_au198));
+		addRecipe(360000, GOLD.dust(), new ItemStack(ModItems.powder_au198));
 		addRecipe(360000 * HazardRegistry.block, GOLD.block(), new ItemStack(ModBlocks.block_au198));
-		addRecipe(360000 * HazardRegistry.powder * HazardRegistry.block, ModBlocks.sand_gold, new ItemStack(ModBlocks.sand_gold198));
+		addRecipe(360000 * HazardRegistry.block, ModBlocks.sand_gold, new ItemStack(ModBlocks.sand_gold198));
 		
 		addRecipe(90000 * HazardRegistry.nugget, TH232.nugget(), new ItemStack(ModItems.nugget_thorium_fuel));
 		addRecipe(90000 * HazardRegistry.billet, TH232.billet(), new ItemStack(ModItems.billet_thorium_fuel));
@@ -100,22 +99,22 @@ public class RBMKOutgasserRecipes {
 		addRecipe(690000, SA326.ingot(), new ItemStack(ModItems.ingot_solinium));
 		addRecipe(690000 * HazardRegistry.block, SA326.block(), new ItemStack(ModBlocks.block_solinium));
 		
-		addRecipe(50000 * HazardRegistry.nugget,CO.nugget(), new ItemStack(ModItems.nugget_co60));
-		addRecipe(50000 * HazardRegistry.powder_tiny, CO.dustTiny(), new ItemStack(ModItems.powder_co60_tiny));
+		addRecipe(50000 * HazardRegistry.nugget, CO.nugget(), new ItemStack(ModItems.nugget_co60));
+		addRecipe(50000 * HazardRegistry.nugget, CO.dustTiny(), new ItemStack(ModItems.powder_co60_tiny));
 		addRecipe(50000, CO.ingot(), new ItemStack(ModItems.ingot_co60));
-		addRecipe(50000 * HazardRegistry.powder, CO.dust(), new ItemStack(ModItems.powder_co60));
+		addRecipe(50000, CO.dust(), new ItemStack(ModItems.powder_co60));
 		
 		addRecipe(55000 * HazardRegistry.nugget, SR.nugget(), new ItemStack(ModItems.nugget_sr90));
 		addRecipe(55000, SR.ingot(), new ItemStack(ModItems.ingot_sr90));
-		addRecipe(55000 * HazardRegistry.powder, SR.dust(), new ItemStack(ModItems.powder_sr90));
+		addRecipe(55000, SR.dust(), new ItemStack(ModItems.powder_sr90));
 
-		addRecipe(45000 * HazardRegistry.powder_tiny, I.dustTiny(), new ItemStack(ModItems.powder_i131_tiny));
+		addRecipe(45000 * HazardRegistry.nugget, I.dustTiny(), new ItemStack(ModItems.powder_i131_tiny));
 		addRecipe(45000, I.ingot(), new ItemStack(ModItems.ingot_i131));
-		addRecipe(45000 * HazardRegistry.powder, I.dust(), new ItemStack(ModItems.powder_i131));
+		addRecipe(45000, I.dust(), new ItemStack(ModItems.powder_i131));
 		
 		addRecipe(450000 * HazardRegistry.nugget, AC.nugget(), new ItemStack(ModItems.nugget_ac227));
 		addRecipe(450000, AC.ingot(), new ItemStack(ModItems.ingot_ac227));
-		addRecipe(450000 * HazardRegistry.powder, AC.dust(), new ItemStack(ModItems.powder_ac227));
+		addRecipe(450000, AC.dust(), new ItemStack(ModItems.powder_ac227));
 		
 		addRecipe(80000, CS.dust(), new ItemStack(ModItems.powder_cs137));
 		addRecipe(120000, AT.dust(), new ItemStack(ModItems.powder_at209));
@@ -124,9 +123,9 @@ public class RBMKOutgasserRecipes {
 		addRecipe(120000 * HazardRegistry.billet, ModItems.billet_australium, new ItemStack(ModItems.billet_australium_lesser));
 		
 		addRecipe(14000000 * HazardRegistry.nugget, PB.nugget(), new ItemStack(ModItems.nugget_pb209));
-		addRecipe(14000000 * HazardRegistry.powder_tiny, PB.dustTiny(), new ItemStack(ModItems.powder_pb209_tiny));
+		addRecipe(14000000 * HazardRegistry.nugget, PB.dustTiny(), new ItemStack(ModItems.powder_pb209_tiny));
 		addRecipe(14000000, PB.ingot(), new ItemStack(ModItems.ingot_pb209));
-		addRecipe(14000000 * HazardRegistry.powder, PB.dust(), new ItemStack(ModItems.powder_pb209));
+		addRecipe(14000000, PB.dust(), new ItemStack(ModItems.powder_pb209));
 		
 		addRecipe(1800000, NB.ingot(), new ItemStack(ModItems.ingot_technetium));
 		addRecipe(32000, ModItems.nugget_unobtainium_lesser, new ItemStack(ModItems.nugget_unobtainium));
@@ -230,19 +229,20 @@ public class RBMKOutgasserRecipes {
 	
 	public static class RBMKOutgasserRecipe implements IRecipeWrapper {
 		
-		private final List<ItemStack> input;
+		private final List<List<ItemStack>> input;
 		private final int requiredFlux;
 		private final ItemStack output;
 		
 		public RBMKOutgasserRecipe(List<ItemStack> input, int requiredFlux, ItemStack output) {
-			this.input = input;
+			this.input = new ArrayList<>();
+            this.input.add(input);
 			this.requiredFlux = requiredFlux;
 			this.output = output;
 		}
 		
 		@Override
 		public void getIngredients(IIngredients ingredients) {
-			ingredients.setInputs(VanillaTypes.ITEM, input);
+			ingredients.setInputLists(VanillaTypes.ITEM, input);
 			ingredients.setOutput(VanillaTypes.ITEM, output);
 		}
 

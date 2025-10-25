@@ -19,7 +19,7 @@ public class SoundLoopSiren extends SoundLoopMachine {
 	public SoundType type;
 
 	public SoundLoopSiren(SoundEvent path, TileEntity te, SoundType type) {
-		super(path, te);
+		super(path, te, 1);
 		list.add(this);
 		intendedVolume = 10.0F;
 		this.attenuationType = ISound.AttenuationType.NONE;
@@ -29,7 +29,7 @@ public class SoundLoopSiren extends SoundLoopMachine {
 	@Override
 	public void update() {
 		super.update();
-		
+		if(this.donePlaying) return;
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		float f = 0;
 		
@@ -50,11 +50,7 @@ public class SoundLoopSiren extends SoundLoopMachine {
 	public TileEntity getTE() {
 		return te;
 	}
-	
-	public void endSound() {
-		this.donePlaying = true;
-	}
-	
+
 	public String getPath() {
 		return this.positionedSoundLocation.getNamespace() + ":" + this.positionedSoundLocation.getPath();
 	}
@@ -62,7 +58,7 @@ public class SoundLoopSiren extends SoundLoopMachine {
 	public void setRepeat(boolean b) {
 		this.repeat = b;
 	}
-	
+
 	public void setRepeatDelay(int i) {
 		this.repeatDelay = i;
 	}

@@ -17,6 +17,10 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.annotation.Nullable;
 
+import baubles.api.BaublesApi;
+import baubles.api.IBauble;
+import baubles.api.cap.BaublesCapabilities;
+import baubles.api.cap.IBaublesItemHandler;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
@@ -191,8 +195,26 @@ public class Library {
 	}
 
 	public static boolean checkForHeld(EntityPlayer player, Item item) {
+        if(player == null || item == null) return false;
 		return player.getHeldItemMainhand().getItem() == item || player.getHeldItemOffhand().getItem() == item;
 	}
+
+    static boolean hasBaubleInstalled = true;
+    public static boolean checkForBauble(EntityPlayer player, Item item) {
+        if(!hasBaubleInstalled || player == null || item == null) return false;
+        try{
+            if(item instanceof IBauble bau) {
+                IBaublesItemHandler baubles = BaublesApi.getBaublesHandler(player);
+                for (int i : bau.getBaubleType(new ItemStack(item)).getValidSlots()) {
+                    ItemStack stack = baubles.getStackInSlot(i);
+                    if(stack.getItem() == item) return true;
+                }
+            }
+        } catch (NoClassDefFoundError e) {
+            hasBaubleInstalled = false;
+        }
+        return false;
+    }
 
 	public static boolean isObstructed(World world, double x, double y, double z, double a, double b, double c) {
 		RayTraceResult pos = world.rayTraceBlocks(new Vec3d(x, y, z), new Vec3d(a, b, c), false, true, true);

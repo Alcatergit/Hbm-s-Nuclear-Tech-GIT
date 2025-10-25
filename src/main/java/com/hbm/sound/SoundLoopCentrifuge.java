@@ -3,6 +3,7 @@ package com.hbm.sound;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineGasCent;
 
@@ -15,39 +16,22 @@ public class SoundLoopCentrifuge extends SoundLoopMachine {
 	public static List<SoundLoopCentrifuge> list = new ArrayList<SoundLoopCentrifuge>();
 	
 	public SoundLoopCentrifuge(SoundEvent path, TileEntity te) {
-		super(path, te);
+		super(path, te, 1);
 		list.add(this);
 	}
 
-	@Override
-	public void update() {
-		super.update();
-		
-		if(te instanceof TileEntityMachineCentrifuge plant) {
+    public static boolean isProcessing(TileEntity te){
+        boolean shouldPlay = false;
+        if(te instanceof TileEntityMachineCentrifuge plant) {
+            shouldPlay = plant.isProgressing;
+        } else if(te instanceof TileEntityMachineGasCent gasCent) {
+            shouldPlay = gasCent.isProgressing && !gasCent.hasMuffler();
+        }
+        return shouldPlay;
+    }
 
-            if(this.volume != 1)
-				volume = 1;
-			
-			if(!plant.isProgressing)
-				this.donePlaying = true;
-		}
-		
-		if(te instanceof TileEntityMachineGasCent gasCent) {
-
-            if(this.volume != 1)
-				volume = 1;
-			
-			if(!gasCent.isProgressing || gasCent.hasMuffler())
-				this.donePlaying = true;
-		}
-		
-		if(!Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this)) {
-			stop();
-		}
-	}
-	
-	public TileEntity getTE() {
-		return te;
-	}
-	
+    @Override
+    public boolean isThisProcessing(){
+        return isProcessing(te);
+    }
 }

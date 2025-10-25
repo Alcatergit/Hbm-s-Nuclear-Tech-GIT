@@ -22,7 +22,8 @@ public class HazardTypeToxic extends HazardTypeBase {
 	public void onUpdate(EntityLivingBase livingTEntity, float level, ItemStack stack) {
 		boolean hasToxFilter = false;
 		boolean hasHazmat = false;
-		if(livingTEntity instanceof EntityPlayer){
+		if(livingTEntity instanceof EntityPlayer player){
+            if(player.capabilities.isCreativeMode) return;
 			if(ArmorRegistry.hasProtection(livingTEntity, EntityEquipmentSlot.HEAD, HazardClass.NERVE_AGENT)){
 				ArmorUtil.damageGasMaskFilter(livingTEntity, 1);
 				hasToxFilter = true;

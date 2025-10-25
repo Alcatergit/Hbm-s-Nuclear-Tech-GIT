@@ -68,9 +68,8 @@ public class ArmorRegistry {
 		if(hazardClasses.containsKey(item))
 			prot.addAll(hazardClasses.get(item));
 		
-		if(item instanceof IGasMask) {
-			IGasMask mask = (IGasMask) item;
-			ItemStack filter = mask.getFilter(stack);
+		if(item instanceof IGasMask mask) {
+            ItemStack filter = mask.getFilter(stack);
 
 			if(filter != null && !filter.isEmpty()) {
 				//add the HazardClasses from the filter, then remove the ones blacklisted by the mask

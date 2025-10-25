@@ -162,7 +162,7 @@ public class ModItems {
 	public static final Item hand_drill = new ItemTooling(ToolType.HAND_DRILL, 100, "hand_drill");
 	public static final Item hand_drill_desh = new ItemTooling(ToolType.HAND_DRILL, -1, "hand_drill_desh");
 	public static final Item boltgun = new ItemBoltgun("boltgun");
-	public static final Item reacher = new ItemCustomLore("reacher").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
+	public static final Item reacher = new ItemBaubleTool("reacher").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
 	public static final Item bismuth_tool = new ItemAmatExtractor("bismuth_tool").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.consumableTab);
 	public static final Item wiring_red_copper = new ItemWiring("wiring_red_copper").setCreativeTab(MainRegistry.consumableTab);
 	public static final Item survey_scanner = new ItemSurveyScanner("survey_scanner").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -514,8 +514,8 @@ public class ModItems {
 	public static final Item detonator = new ItemDetonator("detonator").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	public static final Item detonator_multi = new ItemMultiDetonator("detonator_multi").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	public static final Item detonator_laser = new ItemLaserDetonator("detonator_laser").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
-	public static final Item detonator_deadman = new ItemDrop("detonator_deadman").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
-	public static final Item detonator_de = new ItemDrop("detonator_de").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
+	public static final Item detonator_deadman = new ItemBaubleTool("detonator_deadman").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
+	public static final Item detonator_de = new ItemBaubleTool("detonator_de").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	public static final Item igniter = new ItemCustomLore("igniter").setMaxStackSize(1).setFull3D().setCreativeTab(MainRegistry.nukeTab);
 	public static final Item spawn_chopper = new ItemChopper("chopper").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
 	public static final Item spawn_worm = new ItemChopper("spawn_worm").setMaxStackSize(1).setCreativeTab(MainRegistry.consumableTab);
@@ -1538,18 +1538,18 @@ public class ModItems {
 	public static final Item piston_electro = new ItemBase("piston_electro").setCreativeTab(MainRegistry.partsTab);
 	
 	//BedrockOres
-	public static final Item ore_bedrock = new ItemBedrockOre("ore_bedrock").setCreativeTab(MainRegistry.partsTab);
-	public static final Item ore_bedrock_centrifuged = new ItemBedrockOre("ore_bedrock_centrifuged").setCreativeTab(MainRegistry.partsTab); //Centri
-	public static final Item ore_bedrock_cleaned = new ItemBedrockOre("ore_bedrock_cleaned").setCreativeTab(MainRegistry.partsTab); //Acid Peroxide
-	public static final Item ore_bedrock_separated = new ItemBedrockOre("ore_bedrock_separated").setCreativeTab(MainRegistry.partsTab); //Centri
-	public static final Item ore_bedrock_deepcleaned = new ItemBedrockOre("ore_bedrock_deepcleaned").setCreativeTab(MainRegistry.partsTab); //Acid Sulfuric
-	public static final Item ore_bedrock_purified = new ItemBedrockOre("ore_bedrock_purified").setCreativeTab(MainRegistry.partsTab); //Centri
-	public static final Item ore_bedrock_nitrated = new ItemBedrockOre("ore_bedrock_nitrated").setCreativeTab(MainRegistry.partsTab); //Acid Nitric
-	public static final Item ore_bedrock_nitrocrystalline = new ItemBedrockOre("ore_bedrock_nitrocrystalline").setCreativeTab(MainRegistry.partsTab); //Centri
-	public static final Item ore_bedrock_seared = new ItemBedrockOre("ore_bedrock_seared").setCreativeTab(MainRegistry.partsTab); //Acid Solvent
-	public static final Item ore_bedrock_exquisite = new ItemBedrockOre("ore_bedrock_exquisite").setCreativeTab(MainRegistry.partsTab); //Centri
-	public static final Item ore_bedrock_perfect = new ItemBedrockOre("ore_bedrock_perfect").setCreativeTab(MainRegistry.partsTab); //Acid High Solvent
-	public static final Item ore_bedrock_enriched = new ItemBedrockOre("ore_bedrock_enriched").setCreativeTab(MainRegistry.partsTab); //Final Product
+	public static final Item ore_bedrock = new ItemBedrockOre("ore_bedrock", 1).setCreativeTab(MainRegistry.partsTab);
+	public static final Item ore_bedrock_centrifuged = new ItemBedrockOre("ore_bedrock_centrifuged", 2).setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_cleaned = new ItemBedrockOre("ore_bedrock_cleaned", 3).setCreativeTab(MainRegistry.partsTab); //Acid Peroxide
+	public static final Item ore_bedrock_separated = new ItemBedrockOre("ore_bedrock_separated", 4).setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_deepcleaned = new ItemBedrockOre("ore_bedrock_deepcleaned", 5).setCreativeTab(MainRegistry.partsTab); //Acid Sulfuric
+	public static final Item ore_bedrock_purified = new ItemBedrockOre("ore_bedrock_purified", 6).setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_nitrated = new ItemBedrockOre("ore_bedrock_nitrated", 7).setCreativeTab(MainRegistry.partsTab); //Acid Nitric
+	public static final Item ore_bedrock_nitrocrystalline = new ItemBedrockOre("ore_bedrock_nitrocrystalline", 8).setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_seared = new ItemBedrockOre("ore_bedrock_seared", 9).setCreativeTab(MainRegistry.partsTab); //Acid Solvent
+	public static final Item ore_bedrock_exquisite = new ItemBedrockOre("ore_bedrock_exquisite", 10).setCreativeTab(MainRegistry.partsTab); //Centri
+	public static final Item ore_bedrock_perfect = new ItemBedrockOre("ore_bedrock_perfect", 11).setCreativeTab(MainRegistry.partsTab); //Acid High Solvent
+	public static final Item ore_bedrock_enriched = new ItemBedrockOre("ore_bedrock_enriched", 12).setCreativeTab(MainRegistry.partsTab); //Final Product
 
 	public static final Item neutron_reflector = new ItemBase("neutron_reflector").setCreativeTab(MainRegistry.partsTab);
 	public static final Item rtg_unit = new ItemBase("rtg_unit").setCreativeTab(MainRegistry.partsTab);

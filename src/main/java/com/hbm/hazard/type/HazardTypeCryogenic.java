@@ -22,8 +22,8 @@ public class HazardTypeCryogenic extends HazardTypeBase {
 	public void onUpdate(EntityLivingBase livingCEntity, float level, ItemStack stack) {
 		boolean reacher = false;
 		
-		if(livingCEntity instanceof EntityPlayer && !GeneralConfig.enable528)
-			reacher = Library.checkForHeld((EntityPlayer) livingCEntity, ModItems.reacher);
+		if(livingCEntity instanceof EntityPlayer player && !GeneralConfig.enable528)
+			reacher = player.capabilities.isCreativeMode || Library.checkForHeld(player, ModItems.reacher) || Library.checkForBauble(player, ModItems.reacher);
 		
 		if(!reacher){
 			boolean isProtected = livingCEntity instanceof EntityPlayer && ArmorUtil.checkForHazmat(livingCEntity);

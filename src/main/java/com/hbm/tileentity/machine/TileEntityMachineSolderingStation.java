@@ -175,7 +175,8 @@ public class TileEntityMachineSolderingStation extends TileEntityMachineBase imp
 
 		if(this.power < this.consumption) return false;
 
-		if(recipe.fluid != null && tank.getFluid() != null) {
+		if(recipe.fluid != null) {
+            if(tank.getFluid() == null) return false;
 			if(this.tank.getFluid().getFluid() != recipe.fluid.getFluid()) return false;
 			if(this.tank.getFluidAmount() < recipe.fluid.amount) return false;
 		}

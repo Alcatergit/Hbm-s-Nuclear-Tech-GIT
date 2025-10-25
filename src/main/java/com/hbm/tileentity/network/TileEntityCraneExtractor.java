@@ -105,7 +105,6 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
                         int size;
                         if(access == null) {
-                            assert inv != null;
                             size = inv.getSlots();
                         } else {
                             size = access.length;
@@ -113,19 +112,18 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
                         for(int i = 0; i < size; i++) {
                             int index = access == null ? i : access[i];
-                            assert inv != null;
                             ItemStack stack = inv.getStackInSlot(index);
 
-                            if(!stack.isEmpty() && (sided == null || sided.canExtractItem(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
+                            if(!stack.isEmpty() && (sided == null || canExtract(sided, index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
 
                                 boolean match = this.matchesFilter(stack);
 
                                 if(isWhitelist == match) {
                                     int toSend = stack.getCount();
 
-                                    ItemStack excrated = inv.extractItem(i, toSend, true);
-                                    if(!excrated.isEmpty()){
-                                        int fill = tryInsertItemCap(inventory, excrated.copy(), allowed_slots);
+                                    ItemStack extracted = inv.extractItem(i, toSend, true);
+                                    if(!extracted.isEmpty()){
+                                        int fill = tryInsertItemCap(inventory, extracted.copy(), allowed_slots);
                                         if(fill > 0 && fill <= toSend) inv.extractItem(i, fill, false);
                                     }
                                 }
@@ -140,7 +138,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                     for(int index : allowed_slots) {
                         ItemStack stack = inventory.getStackInSlot(index);
 
-                        if(stack != ItemStack.EMPTY && (sided == null || canExtract(sided, index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
+                        if(!stack.isEmpty()){
 
                             boolean match = this.matchesFilter(stack);
 

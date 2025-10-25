@@ -25,9 +25,7 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 	public static final long maxPower = 100000;
 	public static final int processingSpeed = 100;
 	
-	private static final int[] slots_top = new int[] {1};
-	private static final int[] slots_bottom = new int[] {2, 0};
-	private static final int[] slots_side = new int[] {0};
+	private static final int[] slots = new int[] { 0, 1, 2};
 	
 	public TileEntityMachineElectricFurnace() {
 		super(3);
@@ -66,15 +64,13 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		int i = e.ordinal();
-		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+		return slots;
 	}
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		if(i == 0)
-			if(stack.getItem() instanceof IBatteryItem)
-				return true;
+		if(i == 0 && stack.getItem() instanceof IBatteryItem)
+            return true;
 
         return i == 1;
     }
@@ -86,9 +82,9 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		if(slot == 0)
-			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
-				return true;
+        if(itemStack.getItem() instanceof IBatteryItem bat) {
+            return slot == 0 && bat.getCharge(itemStack) == 0;
+        }
         return slot == 2;
     }
 	
@@ -115,7 +111,7 @@ public class TileEntityMachineElectricFurnace extends TileEntityMachineBase impl
 		}
         ItemStack itemStack = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(1));
         
-		if(itemStack == null || itemStack.isEmpty())
+		if(itemStack.isEmpty())
 		{
 			return false;
 		}

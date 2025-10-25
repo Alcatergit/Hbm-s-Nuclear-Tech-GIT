@@ -837,34 +837,6 @@ public class ModEventHandler {
 				attacker.heal(entity.getMaxHealth() * 0.25F);
 			}
 		}
-		
-		if(entity instanceof EntityPlayer player) {
-
-            for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
-				
-				ItemStack stack = player.inventory.getStackInSlot(i);
-				
-				if(stack.getItem() == ModItems.detonator_deadman) {
-					
-					if(stack.getTagCompound() != null) {
-						
-						int x = stack.getTagCompound().getInteger("x");
-						int y = stack.getTagCompound().getInteger("y");
-						int z = stack.getTagCompound().getInteger("z");
-
-						if(!player.world.isRemote && player.world.getBlockState(new BlockPos(x, y, z)).getBlock() instanceof IBomb) {
-							
-							((IBomb) player.world.getBlockState(new BlockPos(x, y, z)).getBlock()).explode(player.world, new BlockPos(x, y, z));
-							
-							if(GeneralConfig.enableExtendedLogging)
-								MainRegistry.logger.log(Level.INFO, "[DET] Tried to detonate block at " + x + " / " + y + " / " + z + " by dead man's switch from " + player.getDisplayName() + "!");
-						}
-						
-						player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
-					}
-				}
-			}
-		}
 	}
 	
 	public static Field r_handInventory = null;

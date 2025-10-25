@@ -575,6 +575,10 @@ public class HazardRegistry {
         HazardSystem.register(anvil_osmiridium, makeData(DIGAMMA, 0.4F));
         registerHazItem(glow_spawner, bf * 0.1F);
 
+        registerHazItem(hadron_coil_magtung, magt * 2);
+        registerHazItem(hadron_coil_schrabidium, magt * 2 + sa326 * 2);
+        registerHazItem(hadron_coil_schrabidate, sa326 * 2 + sb * 2);
+
         //Fluid Hazards
 
 		registerFluid("radwater_fluid", 4, 0);

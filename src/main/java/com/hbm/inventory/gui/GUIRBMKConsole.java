@@ -43,7 +43,8 @@ public class GUIRBMKConsole extends GuiScreen {
 	protected int guiTop;
 	protected int xSize;
 	protected int ySize;
-	
+
+    public static final int w = 15;
 	private boolean[] selection = new boolean[15 * 15];
 	private boolean az5Lid = true;
 	private long lastPress = 0;
@@ -79,12 +80,11 @@ public class GUIRBMKConsole extends GuiScreen {
 		this.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 		
 		int bX = 86;
-		int bY = 11;
-		int size = 10;
+		int bY = 10;
+		int size = 150;
 
-		if(guiLeft + 86 <= mouseX && guiLeft + 86 + 150 > mouseX && guiTop + 11 < mouseY && guiTop + 11 + 10150 >= mouseY) {
-			int index = (mouseX - bX - guiLeft) / size + 15 * (mouseY - bY - guiTop) / size;
-			
+		if(guiLeft + bX <= mouseX && guiLeft + bX + size > mouseX && guiTop + bY < mouseY && guiTop + bY + size >= mouseY) {
+            int index = w * (mouseX - bX - guiLeft) / size + w * (w * (mouseY - bY - guiTop) / size);
 			if(index >= 0 && index < console.columns.length) {
 				RBMKColumn col = console.columns[index];
 				

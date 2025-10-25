@@ -57,7 +57,7 @@ public class MachineAutocrafter extends BlockContainer {
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
         if(tileentity instanceof TileEntityMachineAutocrafter) {
-            InventoryHelper.dropInventoryItems(worldIn, pos, tileentity, 9, 20);
+            InventoryHelper.dropInventoryItems(worldIn, pos, tileentity, 10, 20);
             worldIn.updateComparatorOutputLevel(pos, this);
         }
         super.breakBlock(worldIn, pos, state);

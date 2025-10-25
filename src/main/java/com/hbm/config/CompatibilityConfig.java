@@ -102,8 +102,6 @@ public class CompatibilityConfig {
 
 	public static boolean modLoot = true;
 
-	public static boolean doEvaporateWater = true;
-	public static HashSet evaporateWater;
 	public static boolean doFillCraterWithWater = true;
 	public static HashMap fillCraterWithWater;
 

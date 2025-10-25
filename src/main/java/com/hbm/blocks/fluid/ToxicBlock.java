@@ -87,6 +87,7 @@ public class ToxicBlock extends BlockFluidClassic {
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
+        super.updateTick(world, pos, state, rand);
 		if(reactToBlocks(world, pos.east()))
 			world.setBlockState(pos.east(), getRandomSellafite(world));
 		if(reactToBlocks(world, pos.west()))
@@ -101,8 +102,6 @@ public class ToxicBlock extends BlockFluidClassic {
 			world.setBlockState(pos.north(), getRandomSellafite(world));
 
 		if(world.rand.nextInt(15) == 0) RadiationSavedData.incrementRad(world, pos, 300F, 3000F);
-
-		super.updateTick(world, pos, state, rand);
 	}
 
 	private IBlockState getRandomSellafite(World world){

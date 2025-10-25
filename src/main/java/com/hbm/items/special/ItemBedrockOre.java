@@ -27,7 +27,10 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ItemBedrockOre extends Item {
 
-	public ItemBedrockOre(String s) {
+    int stage;
+
+	public ItemBedrockOre(String s, int stage) {
+        this.stage = stage;
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setHasSubtypes(true);
@@ -76,12 +79,13 @@ public class ItemBedrockOre extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+        String oreName = BedrockOreRegistry.oreIndexes.get(stack.getMetadata());
+        int tier = BedrockOreRegistry.getOreTier(oreName);
+        list.add("§6"+I18nUtil.resolveKey("desc.tier", tier));
+        list.add("§e"+I18nUtil.resolveKey("desc.stage", stage));
 		if(stack.getItem() == ModItems.ore_bedrock){
-			String oreName = BedrockOreRegistry.oreIndexes.get(stack.getMetadata());
-			int tier = BedrockOreRegistry.getOreTier(oreName);
-			list.add("§6"+I18nUtil.resolveKey("desc.tier", tier));
 			FluidStack req = BedrockOreRegistry.getFluidRequirement(tier);
-			list.add("§e"+I18nUtil.resolveKey("desc.requires", req.amount, req.getFluid().getLocalizedName(req)));
+			list.add("§a"+I18nUtil.resolveKey("desc.requires", req.amount, req.getFluid().getLocalizedName(req)));
 		}
 		super.addInformation(stack, world, list, flagIn);
 	}

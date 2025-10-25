@@ -21,9 +21,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	public static final int maxPower = 12800;
 	public static final int processingSpeed = 400;
 	
-	private static final int[] slots_top = new int[] {0, 1};
-	private static final int[] slots_bottom = new int[] {3};
-	private static final int[] slots_side = new int[] {2};
+	private static final int[] slots = new int[] {0, 1, 2, 3};
 	
 	public TileEntityDiFurnace() {
 		super(4);
@@ -101,8 +99,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		int i = e.ordinal();
-		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
+		return slots;
 	}
 	
 	@Override
@@ -144,7 +141,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	public boolean canProcess() {
-		if(inventory.getStackInSlot(0) == null || inventory.getStackInSlot(1) == null)
+		if(inventory.getStackInSlot(0).isEmpty() || inventory.getStackInSlot(1).isEmpty())
 		{
 			return false;
 		}
@@ -154,11 +151,11 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			return false;
 		}
 		
-		if(inventory.getStackInSlot(3) == ItemStack.EMPTY)
+		if(inventory.getStackInSlot(3).isEmpty())
 		{
 			return true;
 		}
-		if(inventory.getStackInSlot(3).getItem() != ItemStack.EMPTY.getItem() && !inventory.getStackInSlot(3).isItemEqual(itemStack)) {
+		if(!inventory.getStackInSlot(3).isItemEqual(itemStack)) {
 			return false;
 		}
 		
