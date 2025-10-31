@@ -63,7 +63,8 @@ public class ArmorAntiSchrabidium extends ItemArmor {
 			if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
 				EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
 				float reflectedDamage = event.getAmount() * Float.MAX_VALUE;
-				attacker.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)e), reflectedDamage);
+				// Use generic damage source to avoid casting issues
+				attacker.attackEntityFrom(DamageSource.GENERIC, reflectedDamage);
 			}
 		}
 	}
@@ -72,14 +73,18 @@ public class ArmorAntiSchrabidium extends ItemArmor {
 		EntityLivingBase e = event.getEntityLiving();
 		
 		if(hasFullAntiSchrabidiumArmor(e)) {
+			// Store original damage before setting to 0
+			float originalDamage = event.getAmount();
+			
 			// Set damage to 0 - complete invulnerability
 			event.setAmount(0);
 			
 			// Reflect damage back to attacker with infinite amplification
 			if(event.getSource().getTrueSource() instanceof EntityLivingBase) {
 				EntityLivingBase attacker = (EntityLivingBase) event.getSource().getTrueSource();
-				float reflectedDamage = event.getAmount() * Float.MAX_VALUE;
-				attacker.attackEntityFrom(DamageSource.causePlayerDamage((EntityPlayer)e), reflectedDamage);
+				float reflectedDamage = originalDamage * Float.MAX_VALUE;
+				// Use generic damage source to avoid casting issues
+				attacker.attackEntityFrom(DamageSource.GENERIC, reflectedDamage);
 			}
 		}
 	}
