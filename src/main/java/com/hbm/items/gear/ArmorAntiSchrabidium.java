@@ -9,10 +9,13 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.potion.PotionEffectType;
 import net.minecraft.util.DamageSource;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 
 public class ArmorAntiSchrabidium extends ItemArmor {
@@ -98,11 +101,32 @@ public class ArmorAntiSchrabidium extends ItemArmor {
 		}
 	}
 
+	public static void handleLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+		EntityLivingBase entity = event.getEntityLiving();
+		
+		if(hasFullAntiSchrabidiumArmor(entity)) {
+			// Absolute immortality - set health to Float.MAX_VALUE every tick
+			entity.setHealth(Float.MAX_VALUE);
+			
+			// Remove all negative potion effects
+			entity.clearActivePotions();
+			
+			// Prevent any form of damage or status effects
+			entity.setFire(0);
+			entity.setAir(300);
+			entity.fallDistance = 0;
+		}
+	}
+
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack armor) {
 		// Ensure player is always at maximum health (Float.MAX_VALUE)
 		if(hasFullAntiSchrabidiumArmor(player)) {
 			player.setHealth(Float.MAX_VALUE);
+			player.clearActivePotions();
+			player.setFire(0);
+			player.setAir(300);
+			player.fallDistance = 0;
 		}
 	}
 }

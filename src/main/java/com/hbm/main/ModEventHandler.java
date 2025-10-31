@@ -855,6 +855,7 @@ public class ModEventHandler {
 			return;
 		if(event.getEntityLiving() instanceof EntityArmorStand) return;
 		ArmorFSB.handleTick(event.getEntityLiving());
+		ArmorAntiSchrabidium.handleLivingUpdate(event);
 		if(r_handInventory == null){
 			r_handInventory = ReflectionHelper.findField(EntityLivingBase.class, "handInventory", "field_184630_bs");
 			r_armorArray = ReflectionHelper.findField(EntityLivingBase.class, "armorArray", "field_184631_bt");
