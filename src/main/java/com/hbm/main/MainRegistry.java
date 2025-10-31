@@ -425,8 +425,8 @@ public class MainRegistry {
 	public static ArmorMaterial aMatLiquidator = EnumHelper.addArmorMaterial(RefStrings.MODID + ":LIQUIDATOR", RefStrings.MODID + ":LIQUIDATOR", 750, new int[] { 3, 6, 8, 3 }, 10, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial aMatFau = EnumHelper.addArmorMaterial(RefStrings.MODID + ":DIGAMMA", RefStrings.MODID + ":DIGAMMA", 150, new int[] { 3, 8, 6, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
 	public static ArmorMaterial aMatDNS = EnumHelper.addArmorMaterial(RefStrings.MODID + ":DNT_NANO", RefStrings.MODID + ":DNT_NANO", 150, new int[] { 3, 8, 6, 3 }, 100, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 2.0F);
-	
-	
+	public static ArmorMaterial enumArmorMaterialAntiSchrabidium = EnumHelper.addArmorMaterial(RefStrings.MODID + ":ANTI_SCHRABIDIUM", RefStrings.MODID + ":ANTI_SCHRABIDIUM", 999999, new int[] { 3, 6, 8, 3 }, 999, SoundEvents.ITEM_ARMOR_EQUIP_GENERIC, 3.0F);
+
 	// Tool Materials
 	public static ToolMaterial enumToolMaterialSchrabidium = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUM", 4, 10000, 50.0F, 100.0F, 200);
 	public static ToolMaterial enumToolMaterialHammer = EnumHelper.addToolMaterial(RefStrings.MODID + ":SCHRABIDIUMHAMMER", 3, 0, 50.0F, 999999996F, 200);

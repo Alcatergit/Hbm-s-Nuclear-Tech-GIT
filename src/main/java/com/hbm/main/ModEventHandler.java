@@ -45,6 +45,7 @@ import com.hbm.items.armor.ItemArmorMod;
 import com.hbm.items.armor.ItemModRevive;
 import com.hbm.items.armor.ItemModShackles;
 import com.hbm.items.gear.ArmorFSB;
+import com.hbm.items.gear.ArmorAntiSchrabidium;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.ForgeDirection;
@@ -577,6 +578,7 @@ public class ModEventHandler {
 			}
 		}
 		ArmorFSB.handleHurt(e);
+		ArmorAntiSchrabidium.handleHurt(e);
 		
 		/// V1 ///
 		if(EntityDamageUtil.wasAttackedByV1(e.getSource())) {
@@ -636,6 +638,7 @@ public class ModEventHandler {
         }
 
 		ArmorFSB.handleAttack(event);
+		ArmorAntiSchrabidium.handleAttack(event);
 	}
 	
 	@SubscribeEvent
@@ -712,6 +715,9 @@ public class ModEventHandler {
 		HbmLivingProps.setRadiation(event.getEntityLiving(), 0);
 		if(event.getEntity().world.isRemote)
 			return;
+		
+		// Anti Schrabiddium Armor - prevent death entirely
+		ArmorAntiSchrabidium.handleDeath(event);
 		
 		if(event.getEntityLiving() instanceof EntityPlayer) {
 			if(ArmorUtil.checkArmor((EntityPlayer) event.getEntityLiving(), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)) {

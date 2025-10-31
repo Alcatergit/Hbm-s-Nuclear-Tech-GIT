@@ -643,6 +643,12 @@ public class ModItems {
 	public static final Item schrabidium_legs = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.LEGS, RefStrings.MODID + ":textures/armor/schrabidium_2.png", "schrabidium_legs").cloneStats((ArmorFSB) schrabidium_helmet).setCap(4F).setMod(0.1F).setMaxStackSize(1);
 	public static final Item schrabidium_boots = new ArmorFSB(MainRegistry.enumArmorMaterialSchrabidium, -1, EntityEquipmentSlot.FEET, RefStrings.MODID + ":textures/armor/schrabidium_1.png", "schrabidium_boots").cloneStats((ArmorFSB) schrabidium_helmet).setCap(4F).setMod(0.1F).setMaxStackSize(1);
 
+	// Anti Schrabiddium Armor - Complete Invulnerability
+	public static final Item anti_schrabidium_helmet = new ArmorAntiSchrabidium(MainRegistry.enumArmorMaterialAntiSchrabidium, -1, EntityEquipmentSlot.HEAD, "anti_schrabidium_helmet").setMaxStackSize(1);
+	public static final Item anti_schrabidium_plate = new ArmorAntiSchrabidium(MainRegistry.enumArmorMaterialAntiSchrabidium, -1, EntityEquipmentSlot.CHEST, "anti_schrabidium_plate").setMaxStackSize(1);
+	public static final Item anti_schrabidium_legs = new ArmorAntiSchrabidium(MainRegistry.enumArmorMaterialAntiSchrabidium, -1, EntityEquipmentSlot.LEGS, "anti_schrabidium_legs").setMaxStackSize(1);
+	public static final Item anti_schrabidium_boots = new ArmorAntiSchrabidium(MainRegistry.enumArmorMaterialAntiSchrabidium, -1, EntityEquipmentSlot.FEET, "anti_schrabidium_boots").setMaxStackSize(1);
+
 	//Drillgon200: Don't want to move the material here because I'm worried it'll cause issues with static items and stuff.
 	public static final Item t45_helmet = new ArmorT45(MainRegistry.enumArmorMaterialT45, -1, EntityEquipmentSlot.HEAD, 1000000, 10000, 1000, 5, "t45_helmet").setCap(20F).setMod(0.5F)
 			.setFireproof(true)
