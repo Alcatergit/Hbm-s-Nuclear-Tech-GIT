@@ -1,13 +1,13 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import java.util.ArrayList;
 
 public class GunOSIPRFactory {
 	
@@ -26,8 +26,8 @@ public class GunOSIPRFactory {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_ARROWS;
 		config.durability = 10000;
-		config.reloadSound = HBMSoundHandler.osiprReload;
-		config.firingSound = HBMSoundHandler.osiprShoot;
+		config.reloadSound = HBMSoundEvents.osiprReload;
+		config.firingSound = HBMSoundEvents.osiprShoot;
 		config.reloadSoundEnd = false;
 		
 		config.name = "Overwatch Standard Issue Pulse Rifle";
@@ -52,7 +52,7 @@ public class GunOSIPRFactory {
 		config.ammoCap = 0;
 		config.reloadType = GunConfiguration.RELOAD_NONE;
 		config.allowsInfinity = true;
-		config.firingSound = HBMSoundHandler.singFlyby;
+		config.firingSound = HBMSoundEvents.singFlyby;
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.SPECIAL_OSIPR_CHARGED);
 		
@@ -64,7 +64,7 @@ public class GunOSIPRFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_osipr_ammo;
+		bullet.ammo = Armory.gun_osipr_ammo;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 5;
@@ -77,7 +77,7 @@ public class GunOSIPRFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.gun_osipr_ammo2;
+		bullet.ammo = Armory.gun_osipr_ammo2;
 
 		return bullet;
 	}

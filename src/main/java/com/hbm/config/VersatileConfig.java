@@ -1,7 +1,6 @@
 package com.hbm.config;
 
 import com.hbm.potion.HbmPotion;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.potion.PotionEffect;
 

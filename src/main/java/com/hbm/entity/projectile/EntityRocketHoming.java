@@ -1,17 +1,12 @@
 package com.hbm.entity.projectile;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -32,16 +27,16 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class EntityRocketHoming extends Entity implements IProjectile {
 
-	public static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityRocketHoming.class, DataSerializers.BOOLEAN);
+	public static final DataParameter<Boolean> CRITICAL = EntityDataManager.createKey(EntityMissileBaseAdvanced.class, DataSerializers.BOOLEAN);
 	
 	private int field_145791_d = -1;
     private int field_145792_e = -1;
@@ -409,6 +404,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
 
             //for (this.rotationPitch = (float)(Math.atan2(this.motionY, (double)f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
             {
+                ;
             }
 
             /*while (this.rotationPitch - this.prevRotationPitch >= 180.0F)
@@ -486,8 +482,9 @@ public class EntityRocketHoming extends Entity implements IProjectile {
     		double vecProd = rel.x * path.x + rel.y * path.y + rel.z * path.z;
     		double bot = rel.length() * path.length();
     		double angle = Math.acos(vecProd / bot) * 180 / Math.PI;
-
-            if(e.height * e.width * e.width >= 0.5D)
+    		
+    		if(angle <= acceptance);
+    			if(e.height * e.width * e.width >= 0.5D)
     				if(!Library.isObstructed(world, e.posX, e.posY, e.posZ, posX, posY, posZ))
     					targetable.put(e, angle);
     	}
@@ -529,9 +526,9 @@ public class EntityRocketHoming extends Entity implements IProjectile {
         lockonTicks++;
         if(lockonTicks == 5 && !hasBeeped) {
         	if(this.getIsCritical())
-        		world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.stingerLockon, SoundCategory.HOSTILE, 10F, 0.75F, true);
+        		world.playSound(this.posX, this.posY, this.posZ, HBMSoundEvents.stingerLockon, SoundCategory.HOSTILE, 10F, 0.75F, true);
         	else
-        		world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.stingerLockon, SoundCategory.HOSTILE, 10F, 1F, true);
+        		world.playSound(this.posX, this.posY, this.posZ, HBMSoundEvents.stingerLockon, SoundCategory.HOSTILE, 10F, 1F, true);
         	hasBeeped = true;
         }
         
@@ -589,7 +586,7 @@ public class EntityRocketHoming extends Entity implements IProjectile {
         {
             boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityIn.capabilities.isCreativeMode;
 
-            if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_stinger_ammo, 1)))
+            if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(Armory.gun_stinger_ammo, 1)))
             {
                 flag = false;
             }

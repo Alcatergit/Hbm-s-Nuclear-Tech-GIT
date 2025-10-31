@@ -1,13 +1,12 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.items.ModItems;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileRain extends EntityMissileBaseAdvanced {
 
@@ -39,6 +38,7 @@ public class EntityMissileRain extends EntityMissileBaseAdvanced {
 		list.add(new ItemStack(ModItems.plate_steel, 16));
 		list.add(new ItemStack(ModItems.plate_titanium, 10));
 		list.add(new ItemStack(ModItems.thruster_large, 1));
+		list.add(new ItemStack(ModItems.circuit_targeting_tier3, 1));
 		
 		return list;
 	}

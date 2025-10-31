@@ -1,20 +1,19 @@
 package com.hbm.render.util;
 
-import java.util.Random;
-
+import com.hbm.render.amlfrom1710.CompositeBrush;
+import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.util.math.MathHelper;
 import org.lwjgl.opengl.GL11;
 
-import com.hbm.render.amlfrom1710.Tessellator;
-import net.minecraft.util.math.MathHelper;
-import com.hbm.render.amlfrom1710.Vec3;
+import java.util.Random;
 
 public class BeamPronter {
 
-	public enum EnumWaveType {
+	public static enum EnumWaveType {
 		RANDOM, SPIRAL
 	}
 
-	public enum EnumBeamType {
+	public static enum EnumBeamType {
 		SOLID, LINE
 	}
 	
@@ -48,7 +47,7 @@ public class BeamPronter {
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		}
 
-		Tessellator tessellator = Tessellator.instance;
+		CompositeBrush tessellator = CompositeBrush.instance;
 
 		Vec3 unit = Vec3.createVectorHelper(0, 1, 0);
 		Random rand = new Random(start);

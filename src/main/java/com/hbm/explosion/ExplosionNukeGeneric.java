@@ -1,30 +1,17 @@
 package com.hbm.explosion;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
-import net.minecraft.block.*;
-import org.apache.logging.log4j.Level;
-
-import com.hbm.config.CompatibilityConfig;
+import api.hbm.energy.IEnergyUser;
+import cofh.redstoneflux.api.IEnergyProvider;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.VersatileConfig;
-import com.hbm.handler.ArmorUtil;
 import com.hbm.entity.effect.EntityBlackHole;
-import com.hbm.items.ModItems;
+import com.hbm.handler.ArmorUtil;
+import com.hbm.items.ModItems.ArmorSets;
 import com.hbm.main.MainRegistry;
-import api.hbm.energy.IEnergyUser;
-
-import cofh.redstoneflux.api.IEnergyProvider;
+import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -40,6 +27,13 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.IEnergyStorage;
+import org.apache.logging.log4j.Level;
+
+import java.io.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 public class ExplosionNukeGeneric {
 
@@ -50,15 +44,16 @@ public class ExplosionNukeGeneric {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for (int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for (int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for (int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for (int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22) {
@@ -77,14 +72,15 @@ public class ExplosionNukeGeneric {
 		double d5;
 		double d6;
 		double d7;
+		double wat = radius;
 
-        // bombStartStrength *= 2.0F;
-		i = MathHelper.floor(x - (double) radius - 1.0D);
-		j = MathHelper.floor(x + (double) radius + 1.0D);
-		k = MathHelper.floor(y - (double) radius - 1.0D);
-		int i2 = MathHelper.floor(y + (double) radius + 1.0D);
-		int l = MathHelper.floor(z - (double) radius - 1.0D);
-		int j2 = MathHelper.floor(z + (double) radius + 1.0D);
+		// bombStartStrength *= 2.0F;
+		i = MathHelper.floor(x - wat - 1.0D);
+		j = MathHelper.floor(x + wat + 1.0D);
+		k = MathHelper.floor(y - wat - 1.0D);
+		int i2 = MathHelper.floor(y + wat + 1.0D);
+		int l = MathHelper.floor(z - wat - 1.0D);
+		int j2 = MathHelper.floor(z + wat + 1.0D);
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(i, k, l, j, i2, j2));
 
 		for (int i1 = 0; i1 < list.size(); ++i1) {
@@ -100,7 +96,7 @@ public class ExplosionNukeGeneric {
 				d6 = entity.posY + entity.getEyeHeight() - y;
 				d7 = entity.posZ - z;
 				double d9 = MathHelper.sqrt(d5 * d5 + d6 * d6 + d7 * d7);
-				if (d9 < (double) radius && !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
+				if (d9 < wat && !(entity instanceof EntityPlayer && ArmorUtil.checkArmor((EntityPlayer) entity, ArmorSets.euphemium_helmet, ArmorSets.euphemium_plate, ArmorSets.euphemium_legs, ArmorSets.euphemium_boots))) {
 					d5 /= d9;
 					d6 /= d9;
 					d7 /= d9;
@@ -189,15 +185,16 @@ public class ExplosionNukeGeneric {
 			return;
 		}
 		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = radius * radius;
+		int r = radius;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for (int xx = -radius; xx < radius; xx++) {
+		for (int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -radius; yy < radius; yy++) {
+			for (int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -radius; zz < radius; zz++) {
+				for (int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
@@ -224,6 +221,10 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+			}
+
+			else if (b == Blocks.WATER) {
+				world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
 			}
 
 			else if (b == Blocks.MYCELIUM) {
@@ -348,15 +349,16 @@ public class ExplosionNukeGeneric {
 		int y = pos.getY();
 		int z = pos.getZ();
 		MutableBlockPos mpos = new BlockPos.MutableBlockPos(pos);
-        int r2 = radius * radius;
+		int r = radius;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for (int xx = -radius; xx < radius; xx++) {
+		for (int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -radius; yy < radius; yy++) {
+			for (int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -radius; zz < radius; zz++) {
+				for (int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
@@ -380,12 +382,16 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.GLASS || b == Blocks.STAINED_GLASS
 					|| b == Blocks.ACACIA_DOOR || b == Blocks.BIRCH_DOOR || b == Blocks.DARK_OAK_DOOR || b == Blocks.JUNGLE_DOOR || b == Blocks.OAK_DOOR || b == Blocks.SPRUCE_DOOR || b == Blocks.IRON_DOOR
-					|| b instanceof BlockLeaves) {
+					|| b == Blocks.LEAVES || b == Blocks.LEAVES2) {
 				world.setBlockToAir(pos);
 			}
 
 			else if (b == Blocks.GRASS) {
 				world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
+			}
+
+			else if(b == ModBlocks.radwater_block) {
+				world.setBlockState(pos, Blocks.WATER.getDefaultState());
 			}
 
 			else if (b == Blocks.MYCELIUM) {
@@ -480,8 +486,14 @@ public class ExplosionNukeGeneric {
 			}
 			Block b = world.getBlockState(pos).getBlock();
 			TileEntity te = world.getTileEntity(pos);
-			
-			if (te != null && te instanceof IEnergyUser) {
+			if (te instanceof TileEntityCableBaseNT) {
+				if(random.nextInt(5) < 4) {
+					if (b.isFullCube(world.getBlockState(pos)))
+						world.setBlockState(pos,ModBlocks.block_electrical_scrap.getDefaultState());
+					else
+						world.destroyBlock(pos,true);
+				}
+			} else if (te != null && te instanceof IEnergyUser) {
 				
 				((IEnergyUser)te).setPower(0);
 				
@@ -537,7 +549,7 @@ public class ExplosionNukeGeneric {
 				
 				while((currentLine = read.readLine()) != null){
 					lineCount ++;
-					if(currentLine.startsWith("#") || currentLine.isEmpty())
+					if(currentLine.startsWith("#") || currentLine.length() == 0)
 						continue;
 					String[] blocks = currentLine.trim().split("|");
 					if(blocks.length != 2)
@@ -613,6 +625,11 @@ public class ExplosionNukeGeneric {
 				return;
 			}
 
+			if(b.getBlock() == ModBlocks.radwater_block) {
+				world.setBlockState(pos, Blocks.WATER.getDefaultState());
+				return;
+			}
+
 			if(b.getBlock() == ModBlocks.waste_trinitite || b.getBlock() == ModBlocks.waste_sand) {
 				world.setBlockState(pos, Blocks.SAND.getDefaultState());
 				return;
@@ -637,6 +654,11 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.RED_SANDSTONE.getDefaultState());
 				return;
 			}
+			
+			if(b.getBlock() == ModBlocks.waste_gravel) {
+				world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+				return;
+			}
 
 			if(b.getBlock() == ModBlocks.waste_snow) {
 				world.setBlockState(pos, Blocks.SNOW_LAYER.getDefaultState());
@@ -647,14 +669,33 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.SNOW.getDefaultState());
 				return;
 			}
-			
-			if(b.getBlock() == ModBlocks.waste_gravel) {
-				world.setBlockState(pos, Blocks.GRAVEL.getDefaultState());
+
+			if(b.getBlock() == ModBlocks.waste_ice) {
+				world.setBlockState(pos, Blocks.ICE.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.fallout) {
+				world.setBlockToAir(pos);
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.block_fallout) {
+				world.setBlockToAir(pos);
 				return;
 			}
 
 			if(b.getBlock() == ModBlocks.taint) {
 				world.setBlockState(pos, ModBlocks.stone_gneiss.getDefaultState());
+				return;
+			}
+
+			if(b.getBlock() == ModBlocks.ash_balefire) {
+				world.setBlockToAir(pos);
+				return;
+			}
+			if(b.getBlock() == ModBlocks.balefire) {
+				world.setBlockToAir(pos);
 				return;
 			}
 			

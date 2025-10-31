@@ -1,6 +1,8 @@
 package com.hbm.inventory.control_panel.controls.configs;
 
-import com.hbm.inventory.control_panel.*;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.GuiControlEdit;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 import net.minecraft.client.renderer.GlStateManager;

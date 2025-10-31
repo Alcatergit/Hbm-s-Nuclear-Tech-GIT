@@ -2,16 +2,15 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.StorageDrumRecipes;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.hazard.HazardSystem;
-
+import com.hbm.inventory.StorageDrumRecipes;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ContaminationUtil;
-
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -24,7 +23,6 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityStorageDrum extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
@@ -62,10 +60,10 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 				
 				if(!inventory.getStackInSlot(i).isEmpty()) {
 					
-					ItemStack itemStack = inventory.getStackInSlot(i);
+					Item item = inventory.getStackInSlot(i).getItem();
 					
-					if(world.getTotalWorldTime() % 20 == 0) {
-						rad += HazardSystem.getRawRadsFromStack(itemStack);
+					if(item instanceof IItemHazard && world.getTotalWorldTime() % 20 == 0) {
+						rad += ((IItemHazard)item).getModule().radiation.total();
 					}
 
 					int[] wasteData = StorageDrumRecipes.getWaste(inventory.getStackInSlot(i));
@@ -127,7 +125,7 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+	public boolean canExtractItemHopper(int i, ItemStack itemStack, int j) {
 		return !ContaminationUtil.isContaminated(itemStack) && StorageDrumRecipes.getOutput(itemStack) == null;
 	}
 
@@ -158,7 +156,7 @@ public class TileEntityStorageDrum extends TileEntityMachineBase implements ITic
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setTag("liquid", this.tanks[0].writeToNBT(new NBTTagCompound()));
 		nbt.setTag("gas", this.tanks[1].writeToNBT(new NBTTagCompound()));

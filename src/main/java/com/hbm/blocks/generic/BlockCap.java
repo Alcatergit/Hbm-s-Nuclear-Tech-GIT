@@ -1,21 +1,15 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Foods;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.SoundType;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 
-public class BlockCap extends BlockRotatablePillar {
+import java.util.Random;
 
-	public BlockCap(Material materialIn, String s, SoundType sound) {
-		super(materialIn, s, sound);
-	}
+public class BlockCap extends BlockRotatablePillar {
 
 	public BlockCap(Material materialIn, String s) {
 		super(materialIn, s);
@@ -24,21 +18,21 @@ public class BlockCap extends BlockRotatablePillar {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		if(this == ModBlocks.block_cap_nuka)
-			return ModItems.cap_nuka;
+			return Foods.cap_nuka;
 		if(this == ModBlocks.block_cap_quantum)
-			return ModItems.cap_quantum;
+			return Foods.cap_quantum;
 		if(this == ModBlocks.block_cap_sparkle)
-			return ModItems.cap_sparkle;
+			return Foods.cap_sparkle;
 		if(this == ModBlocks.block_cap_rad)
-			return ModItems.cap_rad;
+			return Foods.cap_rad;
 		if(this == ModBlocks.block_cap_korl)
-			return ModItems.cap_korl;
+			return Foods.cap_korl;
 		if(this == ModBlocks.block_cap_fritz)
-			return ModItems.cap_fritz;
+			return Foods.cap_fritz;
 		if(this == ModBlocks.block_cap_sunset)
-			return ModItems.cap_sunset;
+			return Foods.cap_sunset;
 		if(this == ModBlocks.block_cap_star)
-			return ModItems.cap_star;
+			return Foods.cap_star;
 		return Items.AIR;
 	}
 	

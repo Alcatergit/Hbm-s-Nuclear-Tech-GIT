@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "hbm:blocks/concrete_pink_double_slab"
+    }
+}

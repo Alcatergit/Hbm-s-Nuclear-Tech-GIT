@@ -1,12 +1,11 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class Sellafield {
 	
@@ -15,10 +14,10 @@ public class Sellafield {
 		return -Math.pow(x, 2) / Math.pow(rad, 2) * depth + depth;
 	}
 	
-	public boolean generate(World world, int x, int z, double radius, double depth) {
+	public void generate(World world, int x, int z, double radius, double depth) {
 		
 		if(world.isRemote)
-			return false;
+			return;
 		
 		Random rand = new Random();
 		
@@ -53,7 +52,6 @@ public class Sellafield {
 		}
 
 		placeCore(world, x, z, radius * 0.3D);
-        return true;
 	}
 	
 	private void dig(World world, int x, int z, int depth) {

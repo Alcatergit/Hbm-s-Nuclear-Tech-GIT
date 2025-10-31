@@ -1,32 +1,21 @@
 package com.hbm.entity.mob;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.MobConfig;
 import com.hbm.entity.mob.ai.EntityAIBreaking;
 import com.hbm.entity.mob.ai.EntityAI_MLPF;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.ArmorSets;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.IRangedAttackMob;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackMelee;
-import net.minecraft.entity.ai.EntityAIAttackRanged;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
@@ -43,6 +32,10 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class EntityFBI extends EntityMob implements IRangedAttackMob {
 	
@@ -96,21 +89,21 @@ public class EntityFBI extends EntityMob implements IRangedAttackMob {
 		int equip = rand.nextInt(2);
 
         switch(equip) {
-        case 0: this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.gun_revolver_nopip)); break;
-        case 1: this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.gun_ks23)); break;
+        case 0: this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Armory.gun_revolver_nopip)); break;
+        case 1: this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(Armory.gun_ks23)); break;
         }
         if(rand.nextInt(5) == 0) {
-        	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.security_helmet));
-        	this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.security_plate));
-        	this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.security_legs));
-        	this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.security_boots));
+        	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ArmorSets.security_helmet));
+        	this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ArmorSets.security_plate));
+        	this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ArmorSets.security_legs));
+        	this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ArmorSets.security_boots));
         }
 
         if(this.world != null && this.world.provider.getDimension() != 0) {
-        	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ModItems.paa_helmet));
-        	this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ModItems.paa_plate));
-        	this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ModItems.paa_legs));
-        	this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ModItems.paa_boots));
+        	this.setItemStackToSlot(EntityEquipmentSlot.HEAD, new ItemStack(ArmorSets.paa_helmet));
+        	this.setItemStackToSlot(EntityEquipmentSlot.CHEST, new ItemStack(ArmorSets.paa_plate));
+        	this.setItemStackToSlot(EntityEquipmentSlot.LEGS, new ItemStack(ArmorSets.paa_legs));
+        	this.setItemStackToSlot(EntityEquipmentSlot.FEET, new ItemStack(ArmorSets.paa_boots));
         }
 	}
 	
@@ -136,20 +129,20 @@ public class EntityFBI extends EntityMob implements IRangedAttackMob {
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 		if(!this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).isEmpty()) {
-			if(this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == ModItems.gun_revolver_nopip) {
+			if(this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Armory.gun_revolver_nopip) {
 				EntityBullet bullet = new EntityBullet(world, this, target, 3F, 2);
 				bullet.damage = 10;
 		        this.world.spawnEntity(bullet);
-		        this.playSound(HBMSoundHandler.revolverShootAlt, 1.0F, 1.0F);
+		        this.playSound(HBMSoundEvents.revolverShootAlt, 1.0F, 1.0F);
 			}
 
-			if(this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == ModItems.gun_ks23) {
+			if(this.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND).getItem() == Armory.gun_ks23) {
 				for(int i = 0; i < 7; i++) {
 					EntityBullet bullet = new EntityBullet(world, this, target, 3F, 5);
 					bullet.damage = 3;
 			        this.world.spawnEntity(bullet);
 				}
-		        this.playSound(HBMSoundHandler.shotgunShoot, 1.0F, 1.0F);
+		        this.playSound(HBMSoundEvents.shotgunShoot, 1.0F, 1.0F);
 			}
 		}
 	}

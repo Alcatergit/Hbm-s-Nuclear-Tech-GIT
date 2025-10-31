@@ -1,23 +1,21 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
-import com.hbm.util.I18nUtil;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.RBMKColumn;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.RBMKScreen;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
 
 public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKConsole> {
 
@@ -50,16 +48,17 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 
 		///New part
-
-        Tessellator tess = Tessellator.getInstance();
+		TileEntityRBMKConsole console = (TileEntityRBMKConsole) te;
+		
+		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		
-		for(int i = 0; i < ((TileEntityRBMKConsole) te).columns.length; i++) {
+		for(int i = 0; i < console.columns.length; i++) {
 			
-			RBMKColumn col = ((TileEntityRBMKConsole) te).columns[i];
+			RBMKColumn col = console.columns[i];
 			
 			if(col == null)
 				continue;
@@ -89,7 +88,7 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 		GlStateManager.color(1, 1, 1, 1);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
-		for(int i = 0; i < ((TileEntityRBMKConsole) te).screens.length; i++) {
+		for(int i = 0; i < console.screens.length; i++) {
 			
 			GL11.glPushMatrix();
 			
@@ -98,7 +97,7 @@ public class RenderRBMKConsole extends TileEntitySpecialRenderer<TileEntityRBMKC
 			
 			GL11.glTranslatef(0, -0.75F * (i / 2), 0);
 			
-			RBMKScreen screen = ((TileEntityRBMKConsole) te).screens[i];
+			RBMKScreen screen = console.screens[i];
 			String text = screen.display;
 			
 			if(text != null && ! text.isEmpty()) {

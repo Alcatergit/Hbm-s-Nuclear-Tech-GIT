@@ -1,17 +1,13 @@
 package com.hbm.blocks.network;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.blocks.ModBlocks;
+import api.hbm.block.IToolable;
 import com.hbm.blocks.ILookOverlay;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.util.I18nUtil;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidDuctMk2Solid;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2Solid;
-
-import api.hbm.block.IToolable;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -29,8 +25,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
+import net.minecraftforge.fluids.Fluid;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BlockFluidPipeSolid extends BlockContainer implements IToolable, ILookOverlay {
 

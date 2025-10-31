@@ -1,8 +1,7 @@
 package com.hbm.inventory.container;
 
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -54,7 +53,7 @@ public class ContainerTurretBase extends Container {
 				if(!this.mergeItemStack(var5, turret.inventory.getSlots(), this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if(var5.getItem() == ModItems.turret_chip) {
+			} else if(var5.getItem() == Armory.turret_chip) {
 				
 				if(!this.mergeItemStack(var5, 0, 1, false))
 					return ItemStack.EMPTY;

@@ -1,11 +1,6 @@
 package com.hbm.items.special;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.items.ModItems;
-
 import net.minecraft.block.BlockJukebox;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -26,6 +21,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class ItemModRecord extends ItemRecord {
 
@@ -71,8 +70,13 @@ public class ItemModRecord extends ItemRecord {
 	public String getRecordNameLocal() {
 		return I18n.format("item.record." + this.recordName + ".desc");
 	}
-
-    @Override
+	
+	@Override
+	public EnumRarity getRarity(ItemStack stack) {
+		return EnumRarity.RARE;
+	}
+	
+	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
         return (I18n.format(Items.RECORD_11.getTranslationKey() + ".name")).trim();

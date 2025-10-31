@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"activated=true": { "model": "hbm:fwatz_conductor" },
+     	   	"activated=false": { "model": "hbm:fwatz_conductor" }
+	}
+}

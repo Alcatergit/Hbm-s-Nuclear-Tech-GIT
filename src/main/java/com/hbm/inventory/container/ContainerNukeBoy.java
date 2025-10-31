@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -49,11 +48,11 @@ private TileEntityNukeBoy nukeBoy;
 			var3 = var5.copy();
 			
             if (par2 <= 4) {
-				if (!this.mergeItemStack(var5, 5, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 5, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 5, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
             

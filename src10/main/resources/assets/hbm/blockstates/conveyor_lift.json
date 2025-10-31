@@ -1,0 +1,25 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "textures": {},
+    "model": "hbm:conveyor_lift_0.obj"
+  },
+  "variants": {
+    "facing=north,type=0": [{"model": "hbm:conveyor_lift_0.obj", "y": 180 }],
+    "facing=south,type=0": [{"model": "hbm:conveyor_lift_0.obj"}],
+    "facing=west,type=0": [{"model": "hbm:conveyor_lift_0.obj", "y": 90 }],
+    "facing=east,type=0": [{"model": "hbm:conveyor_lift_0.obj", "y": 270 }],
+
+    "facing=north,type=1": [{"model": "hbm:conveyor_lift_1.obj", "y": 180 }],
+    "facing=south,type=1": [{"model": "hbm:conveyor_lift_1.obj"}],
+    "facing=west,type=1": [{"model": "hbm:conveyor_lift_1.obj", "y": 90 }],
+    "facing=east,type=1": [{"model": "hbm:conveyor_lift_1.obj", "y": 270 }],
+
+    "facing=north,type=2": [{"model": "hbm:conveyor_lift_2.obj", "y": 180 }],
+    "facing=south,type=2": [{"model": "hbm:conveyor_lift_2.obj"}],
+    "facing=west,type=2": [{"model": "hbm:conveyor_lift_2.obj", "y": 90 }],
+    "facing=east,type=2": [{"model": "hbm:conveyor_lift_2.obj", "y": 270 }],
+
+    "inventory": [{ "transform": "forge:default-block" }]
+  }
+}

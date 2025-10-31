@@ -1,41 +1,44 @@
 package com.hbm.packet;
 
-import java.io.IOException;
-
+import com.hbm.inventory.gui.GUIScreenTemplateFolder;
 import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemAssemblyTemplate;
-import com.hbm.items.machine.ItemCassette;
-import com.hbm.items.machine.ItemChemistryTemplate;
-import com.hbm.items.machine.ItemCrucibleTemplate;
-import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.items.machine.*;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
+import com.leafia.dev.custompacket.LeafiaCustomPacket;
+import com.leafia.dev.custompacket.LeafiaCustomPacketEncoder;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.network.PacketBuffer;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemFolderPacket implements IMessage {
+import java.util.function.Consumer;
+
+public class ItemFolderPacket extends RecordablePacket {
 
 	ItemStack stack;
-	PacketBuffer buffer;
+	//PacketBuffer buffer; Have you ever heard of ByteBufUtils
 
 	public ItemFolderPacket() {
 
 	}
 
 	public ItemFolderPacket(ItemStack stack) {
-		buffer = new PacketBuffer(Unpooled.buffer());
-		buffer.writeCompoundTag(stack.writeToNBT(new NBTTagCompound()));
+		this.stack = stack;
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
+		/*
 		if (buffer == null) {
 			buffer = new PacketBuffer(Unpooled.buffer());
 		}
@@ -44,15 +47,43 @@ public class ItemFolderPacket implements IMessage {
 			stack = new ItemStack(buffer.readCompoundTag());
 		} catch(IOException e) {
 			e.printStackTrace();
-		}
+		}*/
+		stack = buf.readItemStack();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
+		/*
 		if (buffer == null) {
 			buffer = new PacketBuffer(Unpooled.buffer());
 		}
-		buf.writeBytes(buffer);
+		buf.writeBytes(buffer);*/
+		buf.writeItemStack(stack);
+	}
+
+	public static class FolderResponsePacket implements LeafiaCustomPacketEncoder {
+		boolean serverSuccess = false;
+		public FolderResponsePacket() {}
+		public FolderResponsePacket(boolean success) {
+			serverSuccess = success;
+		}
+		@Override
+		public void encode(LeafiaBuf buf) {
+			buf.writeBoolean(serverSuccess);
+		}
+		@Override
+		@SideOnly(Side.CLIENT)
+		public Consumer<MessageContext> decode(LeafiaBuf buf) {
+			boolean success = buf.readBoolean();
+			return (ctx)->{
+				if (success) {
+					Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+					Minecraft.getMinecraft().player.closeScreen();
+				} else
+					Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundEvents.UI_BUTTON_INVALID, 1.0F));
+				GUIScreenTemplateFolder.cooldown = false;
+			};
+		}
 	}
 
 	public static class Handler implements IMessageHandler<ItemFolderPacket, IMessage> {
@@ -73,15 +104,17 @@ public class ItemFolderPacket implements IMessage {
 				if(p.capabilities.isCreativeMode) {
 					
 					p.inventory.addItemStackToInventory(stack.copy());
+					LeafiaCustomPacket.__start(new FolderResponsePacket(true)).__sendToClient(p);
 					return;
 				}
-
+				boolean success = false;
 				if(stack.getItem() instanceof ItemForgeFluidIdentifier) {
 					if(Library.hasInventoryOreDict(p.inventory, "plateIron") && Library.hasInventoryItem(p.inventory, Items.DYE)) {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_iron);
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() instanceof ItemAssemblyTemplate) {
@@ -90,6 +123,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() instanceof ItemChemistryTemplate) {
@@ -98,6 +132,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() instanceof ItemCrucibleTemplate) {
@@ -106,6 +141,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, Items.DYE);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() instanceof ItemCassette) {
@@ -114,6 +150,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.plate_steel);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_stone_plate || stack.getItem() == ModItems.stamp_stone_wire || stack.getItem() == ModItems.stamp_stone_circuit) {
@@ -121,6 +158,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_stone_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_iron_plate || stack.getItem() == ModItems.stamp_iron_wire || stack.getItem() == ModItems.stamp_iron_circuit) {
@@ -128,6 +166,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_iron_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_steel_plate || stack.getItem() == ModItems.stamp_steel_wire || stack.getItem() == ModItems.stamp_steel_circuit) {
@@ -135,6 +174,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_steel_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_titanium_plate || stack.getItem() == ModItems.stamp_titanium_wire || stack.getItem() == ModItems.stamp_titanium_circuit) {
@@ -142,6 +182,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_titanium_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_obsidian_plate || stack.getItem() == ModItems.stamp_obsidian_wire || stack.getItem() == ModItems.stamp_obsidian_circuit) {
@@ -149,6 +190,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_obsidian_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_schrabidium_plate || stack.getItem() == ModItems.stamp_schrabidium_wire || stack.getItem() == ModItems.stamp_schrabidium_circuit) {
@@ -156,6 +198,7 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_schrabidium_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
 				if(stack.getItem() == ModItems.stamp_desh_plate || stack.getItem() == ModItems.stamp_desh_wire || stack.getItem() == ModItems.stamp_desh_circuit) {
@@ -163,8 +206,10 @@ public class ItemFolderPacket implements IMessage {
 						Library.consumeInventoryItem(p.inventory, ModItems.stamp_desh_flat);
 						if(!p.inventory.addItemStackToInventory(stack.copy()))
 							p.dropItem(stack, true);
+						success = true;
 					}
 				}
+				LeafiaCustomPacket.__start(new FolderResponsePacket(success)).__sendToClient(p);
 			});
 
 			

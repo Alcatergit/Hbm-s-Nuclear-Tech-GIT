@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:dosimeter"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_dosimeter"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_dosimeter.desc"
+		}
+	},
+	"parent": "hbm:progress_burnerpress",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:dosimeter"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 7
+    }
+}

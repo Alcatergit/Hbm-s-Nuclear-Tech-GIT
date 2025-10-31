@@ -1,12 +1,12 @@
 package com.hbm.inventory.control_panel;
 
+import com.hbm.inventory.control_panel.controls.*;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import com.hbm.inventory.control_panel.controls.*;
 
 public class ControlRegistry {
 	
@@ -45,7 +45,8 @@ public class ControlRegistry {
 	
 	public static List<Control> getAllControls(){
 		List<Control> l = new ArrayList<>(registry.size());
-        l.addAll(registry.values());
+		for(Control c : registry.values())
+			l.add(c);
 		return l;
 	}
 

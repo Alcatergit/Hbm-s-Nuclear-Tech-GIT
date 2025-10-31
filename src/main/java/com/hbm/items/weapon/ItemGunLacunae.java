@@ -1,8 +1,7 @@
 package com.hbm.items.weapon;
 
 import com.hbm.handler.GunConfiguration;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -20,7 +19,7 @@ public class ItemGunLacunae extends ItemGunBase {
 		
 		if(main) {
 			setDelay(stack, 20);
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lacunaeSpinup, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lacunaeSpinup, SoundCategory.PLAYERS, 1.0F, 1.0F);
 		}
 	}
 	
@@ -28,7 +27,7 @@ public class ItemGunLacunae extends ItemGunBase {
 	public void endAction(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
 		
 		if(main)
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lacunaeSpindown, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lacunaeSpindown, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	}
 	
 	@Override

@@ -1,26 +1,24 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import javax.annotation.CheckForNull;
-
-import com.hbm.items.ItemBase;
+import com.hbm.items.special.ItemHazard;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ActionResult;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemRTGPellet extends ItemBase {
+import javax.annotation.CheckForNull;
+import java.util.List;
+
+public class ItemRTGPellet extends ItemHazard {
 	
 	private short heat = 0;
 	private boolean doesDecay = false;
@@ -28,10 +26,12 @@ public class ItemRTGPellet extends ItemBase {
 	private long halflife = 0;
 	private long lifespan = 0;
 	
-	public ItemRTGPellet(int heatIn, String s) {
-		super(s);
-		this.heat = (short)heatIn;
+	public ItemRTGPellet(int heatIn, float radiation, String s) {
+		super(radiation, s);
+		this.heat = (short) heatIn;
 		this.setMaxStackSize(1);
+		this.setTranslationKey(s);
+		//ModItems.ALL_ITEMS.add(this);
 	}
 	
 	private static final String[] facts = new String[] {
@@ -150,10 +150,11 @@ public class ItemRTGPellet extends ItemBase {
 	
 	@Override
 	public void addInformation(ItemStack stack, World world, List<String> list, ITooltipFlag flagIn) {
+		super.addInformation(stack, world, list, flagIn);
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
 		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {
-			list.add("§aFuel left: "+((int)(getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
+			list.add("§aFuel left: "+((int)(instance.getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
 			list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
 			list.add("");
 			list.add(String.format("%s / %s ticks", instance.getLifespan(stack), instance.getMaxLifespan()));

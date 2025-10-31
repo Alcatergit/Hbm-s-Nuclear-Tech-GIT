@@ -1,11 +1,10 @@
 package com.hbm.particle_instanced;
 
+import com.hbm.main.ModEventHandlerClient;
+import net.minecraft.world.World;
+
 import java.nio.ByteBuffer;
 import java.util.Random;
-
-import com.hbm.main.ModEventHandlerClient;
-
-import net.minecraft.world.World;
 
 public class ParticleExSmokeInstanced extends ParticleInstanced {
 

@@ -1,0 +1,9 @@
+{
+    "variants": {
+        "facing=up":  { "model": "hbm:radio_torch_unlit" },
+        "facing=east":  { "model": "hbm:radio_torch_wall_unlit" },
+        "facing=south":  { "model": "hbm:radio_torch_wall_unlit", "y": 90 },
+        "facing=west":  { "model": "hbm:radio_torch_wall_unlit", "y": 180 },
+        "facing=north":  { "model": "hbm:radio_torch_wall_unlit", "y": 270 }
+    }
+}

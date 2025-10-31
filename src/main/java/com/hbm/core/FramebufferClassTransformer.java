@@ -1,16 +1,11 @@
 package com.hbm.core;
 
-import java.util.Arrays;
-
+import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
-import org.objectweb.asm.tree.AbstractInsnNode;
-import org.objectweb.asm.tree.ClassNode;
-import org.objectweb.asm.tree.LdcInsnNode;
-import org.objectweb.asm.tree.MethodInsnNode;
-import org.objectweb.asm.tree.MethodNode;
+import org.objectweb.asm.tree.*;
 
-import net.minecraft.launchwrapper.IClassTransformer;
+import java.util.Arrays;
 
 public class FramebufferClassTransformer implements IClassTransformer {
 

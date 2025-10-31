@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeSolinium;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -53,11 +52,11 @@ public class ContainerNukeSolinium extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 8) {
-				if (!this.mergeItemStack(var5, 9, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 9, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 9, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
             

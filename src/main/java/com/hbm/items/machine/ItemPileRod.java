@@ -1,19 +1,22 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import com.hbm.items.ItemBase;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.special.ItemHazard;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
-public class ItemPileRod extends ItemBase {
+import java.util.List;
+
+public class ItemPileRod extends ItemHazard {
 	
 	public ItemPileRod(String s){
 		super(s);
+	}
+
+	public ItemPileRod(float radiation, String s){
+		super(radiation, s);
 	}
 	
 	@Override
@@ -35,5 +38,7 @@ public class ItemPileRod extends ItemBase {
 		if(this == ModItems.pile_rod_source || this == ModItems.pile_rod_plutonium) {
 			tooltip.add(TextFormatting.LIGHT_PURPLE + "[Neutron Source]");
 		}
+		super.addInformation(stack, worldIn, tooltip, flagIn);
 	}
+	
 }

@@ -1,21 +1,18 @@
 package com.hbm.blocks.fluid;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -25,12 +22,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.fluids.BlockFluidClassic;
 import net.minecraftforge.fluids.Fluid;
 
+import java.util.Random;
+
 public class MudBlock extends BlockFluidClassic {
 
 	public static DamageSource damageSource;
 	public Random rand = new Random();
 	public int color;
-	
+
 	public MudBlock(Fluid fluid, DamageSource d, String s, int color) {
 		super(fluid, Material.LAVA);
 		damageSource = d;
@@ -40,7 +39,7 @@ public class MudBlock extends BlockFluidClassic {
 		this.setQuantaPerBlock(4);
 		this.setCreativeTab(null);
 		displacements.put(this, false);
-		
+
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -71,7 +70,7 @@ public class MudBlock extends BlockFluidClassic {
 		}
 		return super.canDisplace(world, pos);
 	}
-	
+
 	@Override
 	public boolean displaceIfPossible(World world, BlockPos pos) {
 		if (world.getBlockState(pos).getMaterial().isLiquid()) {
@@ -79,7 +78,7 @@ public class MudBlock extends BlockFluidClassic {
 		}
 		return super.displaceIfPossible(world, pos);
 	}
-	
+
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity) {
 		entity.setInWeb();
@@ -90,7 +89,7 @@ public class MudBlock extends BlockFluidClassic {
 		if(entity instanceof EntityLivingBase)
 			ContaminationUtil.contaminate((EntityLivingBase)entity, HazardType.RADIATION, ContaminationType.CREATIVE, 20F);
 	}
-	
+
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 		reactToBlocks2(world, pos.east());
@@ -101,7 +100,7 @@ public class MudBlock extends BlockFluidClassic {
 		reactToBlocks2(world, pos.north());
 		super.updateTick(world, pos, state, rand);
 	}
-	
+
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block neighborBlock, BlockPos neighbourPos) {
 		reactToBlocks(world, pos.east());
@@ -112,26 +111,26 @@ public class MudBlock extends BlockFluidClassic {
 		reactToBlocks(world, pos.north());
 		super.neighborChanged(state, world, pos, neighborBlock, neighbourPos);
 	}
-	
+
 	public void reactToBlocks(World world, BlockPos pos) {
 		if(world.getBlockState(pos).getMaterial() != Material.LAVA) {
 			IBlockState block = world.getBlockState(pos);
-			
+
 			if(block.getMaterial().isLiquid()) {
 				world.setBlockToAir(pos);
 			}
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void reactToBlocks2(World world, BlockPos pos) {
 		if(world.getBlockState(pos).getMaterial() != Material.LAVA) {
 			IBlockState state = world.getBlockState(pos);
 			Block block = state.getBlock();
 
-			if (block == Blocks.STONE || 
-					block == Blocks.STONE_BRICK_STAIRS || 
-					block == Blocks.STONEBRICK || 
+			if (block == Blocks.STONE ||
+					block == Blocks.STONE_BRICK_STAIRS ||
+					block == Blocks.STONEBRICK ||
 					block == Blocks.STONE_SLAB) {
 				if(rand.nextInt(20) == 0)
 					world.setBlockState(pos, Blocks.COBBLESTONE.getDefaultState());
@@ -141,7 +140,7 @@ public class MudBlock extends BlockFluidClassic {
 			} else if (block == Blocks.SANDSTONE) {
 				if(rand.nextInt(5) == 0)
 					world.setBlockState(pos, Blocks.SAND.getDefaultState());
-			} else if (block == Blocks.HARDENED_CLAY || 
+			} else if (block == Blocks.HARDENED_CLAY ||
 					block == Blocks.STAINED_HARDENED_CLAY) {
 				if(rand.nextInt(10) == 0)
 					world.setBlockState(pos, Blocks.CLAY.getDefaultState());
@@ -190,7 +189,7 @@ public class MudBlock extends BlockFluidClassic {
 			}
 		}
 	}
-	
+
 	@Override
 	public int tickRate(World world) {
 		return 15;

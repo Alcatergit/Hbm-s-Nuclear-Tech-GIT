@@ -1,10 +1,7 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
@@ -14,6 +11,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 
@@ -49,11 +47,11 @@ public class RenderBeam5 extends Render<EntityExplosiveBeam> {
 				color = 0;
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 			GlStateManager.color(red ? 1 : color, green ? 1 : color, blue ? 1 : color, 1f);
-			buf.pos(0 + o, 0 - o, 0).endVertex();
-            buf.pos(0 + o, 0 + o, 0).endVertex();
-            buf.pos(0 + o, 0 + o, 0 + distance).endVertex();
-            buf.pos(0 + o, 0 - o, 0 + distance).endVertex();
-            tessellator.draw();
+			buf.pos(0 + o, 0 - o, 0).endVertex();;
+			buf.pos(0 + o, 0 + o, 0).endVertex();;
+			buf.pos(0 + o, 0 + o, 0 + distance).endVertex();;
+			buf.pos(0 + o, 0 - o, 0 + distance).endVertex();;
+			tessellator.draw();
 			
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 			GlStateManager.color(red ? 1 : color, green ? 1 : color, blue ? 1 : color, 1f);

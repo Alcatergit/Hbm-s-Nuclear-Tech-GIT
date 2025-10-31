@@ -1,16 +1,17 @@
 package com.hbm.handler;
 
-import java.io.*;
-import java.net.SocketTimeoutException;
-import java.net.URL;
-import java.net.URLConnection;
-import java.nio.file.DirectoryStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-
 import com.hbm.interfaces.Untested;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
+import java.nio.file.DirectoryStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class HTTPHandler {
 
@@ -58,29 +59,12 @@ public class HTTPHandler {
 	    }
 	}
 
-	public static BufferedReader getURLBufferReader(String url) {
-		try {
-			URL githubUrl = new URL(url);
-			URLConnection con = githubUrl.openConnection();
-			con.setConnectTimeout(5000);
-			con.setReadTimeout(5000); // 5 seconds timeout
-			con.connect();
-			InputStream input = con.getInputStream();
-			return new BufferedReader(new InputStreamReader(input));
-		} catch (SocketTimeoutException e) {
-			MainRegistry.logger.warn("Search ended with timeout");
-			return null;
-		} catch (IOException e) {
-            MainRegistry.logger.warn("Search ended with I/O error: {}", e.getMessage());
-			return null;
-		}
-	}
-
 	private static void loadVersion() throws IOException {
-		MainRegistry.logger.info("Searching for new versions...");
 
-		BufferedReader in = getURLBufferReader("https://raw.githubusercontent.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/Custom-1.12.2/src/main/java/com/hbm/lib/RefStrings.java");
-		if(in == null) return;
+		URL github = new URL("https://raw.githubusercontent.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/Custom-1.12.2/src/main/java/com/hbm/lib/RefStrings.java");
+        BufferedReader in = new BufferedReader(new InputStreamReader(github.openStream()));
+
+        MainRegistry.logger.info("Searching for new versions...");
         String line;
 
         while ((line = in.readLine()) != null) {
@@ -115,8 +99,9 @@ public class HTTPHandler {
 
 	private static void loadSoyuz() throws IOException {
 
-        BufferedReader in = getURLBufferReader("https://gist.githubusercontent.com/HbmMods/a1cad71d00b6915945a43961d0037a43/raw/soyuz_holo");
-		if(in == null) return;
+		URL github = new URL("https://gist.githubusercontent.com/HbmMods/a1cad71d00b6915945a43961d0037a43/raw/soyuz_holo");
+        BufferedReader in = new BufferedReader(new InputStreamReader(github.openStream()));
+
         String line = in.readLine();
 
         if(line != null)

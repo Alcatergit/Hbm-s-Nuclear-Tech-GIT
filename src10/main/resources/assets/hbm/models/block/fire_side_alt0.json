@@ -1,0 +1,7 @@
+{
+    "parent": "hbm:block/fire_side_alt",
+    "textures": {
+        "particle": "hbm:blocks/balefire",
+        "fire": "hbm:blocks/balefire"
+    }
+}

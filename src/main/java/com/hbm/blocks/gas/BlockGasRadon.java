@@ -1,21 +1,20 @@
 package com.hbm.blocks.gas;
 
-import java.util.Random;
-
+import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.util.ArmorRegistry;
-import com.hbm.handler.ArmorUtil;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockGasRadon extends BlockGasBase {
 
@@ -32,7 +31,7 @@ public class BlockGasRadon extends BlockGasBase {
 		
 		if(ArmorRegistry.hasProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.RAD_GAS)) {
 			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
-			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.05F);
+			//ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.05F); Wtf
 		} else {
 			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.05F);
 		}
@@ -59,5 +58,6 @@ public class BlockGasRadon extends BlockGasBase {
 		}
 		
 		super.updateTick(world, pos, state, rand);
+		world.scheduleUpdate(pos, this, this.tickRate(world) + rand.nextInt(5));
 	}
 }

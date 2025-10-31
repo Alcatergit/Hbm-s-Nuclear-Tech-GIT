@@ -1,15 +1,13 @@
 package com.hbm.animloader;
 
+import com.hbm.util.BobMathUtil;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
+
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.util.BobMathUtil;
-
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.util.math.MathHelper;
 
 public class AnimatedModel {
 
@@ -77,13 +75,14 @@ public class AnimatedModel {
 		float remappedTime = MathHelper.clamp(BobMathUtil.remap(diff, 0, activeAnim.anim.length, 0, numKeyFrames - 1), 0, numKeyFrames - 1);
 		float diffN = BobMathUtil.remap01_clamp(diff, 0, activeAnim.anim.length);
 		int index = (int) remappedTime;
-        int next;
+		int first = index;
+		int next;
 		if(index < numKeyFrames - 1) {
 			next = index + 1;
 		} else {
 			next = index;
 		}
-		
+
 		renderWithIndex((float) fract(remappedTime), index, next, diffN, c);
 		controller.activeAnim.prevFrame = index;
 	}
@@ -143,10 +142,10 @@ public class AnimatedModel {
 	private static float fract(float number) {
 		return (float) (number - Math.floor(number));
 	}
-	
+
 	public interface IAnimatedModelCallback {
 		//(prevFrame, currentFrame, model, diffN, modelName)
-        boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName);
+		boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName);
 		default void postRender(int prevFrame, int currentFrame, int model, float diffN, String modelName){}
-    }
+	}
 }

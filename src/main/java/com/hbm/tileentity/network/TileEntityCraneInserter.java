@@ -1,21 +1,31 @@
 package com.hbm.tileentity.network;
 
 import com.hbm.lib.Library;
+import com.hbm.blocks.network.CraneInserter;
 import com.hbm.inventory.container.ContainerCraneInserter;
 import com.hbm.inventory.gui.GUICraneInserter;
 import com.hbm.tileentity.IGUIProvider;
+import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
+import net.minecraft.inventory.ISidedInventory;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Item;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
 
 public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUIProvider {
 
@@ -32,7 +42,9 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
     public void update() {
         super.update();
         if(!world.isRemote) {
+
             tryFillTe();
+
         }
     }
 
@@ -40,9 +52,11 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
         EnumFacing outputSide = getOutputSide();
         TileEntity te = world.getTileEntity(pos.offset(outputSide));
 
+        int meta = this.getBlockMetadata();
         if(te != null){
-            if(te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
-                IItemHandler cap = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
+            ICapabilityProvider capte = te;
+            if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide)) {
+                IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, outputSide);
             
                 for(int i = 0; i < inventory.getSlots(); i++) {
                     tryFillContainerCap(cap, i);
@@ -83,8 +97,8 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
                 outputStack.setCount(fillAmount);
 
                 ItemStack rest = chest.insertItem(i, outputStack, true);
-                if(rest.getCount() < outputStack.getCount()){
-                    stack.shrink(outputStack.getCount()-rest.getCount());
+                if(rest.getItem() == Item.getItemFromBlock(Blocks.AIR)){
+                    stack.shrink(outputStack.getCount());
                     chest.insertItem(i, outputStack, false);
                 }
             }
@@ -104,8 +118,4 @@ public class TileEntityCraneInserter extends TileEntityCraneBase implements IGUI
         return new GUICraneInserter(player.inventory, this);
     }
 
-    @Override
-    public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-        return new int[]{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16 ,17, 18, 19, 20};
-    }
 }

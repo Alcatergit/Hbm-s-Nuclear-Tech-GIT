@@ -1,12 +1,11 @@
 package com.hbm.physics;
 
+import com.hbm.render.amlfrom1710.Vec3;
+
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.hbm.render.amlfrom1710.Vec3;
 
 public class GJK {
 
@@ -379,7 +378,8 @@ public class GJK {
 		}
 		
 		public Mkv copy(){
-            return new Mkv(v.copy(), r.copy());
+			Mkv vert = new Mkv(v.copy(), r.copy());
+			return vert;
 		}
 	}
 	
@@ -391,10 +391,10 @@ public class GJK {
 		public Vec3 contactPointB;
 	}
 	
-	public enum Result {
+	public static enum Result {
 		COLLIDING,
 		SEPARATED,
 		GJK_FAILED,
-		EPA_FAILED
-    }
+		EPA_FAILED;
+	}
 }

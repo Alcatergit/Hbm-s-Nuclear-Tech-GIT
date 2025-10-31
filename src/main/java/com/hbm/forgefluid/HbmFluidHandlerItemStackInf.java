@@ -1,7 +1,6 @@
 package com.hbm.forgefluid;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;

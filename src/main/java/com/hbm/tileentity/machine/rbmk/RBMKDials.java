@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.config.GeneralConfig;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
@@ -215,7 +214,7 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 	public static int shittyWorkaroundParseInt(String s, int def) {
 		try {
 			return Integer.parseInt(s);
-		} catch(Exception ignored) { }
+		} catch(Exception ex) { }
 		return def;
 	}
 }

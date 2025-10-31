@@ -21,8 +21,8 @@ public class TileEntityCableSwitch extends TileEntityCableBaseNT {
 		if(this.getBlockMetadata() == 1) {
 			this.connect();
 			
-			if(this.getPowerNet() == null) {
-				new PowerNet().joinLink(this);
+			if(this.getNetwork() == null) {
+				new PowerNet().assignConductor(this);
 			}
 		}
 	}

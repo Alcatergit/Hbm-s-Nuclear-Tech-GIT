@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;

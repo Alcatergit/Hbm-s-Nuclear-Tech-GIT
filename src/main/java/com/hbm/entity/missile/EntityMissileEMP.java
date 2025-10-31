@@ -1,22 +1,19 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.items.ModItems;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static com.hbm.inventory.material.Mats.MAT_ALUMINIUM;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileEMP extends EntityMissileBaseAdvanced {
 
-	public EntityMissileEMP(World world) {
-		super(world);
+	public EntityMissileEMP(World p_i1582_1_) {
+		super(p_i1582_1_);
 		this.setSize(1F, 7F);
 	}
 
@@ -42,10 +39,11 @@ public class EntityMissileEMP extends EntityMissileBaseAdvanced {
 	public List<ItemStack> getDebris() {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 
-		list.add(new ItemStack(ModItems.wire, 4, MAT_ALUMINIUM.id));
+		list.add(new ItemStack(ModItems.wire_aluminium, 4));
 		list.add(new ItemStack(ModItems.plate_titanium, 4));
 		list.add(new ItemStack(ModItems.hull_small_aluminium, 2));
 		list.add(new ItemStack(ModItems.ducttape, 1));
+		list.add(new ItemStack(ModItems.circuit_targeting_tier1, 1));
 		
 		return list;
 	}

@@ -1,18 +1,17 @@
 package com.hbm.flashlight;
 
-import java.nio.IntBuffer;
-
+import com.hbm.handler.HbmShaderManager;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.texture.TextureUtil;
+import net.minecraft.client.shader.Framebuffer;
 import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
-import com.hbm.handler.HbmShaderManager;
 
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.texture.TextureUtil;
-import net.minecraft.client.shader.Framebuffer;
+import java.nio.IntBuffer;
 
 @Deprecated
 public class FlashlightFramebuffer extends Framebuffer {
@@ -80,7 +79,31 @@ public class FlashlightFramebuffer extends Framebuffer {
 		}
 	}
 
-    public void postProcess(){
+	@Override
+	public void deleteFramebuffer() {
+		if(OpenGlHelper.isFramebufferEnabled()) {
+			this.unbindFramebufferTexture();
+			this.unbindFramebuffer();
+
+			if(this.depthBuffer > -1) {
+				OpenGlHelper.glDeleteRenderbuffers(this.depthBuffer);
+				this.depthBuffer = -1;
+			}
+
+			if(this.framebufferTexture > -1) {
+				TextureUtil.deleteTexture(this.framebufferTexture);
+				this.framebufferTexture = -1;
+			}
+
+			if(this.framebufferObject > -1) {
+				OpenGlHelper.glBindFramebuffer(OpenGlHelper.GL_FRAMEBUFFER, 0);
+				OpenGlHelper.glDeleteFramebuffers(this.framebufferObject);
+				this.framebufferObject = -1;
+			}
+		}
+	}
+	
+	public void postProcess(){
 		int prevTexture0;
 		int prevTexture6;
 		int prevTexture7;

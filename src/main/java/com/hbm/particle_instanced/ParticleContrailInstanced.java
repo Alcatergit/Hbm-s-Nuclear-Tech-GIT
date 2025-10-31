@@ -1,12 +1,11 @@
 package com.hbm.particle_instanced;
 
-import java.nio.ByteBuffer;
-import java.util.Random;
-
 import com.hbm.main.ModEventHandlerClient;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.nio.ByteBuffer;
+import java.util.Random;
 
 public class ParticleContrailInstanced extends ParticleInstanced {
 
@@ -38,9 +37,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		this.particleTexture = ModEventHandlerClient.contrail;
 		maxAge = 100 + rand.nextInt(20);
 
-		lowRed = red;
-		lowGreen = green;
-		lowBlue = blue;
+		this.lowRed = red;
+		this.lowGreen = green;
+		this.lowBlue = blue;
 
 		this.scale = scale;
 		initVals();
@@ -48,9 +47,9 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 
 	public ParticleContrailInstanced(World worldIn, double posXIn, double posYIn, double posZIn, float flameRed, float flameGreen, float flameBlue, float red, float green, float blue, float scale) {
 		this(worldIn, posXIn, posYIn, posZIn, red, green, blue, scale);
-		ParticleContrailInstanced.flameRed = flameRed;
-		ParticleContrailInstanced.flameGreen = flameGreen;
-		ParticleContrailInstanced.flameBlue = flameBlue;
+		this.flameRed = flameRed;
+		this.flameGreen = flameGreen;
+		this.flameBlue = flameBlue;
 
 		this.doFlames = true;
 	}
@@ -93,23 +92,23 @@ public class ParticleContrailInstanced extends ParticleInstanced {
 		float pColor = 0;
 		if(index == 0){
 			if(doFlames){
-				pColor = lowRed + (flameRed- lowRed)*particleAlpha*0.1F;
+				pColor = this.lowRed + (this.flameRed-this.lowRed)*particleAlpha*0.1F;
 			} else {
-				pColor = lowRed;
+				pColor = this.lowRed;
 			}
 			this.particleRed = pColor;
 		} else if(index == 1){
 			if(doFlames){
-				pColor = lowGreen + (flameGreen- lowGreen)*particleAlpha*0.1F;
+				pColor = this.lowGreen + (this.flameGreen-this.lowGreen)*particleAlpha*0.1F;
 			} else {
-				pColor = lowGreen;
+				pColor = this.lowGreen;
 			}
 			this.particleGreen = pColor;
 		} else if(index == 2){
 			if(doFlames){
-				pColor = lowBlue + (flameBlue- lowBlue)*particleAlpha*0.1F;
+				pColor = this.lowBlue + (this.flameBlue-this.lowBlue)*particleAlpha*0.1F;
 			} else {
-				pColor = lowBlue;
+				pColor = this.lowBlue;
 			}
 			this.particleBlue = pColor;
 		}

@@ -1,7 +1,5 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,6 +8,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 public class ModelBoltAction extends ModelBase {
 
@@ -211,7 +210,7 @@ public class ModelBoltAction extends ModelBase {
         BufferBuilder buf = tessellator.getBuffer();
         buf.begin(GL11.GL_LINE_STRIP, DefaultVertexFormats.POSITION_COLOR);
         buf.pos(-32F / 16F, 0 + 4F / 16F, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();
-        buf.pos(-150, 0, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();
+        buf.pos(-150, 0, 0).color(0.0F, 1.0F, 0.0F, 1.0F).endVertex();;
         tessellator.draw();
         
         GlStateManager.enableLighting();

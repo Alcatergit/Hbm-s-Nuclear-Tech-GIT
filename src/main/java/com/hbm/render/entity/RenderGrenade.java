@@ -1,17 +1,15 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.grenade.EntityGrenadeASchrab;
 import com.hbm.entity.grenade.EntityGrenadeMk2;
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderGrenade extends Render<Entity> {
 
@@ -37,10 +35,12 @@ public class RenderGrenade extends Render<Entity> {
 
         if(grenade instanceof EntityGrenadeMk2) {
 	        GL11.glRotatef(90, 0F, 1F, 0F);
+	        GL11.glScaled(0.125, 0.125, 0.125);
 			ResourceManager.grenade_frag.renderAll();
         }
         if(grenade instanceof EntityGrenadeASchrab) {
 	        GL11.glRotatef(90, 0F, 1F, 0F);
+	        GL11.glScaled(0.125, 0.125, 0.125);
 			ResourceManager.grenade_aschrab.renderAll();
         }
         GlStateManager.shadeModel(GL11.GL_FLAT);

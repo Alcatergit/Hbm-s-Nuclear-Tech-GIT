@@ -1,7 +1,6 @@
 package com.hbm.crafting.handlers;
 
 import com.hbm.items.machine.ItemFuelRod;
-
 import net.minecraft.inventory.InventoryCrafting;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
@@ -50,15 +49,18 @@ public class SmallReactorFuelCraftingHandler extends net.minecraftforge.registri
 		
 		boolean hasOne = false;
 
-		for(int i = 0; i < inventory.getSizeInventory(); ++i) {
-			ItemStack stack = inventory.getStackInSlot(i);
+		for(int i = 0; i < 3; ++i) {
+			for(int j = 0; j < 3; ++j) {
 				
-			if(!stack.isEmpty()) {
-
-				if(!hasOne)
-					hasOne = true;
-				else
-					return false;
+				ItemStack stack = inventory.getStackInRowAndColumn(j, i);
+				
+				if(!stack.isEmpty()) {
+					
+					if(!hasOne)
+						hasOne = true;
+					else
+						return false;
+				}
 			}
 		}
 		
@@ -67,11 +69,14 @@ public class SmallReactorFuelCraftingHandler extends net.minecraftforge.registri
 	
 	private ItemStack getFirstStack(InventoryCrafting inventory) {
 
-		for(int i = 0; i < inventory.getSizeInventory(); ++i) {
-			ItemStack stack = inventory.getStackInSlot(i);
+		for(int i = 0; i < 3; ++i) {
+			for(int j = 0; j < 3; ++j) {
 				
-			if(!stack.isEmpty()) {
-				return stack;
+				ItemStack stack = inventory.getStackInRowAndColumn(j, i);
+				
+				if(stack != null && !stack.isEmpty()) {
+					return stack;
+				}
 			}
 		}
 		

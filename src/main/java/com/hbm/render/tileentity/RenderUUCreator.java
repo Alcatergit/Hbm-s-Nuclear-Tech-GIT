@@ -1,12 +1,10 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineUUCreator;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderUUCreator extends TileEntitySpecialRenderer<TileEntityMachineUUCreator> {
 
@@ -20,7 +18,7 @@ public class RenderUUCreator extends TileEntitySpecialRenderer<TileEntityMachine
 		
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.uu_creator_tex);
-		ResourceManager.watz.renderAll();
+		ResourceManager.uu_creator.renderAll();
 		GlStateManager.shadeModel(GL11.GL_FLAT);
 		
 		GL11.glPopMatrix();

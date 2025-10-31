@@ -2,22 +2,23 @@ package com.hbm.inventory;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.potion.HbmPotion;
+import com.hbm.items.ModItems.Foods;
+import com.hbm.items.ModItems.Materials.Crystals;
 import com.hbm.lib.RefStrings;
-
+import com.hbm.potion.HbmPotion;
 import net.minecraft.block.Block;
+import net.minecraft.init.Items;
+import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.Ingredient;
-import net.minecraft.init.Items;
-import net.minecraft.init.PotionTypes;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.oredict.OreIngredient;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import net.minecraftforge.oredict.OreIngredient;
 
 public class PotionRecipes {
 
@@ -27,10 +28,10 @@ public class PotionRecipes {
 		addPotionRecipe(HbmPotion.radaway, ModBlocks.mush, 60*20, 10*60*20, 4*60*20);
 		addPotionRecipe(HbmPotion.mutation, ModItems.egg_balefire, 30*20, 2*60*20, 0);
 		addPotionRecipe(HbmPotion.taint, ModItems.syringe_taint, 30*20, 2*60*20, 15*20);
-		addPotionRecipe(HbmPotion.phosphorus, ModItems.crystal_phosphorus, 30*20, 2*60*20, 0);
+		addPotionRecipe(HbmPotion.phosphorus, Crystals.crystal_phosphorus, 30*20, 2*60*20, 0);
 		addPotionRecipe(HbmPotion.bang, ModItems.coin_ufo, 30*20, 15*20, 2*30*20);
-		addPotionRecipe(HbmPotion.stability, ModItems.five_htp, 60*20, 3*60*20, 0);
-		addPotionRecipe(HbmPotion.lead, ModItems.apple_lead1, 30*20, 2*60*20, 15*20);
+		addPotionRecipe(HbmPotion.stability, ModItems.five_htp, 30*20, 2*60*20, 0);
+		addPotionRecipe(HbmPotion.lead, Foods.apple_lead1, 30*20, 2*60*20, 15*20);
 		addPotionRecipe(HbmPotion.telekinesis, ModBlocks.float_bomb, 30*20, 2*60*20, 15*20);
 	}
 

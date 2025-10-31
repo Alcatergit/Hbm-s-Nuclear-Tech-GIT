@@ -1,14 +1,11 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockLadder;
 import net.minecraft.block.material.Material;
@@ -20,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class Barrel extends WorldGenerator {
 	
@@ -56,14 +55,22 @@ public class Barrel extends WorldGenerator {
 		return false;
 	}
 
-    @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
-        return generate(world, rand, pos, false);
-    }
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		return generate(world, rand, pos, false);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-    }
+	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
+		int i = rand.nextInt(1);
+
+		if (i == 0) {
+			generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
+
+		return true;
+
+	}
 	
 	Block Block1 = ModBlocks.reinforced_brick;
 	Block Block2 = ModBlocks.sellafield_slaked;

@@ -27,7 +27,7 @@ public class OreNames {
 	public static final String ORENETHER = "oreNether";
 	public static final String HEAVY_COMPONENT = "componentHeavy";
 	public static final String SCRAP = "scrap";
-	
+
 	public static final String[] prefixes = new String[] {
 			ANY, NUGGET, TINY, BOLT, INGOT, DUSTTINY, DUST, GEM, CRYSTAL, PLATE, PLATECAST, BILLET, BLOCK, ORE, ORENETHER, HEAVY_COMPONENT, WIREDENSE, SCRAP
 	};

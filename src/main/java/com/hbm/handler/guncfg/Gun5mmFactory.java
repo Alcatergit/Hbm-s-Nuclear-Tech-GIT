@@ -1,13 +1,13 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import java.util.ArrayList;
 
 public class Gun5mmFactory {
 
@@ -26,7 +26,7 @@ public static GunConfiguration getMinigunConfig() {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCLE;
 		config.durability = 10000;
-		config.firingSound = HBMSoundHandler.lacunaeShoot;
+		config.firingSound = HBMSoundEvents.lacunaeShoot;
 		
 		config.config = new ArrayList<Integer>();
 		config.config.add(BulletConfigSyncingUtil.R5_NORMAL);
@@ -82,7 +82,7 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm;
+		bullet.ammo = Armory.ammo_5mm;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 5;
@@ -94,7 +94,7 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_explosive;
+		bullet.ammo = Armory.ammo_5mm_explosive;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 7;
@@ -108,7 +108,7 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_du;
+		bullet.ammo = Armory.ammo_5mm_du;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 10;
@@ -122,7 +122,7 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_star;
+		bullet.ammo = Armory.ammo_5mm_star;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 12;
 		bullet.dmgMax = 20;

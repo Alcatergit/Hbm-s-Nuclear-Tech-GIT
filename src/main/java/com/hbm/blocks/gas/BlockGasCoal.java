@@ -1,18 +1,20 @@
 package com.hbm.blocks.gas;
 
-import java.util.Random;
-
-import com.hbm.lib.ForgeDirection;
 import com.hbm.config.GeneralConfig;
+import com.hbm.items.ModItems;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.util.ContaminationUtil;
-
+import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockGasCoal extends BlockGasBase {
 
@@ -30,6 +32,11 @@ public class BlockGasCoal extends BlockGasBase {
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		ContaminationUtil.applyCoal(entity, 5, 1, 5);
+		if (entity instanceof EntityPlayer) {
+			LeafiaRecipeBookServer.unlockRecipe((EntityPlayer)entity,ModItems.rag);
+			LeafiaRecipeBookServer.unlockRecipe((EntityPlayer)entity,ModItems.mask_rag);
+			LeafiaRecipeBookServer.unlockRecipe((EntityPlayer)entity,ModItems.mask_damp);
+		}
 	}
 
 	@Override
@@ -49,11 +56,12 @@ public class BlockGasCoal extends BlockGasBase {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand) {
 
-		if(!world.isRemote && (!GeneralConfig.enableCoal || rand.nextInt(4) == 0)) {
+		if(!world.isRemote && (!GeneralConfig.enableCoal || rand.nextInt(100) == 0)) {
 			world.setBlockToAir(pos);
 			return;
 		}
 		
 		super.updateTick(world, pos, state, rand);
+		world.scheduleUpdate(pos, this, this.tickRate(world) + rand.nextInt(5));
 	}
 }

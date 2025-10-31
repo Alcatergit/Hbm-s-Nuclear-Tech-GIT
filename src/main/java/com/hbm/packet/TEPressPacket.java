@@ -2,8 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.tileentity.machine.TileEntityMachineEPress;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -13,15 +13,13 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class TEPressPacket implements IMessage {
+public class TEPressPacket extends RecordablePacket {
 
 	int x;
 	int y;
 	int z;
 	int item;
 	int meta;
-    int stampItem;
-    int stampMeta;
 	int progress;
 
 	public TEPressPacket()
@@ -29,48 +27,38 @@ public class TEPressPacket implements IMessage {
 		
 	}
 
-	public TEPressPacket(int x, int y, int z, ItemStack stack, ItemStack stamp, int progress)
+	public TEPressPacket(int x, int y, int z, ItemStack stack, int progress)
 	{
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		this.item = 0;
 		this.meta = 0;
-        this.stampItem = 0;
-        this.stampMeta = 0;
-        if(stack != null && !stack.isEmpty()) {
+		if(stack != null) {
 			this.item = Item.getIdFromItem(stack.getItem());
 			this.meta = stack.getItemDamage();
 		}
-        if(stamp != null && !stamp.isEmpty()) {
-            this.stampItem = Item.getIdFromItem(stamp.getItem());
-            this.stampMeta = stamp.getItemDamage();
-        }
 		this.progress = progress;
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
 		item = buf.readInt();
 		meta = buf.readInt();
-        stampItem = buf.readInt();
-        stampMeta = buf.readInt();
-        progress = buf.readInt();
+		progress = buf.readInt();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
 		buf.writeInt(item);
 		buf.writeInt(meta);
-        buf.writeInt(stampItem);
-        buf.writeInt(stampMeta);
-        buf.writeInt(progress);
+		buf.writeInt(progress);
 	}
 
 	public static class Handler implements IMessageHandler<TEPressPacket, IMessage> {
@@ -81,21 +69,19 @@ public class TEPressPacket implements IMessage {
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-				if (te != null && te instanceof TileEntityMachinePress gen) {
-
-                    gen.item = m.item;
+				if (te != null && te instanceof TileEntityMachinePress) {
+						
+					TileEntityMachinePress gen = (TileEntityMachinePress) te;
+					gen.item = m.item;
 					gen.meta = m.meta;
-                    gen.stampItem = m.stampItem;
-                    gen.stampMeta = m.stampMeta;
-                    gen.progress = m.progress;
+					gen.progress = m.progress;
 				}
-				if (te != null && te instanceof TileEntityMachineEPress gen) {
-
-                    gen.item = m.item;
+				if (te != null && te instanceof TileEntityMachineEPress) {
+						
+					TileEntityMachineEPress gen = (TileEntityMachineEPress) te;
+					gen.item = m.item;
 					gen.meta = m.meta;
-                    gen.stampItem = m.stampItem;
-                    gen.stampMeta = m.stampMeta;
-                    gen.progress = m.progress;
+					gen.progress = m.progress;
 				}
 			});
 			

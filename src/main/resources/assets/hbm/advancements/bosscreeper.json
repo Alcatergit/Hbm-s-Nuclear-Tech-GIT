@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:coin_creeper"
+		},
+		"title": {
+			"translate": "hbm.achievement.bossCreeper"
+		},
+		"description": {
+			"translate": "hbm.achievement.bossCreeper.desc"
+		}
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 30
+    }
+}

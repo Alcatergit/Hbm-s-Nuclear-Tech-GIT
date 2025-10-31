@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_catalytic_cracker"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_crack"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_crack.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_fraction",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_catalytic_cracker"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 47
+    }
+}

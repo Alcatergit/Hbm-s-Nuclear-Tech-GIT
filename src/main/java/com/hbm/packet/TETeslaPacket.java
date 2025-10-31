@@ -1,11 +1,8 @@
 package com.hbm.packet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.tileentity.machine.TileEntityTesla;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -15,7 +12,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TETeslaPacket implements IMessage {
+import java.util.ArrayList;
+import java.util.List;
+
+public class TETeslaPacket extends RecordablePacket {
 	
 	public BlockPos pos;
 	public List<double[]> targets;
@@ -32,7 +32,7 @@ public class TETeslaPacket implements IMessage {
 	
 	
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		pos = new BlockPos(buf.readInt(), buf.readInt(), buf.readInt());
 		int size = buf.readInt();
 		targets = new ArrayList<double[]>(size);
@@ -43,7 +43,7 @@ public class TETeslaPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(pos.getX());
 		buf.writeInt(pos.getY());
 		buf.writeInt(pos.getZ());

@@ -1,7 +1,6 @@
 package com.hbm.tileentity.bomb;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +33,7 @@ public class TileEntityNukeMike extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -64,25 +63,35 @@ public class TileEntityNukeMike extends TileEntity {
 	}
 	
 public boolean isReady() {
-
-    return inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 &&
-            inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 &&
-            inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 &&
-            inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 &&
-            inventory.getStackInSlot(4).getItem() == ModItems.man_core;
-}
+		
+			if(inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(4).getItem() == ModItems.man_core)
+			{
+				return true;
+			}
+		
+		return false;
+	}
 	
 	public boolean isFilled() {
-
-        return inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 &&
-                inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 &&
-                inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 &&
-                inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 &&
-                inventory.getStackInSlot(4).getItem() == ModItems.man_core &&
-                inventory.getStackInSlot(5).getItem() == ModItems.mike_core &&
-                inventory.getStackInSlot(6).getItem() == ModItems.mike_deut &&
-                inventory.getStackInSlot(7).getItem() == ModItems.mike_cooling_unit;
-    }
+		
+			if(inventory.getStackInSlot(0).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(1).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(2).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(3).getItem() == ModItems.man_explosive8 && 
+			inventory.getStackInSlot(4).getItem() == ModItems.man_core && 
+			inventory.getStackInSlot(5).getItem() == ModItems.mike_core && 
+			inventory.getStackInSlot(6).getItem() == ModItems.mike_deut && 
+			inventory.getStackInSlot(7).getItem() == ModItems.mike_cooling_unit)
+			{
+				return true;
+			}
+		
+		return false;
+	}
 	
 	public void clearSlots() {
 		for(int i = 0; i < inventory.getSlots(); i++)

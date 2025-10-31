@@ -1,9 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.container.ContainerMachineReactorSmall;
@@ -11,13 +7,16 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public class GUIMachineReactorSmall extends GuiInfoContainer {
 
@@ -44,51 +43,51 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 42, guiTop + 5, 4, 88, new String[] { "Core Temperature:", "   " + Math.round((diFurnace.coreHeat) * 0.00002 * 980 + 20) + "°C" });
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 48, guiTop + 5, 4, 88, new String[] { "Hull Temperature:", "   " + Math.round((diFurnace.hullHeat) * 0.00001 * 980 + 20) + "°C" });
 		
-		String[] text = new String[] { "Coolant will move heat from the core to",
-				"the hull. Water will use that heat and",
-				"generate steam.",
-				"Water consumption rate:",
-				" 100 mB/t",
-				" 2000 mB/s",
-				"Coolant consumption rate:",
-				" 10 mB/t",
-				" 200 mB/s",
-				"Water next to the reactor's open",
-				"sides will pour into the tank." };
+		String[] text = I18nUtil.resolveKeyArray("desc.leafia.classicreactor.tips.coolant");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		
-		String[] text1 = new String[] { "Raise/lower the control rods",
-				"using the button next to the",
-				"fluid gauges." };
+		String[] text1 = I18nUtil.resolveKeyArray("desc.leafia.classicreactor.tips.activation");
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 16, text1);
 
 		if(diFurnace.tanks[0].getFluidAmount() <= 0) {
-			String[] text2 = new String[] { "Error: Water is required for",
-					"the reactor to function properly!" };
+			String[] text2 = I18nUtil.resolveKeyArray(
+					"desc.leafia._repeated.reactors.require.properly",
+					I18nUtil.resolveKey("tile.water.name")
+			);
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 32, 16, 16, guiLeft - 8, guiTop + 36 + 32 + 16, text2);
 		}
 
 		if(diFurnace.tanks[1].getFluidAmount() <= 0) {
-			String[] text3 = new String[] { "Error: Coolant is required for",
-					"the reactor to function properly!" };
+			String[] text3 = I18nUtil.resolveKeyArray(
+					"desc.leafia._repeated.reactors.require.properly",
+					I18nUtil.resolveKey("fluid.coolant")
+			);
 			this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36 + 32 + 16, 16, 16, guiLeft - 8, guiTop + 36 + 32 + 16, text3);
 		}
 		
 		String s = "0";
 		
 		if(diFurnace.tankTypes[2] == ModForgeFluids.STEAM){
-			s = "1x";
+			s = "1";
 		} else if(diFurnace.tankTypes[2] == ModForgeFluids.HOTSTEAM){
-			s = "10x";
+			s = "10";
 		} else if(diFurnace.tankTypes[2] == ModForgeFluids.SUPERHOTSTEAM){
-			s = "100x";
+			s = "100";
 		}
 		
-		String[] text4 = new String[] { "Steam compression switch",
-				"Current compression level: " + s};
+		String[] text4 = I18nUtil.resolveKeyArray(
+				"desc.leafia._repeated.reactors.compression",
+				s
+		);;
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 4, guiTop + 105, 16, 20, mouseX, mouseY, text4);
 		
-		String[] text5 = new String[] { diFurnace.retracting ? "Raise control rods" : "Lower control rods"};
+		String[] text5 = I18nUtil.resolveKeyArray(
+				"desc.leafia."+(
+						diFurnace.retracting
+								? ((diFurnace.rods == 0) ? "_repeated.reactors.off" : "classicreactor.button.lowering")
+								: ((diFurnace.rods == 100) ? "_repeated.reactors.on" : "classicreactor.button.raising")
+						)
+		);
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 35, guiTop + 106, 18, 18, mouseX, mouseY, text5);
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}

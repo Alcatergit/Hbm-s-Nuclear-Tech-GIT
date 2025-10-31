@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_chemplant.desc"
 		}
 	},
-	"parent": "hbm:progress_soldering",
+	"parent": "hbm:progress_assembler",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

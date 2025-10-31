@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_osmiridium"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_osmiridium"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_osmiridium.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_radspice",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_osmiridium"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 2000
+    }
+}

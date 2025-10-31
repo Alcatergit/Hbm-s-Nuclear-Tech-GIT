@@ -1,9 +1,8 @@
 package api.hbm.energy;
 
 import com.hbm.lib.ForgeDirection;
-
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -15,7 +14,7 @@ public interface IEnergyUser extends IEnergyConnector {
 	/**
 	 * Not to be used for actual energy transfer, rather special external things like EMPs and sync packets
 	 */
-    void setPower(long power);
+	public void setPower(long power);
 	
 	/**
 	 * Standard implementation for power transfer.
@@ -23,7 +22,7 @@ public interface IEnergyUser extends IEnergyConnector {
 	 * @param long power
 	 */
 	@Override
-    default long transferPower(long power) {
+	public default long transferPower(long power) {
 		long ownMaxPower = this.getMaxPower();
 		long ownPower = this.getPower();
 		if(power > ownMaxPower - ownPower) {
@@ -46,7 +45,7 @@ public interface IEnergyUser extends IEnergyConnector {
 	 * @param z
 	 * @param dir
 	 */
-	default void sendPower(World world, BlockPos pos, ForgeDirection dir) {
+	public default void sendPower(World world, BlockPos pos, ForgeDirection dir) {
 		
 		TileEntity te = world.getTileEntity(pos);
 		boolean wasSubscribed = false;
@@ -56,8 +55,8 @@ public interface IEnergyUser extends IEnergyConnector {
 		if(te instanceof IEnergyConductor) {
 			IEnergyConductor con = (IEnergyConductor) te;
 			
-			if(con.canConnect(dir.getOpposite()) && con.getPowerNet() != null && con.getPowerNet().isSubscribed(this)) {
-				con.getPowerNet().unsubscribe(this);
+			if(con.canConnect(dir.getOpposite()) && con.getNetwork() != null && con.getNetwork().containsMember(this)) {
+				con.getNetwork().removeMember(this);
 				wasSubscribed = true;
 			}
 		}
@@ -78,8 +77,8 @@ public interface IEnergyUser extends IEnergyConnector {
 		if(wasSubscribed && te instanceof IEnergyConductor) {
 			IEnergyConductor con = (IEnergyConductor) te;
 			
-			if(con.getPowerNet() != null && !con.getPowerNet().isSubscribed(this)) {
-				con.getPowerNet().subscribe(this);
+			if(con.getNetwork() != null && !con.getNetwork().containsMember(this)) {
+				con.getNetwork().addMember(this);
 			}
 		}
 		

@@ -61,10 +61,11 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 				dest.y - itemPos.y,
 				dest.z - itemPos.z);
 		double len = motion.length();
-        return new Vec3d(
-                itemPos.x + motion.x / len * speed,
-                itemPos.y + motion.y / len * speed,
-                itemPos.z + motion.z / len * speed);
+		Vec3d ret = new Vec3d(
+				itemPos.x + motion.x / len * speed,
+				itemPos.y + motion.y / len * speed,
+				itemPos.z + motion.z / len * speed);
+		return ret;
 	}
 
 
@@ -186,8 +187,8 @@ public class BlockConveyor extends Block implements IConveyorBelt, IToolable {
 		return 0;
 	}
 
-	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, IToolable.ToolType tool) {
-		if(tool != IToolable.ToolType.SCREWDRIVER)
+	public boolean onScrew(World world, EntityPlayer player, int x, int y, int z, EnumFacing side, float fX, float fY, float fZ, EnumHand hand, ToolType tool) {
+		if(tool != ToolType.SCREWDRIVER)
 			return false;
 		BlockPos pos = new BlockPos(x, y, z);
 		IBlockState state = world.getBlockState(pos);

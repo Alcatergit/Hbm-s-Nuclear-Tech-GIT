@@ -1,12 +1,11 @@
 package com.hbm.handler;
 
-import java.util.Arrays;
-
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.items.special.ItemCell;
 import com.hbm.items.tool.IItemAbility;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -14,7 +13,6 @@ import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
 import com.hbm.util.WeightedRandomObject;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
@@ -37,6 +35,8 @@ import net.minecraft.util.WeightedRandom;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Arrays;
 
 public abstract class WeaponAbility {
 	
@@ -183,30 +183,30 @@ public abstract class WeaponAbility {
 				if(living.getHealth() <= 0.0F) {
 
 					WeightedRandomObject[] ammo = new WeightedRandomObject[] {
-							new WeightedRandomObject(ModItems.ammo_12gauge, 10),
-							new WeightedRandomObject(ModItems.ammo_12gauge_shrapnel, 5),
-							new WeightedRandomObject(ModItems.ammo_12gauge_du, 3),
-							new WeightedRandomObject(ModItems.ammo_20gauge, 10),
-							new WeightedRandomObject(ModItems.ammo_20gauge_flechette, 5),
-							new WeightedRandomObject(ModItems.ammo_20gauge_slug, 5),
-							new WeightedRandomObject(ModItems.ammo_9mm, 10),
-							new WeightedRandomObject(ModItems.ammo_9mm_ap, 5),
-							new WeightedRandomObject(ModItems.ammo_5mm, 10),
-							new WeightedRandomObject(ModItems.ammo_5mm_du, 3),
-							new WeightedRandomObject(ModItems.ammo_556, 10),
-							new WeightedRandomObject(ModItems.ammo_556_phosphorus, 5),
-							new WeightedRandomObject(ModItems.ammo_556_flechette, 10),
-							new WeightedRandomObject(ModItems.ammo_556_flechette_phosphorus, 5),
-							new WeightedRandomObject(ModItems.ammo_50bmg, 10),
-							new WeightedRandomObject(ModItems.ammo_50bmg_incendiary, 5),
-							new WeightedRandomObject(ModItems.ammo_50bmg_ap, 5),
-							new WeightedRandomObject(ModItems.ammo_grenade, 5),
-							new WeightedRandomObject(ModItems.ammo_grenade_concussion, 3),
-							new WeightedRandomObject(ModItems.ammo_grenade_phosphorus, 3),
-							new WeightedRandomObject(ModItems.ammo_rocket, 5),
-							new WeightedRandomObject(ModItems.ammo_rocket_glare, 5),
-							new WeightedRandomObject(ModItems.ammo_rocket_phosphorus, 5),
-							new WeightedRandomObject(ModItems.ammo_rocket_rpc, 1),
+							new WeightedRandomObject(Armory.ammo_12gauge, 10),
+							new WeightedRandomObject(Armory.ammo_12gauge_shrapnel, 5),
+							new WeightedRandomObject(Armory.ammo_12gauge_du, 3),
+							new WeightedRandomObject(Armory.ammo_20gauge, 10),
+							new WeightedRandomObject(Armory.ammo_20gauge_flechette, 5),
+							new WeightedRandomObject(Armory.ammo_20gauge_slug, 5),
+							new WeightedRandomObject(Armory.ammo_9mm, 10),
+							new WeightedRandomObject(Armory.ammo_9mm_ap, 5),
+							new WeightedRandomObject(Armory.ammo_5mm, 10),
+							new WeightedRandomObject(Armory.ammo_5mm_du, 3),
+							new WeightedRandomObject(Armory.ammo_556, 10),
+							new WeightedRandomObject(Armory.ammo_556_phosphorus, 5),
+							new WeightedRandomObject(Armory.ammo_556_flechette, 10),
+							new WeightedRandomObject(Armory.ammo_556_flechette_phosphorus, 5),
+							new WeightedRandomObject(Armory.ammo_50bmg, 10),
+							new WeightedRandomObject(Armory.ammo_50bmg_incendiary, 5),
+							new WeightedRandomObject(Armory.ammo_50bmg_ap, 5),
+							new WeightedRandomObject(Armory.ammo_grenade, 5),
+							new WeightedRandomObject(Armory.ammo_grenade_concussion, 3),
+							new WeightedRandomObject(Armory.ammo_grenade_phosphorus, 3),
+							new WeightedRandomObject(Armory.ammo_rocket, 5),
+							new WeightedRandomObject(Armory.ammo_rocket_glare, 5),
+							new WeightedRandomObject(Armory.ammo_rocket_phosphorus, 5),
+							new WeightedRandomObject(Armory.ammo_rocket_rpc, 1),
 							new WeightedRandomObject(ModItems.syringe_metal_stimpak, 25),
 					};
 
@@ -228,7 +228,7 @@ public abstract class WeaponAbility {
 						PacketDispatcher.wrapper.sendTo(new AuxParticlePacketNT(data, living.posX, living.posY + living.height * 0.5, living.posZ), (EntityPlayerMP)player);
 					}
 
-					world.playSound(null, living.posX, living.posY + living.height * 0.5, living.posZ, HBMSoundHandler.chainsaw, SoundCategory.PLAYERS, 0.5F, 1.0F);
+					world.playSound(null, living.posX, living.posY + living.height * 0.5, living.posZ, HBMSoundEvents.chainsaw, SoundCategory.PLAYERS, 0.5F, 1.0F);
 				}
 			}
 		}

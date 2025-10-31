@@ -1,13 +1,7 @@
 package com.hbm.inventory.control_panel.nodes;
 
-import com.hbm.inventory.control_panel.DataValue;
-import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.inventory.control_panel.NodeConnection;
-import com.hbm.inventory.control_panel.NodeDropdown;
-import com.hbm.inventory.control_panel.NodeSystem;
-import com.hbm.inventory.control_panel.NodeType;
+import com.hbm.inventory.control_panel.*;
 import com.hbm.inventory.control_panel.DataValue.DataType;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
 
@@ -90,6 +84,16 @@ public class NodeMath extends Node {
 				return evalCache[0] = new DataValueFloat(evals[0].getNumber() <= evals[1].getNumber() ? 1 : 0);
 			case CLAMP:
 				return evalCache[0] = new DataValueFloat(MathHelper.clamp(evals[0].getNumber(), evals[1].getNumber(), evals[2].getNumber()));
+			case MAX:
+				return evalCache[0] = new DataValueFloat(Math.max(evals[0].getNumber(),evals[1].getNumber()));
+			case MIN:
+				return evalCache[0] = new DataValueFloat(Math.min(evals[0].getNumber(),evals[1].getNumber()));
+			case FLOOR:
+				return evalCache[0] = new DataValueFloat((float)Math.floor(evals[0].getNumber()));
+			case CEIL:
+				return evalCache[0] = new DataValueFloat((float)Math.ceil(evals[0].getNumber()));
+			case ROUND:
+				return evalCache[0] = new DataValueFloat((float)Math.round(evals[0].getNumber()));
 		}
 		return evalCache[0] = null;
 	}
@@ -119,6 +123,8 @@ public class NodeMath extends Node {
 			case DIV:
 			case MOD:
 			case POW:
+			case MIN:
+			case MAX:
 			case LOG:
 				if(op == Operation.POW){
 					s1 = "Base";
@@ -154,7 +160,7 @@ public class NodeMath extends Node {
 		return op.name;
 	}
 	
-	public enum Operation {
+	public static enum Operation {
 		ADD("Add"),
 		SUB("Subtract"),
 		MULT("Multiply"),
@@ -170,10 +176,15 @@ public class NodeMath extends Node {
 		LESS("Less"),
 		GEQUAL("Greater/equal"),
 		LEQUAL("Less/equal"),
-		CLAMP("Clamp");
+		CLAMP("Clamp"),
+		MAX("Max"),
+		MIN("Min"),
+		FLOOR("Floor"),
+		CEIL("Ceil"),
+		ROUND("Round");
 
-		public final String name;
-		Operation(String name){
+		public String name;
+		private Operation(String name){
 			this.name = name;
 		}
 		

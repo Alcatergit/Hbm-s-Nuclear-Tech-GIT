@@ -1,9 +1,8 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.FluidTypeHandler;
-import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
-
+import com.hbm.forgefluid.ModFluidProperties;
+import com.hbm.forgefluid.ModFluidProperties.FluidTrait;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidTank;
@@ -23,7 +22,7 @@ public class TileEntityMachineBAT9000 extends TileEntityBarrel {
 	
 	@Override
 	public void checkFluidInteraction() {
-		if(tank.getFluid() != null && FluidTypeHandler.containsTrait(tank.getFluid().getFluid(), FluidTrait.AMAT)) {
+		if(tank.getFluid() != null && ModFluidProperties.containsTrait(tank.getFluid().getFluid(), FluidTrait.AMAT)) {
 			world.destroyBlock(pos, false);
 			world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 10, true, true);
 		}

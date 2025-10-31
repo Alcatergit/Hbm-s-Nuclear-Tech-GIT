@@ -1,39 +1,37 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.apache.commons.lang3.math.NumberUtils;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.RefStrings;
-import com.hbm.util.I18nUtil;
 import com.hbm.packet.NBTControlPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.RBMKColumn;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import org.apache.commons.lang3.math.NumberUtils;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GUIRBMKConsole extends GuiScreen {
 	
@@ -43,8 +41,7 @@ public class GUIRBMKConsole extends GuiScreen {
 	protected int guiTop;
 	protected int xSize;
 	protected int ySize;
-
-    public static final int w = 15;
+	
 	private boolean[] selection = new boolean[15 * 15];
 	private boolean az5Lid = true;
 	private long lastPress = 0;
@@ -80,12 +77,13 @@ public class GUIRBMKConsole extends GuiScreen {
 		this.drawGuiContainerBackgroundLayer(f, mouseX, mouseY);
 		
 		int bX = 86;
-		int bY = 10;
-		int size = 150;
+		int bY = 11;
+		int size = 10;
 
-		if(guiLeft + bX <= mouseX && guiLeft + bX + size > mouseX && guiTop + bY < mouseY && guiTop + bY + size >= mouseY) {
-            int index = w * (mouseX - bX - guiLeft) / size + w * (w * (mouseY - bY - guiTop) / size);
-			if(index >= 0 && index < console.columns.length) {
+		if(guiLeft + 86 <= mouseX && guiLeft + 86 + 150 > mouseX && guiTop + 11 < mouseY && guiTop + 11 + 10150 >= mouseY) {
+			int index = ((mouseX - bX - guiLeft) / size + (mouseY - bY - guiTop) / size * 15);
+			
+			if(index > 0 && index < console.columns.length) {
 				RBMKColumn col = console.columns[index];
 				
 				if(col != null) {
@@ -192,9 +190,9 @@ public class GUIRBMKConsole extends GuiScreen {
 			
 			if(az5Lid) {
 				az5Lid = false;
-				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.rbmk_az5_cover, 0.5F));
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundEvents.rbmk_az5_cover, 0.5F));
 			} else if(lastPress + 3000 < System.currentTimeMillis()) {
-				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundHandler.shutdown, 1));
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(HBMSoundEvents.shutdown, 1));
 				lastPress = System.currentTimeMillis();
 				
 				NBTTagCompound control = new NBTTagCompound();

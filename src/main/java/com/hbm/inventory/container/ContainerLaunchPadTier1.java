@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -48,12 +47,12 @@ private TileEntityLaunchPad diFurnace;
 			var3 = var5.copy();
 			
             if (par2 <= 2) {
-				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 3, false)){
-                return ItemStack.EMPTY;
+			} else {
+				return ItemStack.EMPTY;
 			}
             
 			if (var5.isEmpty())

@@ -1,10 +1,9 @@
 package com.hbm.items.weapon;
 
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.turret.TileEntityTurretBase;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -46,7 +45,7 @@ public class ItemTurretAmmo extends Item {
             	player.setHeldItem(hand, stack.copy());
             	if(stack.isEmpty())
             		player.inventory.deleteStack(stack);
-    			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.reloadTurret, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+    			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundEvents.reloadTurret, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
 			}
 			return EnumActionResult.SUCCESS;
 		}

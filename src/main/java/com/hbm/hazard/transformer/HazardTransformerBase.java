@@ -1,10 +1,9 @@
 package com.hbm.hazard.transformer;
 
-import java.util.List;
-
 import com.hbm.hazard.HazardEntry;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.List;
 
 public abstract class HazardTransformerBase {
 

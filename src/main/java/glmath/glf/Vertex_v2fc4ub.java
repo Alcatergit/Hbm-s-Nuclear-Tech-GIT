@@ -5,10 +5,10 @@
  */
 package glmath.glf;
 
-import java.nio.ByteBuffer;
-
 import glmath.dev.Vec4u8;
 import glmath.glm.vec._2.Vec2;
+
+import java.nio.ByteBuffer;
 
 /**
  *

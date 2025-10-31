@@ -1,10 +1,10 @@
 package com.hbm.inventory.control_panel;
 
+import net.minecraft.nbt.NBTTagCompound;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import net.minecraft.nbt.NBTTagCompound;
 
 public class ControlEvent {
 
@@ -45,7 +45,9 @@ public class ControlEvent {
 	public ControlEvent copy(){
 		ControlEvent evt = new ControlEvent(name);
 		//Set default values
-        evt.vars.putAll(vars);
+		for(Entry<String, DataValue> def : vars.entrySet()){
+			evt.vars.put(def.getKey(), def.getValue());
+		}
 		return evt;
 	}
 	
@@ -101,5 +103,11 @@ public class ControlEvent {
 		register(new ControlEvent("rbmk_crane_load"));
 		register(new ControlEvent("ctrl_press").setVar("isSneaking", false));
 		register(new ControlEvent("initialize"));
+		register(new ControlEvent("set_booster_level").setVar("level",0));
+		register(new ControlEvent("set_booster_active").setVar("active",0));
+		register(new ControlEvent("set_absorber_level").setVar("level",0));
+		register(new ControlEvent("set_stabilizer_level").setVar("level",0));
+		register(new ControlEvent("torch_set_state").setVar("isOn", 0));
+		register(new ControlEvent("pwr_ctrl_set_level").setVar("level", 0));
 	}
 }

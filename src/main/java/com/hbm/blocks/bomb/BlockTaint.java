@@ -1,14 +1,9 @@
 package com.hbm.blocks.bomb;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import com.hbm.main.MainRegistry;
 import com.hbm.potion.HbmPotion;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -24,6 +19,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class BlockTaint extends Block {
 
@@ -67,7 +66,8 @@ public class BlockTaint extends Block {
 
 	private static boolean checkAttachment(World world, BlockPos pos){
 		if(!world.isAirBlock(pos)){
-            return world.getBlockState(pos).getBlock() != ModBlocks.taint;
+    		if(world.getBlockState(pos).getBlock() != ModBlocks.taint)
+    			return true;
     	}
     	return false;
     }
@@ -93,7 +93,12 @@ public class BlockTaint extends Block {
 		return NULL_AABB;
 	}
 
-    @Override
+	@Override
+	public boolean isCollidable(){
+		return true;
+	}
+
+	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos){
 		return false;
 	}

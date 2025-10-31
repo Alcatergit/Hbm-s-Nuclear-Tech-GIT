@@ -1,17 +1,13 @@
 package com.hbm.entity.mob;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.tileentity.machine.TileEntityTesla;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
@@ -21,6 +17,9 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityTaintCrab extends EntityCyberCrab {
 
@@ -52,7 +51,7 @@ public class EntityTaintCrab extends EntityCyberCrab {
 		
 		for(EntityLivingBase e : targets) {
 			if(!(e instanceof EntityCyberCrab))
-				e.addPotionEffect(new PotionEffect(HbmPotion.taint, 30));
+				e.addPotionEffect(new PotionEffect(HbmPotion.radiation, 10, 15));
 		}
     	
         super.onLivingUpdate();
@@ -62,7 +61,12 @@ public class EntityTaintCrab extends EntityCyberCrab {
 	protected Item getDropItem() {
 		return ModItems.coil_advanced_alloy;
 	}
-
+	
+	@Override
+	protected void dropRareDrop(int p_70600_1_) {
+		this.dropItem(ModItems.coil_magnetized_tungsten, 1);
+	}
+	
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 		EntityBulletBase bullet = new EntityBulletBase(world, BulletConfigSyncingUtil.BMG50_STAR, this);
@@ -76,7 +80,7 @@ public class EntityTaintCrab extends EntityCyberCrab {
 		data.setDouble("mZ", bullet.motionZ * 0.3);
 		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, bullet.posX, bullet.posY, bullet.posZ), new TargetPoint(this.dimension, posX, posY, posZ, 50));
         this.world.spawnEntity(bullet);
-        this.playSound(HBMSoundHandler.sawShoot, 1.0F, 0.5F);
+        this.playSound(HBMSoundEvents.sawShoot, 1.0F, 0.5F);
 	}
 	
 }

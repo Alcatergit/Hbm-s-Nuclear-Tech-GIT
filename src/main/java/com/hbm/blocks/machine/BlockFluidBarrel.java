@@ -1,13 +1,10 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.YellowBarrel;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityBarrel;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -26,6 +23,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class BlockFluidBarrel extends BlockContainer {
 
@@ -53,6 +52,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothot"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotcor"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothp"));
 		}
 		
 		if(this == ModBlocks.barrel_corroded) {
@@ -60,6 +60,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothp"));
 			list.add(TextFormatting.RED + I18nUtil.resolveKey("desc.leaky"));
 		}
 		
@@ -68,6 +69,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotcor1"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothp"));
 		}
 		
 		if(this == ModBlocks.barrel_steel) {
@@ -76,6 +78,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.cancor"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothighcor"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhp"));
 		}
 		
 		if(this == ModBlocks.barrel_antimatter) {
@@ -83,6 +86,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canam"));
+			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannothp"));
 		}
 		
 		if(this == ModBlocks.barrel_tcalloy) {
@@ -90,6 +94,7 @@ public class BlockFluidBarrel extends BlockContainer {
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhot"));
 			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canhighcor"));
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.cannotam"));
+			list.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.canep"));
 		}
 	}
 	

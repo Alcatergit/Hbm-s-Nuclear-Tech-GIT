@@ -1,14 +1,11 @@
 package com.hbm.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.LightningGenerator;
 import com.hbm.handler.LightningGenerator.LightningGenInfo;
 import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.lightning_test.TrailRenderer2.IColorGetter;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -19,6 +16,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleLightningFade extends Particle {
 

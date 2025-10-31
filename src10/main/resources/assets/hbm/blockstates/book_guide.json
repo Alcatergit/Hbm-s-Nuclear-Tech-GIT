@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:book_guide" },
+     	   	"facing=south": { "model": "hbm:book_guide", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:book_guide", "y": 270 },
+      		"facing=east":  { "model": "hbm:book_guide", "y": 90 }
+	}
+}

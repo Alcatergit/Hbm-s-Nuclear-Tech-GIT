@@ -1,32 +1,30 @@
 package com.hbm.particle.bullet_hit;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleDecal;
 import com.hbm.particle.ParticleLayerBase;
 import com.hbm.particle.ParticleRenderLayer;
 import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.math.RayTraceResult.Type;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleBloodParticle extends ParticleLayerBase {
 
@@ -100,7 +98,7 @@ public class ParticleBloodParticle extends ParticleLayerBase {
 					Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleDecalFlow(world, data, 150, (float)hit.x-direction.x, (float)hit.y-direction.y, (float)hit.z-direction.z).shader(ResourceManager.blood_dissolve));
 				}
 				float vel = (float) Math.sqrt(motionX*motionX + motionY*motionY + motionZ*motionZ);
-				world.playSound(posX, posY, posZ, HBMSoundHandler.blood_splat, SoundCategory.BLOCKS, vel*0.5F, 0.8F+rand.nextFloat()*0.4F, false);
+				world.playSound(posX, posY, posZ, HBMSoundEvents.blood_splat, SoundCategory.BLOCKS, vel*0.5F, 0.8F+rand.nextFloat()*0.4F, false);
 				setExpired();
 				return;
 			}

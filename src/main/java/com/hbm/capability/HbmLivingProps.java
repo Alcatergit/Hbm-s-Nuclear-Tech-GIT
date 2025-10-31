@@ -1,15 +1,11 @@
 package com.hbm.capability;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,7 +14,13 @@ import net.minecraft.entity.ai.attributes.IAttributeInstance;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
+import java.util.UUID;
 
 public class HbmLivingProps {
 
@@ -96,12 +98,9 @@ public class HbmLivingProps {
 		}
 
 		attributeinstance.applyModifier(new AttributeModifier(digamma_UUID, "digamma", healthMod, 2));
-		int s = (int)(digamma * 6);
-		if(s > 1){
-			NBTTagCompound shake = new NBTTagCompound();
-			shake.setString("type", "justTilt");
-			shake.setInteger("time", s);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(shake, 0, 0, 0), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 50));
+
+		if(entity.getHealth() > entity.getMaxHealth()) {
+			entity.setHealth(entity.getMaxHealth());
 		}
 
 		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {
@@ -158,6 +157,9 @@ public class HbmLivingProps {
 
 	public static void incrementAsbestos(EntityLivingBase entity, int asbestos){
 		setAsbestos(entity, getAsbestos(entity) + asbestos);
+		if (entity instanceof EntityPlayer) {
+			((EntityPlayer)entity).sendStatusMessage(new TextComponentTranslation("chat.lungs").setStyle(new Style().setColor(TextFormatting.RED)),true);
+		}
 	}
 
 	public static void addCont(EntityLivingBase entity, ContaminationEffect cont){
@@ -180,6 +182,9 @@ public class HbmLivingProps {
 
 	public static void incrementBlackLung(EntityLivingBase entity, int blacklung){
 		setBlackLung(entity, getBlackLung(entity) + blacklung);
+		if (entity instanceof EntityPlayer) {
+			((EntityPlayer)entity).sendStatusMessage(new TextComponentTranslation("chat.lungs").setStyle(new Style().setColor(TextFormatting.RED)),true);
+		}
 	}
 
 	/// TIME BOMB ///

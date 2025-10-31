@@ -1,15 +1,14 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemKeyPin extends Item {
 
@@ -36,6 +35,7 @@ public class ItemKeyPin extends Item {
 	
 	public static int getPins(ItemStack stack) {
 		if(stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 		return stack.getTagCompound().getInteger("pins");

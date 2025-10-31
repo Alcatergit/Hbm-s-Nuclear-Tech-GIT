@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:factory_titanium_furnace" },
+     	   	"facing=south": { "model": "hbm:factory_titanium_furnace", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:factory_titanium_furnace", "y": 270 },
+      		"facing=east":  { "model": "hbm:factory_titanium_furnace", "y": 90 }
+	}
+}

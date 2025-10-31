@@ -5,5 +5,5 @@ import net.minecraft.util.EnumHand;
 
 public interface IEquipReceiver {
 
-	void onEquip(EntityPlayer player, EnumHand hand);
+	public void onEquip(EntityPlayer player, EnumHand hand);
 }

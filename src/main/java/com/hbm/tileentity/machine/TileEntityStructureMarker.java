@@ -2,7 +2,6 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEStructurePacket;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -20,7 +19,7 @@ public class TileEntityStructureMarker extends TileEntity implements ITickable {
 
 	@Override
 	public void update() {
-		if(this.type > 3)
+		if(this.type > 4)
 			type = 0;
 
 		if(!world.isRemote)

@@ -1,22 +1,24 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.main.ResourceManager;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.conductor.TileEntityFFFluidSuccMk2;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderFluidDuctMk2<T extends TileEntityFFDuctBaseMk2> extends TileEntitySpecialRenderer<T> {
 	
 	@Override
 	public void render(T te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		if(te.getBlockType() == ModBlocks.fluid_duct_solid)
+			return;
+		if(te.getBlockType() == ModBlocks.fluid_duct_solid_tinge)
+			return;
+		if(te.getBlockType() == ModBlocks.fluid_duct_solid_stripe)
 			return;
 		GL11.glPushMatrix();
 		GlStateManager.enableLighting();

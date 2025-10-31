@@ -6,6 +6,6 @@ public interface IBulletImpactBehavior {
 	
 	//block is hit, bullet dies
 	//also called when an entity is hit but with -1 coords, so beware
-    void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z);
+	public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z);
 
 }

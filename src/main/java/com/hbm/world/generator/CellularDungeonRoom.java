@@ -23,8 +23,7 @@ public class CellularDungeonRoom {
 			generateWall(world, x, y, z, dir, dir == door);
 		}
 	}
-
-    //makes ceiling, air box and floor
+	
 	public void generateMain(World world, int x, int y, int z) {
 		
 		DungeonToolbox.generateBox(world, x, y, z, parent.width, 1, parent.width, parent.floor);
@@ -40,26 +39,27 @@ public class CellularDungeonRoom {
 			if(door)
 				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
-
-        else if(wall == EnumFacing.SOUTH) {
+		
+		if(wall == EnumFacing.SOUTH) {
 			DungeonToolbox.generateBox(world, x, y + 1, z + parent.width - 1, parent.width, parent.height - 2, 1, parent.wall);
 			
 			if(door)
 				DungeonToolbox.generateBox(world, x + parent.width / 2, y + 1, z + parent.width - 1, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
-
-        else if(wall == EnumFacing.WEST) {
+		
+		if(wall == EnumFacing.WEST) {
 			DungeonToolbox.generateBox(world, x, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 			
 			if(door)
 				DungeonToolbox.generateBox(world, x, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
-
-        else if(wall == EnumFacing.EAST) {
+		
+		if(wall == EnumFacing.EAST) {
 			DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z, 1, parent.height - 2, parent.width, parent.wall);
 			
 			if(door)
 				DungeonToolbox.generateBox(world, x + parent.width - 1, y + 1, z + parent.width / 2, 1, 2, 1, Blocks.AIR.getDefaultState());
 		}
 	}
+
 }

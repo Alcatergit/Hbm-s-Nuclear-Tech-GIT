@@ -1,10 +1,7 @@
 package com.hbm.blocks.machine;
 
-import javax.annotation.Nullable;
-
 import com.google.common.base.Predicate;
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.block.BlockRailBase;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyEnum;
@@ -13,6 +10,8 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityMinecart;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import javax.annotation.Nullable;
 
 public class RailHighspeed extends BlockRailBase {
 

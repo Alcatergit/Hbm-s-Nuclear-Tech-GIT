@@ -19,8 +19,8 @@ import javax.annotation.Nullable;
 public class Press {
 
 	@ZenMethod
-	public static void addRecipe(IItemStack output, IIngredient input, int type) {
-		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, input, type));
+	public static void addRecipe(IItemStack output, IIngredient inputs, int type) {
+		NTMCraftTweaker.postInitActions.add(new ActionAddRecipe(output, inputs, type));
 	}
 
 	@Nullable
@@ -33,15 +33,15 @@ public class Press {
 	}
 	private static class ActionAddRecipe implements IAction {
 
-		private RecipesCommon.AStack input;
+		private RecipesCommon.AStack inputs;
 
 		private ItemStack output;
 
 		private int type;
 
-		public ActionAddRecipe(IItemStack output, IIngredient input, int type) {
+		public ActionAddRecipe(IItemStack output, IIngredient inputs, int type) {
 			this.output = CraftTweakerMC.getItemStack(output);
-			this.input = NTMCraftTweaker.IIngredientToAStack(input);
+			this.inputs = NTMCraftTweaker.IIngredientToAStack(inputs);
 			this.type = type;
 		}
 
@@ -56,16 +56,16 @@ public class Press {
 				CraftTweakerAPI.logError("Invalid press output" );
 				return;
 			}
-			if(this.input == null) {
-				CraftTweakerAPI.logError("Invalid press input" );
+			if(this.inputs == null) {
+				CraftTweakerAPI.logError("Invalid press inputs" );
 				return;
 			}
-			PressRecipes.addRecipe(toType(this.type), this.input, this.output);
+			PressRecipes.addRecipe(toType(this.type), this.inputs, this.output);
 		}
 
 		@Override
 		public String describe() {
-			return "Adding NTM Press recipe ("+ this.input +" -> "+this.output+")";
+			return "Adding NTM Press recipe ("+ this.inputs +" -> "+this.output+")";
 		}
 	}
 }

@@ -2,7 +2,6 @@ package com.hbm.sound;
 
 import com.hbm.handler.JetpackHandler;
 import com.hbm.handler.JetpackHandler.JetpackInfo;
-
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.SoundCategory;

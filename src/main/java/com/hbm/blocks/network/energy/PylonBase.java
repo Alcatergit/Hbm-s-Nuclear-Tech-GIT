@@ -1,22 +1,21 @@
 package com.hbm.blocks.network.energy;
 
-import java.util.List;
-
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.ITooltipProvider;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.world.IBlockAccess;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
-import net.minecraft.block.material.Material;
 import net.minecraft.block.BlockContainer;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
+
+import java.util.List;
 
 public abstract class PylonBase extends BlockContainer implements ITooltipProvider
 {

@@ -1,10 +1,8 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -15,6 +13,7 @@ import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
 
 public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachineAssembler> {
 	
@@ -66,7 +65,6 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 					GL11.glTranslated(1, 0, 1);
 					if(!(stack.getItem() instanceof ItemBlock)) {
 						GL11.glRotatef(-90, 1F, 0F, 0F);
-						GL11.glRotatef(-180, 0F, 1F, 0F);
 					} else {
 						GL11.glScaled(0.5, 0.5, 0.5);
 						GL11.glTranslated(0, -0.875, -2);
@@ -124,8 +122,10 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
         
         if(offset > 500)
         	offset = 500 - (offset - 500);
-
-        if(((TileEntityMachineAssembler) tileEntity).isProgressing)
+        
+        TileEntityMachineAssembler assembler = (TileEntityMachineAssembler) tileEntity;
+        
+        if(assembler.isProgressing)
         	GL11.glTranslated(offset * 0.003 - 0.75, 0, 0);
 		
         ResourceManager.assembler_slider.renderAll();
@@ -136,7 +136,7 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 
         sway = Math.sin(sway / Math.PI / 50);
 
-        if(((TileEntityMachineAssembler) tileEntity).isProgressing)
+        if(assembler.isProgressing)
         	GL11.glTranslated(0, 0, sway * 0.3);
         ResourceManager.assembler_arm.renderAll();
 
@@ -170,8 +170,10 @@ public class RenderAssembler extends TileEntitySpecialRenderer<TileEntityMachine
 		bindTexture(ResourceManager.assembler_cog_tex);
 
         int rotation = (int) (System.currentTimeMillis() % (360 * 5)) / 5;
+        
+        TileEntityMachineAssembler assembler = (TileEntityMachineAssembler) tileEntity;
 
-        if(!((TileEntityMachineAssembler) tileEntity).isProgressing)
+        if(!assembler.isProgressing)
         	rotation = 0;
         
         GL11.glPushMatrix();

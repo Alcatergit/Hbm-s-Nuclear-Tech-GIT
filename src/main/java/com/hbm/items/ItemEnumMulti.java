@@ -1,10 +1,13 @@
 package com.hbm.items;
 
 import java.util.HashSet;
+import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import com.hbm.interfaces.IHasCustomMetaModels;
 import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
 import com.hbm.util.EnumUtil;
 
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
@@ -65,6 +68,6 @@ public class ItemEnumMulti extends Item implements IHasCustomMetaModels {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public String getItemStackDisplayName(ItemStack stack) {
-		return (I18n.format(stack.getTranslationKey() + "_" + EnumUtil.grabEnumSafely(theEnum,stack.getItemDamage()).toString().toLowerCase() + ".name")).trim();
+		return (I18n.format(stack.getTranslationKey() + "_" + theEnum.getEnumConstants()[stack.getItemDamage()].toString().toLowerCase() + ".name")).trim();
 	}
 }

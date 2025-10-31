@@ -7,23 +7,21 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.modules.ModuleBurnTime;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityFurnaceIron extends TileEntityMachineBase implements IGUIProvider, ITickable {
 	
@@ -67,17 +65,13 @@ public class TileEntityFurnaceIron extends TileEntityMachineBase implements IGUI
 				
 				for(int i = 1; i < 3; i++) {
 					ItemStack input = inventory.getStackInSlot(i);
-					if(input != null && !input.isEmpty()) {
+					if(input != null) {
 						
 						int fuel = burnModule.getBurnTime(input);
 						
 						if(fuel > 0) {
 							this.maxBurnTime = this.burnTime = fuel;
-							
-							ItemStack copy = input.copy();
 							input.shrink(1);
-
-							if(input.isEmpty()) inventory.setStackInSlot(i, copy.getItem().getContainerItem(copy));
 							break;
 						}
 					}
@@ -182,7 +176,7 @@ public class TileEntityFurnaceIron extends TileEntityMachineBase implements IGUI
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+	public boolean canExtractItemHopper(int i, ItemStack itemStack, int j) {
 		return i == 3;
 	}
 	
@@ -196,7 +190,7 @@ public class TileEntityFurnaceIron extends TileEntityMachineBase implements IGUI
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("maxBurnTime", maxBurnTime);

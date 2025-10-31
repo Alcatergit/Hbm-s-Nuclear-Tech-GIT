@@ -1,26 +1,21 @@
 package com.hbm.particle.bullet_hit;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketSpecialDeath;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class EntityHitDataHandler {
 
@@ -47,7 +42,7 @@ public class EntityHitDataHandler {
 				if(ent instanceof EntityPlayerMP){
 					PacketDispatcher.wrapper.sendTo(new PacketSpecialDeath(ent, 4), (EntityPlayerMP) ent);
 				}
-				ent.world.playSound(null, ent.posX, ent.posY, ent.posZ, HBMSoundHandler.mob_gib, SoundCategory.HOSTILE, 1, 1);
+				ent.world.playSound(null, ent.posX, ent.posY, ent.posZ, HBMSoundEvents.mob_gib, SoundCategory.HOSTILE, 1, 1);
 				itr.remove();
 				continue;
 			}
@@ -80,7 +75,7 @@ public class EntityHitDataHandler {
 		data.add(hit);
 	}
 	
-	public static void encodeData(Entity ent, ByteBuf buf){
+	public static void encodeData(Entity ent,LeafiaBuf buf){
 		List<BulletHit> data = hitData.get(ent);
 		if(data == null){
 			buf.writeByte(0);
@@ -98,7 +93,7 @@ public class EntityHitDataHandler {
 		}
 	}
 	
-	public static List<BulletHit> decodeData(ByteBuf buf){
+	public static List<BulletHit> decodeData(LeafiaBuf buf){
 		List<BulletHit> list = new ArrayList<>();
 		byte size = buf.readByte();
 		for(int i = 0; i < size; i ++){

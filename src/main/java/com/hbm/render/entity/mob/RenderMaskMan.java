@@ -3,7 +3,6 @@ package com.hbm.render.entity.mob;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.model.ModelMaskMan;
-
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;

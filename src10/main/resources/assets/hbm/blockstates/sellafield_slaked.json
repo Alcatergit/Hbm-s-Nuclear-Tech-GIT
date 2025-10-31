@@ -1,0 +1,9 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:sellafield_0_1" },
+		"meta=0": { "model": "hbm:sellafield_0_1" },
+		"meta=1": { "model": "hbm:sellafield_0_2" },
+		"meta=2": { "model": "hbm:sellafield_0_3" },
+		"meta=3": { "model": "hbm:sellafield_0_4" }
+	}
+}

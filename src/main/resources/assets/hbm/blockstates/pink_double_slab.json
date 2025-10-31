@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=top,variant=default": { "model": "hbm:pink_planks" },
+        "half=bottom,variant=default": { "model": "hbm:pink_planks" }
+    }
+}

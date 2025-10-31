@@ -1,14 +1,13 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 public class ModelPip extends ModelBase {
 
-public ModelRenderer[] pipModel;
+public ModelRenderer pipModel[];
 	
 	int textureX = 128;
 	int textureY = 128;

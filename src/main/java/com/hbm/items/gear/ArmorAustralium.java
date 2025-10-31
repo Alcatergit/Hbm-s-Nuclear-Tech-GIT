@@ -1,11 +1,8 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ArmorSets;
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -15,6 +12,9 @@ import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class ArmorAustralium extends ItemArmor {
 
@@ -31,7 +31,7 @@ public class ArmorAustralium extends ItemArmor {
 	@Override
 	public void onArmorTick(World world, EntityPlayer player, ItemStack armor) {
 		if(armor.getItemDamage() < armor.getMaxDamage()) {
-			if (armor.getItem() == ModItems.australium_iii) {
+			if (armor.getItem() == ArmorSets.australium_iii) {
 				if(rand.nextInt(3) == 0) {
 					armor.damageItem(1, player);
 				}
@@ -43,14 +43,14 @@ public class ArmorAustralium extends ItemArmor {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if (stack.getItem() == ModItems.australium_iii)
+		if (stack.getItem() == ArmorSets.australium_iii)
 			tooltip.add("Ouch, that hurts.");
 	}
 	
 	@Override
 	
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if(stack.getItem().equals(ModItems.australium_iii)) {
+		if(stack.getItem().equals(ArmorSets.australium_iii)) {
 			return (RefStrings.MODID + ":textures/armor/australium_iii.png");
 		}
 		return super.getArmorTexture(stack, entity, slot, type);

@@ -4,5 +4,5 @@ import net.minecraft.item.ItemStack;
 
 public interface IConveyorItem {
 
-    ItemStack getItemStack();
+    public ItemStack getItemStack();
 }

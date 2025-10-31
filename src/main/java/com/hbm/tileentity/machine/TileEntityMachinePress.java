@@ -1,13 +1,11 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.PressRecipes;
 import com.hbm.items.machine.ItemStamp;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,12 +20,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachinePress extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
-    public int progress = 0;
-    public int prevProgress = 0;
+	public int progress = 0;
 	public int power = 0;
 	public int burnTime = 0;
 	public final static int maxProgress = 200;
@@ -35,9 +31,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 	public int maxBurn = 160;
 	public int item;
 	public int meta;
-    public int stampItem;
-    public int stampMeta;
-    public boolean isRetracting = false;
+	public boolean isRetracting = false;
 	public boolean test = true;
 
 	public TileEntityMachinePress(){
@@ -73,11 +67,11 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 		isRetracting = nbt.getBoolean("ret");
 		detectIsRetracting = !isRetracting;
 		if(nbt.hasKey("inventory"))
-			inventory.deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
+			((ItemStackHandler) inventory).deserializeNBT((NBTTagCompound) nbt.getTag("inventory"));
 	}
 
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("progress", progress);
@@ -93,10 +87,16 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 
 	@Override
 	public void update() {
+		/*	if(test){
+				Vec3d bottomLeft = new Vec3d(pos.getX(), pos.getY() + 5, pos.getZ());
+				Portal portal = new Mirror(world, bottomLeft, bottomLeft.add(1, 0, 0), bottomLeft.add(0, 1, 0), bottomLeft.add(1, 1, 0), null);
+				System.out.println(portal);
+				test = false;
+			}*/
 		if(!world.isRemote) {
 			if(burnTime > 0) {
 				this.burnTime--;
-				this.power += world.getBlockState(pos.down()).getBlock() == ModBlocks.press_preheater ? 5 : 1;
+				this.power++;
 				if(power > maxPower)
 					power = maxPower;
 			} else {
@@ -104,7 +104,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 					power--;
 			}
 			if(!(world.getRedstonePowerFromNeighbors(pos) > 0)) {
-				if(!inventory.getStackInSlot(0).isEmpty() && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
+				if(inventory.getStackInSlot(0) != ItemStack.EMPTY && this.burnTime == 0 && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) > 0) {
 					this.maxBurn = this.burnTime = TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(0)) / 8;
 					ItemStack copy = inventory.getStackInSlot(0).copy();
 					inventory.getStackInSlot(0).shrink(1);
@@ -133,9 +133,11 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 									inventory.setStackInSlot(3, stack.copy());
 								else
 									inventory.getStackInSlot(3).grow(stack.getCount());
+								;
 
-                                inventory.getStackInSlot(2).shrink(1);
-                                if(inventory.getStackInSlot(2).getCount() <= 0)
+								inventory.getStackInSlot(2).shrink(1);
+								;
+								if(inventory.getStackInSlot(2).getCount() <= 0)
 									inventory.setStackInSlot(2, ItemStack.EMPTY);
 
 								if(inventory.getStackInSlot(1).getMaxDamage() > 0){
@@ -146,7 +148,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 								// this.world.playSound(pos.getX(), pos.getY(),
 								// pos.getZ(), HBMSoundHandler.pressOperate,
 								// SoundCategory.BLOCKS, 1.5F, 1.0F, false);
-								this.world.playSound(null, pos, HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
+								this.world.playSound(null, pos, HBMSoundEvents.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
 							}
 
 							if(!isRetracting)
@@ -172,9 +174,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 				}
 			}
 			detectAndSendChanges();
-		} else {
-            prevProgress = progress;
-        }
+		}
 	}
 
 	@Override
@@ -214,7 +214,8 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e){
-		return new int[]{ 0, 1, 2, 3 };
+		int i = e.ordinal();
+		return i == 0 ? new int[] { 3 } : new int[]{ 0, 1, 2 };
 	}
 	
 	@Override
@@ -223,20 +224,22 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount){
 		return slot == 3;
 	}
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack){
-		if(stack.getItem() instanceof ItemStamp && i == 1)
-			return true;
-		
-		if(TileEntityFurnace.getItemBurnTime(stack) > 0 && i == 0)
-			return true;
-
-        return !(stack.getItem() instanceof ItemStamp) && i == 2;
-    }
+		switch(i) {
+			case 1:
+				return (stack.getItem() instanceof ItemStamp);
+			case 0:
+				return (TileEntityFurnace.getItemBurnTime(stack) > 0);
+			case 2:
+				return !(stack.getItem() instanceof ItemStamp);
+		}
+		return true;
+	}
 
 	private int detectProgress;
 	private int detectPower;
@@ -269,7 +272,7 @@ public class TileEntityMachinePress extends TileEntityMachineBase implements ITi
 		}
 		if(mark)
 			markDirty();
-		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), inventory.getStackInSlot(1), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(this.pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 	}
 
 }

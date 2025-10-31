@@ -1,9 +1,9 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.inventory.material.Mats.MaterialStack;
+import com.hbm.items.ModItems.Foundry;
 import com.hbm.lib.ItemStackHandlerWrapper;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMold;
 import com.hbm.items.machine.ItemMold.Mold;
 
@@ -38,8 +38,12 @@ public abstract class TileEntityFoundryCastingBase extends TileEntityFoundryBase
 				super.onContentsChanged(slot);
 				markDirty();
 			}
-
-        };
+			
+			@Override
+			public int getSlotLimit(int slot) {
+				return 64;
+			}
+		};
 	}
 	
 	@Override
@@ -89,7 +93,7 @@ public abstract class TileEntityFoundryCastingBase extends TileEntityFoundryBase
 	public Mold getInstalledMold() {
 		if(inventory.getStackInSlot(0).isEmpty()) return null;
 		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.mold) {
+		if(inventory.getStackInSlot(0).getItem() == Foundry.mold) {
 			Mold mold = ((ItemMold) inventory.getStackInSlot(0).getItem()).getMold(inventory.getStackInSlot(0));
 			
 			if(mold.size == this.getMoldSize()){

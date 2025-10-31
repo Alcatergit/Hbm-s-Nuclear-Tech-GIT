@@ -1,0 +1,50 @@
+{
+    "multipart": [
+        {   "when": {"north": false, "east": false, "south": false, "west": false, "up": false},
+            "apply": [
+                { "model": "hbm:fire_floor0_digamma" },
+                { "model": "hbm:fire_floor1_digamma" }
+            ]
+        },
+        {   "when": {"OR": [{"north": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "hbm:fire_side0_digamma" },
+                { "model": "hbm:fire_side1_digamma" },
+                { "model": "hbm:fire_side_alt0_digamma" },
+                { "model": "hbm:fire_side_alt1_digamma" }
+            ]
+        },
+        {   "when": {"OR": [{"east": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "hbm:fire_side0_digamma", "y": 90 },
+                { "model": "hbm:fire_side1_digamma", "y": 90 },
+                { "model": "hbm:fire_side_alt0_digamma", "y": 90 },
+                { "model": "hbm:fire_side_alt1_digamma", "y": 90 }
+            ]
+        },
+        {   "when": {"OR": [{"south": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "hbm:fire_side0_digamma", "y": 180 },
+                { "model": "hbm:fire_side1_digamma", "y": 180 },
+                { "model": "hbm:fire_side_alt0_digamma", "y": 180 },
+                { "model": "hbm:fire_side_alt1_digamma", "y": 180 }
+            ]
+        },
+        {   "when": {"OR": [{"west": true}, {"north": false, "east": false, "south": false, "west": false, "up": false}]},
+            "apply": [
+                { "model": "hbm:fire_side0_digamma", "y": 270 },
+                { "model": "hbm:fire_side1_digamma", "y": 270 },
+                { "model": "hbm:fire_side_alt0_digamma", "y": 270 },
+                { "model": "hbm:fire_side_alt1_digamma", "y": 270 }
+            ]
+        },
+        {   "when": {"up": true},
+            "apply": [
+                { "model": "hbm:fire_up0_digamma" },
+                { "model": "hbm:fire_up1_digamma" },
+                { "model": "hbm:fire_up_alt0_digamma" },
+                { "model": "hbm:fire_up_alt1_digamma" }
+            ]
+        }
+    ]
+}

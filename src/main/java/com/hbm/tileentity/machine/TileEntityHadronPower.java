@@ -1,8 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.tileentity.TileEntityTickingBase;
-
 import api.hbm.energy.IEnergyUser;
+import com.hbm.tileentity.TileEntityTickingBase;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityHadronPower extends TileEntityTickingBase implements IEnergyUser {

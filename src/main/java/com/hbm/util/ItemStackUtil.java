@@ -1,18 +1,16 @@
 package com.hbm.util;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.oredict.OreDictionary;
 
 import javax.annotation.Nonnull;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemStackUtil {
 	
@@ -172,12 +170,12 @@ public class ItemStackUtil {
 	 */
 	public static List<String> getOreDictNames(ItemStack stack) {
 		List<String> list = new ArrayList();
-		if(!stack.isEmpty()) {
-			int[] ids = OreDictionary.getOreIDs(stack);
-			for (int i : ids) {
-				list.add(OreDictionary.getOreName(i));
-			}
+		
+		int ids[] = OreDictionary.getOreIDs(stack);
+		for(int i : ids) {
+			list.add(OreDictionary.getOreName(i));
 		}
+		
 		return list;
 	}
 }

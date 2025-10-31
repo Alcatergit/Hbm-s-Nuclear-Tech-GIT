@@ -1,16 +1,13 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.projectile.EntityModBeam;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +25,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunB93 extends Item {
 
@@ -47,7 +47,7 @@ public class GunB93 extends Item {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_b93) {
+		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Armory.gun_b93) {
 			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		if (!entityLiving.isSneaking()) {
@@ -81,7 +81,7 @@ public class GunB93 extends Item {
 
 					worldIn.spawnEntity(entityarrow1);
 
-					worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.sparkShoot, SoundCategory.PLAYERS, 5.0F, 1.0F);
+					worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundEvents.sparkShoot, SoundCategory.PLAYERS, 5.0F, 1.0F);
 				}
 
 				setAnim(stack, 1);
@@ -102,7 +102,7 @@ public class GunB93 extends Item {
 				setAnim(stack, 0);
 
 			if (j == 15) {
-				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.b92Reload, SoundCategory.PLAYERS, 2F, 0.9F);
+				world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.b92Reload, SoundCategory.PLAYERS, 2F, 0.9F);
 				setPower(stack, getPower(stack) + 1);
 				
 				if(getPower(stack) > 10) {

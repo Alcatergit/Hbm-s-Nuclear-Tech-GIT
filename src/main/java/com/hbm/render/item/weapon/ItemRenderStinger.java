@@ -1,16 +1,14 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.render.model.ModelStinger;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderStinger extends TEISRBase {
 
@@ -25,9 +23,9 @@ public class ItemRenderStinger extends TEISRBase {
 	@Override
 	public void renderByItem(ItemStack itemStackIn) {
 		GL11.glPushMatrix();
-		if(itemStackIn.getItem() == ModItems.gun_stinger)
+		if(itemStackIn.getItem() == Armory.gun_stinger)
 			Minecraft.getMinecraft().renderEngine.bindTexture(stinger_rl);
-		if(itemStackIn.getItem() == ModItems.gun_skystinger)
+		if(itemStackIn.getItem() == Armory.gun_skystinger)
 			Minecraft.getMinecraft().renderEngine.bindTexture(skystinger_rl);
 		switch(type){
 		case FIRST_PERSON_LEFT_HAND:

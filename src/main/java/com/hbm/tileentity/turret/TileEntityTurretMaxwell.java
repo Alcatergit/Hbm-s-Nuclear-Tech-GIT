@@ -1,13 +1,10 @@
 package com.hbm.tileentity.turret;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.util.EntityDamageUtil;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -16,6 +13,8 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
 
 public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 
@@ -93,7 +92,8 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 			
 			if(this.tPos != null) {
 				Vec3d pos = this.getTurretPos();
-                this.lastDist = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
+				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
+				this.lastDist = length;
 			}
 			
 			if(beam > 0)
@@ -113,21 +113,21 @@ public class TileEntityTurretMaxwell extends TileEntityTurretBaseNT {
 					if(!inventory.getStackInSlot(i).isEmpty()) {
 						Item item = inventory.getStackInSlot(i).getItem();
 						
-						if(item == ModItems.upgrade_speed_1) redLevel += 1;
-						if(item == ModItems.upgrade_speed_2) redLevel += 2;
-						if(item == ModItems.upgrade_speed_3) redLevel += 3;
-						if(item == ModItems.upgrade_effect_1) greenLevel += 1;
-						if(item == ModItems.upgrade_effect_2) greenLevel += 2;
-						if(item == ModItems.upgrade_effect_3) greenLevel += 3;
-						if(item == ModItems.upgrade_power_1) blueLevel += 1;
-						if(item == ModItems.upgrade_power_2) blueLevel += 2;
-						if(item == ModItems.upgrade_power_3) blueLevel += 3;
-						if(item == ModItems.upgrade_afterburn_1) pinkLevel += 1;
-						if(item == ModItems.upgrade_afterburn_2) pinkLevel += 2;
-						if(item == ModItems.upgrade_afterburn_3) pinkLevel += 3;
-						if(item == ModItems.upgrade_overdrive_1) blackLevel += 1;
-						if(item == ModItems.upgrade_overdrive_2) blackLevel += 2;
-						if(item == ModItems.upgrade_overdrive_3) blackLevel += 3;
+						if(item == Upgrades.upgrade_speed_1) redLevel += 1;
+						if(item == Upgrades.upgrade_speed_2) redLevel += 2;
+						if(item == Upgrades.upgrade_speed_3) redLevel += 3;
+						if(item == Upgrades.upgrade_effect_1) greenLevel += 1;
+						if(item == Upgrades.upgrade_effect_2) greenLevel += 2;
+						if(item == Upgrades.upgrade_effect_3) greenLevel += 3;
+						if(item == Upgrades.upgrade_power_1) blueLevel += 1;
+						if(item == Upgrades.upgrade_power_2) blueLevel += 2;
+						if(item == Upgrades.upgrade_power_3) blueLevel += 3;
+						if(item == Upgrades.upgrade_afterburn_1) pinkLevel += 1;
+						if(item == Upgrades.upgrade_afterburn_2) pinkLevel += 2;
+						if(item == Upgrades.upgrade_afterburn_3) pinkLevel += 3;
+						if(item == Upgrades.upgrade_overdrive_1) blackLevel += 1;
+						if(item == Upgrades.upgrade_overdrive_2) blackLevel += 2;
+						if(item == Upgrades.upgrade_overdrive_3) blackLevel += 3;
 					}
 				}
 			}

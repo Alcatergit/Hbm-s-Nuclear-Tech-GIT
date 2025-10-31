@@ -1,16 +1,14 @@
 package com.hbm.handler.crt;
 
-import crafttweaker.IAction;
+import com.hbm.inventory.RBMKOutgasserRecipes;
 import crafttweaker.CraftTweakerAPI;
-import crafttweaker.api.minecraft.CraftTweakerMC;
-import crafttweaker.api.item.IItemStack;
+import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.item.IItemStack;
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import com.hbm.inventory.RBMKOutgasserRecipes;
-
-import net.minecraft.item.ItemStack;
 
 @ZenRegister
 @ZenClass("mods.ntm.IrradiationChannel")

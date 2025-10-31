@@ -1,26 +1,21 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemGuideBook extends Item {
 
@@ -61,11 +56,11 @@ public class ItemGuideBook extends Item {
 		MSWORD("book.msword.cover", 1.5F, statFacMSword()),
 		HADRON("book.error.cover", 1.5F, statFacHadron());
 		
-		public final List<GuidePage> pages;
-		public final float titleScale;
-		public final String title;
+		public List<GuidePage> pages;
+		public float titleScale;
+		public String title;
 		
-		BookType(String title, float titleScale, List<GuidePage> pages) {
+		private BookType(String title, float titleScale, List<GuidePage> pages) {
 			this.title = title;
 			this.titleScale = titleScale;
 			this.pages = pages;

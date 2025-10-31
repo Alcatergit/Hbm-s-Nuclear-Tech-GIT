@@ -1,19 +1,19 @@
 package com.hbm.tileentity.bomb;
 
+import api.hbm.energy.IEnergyUser;
 import com.hbm.config.RadiationConfig;
 import com.hbm.entity.projectile.EntityRailgunBlast;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.RailgunRotationPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -91,7 +91,7 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -196,9 +196,13 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 	public boolean canFire() {
 		
 		int required = RadiationConfig.railgunUse;
-
-        return inventory.getStackInSlot(2).getItem() == ModItems.charge_railgun && power >= required;
-    }
+		
+		if(inventory.getStackInSlot(2).getItem() == Armory.charge_railgun && power >= required) {
+			return true;
+		}
+		
+		return false;
+	}
 	
 	public void tryFire() {
 		
@@ -210,7 +214,7 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 				power = 0;
 			PacketDispatcher.wrapper.sendToAll(new AuxGaugePacket(pos.getX(), pos.getY(), pos.getZ(), 0, 0));
 		} else {
-			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 	}
 	
@@ -238,7 +242,7 @@ public class TileEntityRailgun extends TileEntityLoadedBase implements ITickable
 		fart.motionZ = motionZ;
 		fart.rotation();
 		world.spawnEntity(fart);
-		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.railgunFire, SoundCategory.BLOCKS, 100.0F, 1.0F);
+		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.railgunFire, SoundCategory.BLOCKS, 100.0F, 1.0F);
 	}
 	
 	@Override

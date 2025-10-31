@@ -1,16 +1,15 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityRainbow;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Materials.Ingots;
+import com.hbm.items.ModItems.Materials.Nuggies;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,6 +26,9 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunZOMG extends Item {
 
@@ -66,11 +68,11 @@ public class GunZOMG extends Item {
 
 		if (!player.isSneaking()) {
 			if (stack.getTagCompound().getBoolean("valid")) {
-				if ((Library.hasInventoryItem(player.inventory, ModItems.nugget_euphemium)
-						|| Library.hasInventoryItem(player.inventory, ModItems.ingot_euphemium))) {
+				if ((Library.hasInventoryItem(player.inventory, Nuggies.nugget_euphemium)
+						|| Library.hasInventoryItem(player.inventory, Ingots.ingot_euphemium))) {
 				} else {
-					if (!Library.hasInventoryItem(player.inventory, ModItems.nugget_euphemium)
-							&& !Library.hasInventoryItem(player.inventory, ModItems.ingot_euphemium)) {
+					if (!Library.hasInventoryItem(player.inventory, Nuggies.nugget_euphemium)
+							&& !Library.hasInventoryItem(player.inventory, Ingots.ingot_euphemium)) {
 						stack.getTagCompound().setBoolean("valid", false);
 						if (!worldIn.isRemote) {
 							player.sendMessage(new TextComponentTranslation("[ZOMG] Validation lost!"));
@@ -90,7 +92,7 @@ public class GunZOMG extends Item {
 					player.sendMessage(new TextComponentTranslation("[ZOMG] Gun has already been validated."));
 				}
 			} else {
-				if (Library.hasInventoryItem(player.inventory, ModItems.nugget_euphemium) || Library.hasInventoryItem(player.inventory, ModItems.ingot_euphemium)) {
+				if (Library.hasInventoryItem(player.inventory, Nuggies.nugget_euphemium) || Library.hasInventoryItem(player.inventory, Ingots.ingot_euphemium)) {
 					stack.getTagCompound().setBoolean("valid", true);
 					if (!worldIn.isRemote) {
 						player.sendMessage(new TextComponentTranslation("[ZOMG] Gun has been validated!"));
@@ -129,7 +131,7 @@ public class GunZOMG extends Item {
 		if(!(ent instanceof EntityPlayer))
 			return;
 		EnumHand hand = ent.getHeldItem(EnumHand.MAIN_HAND) == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
-		if(hand == EnumHand.MAIN_HAND && ent.getHeldItem(EnumHand.OFF_HAND).getItem() == ModItems.gun_zomg){
+		if(hand == EnumHand.MAIN_HAND && ent.getHeldItem(EnumHand.OFF_HAND).getItem() == Armory.gun_zomg){
 			ent.getHeldItem(EnumHand.OFF_HAND).getItem().onUsingTick(ent.getHeldItem(EnumHand.OFF_HAND), ent, count);
 		}
 		EntityPlayer player = (EntityPlayer) ent;
@@ -144,8 +146,8 @@ public class GunZOMG extends Item {
 		
 		if (!player.isSneaking()) {
 			if (stack.getTagCompound().getBoolean("valid")) {
-				if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, ModItems.nugget_euphemium)
-						|| Library.hasInventoryItem(player.inventory, ModItems.ingot_euphemium)) && count % 1 == 0) {
+				if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, Nuggies.nugget_euphemium)
+						|| Library.hasInventoryItem(player.inventory, Ingots.ingot_euphemium)) && count % 1 == 0) {
 					if (!stack.getTagCompound().getBoolean("superuser")) {
 						EntityBullet entityarrow = new EntityBullet(world, player, 3.0F, 35, 45, false, "chopper", hand);
 						EntityBullet entityarrow1 = new EntityBullet(world, player, 3.0F, 35, 45, false, "chopper", hand);
@@ -160,7 +162,7 @@ public class GunZOMG extends Item {
 						entityarrow4.setDamage(35 + rand.nextInt(45 - 35));
 						entityarrow5.setDamage(35 + rand.nextInt(45 - 35));
 
-						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.osiprShoot, SoundCategory.PLAYERS, 1.0F, 0.6F + (rand.nextFloat() * 0.4F));
+						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.osiprShoot, SoundCategory.PLAYERS, 1.0F, 0.6F + (rand.nextFloat() * 0.4F));
 
 						if (!world.isRemote) {
 							world.spawnEntity(entityarrow);
@@ -184,7 +186,7 @@ public class GunZOMG extends Item {
 						entityarrow4.setDamage(10000 + rand.nextInt(90000));
 
 						//world.playSoundAtEntity(player, "random.explode", 1.0F, 1.5F + (rand.nextFloat() / 4));
-						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.zomgShoot, SoundCategory.PLAYERS, 1.0F, 0.8F + (rand.nextFloat() * 0.4F));
+						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.zomgShoot, SoundCategory.PLAYERS, 1.0F, 0.8F + (rand.nextFloat() * 0.4F));
 
 						if (!world.isRemote) {
 							world.spawnEntity(entityarrow);
@@ -195,7 +197,7 @@ public class GunZOMG extends Item {
 						}
 					}
 				} else {
-					if (!Library.hasInventoryItem(player.inventory, ModItems.nugget_euphemium) && !Library.hasInventoryItem(player.inventory, ModItems.ingot_euphemium)) {
+					if (!Library.hasInventoryItem(player.inventory, Nuggies.nugget_euphemium) && !Library.hasInventoryItem(player.inventory, Ingots.ingot_euphemium)) {
 						stack.getTagCompound().setBoolean("valid", false);
 						if (!world.isRemote) {
 							player.sendMessage(new TextComponentTranslation("[ZOMG] Validation lost!"));

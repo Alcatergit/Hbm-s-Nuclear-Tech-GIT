@@ -1,0 +1,21 @@
+{
+  "variants": {
+    "meta=0": { "model": "hbm:foundry_channel_center" },
+    "meta=1": { "model": "hbm:foundry_channel_side", "y": 90 },
+    "meta=2": { "model": "hbm:foundry_channel_side", "y": 270 },
+    "meta=3": { "model": "hbm:foundry_channel_straight" },
+    "meta=4": { "model": "hbm:foundry_channel_side", "y": 180 },
+    "meta=5": { "model": "hbm:foundry_channel_corner", "y": 90 },
+    "meta=6": { "model": "hbm:foundry_channel_corner", "y": 180 },
+    "meta=7": { "model": "hbm:foundry_channel_t" },
+    "meta=8": { "model": "hbm:foundry_channel_side" },
+    "meta=9": { "model": "hbm:foundry_channel_corner" },
+    "meta=10": { "model": "hbm:foundry_channel_corner", "y": 270 },
+    "meta=11": { "model": "hbm:foundry_channel_t", "y": 180 },
+    "meta=12": { "model": "hbm:foundry_channel_straight", "y": 90 },
+    "meta=13": { "model": "hbm:foundry_channel_t", "y": 270 },
+    "meta=14": { "model": "hbm:foundry_channel_t", "y": 90 },
+    "meta=15": { "model": "hbm:foundry_channel_cross" },
+	"inventory": [{"model": "hbm:foundry_channel_cross"}]
+  }
+}

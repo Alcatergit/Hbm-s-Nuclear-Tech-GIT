@@ -1,18 +1,11 @@
 package com.hbm.render.misc;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,16 +14,21 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.util.Random;
 
 public class BeamPronter {
 	
-	public enum EnumWaveType {
+	public static enum EnumWaveType {
 		RANDOM,
 		SPIRAL,
 		STRAIGHT
 	}
 	
-	public enum EnumBeamType {
+	public static enum EnumBeamType {
 		SOLID,
 		LINE
 	}
@@ -60,7 +58,7 @@ public class BeamPronter {
 			GlStateManager.disableCull();
 		}
         
-		Tessellator tessellator = Tessellator.instance;
+		CompositeBrush tessellator = CompositeBrush.instance;
 		
 		if(beam == EnumBeamType.LINE) {
 			net.minecraft.client.renderer.Tessellator.getInstance().getBuffer().begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
@@ -77,18 +75,23 @@ public class BeamPronter {
 		double lastZ = 0;
 		
 		for(int i = 0; i <= segments; i++) {
+			boolean firstSegment = i == 0;
+			boolean lastSegment = i == segments;
 
 			double pX = unit.xCoord * segLength * i;
 			double pY = unit.yCoord * segLength * i;
 			double pZ = unit.zCoord * segLength * i;
 			
-			if(wave != EnumWaveType.STRAIGHT) {
+			if(wave != EnumWaveType.STRAIGHT && !(wave == EnumWaveType.RANDOM && (firstSegment || lastSegment))) {
 				Vec3 spinner = Vec3.createVectorHelper(spinRadius, 0, 0);
 				if(wave == EnumWaveType.SPIRAL) {
 					spinner.rotateAroundY((float)Math.PI * (float)start / 180F);
 					spinner.rotateAroundY((float)Math.PI * 45F / 180F * i);
 				} else if(wave == EnumWaveType.RANDOM) {
+					spinner.mult(rand.nextFloat());
 					spinner.rotateAroundY((float)Math.PI * 2 * rand.nextFloat());
+					if (rand.nextInt(3) == 0)
+						continue;
 				}
 				pX += spinner.xCoord;
 				pY += spinner.yCoord;

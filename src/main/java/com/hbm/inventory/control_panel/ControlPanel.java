@@ -1,14 +1,7 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.*;
-import java.util.Map.Entry;
-
-import net.minecraft.client.renderer.GlStateManager;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.packet.ControlPanelUpdatePacket.VarUpdate;
-
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
@@ -17,6 +10,11 @@ import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ControlPanel {
 

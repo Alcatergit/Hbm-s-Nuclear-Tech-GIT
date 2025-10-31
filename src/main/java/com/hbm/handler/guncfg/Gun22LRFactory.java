@@ -1,13 +1,13 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import java.util.ArrayList;
 
 public class Gun22LRFactory {
 
@@ -27,7 +27,7 @@ public class Gun22LRFactory {
 		config.crosshair = Crosshair.L_CROSS;
 		config.durability = 3000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.uziShoot;
+		config.firingSound = HBMSoundEvents.uziShoot;
 		config.reloadSoundEnd = false;
 		
 		config.name = "IMI Uzi";
@@ -64,7 +64,7 @@ public class Gun22LRFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_22lr;
+		bullet.ammo = Armory.ammo_22lr;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 2;
 		bullet.dmgMax = 4;
@@ -76,7 +76,7 @@ public class Gun22LRFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_22lr_ap;
+		bullet.ammo = Armory.ammo_22lr_ap;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 8;

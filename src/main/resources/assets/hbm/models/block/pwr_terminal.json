@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/pwr/pwr_casing_blank",
+		"front": "hbm:blocks/pwr/pwr_controller",
+		"side": "hbm:blocks/pwr/pwr_casing_blank"
+	}
+}

@@ -1,15 +1,12 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunXVL1456 extends Item {
 
@@ -58,7 +58,7 @@ public class GunXVL1456 extends Item {
 			return;
 		
 		EntityPlayer player = (EntityPlayer)entityLiving;
-		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == ModItems.gun_xvl1456){
+		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == Armory.gun_xvl1456){
 			player.getHeldItemOffhand().onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -74,17 +74,17 @@ public class GunXVL1456 extends Item {
 			boolean flag = player.capabilities.isCreativeMode
 					|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-			if (flag || Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) {
+			if (flag || Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo)) {
 				EntityBullet entitybullet = new EntityBullet(worldIn, player, 3.0F, j, j + 5, false, "tauDay", player.getHeldItem(EnumHand.MAIN_HAND) == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 
 				entitybullet.setDamage(j + rand.nextInt(6));
 
-				worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.5F);
+				worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.5F);
 
 				if (flag) {
 					entitybullet.canBePickedUp = 2;
 				} else {
-					Library.consumeInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo);
+					Library.consumeInventoryItem(player.inventory, Armory.gun_xvl1456_ammo);
 				}
 
 				entitybullet.setIsCritical(true);
@@ -118,24 +118,24 @@ public class GunXVL1456 extends Item {
 		if(!(player1 instanceof EntityPlayer))
 			return;
 		EntityPlayer player = (EntityPlayer)player1;
-		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == ModItems.gun_xvl1456){
+		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == Armory.gun_xvl1456){
 			player.getHeldItemOffhand().getItem().onUsingTick(player.getHeldItemOffhand(), player, count);
 		}
 		World world = player.world;
 		if (!player.isSneaking()) {
 			boolean flag = player.capabilities.isCreativeMode
 					|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-			if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) && count % 4 == 0) {
+			if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo)) && count % 4 == 0) {
 
 				EntityBullet entityarrow = new EntityBullet(world, player, 3.0F, 25, 65, false, "eyyOk", player.getHeldItem(EnumHand.MAIN_HAND) == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 				entityarrow.setDamage(25 + rand.nextInt(65 - 25));
 
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.8F + (rand.nextFloat() * 0.4F));
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.8F + (rand.nextFloat() * 0.4F));
 
 				if (flag) {
 					entityarrow.canBePickedUp = 2;
 				} else {
-					Library.consumeInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo);
+					Library.consumeInventoryItem(player.inventory, Armory.gun_xvl1456_ammo);
 				}
 				
 				if (!world.isRemote) {
@@ -146,14 +146,14 @@ public class GunXVL1456 extends Item {
 			if (count % 20 == 0 && this.getMaxItemUseDuration(stack) - count != 0) {
 				boolean flag = player.capabilities.isCreativeMode
 						|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-				if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo))) {
+				if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo))) {
 					if (!flag) {
-						Library.consumeInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo);
+						Library.consumeInventoryItem(player.inventory, Armory.gun_xvl1456_ammo);
 					}
 				}
 			}
 			
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.nullTau, SoundCategory.PLAYERS, 0.1F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.nullTau, SoundCategory.PLAYERS, 0.1F, 1.0F);
 		}
 		
 		if(player instanceof EntityPlayer)

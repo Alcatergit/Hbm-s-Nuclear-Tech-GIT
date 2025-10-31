@@ -22,12 +22,12 @@ public class SolderingRecipeHandler implements IRecipeCategory<SolderingRecipe> 
 
 	@Override
 	public String getUid() {
-		return JEIConfig.SOLDERINGSTATION;
+		return JEIConfig.SOLDERING;
 	}
 
 	@Override
 	public String getTitle() {
-		return I18nUtil.resolveKey("container.machineSolderingStation");
+		return I18nUtil.resolveKey("tile.machine_soldering.name");
 	}
 
 	@Override

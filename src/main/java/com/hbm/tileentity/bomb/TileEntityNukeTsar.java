@@ -1,7 +1,6 @@
 package com.hbm.tileentity.bomb;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -34,7 +33,7 @@ public class TileEntityNukeTsar extends TileEntity {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {

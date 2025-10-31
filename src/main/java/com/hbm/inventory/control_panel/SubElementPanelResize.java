@@ -9,7 +9,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.client.config.*;
+import net.minecraftforge.fml.client.config.GuiSlider;
 import org.lwjgl.opengl.GL11;
 
 // placeholder gui until i make something better

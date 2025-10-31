@@ -1,13 +1,12 @@
 package com.hbm.inventory.control_panel.nodes;
 
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.inventory.control_panel.NodeSystem;
-
 import net.minecraft.util.math.BlockPos;
+
+import java.util.List;
+import java.util.Map;
 
 public abstract class NodeOutput extends Node {
 

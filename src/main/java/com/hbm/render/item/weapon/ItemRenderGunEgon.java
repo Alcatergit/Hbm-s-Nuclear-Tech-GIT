@@ -1,7 +1,5 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.weapon.ItemGunEgon;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
@@ -10,7 +8,6 @@ import com.hbm.main.ResourceManager;
 import com.hbm.particle.gluon.ParticleGluonMuzzleSmoke;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,6 +19,7 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderGunEgon extends TEISRBase {
 

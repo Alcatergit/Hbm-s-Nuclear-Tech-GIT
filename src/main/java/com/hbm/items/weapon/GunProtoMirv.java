@@ -1,15 +1,12 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +25,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
+import java.util.List;
+import java.util.UUID;
+
 public class GunProtoMirv extends Item {
 
 	public GunProtoMirv(String s) {
@@ -45,7 +45,7 @@ public class GunProtoMirv extends Item {
 		if(!(entityLiving instanceof EntityPlayer))
 			return;
 		EntityPlayer player = (EntityPlayer) entityLiving;
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_proto) {
+		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Armory.gun_proto) {
 			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
@@ -63,7 +63,7 @@ public class GunProtoMirv extends Item {
 		boolean f1 = false;
 				
 		for(int i = 0; i < 8; i++) {
-			if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_nuke)) {
+			if (flag || Library.hasInventoryItem(player.inventory, Armory.ammo_nuke)) {
 				
 				f1 = true;
 				
@@ -91,7 +91,7 @@ public class GunProtoMirv extends Item {
 				stack.damageItem(1, player);
 	
 				if (!flag) {
-					Library.consumeInventoryItem(player.inventory, ModItems.ammo_nuke);
+					Library.consumeInventoryItem(player.inventory, Armory.ammo_nuke);
 				}
 	
 				if (!worldIn.isRemote) {
@@ -101,7 +101,7 @@ public class GunProtoMirv extends Item {
 		}
 		
 		if(f1)
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 	}
 	
 	@Override

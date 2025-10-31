@@ -1,14 +1,12 @@
 package com.hbm.animloader;
 
-import java.nio.FloatBuffer;
-
+import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.client.renderer.GLAllocation;
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.util.vector.Matrix4f;
 import org.lwjgl.util.vector.Quaternion;
 
-import com.hbm.render.amlfrom1710.Vec3;
-
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import java.nio.FloatBuffer;
 
 public class Transform {
 

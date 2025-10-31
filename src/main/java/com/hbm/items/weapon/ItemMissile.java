@@ -1,18 +1,17 @@
 package com.hbm.items.weapon;
 
-import java.util.HashMap;
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.items.special.ItemLootCrate;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class ItemMissile extends Item {
 	
@@ -114,7 +113,7 @@ public class ItemMissile extends Item {
 		LEGENDARY("rarity.legendary"),
 		SEWS_CLOTHES_AND_SUCKS_HORSE_COCK("rarity.strange");
 		
-		final String name;
+		String name;
 		
 		Rarity(String name) {
 			this.name = name;

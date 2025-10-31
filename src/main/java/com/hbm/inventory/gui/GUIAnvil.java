@@ -1,13 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.AnvilRecipes.AnvilConstructionRecipe;
 import com.hbm.inventory.AnvilRecipes.AnvilOutput;
@@ -18,7 +10,7 @@ import com.hbm.inventory.container.ContainerAnvil;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AnvilCraftPacket;
 import com.hbm.packet.PacketDispatcher;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
@@ -34,6 +26,12 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class GUIAnvil extends GuiContainer {
 
@@ -236,7 +234,7 @@ public class GUIAnvil extends GuiContainer {
 				OreDictStack input = (OreDictStack) stack;
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 				
-				if(!ores.isEmpty()) {
+				if(ores.size() > 0) {
 					ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 					list.add(">" + input.count() + "x " + inStack.getDisplayName());
 					
@@ -274,7 +272,7 @@ public class GUIAnvil extends GuiContainer {
 				OreDictStack input = (OreDictStack) stack;
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 				
-				if(!ores.isEmpty()) {
+				if(ores.size() > 0) {
 					for(ItemStack ore : ores) {
 						list.add(ore.getDisplayName().toLowerCase());
 					}

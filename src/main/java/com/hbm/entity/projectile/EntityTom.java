@@ -1,13 +1,15 @@
 package com.hbm.entity.projectile;
 
+import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.entity.logic.EntityTomBlast;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.saveddata.AuxSavedData;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
@@ -32,7 +34,7 @@ public class EntityTom extends EntityThrowable implements IConstantRenderer {
 		this.setPosition(posX + this.motionX, posY + this.motionY, posZ + this.motionZ);
 		
 		if(this.ticksExisted % 100 == 0) {
-			world.playSound(null, posX, posY, posZ, HBMSoundHandler.chime, SoundCategory.HOSTILE, 10000, 1.0F);
+			world.playSound(null, posX, posY, posZ, HBMSoundEvents.chime, SoundCategory.HOSTILE, 10000, 1.0F);
 		}
         
 		motionY = -0.5;
@@ -45,8 +47,17 @@ public class EntityTom extends EntityThrowable implements IConstantRenderer {
 	    			tom.posX = posX;
 	    			tom.posY = posY;
 	    			tom.posZ = posZ;
-	    			tom.destructionRange = 600;
+	    			tom.destructionRange = BombConfig.tomRadius;
 	    			world.spawnEntity(tom);
+					NBTTagCompound nbt = new NBTTagCompound();
+					nbt.setInteger("x",getPosition().getX());
+					nbt.setInteger("z",getPosition().getZ());
+					nbt.setInteger("dim",dimension);
+					nbt.setDouble("infernal",1);
+					nbt.setDouble("volcanic",1);
+					nbt.setDouble("seismic",1);
+					nbt.setDouble("dust",0);
+					AuxSavedData.addToList(world,"tomImpact",nbt);
 	    		}
     			
     			EntityCloudTom cloud = new EntityCloudTom(world, 500);

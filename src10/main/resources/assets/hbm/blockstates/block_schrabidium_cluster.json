@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "hbm:block_schrabidium_cluster" },
+        "axis=z": { "model": "hbm:block_schrabidium_cluster", "x": 90 },
+        "axis=x": { "model": "hbm:block_schrabidium_cluster", "x": 90, "y": 90 }
+    }
+}

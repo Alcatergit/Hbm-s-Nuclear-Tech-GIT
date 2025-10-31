@@ -27,27 +27,38 @@ public class AudioWrapperClientStartStop extends AudioWrapperClient {
 	}
 	
 	@Override
-	public void updatePosition(float x, float y, float z){
+	public AudioWrapperClientStartStop updatePosition(float x, float y, float z){
 		this.x = x;
 		this.y = y;
 		this.z = z;
 		super.updatePosition(x, y, z);
+		return this;
 	}
 	
 	@Override
-	public void startSound(){
-		if(start != null){
-			world.playSound(x, y, z, start, cat, ssVol, 1, false);
-		}
+	public AudioWrapperClientStartStop startSound(){
 		super.startSound();
+		if(start != null){
+			float stupidpitch = 1;
+			try {
+				stupidpitch = getPitch(); // fuck you
+			} catch (NullPointerException ignored) {}
+			world.playSound(x, y, z, start, cat, ssVol, stupidpitch, false);
+		}
+		return this;
 	}
 	
 	@Override
-	public void stopSound(){
+	public AudioWrapperClientStartStop stopSound(){
 		if(stop != null){
-			world.playSound(x, y, z, stop, cat, ssVol, 1, false);
+			float stupidpitch = 1;
+			try {
+				stupidpitch = getPitch(); // fuck you
+			} catch (NullPointerException ignored) {}
+			world.playSound(x, y, z, stop, cat, ssVol, stupidpitch, false);
 		}
 		super.stopSound();
+		return this;
 	}
 	
 	@Override

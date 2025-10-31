@@ -3,14 +3,10 @@ package com.hbm.entity.mob;
 import com.google.common.base.Predicate;
 import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.interfaces.IRadiationImmune;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
-
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.IRangedAttackMob;
-import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.entity.*;
 import net.minecraft.entity.ai.EntityAIAttackRanged;
 import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
 import net.minecraft.entity.ai.EntityAIPanic;
@@ -18,7 +14,6 @@ import net.minecraft.entity.ai.EntityAIWanderAvoidWater;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundEvent;
@@ -87,12 +82,12 @@ public class EntityCyberCrab extends EntityMob implements IRangedAttackMob, IRad
 	
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return HBMSoundHandler.cybercrab;
+		return HBMSoundEvents.cybercrab;
 	}
 	
 	@Override
 	protected SoundEvent getDeathSound() {
-		return HBMSoundHandler.cybercrab;
+		return HBMSoundEvents.cybercrab;
 	}
 	
 	@Override
@@ -102,17 +97,21 @@ public class EntityCyberCrab extends EntityMob implements IRangedAttackMob, IRad
 	
 	@Override
 	protected Item getDropItem() {
-		return Items.GOLD_NUGGET;
+		return ModItems.wire_gold;
 	}
-
+	
+	protected void dropRareDrop(int p_70600_1_) {
+    	this.dropItem(ModItems.wire_magnetized_tungsten, 1);
+    }
+	
 	@Override
 	public void attackEntityWithRangedAttack(EntityLivingBase target, float distanceFactor) {
 		EntityBullet bullet = new EntityBullet(world, this, target, 1.6F, 2);
 		bullet.setIsCritical(true);
 		bullet.setTau(true);
-		bullet.damage = 2;
+		bullet.damage = 3;
         this.world.spawnEntity(bullet);
-        this.playSound(HBMSoundHandler.sawShoot, 1.0F, 2.0F);
+        this.playSound(HBMSoundEvents.sawShoot, 1.0F, 2.0F);
 	}
 
 	@Override

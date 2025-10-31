@@ -1,18 +1,20 @@
 package com.hbm.inventory.control_panel.nodes;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.inventory.control_panel.*;
-import org.lwjgl.opengl.GL11;
-
+import com.hbm.inventory.control_panel.nodes.leafia.NodeAddString;
+import com.hbm.inventory.control_panel.nodes.leafia.NodeSIPfx;
+import com.hbm.inventory.control_panel.nodes.leafia.NodeSounder;
+import com.hbm.inventory.control_panel.nodes.leafia.NodeSubString;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.nbt.NBTTagCompound;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class Node {
 
@@ -81,47 +83,59 @@ public abstract class Node {
 	public static Node nodeFromNBT(NBTTagCompound tag, NodeSystem sys){
 		Node node = null;
 		switch(tag.getString("nodeType")){
-		case "cancelEvent":
-			node = new NodeCancelEvent(0, 0);
-			break;
-		case "eventBroadcast":
-			NBTTagCompound list = tag.getCompoundTag("itemList");
-			List<ControlEvent> l = new ArrayList<>();
-			for(int i = 0; i < list.getKeySet().size(); i ++){
-				l.add(ControlEvent.getRegisteredEvent(list.getString("item"+i)));
-			}
-			node = new NodeEventBroadcast(0, 0, l);
-			break;
-		case "getVar":
-			int ctrlIdx = tag.getInteger("controlIdx");
-			node = new NodeGetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx));
-			break;
-		case "queryBlock":
-			ctrlIdx = tag.getInteger("controlIdx");
-			node = new NodeQueryBlock(0, 0, sys.parent.panel.controls.get(ctrlIdx));
-			break;
+			case "cancelEvent":
+				node = new NodeCancelEvent(0, 0);
+				break;
+			case "eventBroadcast":
+				NBTTagCompound list = tag.getCompoundTag("itemList");
+				List<ControlEvent> l = new ArrayList<>();
+				for(int i = 0; i < list.getKeySet().size(); i ++){
+					l.add(ControlEvent.getRegisteredEvent(list.getString("item"+i)));
+				}
+				node = new NodeEventBroadcast(0, 0, l);
+				break;
+			case "sounder":
+				node = new NodeSounder(0,0);
+				break;
+			case "addString":
+				node = new NodeAddString(0,0);
+				break;
+			case "subString":
+				node = new NodeSubString(0,0);
+				break;
+			case "sipfx":
+				node = new NodeSIPfx(0,0);
+				break;
+			case "getVar":
+				int ctrlIdx = tag.getInteger("controlIdx");
+				node = new NodeGetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx));
+				break;
+			case "queryBlock":
+				ctrlIdx = tag.getInteger("controlIdx");
+				node = new NodeQueryBlock(0, 0, sys.parent.panel.controls.get(ctrlIdx));
+				break;
 			case "math":
-			node = new NodeMath(0, 0);
-			break;
-		case "boolean":
-			node = new NodeBoolean(0, 0);
-			break;
-		case "function":
-			node = new NodeFunction(0, 0);
-			break;
-		case "buffer":
-			node = new NodeBuffer(0, 0);
-			break;
-		case "conditional":
-			node = new NodeConditional(0, 0);
-			break;
-		case "setVar":
-			int ctrlIdx2 = tag.getInteger("controlIdx");
-			node = new NodeSetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx2));
-			break;
-		case "input":
-			node = new NodeInput(0, 0, null);
-			break;
+				node = new NodeMath(0, 0);
+				break;
+			case "boolean":
+				node = new NodeBoolean(0, 0);
+				break;
+			case "function":
+				node = new NodeFunction(0, 0);
+				break;
+			case "buffer":
+				node = new NodeBuffer(0, 0);
+				break;
+			case "conditional":
+				node = new NodeConditional(0, 0);
+				break;
+			case "setVar":
+				int ctrlIdx2 = tag.getInteger("controlIdx");
+				node = new NodeSetVar(0, 0, sys.parent.panel.controls.get(ctrlIdx2));
+				break;
+			case "input":
+				node = new NodeInput(0, 0, null);
+				break;
 		}
 		return node;
 	}

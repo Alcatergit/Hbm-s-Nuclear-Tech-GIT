@@ -1,18 +1,16 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Materials.Powders;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-import static com.hbm.inventory.material.Mats.MAT_ALUMINIUM;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileTaint extends EntityMissileBaseAdvanced {
 
@@ -44,17 +42,18 @@ public class EntityMissileTaint extends EntityMissileBaseAdvanced {
 	public List<ItemStack> getDebris() {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 
-		list.add(new ItemStack(ModItems.wire, 4, MAT_ALUMINIUM.id));
+		list.add(new ItemStack(ModItems.wire_aluminium, 4));
 		list.add(new ItemStack(ModItems.plate_titanium, 4));
 		list.add(new ItemStack(ModItems.hull_small_aluminium, 2));
-		list.add(new ItemStack(ModItems.powder_magic, 1));
+		list.add(new ItemStack(Powders.powder_magic, 1));
+		list.add(new ItemStack(ModItems.circuit_targeting_tier1, 1));
 
 		return list;
 	}
 
 	@Override
 	public ItemStack getDebrisRareDrop() {
-		return new ItemStack(ModItems.powder_spark_mix, 1);
+		return new ItemStack(Powders.powder_spark_mix, 1);
 	}
 
 	@Override

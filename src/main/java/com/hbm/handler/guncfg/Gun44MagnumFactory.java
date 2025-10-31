@@ -1,7 +1,5 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.entity.particle.EntityBSmokeFX;
 import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.entity.projectile.EntityBuilding;
@@ -12,18 +10,19 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IBulletHitBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
 
 public class Gun44MagnumFactory {
 
@@ -42,7 +41,7 @@ public class Gun44MagnumFactory {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CLASSIC;
 		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
-		config.firingSound = HBMSoundHandler.revolverShootAlt;
+		config.firingSound = HBMSoundEvents.revolverShootAlt;
 		config.reloadSoundEnd = false;
 
 		return config;
@@ -173,7 +172,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44;
+		bullet.ammo = Armory.ammo_44;
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 7;
 
@@ -184,7 +183,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_ap;
+		bullet.ammo = Armory.ammo_44_ap;
 		bullet.dmgMin = 7;
 		bullet.dmgMax = 10;
 		bullet.wear = 15;
@@ -197,7 +196,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_du;
+		bullet.ammo = Armory.ammo_44_du;
 		bullet.dmgMin = 7;
 		bullet.dmgMax = 10;
 		bullet.wear = 25;
@@ -210,7 +209,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_star;
+		bullet.ammo = Armory.ammo_44_star;
 		bullet.dmgMin = 14;
 		bullet.dmgMax = 20;
 		bullet.wear = 25;
@@ -223,7 +222,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_pip;
+		bullet.ammo = Armory.ammo_44_pip;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -246,7 +245,7 @@ public class Gun44MagnumFactory {
 					}
 					bullet.world.spawnEntity(pippo);
 
-					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.trainHorn, SoundCategory.PLAYERS, 100F, 1F);
+					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundEvents.trainHorn, SoundCategory.PLAYERS, 100F, 1F);
 				}
 			}
 		};
@@ -258,7 +257,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_bj;
+		bullet.ammo = Armory.ammo_44_bj;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -281,7 +280,7 @@ public class Gun44MagnumFactory {
 					}
 					bullet.world.spawnEntity(pippo);
 
-					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.boatWeapon, SoundCategory.PLAYERS, 100F, 1F);
+					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundEvents.boatWeapon, SoundCategory.PLAYERS, 100F, 1F);
 				}
 			}
 
@@ -294,7 +293,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_silver;
+		bullet.ammo = Armory.ammo_44_silver;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -317,7 +316,7 @@ public class Gun44MagnumFactory {
 					}
 					bullet.world.spawnEntity(pippo);
 
-					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundHandler.blockDebris, SoundCategory.PLAYERS, 100F, 1F);
+					bullet.world.playSound(null, pippo.posX, pippo.posY + 50, pippo.posZ, HBMSoundEvents.blockDebris, SoundCategory.PLAYERS, 100F, 1F);
 				}
 			}
 
@@ -330,7 +329,7 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_44_rocket;
+		bullet.ammo = Armory.ammo_44_rocket;
 		bullet.velocity = 5;
 		bullet.explosive = 15F;
 		bullet.trail = 1;
@@ -342,7 +341,7 @@ public class Gun44MagnumFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_44_phosphorus;
+		bullet.ammo = Armory.ammo_44_phosphorus;
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 7;
 		bullet.wear = 15;

@@ -1,14 +1,12 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.items.ModItems.BlockItems;
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -23,12 +21,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockRenderLayer;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -36,7 +29,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockModDoor extends Block {
+import java.util.Random;
+
+public class BlockModDoor extends BlockDoor {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	public static final PropertyBool OPEN = PropertyBool.create("open");
@@ -53,6 +48,8 @@ public class BlockModDoor extends Block {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
 		this.setDefaultState(this.blockState.getBaseState().withProperty(FACING, EnumFacing.NORTH).withProperty(OPEN, Boolean.FALSE).withProperty(HINGE, BlockDoor.EnumHingePosition.LEFT).withProperty(POWERED, Boolean.FALSE).withProperty(HALF, BlockDoor.EnumDoorHalf.LOWER));
+		if (this == ModBlocks.door_fuckoff)
+			this.setSoundType(SoundType.WOOD);
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -114,7 +111,10 @@ public class BlockModDoor extends Block {
 			state = iblockstate.cycleProperty(OPEN);
 			worldIn.setBlockState(blockpos, state, 10);
 			worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
-			worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+			if (this == ModBlocks.door_fuckoff)
+				worldIn.playEvent(playerIn, state.getValue(OPEN) ? 1006 : 1012, pos, 0);
+			else
+				worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			return true;
 		}
 	}
@@ -129,7 +129,10 @@ public class BlockModDoor extends Block {
 			if(iblockstate1.getBlock() == this && (Boolean) iblockstate1.getValue(OPEN) != open) {
 				worldIn.setBlockState(blockpos, iblockstate1.withProperty(OPEN, open), 10);
 				worldIn.markBlockRangeForRenderUpdate(blockpos, pos);
-				worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+				if (this == ModBlocks.door_fuckoff)
+					worldIn.playEvent(null, open ? 1006 : 1012, pos, 0);
+				else
+					worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 			}
 		}
 	}
@@ -182,7 +185,10 @@ public class BlockModDoor extends Block {
 					if(flag != (Boolean) state.getValue(OPEN)) {
 						worldIn.setBlockState(pos, state.withProperty(OPEN, flag), 2);
 						worldIn.markBlockRangeForRenderUpdate(pos, pos);
-						worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
+						if (this == ModBlocks.door_fuckoff)
+							worldIn.playEvent(null, flag ? 1006 : 1012, pos, 0);
+						else
+							worldIn.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.openDoor, SoundCategory.BLOCKS, 1.0F, worldIn.rand.nextFloat() * 0.1F + 0.9F);
 					}
 				}
 			}
@@ -200,12 +206,13 @@ public class BlockModDoor extends Block {
 	 * Checks if this block can be placed exactly at the given position.
 	 */
 	public boolean canPlaceBlockAt(World worldIn, BlockPos pos) {
-		if(pos.getY() >= worldIn.getHeight() - 1) {
+		/* if(pos.getY() >= worldIn.getHeight() - 1) {
 			return false;
 		} else {
 			IBlockState state = worldIn.getBlockState(pos.down());
 			return (state.isTopSolid() || state.getBlockFaceShape(worldIn, pos.down(), EnumFacing.UP) == BlockFaceShape.SOLID) && super.canPlaceBlockAt(worldIn, pos) && super.canPlaceBlockAt(worldIn, pos.up());
-		}
+		}*/
+		return super.canPlaceBlockAt(worldIn,pos);
 	}
 
 	public EnumPushReaction getMobilityFlag(IBlockState state) {
@@ -233,11 +240,13 @@ public class BlockModDoor extends Block {
 
 	private Item getItem() {
 		if(this == ModBlocks.door_metal)
-			return ModItems.door_metal;
+			return BlockItems.door_metal;
 		else if(this == ModBlocks.door_office)
-			return ModItems.door_office;
+			return BlockItems.door_office;
+		else if (this == ModBlocks.door_fuckoff)
+			return BlockItems.door_fuckoff;
 		else
-			return ModItems.door_bunker;
+			return BlockItems.door_bunker;
 	}
 
 	/**

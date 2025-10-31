@@ -3,7 +3,6 @@ package com.hbm.util;
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.packet.KeypadClientPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -61,7 +60,9 @@ public class Keypad {
 				data[i] = buttons[i].cooldown;
 			}
 			data[12] = (byte) (isSettingCode ? 1 : 0);
-            System.arraycopy(code, 0, data, 13, 6);
+			for(int i = 0; i < 6; i ++){
+				data[13 + i] = code[i];
+			}
 			data[19] = successColorTicks;
 			data[20] = failColorTicks;
 			PacketDispatcher.wrapper.sendToAllAround(new KeypadClientPacket(te.getPos(), data), new TargetPoint(te.getWorld().provider.getDimension(), te.getPos().getX(), te.getPos().getY(), te.getPos().getZ(), 10));

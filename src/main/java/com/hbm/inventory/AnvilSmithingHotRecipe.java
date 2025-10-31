@@ -1,12 +1,11 @@
 package com.hbm.inventory;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.items.special.ItemHot;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class AnvilSmithingHotRecipe extends AnvilSmithingRecipe {
 

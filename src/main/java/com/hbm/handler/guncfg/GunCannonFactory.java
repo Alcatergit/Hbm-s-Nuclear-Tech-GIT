@@ -3,7 +3,7 @@ package com.hbm.handler.guncfg;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 
 public class GunCannonFactory {
 
@@ -11,7 +11,7 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell;
+		bullet.ammo = Armory.ammo_shell;
 		bullet.dmgMin = 25;
 		bullet.dmgMax = 35;
 		bullet.explosive = 4F;
@@ -24,7 +24,7 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_explosive;
+		bullet.ammo = Armory.ammo_shell_explosive;
 		bullet.dmgMin = 35;
 		bullet.dmgMax = 45;
 		bullet.explosive = 4F;
@@ -37,7 +37,7 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_apfsds_t;
+		bullet.ammo = Armory.ammo_shell_apfsds_t;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 55;
 		bullet.doesPenetrate = true;
@@ -50,7 +50,7 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_apfsds_du;
+		bullet.ammo = Armory.ammo_shell_apfsds_du;
 		bullet.dmgMin = 70;
 		bullet.dmgMax = 80;
 		bullet.doesPenetrate = true;
@@ -63,7 +63,7 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_w9;
+		bullet.ammo = Armory.ammo_shell_w9;
 		bullet.dmgMin = 100;
 		bullet.dmgMax = 150;
 		

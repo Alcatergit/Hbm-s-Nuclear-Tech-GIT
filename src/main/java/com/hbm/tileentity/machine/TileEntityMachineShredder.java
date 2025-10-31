@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.interfaces.Untested;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.machine.ItemBlades;
@@ -7,9 +9,6 @@ import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
@@ -18,7 +17,6 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineShredder extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -54,21 +52,23 @@ public class TileEntityMachineShredder extends TileEntityMachineBase implements 
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack){
-		if (i < 9) {
+		if (i == 29 && stack.getItem() instanceof IBatteryItem) {
 			return true;
-		} else if (i == 29 && stack.getItem() instanceof IBatteryItem) {
+		} else if (i < 9) {
 			return true;
-		} else {
-			return (i == 27 || i == 28) && stack.getItem() instanceof ItemBlades;
+		} else if ((i == 27 || i == 28)) {
+			return stack.getItem() instanceof ItemBlades;
 		}
+		return true;
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount){
 		if(slot >= 9 && slot <= 26)
 			return true;
 		if(slot >= 27 && slot <= 29){
-            return itemStack.getItemDamage() == itemStack.getMaxDamage() && itemStack.getMaxDamage() > 0;
+			if(itemStack.getItemDamage() == itemStack.getMaxDamage() && itemStack.getMaxDamage() > 0)
+				return true;
 		}
 		return false;
 	}
@@ -91,7 +91,7 @@ public class TileEntityMachineShredder extends TileEntityMachineBase implements 
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setTag("inventory", inventory.serializeNBT());
 		return super.writeToNBT(compound);
@@ -142,9 +142,14 @@ public class TileEntityMachineShredder extends TileEntityMachineBase implements 
 				progress = 0;
 			}
 			
-			boolean trigger = !hasPower() || !canProcess() || this.progress != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(hasPower() && canProcess() && this.progress == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 flag1 = true;
             }

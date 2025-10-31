@@ -1,16 +1,9 @@
 package com.hbm.inventory.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.ItemBobmazonPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -26,6 +19,11 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class GUIScreenBobmazon extends GuiScreen {
 	
@@ -291,7 +289,7 @@ public class GUIScreenBobmazon extends GuiScreen {
 		NUCLEAR(AdvancementManager.bobNuclear, "bobnuclear"),
 		HIDDEN(AdvancementManager.bobHidden, "bobhidden");
 		
-		Requirement(Advancement achievement, String advName) {
+		private Requirement(Advancement achievement, String advName) {
 			this.setAchievement(achievement);
 			this.advName = advName;
 		}
@@ -318,7 +316,7 @@ public class GUIScreenBobmazon extends GuiScreen {
 		}
 
 		private Advancement achievement;
-		private final String advName;
+		private String advName;
 	}
 
 }

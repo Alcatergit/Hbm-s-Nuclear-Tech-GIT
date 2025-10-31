@@ -4,5 +4,5 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 public interface IHasCustomModel {
 
-	ModelResourceLocation getResourceLocation();
+	public ModelResourceLocation getResourceLocation();
 }

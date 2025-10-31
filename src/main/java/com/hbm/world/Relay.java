@@ -1,15 +1,12 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Inserts;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateIron;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockTorch;
@@ -24,6 +21,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class Relay extends WorldGenerator
 {
@@ -84,11 +83,19 @@ public class Relay extends WorldGenerator
 		return generate(world, rand, pos, false);
 
 	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
 
-    }
+       return true;
+
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{
@@ -657,7 +664,7 @@ public class Relay extends WorldGenerator
         WeightedRandomChestContentFrom1710.generateChestContents(rand, HbmChestContents.getLoot(1), (TileEntityCrateIron)world.getTileEntity(pos.setPos(x + 6, y + 0, z + 10)), 8);
 		
         if(world.rand.nextInt(5) == 0) {
-			((TileEntityCrateIron)world.getTileEntity(pos.setPos(x + 6, y + 0, z + 10))).inventory.setStackInSlot(11, new ItemStack(ModItems.morning_glory));
+			((TileEntityCrateIron)world.getTileEntity(pos.setPos(x + 6, y + 0, z + 10))).inventory.setStackInSlot(11, new ItemStack(Inserts.morning_glory));
 		}
         
         world.setBlockState(pos.setPos(x + 7, y + 0, z + 10), Blocks.BRICK_BLOCK.getDefaultState(), 3);

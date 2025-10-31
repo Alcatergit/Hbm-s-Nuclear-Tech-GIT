@@ -1,19 +1,17 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.LinkedHashMap;
-
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.lib.Library;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual.RBMKColor;
-import com.hbm.util.I18nUtil;
 import com.hbm.util.BobMathUtil;
-
+import com.hbm.util.I18nUtil;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -22,17 +20,12 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.client.resources.I18n;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import net.minecraftforge.fml.common.Optional;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-import org.jetbrains.annotations.NotNull;
+import java.util.*;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
 public class TileEntityRBMKConsole extends TileEntityMachineBase implements IControlReceiver, ITickable, SimpleComponent {
@@ -124,8 +117,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				}
 			}
 		}
-		Integer[] fuelIndices = fuelRods.toArray(new Integer[0]);
-		Integer[] controlIndices = controlRods.toArray(new Integer[0]);
+		Integer[] fuelIndices = fuelRods.toArray(new Integer[fuelRods.size()]);
+		Integer[] controlIndices = controlRods.toArray(new Integer[controlRods.size()]);
 		screens[0] = new RBMKScreen(ScreenType.COL_TEMP, fuelIndices, null);
 		screens[1] = new RBMKScreen(ScreenType.FUEL_TEMP, fuelIndices, null);
 		screens[2] = new RBMKScreen(ScreenType.ROD_EXTRACTION, controlIndices, null);
@@ -369,12 +362,14 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			int slot = data.getByte("toggle");
 			if(slot == 99){
 				int next = this.graph.type.ordinal() + 1;
-                this.graph.type = ScreenType.values()[next % ScreenType.values().length];
+				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
+				this.graph.type = type;
 				this.graph.dataBuffer = new int[lookbackLength];
 				Arrays.fill(this.graph.dataBuffer, 0);
 			} else {
 				int next = this.screens[slot].type.ordinal() + 1;
-                this.screens[slot].type = ScreenType.values()[next % ScreenType.values().length];
+				ScreenType type = ScreenType.values()[next % ScreenType.values().length];
+				this.screens[slot].type = type;
 			}
 		}
 		
@@ -432,7 +427,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 
 		nbt.setInteger("tX", this.targetX);
@@ -543,7 +538,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 	
-	public enum ColumnType {
+	public static enum ColumnType {
 		BLANK(0),
 		FUEL(10),
 		FUEL_SIM(90),
@@ -559,9 +554,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		COOLER(120),
 		HEATEX(130);
 		
-		public final int offset;
+		public int offset;
 		
-		ColumnType(int offset) {
+		private ColumnType(int offset) {
 			this.offset = offset;
 		}
 	}
@@ -599,7 +594,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 	}
 	
-	public enum ScreenType {
+	public static enum ScreenType {
 		NONE(0 * 18),
 		COL_TEMP(1 * 18),
 		FUEL_TEMP(5 * 18),
@@ -608,9 +603,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		FUEL_DEPLETION(3 * 18),
 		FUEL_POISON(4 * 18);
 		
-		public final int offset;
+		public int offset;
 		
-		ScreenType(int offset) {
+		private ScreenType(int offset) {
 			this.offset = offset;
 		}
 	}

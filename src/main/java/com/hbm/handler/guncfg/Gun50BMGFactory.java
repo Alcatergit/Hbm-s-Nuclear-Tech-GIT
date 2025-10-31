@@ -1,15 +1,13 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IBulletHitBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -17,12 +15,13 @@ import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
 
 public class Gun50BMGFactory {
 
@@ -42,7 +41,7 @@ public class Gun50BMGFactory {
 		config.crosshair = Crosshair.L_BOX;
 		config.durability = 2000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.calShoot;
+		config.firingSound = HBMSoundEvents.calShoot;
 		config.reloadSoundEnd = false;
 
 		config.name = "Maxim gun";
@@ -78,7 +77,7 @@ public class Gun50BMGFactory {
 		config.crosshair = Crosshair.L_BOX;
 		config.durability = 3500;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.calShoot;
+		config.firingSound = HBMSoundEvents.calShoot;
 
 		config.name = "Double Maxim gun";
 		config.manufacturer = "???";
@@ -103,7 +102,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg;
+		bullet.ammo = Armory.ammo_50bmg;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -115,7 +114,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_incendiary;
+		bullet.ammo = Armory.ammo_50bmg_incendiary;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -129,7 +128,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_explosive;
+		bullet.ammo = Armory.ammo_50bmg_explosive;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 25;
@@ -143,7 +142,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_du;
+		bullet.ammo = Armory.ammo_50bmg_du;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 40;
 		bullet.dmgMax = 45;
@@ -157,7 +156,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_star;
+		bullet.ammo = Armory.ammo_50bmg_star;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 70;
@@ -171,7 +170,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_phosphorus;
+		bullet.ammo = Armory.ammo_50bmg_phosphorus;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -206,7 +205,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_ap;
+		bullet.ammo = Armory.ammo_50bmg_ap;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 30;
 		bullet.dmgMax = 25;
@@ -220,7 +219,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_sleek;
+		bullet.ammo = Armory.ammo_50bmg_sleek;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 70;
@@ -282,7 +281,7 @@ public class Gun50BMGFactory {
 		config.crosshair = Crosshair.L_CROSS;
 		config.durability = 100000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.howard_fire;
+		config.firingSound = HBMSoundEvents.howard_fire;
 
 		config.name = "AR-15 .50 BMG Mod";
 		config.manufacturer = "Armalite";
@@ -308,7 +307,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette;
+		bullet.ammo = Armory.ammo_50bmg_flechette;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 25;
@@ -321,7 +320,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette_am;
+		bullet.ammo = Armory.ammo_50bmg_flechette_am;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 65;
@@ -348,7 +347,7 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette_po;
+		bullet.ammo = Armory.ammo_50bmg_flechette_po;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 30;
 		bullet.dmgMax = 40;

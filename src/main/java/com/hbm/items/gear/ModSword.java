@@ -1,14 +1,13 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemSword;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ModSword extends ItemSword {
 

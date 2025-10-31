@@ -1,0 +1,8 @@
+{
+    "variants": {
+        "facing=north": { "model": "hbm:ladder_gold" },
+        "facing=east":  { "model": "hbm:ladder_gold", "y": 90 },
+        "facing=south": { "model": "hbm:ladder_gold", "y": 180 },
+        "facing=west":  { "model": "hbm:ladder_gold", "y": 270 }
+    }
+}

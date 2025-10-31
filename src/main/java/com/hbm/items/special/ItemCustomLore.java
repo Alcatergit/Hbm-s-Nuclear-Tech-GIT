@@ -1,16 +1,17 @@
 package com.hbm.items.special;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ArmorSets;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Inserts;
+import com.hbm.items.ModItems.Materials.*;
+import com.hbm.items.ModItems.RetroRods;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
+import com.leafia.dev.MachineTooltip;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -21,6 +22,9 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.Random;
 
 public class ItemCustomLore extends Item {
 
@@ -43,9 +47,11 @@ public class ItemCustomLore extends Item {
 
 			String[] locs = loc.split("\\$");
 
-            list.addAll(Arrays.asList(locs));
+			for(String s : locs) {
+				list.add(s);
+			}
 		}
-		if(this == ModItems.powder_asbestos)
+		if(this == Powders.powder_asbestos)
 		{
 			list.add(TextFormatting.ITALIC + "\"Sniffffffff- MHHHHHHMHHHHHHHHH\"");
 		}
@@ -71,14 +77,14 @@ public class ItemCustomLore extends Item {
 			list.add(I18nUtil.resolveKey("desc.radspeed", -400));
 			list.add(I18nUtil.resolveKey("desc.duration", 2.5));
 		}
-		if(this == ModItems.ingot_schraranium)
+		if(this == Ingots.ingot_schraranium)
 		{
 			if(GeneralConfig.enableBabyMode)
 				list.add("Peer can go die, I'm not putting any retarded niko stuff in the mod.");
 			else
 				list.add("Made from uranium in a nuclear transmutator");
 		}
-		if(this == ModItems.ingot_fiberglass)
+		if(this == Ingots.ingot_fiberglass)
 		{
 			list.add("High in fiber, high in glass. Everything the body needs.");
 		}
@@ -98,7 +104,11 @@ public class ItemCustomLore extends Item {
 			list.add("and some shards are missing.");
 			list.add("It stopped ticking at 2:34.");
 		}
-
+		if(this == ModItems.reacher)
+		{
+			list.add("Holding this in main hand or off hand reduces radiation coming from items to its square-root.");
+			list.add("It also is useful to handle very hot or cold items.");
+		}
 		if(this == ModItems.crystal_horn)
 		{
 			if(MainRegistry.polaroidID == 11)
@@ -114,7 +124,7 @@ public class ItemCustomLore extends Item {
 			else
 				list.add("High quality silicate, slightly burned.");
 		}
-		if(this == ModItems.ingot_asbestos)
+		if(this == Ingots.ingot_asbestos)
 		{
 			list.add(TextFormatting.ITALIC + "\"Filled with life, self-doubt and asbestos. That comes with the air.\"");
 		}
@@ -140,7 +150,7 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("...it emits an energy-beam thingy.");
 		}
-		if(this == ModItems.powder_poison)
+		if(this == Powders.powder_poison)
 		{
 			list.add("Used in multi purpose bombs:");
 			list.add("Warning: Poisonous!");
@@ -151,7 +161,7 @@ public class ItemCustomLore extends Item {
 			list.add("Adds some extra boom!");
 		}
 
-		if(this == ModItems.powder_fire)
+		if(this == Powders.powder_fire)
 		{
 			list.add("Used in multi purpose bombs:");
 			list.add("Incendiary bombs are fun!");
@@ -161,7 +171,7 @@ public class ItemCustomLore extends Item {
 			list.add("Used in multi purpose bombs:");
 			list.add("*cough cough* Halp pls!");
 		}
-		if(this == ModItems.powder_tektite)
+		if(this == Powders.powder_tektite)
 		{
 			list.add("Collected via Geralds Miningfleet from §3outer space");
 		}
@@ -187,7 +197,7 @@ public class ItemCustomLore extends Item {
 			list.add("Can be used with a screwdriver to pick locks.");
 			if(Minecraft.getMinecraft().player != null) {
 				EntityPlayer player = Minecraft.getMinecraft().player;
-				if(ArmorUtil.checkArmorPiece(player, ModItems.jackt, 2) || ArmorUtil.checkArmorPiece(player, ModItems.jackt2, 2))
+				if(ArmorUtil.checkArmorPiece(player, ArmorSets.jackt, 2) || ArmorUtil.checkArmorPiece(player, ArmorSets.jackt2, 2))
 					list.add("Success rate of picking standard lock is 100%!");
 				else
 					list.add("Success rate of picking standard lock is ~10%");
@@ -200,15 +210,24 @@ public class ItemCustomLore extends Item {
 				list.add("Explore the other side.");
 			}
 		}
+		if(this == ModItems.crystal_energy) {
+			list.add("Densely packed energy powder.");
+			list.add("Not edible.");
+		}
+		if(this == ModItems.pellet_coolant) {
+			list.add("Required for cyclotron operation.");
+			list.add("Do NOT operate cyclotron without it!");
+		}
 		if(this == ModItems.fuse) {
+			/*
 			list.add("This item is needed for every large");
 			list.add("nuclear reactor, as it allows the");
 			list.add("reactor to generate electricity and");
 			list.add("use up it's fuel. Removing the fuse");
 			list.add("from a reactor will instantly shut");
-			list.add("it down.");
+			list.add("it down.");*/
 		}
-		if(this == ModItems.gun_super_shotgun) {
+		if(this == Armory.gun_super_shotgun) {
 			list.add("It's super broken!");
 		}
 
@@ -234,7 +253,7 @@ public class ItemCustomLore extends Item {
 			list.add(I18nUtil.resolveKey("desc.flameopinion"));
 		}
 
-		if(this == ModItems.ingot_neptunium) {
+		if(this == Ingots.ingot_neptunium) {
 			if(MainRegistry.polaroidID == 11) {
 				list.add("Woo, scary!");
 			} else
@@ -248,18 +267,18 @@ public class ItemCustomLore extends Item {
 				list.add("RTG fuel pellet for infinite energy! (almost)");
 		}
 
-		if(this == ModItems.rod_lithium) {
+		if(this == RetroRods.rod_lithium) {
 			list.add("Turns into Tritium Rod");
 		}
 
-		if(this == ModItems.rod_dual_lithium) {
+		if(this == RetroRods.rod_dual_lithium) {
 			list.add("Turns into Dual Tritium Rod");
 		}
 
-		if(this == ModItems.rod_quad_lithium) {
+		if(this == RetroRods.rod_quad_lithium) {
 			list.add("Turns into Quad Tritium Rod");
 		}
-		if(this == ModItems.ingot_combine_steel) {
+		if(this == Ingots.ingot_combine_steel) {
 			/*list.add("\"I mean, it's a verb for crying out loud.");
 			list.add("The aliens aren't verbs. They're nouns!\"");
 			list.add("\"Actually, I think it's also the name");
@@ -274,19 +293,19 @@ public class ItemCustomLore extends Item {
 			list.add("\"'So?' C'mon man, they're ALIENS!\"");*/
 			list.add("*insert Civil Protection reference here*");
 		}
-		if(this == ModItems.ingot_euphemium) {
+		if(this == Ingots.ingot_euphemium) {
 			list.add("A very special and yet strange element.");
 		}
-		if(this == ModItems.powder_euphemium) {
+		if(this == Powders.powder_euphemium) {
 			list.add("Pulverized pink.");
 			list.add("Tastes like strawberries.");
 		}
-		if(this == ModItems.nugget_euphemium) {
+		if(this == Nuggies.nugget_euphemium) {
 			list.add("A small piece of a pink metal.");
 			list.add("It's properties are still unknown,");
 			list.add("DEAL WITH IT carefully.");
 		}
-		if(this == ModItems.rod_quad_euphemium) {
+		if(this == RetroRods.rod_quad_euphemium) {
 			list.add("A quad fuel rod which contains a");
 			list.add("very small ammount of a strange new element.");
 		}
@@ -301,29 +320,29 @@ public class ItemCustomLore extends Item {
 		{
 			list.add("It pulses with power.");
 		}
-		if(this == ModItems.nugget_mox_fuel) {
+		if(this == Nuggies.nugget_mox_fuel) {
 			list.add("Moxie says: " + TextFormatting.BOLD + "TAX EVASION.");
 		}
-		if(this == ModItems.billet_mox_fuel) {
+		if(this == Billets.billet_mox_fuel) {
 			list.add(TextFormatting.ITALIC + "Pocket-Moxie!");
 		}
 		
-		if(this == ModItems.ingot_lanthanium)
+		if(this == Ingots.ingot_lanthanium)
 		{
 			list.add("'Lanthanum'");
 		}
 
-		if(this == ModItems.ingot_gh336 || this == ModItems.billet_gh336 || this == ModItems.nugget_gh336)
+		if(this == Ingots.ingot_gh336 || this == Billets.billet_gh336 || this == Nuggies.nugget_gh336)
 		{
 			list.add("Seaborgium's colleague");
 		}
 
-		if(this == ModItems.billet_flashlead)
+		if(this == Billets.billet_flashlead)
 		{
 			list.add("The lattice decays, causing antimatter-matter annihilation reactions, causing the release of pions, decaying into muons, catalyzing fusion of the nuclei, creating the new element. Please try to keep up.");
 		}
 		
-		if(this == ModItems.ingot_tantalium || this == ModItems.nugget_tantalium || this == ModItems.gem_tantalium || this == ModItems.powder_tantalium)
+		if(this == Ingots.ingot_tantalium || this == Nuggies.nugget_tantalium || this == ModItems.gem_tantalium || this == Powders.powder_tantalium)
 		{
 			list.add("'Tantalum'");
 		}
@@ -364,152 +383,158 @@ public class ItemCustomLore extends Item {
 	@Override
 	public EnumRarity getRarity(ItemStack stack) {
 		if(this == ModItems.plate_euphemium || 
-			this == ModItems.ingot_euphemium || 
-			this == ModItems.ingot_osmiridium || 
-			this == ModItems.ingot_astatine || 
-			this == ModItems.ingot_iodine || 
-			this == ModItems.ingot_i131 || 
-			this == ModItems.ingot_strontium || 
-			this == ModItems.ingot_sr90 || 
-			this == ModItems.ingot_cobalt || 
-			this == ModItems.ingot_co60 || 
-			this == ModItems.ingot_bromine || 
-			this == ModItems.ingot_tennessine || 
-			this == ModItems.ingot_cerium || 
-			this == ModItems.ingot_caesium || 
-			this == ModItems.ingot_niobium || 
-			this == ModItems.ingot_neodymium || 
-			this == ModItems.ingot_gh336 || 
+			this == Ingots.ingot_euphemium ||
+			this == Ingots.ingot_osmiridium ||
+			this == Ingots.ingot_astatine ||
+			this == Ingots.ingot_iodine ||
+			this == Ingots.ingot_i131 ||
+			this == Ingots.ingot_strontium ||
+			this == Ingots.ingot_sr90 ||
+			this == Ingots.ingot_cobalt ||
+			this == Ingots.ingot_co60 ||
+			this == Ingots.ingot_bromine ||
+			this == Ingots.ingot_tennessine ||
+			this == Ingots.ingot_cerium ||
+			this == Ingots.ingot_caesium ||
+			this == Ingots.ingot_niobium ||
+			this == Ingots.ingot_neodymium ||
+			this == Ingots.ingot_gh336 ||
 			this == ModItems.euphemium_capacitor ||
 
-			this == ModItems.nugget_euphemium || 
-			this == ModItems.nugget_osmiridium || 
-			this == ModItems.nugget_strontium || 
-			this == ModItems.nugget_sr90 || 
-			this == ModItems.nugget_cobalt || 
-			this == ModItems.nugget_co60 || 
-			this == ModItems.nugget_gh336 || 
+			this == Nuggies.nugget_euphemium ||
+			this == Nuggies.nugget_osmiridium ||
+			this == Nuggies.nugget_strontium ||
+			this == Nuggies.nugget_sr90 ||
+			this == Nuggies.nugget_cobalt ||
+			this == Nuggies.nugget_co60 ||
+			this == Nuggies.nugget_gh336 ||
 
-			this == ModItems.billet_gh336 || 
-			this == ModItems.billet_co60 || 
-			this == ModItems.billet_sr90 || 
+			this == Billets.billet_gh336 ||
+			this == Billets.billet_co60 ||
+			this == Billets.billet_sr90 ||
 			
-			this == ModItems.powder_neptunium ||
-			this == ModItems.powder_euphemium || 
-			this == ModItems.powder_osmiridium || 
-			this == ModItems.powder_iodine || 
-			this == ModItems.powder_i131 || 
-			this == ModItems.powder_strontium || 
-			this == ModItems.powder_sr90 || 
-			this == ModItems.powder_astatine || 
-			this == ModItems.powder_at209 || 
-			this == ModItems.powder_cobalt || 
-			this == ModItems.powder_co60 || 
-			this == ModItems.powder_bromine || 
-			this == ModItems.powder_niobium || 
-			this == ModItems.powder_cerium || 
-			this == ModItems.powder_neodymium || 
-			this == ModItems.powder_tennessine || 
-			this == ModItems.powder_xe135 || 
-			this == ModItems.powder_caesium || 
-			this == ModItems.powder_cs137 ||
-			this == ModItems.powder_spark_mix || 
-			this == ModItems.powder_magic || 
+			this == Powders.powder_neptunium ||
+			this == Powders.powder_euphemium ||
+			this == Powders.powder_osmiridium ||
+			this == Powders.powder_iodine ||
+			this == Powders.powder_i131 ||
+			this == Powders.powder_strontium ||
+			this == Powders.powder_sr90 ||
+			this == Powders.powder_astatine ||
+			this == Powders.powder_at209 ||
+			this == Powders.powder_cobalt ||
+			this == Powders.powder_co60 ||
+			this == Powders.powder_bromine ||
+			this == Powders.powder_niobium ||
+			this == Powders.powder_cerium ||
+			this == Powders.powder_neodymium ||
+			this == Powders.powder_tennessine ||
+			this == Powders.powder_xe135 ||
+			this == Powders.powder_caesium ||
+			this == Powders.powder_cs137 ||
+			this == Powders.powder_cs137 ||
+			this == Powders.powder_nitan_mix ||
+			this == Powders.powder_spark_mix ||
+			this == Powders.powder_magic ||
 
 
-			this == ModItems.powder_sr90_tiny || 
-			this == ModItems.powder_iodine_tiny || 
-			this == ModItems.powder_i131_tiny || 
-			this == ModItems.powder_co60_tiny || 
-			this == ModItems.powder_cobalt_tiny || 
-			this == ModItems.powder_niobium_tiny || 
-			this == ModItems.powder_cerium_tiny || 
-			this == ModItems.powder_neodymium_tiny || 
-			this == ModItems.powder_xe135_tiny || 
-			this == ModItems.powder_cs137_tiny || 
-			this == ModItems.nugget_daffergon || 
-			this == ModItems.powder_daffergon || 
-			this == ModItems.ingot_daffergon || 
+			this == Powders.powder_sr90_tiny ||
+			this == Powders.powder_iodine_tiny ||
+			this == Powders.powder_i131_tiny ||
+			this == Powders.powder_co60_tiny ||
+			this == Powders.powder_cobalt_tiny ||
+			this == Powders.powder_niobium_tiny ||
+			this == Powders.powder_cerium_tiny ||
+			this == Powders.powder_neodymium_tiny ||
+			this == Powders.powder_xe135_tiny ||
+			this == Powders.powder_cs137_tiny ||
+			this == Nuggies.nugget_daffergon ||
+			this == Powders.powder_daffergon ||
+			this == Ingots.ingot_daffergon ||
 			
-			this == ModItems.bathwater_mk3 ||
-			this == ModItems.rod_euphemium ||
-			this == ModItems.rod_quad_euphemium ||
-			this == ModItems.rod_daffergon || 
+			this == Inserts.bathwater_mk3 ||
+			this == ModItems.plate_euphemium ||  
+			this == RetroRods.rod_euphemium ||
+			this == RetroRods.rod_quad_euphemium ||
+			this == RetroRods.rod_daffergon ||
 			this == ModItems.watch || 
 			this == ModItems.undefined) {
 			return EnumRarity.EPIC;
 		}
 
-		if(this == ModItems.ingot_schrabidium ||
-			this == ModItems.ingot_schraranium || 
-			this == ModItems.ingot_schrabidate || 
-			this == ModItems.ingot_saturnite ||  
-			this == ModItems.ingot_solinium || 
-			this == ModItems.nugget_schrabidium || 
-			this == ModItems.nugget_solinium || 
-			this == ModItems.ingot_electronium || 
-			this == ModItems.billet_solinium || 
-			this == ModItems.billet_schrabidium || 
+		if(this == Ingots.ingot_schrabidium ||
+			this == Ingots.ingot_schraranium ||
+			this == Ingots.ingot_schrabidate ||
+			this == Ingots.ingot_saturnite ||
+			this == Ingots.ingot_solinium ||
+			this == Nuggies.nugget_schrabidium ||
+			this == Nuggies.nugget_solinium ||
+			this == Ingots.ingot_electronium ||
+			this == Billets.billet_solinium ||
+			this == Billets.billet_schrabidium ||
 			
-			this == ModItems.powder_schrabidate || 
-			this == ModItems.powder_schrabidium || 
+			this == Powders.powder_schrabidate ||
+			this == Powders.powder_schrabidium ||
+
+			this == ModItems.wire_schrabidium || 
 
 			this == ModItems.plate_schrabidium || 
 			this == ModItems.plate_saturnite || 
-
-			this == ModItems.gun_revolver_schrabidium_ammo || 
-			this == ModItems.powder_unobtainium || 
-			this == ModItems.nugget_unobtainium || 
-			this == ModItems.ingot_unobtainium || 
-			this == ModItems.nugget_unobtainium_greater || 
-			this == ModItems.nugget_unobtainium_lesser || 
-			this == ModItems.billet_unobtainium ||
+			
+			this == ModItems.circuit_schrabidium || 
+			this == Armory.gun_revolver_schrabidium_ammo ||
+			this == Powders.powder_unobtainium ||
+			this == Nuggies.nugget_unobtainium ||
+			this == Ingots.ingot_unobtainium ||
+			this == Nuggies.nugget_unobtainium_greater ||
+			this == Nuggies.nugget_unobtainium_lesser ||
+			this == Billets.billet_unobtainium ||
 			
 			this == ModItems.solinium_core ||
-			this == ModItems.powder_impure_osmiridium ||
-			this == ModItems.crystal_osmiridium ||
-			this == ModItems.crystal_schrabidium ||
-    		this == ModItems.crystal_schraranium ||
-    		this == ModItems.crystal_trixite ||
+			this == Powders.powder_impure_osmiridium ||
+			this == Crystals.crystal_osmiridium ||
+			this == Crystals.crystal_schrabidium ||
+    		this == Crystals.crystal_schraranium ||
+    		this == Crystals.crystal_trixite ||
     		ItemCell.hasFluid(stack, ModForgeFluids.SAS3) ||
-    		this == ModItems.rod_unobtainium || 
-    		this == ModItems.rod_schrabidium || 
-			this == ModItems.rod_dual_schrabidium || 
-			this == ModItems.rod_quad_schrabidium ||
-			this == ModItems.rod_dual_solinium || 
-			this == ModItems.rod_quad_solinium) {
+    		this == RetroRods.rod_unobtainium ||
+    		this == RetroRods.rod_schrabidium ||
+			this == RetroRods.rod_dual_schrabidium ||
+			this == RetroRods.rod_quad_schrabidium ||
+			this == RetroRods.rod_dual_solinium ||
+			this == RetroRods.rod_quad_solinium) {
 			return EnumRarity.RARE;
 		}
 
-		if(this == ModItems.bathwater_mk2 || 
+		if(this == Inserts.bathwater_mk2 ||
 			this == ModItems.plate_paa || 
-			this == ModItems.cladding_paa || 
-			this == ModItems.ammo_566_gold || 
-			this == ModItems.gun_revolver_cursed_ammo || 
-			this == ModItems.powder_power || 
-			this == ModItems.powder_yellowcake || 
-			this == ModItems.billet_australium || 
-			this == ModItems.billet_australium_greater || 
-			this == ModItems.billet_australium_lesser || 
+			this == Inserts.cladding_paa ||
+			this == Armory.ammo_566_gold ||
+			this == Armory.gun_revolver_cursed_ammo ||
+			this == Powders.powder_power ||
+			this == Powders.powder_yellowcake ||
+			this == Billets.billet_australium ||
+			this == Billets.billet_australium_greater ||
+			this == Billets.billet_australium_lesser ||
 
-			this == ModItems.ingot_australium || 
-			this == ModItems.ingot_weidanium || 
-			this == ModItems.ingot_reiium || 
-			this == ModItems.ingot_verticium || 
-			this == ModItems.powder_paleogenite || 
-			this == ModItems.powder_paleogenite_tiny || 
+			this == Ingots.ingot_australium ||
+			this == Ingots.ingot_weidanium ||
+			this == Ingots.ingot_reiium ||
+			this == Ingots.ingot_verticium ||
+			this == Powders.powder_paleogenite ||
+			this == Powders.powder_paleogenite_tiny ||
 
-			this == ModItems.nugget_australium || 
-			this == ModItems.nugget_australium_greater || 
-			this == ModItems.nugget_australium_lesser || 
-			this == ModItems.nugget_weidanium || 
-			this == ModItems.nugget_reiium || 
-			this == ModItems.nugget_verticium || 
+			this == Nuggies.nugget_australium ||
+			this == Nuggies.nugget_australium_greater ||
+			this == Nuggies.nugget_australium_lesser ||
+			this == Nuggies.nugget_weidanium ||
+			this == Nuggies.nugget_reiium ||
+			this == Nuggies.nugget_verticium ||
 
-			this == ModItems.powder_australium || 
-			this == ModItems.powder_weidanium || 
-			this == ModItems.powder_reiium || 
-			this == ModItems.powder_verticium) {
+			this == Powders.powder_australium ||
+			this == Powders.powder_weidanium ||
+			this == Powders.powder_reiium ||
+			this == Powders.powder_verticium) {
 			return EnumRarity.UNCOMMON;
 		}
 

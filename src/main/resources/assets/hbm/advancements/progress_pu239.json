@@ -11,7 +11,7 @@
 		},
 		"frame": "goal"
 	},
-	"parent": "hbm:progress_gc_speed",
+	"parent": "hbm:progress_u235",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

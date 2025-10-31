@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "hbm:blocks/machine_controller_side",
+		"down": "hbm:blocks/machine_controller_top",
+		"up": "hbm:blocks/machine_controller_top",
+		"north": "hbm:blocks/machine_controller",
+		"east": "hbm:blocks/machine_controller_side",
+		"south": "hbm:blocks/machine_controller_back",
+		"west": "hbm:blocks/machine_controller_side"
+	}
+}

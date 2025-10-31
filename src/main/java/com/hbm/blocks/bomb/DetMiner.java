@@ -1,13 +1,10 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.interfaces.IBomb;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -16,6 +13,8 @@ import net.minecraft.item.Item;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class DetMiner extends Block implements IBomb {
 
@@ -38,8 +37,8 @@ public class DetMiner extends Block implements IBomb {
 
 			world.destroyBlock(pos, false);
 			ExplosionNT explosion = new ExplosionNT(world, null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 4);
-			explosion.atttributes.add(ExAttrib.ALLDROP);
-			explosion.atttributes.add(ExAttrib.NOHURT);
+			explosion.attributes.add(ExAttrib.ALLDROP);
+			explosion.attributes.add(ExAttrib.NOHURT);
 			explosion.explode();
 
 			ExplosionLarge.spawnParticles(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 30);

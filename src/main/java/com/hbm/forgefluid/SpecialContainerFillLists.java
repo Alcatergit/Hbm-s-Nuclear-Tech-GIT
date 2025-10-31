@@ -1,13 +1,11 @@
 package com.hbm.forgefluid;
 
-import org.apache.commons.lang3.tuple.MutablePair;
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.fluids.Fluid;
+import org.apache.commons.lang3.tuple.MutablePair;
+import org.apache.commons.lang3.tuple.Pair;
 
 public class SpecialContainerFillLists {
 	
@@ -31,11 +29,11 @@ public class SpecialContainerFillLists {
 		LIGHTOIL(ModForgeFluids.LIGHTOIL, new ModelResourceLocation(RefStrings.MODID + ":canister_lightoil", "inventory")),
 		GASOLINE(ModForgeFluids.GASOLINE, new ModelResourceLocation(RefStrings.MODID + ":canister_gasoline", "inventory"));
 		
-		private final Fluid fluid;
-		private final Pair<ModelResourceLocation, IBakedModel> renderPair;
-		private final String translateKey;
+		private Fluid fluid;
+		private Pair<ModelResourceLocation, IBakedModel> renderPair;
+		private String translateKey;
 		
-		EnumCanister(Fluid f, ModelResourceLocation r){
+		private EnumCanister(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
 			this.translateKey = "item." + r.getPath() + ".name";
@@ -93,11 +91,11 @@ public class SpecialContainerFillLists {
 		SAS3(ModForgeFluids.SAS3, new ModelResourceLocation(RefStrings.MODID + ":cell_sas3", "inventory")),
 		ANTISCHRABIDIUM(ModForgeFluids.ASCHRAB, new ModelResourceLocation(RefStrings.MODID + ":cell_anti_schrabidium", "inventory"));
 		
-		private final Fluid fluid;
-		private final Pair<ModelResourceLocation, IBakedModel> renderPair;
-		private final String translateKey;
+		private Fluid fluid;
+		private Pair<ModelResourceLocation, IBakedModel> renderPair;
+		private String translateKey;
 		
-		EnumCell(Fluid f, ModelResourceLocation r){
+		private EnumCell(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
 			this.translateKey = "item." + r.getPath() + ".name";
@@ -155,11 +153,11 @@ public class SpecialContainerFillLists {
 		TRITIUM(ModForgeFluids.TRITIUM, new ModelResourceLocation(RefStrings.MODID + ":gas_tritium", "inventory")),
 		OXYGEN(ModForgeFluids.OXYGEN, new ModelResourceLocation(RefStrings.MODID + ":gas_oxygen", "inventory"));
 		
-		private final Fluid fluid;
-		private final Pair<ModelResourceLocation, IBakedModel> renderPair;
-		private final String translateKey;
+		private Fluid fluid;
+		private Pair<ModelResourceLocation, IBakedModel> renderPair;
+		private String translateKey;
 		
-		EnumGasCanister(Fluid f, ModelResourceLocation r){
+		private EnumGasCanister(Fluid f, ModelResourceLocation r){
 			this.fluid = f;
 			this.renderPair = MutablePair.of(r, null);
 			this.translateKey = "item." + r.getPath() + ".name";

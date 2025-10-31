@@ -1,0 +1,5 @@
+newmtl BarbedWireWitherMTL
+d 1.0
+Ka 0.0 0.0 0.0
+Kd 1.0 1.0 1.0
+map_Kd hbm:blocks/barbed_wire_wither_model_flipped

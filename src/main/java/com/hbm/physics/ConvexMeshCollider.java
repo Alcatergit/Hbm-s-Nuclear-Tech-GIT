@@ -1,18 +1,16 @@
 package com.hbm.physics;
 
-import javax.vecmath.Matrix3f;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.util.Triangle;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+
+import javax.vecmath.Matrix3f;
 
 public class ConvexMeshCollider extends Collider {
 

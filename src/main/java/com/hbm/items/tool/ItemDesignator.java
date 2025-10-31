@@ -1,12 +1,9 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.blocks.bomb.LaunchPad;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +19,8 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 
+import java.util.List;
+
 public class ItemDesignator extends Item {
 
 	public ItemDesignator(String s) {
@@ -36,6 +35,7 @@ public class ItemDesignator extends Item {
 	public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
 		stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setInteger("xCoord", 0);
+		stack.getTagCompound().setInteger("yCoord", 0);
 		stack.getTagCompound().setInteger("zCoord", 0);
 	}
 	
@@ -44,8 +44,9 @@ public class ItemDesignator extends Item {
 		if(stack.getTagCompound() != null)
 		{
 			tooltip.add(TextFormatting.GREEN + I18nUtil.resolveKey("desc.targetcoord")+"§r");
-			tooltip.add("§aX: " + stack.getTagCompound().getInteger("xCoord") + "§r");
-			tooltip.add("§aZ: " + stack.getTagCompound().getInteger("zCoord") + "§r");
+			tooltip.add("§aX: " + String.valueOf(stack.getTagCompound().getInteger("xCoord")) + "§r");
+			tooltip.add("§aZ: " + String.valueOf(stack.getTagCompound().getInteger("zCoord")) + "§r");
+			tooltip.add("§2(Y: " + String.valueOf(stack.getTagCompound().getInteger("yCoord")) + ")§r");
 		} else {
 			tooltip.add(TextFormatting.YELLOW + I18nUtil.resolveKey("desc.choosetarget1"));
 		}
@@ -59,10 +60,12 @@ public class ItemDesignator extends Item {
 			if(stack.getTagCompound() != null)
 			{
 				stack.getTagCompound().setInteger("xCoord", pos.getX());
+				stack.getTagCompound().setInteger("yCoord", pos.getY());
 				stack.getTagCompound().setInteger("zCoord", pos.getZ());
 			} else {
 				stack.setTagCompound(new NBTTagCompound());
 				stack.getTagCompound().setInteger("xCoord", pos.getX());
+				stack.getTagCompound().setInteger("yCoord", pos.getY());
 				stack.getTagCompound().setInteger("zCoord", pos.getZ());
 			}
 	        if(world.isRemote)
@@ -70,7 +73,7 @@ public class ItemDesignator extends Item {
 	        	player.sendMessage(new TextComponentTranslation(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("chat.posset") + "]"));
 			}
 
-	        world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+	        world.playSound(player.posX, player.posY, player.posZ, HBMSoundEvents.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
         	
 	        return EnumActionResult.SUCCESS;
 		}

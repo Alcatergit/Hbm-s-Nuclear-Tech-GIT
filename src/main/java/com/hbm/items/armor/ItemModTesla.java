@@ -1,15 +1,9 @@
 package com.hbm.items.armor;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.main.MainRegistry;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelBackTesla;
 import com.hbm.tileentity.machine.TileEntityTesla;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -20,6 +14,10 @@ import net.minecraft.world.World;
 import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemModTesla extends ItemArmorMod {
 

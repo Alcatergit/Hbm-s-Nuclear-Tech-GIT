@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:machine_epress" },
+		"facing=south": { "model": "hbm:machine_epress", "y": 180 },
+		"facing=west": { "model": "hbm:machine_epress", "y": 270 },
+		"facing=east": { "model": "hbm:machine_epress", "y": 90 }
+	}
+}

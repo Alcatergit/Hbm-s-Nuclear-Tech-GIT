@@ -1,10 +1,8 @@
 package com.hbm.render.entity;
 
-import org.lwjgl.opengl.GL11;
 import com.hbm.entity.projectile.EntityFire;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.DummyTexs;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -15,10 +13,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderFireProjectile extends Render<EntityFire> {
 
-	public static final IRenderFactory<EntityFire> FACTORY = (RenderManager man) -> {return new RenderFireProjectile(man, ModItems.flame_1, 0);};
+	public static final IRenderFactory<EntityFire> FACTORY = (RenderManager man) -> {return new RenderFireProjectile(man, DummyTexs.flame_1, 0);};
 	
 	Item item;
 	int meta;
@@ -34,52 +33,52 @@ public class RenderFireProjectile extends Render<EntityFire> {
 
 		if(fx.ticksExisted <= fx.maxAge && fx.ticksExisted >= fx.maxAge / 10 * 9)
 		{
-			item = ModItems.flame_10;
+			item = DummyTexs.flame_10;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 9 && fx.ticksExisted >= fx.maxAge / 10 * 8)
 		{
-			item = ModItems.flame_9;
+			item = DummyTexs.flame_9;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 8 && fx.ticksExisted >= fx.maxAge / 10 * 7)
 		{
-			item = ModItems.flame_8;
+			item = DummyTexs.flame_8;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 7 && fx.ticksExisted >= fx.maxAge / 10 * 6)
 		{
-			item = ModItems.flame_7;
+			item = DummyTexs.flame_7;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 6 && fx.ticksExisted >= fx.maxAge / 10 * 5)
 		{
-			item = ModItems.flame_6;
+			item = DummyTexs.flame_6;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 5 && fx.ticksExisted >= fx.maxAge / 10 * 4)
 		{
-			item = ModItems.flame_5;
+			item = DummyTexs.flame_5;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 4 && fx.ticksExisted >= fx.maxAge / 10 * 3)
 		{
-			item = ModItems.flame_4;
+			item = DummyTexs.flame_4;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 3 && fx.ticksExisted >= fx.maxAge / 10 * 2)
 		{
-			item = ModItems.flame_3;
+			item = DummyTexs.flame_3;
 		}
 
 		if(fx.ticksExisted < fx.maxAge / 10 * 2 && fx.ticksExisted >= fx.maxAge / 10 * 1)
 		{
-			item = ModItems.flame_2;
+			item = DummyTexs.flame_2;
 		}
 		
 		if(fx.ticksExisted < fx.maxAge / 10 && fx.ticksExisted >= 0 && !fx.isDead)
 		{
-			item = ModItems.flame_1;
+			item = DummyTexs.flame_1;
 		}
 		
 		TextureAtlasSprite iicon = RenderHelper.getItemTexture(item);

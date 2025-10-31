@@ -1,14 +1,11 @@
 package com.hbm.items.gear;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.model.ModelCloak;
 import com.hbm.render.model.ModelGoggles;
 import com.hbm.render.model.ModelHat;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.model.ModelBiped;
@@ -25,6 +22,8 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ArmorModel extends ItemArmor {
 
@@ -76,7 +75,10 @@ public class ArmorModel extends ItemArmor {
 		if (this == ModItems.cape_schrabidium) {
 			return armorType == EntityEquipmentSlot.CHEST;
 		}
-        return armorType == EntityEquipmentSlot.HEAD;
+		if (this == ModItems.hat) {
+			return armorType == EntityEquipmentSlot.HEAD;
+		}
+		return armorType == EntityEquipmentSlot.HEAD;
 	}
 
 	@SideOnly(Side.CLIENT)
@@ -144,31 +146,26 @@ public class ArmorModel extends ItemArmor {
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         GlStateManager.disableAlpha();
-
-        switch ((int) ((double) stack.getItemDamage() / (double) stack.getMaxDamage() * 6D)) {
-            case 0:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur0);
-                break;
-            case 1:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur1);
-                break;
-            case 2:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur2);
-                break;
-            case 3:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur3);
-                break;
-            case 4:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur4);
-                break;
-            case 5:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur5);
-                break;
-            default:
-                Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur5);
-                break;
+        
+        if(this == ModItems.goggles) {
+        	switch((int)((double)stack.getItemDamage() / (double)stack.getMaxDamage() * 6D)) {
+        	case 0:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur0); break;
+        	case 1:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur1); break;
+        	case 2:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur2); break;
+        	case 3:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur3); break;
+        	case 4:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur4); break;
+        	case 5:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur5); break;
+        	default:
+            	Minecraft.getMinecraft().getTextureManager().bindTexture(goggleBlur5); break;
+        	}
         }
-
+        
         RenderHelper.startDrawingTexturedQuads();
         RenderHelper.addVertexWithUV(0.0D, (double)resolution.getScaledHeight(), -90.0D, 0.0D, 1.0D);
         RenderHelper.addVertexWithUV((double)resolution.getScaledWidth(), (double)resolution.getScaledHeight(), -90.0D, 1.0D, 1.0D);

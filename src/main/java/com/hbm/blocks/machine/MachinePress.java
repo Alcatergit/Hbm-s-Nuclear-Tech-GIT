@@ -1,12 +1,11 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
-
+import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -18,6 +17,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class MachinePress extends BlockContainer {
 
@@ -88,6 +89,7 @@ public class MachinePress extends BlockContainer {
 			TileEntityMachinePress entity = (TileEntityMachinePress) world.getTileEntity(pos);
 			if(entity != null)
 			{
+				LeafiaRecipeBookServer.unlockRecipe(player,ModItems.plate_copper);
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_machine_press, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;

@@ -1,23 +1,19 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.blocks.ModBlocks;
-import com.hbm.config.WeaponConfig;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.ForgeDirection;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.tileentity.TileEntityTickingBase;
-import com.hbm.capability.HbmLivingProps;
-
 import api.hbm.energy.IEnergyUser;
 import api.hbm.entity.IRadarDetectable;
 import api.hbm.entity.IRadarDetectable.RadarTargetType;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.capability.HbmLivingProps;
+import com.hbm.config.WeaponConfig;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.packet.AuxElectricityPacket;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityTickingBase;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -26,6 +22,9 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class TileEntityMachineRadar extends TileEntityTickingBase implements ITickable, IEnergyUser {
@@ -89,7 +88,7 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 				pingTimer++;
 
 				if(power > 0 && pingTimer >= maxTimer) {
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.sonarPing, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.sonarPing, SoundCategory.BLOCKS, 1.0F, 1.0F);
 					pingTimer = 0;
 				}
 			}

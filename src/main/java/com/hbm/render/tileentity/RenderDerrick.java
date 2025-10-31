@@ -1,12 +1,10 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.oil.TileEntityMachineOilWell;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class RenderDerrick extends TileEntitySpecialRenderer<TileEntityMachineOilWell> {
     
@@ -23,10 +21,8 @@ public class RenderDerrick extends TileEntitySpecialRenderer<TileEntityMachineOi
         GlStateManager.enableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.derrick_tex);
         ResourceManager.derrick.renderAll();
-        GlStateManager.shadeModel(GL11.GL_FLAT);
 
         GL11.glPopMatrix();
 	}

@@ -2,8 +2,7 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineNukeFurnace;
 import com.hbm.inventory.BreederRecipes;
-import com.hbm.hazard.HazardSystem;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -45,7 +44,7 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -73,7 +72,7 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 			int[] power = BreederRecipes.getFuelValue(stack);
 
 			if(power == null){
-				return (int)(Math.max(0, Math.sqrt(HazardSystem.getTotalRadsFromStack(stack))-7));
+				return (int)(Math.max(0, Math.sqrt(ContaminationUtil.getStackRads(stack))-7));
 			}
 
 			return power[0] * power[1] * 5;
@@ -206,9 +205,14 @@ public class TileEntityNukeFurnace extends TileEntity implements ITickable {
 				dualCookTime = 0;
 			}
 			
-			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(hasPower() && canProcess() && this.dualCookTime == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 flag1 = true;
                 MachineNukeFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);

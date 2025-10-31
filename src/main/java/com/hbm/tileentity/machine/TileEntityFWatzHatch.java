@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.tileentity.TileEntityLoadedBase;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;

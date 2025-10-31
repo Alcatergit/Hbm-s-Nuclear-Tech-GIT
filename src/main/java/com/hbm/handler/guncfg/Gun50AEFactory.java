@@ -1,13 +1,13 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import java.util.ArrayList;
 
 public class Gun50AEFactory {
 
@@ -26,7 +26,7 @@ public class Gun50AEFactory {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CLASSIC;
 		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
-		config.firingSound = HBMSoundHandler.deagleShoot;
+		config.firingSound = HBMSoundEvents.deagleShoot;
 		config.reloadSoundEnd = false;
 		
 		return config;
@@ -57,7 +57,7 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae;
+		bullet.ammo = Armory.ammo_50ae;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -69,7 +69,7 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_ap;
+		bullet.ammo = Armory.ammo_50ae_ap;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 22;
@@ -83,7 +83,7 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_du;
+		bullet.ammo = Armory.ammo_50ae_du;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 24;
 		bullet.dmgMax = 28;
@@ -97,7 +97,7 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_star;
+		bullet.ammo = Armory.ammo_50ae_star;
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 48;
 		bullet.dmgMax = 56;

@@ -1,15 +1,12 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -36,6 +33,9 @@ import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+import java.util.Random;
+
 public class GunLeverActionS extends Item {
 
 	Random rand = new Random();
@@ -59,14 +59,14 @@ public class GunLeverActionS extends Item {
 		EntityPlayer player = (EntityPlayer) entityLiving;
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
 
-		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge));
+		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, Armory.ammo_20gauge));
 		MinecraftForge.EVENT_BUS.post(event);
 		j = event.getCharge();
 
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge)) {
+		if (flag || Library.hasInventoryItem(player.inventory, Armory.ammo_20gauge)) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -86,7 +86,7 @@ public class GunLeverActionS extends Item {
 			player.motionY += vec.y * 0.75;
 			player.motionZ += vec.z * 0.75;
 			
-			Library.consumeInventoryItem(player.inventory, ModItems.ammo_12gauge);
+			Library.consumeInventoryItem(player.inventory, Armory.ammo_12gauge);
 
 			stack.damageItem(1, player);
 
@@ -94,7 +94,7 @@ public class GunLeverActionS extends Item {
         	if(!player.capabilities.isCreativeMode)
         		player.setHealth(0.0F);
 
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.revolverShootAlt, SoundCategory.PLAYERS, 5.0F, 0.75F);
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.revolverShootAlt, SoundCategory.PLAYERS, 5.0F, 0.75F);
 			
 			setAnim(stack, 1);
 		}
@@ -111,7 +111,7 @@ public class GunLeverActionS extends Item {
     			setAnim(stack, 0);
     		
         	if(j == 15)
-        		worldIn.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.leverActionReload, SoundCategory.PLAYERS, 2F, 0.85F);
+        		worldIn.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.leverActionReload, SoundCategory.PLAYERS, 2F, 0.85F);
     	}
 	}
 	
@@ -128,7 +128,7 @@ public class GunLeverActionS extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		ArrowNockEvent event = new ArrowNockEvent(playerIn, stack, handIn, worldIn, Library.hasInventoryItem(playerIn.inventory, ModItems.ammo_12gauge));
+		ArrowNockEvent event = new ArrowNockEvent(playerIn, stack, handIn, worldIn, Library.hasInventoryItem(playerIn.inventory, Armory.ammo_12gauge));
 		MinecraftForge.EVENT_BUS.post(event);
 
 		if(getAnim(stack) == 0)

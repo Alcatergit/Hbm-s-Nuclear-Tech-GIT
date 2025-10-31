@@ -1,27 +1,25 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.machine.TileEntityRadSensor;
-
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.SoundCategory;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class RadSensor extends BlockContainer {
 
@@ -39,7 +37,7 @@ public class RadSensor extends BlockContainer {
 		{
 			return true;
 		} else if(player != null){
-	    	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	    	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.techBoop, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 	    	TileEntityRadSensor entity = (TileEntityRadSensor) world.getTileEntity(pos);
 	    	player.sendMessage(new TextComponentString("§6===== ☢ Radiaton Sensor ☢ =====§r"));
@@ -70,7 +68,12 @@ public class RadSensor extends BlockContainer {
 		return true;
 	}
 
-    @Override
+	@Override
+	public boolean getWeakChanges(IBlockAccess world, BlockPos pos){
+		return false;
+	}
+	
+	@Override
 	public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		if(side == EnumFacing.UP)
 			return 0;

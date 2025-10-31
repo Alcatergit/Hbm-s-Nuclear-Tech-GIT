@@ -1,11 +1,9 @@
 package com.hbm.modules;
 
 import com.hbm.util.ItemStackUtil;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
-import net.minecraftforge.items.ItemStackHandler;
 
 import java.util.List;
 
@@ -13,6 +11,10 @@ public class ModulePatternMatcher {
     public static final String MODE_EXACT = "exact";
     public static final String MODE_WILDCARD = "wildcard";
     public String[] modes;
+
+    public ModulePatternMatcher() {
+        this.modes = new String[1];
+    }
 
     public ModulePatternMatcher(int count) {
         this.modes = new String[count];
@@ -22,7 +24,7 @@ public class ModulePatternMatcher {
 
         if(world.isRemote) return;
 
-        if(stack == null || stack.isEmpty()) {
+        if(stack == null) {
             modes[i] = null;
             return;
         }
@@ -54,11 +56,27 @@ public class ModulePatternMatcher {
         return false;
     }
 
+    public void initPatternStandard(World world, ItemStack stack, int i) {
+
+        if(world.isRemote) return;
+
+        if(stack == null) {
+            modes[i] = null;
+            return;
+        }
+
+        if(stack.getHasSubtypes()) {
+            modes[i] = MODE_EXACT;
+        } else {
+            modes[i] = MODE_WILDCARD;
+        }
+    }
+
     public void nextMode(World world, ItemStack pattern, int i) {
 
         if(world.isRemote) return;
 
-        if(pattern == null || pattern.isEmpty()) {
+        if(pattern == null) {
             modes[i] = null;
             return;
         }
@@ -98,37 +116,22 @@ public class ModulePatternMatcher {
     public boolean isValidForFilter(ItemStack f, int index, ItemStack i) {
 
         String mode = modes[index];
-        if(f.isEmpty()) return false;
-
         ItemStack filter = f.copy();
         filter.setCount(1);
         ItemStack input = i.copy();
         input.setCount(1);
-
+        
         if(mode == null) {
             modes[index] = mode = MODE_EXACT;
         }
 
-        return switch (mode) {
-            case MODE_EXACT -> input.isItemEqual(filter) && ItemStack.areItemStackTagsEqual(input, filter);
-            case MODE_WILDCARD -> input.getItem() == filter.getItem() && ItemStack.areItemStackTagsEqual(input, filter);
-            default -> {
+        switch(mode) {
+            case MODE_EXACT: return input.isItemEqual(filter) && ItemStack.areItemStackTagsEqual(input, filter);
+            case MODE_WILDCARD: return input.getItem() == filter.getItem() && ItemStack.areItemStackTagsEqual(input, filter);
+            default:
                 List<String> keys = ItemStackUtil.getOreDictNames(input);
-                yield keys.contains(mode);
-            }
-        };
-    }
-
-    public boolean matchesFilter(ItemStackHandler inventory, ItemStack stack) {
-
-        for(int i = 0; i < 9; i++) {
-            ItemStack filter = inventory.getStackInSlot(i);
-
-            if(!filter.isEmpty() && this.isValidForFilter(filter, i, stack)) {
-                return true;
-            }
+                return keys.contains(mode);
         }
-        return false;
     }
 
     public void readFromNBT(NBTTagCompound nbt) {

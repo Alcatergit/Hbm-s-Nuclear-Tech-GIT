@@ -3,11 +3,11 @@ package com.hbm.tileentity.machine;
 import api.hbm.block.IToolable.ToolType;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemTooling;
+import com.hbm.items.ModItems.ArmorSets;
 import com.hbm.items.tool.ItemKeyPin;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.tool.ItemTooling;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,6 +15,9 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.text.Style;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.text.TextFormatting;
 
 public class TileEntityLockableBase extends TileEntity {
 	protected int lock;
@@ -32,7 +35,7 @@ public class TileEntityLockableBase extends TileEntity {
 	public void lock() {
 		
 		if(lock == 0) {
-			MainRegistry.logger.error("A block has been set to locked state before setting pins, this should not happen and may cause errors! " + this);
+			MainRegistry.logger.error("A block has been set to locked state before setting pins, this should not happen and may cause errors! " + this.toString());
 		}
 		if(isLocked == false)
 			markDirty();
@@ -74,21 +77,33 @@ public class TileEntityLockableBase extends TileEntity {
 		compound.setDouble("lockMod", lockMod);
 		return super.writeToNBT(compound);
 	}
+
+	public boolean manualOpenable() { return false; }
 	
 	public boolean canAccess(EntityPlayer player) {
-		
-		if(player == null) { //!isLocked || 
-			return false;
+
+		if(!isLocked || player == null) {
+			return this.manualOpenable();
 		} else {
 			ItemStack stack = player.getHeldItemMainhand();
 			
-			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
-				return true;
+			if(stack.getItem() instanceof ItemKeyPin) {
+				if (lock < 0) {
+					player.sendStatusMessage(new TextComponentTranslation("chat.digital").setStyle(new Style().setColor(TextFormatting.RED)),true);
+					return false;
+				}
+				if (ItemKeyPin.getPins(stack) == this.lock) {
+					world.playSound(null,player.posX,player.posY,player.posZ,HBMSoundEvents.lockOpen,SoundCategory.BLOCKS,1.0F,1.0F);
+					return true;
+				}
 			}
 			
 			if(stack.getItem() == ModItems.key_red) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				if (lock < 0) {
+					player.sendStatusMessage(new TextComponentTranslation("chat.digital").setStyle(new Style().setColor(TextFormatting.RED)),true);
+					return false;
+				}
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 			
@@ -113,6 +128,7 @@ public class TileEntityLockableBase extends TileEntity {
 	}	
 	
 	public boolean tryPick(EntityPlayer player) {
+		if (lock < 0) return false;
 
 		boolean canPick = false;
 		int hand = hasLockPickTools(player);
@@ -128,17 +144,17 @@ public class TileEntityLockableBase extends TileEntity {
 		
 		if(canPick) {
 			
-			if(ArmorUtil.checkArmorPiece(player, ModItems.jackt, 2) || ArmorUtil.checkArmorPiece(player, ModItems.jackt2, 2))
+			if(ArmorUtil.checkArmorPiece(player, ArmorSets.jackt, 2) || ArmorUtil.checkArmorPiece(player, ArmorSets.jackt2, 2))
 				chanceOfSuccess *= 100D;
 			
 			double rand = player.world.rand.nextDouble() * 100;
 			
 			if(chanceOfSuccess > rand) {
-        		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.pinUnlock, SoundCategory.BLOCKS, 1.0F, 1.0F);
+        		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.pinUnlock, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 
-    		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.pinBreak, SoundCategory.BLOCKS, 1.0F, 0.8F + player.world.rand.nextFloat() * 0.2F);
+    		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.pinBreak, SoundCategory.BLOCKS, 1.0F, 0.8F + player.world.rand.nextFloat() * 0.2F);
 		}
 		
 		return false;

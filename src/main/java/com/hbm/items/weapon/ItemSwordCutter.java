@@ -8,7 +8,6 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PacketMobSlicer;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;

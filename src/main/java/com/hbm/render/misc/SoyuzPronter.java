@@ -1,18 +1,16 @@
 package com.hbm.render.misc;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class SoyuzPronter {
 
 	
-	public enum SoyuzSkin {
+	public static enum SoyuzSkin {
 		
 		SOYUZ(
 				ResourceManager.soyuz_engineblock,
@@ -54,17 +52,17 @@ public class SoyuzPronter {
 				ResourceManager.soyuz_authentic_boosterside
 		);
 		
-		public final ResourceLocation engineblock;
-		public final ResourceLocation bottomstage;
-		public final ResourceLocation topstage;
-		public final ResourceLocation payload;
-		public final ResourceLocation payloadblocks;
-		public final ResourceLocation les;
-		public final ResourceLocation lesthrusters;
-		public final ResourceLocation mainengines;
-		public final ResourceLocation sideengines;
-		public final ResourceLocation booster;
-		public final ResourceLocation boosterside;
+		public ResourceLocation engineblock;
+		public ResourceLocation bottomstage;
+		public ResourceLocation topstage;
+		public ResourceLocation payload;
+		public ResourceLocation payloadblocks;
+		public ResourceLocation les;
+		public ResourceLocation lesthrusters;
+		public ResourceLocation mainengines;
+		public ResourceLocation sideengines;
+		public ResourceLocation booster;
+		public ResourceLocation boosterside;
 		
 		SoyuzSkin(
 				ResourceLocation engineblock,

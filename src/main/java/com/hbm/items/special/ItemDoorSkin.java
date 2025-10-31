@@ -1,9 +1,8 @@
 package com.hbm.items.special;
 
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.interfaces.IDoor;
 import com.hbm.items.ModItems;
-import com.hbm.blocks.BlockDummyable;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.tileentity.TileEntity;

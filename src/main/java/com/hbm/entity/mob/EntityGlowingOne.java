@@ -1,19 +1,18 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
 import com.hbm.interfaces.IRadiationImmune;
-import com.hbm.util.ContaminationUtil;
+import com.hbm.items.ModItems.Foods;
 import com.hbm.render.amlfrom1710.Vec3;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
-import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 
@@ -27,7 +26,7 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 	protected void applyEntityAttributes() {
 		super.applyEntityAttributes();
 		this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(250.0D);
-		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(50.0D);
+		this.getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(10.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(2.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR).setBaseValue(10.0D);
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(5.0D);
@@ -105,6 +104,6 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 	@Override
 	protected void dropLoot(boolean wasRecentlyHit, int lootingModifier, DamageSource source) {
 		super.dropLoot(wasRecentlyHit, lootingModifier, source);
-		this.dropItem(ModItems.cap_rad, Math.max(1, lootingModifier));
+		this.dropItem(Foods.cap_rad, Math.max(1, lootingModifier));
 	}
 }

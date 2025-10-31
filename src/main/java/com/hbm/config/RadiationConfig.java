@@ -26,6 +26,8 @@ public class RadiationConfig {
 	public static int geigerY = 2;
 	public static int digammaX = 16;
 	public static int digammaY = 18;
+
+	public static boolean enableHealthMod = true;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKE = "06_explosions";
@@ -73,6 +75,8 @@ public class RadiationConfig {
 		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
 		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
 		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic gui (y=0 is on the bottom)", 18);
+
+		enableHealthMod = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.06.0_enableTypeModifier", "Decides whether multiplier should be applied when contaminating entities. Also changes Geiger Counter unit from RAD to Sv.", true);
 	}
 
 }

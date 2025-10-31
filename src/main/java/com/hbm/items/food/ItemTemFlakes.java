@@ -1,14 +1,14 @@
 package com.hbm.items.food;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Foods;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemTemFlakes extends ItemFood {
 
@@ -28,15 +28,15 @@ public class ItemTemFlakes extends ItemFood {
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(stack.getItem() == ModItems.tem_flakes)
+		if(stack.getItem() == Foods.tem_flakes)
 		{
 			tooltip.add("Heals 2HP DISCOUNT FOOD OF TEM!!!");
 		}
-		if(stack.getItem() == ModItems.tem_flakes1)
+		if(stack.getItem() == Foods.tem_flakes1)
 		{
 			tooltip.add("Heals 2HP food of tem");
 		}
-		if(stack.getItem() == ModItems.tem_flakes2)
+		if(stack.getItem() == Foods.tem_flakes2)
 		{
 			tooltip.add("Heals food of tem (expensiv)");
 		}

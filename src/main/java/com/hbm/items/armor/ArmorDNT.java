@@ -1,19 +1,16 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.Multimap;
 import com.hbm.capability.HbmCapability;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ArmorSets;
 import com.hbm.items.gear.ArmorFSB;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.render.model.ModelArmorDNT;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -32,6 +29,9 @@ import net.minecraftforge.event.entity.living.LivingAttackEvent;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ArmorDNT extends ArmorFSBPowered {
 
@@ -62,7 +62,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 
 		super.onArmorTick(world, player, stack);
 		
-		if(this != ModItems.dns_plate)
+		if(this != ArmorSets.dns_plate)
 			return;
 
 		IHBMData props = HbmCapability.getData(player);
@@ -88,7 +88,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 				player.fallDistance = 0;
 
 				if(world.getTotalWorldTime() % 4 == 0)
-					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
+					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 
 			} else if(!player.isSneaking() && !player.onGround && props.getEnableBackpack()) {
 				player.fallDistance = 0;
@@ -108,7 +108,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 					player.motionZ += player.getLookVec().z * 0.25 * player.moveForward;
 				}
 				if(world.getTotalWorldTime() % 4 == 0)
-					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
+					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 			}
 			
 			if(player.isSneaking() && !player.onGround) {
@@ -135,7 +135,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 	
 	@Override
 	public void handleHurt(LivingHurtEvent event, ArmorFSB chestplate) {
-
+		if (event.getSource() == ModDamageSource.fleija) return;
 		EntityLivingBase e = event.getEntityLiving();
 
 		if(ArmorFSB.hasFSBArmor(e)) {
@@ -161,7 +161,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		long power = getCharge(stack);
-    	list.add("Charge: " + getColor(power, getMaxCharge(stack)) + Library.getShortNumber(power) + " §2/ " + Library.getShortNumber(getMaxCharge(stack)));
+    	list.add("Charge: " + getColor(power, maxPower) + Library.getShortNumber(power) + " §2/ " + Library.getShortNumber(maxPower));
 
 		list.add(TextFormatting.GOLD + I18nUtil.resolveKey("armor.fullSetBonus"));
 

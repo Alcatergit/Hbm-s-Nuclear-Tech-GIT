@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "hbm:blocks/fusion_hatch",
+		"north": "hbm:blocks/fusion_hatch",
+		"south": "hbm:blocks/fusion_heater_side",
+		"east": "hbm:blocks/fusion_heater_side",
+		"west": "hbm:blocks/fusion_heater_side",
+		"up": "hbm:blocks/block_tungsten",
+		"down": "hbm:blocks/block_tungsten"
+	}
+}

@@ -1,9 +1,8 @@
 package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.tileentity.machine.TileEntityMachineFENSU;
 import com.hbm.tileentity.machine.TileEntityMachineBattery;
-
+import com.hbm.tileentity.machine.TileEntityMachineFENSU;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -60,7 +59,7 @@ public class ContainerMachineBattery extends Container {
 				if (!this.mergeItemStack(var5, 1, 2, false))
 					return ItemStack.EMPTY;
 			
-			if (var5.isEmpty())
+			if (var5.getCount() == 0)
 			{
 				var4.putStack(ItemStack.EMPTY);
 			}

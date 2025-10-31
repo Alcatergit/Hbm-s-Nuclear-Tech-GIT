@@ -1,0 +1,6 @@
+{
+    "variants": {
+        "half=bottom,variant=default": { "model": "hbm:cmb_brick_reinforced" },
+        "half=top,variant=default": { "model": "hbm:cmb_brick_reinforced" }
+    }
+}

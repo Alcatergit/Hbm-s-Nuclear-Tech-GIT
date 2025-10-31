@@ -2,18 +2,19 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.FluidTypeHandler;
-import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
+import com.hbm.forgefluid.ModFluidProperties;
+import com.hbm.forgefluid.ModFluidProperties.FluidTrait;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
+import com.leafia.dev.fluids.ISpecializedContainer;
 import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumFacing.Axis;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
@@ -25,9 +26,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
 
-public class TileEntityBarrel extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityBarrel extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, ISpecializedContainer {
 
 	public FluidTank tank;
 	//Drillgon200: I think this would be much easier to read as an enum.
@@ -42,11 +42,13 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	public TileEntityBarrel() {
 		super(4);
 		tank = new FluidTank(-1);
+		tank.setTileEntity(this);
 	}
 	
 	public TileEntityBarrel(int cap) {
 		super(4);
 		tank = new FluidTank(cap);
+		tank.setTileEntity(this);
 	}
 
 	@Override
@@ -79,19 +81,19 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		Fluid f = tank.getFluid().getFluid();
 		
 		//for when you fill antimatter into a matter tank
-		if(b != ModBlocks.barrel_antimatter && FluidTypeHandler.containsTrait(f, FluidTrait.AMAT)) {
+		if(b != ModBlocks.barrel_antimatter && ModFluidProperties.containsTrait(f, FluidTrait.AMAT)) {
 			world.destroyBlock(pos, false);
 			world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
 		}
 		
 		//for when you fill hot or corrosive liquids into a plastic tank
-		if(b == ModBlocks.barrel_plastic && (FluidTypeHandler.isCorrosivePlastic(f) || FluidTypeHandler.isHot(f))) {
+		if(b == ModBlocks.barrel_plastic && (ModFluidProperties.isCorrosivePlastic(f) || ModFluidProperties.isHot(f))) {
 			world.destroyBlock(pos, false);
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 		}
 		
 		//for when you fill corrosive liquid into an iron tank
-		if((b == ModBlocks.barrel_iron && FluidTypeHandler.isCorrosivePlastic(f)) || (b == ModBlocks.barrel_steel && FluidTypeHandler.isCorrosiveIron(f))) {
+		if((b == ModBlocks.barrel_iron && ModFluidProperties.isCorrosivePlastic(f)) || (b == ModBlocks.barrel_steel && ModFluidProperties.isCorrosiveIron(f))) {
 			
 			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			world.setBlockState(pos, ModBlocks.barrel_corroded.getDefaultState());
@@ -104,15 +106,32 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 		if(b == ModBlocks.barrel_corroded && world.rand.nextInt(3) == 0) {
 			tank.drain(1, true);
 		}
+
+		if (b == ModBlocks.barrel_steel) {
+			if (ModFluidProperties.explodeTier1(f)) {
+				world.destroyBlock(pos, false);
+				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3, false, true);
+			}
+		} else if (b == ModBlocks.barrel_tcalloy) {
+			if (ModFluidProperties.explodeTier2(f)) {
+				world.destroyBlock(pos, false);
+				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3, false, true);
+			}
+		} else {
+			if (ModFluidProperties.explodeTier0(f)) {
+				world.destroyBlock(pos, false);
+				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 3, false, true);
+			}
+		}
 	}
 	
 	public void fillFluidInit(FluidTank tank) {
-		fillFluid(pos.east(), tank);
-		fillFluid(pos.west(), tank);
+		//fillFluid(pos.east(), tank);
+		//fillFluid(pos.west(), tank);
 		fillFluid(pos.up(), tank);
 		fillFluid(pos.down(), tank);
-		fillFluid(pos.south(), tank);
-		fillFluid(pos.north(), tank);
+		//fillFluid(pos.south(), tank);
+		//fillFluid(pos.north(), tank);
 	}
 
 	public void fillFluid(BlockPos pos1, FluidTank tank) {
@@ -151,7 +170,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setShort("mode", mode);
 		compound.setInteger("cap", tank.getCapacity());
 		tank.writeToNBT(compound);
@@ -170,14 +189,15 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
-			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+			//if (facing.getAxis().equals(Axis.Y)) // mwhahahaha!!!!!
+				return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		}
 		return super.getCapability(capability, facing);
 	}
 	
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
-		return capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
+		return (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY && (facing == null || facing.getAxis().equals(Axis.Y))) || super.hasCapability(capability, facing);
 	}
 
 	@Override
@@ -193,25 +213,41 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack) {
+	public boolean isItemValidForSlotHopper(int i, ItemStack stack) {
 		if(i == 0){
 			return true;
 		}
-
-        return i == 2;
-    }
-	
-	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
-		return isItemValidForSlot(slot, itemStack);
+		
+		if(i == 2){
+			return true;
+		}
+		
+		return false;
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+	public boolean canInsertItemHopper(int slot, ItemStack itemStack, int amount) {
+		return isItemValidForSlotHopper(slot, itemStack);
+	}
+	
+	@Override
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
 		if(slot == 1){
 			return true;
 		}
+		
+		if(slot == 3){
+			return true;
+		}
+		
+		return false;
+	}
 
-        return slot == 3;
-    }
+	@Override
+	public String[] protections() {
+		Block b = this.getBlockType();
+		if (b == ModBlocks.barrel_antimatter)
+			return new String[]{"magnetic"};
+		return new String[0];
+	}
 }

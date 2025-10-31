@@ -1,13 +1,10 @@
 package com.hbm.particle.bullet_hit;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -17,6 +14,7 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleDecalFlow extends Particle {
 

@@ -1,14 +1,13 @@
 package com.hbm.handler;
 
-import java.util.Arrays;
-import java.util.UUID;
-
 import com.hbm.items.armor.ItemArmorMod;
-
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.Arrays;
+import java.util.UUID;
 
 public class ArmorModHandler {
 
@@ -20,9 +19,6 @@ public class ArmorModHandler {
 	public static final int cladding = 5;
 	public static final int kevlar = 6;
 	public static final int extra = 7;
-	public static final int battery = 8;
-
-	public static final int MOD_SLOTS = 9;
 	
 	public static final UUID[] UUIDs = new UUID[] {
 			UUID.fromString("8d6e5c77-133e-4056-9c80-a9e42a1a0b65"),
@@ -154,7 +150,7 @@ public class ArmorModHandler {
 	
 	public static ItemStack[] pryMods(ItemStack armor) {
 		
-		ItemStack[] slots = new ItemStack[MOD_SLOTS];
+		ItemStack[] slots = new ItemStack[8];
 
 		if(!hasMods(armor)){
 			Arrays.fill(slots, ItemStack.EMPTY);
@@ -164,7 +160,7 @@ public class ArmorModHandler {
 		NBTTagCompound nbt = armor.getTagCompound();
 		NBTTagCompound mods = nbt.getCompoundTag(MOD_COMPOUND_KEY);
 		
-		for(int i = 0; i < MOD_SLOTS; i++) {
+		for(int i = 0; i < 8; i++) {
 			
 			NBTTagCompound cmp = mods.getCompoundTag(MOD_SLOT_KEY + i);
 			
@@ -183,7 +179,8 @@ public class ArmorModHandler {
 		NBTTagCompound mods = nbt.getCompoundTag(MOD_COMPOUND_KEY);
 		
 		NBTTagCompound cmp = mods.getCompoundTag(MOD_SLOT_KEY + slot);
-
-        return new ItemStack(cmp);
+		ItemStack stack = new ItemStack(cmp);
+		
+		return stack;
 	}
 }

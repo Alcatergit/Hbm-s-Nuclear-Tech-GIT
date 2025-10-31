@@ -1,16 +1,14 @@
 package com.hbm.tileentity.network.energy;
 
-import com.hbm.lib.ForgeDirection;
-
 import api.hbm.energy.IEnergyConductor;
-import api.hbm.energy.IPowerNet;
 import api.hbm.energy.PowerNet;
-import net.minecraft.util.ITickable;
+import com.hbm.lib.ForgeDirection;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 
 public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEnergyConductor {
 	
-	protected IPowerNet network;
+	protected PowerNet network;
 
 	@Override
 	public void update() {
@@ -18,12 +16,14 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 		if(!world.isRemote && canUpdate()) {
 			
 			//we got here either because the net doesn't exist or because it's not valid, so that's safe to assume
-			this.setPowerNet(null);
+			this.setNetwork(null);
 			
 			this.connect();
 			
-			if(this.getPowerNet() == null) {
-				this.setPowerNet(new PowerNet().joinLink(this));
+			if(this.getNetwork() == null) {
+				PowerNet net = new PowerNet();
+				net.assignConductor(this);
+				this.setNetwork(net);
 			}
 		}
 	}
@@ -41,12 +41,12 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 				if(!conductor.canConnect(dir.getOpposite()))
 					continue;
 				
-				if(this.getPowerNet() == null && conductor.getPowerNet() != null) {
-					conductor.getPowerNet().joinLink(this);
+				if(this.getNetwork() == null && conductor.getNetwork() != null) {
+					conductor.getNetwork().assignConductor(this);
 				}
 				
-				if(this.getPowerNet() != null && conductor.getPowerNet() != null && this.getPowerNet() != conductor.getPowerNet()) {
-					conductor.getPowerNet().joinNetworks(this.getPowerNet());
+				if(this.getNetwork() != null && conductor.getNetwork() != null && this.getNetwork() != conductor.getNetwork()) {
+					conductor.getNetwork().joinFrom(this.getNetwork());
 				}
 			}
 		}
@@ -71,7 +71,12 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 		return (this.network == null || !this.network.isValid()) && !this.isInvalid();
 	}
 
-    @Override
+	@Override
+	public boolean canConnect(ForgeDirection dir) {
+		return dir != ForgeDirection.UNKNOWN;
+	}
+
+	@Override
 	public long getPower() {
 		return 0;
 	}
@@ -82,8 +87,9 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 	}
 
 	@Override
-	public void setPowerNet(IPowerNet network) {
+	public TileEntityCableBaseNT setNetwork(PowerNet network) {
 		this.network = network;
+		return this;
 	}
 
 	@Override
@@ -96,7 +102,7 @@ public class TileEntityCableBaseNT extends TileEntity implements ITickable, IEne
 	}
 
 	@Override
-	public IPowerNet getPowerNet() {
+	public PowerNet getNetwork() {
 		return this.network;
 	}
 }

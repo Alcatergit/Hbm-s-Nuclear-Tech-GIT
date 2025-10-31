@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "hbm:block_euphemium_cluster" },
+        "axis=z": { "model": "hbm:block_euphemium_cluster", "x": 90 },
+        "axis=x": { "model": "hbm:block_euphemium_cluster", "x": 90, "y": 90 }
+    }
+}

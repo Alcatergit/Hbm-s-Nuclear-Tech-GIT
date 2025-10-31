@@ -1,12 +1,11 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.main.MainRegistry;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.world.HugeMush;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
@@ -19,8 +18,11 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockMush extends BlockBush implements IGrowable {
+import java.util.Random;
+
+public class BlockMush extends BlockBush implements IGrowable, IItemHazard {
 	
+	ItemHazardModule module;
 	protected static final AxisAlignedBB MUSHROOM_AABB = new AxisAlignedBB(0.30000001192092896D, 0.0D, 0.30000001192092896D, 0.699999988079071D, 0.4000000059604645D, 0.699999988079071D);
 	
 	public BlockMush(Material materialIn, String s) {
@@ -30,7 +32,13 @@ public class BlockMush extends BlockBush implements IGrowable {
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(true);
 		this.setSoundType(SoundType.PLANT);
+		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
 	}
 
 	@Override

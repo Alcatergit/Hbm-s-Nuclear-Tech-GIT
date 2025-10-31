@@ -3,5 +3,5 @@ package com.hbm.interfaces;
 import net.minecraft.nbt.NBTTagCompound;
 
 public interface ITankPacketAcceptor {
-	void recievePacket(NBTTagCompound[] tags);
+	public void recievePacket(NBTTagCompound[] tags);
 }

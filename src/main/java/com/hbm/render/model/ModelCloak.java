@@ -25,7 +25,11 @@ public class ModelCloak extends ModelBiped {
 	@Override
 	public void setRotationAngles(float f, float f1, float f2, float f3, float f4, float f5, Entity entity) {
 		EntityPlayer player = (EntityPlayer) entity;
-        this.isSneak = player.isSneaking();
+		if(player.isSneaking()) {
+			this.isSneak = true;
+		} else {
+			this.isSneak = false;
+		}
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);
 	}
 

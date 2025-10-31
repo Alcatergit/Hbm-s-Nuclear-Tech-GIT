@@ -1,8 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.machine.TileEntitySafe;
-
-import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,7 +8,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
-@ChestContainer
 public class ContainerSafe extends Container {
 	
 	private TileEntitySafe diFurnace;
@@ -52,7 +49,7 @@ public class ContainerSafe extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= diFurnace.inventory.getSlots() - 1) {
-				if (!this.mergeItemStack(var5, diFurnace.inventory.getSlots(), this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, diFurnace.inventory.getSlots(), this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}

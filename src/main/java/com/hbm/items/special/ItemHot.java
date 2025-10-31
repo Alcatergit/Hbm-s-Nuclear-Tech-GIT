@@ -1,7 +1,6 @@
 package com.hbm.items.special;
 
 import com.hbm.items.ModItems;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

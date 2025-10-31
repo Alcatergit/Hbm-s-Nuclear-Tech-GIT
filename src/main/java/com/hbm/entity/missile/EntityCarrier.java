@@ -2,11 +2,10 @@ package com.hbm.entity.missile;
 
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemSatChip;
 import com.hbm.main.AdvancementManager;
 import com.hbm.saveddata.satellites.Satellite;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.item.ItemStack;
@@ -125,9 +124,9 @@ public class EntityCarrier extends EntityThrowable {
 					AdvancementManager.grantAchievement(p, AdvancementManager.achFOEQ);
 			}
 			
-			if(payload.getItem() instanceof ISatChip) {
+			if(payload.getItem() instanceof ItemSatChip) {
 				
-			    int freq = ISatChip.getFreqS(payload);
+			    int freq = ItemSatChip.getFreq(payload);
 		    	
 		    	Satellite.orbit(world, Satellite.getIDFromItem(payload.getItem()), freq, posX, posY, posZ);
 			}

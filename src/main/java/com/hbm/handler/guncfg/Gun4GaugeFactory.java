@@ -1,7 +1,5 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
@@ -12,8 +10,8 @@ import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IBulletHurtBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
@@ -23,13 +21,14 @@ import com.hbm.render.anim.BusAnimationKeyframe;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
 
 public class Gun4GaugeFactory {
 	
@@ -59,7 +58,7 @@ public class Gun4GaugeFactory {
 		
 		config.durability = 3000;
 		config.reloadSound = GunConfiguration.RSOUND_SHOTGUN;
-		config.firingSound = HBMSoundHandler.revolverShootAlt;
+		config.firingSound = HBMSoundEvents.revolverShootAlt;
 		config.firingPitch = 0.65F;
 		
 		config.name = "KS-23";
@@ -87,7 +86,7 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge;
+		bullet.ammo = Armory.ammo_4gauge;
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 6;
 		bullet.bulletsMin *= 2;
@@ -100,7 +99,7 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge_slug;
+		bullet.ammo = Armory.ammo_4gauge_slug;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 20;
 		bullet.wear = 7;
@@ -113,7 +112,7 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge_explosive;
+		bullet.ammo = Armory.ammo_4gauge_explosive;
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -134,7 +133,7 @@ public class Gun4GaugeFactory {
 		config.firingMode = GunConfiguration.FIRE_AUTO;
 		config.durability = 3000;
 		config.reloadSound = GunConfiguration.RSOUND_SHOTGUN;
-		config.firingSound = HBMSoundHandler.sauerGun;
+		config.firingSound = HBMSoundEvents.sauerGun;
 		config.firingPitch = 1.0F;
 
 		config.name = "Sauer Shotgun";
@@ -186,7 +185,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardAirstrikeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_sleek;
+		bullet.ammo = Armory.ammo_4gauge_sleek;
 
 		return bullet;
 	}
@@ -195,7 +194,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette;
+		bullet.ammo = Armory.ammo_4gauge_flechette;
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 8;
 		bullet.bulletsMin *= 2;
@@ -212,7 +211,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette;
+		bullet.ammo = Armory.ammo_4gauge_flechette;
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 8;
 		bullet.bulletsMin *= 2;
@@ -222,7 +221,7 @@ public class Gun4GaugeFactory {
 		bullet.HBRC = 2;
 		bullet.LBRC = 95;
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette_phosphorus;
+		bullet.ammo = Armory.ammo_4gauge_flechette_phosphorus;
 		bullet.incendiary = 5;
 
 		PotionEffect eff = new PotionEffect(HbmPotion.phosphorus, 20 * 20, 0, true, false);
@@ -252,7 +251,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_semtex;
+		bullet.ammo = Armory.ammo_4gauge_semtex;
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -270,8 +269,8 @@ public class Gun4GaugeFactory {
 					return;
 				
 				ExplosionNT explosion = new ExplosionNT(bullet.world, null, bullet.posX, bullet.posY, bullet.posZ, 4);
-				explosion.atttributes.add(ExAttrib.ALLDROP);
-				explosion.atttributes.add(ExAttrib.NOHURT);
+				explosion.attributes.add(ExAttrib.ALLDROP);
+				explosion.attributes.add(ExAttrib.NOHURT);
 				explosion.explode();
 
 				ExplosionLarge.spawnParticles(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 15);
@@ -285,7 +284,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_balefire;
+		bullet.ammo = Armory.ammo_4gauge_balefire;
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -303,7 +302,7 @@ public class Gun4GaugeFactory {
 					return;
 				
 				ExplosionNT explosion = new ExplosionNT(bullet.world, null, bullet.posX, bullet.posY, bullet.posZ, 6);
-				explosion.atttributes.add(ExAttrib.BALEFIRE);
+				explosion.attributes.add(ExAttrib.BALEFIRE);
 				explosion.explode();
 
 				ExplosionLarge.spawnParticles(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 30);
@@ -317,7 +316,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_kampf;
+		bullet.ammo = Armory.ammo_4gauge_kampf;
 		bullet.spread = 0.0F;
 		bullet.gravity = 0.0D;
 		bullet.wear = 15;
@@ -333,7 +332,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_canister;
+		bullet.ammo = Armory.ammo_4gauge_canister;
 		bullet.spread = 0.0F;
 		bullet.gravity = 0.0D;
 		bullet.wear = 15;
@@ -371,7 +370,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_claw;
+		bullet.ammo = Armory.ammo_4gauge_claw;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;
@@ -405,7 +404,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_vampire;
+		bullet.ammo = Armory.ammo_4gauge_vampire;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;
@@ -441,7 +440,7 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_void;
+		bullet.ammo = Armory.ammo_4gauge_void;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;

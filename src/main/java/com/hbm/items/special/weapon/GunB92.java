@@ -1,37 +1,37 @@
 	package com.hbm.items.special.weapon;
 
-import java.util.List;
-import java.util.Random;
+    import com.google.common.collect.Multimap;
+    import com.hbm.entity.logic.EntityNukeExplosionMK3;
+    import com.hbm.entity.projectile.EntityExplosiveBeam;
+    import com.hbm.interfaces.IHasCustomModel;
+    import com.hbm.items.ModItems;
+    import com.hbm.items.ModItems.Armory;
+    import com.hbm.lib.HBMSoundEvents;
+    import com.hbm.main.MainRegistry;
+    import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
+    import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+    import net.minecraft.client.util.ITooltipFlag;
+    import net.minecraft.entity.Entity;
+    import net.minecraft.entity.EntityLivingBase;
+    import net.minecraft.entity.ai.attributes.AttributeModifier;
+    import net.minecraft.entity.player.EntityPlayer;
+    import net.minecraft.init.SoundEvents;
+    import net.minecraft.inventory.EntityEquipmentSlot;
+    import net.minecraft.item.EnumAction;
+    import net.minecraft.item.EnumRarity;
+    import net.minecraft.item.Item;
+    import net.minecraft.item.ItemStack;
+    import net.minecraft.nbt.NBTTagCompound;
+    import net.minecraft.util.ActionResult;
+    import net.minecraft.util.EnumHand;
+    import net.minecraft.util.SoundCategory;
+    import net.minecraft.util.text.TextFormatting;
+    import net.minecraft.world.World;
+    import net.minecraftforge.common.MinecraftForge;
+    import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
-import com.google.common.collect.Multimap;
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
-import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.entity.projectile.EntityExplosiveBeam;
-import com.hbm.interfaces.IHasCustomModel;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.main.MainRegistry;
-
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.ai.attributes.AttributeModifier;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.EnumAction;
-import net.minecraft.item.EnumRarity;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.world.World;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+    import java.util.List;
+    import java.util.Random;
 
 public class GunB92 extends Item implements IHasCustomModel {
 
@@ -53,7 +53,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 
 	@Override
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_b92) {
+		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Armory.gun_b92) {
 			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		if (!entityLiving.isSneaking()) {
@@ -97,7 +97,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 						worldIn.spawnEntity(entityarrow1);
 					}
 
-				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.sparkShoot, SoundCategory.AMBIENT, 5.0F, 1.0F);
+				worldIn.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundEvents.sparkShoot, SoundCategory.AMBIENT, 5.0F, 1.0F);
 				// Well that was a failure. Maybe I'll make it work one day
 				// if(worldIn.isRemote)
 				// ItemRenderGunAnim.b92Ani.start();
@@ -121,7 +121,7 @@ public class GunB92 extends Item implements IHasCustomModel {
 					setAnim(stack, 0);
 
 				if (j == 15) {
-					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.b92Reload, SoundCategory.AMBIENT, 2.0F, 0.9F);
+					world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.b92Reload, SoundCategory.AMBIENT, 2.0F, 0.9F);
 					setPower(stack, getPower(stack) + 1);
 
 					if (getPower(stack) > 10) {
@@ -237,10 +237,11 @@ public class GunB92 extends Item implements IHasCustomModel {
 
 	@Override
 	public Multimap<String, AttributeModifier> getItemAttributeModifiers(EntityEquipmentSlot equipmentSlot) {
-        // multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new
+		Multimap<String, AttributeModifier> multimap = super.getItemAttributeModifiers(equipmentSlot);
+		// multimap.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new
 		// AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", 3.5,
 		// 0));
-		return super.getItemAttributeModifiers(equipmentSlot);
+		return multimap;
 	}
 
 	private static int getAnim(ItemStack stack) {

@@ -5,13 +5,13 @@
  */
 package glmath.glm.vec._4.i;
 
+import glmath.glm.vec._2.i.Vec2i;
+import glmath.glm.vec._3.i.Vec3i;
+
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
-import glmath.glm.vec._2.i.Vec2i;
-import glmath.glm.vec._3.i.Vec3i;
 
 /**
  *

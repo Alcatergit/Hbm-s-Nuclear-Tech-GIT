@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:integ_cable_oc" }
+	}
+}

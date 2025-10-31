@@ -1,19 +1,17 @@
 package com.hbm.handler;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
 import com.hbm.particle.lightning_test.TrailRenderer2;
 import com.hbm.particle.lightning_test.TrailRenderer2.IColorGetter;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class LightningGenerator {
 
@@ -35,7 +33,7 @@ public class LightningGenerator {
 		subdivide(node, info.subdivisions, info.subdivMult, info.subdivRecurse-1, info.randAmount, info.randAmountSubdivMultiplier);
 		LightningNode child = node.children.get(0);
 		float value = 0;
-		while(!child.children.isEmpty()){
+		while(child.children.size() > 0){
 			value += 0.02F;
 			LightningNode next = child.children.get(0);
 			if(rand.nextFloat() < info.forkChance-value){
@@ -68,7 +66,7 @@ public class LightningGenerator {
 		if(recurse <= 0)
 			return;
 		child = n;
-		while(!child.children.isEmpty()){
+		while(child.children.size() > 0){
 			LightningNode next = child.children.get(0);
 			subdivide(child, (int)(subdivisions*subdivMult), subdivMult, recurse-1, randAmount*randAmountSubdivMultiplier, randAmountSubdivMultiplier);
 			child = next;
@@ -84,7 +82,7 @@ public class LightningGenerator {
 	public static void render(LightningNode n, Vec3d playerPos, float scale, float x, float y, float z, boolean fadeEnd, @Nullable IColorGetter c){
 		List<Vec3d> toRender = new ArrayList<>();
 		toRender.add(n.pos.add(x, y, z));
-		while(!n.children.isEmpty()){
+		while(n.children.size() > 0){
 			//Render forks
 			for(int i = 1; i < n.children.size(); i ++){
 				render(n.children.get(i), playerPos, scale*0.5F, x, y, z, fadeEnd, c);

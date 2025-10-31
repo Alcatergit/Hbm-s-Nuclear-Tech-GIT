@@ -1,13 +1,9 @@
 package com.hbm.world.dungeon;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.main.MainRegistry;
 import com.hbm.world.generator.DungeonToolbox;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.BlockStoneBrick;
 import net.minecraft.block.material.Material;
@@ -17,6 +13,9 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class ArcticVault {
 

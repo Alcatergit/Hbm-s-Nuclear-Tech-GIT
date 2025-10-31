@@ -1,19 +1,5 @@
 package com.hbm.handler;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector2f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
@@ -21,7 +7,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
 import com.hbm.items.gear.JetpackGlider;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
@@ -35,8 +21,7 @@ import com.hbm.render.RenderHelper;
 import com.hbm.render.misc.ColorGradient;
 import com.hbm.sound.MovingSoundJetpack;
 import com.hbm.util.BobMathUtil;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.particle.Particle;
@@ -70,6 +55,15 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector2f;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class JetpackHandler {
 
@@ -96,8 +90,10 @@ public class JetpackHandler {
 	public static boolean hasJetpack(EntityPlayer p){
 		ItemStack chest = p.inventory.armorInventory.get(2);
 		ItemStack stack = ArmorModHandler.pryMod(chest, 1);
-        return stack.getItem() == ModItems.jetpack_glider;
-    }
+		if(stack.getItem() == ModItems.jetpack_glider)
+			return true;
+		return false;
+	}
 	
 	public static FluidTank getTank(EntityPlayer p){
 		ItemStack chest = p.inventory.armorInventory.get(2);
@@ -615,6 +611,7 @@ public class JetpackHandler {
         float f;
 
         for (f = yawOffset - prevYawOffset; f < -180.0F; f += 360.0F) {
+            ;
         }
 
         while (f >= 180.0F) {
@@ -683,7 +680,7 @@ public class JetpackHandler {
 				JetpackInfo j = entry.getValue();
 				if(j.thrust > 0.001){
 					if(j.sound == null){
-						Minecraft.getMinecraft().getSoundHandler().playSound(j.sound = new MovingSoundJetpack(player, HBMSoundHandler.jetpack, SoundCategory.PLAYERS));
+						Minecraft.getMinecraft().getSoundHandler().playSound(j.sound = new MovingSoundJetpack(player, HBMSoundEvents.jetpack, SoundCategory.PLAYERS));
 					}
 				} else {
 					if(j.sound != null){
@@ -1012,7 +1009,7 @@ public class JetpackHandler {
 			dirty = true;
 		}
 		
-		public void write(ByteBuf buf){
+		public void write(LeafiaBuf buf){
 			buf.writeBoolean(opening);
 			buf.writeBoolean(hover);
 			buf.writeFloat(thrust);
@@ -1021,7 +1018,7 @@ public class JetpackHandler {
 			buf.writeInt(failureTicks);
 		}
 		
-		public void read(ByteBuf buf){
+		public void read(LeafiaBuf buf){
 			opening = buf.readBoolean();
 			hover = buf.readBoolean();
 			thrust = buf.readFloat();

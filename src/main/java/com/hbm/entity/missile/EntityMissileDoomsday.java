@@ -1,12 +1,11 @@
 package com.hbm.entity.missile;
 
-import java.util.Collections;
-import java.util.List;
-
 import com.hbm.explosion.ExplosionLarge;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.Collections;
+import java.util.List;
 
 public class EntityMissileDoomsday extends EntityMissileBaseAdvanced {
 

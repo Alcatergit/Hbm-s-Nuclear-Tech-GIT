@@ -1,15 +1,8 @@
 package com.hbm.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityOilSpillFX;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.DummyTexs;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,6 +10,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SpillRenderer extends Render<EntityOilSpillFX> {
 
@@ -27,51 +25,51 @@ public class SpillRenderer extends Render<EntityOilSpillFX> {
 	
 	protected SpillRenderer(RenderManager renderManager) {
 		super(renderManager);
-		renderItem = ModItems.spill8;
+		renderItem = DummyTexs.spill8;
 	}
 	
 	@Override
 	public void doRender(EntityOilSpillFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
 		if(textures.isEmpty()){
-			textures.put(ModItems.spill1, RenderHelper.getItemTexture(ModItems.spill1));
-			textures.put(ModItems.spill2, RenderHelper.getItemTexture(ModItems.spill2));
-			textures.put(ModItems.spill3, RenderHelper.getItemTexture(ModItems.spill3));
-			textures.put(ModItems.spill4, RenderHelper.getItemTexture(ModItems.spill4));
-			textures.put(ModItems.spill5, RenderHelper.getItemTexture(ModItems.spill5));
-			textures.put(ModItems.spill6, RenderHelper.getItemTexture(ModItems.spill6));
-			textures.put(ModItems.spill7, RenderHelper.getItemTexture(ModItems.spill7));
-			textures.put(ModItems.spill8, RenderHelper.getItemTexture(ModItems.spill8));
+			textures.put(DummyTexs.spill1, RenderHelper.getItemTexture(DummyTexs.spill1));
+			textures.put(DummyTexs.spill2, RenderHelper.getItemTexture(DummyTexs.spill2));
+			textures.put(DummyTexs.spill3, RenderHelper.getItemTexture(DummyTexs.spill3));
+			textures.put(DummyTexs.spill4, RenderHelper.getItemTexture(DummyTexs.spill4));
+			textures.put(DummyTexs.spill5, RenderHelper.getItemTexture(DummyTexs.spill5));
+			textures.put(DummyTexs.spill6, RenderHelper.getItemTexture(DummyTexs.spill6));
+			textures.put(DummyTexs.spill7, RenderHelper.getItemTexture(DummyTexs.spill7));
+			textures.put(DummyTexs.spill8, RenderHelper.getItemTexture(DummyTexs.spill8));
 		}
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
-			renderItem = ModItems.spill8;
+			renderItem = DummyTexs.spill8;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 7 && fx.particleAge >= fx.maxAge / 8 * 6) {
-			renderItem = ModItems.spill7;
+			renderItem = DummyTexs.spill7;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 6 && fx.particleAge >= fx.maxAge / 8 * 5) {
-			renderItem = ModItems.spill6;
+			renderItem = DummyTexs.spill6;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 5 && fx.particleAge >= fx.maxAge / 8 * 4) {
-			renderItem = ModItems.spill5;
+			renderItem = DummyTexs.spill5;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 4 && fx.particleAge >= fx.maxAge / 8 * 3) {
-			renderItem = ModItems.spill4;
+			renderItem = DummyTexs.spill4;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 3 && fx.particleAge >= fx.maxAge / 8 * 2) {
-			renderItem = ModItems.spill3;
+			renderItem = DummyTexs.spill3;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 2 && fx.particleAge >= fx.maxAge / 8 * 1) {
-			renderItem = ModItems.spill2;
+			renderItem = DummyTexs.spill2;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 && fx.particleAge >= 0) {
-			renderItem = ModItems.spill1;
+			renderItem = DummyTexs.spill1;
 		}
 
 		TextureAtlasSprite iicon = textures.get(renderItem);

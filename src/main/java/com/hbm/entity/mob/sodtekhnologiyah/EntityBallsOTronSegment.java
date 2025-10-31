@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -47,9 +46,10 @@ public class EntityBallsOTronSegment extends EntityBallsOTronBase {
 
 		if((this.followed != null) && (getPartID() == 0)) {
 			//this.dataWatcher.updateObject(17, Byte.valueOf((byte) (((EntityBallsOTronHead) this.followed).isArmored() ? 1 : 0)));
-		}  //this.dataWatcher.updateObject(17, Byte.valueOf(this.targetedEntity.getDataWatcher().getWatchableObjectByte(17)));
-
-        if(this.didCheck) {
+		} else if(this.targetedEntity != null) {
+			//this.dataWatcher.updateObject(17, Byte.valueOf(this.targetedEntity.getDataWatcher().getWatchableObjectByte(17)));
+		}
+		if(this.didCheck) {
 			if(this.targetedEntity == null || !this.targetedEntity.isEntityAlive()) {
 				setHealth(getHealth() - 1999.0F);
 			}

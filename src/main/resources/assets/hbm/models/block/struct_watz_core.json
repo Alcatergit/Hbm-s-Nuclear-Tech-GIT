@@ -1,6 +1,6 @@
 {
   "parent": "block/cube_all",
   "textures": {
-    "all": "hbm:blocks/struct_watz_core"
+    "all": "hbm:blocks/watz/struct_watz_core"
   }
 }

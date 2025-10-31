@@ -1,37 +1,45 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
+import com.hbm.blocks.bomb.BlockCrashedBomb;
 import com.hbm.config.BombConfig;
 import com.hbm.config.WeaponConfig;
-import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.forgefluid.HbmFluidHandlerCell;
 import com.hbm.forgefluid.HbmFluidHandlerItemStack;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.items.ModItems;
-
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.ContaminationUtil.ContaminationType;
+import com.hbm.util.ContaminationUtil.HazardType;
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleija;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.*;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
+import java.util.Random;
 
 public class ItemCell extends Item {
 
@@ -68,7 +76,7 @@ public class ItemCell extends Item {
 						cloud.posX = entityItem.posX;
 						cloud.posY = entityItem.posY;
 						cloud.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(cloud);
+						entityItem.world.spawnEntity(cloud.setAntischrab());
 					}
 				}
 				return true;
@@ -86,14 +94,48 @@ public class ItemCell extends Item {
 	}
 
 	@Override
-	public @NotNull ItemStack getContainerItem(@NotNull ItemStack itemStack) {
-		if(isEmptyCell(itemStack)) return ItemStack.EMPTY;
-		return super.getContainerItem(itemStack);
-	}
-
-	@Override
 	public int getItemStackLimit(ItemStack stack) {
 		return isFullOrEmpty(stack) ? 64 : 1;
+	}
+	
+	@Override
+	public void onUpdate(ItemStack stack, World worldIn, Entity entityIn, int itemSlot, boolean isSelected) {
+		if(!(entityIn instanceof EntityLivingBase))
+			return;
+		super.onUpdate(stack, worldIn, entityIn, itemSlot, isSelected);
+		if(hasFluid(stack, ModForgeFluids.TRITIUM)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F / 20F);
+		} else if(hasFluid(stack, ModForgeFluids.SAS3)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 20F / 20F);
+			((EntityLivingBase) entityIn).addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100, 0));
+		} else if(hasFluid(stack, ModForgeFluids.UF6)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 2F / 20F);
+		} else if(hasFluid(stack, ModForgeFluids.PUF6)){
+			ContaminationUtil.contaminate((EntityLivingBase)entityIn, HazardType.RADIATION, ContaminationType.CREATIVE, 10F / 20F);
+		}
+	}
+	
+	@Override
+	public EnumActionResult onItemUse(EntityPlayer player, World world, BlockPos pos, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+		ItemStack stack = player.getHeldItem(hand);
+		if(!world.isRemote && ItemCell.isEmptyCell(stack) && world.getBlockState(pos).getBlock() instanceof BlockCrashedBomb) {
+			Random rand = new Random();
+			int i = rand.nextInt(100);
+			if(i == 0) {
+				if(!world.isRemote) {
+					((BlockCrashedBomb) world.getBlockState(pos).getBlock()).explode(world, pos);
+				}
+			} else if(i < 90) {
+				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
+					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.AMAT, 1000), true);
+			} else {
+				if(stack.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null))
+					stack.getCapability(CapabilityFluidHandler.FLUID_HANDLER_ITEM_CAPABILITY, null).fill(new FluidStack(ModForgeFluids.ASCHRAB, 1000), true);
+			}
+			ContaminationUtil.contaminate(player, HazardType.RADIATION, ContaminationType.CREATIVE, 50.0F);
+			return EnumActionResult.SUCCESS;
+		}
+		return EnumActionResult.PASS;
 	}
 
 	@Override
@@ -114,10 +156,9 @@ public class ItemCell extends Item {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
 			for(Fluid f : EnumCell.getFluids()) {
 				ItemStack stack = new ItemStack(this, 1, 0);
-				if(f != null) {
-					stack.setTagCompound(new NBTTagCompound());
+				stack.setTagCompound(new NBTTagCompound());
+				if(f != null)
 					stack.getTagCompound().setTag(HbmFluidHandlerCell.FLUID_NBT_KEY, new FluidStack(f, 1000).writeToNBT(new NBTTagCompound()));
-				}
 				items.add(stack);
 			}
 		}
@@ -131,17 +172,33 @@ public class ItemCell extends Item {
 		} else if(ItemCell.hasFluid(stack, ModForgeFluids.ASCHRAB)){
 			tooltip.add("§eExposure to matter will create a fólkvangr field!§r");
 			tooltip.add("§c[Dangerous Drop]§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.TRITIUM)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e0.5 RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.UF6)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e2.0 RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.PUF6)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e10.0 RAD/s§r");
+		} else if(ItemCell.hasFluid(stack, ModForgeFluids.SAS3)){
+			tooltip.add("§a[Radioactive]§r");
+			tooltip.add("§e20.0 RAD/s§r");
+			tooltip.add("§3[Blinding]§r");
 		}
 	}
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
+		if(stack.getTagCompound() == null)
+			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerCell(stack, 1000);
 	}
 
 	public static boolean isFullCell(ItemStack stack, Fluid fluid) {
 		if(stack != null) {
-            return stack.getItem() instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == 1000;
+			if(stack.getItem() instanceof ItemCell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == fluid && FluidUtil.getFluidContained(stack).amount == 1000)
+				return true;
 		}
 		return false;
 	}
@@ -150,15 +207,19 @@ public class ItemCell extends Item {
 		if(stack != null) {
 			if(stack.getItem() == ModItems.cell && stack.getTagCompound() != null) {
 				FluidStack s = FluidStack.loadFluidStackFromNBT(stack.getTagCompound().getCompoundTag(HbmFluidHandlerCell.FLUID_NBT_KEY));
-                return s == null || s.amount <= 0;
-			} else return stack.getItem() == ModItems.cell && stack.getTagCompound() == null;
+				if(s == null || s.amount <= 0)
+					return true;
+			} else if (stack.getItem() == ModItems.cell && stack.getTagCompound() == null){
+				return true;
+			}
 		}
 		return false;
 	}
 
 	public static boolean hasFluid(ItemStack stack, Fluid f) {
 		if(stack != null) {
-            return stack.getItem() == ModItems.cell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == f;
+			if(stack.getItem() == ModItems.cell && FluidUtil.getFluidContained(stack) != null && FluidUtil.getFluidContained(stack).getFluid() == f)
+				return true;
 		}
 		return false;
 	}
@@ -184,8 +245,11 @@ public class ItemCell extends Item {
 				return true;
 			return f.amount == 1000 || f.amount == 0;
 			
-		} else return stack.getItem() == ModItems.cell;
-    }
+		} else if(stack.getItem() == ModItems.cell){
+			return true;
+		}
+		return false;
+	}
 
 	public static boolean hasEmptyCell(EntityPlayer player){
 		InventoryPlayer inv = player.inventory;
@@ -206,4 +270,5 @@ public class ItemCell extends Item {
 			}
 		}
 	}
+
 }

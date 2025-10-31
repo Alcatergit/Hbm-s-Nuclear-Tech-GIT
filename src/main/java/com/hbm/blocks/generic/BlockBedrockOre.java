@@ -1,10 +1,9 @@
 package com.hbm.blocks.generic;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
 import api.hbm.block.IDrillInteraction;
 import api.hbm.block.IMiningDrill;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

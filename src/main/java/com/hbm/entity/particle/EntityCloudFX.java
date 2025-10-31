@@ -3,7 +3,6 @@ package com.hbm.entity.particle;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.explosion.ExplosionChaos;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

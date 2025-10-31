@@ -3,17 +3,16 @@ package com.hbm.tileentity.machine;
 import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.tileentity.TileEntityMachineBase;
-
+import com.leafia.contents.control.fuel.nuclearfuel.LeafiaRodItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineReactor extends TileEntityMachineBase implements ITickable {
 
@@ -70,7 +69,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 	}
 
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		nbt.setShort("powerTime", (short) charge);
 		nbt.setShort("heat", (short) heat);
@@ -113,15 +112,19 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
 		if(slot == 0) {
-            return !hasItemPower(inventory.getStackInSlot(0));
-        }
+			if(!hasItemPower(inventory.getStackInSlot(0))) {
+				return true;
+			}
+
+			return false;
+		}
 
 		return true;
 	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i != 2 && (i != 0 || hasItemPower(stack));
+		return i == 2 ? false : (i == 0 ? (hasItemPower(stack) || (stack.getItem() instanceof LeafiaRodItem)) : true);
 	}
 
 	public int getProgressScaled(int i) {
@@ -140,7 +143,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		return this.progress > 0;
 	}
 
-	public boolean canProcess() {
+	public boolean canProcess(boolean ignoreHeatCheck) {
 		if(inventory.getStackInSlot(1).isEmpty()) {
 			return false;
 		}
@@ -150,9 +153,10 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 		if(recipe == null)
 			return false;
 		recipeHeat = recipe.heat;
-		if(this.heat < recipe.heat)
-			return false;
-
+		if (!ignoreHeatCheck) {
+			if (this.heat < recipe.heat)
+				return false;
+		}
 		if(inventory.getStackInSlot(2).isEmpty())
 			return true;
 
@@ -166,7 +170,7 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 	}
 
 	private void processItem() {
-		if(canProcess()) {
+		if(canProcess(false)) {
 			
 			BreederRecipe rec = BreederRecipes.getOutput(inventory.getStackInSlot(1));
 			
@@ -219,7 +223,6 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 			if(charge == 0) {
 				heat = 0;
 			}
-			
 			if(hasItemPower(inventory.getStackInSlot(0)) && charge == 0) {
 				
 				charge += getItemPower(inventory.getStackInSlot(0));
@@ -235,9 +238,36 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 					
 					markDirty = true;
 				}
+			} else if (inventory.getStackInSlot(0).getItem() instanceof LeafiaRodItem) {
+				ItemStack stack = inventory.getStackInSlot(0);
+				LeafiaRodItem rod = (LeafiaRodItem)stack.getItem();
+				NBTTagCompound nbt = stack.getTagCompound();
+				double fuelHeat = 20;
+				if (nbt != null) {
+					fuelHeat = nbt.getDouble("heat");
+					//if (fuelHeat >= 2000) {
+						if (nbt.getInteger("spillage") > 20*5) {
+							ItemStack prevStack = null;
+							for (int i = 0; i < inventory.getSlots(); i++) {
+								prevStack = LeafiaRodItem.comparePriority(inventory.getStackInSlot(i), prevStack);
+								inventory.setStackInSlot(i, ItemStack.EMPTY);
+							}
+							world.setBlockToAir(pos);
+							((LeafiaRodItem) (prevStack.getItem())).resetDetonate().detonate(world, pos);
+							return;
+						}
+					//}
+				}
+				if (canProcess(true)) {
+					charge = 1;
+					heat = (int)Math.floor(Math.pow(fuelHeat/250,0.54));
+					rod.HeatFunction(stack,true,rod.getFlux(stack)*2,0,0,0);
+					rod.decay(stack,inventory,0);
+				} else
+					rod.HeatFunction(stack,true,0,0,0,0);
 			}
 
-			if(hasPower() && canProcess()) {
+			if(hasPower() && canProcess(false)) {
 				
 				progress += heat / recipeHeat;
 
@@ -251,9 +281,12 @@ public class TileEntityMachineReactor extends TileEntityMachineBase implements I
 				progress = 0;
 			}
 
-			boolean trigger = !hasPower() || !canProcess() || this.progress != 0;
+			boolean trigger = true;
 
-            if(trigger) {
+			if(hasPower() && canProcess(false) && this.progress == 0)
+				trigger = false;
+
+			if(trigger) {
 				markDirty = true;
 			}
 

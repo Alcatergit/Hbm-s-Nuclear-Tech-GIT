@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:frozen_grass" },
+		"meta=0": { "model": "hbm:frozen_grass" }
+	}
+}

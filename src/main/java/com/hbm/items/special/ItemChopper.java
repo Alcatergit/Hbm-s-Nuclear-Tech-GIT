@@ -1,12 +1,9 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
 import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.mob.EntityUFO;
 import com.hbm.entity.mob.botprime.EntityBOTPrimeHead;
 import com.hbm.items.ModItems;
-
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
@@ -25,6 +22,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemChopper extends Item {
 
@@ -118,7 +117,7 @@ public class ItemChopper extends Item {
 	}
 	
 	public Entity spawnCreature(World world, int dmg, double x, double y, double z) {
-		EntityLiving entity = null;
+		Entity entity = null;
 
 		if(this == ModItems.spawn_chopper)
 			entity = new EntityHunterChopper(world);
@@ -134,10 +133,11 @@ public class ItemChopper extends Item {
 		
 		if(entity != null) {
 
-            entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
-			entity.rotationYawHead = entity.rotationYaw;
-			entity.renderYawOffset = entity.rotationYaw;
-			entity.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), (IEntityLivingData) null);
+			EntityLiving entityliving = (EntityLiving) entity;
+			entity.setLocationAndAngles(x, y, z, MathHelper.wrapDegrees(world.rand.nextFloat() * 360.0F), 0.0F);
+			entityliving.rotationYawHead = entityliving.rotationYaw;
+			entityliving.renderYawOffset = entityliving.rotationYaw;
+			entityliving.onInitialSpawn(world.getDifficultyForLocation(new BlockPos(x, y, z)), (IEntityLivingData) null);
 			world.spawnEntity(entity);
 		}
 

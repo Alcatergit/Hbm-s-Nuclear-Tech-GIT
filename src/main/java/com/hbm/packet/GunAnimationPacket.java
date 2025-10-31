@@ -2,7 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.render.anim.HbmAnimations.AnimType;
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -13,7 +14,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class GunAnimationPacket implements IMessage {
+public class GunAnimationPacket extends RecordablePacket {
 
 	int type;
 	EnumHand hand;
@@ -26,13 +27,13 @@ public class GunAnimationPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		type = buf.readInt();
 		hand = buf.readInt() > 0 ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND;
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(type);
 		buf.writeInt(hand == EnumHand.MAIN_HAND ? 0 : 1);
 	}

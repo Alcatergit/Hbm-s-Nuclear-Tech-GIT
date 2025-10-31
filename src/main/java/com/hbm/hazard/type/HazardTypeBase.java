@@ -1,15 +1,14 @@
 package com.hbm.hazard.type;
 
-import java.util.List;
-
-import com.hbm.hazard.modifier.HazardModifier;
-
+import com.hbm.hazard.HazardModifier;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public abstract class HazardTypeBase {
 	

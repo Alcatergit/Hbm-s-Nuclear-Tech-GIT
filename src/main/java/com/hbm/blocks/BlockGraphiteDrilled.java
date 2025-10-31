@@ -2,8 +2,8 @@ package com.hbm.blocks;
 
 import com.hbm.blocks.machine.pile.BlockGraphiteDrilledBase;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.items.ModItems.Materials.Ingots;
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -34,7 +34,7 @@ public class BlockGraphiteDrilled extends BlockGraphiteDrilledBase {
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_plutonium, ModBlocks.block_graphite_plutonium)) return true;
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_source, ModBlocks.block_graphite_source)) return true;
 				if(checkInteraction(world, x, y, z, axis, player, hand, ModItems.pile_rod_boron, ModBlocks.block_graphite_rod)) return true;
-                return checkInteraction(world, x, y, z, null, player, hand, ModItems.ingot_graphite, ModBlocks.block_graphite);
+				if(checkInteraction(world, x, y, z, null, player, hand, Ingots.ingot_graphite, ModBlocks.block_graphite)) return true;
 			}
 		}
 		
@@ -52,7 +52,7 @@ public class BlockGraphiteDrilled extends BlockGraphiteDrilledBase {
 			}
 			
 
-			world.playSound(null, x + 0.5, y + 1.5, z + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound(null, x + 0.5, y + 1.5, z + 0.5, HBMSoundEvents.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			
 			return true;
 		}

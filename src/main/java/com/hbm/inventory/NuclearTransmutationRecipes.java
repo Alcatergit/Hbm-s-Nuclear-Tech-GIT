@@ -1,30 +1,35 @@
 package com.hbm.inventory;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-
-import com.hbm.items.ModItems;
 import com.hbm.blocks.ModBlocks;
-import static com.hbm.inventory.OreDictManager.*;
+import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
-
+import com.hbm.items.ModItems.Materials.Crystals;
+import com.hbm.items.ModItems.Materials.Ingots;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.oredict.OreDictionary;
 
+import java.util.HashMap;
+
+import static com.hbm.inventory.OreDictManager.U;
+
 public class NuclearTransmutationRecipes {
 
-	public static LinkedHashMap<AStack, ItemStack> recipesOutput = new LinkedHashMap<>();
+	public static HashMap<AStack, ItemStack> recipesOutput = new HashMap<>();
 	public static HashMap<AStack, Long> recipesEnergy = new HashMap<>();
 	
 	public static void registerRecipes() {
 
 		//input, output
-		addRecipe(new OreDictStack(U.crystal()), new ItemStack(ModItems.crystal_schraranium, 1), 5_000_000L);
-		addRecipe(new OreDictStack(U.ingot()), new ItemStack(ModItems.ingot_schraranium, 1), 5_000_000L);
-		addRecipe(new OreDictStack(U.block()), new ItemStack(ModBlocks.block_schraranium, 1), 50_000_000L);
+		if (GeneralConfig.enableBabyMode)
+			addRecipe(new OreDictStack(U.ingot()),new ItemStack(Ingots.ingot_ralseinium,1),5_000_000L);
+		else {
+			addRecipe(new OreDictStack(U.crystal()),new ItemStack(Crystals.crystal_schraranium,1),5_000_000L);
+			addRecipe(new OreDictStack(U.ingot()),new ItemStack(Ingots.ingot_schraranium,1),5_000_000L);
+			addRecipe(new OreDictStack(U.block()),new ItemStack(ModBlocks.block_schraranium,1),50_000_000L);
+		}
 	}
 
 	public static void addRecipe(AStack input, ItemStack output, long energy){
@@ -52,7 +57,7 @@ public class NuclearTransmutationRecipes {
 		return null;
 	}
 
-	public static long getCombustionEnergy(ItemStack stack) {
+	public static long getEnergy(ItemStack stack) {
 		if(stack == null || stack.isEmpty())
 			return -1;
 

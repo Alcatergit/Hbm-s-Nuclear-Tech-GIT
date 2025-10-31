@@ -2,9 +2,8 @@ package com.hbm.blocks.turret;
 
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityRocket;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.turret.TileEntityTurretRocket;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -61,7 +60,7 @@ public class TurretRocket extends TurretBase {
 				world.spawnEntity(fx);
 			}
 
-			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.rpgShoot, SoundCategory.BLOCKS, 1.0F, 0.75F);
+			world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundEvents.rpgShoot, SoundCategory.BLOCKS, 1.0F, 0.75F);
 			
 			flag = true;
 		}

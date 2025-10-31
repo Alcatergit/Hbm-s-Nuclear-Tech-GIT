@@ -1,24 +1,19 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
 import com.hbm.capability.HbmLivingCapability.EntityHbmPropsProvider;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 
+import java.util.List;
+
 public class TileEntityDeconDi extends TileEntity implements ITickable {
 
 	private static float digammaRemove;
-    public TileEntityDeconDi() {
-        this(0.001F);
-    }
-
-    public TileEntityDeconDi(float dig) {
-        super();
-		digammaRemove = dig;
+	public TileEntityDeconDi(float dig) {
+		super();
+		this.digammaRemove = dig;
 	}
 
 	@Override
@@ -29,8 +24,8 @@ public class TileEntityDeconDi extends TileEntity implements ITickable {
 			if(!entities.isEmpty()) {
 				for(Entity e : entities) {
 					if(e.hasCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null)){
-						if(digammaRemove > 0.0F){
-							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseDigamma(digammaRemove);
+						if(this.digammaRemove > 0.0F){
+							e.getCapability(EntityHbmPropsProvider.ENT_HBM_PROPS_CAP, null).decreaseDigamma(this.digammaRemove);
 						}
 					}
 				}

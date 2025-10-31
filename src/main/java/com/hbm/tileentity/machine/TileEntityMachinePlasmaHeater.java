@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Arrays;
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
@@ -13,8 +11,6 @@ import com.hbm.lib.Library;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -32,7 +28,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IEnergyUser {
 
@@ -193,8 +191,7 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 	}
 
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
-		compound.setLong("power", power);
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("fuel_1", tanks[0].writeToNBT(new NBTTagCompound()));
 		compound.setTag("fuel_2", tanks[1].writeToNBT(new NBTTagCompound()));
 		compound.setTag("plasma", plasma.writeToNBT(new NBTTagCompound()));
@@ -206,7 +203,6 @@ public class TileEntityMachinePlasmaHeater extends TileEntityMachineBase impleme
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		super.readFromNBT(compound);
-		power = compound.getLong("power");
 		tanks[0].readFromNBT(compound.getCompoundTag("fuel_1"));
 		tanks[1].readFromNBT(compound.getCompoundTag("fuel_2"));
 		plasma.readFromNBT(compound.getCompoundTag("plasma"));

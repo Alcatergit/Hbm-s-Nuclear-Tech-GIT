@@ -1,0 +1,9 @@
+{
+	"parent": "hbm:block/orientable_updown",
+	"textures": {
+		"top": "hbm:blocks/leafia/msr/msr_element",
+		"bottom": "hbm:blocks/leafia/msr/msr_fuel_hatch",
+		"front": "hbm:blocks/leafia/msr/msr_fuel_inserter",
+		"side": "hbm:blocks/leafia/msr/msr_element_side"
+	}
+}

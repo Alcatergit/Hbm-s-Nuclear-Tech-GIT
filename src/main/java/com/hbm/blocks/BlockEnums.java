@@ -2,7 +2,7 @@ package com.hbm.blocks;
 
 public class BlockEnums {
 
-	public enum EnumStoneType {
+	public static enum EnumStoneType {
 		SULFUR,
 		ASBESTOS,
 		HEMATITE,
@@ -10,7 +10,7 @@ public class BlockEnums {
 		LIMESTONE
 	}
 
-	public enum EnumStalagmiteType {
+	public static enum EnumStalagmiteType {
 		SULFUR,
 		ASBESTOS
 	}
@@ -18,16 +18,16 @@ public class BlockEnums {
 	/** DECO / STRUCTURE ENUMS */
 	//i apologize in advance
 	
-	public enum TileType {
+	public static enum TileType {
 		LARGE,
 		SMALL
 	}
 	
-	public enum DecoComputerEnum {
+	public static enum DecoComputerEnum {
 		IBM_300PL
 	}
 	
-	public enum DecoCabinetEnum {
+	public static enum DecoCabinetEnum {
 		GREEN,
 		STEEL
 	}

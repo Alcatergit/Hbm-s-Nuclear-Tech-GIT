@@ -1,30 +1,28 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.Map;
-
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
-
 import net.minecraft.entity.Entity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.DamageSource;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.common.capabilities.Capability;
 
 import java.util.List;
+import java.util.Map;
 
 public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHandler, ITankPacketAcceptor {
 
@@ -69,7 +67,7 @@ public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHa
 			}
 
 			if(this.lastCooled > 100) {
-				world.playSound(null, pos.getX() + 0.5, pos.getY() + rbmkHeight + 0.5, pos.getZ() + 0.5, HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.25F + world.rand.nextFloat());
+				world.playSound(null, pos.getX() + 0.5, pos.getY() + rbmkHeight + 0.5, pos.getZ() + 0.5, HBMSoundEvents.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.25F + world.rand.nextFloat());
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + rbmkHeight + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 1F + world.rand.nextFloat() * 0.5F);
 			} else if(this.lastCooled > 50){
 				world.playSound(null, pos.getX() + 0.5, pos.getY() + rbmkHeight + 0.5, pos.getZ() + 0.5, SoundEvents.BLOCK_FIRE_EXTINGUISH, SoundCategory.BLOCKS, 1.0F, 0.75F + world.rand.nextFloat() * 0.5F);

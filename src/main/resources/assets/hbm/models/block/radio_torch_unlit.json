@@ -1,0 +1,6 @@
+{
+    "parent": "hbm:leafia/radio/radio_torch",
+    "textures": {
+        "torch": "hbm:blocks/leafia/radio/radio_torch_off"
+    }
+}

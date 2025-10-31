@@ -1,0 +1,12 @@
+{
+    "variants": {
+        "axis=y,out=false":    { "model": "hbm:block_graphite_rod_in" },
+        "axis=z,out=false":     { "model": "hbm:block_graphite_rod_in", "x": 90 },
+        "axis=x,out=false":     { "model": "hbm:block_graphite_rod_in", "x": 90, "y": 90 },
+        "axis=none,out=false":   { "model": "hbm:block_graphite_rod_in" },
+        "axis=y,out=true":    { "model": "hbm:block_graphite_rod_out" },
+        "axis=z,out=true":     { "model": "hbm:block_graphite_rod_out", "x": 90 },
+        "axis=x,out=true":     { "model": "hbm:block_graphite_rod_out", "x": 90, "y": 90 },
+        "axis=none,out=true":   { "model": "hbm:block_graphite_rod_out" }
+    }
+}

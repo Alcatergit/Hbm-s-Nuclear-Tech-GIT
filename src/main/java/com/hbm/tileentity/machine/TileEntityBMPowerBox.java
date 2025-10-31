@@ -1,18 +1,17 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.IControllable;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.Arrays;
+import java.util.List;
 
 public class TileEntityBMPowerBox extends TileEntity implements IControllable {
 	
@@ -44,8 +43,12 @@ public class TileEntityBMPowerBox extends TileEntity implements IControllable {
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt){
 		readFromNBT(pkt.getNbtCompound());
 	}
+	
+	@Override
+	public void receiveEvent(BlockPos from, ControlEvent e){
+	}
 
-    @Override
+	@Override
 	public List<String> getOutEvents(){
 		return Arrays.asList("lever_toggle");
 	}

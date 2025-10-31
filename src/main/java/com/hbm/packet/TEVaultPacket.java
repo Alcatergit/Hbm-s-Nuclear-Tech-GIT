@@ -3,20 +3,18 @@ package com.hbm.packet;
 import com.hbm.interfaces.IDoor;
 import com.hbm.tileentity.machine.TileEntityBlastDoor;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
-
-import com.hbm.tileentity.turret.TileEntityTurretBase;
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TEVaultPacket implements IMessage {
+public class TEVaultPacket extends RecordablePacket {
 
 	int x;
 	int y;
@@ -40,7 +38,7 @@ public class TEVaultPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -50,7 +48,7 @@ public class TEVaultPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -64,25 +62,27 @@ public class TEVaultPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEVaultPacket m, MessageContext ctx) {
-            Minecraft.getMinecraft().addScheduledTask(() -> {
-                BlockPos pos = new BlockPos(m.x, m.y, m.z);
-                World world = Minecraft.getMinecraft().world;
-                if(world.isBlockLoaded(pos)){
-                    TileEntity te = world.getTileEntity(pos);
-                    if (te != null && te instanceof TileEntityVaultDoor vault) {
-                        vault.state = IDoor.DoorState.values()[m.state];
-                        if(m.sysTime == 1)
-                            vault.sysTime = System.currentTimeMillis();
-                        vault.type = m.type;
-                    }
+			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-                    if (te != null && te instanceof TileEntityBlastDoor vault) {
-                        vault.state = IDoor.DoorState.values()[m.state];
-                        if(m.sysTime == 1)
-                            vault.sysTime = System.currentTimeMillis();
-                    }
-                }
-            });
+			try {
+				if (te != null && te instanceof TileEntityVaultDoor) {
+
+					TileEntityVaultDoor vault = (TileEntityVaultDoor) te;
+					vault.state = IDoor.DoorState.values()[m.state];
+					if(m.sysTime == 1)
+						vault.sysTime = System.currentTimeMillis();
+					vault.type = m.type;
+				}
+				
+				if (te != null && te instanceof TileEntityBlastDoor) {
+
+					TileEntityBlastDoor vault = (TileEntityBlastDoor) te;
+					vault.state = IDoor.DoorState.values()[m.state];
+					if(m.sysTime == 1)
+						vault.sysTime = System.currentTimeMillis();
+				}
+			} catch (Exception x) {
+			}
 			return null;
 		}
 	}

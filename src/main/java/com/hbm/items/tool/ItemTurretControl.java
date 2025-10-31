@@ -1,19 +1,16 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.turret.TurretBase;
 import com.hbm.blocks.turret.TurretBaseNT;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.turret.TileEntityTurretBase;
 import com.hbm.tileentity.turret.TileEntityTurretBaseNT;
 import com.hbm.tileentity.turret.TileEntityTurretCheapo;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,11 +20,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -35,6 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+
+import java.util.List;
 
 public class ItemTurretControl extends Item {
 
@@ -88,9 +83,9 @@ public class ItemTurretControl extends Item {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		if (stack.getTagCompound() != null) {
 			list.add(I18nUtil.resolveKey("desc.turrectcontrol"));
-			list.add("X: " + stack.getTagCompound().getInteger("xCoord"));
-			list.add("Y: " + stack.getTagCompound().getInteger("yCoord"));
-			list.add("Z: " + stack.getTagCompound().getInteger("zCoord"));
+			list.add("X: " + String.valueOf(stack.getTagCompound().getInteger("xCoord")));
+			list.add("Y: " + String.valueOf(stack.getTagCompound().getInteger("yCoord")));
+			list.add("Z: " + String.valueOf(stack.getTagCompound().getInteger("zCoord")));
 		} else {
 			list.add(I18nUtil.resolveKey("desc.turrectcontrol.noconnect"));
 		}
@@ -134,7 +129,7 @@ public class ItemTurretControl extends Item {
 				player.sendMessage(new TextComponentTranslation("chat.turretcontrol.linked"));
 			}
 
-			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
+			worldIn.playSound(player.posX, player.posY, player.posZ, HBMSoundEvents.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
 
 			return EnumActionResult.SUCCESS;
 		}
@@ -251,7 +246,7 @@ public class ItemTurretControl extends Item {
 						if(rpos.typeOfHit == RayTraceResult.Type.ENTITY) {
 							turret.target = rpos.entityHit;
 							turret.turnTowards(turret.getEntityPos(rpos.entityHit));
-							world.playSound(player.posX, player.posY, player.posZ, HBMSoundHandler.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
+							world.playSound(player.posX, player.posY, player.posZ, HBMSoundEvents.techBleep, SoundCategory.PLAYERS, 1.0F, 1.0F, false);
 						} else if(rpos.typeOfHit == RayTraceResult.Type.BLOCK){
 							turret.tPos = vecDestination.toVec3d();
 							turret.manualOverride = true;

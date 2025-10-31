@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:sat_foeq"
+		},
+		"title": {
+			"translate": "hbm.achievement.foeq"
+		},
+		"description": {
+			"translate": "hbm.achievement.foeq.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:space",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 700
+    }
+}

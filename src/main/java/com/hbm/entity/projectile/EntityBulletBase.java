@@ -1,17 +1,11 @@
 package com.hbm.entity.projectile;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import com.hbm.config.BombConfig;
-import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.RedBarrel;
-import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+import com.hbm.config.BombConfig;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityEMPBlast;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.particle.EntityTSmokeFX;
@@ -21,7 +15,7 @@ import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -31,7 +25,7 @@ import com.hbm.particle.bullet_hit.EntityHitDataHandler;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
-
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -49,16 +43,16 @@ import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.*;
 import net.minecraft.util.math.RayTraceResult.Type;
-import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import javax.annotation.Nullable;
+import java.lang.reflect.Field;
+import java.util.List;
 
 @SuppressWarnings("deprecation")
 public class EntityBulletBase extends Entity implements IProjectile {
@@ -402,9 +396,9 @@ public class EntityBulletBase extends Entity implements IProjectile {
 							}
 
 							if (config.plink == 1)
-								world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.ricochet, SoundCategory.HOSTILE, 0.25F, 1.0F, true);
+								world.playSound(this.posX, this.posY, this.posZ, HBMSoundEvents.ricochet, SoundCategory.HOSTILE, 0.25F, 1.0F, true);
 							if (config.plink == 2)
-								world.playSound(this.posX, this.posY, this.posZ, HBMSoundHandler.grenadeBounce, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
+								world.playSound(this.posX, this.posY, this.posZ, HBMSoundEvents.grenadeBounce, SoundCategory.HOSTILE, 1.0F, 1.0F, true);
 
 							onRicochet(movement.getBlockPos());
 
@@ -449,7 +443,8 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
 		f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
 		for (this.rotationPitch = (float) (Math.atan2(this.motionY, (double) f2) * 180.0D / Math.PI); this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F) {
-        }
+			;
+		}
 
 		while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
 			this.prevRotationPitch += 360.0F;
@@ -595,13 +590,13 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			
 			if(BombConfig.enableNukeClouds) {
 				if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0){
-					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke, false);
 				}
 				else{
-					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke, false);
 				}
 			}
-			world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
+			world.playSound(null, posX, posY, posZ, HBMSoundEvents.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
 		}
 
 		if (config.destroysBlocks && !world.isRemote) {
@@ -610,7 +605,8 @@ public class EntityBulletBase extends Entity implements IProjectile {
 		} else if (config.doesBreakGlass && !world.isRemote) {
 			if (block == Blocks.GLASS || block == Blocks.GLASS_PANE || block == Blocks.STAINED_GLASS || block == Blocks.STAINED_GLASS_PANE)
 				world.destroyBlock(pos, false);
-			 if(block == ModBlocks.red_barrel) ((RedBarrel) ModBlocks.red_barrel).explode(world, pos.getX(), pos.getY(), pos.getZ());
+			 if(block == ModBlocks.red_barrel)
+			 ((RedBarrel) ModBlocks.red_barrel).explode(world, pos.getX(), pos.getY(), pos.getZ());
 		}
 	}
 

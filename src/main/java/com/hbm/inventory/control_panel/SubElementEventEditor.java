@@ -1,10 +1,10 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.util.math.MathHelper;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubElementEventEditor extends SubElement {
 
@@ -112,7 +112,7 @@ public class SubElementEventEditor extends SubElement {
 			receiveButtons.get(i).visible = true;
 			receiveButtons.get(i).enabled = true;
 		}
-		if(!sendButtons.isEmpty()){
+		if(sendButtons.size() > 0){
 			idx = (currentSendPage-1)*3;
 			for(int i = idx; i < idx+3; i ++){
 				if(i >= sendButtons.size())

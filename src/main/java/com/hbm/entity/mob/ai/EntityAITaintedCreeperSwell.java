@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.ai;
 
 import com.hbm.entity.mob.EntityTaintedCreeper;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 
@@ -33,7 +32,7 @@ public class EntityAITaintedCreeperSwell extends EntityAIBase {
     @Override
 	public void startExecuting()
     {
-        this.swellingCreeper.getNavigator().clearPath();
+        this.swellingCreeper.getNavigator().clearPath();;
         this.creeperAttackTarget = this.swellingCreeper.getAttackTarget();
     }
 

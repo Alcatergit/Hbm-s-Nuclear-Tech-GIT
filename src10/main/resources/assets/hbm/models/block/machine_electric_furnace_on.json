@@ -1,0 +1,9 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/machine_electric_furnace_top",
+		"front": "hbm:blocks/machine_electric_furnace_front_on",
+		"side": "hbm:blocks/machine_electric_furnace_side",
+		"bottom": "hbm:blocks/machine_electric_furnace_bottom"
+	}
+}

@@ -1,9 +1,6 @@
 package com.hbm.forgefluid;
 
-import javax.annotation.Nonnull;
-
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,6 +11,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import javax.annotation.Nonnull;
 
 public class HbmFluidHandlerCanister implements ICapabilityProvider, IFluidHandlerItem {
 

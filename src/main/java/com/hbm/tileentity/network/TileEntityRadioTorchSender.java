@@ -1,7 +1,5 @@
 package com.hbm.tileentity.network;
 
-import com.hbm.tileentity.network.RTTYSystem;
-
 public class TileEntityRadioTorchSender extends TileEntityRadioTorchBase {
 
 	@Override

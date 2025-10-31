@@ -1,13 +1,12 @@
 package com.hbm.entity.projectile;
 
 import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.entity.effect.EntityNukeTorex;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
@@ -57,13 +56,13 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
     		{
     			if(type == 0) {
     				ExplosionLarge.explode(world, this.posX + 0.5F, this.posY + 0.5F, this.posZ + 0.5F, 5.0F, true, false, false);
-    	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.bombDet, SoundCategory.HOSTILE, 25.0F, 0.8F + rand.nextFloat() * 0.4F, true);
+    	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.bombDet, SoundCategory.HOSTILE, 25.0F, 0.8F + rand.nextFloat() * 0.4F, true);
     			}
     			if(type == 1) {
     				ExplosionLarge.explode(world, this.posX + 0.5F, this.posY + 0.5F, this.posZ + 0.5F, 2.5F, false, false, false);
     				ExplosionChaos.burn(world, pos, 9);
     				ExplosionChaos.flameDeath(world, pos, 14);
-    	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.bombDet, SoundCategory.HOSTILE, 25.0F, 1.0F, true);
+    	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.bombDet, SoundCategory.HOSTILE, 25.0F, 1.0F, true);
     	        	
     	        	for(int i = 0; i < 5; i++)
     	        		ExplosionLarge.spawnBurst(world, this.posX + 0.5F, this.posY + 1.0F, this.posZ + 0.5F, rand.nextInt(10) + 15, rand.nextFloat() * 2 + 2);
@@ -76,9 +75,9 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
     				world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int) (BombConfig.fatmanRadius * 1.5), posX, posY, posZ).mute());
     				
     				if(BombConfig.enableNukeClouds) {
-						EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, (int) (BombConfig.fatmanRadius * 1.5));
+						EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, (int) (BombConfig.fatmanRadius * 1.5), false);
 					}
-    				world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
+    				world.playSound(null, posX, posY, posZ, HBMSoundEvents.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
     			}
     		}
     		this.setDead();
@@ -91,6 +90,7 @@ public class EntityBombletZeta extends EntityThrowable implements IConstantRende
 
         for (this.rotationPitch = (float)(Math.atan2(this.motionY, f2) * 180.0D / Math.PI) - 90; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
+            ;
         }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F)

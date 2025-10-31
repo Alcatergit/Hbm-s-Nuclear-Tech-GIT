@@ -1,14 +1,13 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
-
+import com.hbm.render.amlfrom1710.Vec3;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileBunkerBuster extends EntityMissileBaseAdvanced {
 
@@ -33,6 +32,7 @@ public class EntityMissileBunkerBuster extends EntityMissileBaseAdvanced {
 
 		list.add(new ItemStack(ModItems.plate_titanium, 4));
 		list.add(new ItemStack(ModItems.thruster_small, 1));
+		list.add(new ItemStack(ModItems.circuit_targeting_tier1, 1));
 		
 		return list;
 	}

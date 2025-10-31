@@ -1,7 +1,6 @@
 package com.hbm.blocks.generic;
 
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -104,8 +103,10 @@ public class BlockChain extends Block {
         if(facing.ordinal() == 5 && world.isSideSolid(pos.west(), EnumFacing.EAST))
             j1 = 5;
 
-        boolean end = (world.getBlockState(pos.down()).getBlock() != this || (j1 != 0) != world.getBlockState(pos.down()).getValue(WALL)) && !world.isSideSolid(pos.down(), EnumFacing.UP);
-
+        boolean end = true;
+        if(world.getBlockState(pos.down()).getBlock() == this && (j1 != 0) == world.getBlockState(pos.down()).getValue(WALL) || world.isSideSolid(pos.down(), EnumFacing.UP))
+        	end = false;
+        
         if(j1 == 0) {
         	if(world.getBlockState(pos.up()).getBlock() == this)
         		return this.getDefaultState().withProperty(FACING, world.getBlockState(pos.up()).getValue(FACING)).withProperty(WALL, world.getBlockState(pos.up()).getValue(WALL)).withProperty(END, end);
@@ -165,8 +166,13 @@ public class BlockChain extends Block {
             world.destroyBlock(pos, true);
 
 	}
-
-    @Override
+	
+	@Override
+	public boolean isCollidable() {
+		return true;
+	}
+	
+	@Override
 	public BlockRenderLayer getRenderLayer() {
 		return BlockRenderLayer.CUTOUT;
 	}
@@ -212,8 +218,8 @@ public class BlockChain extends Block {
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		return this.getDefaultState()
-				.withProperty(WALL, ((meta >> 3) & 1) > 0)
-				.withProperty(END, ((meta >> 2) & 1) > 0)
+				.withProperty(WALL, ((meta >> 3) & 1) > 0 ? true : false)
+				.withProperty(END, ((meta >> 2) & 1) > 0 ? true : false)
 				.withProperty(FACING, EnumFacing.VALUES[(meta & 2) + 2]);
 	}
 	

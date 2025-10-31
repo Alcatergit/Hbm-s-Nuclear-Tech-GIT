@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_dineutronium"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_dineutronium"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_dineutronium.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_hadron",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_dineutronium"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 3000
+    }
+}

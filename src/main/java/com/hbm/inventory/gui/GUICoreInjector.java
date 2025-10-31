@@ -3,8 +3,8 @@ package com.hbm.inventory.gui;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerCoreInjector;
 import com.hbm.lib.RefStrings;
+import com.hbm.tileentity.machine.TileEntityCore;
 import com.hbm.tileentity.machine.TileEntityCoreInjector;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
@@ -47,6 +47,15 @@ public class GUICoreInjector extends GuiInfoContainer {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
+		if (injector.lastGetCore != null) {
+			TileEntityCore core = injector.lastGetCore;
+			if (core.temperature >= 1500)
+				drawTexturedModalRect(guiLeft+53,guiTop+15,176,87,70,70);
+			else if (core.temperature >= 100)
+				drawTexturedModalRect(guiLeft+53,guiTop+15,176,29,70,57);
+			else if (core.tanks[0].getFluidAmount() > 0 && core.tanks[1].getFluidAmount() > 0)
+				drawTexturedModalRect(guiLeft+72,guiTop+36,176,0,32,28);
+		}
 
 		FFUtils.drawLiquid(injector.tanks[0], guiLeft, guiTop, zLevel, 16, 52, 35, 97);
 		FFUtils.drawLiquid(injector.tanks[1], guiLeft, guiTop, zLevel, 16, 52, 125, 97);

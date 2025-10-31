@@ -5,6 +5,8 @@ import java.util.Random;
 
 import api.hbm.block.IToolable;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
+import com.hbm.items.ModItems.Materials.Billets;
+import com.hbm.items.ModItems.Materials.Ingots;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.EnchantmentUtil;
 import com.hbm.util.I18nUtil;
@@ -63,7 +65,7 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb, IToolable
         }
     }
 
-    public static final PropertyEnum<BlockCrashedBomb.EnumDudType> VARIANT = PropertyEnum.<BlockCrashedBomb.EnumDudType>create("variant", BlockCrashedBomb.EnumDudType.class);
+    public static final PropertyEnum<EnumDudType> VARIANT = PropertyEnum.<EnumDudType>create("variant", EnumDudType.class);
 
 	public BlockCrashedBomb(Material materialIn, String s) {
 		super(materialIn);
@@ -140,11 +142,11 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb, IToolable
                 world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.ball_tnt, 16)));
             } else if(type == 2) {
                 world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.ball_tnt, 8)));
-                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.billet_plutonium, 4)));
+                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Billets.billet_plutonium, 4)));
             } else if(type == 3) {
                 world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.ball_tnt, 8)));
-                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.billet_plutonium, 2)));
-                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.ingot_cobalt, 12)));
+                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Billets.billet_plutonium, 2)));
+                world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Ingots.ingot_cobalt, 12)));
             }
             return true;
         }

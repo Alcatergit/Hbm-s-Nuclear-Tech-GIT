@@ -7,7 +7,6 @@ import com.hbm.inventory.control_panel.*;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -25,9 +24,11 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class TileEntityMachineFluidTank extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor, IControllable {
 
@@ -55,7 +56,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		tank.writeToNBT(compound);
 		compound.setShort("mode", mode);
 		return super.writeToNBT(compound);
@@ -178,7 +179,10 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	
 	public boolean canFill(Fluid fluid) {
 		if (!this.world.isRemote) {
-            return mode != 2 && mode != 3 && (tank.getFluid() == null || tank.getFluid().getFluid() == fluid);
+			if(mode == 2 || mode == 3 || (tank.getFluid() != null && tank.getFluid().getFluid() != fluid))
+				return false;
+			else
+				return true;
 		}
 		return false;
 	}

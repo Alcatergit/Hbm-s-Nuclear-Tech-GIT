@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_assembly"
+		},
+		"title": {
+			"translate": "hbm.achievement.bobassembly"
+		},
+		"description": {
+			"translate": "hbm.achievement.bobassembly.desc"
+		}
+	},
+	"parent": "hbm:bobmetalworks",
+	"criteria": {
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:circuit"
+                    }
+                ]
+            }
+        }
+	},
+    "rewards": {
+        "experience": 50
+    }
+}

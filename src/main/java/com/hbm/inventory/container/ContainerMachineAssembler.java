@@ -1,13 +1,16 @@
 package com.hbm.inventory.container;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.SlotMachineOutput;
+import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemAssemblyTemplate;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
-
+import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
+import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
@@ -29,8 +32,8 @@ public class ContainerMachineAssembler extends Container {
 			@Override
 			public boolean isItemValid(ItemStack stack) {
 				return stack != null && stack.getItem() instanceof ItemAssemblyTemplate;
-			}
-        });
+			};
+		});
 		//Output
 		this.addSlotToContainer(new SlotMachineOutput(te.inventory, 5, 134, 90));
 		//Input
@@ -94,6 +97,17 @@ public class ContainerMachineAssembler extends Container {
 		
 		return var3;
     }
+
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ItemBlock.getItemFromBlock(ModBlocks.machine_coal_off));
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ItemBlock.getItemFromBlock(ModBlocks.red_cable));
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ItemBlock.getItemFromBlock(ModBlocks.red_wire_coated));
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ItemBlock.getItemFromBlock(ModBlocks.cable_switch));
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ItemBlock.getItemFromBlock(ModBlocks.cable_detector));
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.plate_polymer);
+		super.onContainerClosed(playerIn);
+	}
 
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {

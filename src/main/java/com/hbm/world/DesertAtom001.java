@@ -1,13 +1,10 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.NukeMan;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockLiquid;
@@ -20,6 +17,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class DesertAtom001 extends WorldGenerator
 {
@@ -41,8 +40,8 @@ public class DesertAtom001 extends WorldGenerator
 	Block Block17 = ModBlocks.ore_schrabidium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
-	Block Block20 = ModBlocks.barrel_iron;
-	Block Block21 = ModBlocks.barrel_corroded;
+	Block Block20 = ModBlocks.machine_uf6_tank;
+	Block Block21 = ModBlocks.machine_puf6_tank;
 	Block Block22 = ModBlocks.reinforced_brick;
 	Block Block23 = ModBlocks.waste_earth;
 	Block Block24 = ModBlocks.deco_lead;
@@ -95,14 +94,23 @@ public class DesertAtom001 extends WorldGenerator
 		return false;
 	}
 
-    @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
-        return generate(world, rand, pos, false);
-    }
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
+		return generate(world, rand, pos, false);
+	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-    }
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
+
+       return true;
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

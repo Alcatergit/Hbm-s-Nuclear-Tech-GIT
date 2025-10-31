@@ -6,5 +6,5 @@ import net.minecraft.world.World;
 
 public interface IItemAbility {
 
-	void breakExtraBlock(World world, int x, int y, int z, EntityPlayer player, int refX, int refY, int refZ, EnumHand hand);
+	public void breakExtraBlock(World world, int x, int y, int z, EntityPlayer player, int refX, int refY, int refZ, EnumHand hand);
 }

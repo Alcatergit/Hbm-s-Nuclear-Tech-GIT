@@ -1,13 +1,10 @@
 package com.hbm.forgefluid;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-
 import com.hbm.interfaces.IFluidPipeMk2;
+import com.leafia.contents.network.fluid.gauges.IFluidGauge;
+import com.leafia.dev.LeafiaDebug;
+import com.llib.group.LeafiaSet;
+import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
@@ -16,6 +13,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import java.util.*;
 
 public class FFPipeNetworkMk2 implements IFluidHandler {
 
@@ -34,6 +33,8 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		return new IFluidTankProperties[]{};
 	}
 
+	public LeafiaSet<IFluidGauge> listeners = new LeafiaSet<>();
+
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
 		if(resource == null || resource.getFluid() != type)
@@ -47,9 +48,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 				itr.remove();
 				continue;
 			}
-			if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)){
+			if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)){
 				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0){
+				if(h != null && h.fill(new FluidStack(resource, 1), false) > 0){
 					handlers.add(h);
 				}
 			}
@@ -67,13 +68,18 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		int randomFillIndex = rand.nextInt(handlers.size());
 		for(int i = 0; i < handlers.size(); i++){
 			IFluidHandler consumer = handlers.get(i);
-			int vol = consumer.fill(new FluidStack(resource.getFluid(), randomFillIndex == i ? part + intRoundingCompensation : part), doFill);
+			int vol = consumer.fill(new FluidStack(resource, randomFillIndex == i ? part + intRoundingCompensation : part), doFill);
 			totalDrained += vol;
 			remaining -= vol;
 			if(remaining <= 0)
-				return totalDrained;
+				break;
 		}
-		
+
+		if (doFill) {
+			for (IFluidGauge listener : listeners)
+				listener.onFill(totalDrained);
+		}
+
 		return totalDrained;
 	}
 
@@ -109,10 +115,10 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			pipes.remove(te.getPos());
 		} else{
 			try{
-				if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+				if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 					fillables.remove(te.getPos());
 				}
-			} catch(Throwable ignored){
+			} catch(Throwable t){
 			}
 		}
 	}
@@ -125,7 +131,7 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 				pipes.put(te.getPos(), (IFluidPipeMk2) te);
 				return true;
 			}
-		} else if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+		} else if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			if(!fillables.containsKey(te.getPos())) {
 				fillables.put(te.getPos(), te);
 				return true;
@@ -157,8 +163,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 
 	public static FFPipeNetworkMk2 buildNetwork(TileEntity te) {
 		FFPipeNetworkMk2 net = null;
-		if(te instanceof IFluidPipeMk2 pipe) {
-            if(pipe.getNetwork() != null)
+		if(te instanceof IFluidPipeMk2) {
+			IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
+			if(pipe.getNetwork() != null)
 				return pipe.getNetwork();
 			Fluid type = pipe.getType();
 
@@ -167,12 +174,12 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			List<FFPipeNetworkMk2> toMerge = new ArrayList<FFPipeNetworkMk2>();
 			iteratePipes(pipes, consumers, toMerge, te, type);
 
-			if(!toMerge.isEmpty())
+			if(toMerge.size() > 0)
 				net = toMerge.remove(0);
 			else
 				net = new FFPipeNetworkMk2(pipe);
 			
-			while(!toMerge.isEmpty())
+			while(toMerge.size() > 0)
 				mergeNetworks(net, toMerge.remove(0));
 			
 			for(IFluidPipeMk2 p : pipes.values())
@@ -190,8 +197,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		if(te == null)
 			return;
 
-		if(te instanceof IFluidPipeMk2 pipe) {
-            if(pipe.getType() == type && pipe.isValidForBuilding()) {
+		if(te instanceof IFluidPipeMk2) {
+			IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
+			if(pipe.getType() == type && pipe.isValidForBuilding()) {
 				if(pipe.getNetwork() == null) {
 					if(!pipes.containsKey(te.getPos())) {
 						pipes.put(te.getPos(), pipe);
@@ -206,9 +214,10 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 					networks.add(pipe.getNetwork());
 				}
 			}
-		} else if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+		} else if(te.hasCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null)) {
 			if(!consumers.containsKey(te.getPos()))
 				consumers.put(te.getPos(), te);
 		}
 	}
+
 }

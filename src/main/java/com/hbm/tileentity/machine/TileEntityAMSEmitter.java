@@ -1,17 +1,19 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IEnergyUser;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -32,7 +34,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import scala.util.Random;
 
-public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IEnergyUser {
 
 	public ItemStackHandler inventory;
 
@@ -74,7 +76,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -99,6 +101,8 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 		locked = compound.getBoolean("locked");
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
+		tankType = FluidRegistry.getFluid(compound.getString("coolant"));
+		if (tankType == null) tankType = ModForgeFluids.COOLANT;
 		super.readFromNBT(compound);
 	}
 	
@@ -110,6 +114,7 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 		compound.setInteger("heat", heat);
 		compound.setBoolean("locked", locked);
 		compound.setTag("inventory", inventory.serializeNBT());
+		compound.setString("coolant", tankType.getName());
 		return super.writeToNBT(compound);
 	}
 	
@@ -124,7 +129,16 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 			}
 			
 			if(!locked) {
-
+				if(inventory.getStackInSlot(0).getItem() instanceof ItemForgeFluidIdentifier && inventory.getStackInSlot(1).isEmpty()){
+					Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
+					inventory.setStackInSlot(1,inventory.getStackInSlot(0));
+					inventory.setStackInSlot(0,ItemStack.EMPTY);
+					if (f == ModForgeFluids.CRYOGEL || f == ModForgeFluids.COOLANT || f == FluidRegistry.WATER) {
+						if(tankType != f)
+							tank.setFluid(null);
+						tankType = f;
+					}
+				}
 				
 				if(power > 0) {
 					//" - (maxHeat / 2)" offsets center to 50% instead of 0%
@@ -228,8 +242,8 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 					ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 36, 2);
 					ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 36, 1.5);
 					ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 36, 1);
-		            this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.oldExplosion, SoundCategory.BLOCKS, 10.0F, 1);
-			        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
+		            this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.oldExplosion, SoundCategory.BLOCKS, 10.0F, 1);
+			        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
 				}
 	
 				power = Library.chargeTEFromItems(inventory, 3, power, maxPower);
@@ -243,9 +257,9 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 				warning = 3;
 			}
 
-			tank.drain(tank.getCapacity(), true);
-			tankType = ModForgeFluids.CRYOGEL;
-			tank.fill(new FluidStack(ModForgeFluids.CRYOGEL, tank.getCapacity()), true);
+			//tank.drain(tank.getCapacity(), true);
+			//tankType = ModForgeFluids.cryogel;
+			//tank.fill(new FluidStack(ModForgeFluids.cryogel, tank.getCapacity()), true);
 			needsUpdate = true;
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, locked ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
@@ -291,8 +305,10 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 	}
 	
 	public boolean isValidFluid(Fluid fluid){
-        return fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL);
-    }
+		if(fluid != null && (fluid == FluidRegistry.WATER || fluid == ModForgeFluids.COOLANT || fluid == ModForgeFluids.CRYOGEL))
+			return true;
+		return false;
+	}
 
 	@Override
 	public IFluidTankProperties[] getTankProperties() {
@@ -301,9 +317,9 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if(resource == null){
+		if(resource == null || locked){
 			return 0;
-		} else if((tank.getFluid() == null && this.isValidFluid(resource.getFluid())) || (tank.getFluid() != null && tank.getFluid().getFluid() == resource.getFluid())){
+		} else if (resource.getFluid() == tankType) { //((tank.getFluid() == null && this.isValidFluid(resource.getFluid())) || (tank.getFluid() != null && tank.getFluid().getFluid() == resource.getFluid())){
 			return tank.fill(resource, doFill);
 		} else {
 			return 0;
@@ -347,4 +363,23 @@ public class TileEntityAMSEmitter extends TileEntity implements ITickable, IFlui
 		}
 	}
 
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
+
+	@Override
+	public void setPower(long power) {
+		this.power = power;
+	}
+
+	@Override
+	public boolean isLoaded() {
+		return true;
+	}
 }

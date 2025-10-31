@@ -1,13 +1,8 @@
 package com.hbm.packet;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.inventory.control_panel.ControlPanel;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.tileentity.machine.TileEntityControlPanel;
-
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
 import net.minecraft.client.Minecraft;
@@ -21,6 +16,11 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+// this class was beyond my understanding so no RecordablePacket.
 public class ControlPanelUpdatePacket implements IMessage {
 
 	PacketBuffer buffer;

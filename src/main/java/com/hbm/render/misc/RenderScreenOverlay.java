@@ -1,28 +1,32 @@
 package com.hbm.render.misc;
 
-import org.lwjgl.opengl.GL11;
-import com.hbm.lib.RefStrings;
 import com.hbm.config.RadiationConfig;
-
+import com.hbm.lib.RefStrings;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.RenderHelper;
+import net.minecraft.client.renderer.RenderItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import static com.leafia.passive.effects.IdkWhereThisShitBelongs.darkness;
+import static com.leafia.passive.effects.IdkWhereThisShitBelongs.dustDisplayTicks;
 
 @SideOnly(Side.CLIENT)
 public class RenderScreenOverlay {
 
 	private static final ResourceLocation misc = new ResourceLocation(RefStrings.MODID + ":textures/misc/overlay_misc.png");
+	private static final ResourceLocation dust = new ResourceLocation(RefStrings.MODID + ":textures/misc/dust.png");
+	private static final ResourceLocation dust2 = new ResourceLocation(RefStrings.MODID + ":textures/misc/dust2.png");
 	private static final RenderItem itemRenderer = Minecraft.getMinecraft().getRenderItem();
 	
 	private static long lastRadSurvey;
@@ -80,11 +84,11 @@ public class RenderScreenOverlay {
         }
 		
 		if(radiation > 1000) {
-			Minecraft.getMinecraft().fontRenderer.drawString(">1000 RAD/s", posX, posY - 8, 0xFF0000);
-		} else if(radiation >= 1) {
-			Minecraft.getMinecraft().fontRenderer.drawString(((int)Math.round(radiation)) + " RAD/s", posX, posY - 8, 0xFFFF00);
+			Minecraft.getMinecraft().fontRenderer.drawString(RadiationConfig.enableHealthMod ? ">10 Sv/s" : ">1000 RAD/s", posX, posY - 8, 0xFF0000);
+		} else if(radiation >= (RadiationConfig.enableHealthMod ? 0.01 : 1)) {
+			Minecraft.getMinecraft().fontRenderer.drawString((Math.round(radiation))/(RadiationConfig.enableHealthMod ? 100f : 1) + (RadiationConfig.enableHealthMod ? " Sv" : " RAD") +"/s", posX, posY - 8, 0xFFFF00);
 		} else if(radiation > 0) {
-			Minecraft.getMinecraft().fontRenderer.drawString("<1 RAD/s", posX, posY - 8, 0x00FF00);
+			Minecraft.getMinecraft().fontRenderer.drawString(RadiationConfig.enableHealthMod ? "<0.01 Sv/s" : "<1 RAD/s", posX, posY - 8, 0x00FF00);
 		}
 
         GlStateManager.enableDepth();
@@ -234,6 +238,45 @@ public class RenderScreenOverlay {
         GL11.glPopMatrix();
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 	}
+	static void drawDust(double time,Gui gui,ScaledResolution resolution,double speed) {
+		speed = speed/60;
+		gui.drawTexturedModalRect(0, 0, (int)Math.floorMod((long)(time*60*speed),256), -(int)Math.floorMod((long)(time*40*speed),256), resolution.getScaledWidth(), resolution.getScaledHeight());
+	}
+	public static void renderTomDust(ScaledResolution resolution, Gui gui) {
+		float intensity = (float)(darkness)*(dustDisplayTicks/30f);
+		if (intensity > 0) {
+			GL11.glPushMatrix();
+			GlStateManager.disableDepth();
+			GlStateManager.depthMask(false);
+			GlStateManager.enableBlend();
+			GlStateManager.disableAlpha();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+			double time = Math.floorMod(System.currentTimeMillis(), 2147483647) / 1e+3;
+
+			GlStateManager.color(0.75f, 0.75f, 0.75f, 0.9f * intensity);
+			Minecraft.getMinecraft().renderEngine.bindTexture(dust2);
+			drawDust(time, gui, resolution, 30);
+			GlStateManager.color(0.75f, 0.75f, 0.75f, 0.6f * intensity);
+			Minecraft.getMinecraft().renderEngine.bindTexture(dust);
+			drawDust(time, gui, resolution, 100);
+			GlStateManager.color(1, 1, 1, 0.5f * intensity);
+			Minecraft.getMinecraft().renderEngine.bindTexture(dust2);
+			drawDust(time, gui, resolution, 60);
+			GlStateManager.color(1, 1, 1, 0.2f * intensity);
+			Minecraft.getMinecraft().renderEngine.bindTexture(dust);
+			drawDust(time, gui, resolution, 150);
+
+			GlStateManager.enableAlpha();
+			GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+			GlStateManager.color(1, 1, 1, 1);
+
+			GlStateManager.enableDepth();
+			GlStateManager.depthMask(true);
+
+			GL11.glPopMatrix();
+			Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
+		}
+	}
 	
 	public enum Crosshair {
 		NONE(0, 0, 0),
@@ -255,11 +298,11 @@ public class RenderScreenOverlay {
 		L_CIRCUMFLEX(96, 122, 32),
 		L_RAD(0, 154, 32);
 		
-		public final int x;
-		public final int y;
-		public final int size;
+		public int x;
+		public int y;
+		public int size;
 		
-		Crosshair(int x, int y, int size) {
+		private Crosshair(int x, int y, int size) {
 			this.x = x;
 			this.y = y;
 			this.size = size;

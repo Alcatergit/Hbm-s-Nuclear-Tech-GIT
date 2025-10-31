@@ -1,13 +1,11 @@
 package com.hbm.tileentity.network.energy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.render.amlfrom1710.Vec3;
-
-import api.hbm.energy.IEnergyConductor;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntitySubstation extends TileEntityPylonBase {
 
@@ -62,17 +60,17 @@ public class TileEntitySubstation extends TileEntityPylonBase {
 	}
 
 	@Override
-	public boolean hasProxies() {
+	public boolean needsRedirectionMap() {
 		return true;
 	}
 
 	@Override
-	public List<Integer> getProxies() {
-		List<Integer> proxies = new ArrayList();
-		proxies.add(IEnergyConductor.getIdentityFromPos(pos.add(1, 0, 1)));
-		proxies.add(IEnergyConductor.getIdentityFromPos(pos.add(1, 0, -1)));
-		proxies.add(IEnergyConductor.getIdentityFromPos(pos.add(-1, 0, 1)));
-		proxies.add(IEnergyConductor.getIdentityFromPos(pos.add(-1, 0, -1)));
-		return proxies;
+	public List<BlockPos> getMultiblockPositions() {
+		List<BlockPos> positions = new ArrayList<>();
+		positions.add(pos.add(1, 0, 1));
+		positions.add(pos.add(1, 0, -1));
+		positions.add(pos.add(-1, 0, 1));
+		positions.add(pos.add(-1, 0, -1));
+		return positions;
 	}
 }

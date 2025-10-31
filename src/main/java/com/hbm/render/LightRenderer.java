@@ -1,18 +1,5 @@
 package com.hbm.render;
 
-import java.lang.reflect.Field;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.util.glu.Project;
-import org.lwjgl.util.vector.Matrix4f;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.HbmShaderManager2.Shader;
@@ -21,7 +8,6 @@ import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.GlStateManager;
@@ -41,6 +27,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+import org.lwjgl.util.glu.Project;
+import org.lwjgl.util.vector.Matrix4f;
+
+import java.lang.reflect.Field;
+import java.nio.FloatBuffer;
+import java.util.*;
 
 public class LightRenderer {
 
@@ -777,13 +771,13 @@ public class LightRenderer {
 		
 	}
 	
-	private interface ILight {
-		AxisAlignedBB getBoundingBox();
-		void addEntToRender(Entity e);
-		void addTileToRender(TileEntity t);
-		void addChunkToRender(RenderChunk r);
-		boolean doesEnts();
-		boolean doesTiles();
-		boolean intersects(AxisAlignedBB box);
+	private static interface ILight {
+		public AxisAlignedBB getBoundingBox();
+		public void addEntToRender(Entity e);
+		public void addTileToRender(TileEntity t);
+		public void addChunkToRender(RenderChunk r);
+		public boolean doesEnts();
+		public boolean doesTiles();
+		public boolean intersects(AxisAlignedBB box);
 	}
 }

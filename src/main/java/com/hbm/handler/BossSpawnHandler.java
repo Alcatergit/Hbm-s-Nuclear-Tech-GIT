@@ -1,25 +1,24 @@
 package com.hbm.handler;
 
-import com.hbm.main.MainRegistry;
-import com.hbm.items.ModItems;
+import com.hbm.config.CompatibilityConfig;
+import com.hbm.config.GeneralConfig;
+import com.hbm.config.MobConfig;
 import com.hbm.entity.mob.EntityFBI;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.entity.mob.EntityRADBeast;
 import com.hbm.entity.projectile.EntityMeteor;
+import com.hbm.items.ModItems.Inserts;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.config.MobConfig;
-import com.hbm.config.GeneralConfig;
-import com.hbm.config.CompatibilityConfig;
 import com.hbm.util.ContaminationUtil;
-
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.ForgeEventFactory;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
@@ -33,7 +32,7 @@ public class BossSpawnHandler {
 
 				if(world.rand.nextInt(MobConfig.maskmanChance) == 0 && !world.playerEntities.isEmpty() && world.provider.isSurfaceWorld()) {	//33% chance only if there is a player online
 
-					EntityPlayer player = world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));	//choose a random player
+					EntityPlayer player = (EntityPlayer) world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));	//choose a random player
 					
 					
 					if(ContaminationUtil.getRads(player) >= MobConfig.maskmanMinRad && (world.getHeight((int)player.posX, (int)player.posZ) > player.posY + 3 || !MobConfig.maskmanUnderground)) {	//if the player has more than 50 RAD and is underground
@@ -175,10 +174,10 @@ public class BossSpawnHandler {
 							ItemStack mod = ArmorModHandler.pryMods(armor)[ArmorModHandler.helmet_only];
 							
 							if(mod != null) {
-								if(mod.getItem() == ModItems.protection_charm) {
+								if(mod.getItem() == Inserts.protection_charm) {
 									repell = true;
 								}
-								if(mod.getItem() == ModItems.meteor_charm) {
+								if(mod.getItem() == Inserts.meteor_charm) {
 									strike = false;
 								}
 							}

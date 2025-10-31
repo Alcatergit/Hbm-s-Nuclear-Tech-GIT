@@ -1,12 +1,7 @@
 package com.hbm.blocks.generic;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Foods;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -21,6 +16,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class BlockCanCrate extends Block {
 
@@ -49,42 +48,42 @@ public class BlockCanCrate extends Block {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		List<Item> items = new ArrayList<Item>();
-    	items.add(ModItems.canned_beef);
-    	items.add(ModItems.canned_tuna);
-    	items.add(ModItems.canned_mystery);
-    	items.add(ModItems.canned_pashtet);
-    	items.add(ModItems.canned_cheese);
-    	items.add(ModItems.canned_jizz);
-    	items.add(ModItems.canned_milk);
-    	items.add(ModItems.canned_ass);
-    	items.add(ModItems.canned_pizza);
-    	items.add(ModItems.canned_tomato);
-    	items.add(ModItems.canned_tube);
-    	items.add(ModItems.canned_asbestos);
-    	items.add(ModItems.canned_bhole);
-    	items.add(ModItems.canned_hotdogs);
-    	items.add(ModItems.canned_leftovers);
-    	items.add(ModItems.canned_yogurt);
-    	items.add(ModItems.canned_stew);
-    	items.add(ModItems.canned_chinese);
-    	items.add(ModItems.canned_oil);
-    	items.add(ModItems.canned_fist);
-    	items.add(ModItems.canned_spam);
-    	items.add(ModItems.canned_fried);
-    	items.add(ModItems.canned_napalm);
-    	items.add(ModItems.canned_diesel);
-    	items.add(ModItems.canned_kerosene);
-    	items.add(ModItems.canned_recursion);
-    	items.add(ModItems.canned_bark);
-    	items.add(ModItems.can_smart);
-    	items.add(ModItems.can_creature);
-    	items.add(ModItems.can_redbomb);
-    	items.add(ModItems.can_mrsugar);
-    	items.add(ModItems.can_overcharge);
-    	items.add(ModItems.can_luna);
-    	items.add(ModItems.can_breen);
-    	items.add(ModItems.can_bepis);
-    	items.add(ModItems.pudding);
+    	items.add(Foods.canned_beef);
+    	items.add(Foods.canned_tuna);
+    	items.add(Foods.canned_mystery);
+    	items.add(Foods.canned_pashtet);
+    	items.add(Foods.canned_cheese);
+    	items.add(Foods.canned_jizz);
+    	items.add(Foods.canned_milk);
+    	items.add(Foods.canned_ass);
+    	items.add(Foods.canned_pizza);
+    	items.add(Foods.canned_tomato);
+    	items.add(Foods.canned_tube);
+    	items.add(Foods.canned_asbestos);
+    	items.add(Foods.canned_bhole);
+    	items.add(Foods.canned_hotdogs);
+    	items.add(Foods.canned_leftovers);
+    	items.add(Foods.canned_yogurt);
+    	items.add(Foods.canned_stew);
+    	items.add(Foods.canned_chinese);
+    	items.add(Foods.canned_oil);
+    	items.add(Foods.canned_fist);
+    	items.add(Foods.canned_spam);
+    	items.add(Foods.canned_fried);
+    	items.add(Foods.canned_napalm);
+    	items.add(Foods.canned_diesel);
+    	items.add(Foods.canned_kerosene);
+    	items.add(Foods.canned_recursion);
+    	items.add(Foods.canned_bark);
+    	items.add(Foods.can_smart);
+    	items.add(Foods.can_creature);
+    	items.add(Foods.can_redbomb);
+    	items.add(Foods.can_mrsugar);
+    	items.add(Foods.can_overcharge);
+    	items.add(Foods.can_luna);
+    	items.add(Foods.can_breen);
+    	items.add(Foods.can_bepis);
+    	items.add(Foods.pudding);
     	
         return items.get(rand.nextInt(items.size()));
 	}

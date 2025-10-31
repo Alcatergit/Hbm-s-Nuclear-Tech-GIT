@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_starmetal"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_starmetal"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_starmetal.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_adv",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_starmetal"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 70
+    }
+}

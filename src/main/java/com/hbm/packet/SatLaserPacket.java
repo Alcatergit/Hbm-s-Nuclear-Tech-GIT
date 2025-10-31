@@ -1,18 +1,17 @@
 package com.hbm.packet;
 
-import com.hbm.items.ISatChip;
 import com.hbm.items.tool.ItemSatInterface;
 import com.hbm.saveddata.satellites.Satellite;
 import com.hbm.saveddata.satellites.SatelliteSavedData;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class SatLaserPacket implements IMessage {
+public class SatLaserPacket extends RecordablePacket {
 
 	//0: Add
 	//1: Subtract
@@ -34,14 +33,14 @@ public class SatLaserPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		z = buf.readInt();
 		freq = buf.readInt();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(z);
 		buf.writeInt(freq);
@@ -57,7 +56,7 @@ public class SatLaserPacket implements IMessage {
 					return;
 				if(p.getHeldItemMainhand().getItem() instanceof ItemSatInterface) {
 					
-					int freq = ISatChip.getFreqS(p.getHeldItemMainhand());
+					int freq = ItemSatInterface.getFreq(p.getHeldItemMainhand());
 					
 					if(freq == m.freq) {
 					    Satellite sat = SatelliteSavedData.getData(p.world).getSatFromFreq(m.freq);

@@ -1,12 +1,13 @@
 package com.hbm.entity.mob;
 
+import com.hbm.items.ModItems;
+import com.hbm.tileentity.machine.TileEntityTesla;
+import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.item.Item;
+import net.minecraft.world.World;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.hbm.tileentity.machine.TileEntityTesla;
-
-import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.world.World;
 
 public class EntityTeslaCrab extends EntityCyberCrab {
 	
@@ -32,4 +33,14 @@ public class EntityTeslaCrab extends EntityCyberCrab {
     	
         super.onLivingUpdate();
     }
+
+    @Override
+	protected Item getDropItem(){
+        return ModItems.wire_advanced_alloy;
+    }
+
+    protected void dropRareDrop(int p_70600_1_) {
+    	this.dropItem(ModItems.coil_copper, 1);
+    }
+
 }

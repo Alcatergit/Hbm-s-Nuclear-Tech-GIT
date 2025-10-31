@@ -1,10 +1,14 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
-import com.hbm.items.ModItems;
+import com.hbm.inventory.control_panel.DataValue;
+import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.inventory.control_panel.IControllable;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
@@ -12,14 +16,13 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -32,7 +35,10 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class TileEntityMachineTurbine extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, ITankPacketAcceptor, IFluidHandler {
+import java.util.HashMap;
+import java.util.Map;
+
+public class TileEntityMachineTurbine extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, ITankPacketAcceptor, IFluidHandler, IControllable {
 
 	public ItemStackHandler inventory;
 
@@ -49,6 +55,9 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 
 	private String customName;
 
+	public int[] generateds = new int[20];
+	public int generatedIndex = 0;
+
 	public TileEntityMachineTurbine() {
 		inventory = new ItemStackHandler(7) {
 			@Override
@@ -60,7 +69,7 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 			@Override
 			public boolean isItemValid(int slot, ItemStack stack) {
 				if(slot == 0)
-					return stack != null && stack.getItem() == ModItems.forge_fluid_identifier;
+					return stack != null && stack.getItem() instanceof ItemForgeFluidIdentifier;
 				if(slot == 4)
 					if(stack != null && stack.getItem() instanceof IBatteryItem)
 						return true;
@@ -87,8 +96,10 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 	@Override
 	public void update() {
 		if(!world.isRemote) {
+			generatedIndex = Math.floorMod(generatedIndex+1,20);
+			generateds[generatedIndex] = 0;
 			
-			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
+			if(inventory.getStackInSlot(0).getItem() instanceof ItemForgeFluidIdentifier && inventory.getStackInSlot(1).isEmpty()){
 				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
 				if(isValidFluidForTank(0, new FluidStack(f, 1000))){
 					if(tankTypes[0] != f){
@@ -132,7 +143,9 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 				tanks[0].drain((Integer)outs[2] * cycles, true);
 				tanks[1].fill(new FluidStack(tankTypes[1], (Integer)outs[1] * cycles), true);
 
-				power += (Integer)outs[3] * cycles;
+				int generated = (Integer)outs[3] * cycles;
+				generateds[generatedIndex] = generated;
+				power += generated;
 
 				if(power > maxPower)
 					power = maxPower;
@@ -195,7 +208,7 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -324,5 +337,23 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 	@Override
 	public long getMaxPower() {
 		return maxPower;
+	}
+
+	@Override
+	public Map<String,DataValue> getQueryData() {
+		Map<String,DataValue> map = new HashMap<>();
+		float generated = 0;
+		for (int gen : generateds)
+			generated += gen;
+		map.put("generated",new DataValueFloat(generated/20f));
+		return map;
+	}
+	@Override
+	public BlockPos getControlPos() {
+		return getPos();
+	}
+	@Override
+	public World getControlWorld() {
+		return getWorld();
 	}
 }

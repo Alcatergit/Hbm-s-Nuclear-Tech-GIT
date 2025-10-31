@@ -1,16 +1,15 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.potion.HbmPotion;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.potion.PotionEffect;
+
+import java.util.ArrayList;
 
 public class Gun357MagnumFactory {
 
@@ -29,7 +28,7 @@ public static GunConfiguration getBaseConfig() {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CLASSIC;
 		config.reloadSound = GunConfiguration.RSOUND_REVOLVER;
-		config.firingSound = HBMSoundHandler.revolverShoot;
+		config.firingSound = HBMSoundEvents.revolverShoot;
 		config.reloadSoundEnd = false;
 		
 		return config;
@@ -122,7 +121,7 @@ public static GunConfiguration getBaseConfig() {
 		config.rateOfFire = 7;
 		config.ammoCap = 17;
 		config.durability = 5000;
-		config.firingSound = HBMSoundHandler.heavyShoot;
+		config.firingSound = HBMSoundEvents.heavyShoot;
 		
 		config.name = "Britannia Standard Issue Motorized Handgun";
 		config.manufacturer = "BAE Systems plc";
@@ -139,7 +138,7 @@ public static GunConfiguration getBaseConfig() {
 		GunConfiguration config = getBaseConfig();
 		
 		config.durability = 7500;
-		config.firingSound = HBMSoundHandler.schrabidiumShoot;
+		config.firingSound = HBMSoundEvents.schrabidiumShoot;
 		
 		config.name = "FFI Viper Ultra";
 		config.manufacturer = "FlimFlam Industries";
@@ -156,7 +155,7 @@ public static GunConfiguration getBaseConfig() {
 		GunConfiguration config = getBaseConfig();
 		
 		config.durability = 4000;
-		config.firingSound = HBMSoundHandler.schrabidiumShoot;
+		config.firingSound = HBMSoundEvents.schrabidiumShoot;
 		
 		config.name = "FFI Viper N1";
 		config.manufacturer = "FlimFlam Industries";
@@ -173,7 +172,7 @@ public static GunConfiguration getBaseConfig() {
 		GunConfiguration config = getBaseConfig();
 		
 		config.durability = 4000;
-		config.firingSound = HBMSoundHandler.schrabidiumShoot;
+		config.firingSound = HBMSoundEvents.schrabidiumShoot;
 		config.crosshair = Crosshair.NONE;
 		
 		config.name = "FFI Viper N2";
@@ -195,7 +194,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_iron_ammo;
+		bullet.ammo = Armory.gun_revolver_iron_ammo;
 		bullet.dmgMin = 2;
 		bullet.dmgMax = 4;
 		
@@ -206,7 +205,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_ammo;
+		bullet.ammo = Armory.gun_revolver_ammo;
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 5;
 		
@@ -217,7 +216,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_lead_ammo;
+		bullet.ammo = Armory.gun_revolver_lead_ammo;
 		bullet.dmgMin = 2;
 		bullet.dmgMax = 3;
 		
@@ -231,7 +230,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_gold_ammo;
+		bullet.ammo = Armory.gun_revolver_gold_ammo;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		
@@ -242,7 +241,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_357_desh;
+		bullet.ammo = Armory.ammo_357_desh;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 17;
 		
@@ -253,7 +252,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_schrabidium_ammo;
+		bullet.ammo = Armory.gun_revolver_schrabidium_ammo;
 		bullet.dmgMin = 1000000;
 		bullet.dmgMax = 10000000;
 		// bullet.instakill = true;
@@ -265,7 +264,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_cursed_ammo;
+		bullet.ammo = Armory.gun_revolver_cursed_ammo;
 		bullet.dmgMin = 12;
 		bullet.dmgMax = 15;
 		
@@ -276,7 +275,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_nightmare_ammo;
+		bullet.ammo = Armory.gun_revolver_nightmare_ammo;
 		bullet.dmgMin = 1;
 		bullet.dmgMax = 50;
 		
@@ -287,7 +286,7 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_revolver_nightmare2_ammo;
+		bullet.ammo = Armory.gun_revolver_nightmare2_ammo;
 		bullet.spread *= 10;
 		bullet.bulletsMin = 4;
 		bullet.bulletsMax = 6;

@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.particle.book.ParticleBookCircle;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;

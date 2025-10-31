@@ -1,16 +1,9 @@
 package com.hbm.items.weapon;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.annotation.Nullable;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -18,20 +11,14 @@ import com.hbm.main.ModEventHandlerClient;
 import com.hbm.main.ResourceManager;
 import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunFXPacket;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.GunFXPacket.FXType;
-import com.hbm.particle.tau.ParticleTauBeam;
-import com.hbm.particle.tau.ParticleTauHit;
-import com.hbm.particle.tau.ParticleTauLightning;
-import com.hbm.particle.tau.ParticleTauMuzzleLightning;
-import com.hbm.particle.tau.ParticleTauParticleFirstPerson;
-import com.hbm.particle.tau.ParticleTauRay;
+import com.hbm.packet.PacketDispatcher;
+import com.hbm.particle.tau.*;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -53,6 +40,11 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ItemGunGauss extends ItemGunBase {
 	
@@ -66,7 +58,7 @@ public class ItemGunGauss extends ItemGunBase {
 	@Override
 	public void endAction(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
 		if(getHasShot(stack)) {
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.sparkShoot, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.sparkShoot, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			setHasShot(stack, false);
 		}
 		if(!main && getStored(stack) > 0) {
@@ -75,7 +67,7 @@ public class ItemGunGauss extends ItemGunBase {
 			//bullet.overrideDamage = Math.min(getStored(stack), 13) * 3.5F;
 			PacketDispatcher.sendTo(new GunAnimationPacket(AnimType.ALT_CYCLE.ordinal(), hand), (EntityPlayerMP) player);
 			//world.spawnEntity(bullet);
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.75F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.tauShoot, SoundCategory.PLAYERS, 1.0F, 0.75F);
 			setItemWear(stack, getItemWear(stack) + (getCharge(stack)) * 2);
 			setCharge(stack, 0);
 		}
@@ -96,7 +88,7 @@ public class ItemGunGauss extends ItemGunBase {
 				} catch (Exception x){
 					x.printStackTrace();
 				}
-				r.entityHit.attackEntityFrom(ModDamageSource.causeTauDamage(player, player), damage);
+				r.entityHit.attackEntityFrom(ModDamageSource.causeTauDamage(player, null), damage);
 				break;
 			} else {
 				Vec3d normal = new Vec3d(r.sideHit.getXOffset(), r.sideHit.getYOffset(), r.sideHit.getZOffset());
@@ -188,7 +180,7 @@ public class ItemGunGauss extends ItemGunBase {
 	@Override
 	public void startAction(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
 		super.startAction(stack, world, player, main, hand);
-		if(!main && getItemWear(stack) < mainConfig.durability && Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) {
+		if(!main && getItemWear(stack) < mainConfig.durability && Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo)) {
 			PacketDispatcher.sendTo(new GunAnimationPacket(AnimType.SPINUP.ordinal(), hand), (EntityPlayerMP) player);
 		}
 	}
@@ -213,7 +205,7 @@ public class ItemGunGauss extends ItemGunBase {
 	public static void doTauBeamFX(EntityPlayer player, float r, float g, float b, float a, int life, @Nullable Entity shooter){
 		ArrayList<Vec3d> hitPoints = new ArrayList<>(3);
 		doTauBeamHits(player.world, player.getPositionEyes(MainRegistry.proxy.partialTicks()), player.getLook(MainRegistry.proxy.partialTicks()), hitPoints, shooter);
-		Vec3d[] hps = hitPoints.toArray(new Vec3d[0]);
+		Vec3d[] hps = hitPoints.toArray(new Vec3d[hitPoints.size()]);
 		hps[0] = new Vec3d(-0.38, -0.22, 0.3).rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYawHead)).add(player.getPositionEyes(MainRegistry.proxy.partialTicks()));
 		ParticleTauBeam beam = new ParticleTauBeam(player.world, hps, 0.2F);
 		beam.color(r, g, b, a);
@@ -369,9 +361,9 @@ public class ItemGunGauss extends ItemGunBase {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void startActionClient(ItemStack stack, World world, EntityPlayer player, boolean main, EnumHand hand) {
-		if(!main && getItemWear(stack) < mainConfig.durability && Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) {
-			chargeLoop = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.tauChargeLoop2, SoundCategory.PLAYERS, (float)player.posX, (float)player.posY, (float)player.posZ, 1.0F, 0.75F);
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.tauChargeLoop2, SoundCategory.PLAYERS, 1.0F, 0.75F);
+		if(!main && getItemWear(stack) < mainConfig.durability && Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo)) {
+			chargeLoop = MainRegistry.proxy.getLoopedSound(HBMSoundEvents.tauChargeLoop2, SoundCategory.PLAYERS, (float)player.posX, (float)player.posY, (float)player.posZ, 1.0F, 0.75F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.tauChargeLoop2, SoundCategory.PLAYERS, 1.0F, 0.75F);
 			firstPersonFireCounter = 0;
 			if(chargeLoop != null) {
 				chargeLoop.startSound();
@@ -401,8 +393,8 @@ public class ItemGunGauss extends ItemGunBase {
 				setCharge(stack, c + 1);
 				
 				if(c % 10 == 1 && c < 140 && c > 2) {
-					if(Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo)) {
-						Library.consumeInventoryItem(player.inventory, ModItems.gun_xvl1456_ammo);
+					if(Library.hasInventoryItem(player.inventory, Armory.gun_xvl1456_ammo)) {
+						Library.consumeInventoryItem(player.inventory, Armory.gun_xvl1456_ammo);
 						setStored(stack, getStored(stack) + 1);
 					} else {
 						setCharge(stack, 0);

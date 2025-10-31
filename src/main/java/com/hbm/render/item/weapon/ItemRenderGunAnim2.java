@@ -1,8 +1,6 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
@@ -10,12 +8,12 @@ import com.hbm.render.model.ModelB92;
 import com.hbm.render.model.ModelB93;
 import com.hbm.render.model.ModelBoltAction;
 import com.hbm.render.model.ModelLeverAction;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderGunAnim2 extends TEISRBase {
 
@@ -40,13 +38,13 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 		
 		float lever = 0;
 		
-		if(item.getItem() == ModItems.gun_lever_action/* || item.getItem() == ModItems.gun_lever_action_sonata*/)
+		if(item.getItem() == Armory.gun_lever_action/* || item.getItem() == ModItems.gun_lever_action_sonata*/)
 			Minecraft.getMinecraft().renderEngine.bindTexture(leverActionLoc);
-		if(item.getItem() == ModItems.gun_lever_action_dark)
+		if(item.getItem() == Armory.gun_lever_action_dark)
 			Minecraft.getMinecraft().renderEngine.bindTexture(leverActionDark_rl);
-		if(item.getItem() == ModItems.gun_bolt_action)
+		if(item.getItem() == Armory.gun_bolt_action)
 			Minecraft.getMinecraft().renderEngine.bindTexture(leverBoltAction);
-		if(item.getItem() == ModItems.gun_bolt_action_green)
+		if(item.getItem() == Armory.gun_bolt_action_green)
 			Minecraft.getMinecraft().renderEngine.bindTexture(leverBoltAction_green);
 		
 		switch(type){
@@ -66,7 +64,7 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 				GL11.glRotated(25, 0, 0, 1);
 			}
 			
-			if(item.getItem() == ModItems.gun_lever_action || item.getItem() == ModItems.gun_lever_action_dark) {
+			if(item.getItem() == Armory.gun_lever_action || item.getItem() == Armory.gun_lever_action_dark) {
 
 				double[] recoil = HbmAnimations.getRelevantTransformation("LEVER_RECOIL", type == TransformType.FIRST_PERSON_LEFT_HAND ? EnumHand.OFF_HAND : EnumHand.MAIN_HAND);
 				GL11.glTranslated(recoil[0], recoil[1] * 4, recoil[2]);
@@ -78,11 +76,11 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 				GL11.glTranslatef(1.5F, 0, 0);
 			}
 			
-			if(item.getItem() == ModItems.gun_lever_action || item.getItem() == ModItems.gun_lever_action_dark)
+			if(item.getItem() == Armory.gun_lever_action || item.getItem() == Armory.gun_lever_action_dark)
 				leveraction.renderAnim(entity, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F, lever);
-			if(item.getItem() == ModItems.gun_bolt_action)
+			if(item.getItem() == Armory.gun_bolt_action)
 				boltaction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_bolt_action_green)
+			if(item.getItem() == Armory.gun_bolt_action_green)
 				boltaction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			break;
 		case THIRD_PERSON_LEFT_HAND:
@@ -94,13 +92,13 @@ public class ItemRenderGunAnim2 extends TEISRBase {
 			GL11.glTranslated(1.0, 1, 1);
 			GL11.glRotated(-90, 0, 1, 0);
 			GL11.glRotated(180, 1, 0, 0);
-			if(item.getItem() == ModItems.gun_lever_action)
+			if(item.getItem() == Armory.gun_lever_action)
 				leveraction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_lever_action_dark)
+			if(item.getItem() == Armory.gun_lever_action_dark)
 				leveraction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_bolt_action)
+			if(item.getItem() == Armory.gun_bolt_action)
 				boltaction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_bolt_action_green)
+			if(item.getItem() == Armory.gun_bolt_action_green)
 				boltaction.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			break;
 		default:

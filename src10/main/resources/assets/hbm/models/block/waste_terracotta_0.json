@@ -1,0 +1,6 @@
+{
+    "parent": "block/cube_all",
+    "textures": {
+        "all": "hbm:blocks/contamination/terracotta/waste_terracotta_0"
+    }
+}

@@ -1,9 +1,6 @@
 package com.hbm.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -20,6 +17,7 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 @SideOnly(Side.CLIENT)
 public class ParticleHadron extends Particle {
@@ -41,9 +39,8 @@ public class ParticleHadron extends Particle {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		GlStateManager.color(1, 1, 1, 1);
 		GlStateManager.disableLighting();
-        GlStateManager.enableAlpha();
-        GlStateManager.enableBlend();
-        GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+		GlStateManager.enableBlend();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 		GlStateManager.depthMask(false);
 		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		RenderHelper.disableStandardItemLighting();
@@ -66,9 +63,7 @@ public class ParticleHadron extends Particle {
         Tessellator.getInstance().draw();
         
 		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-        GlStateManager.disableBlend();
-        GlStateManager.disableAlpha();
-        GlStateManager.enableLighting();
-        GlStateManager.depthMask(true);
-    }
+		GlStateManager.enableLighting();
+	}
+
 }

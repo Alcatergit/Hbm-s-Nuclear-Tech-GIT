@@ -1,26 +1,22 @@
 package com.hbm.hazard;
 
+import com.hbm.hazard.transformer.HazardTransformerBase;
+import com.hbm.interfaces.Untested;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
+import net.minecraft.block.Block;
+import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.oredict.OreDictionary;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-
-import com.hbm.hazard.modifier.HazardModifier;
-import com.hbm.hazard.transformer.HazardTransformerBase;
-import com.hbm.hazard.type.HazardTypeBase;
-import com.hbm.interfaces.Untested;
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.util.ContaminationUtil;
-
-import net.minecraft.block.Block;
-import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.inventory.EntityEquipmentSlot;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.oredict.OreDictionary;
 
 @Untested
 public class HazardSystem {
@@ -28,7 +24,7 @@ public class HazardSystem {
 	/*
 	 * Map for OreDict entries, always evaluated first. Avoid registering HazardData with 'doesOverride', as internal order is based on the item's ore dict keys.
 	 */
-	public static final HashMap<String, HazardData> oreMap = new HashMap();
+	public static final HashMap<String, HazardData> oreMap = new HashMap<>();
 	/*
 	 * Map for items, either with wildcard meta or stuff that's expected to have a variety of damage values, like tools.
 	 */
@@ -40,21 +36,11 @@ public class HazardSystem {
 	/*
 	 * For items that should, for whichever reason, be completely exempt from the hazard system.
 	 */
-	public static final HashSet<ComparableStack> stackBlacklist = new HashSet<>();
-	public static final HashSet<String> dictBlacklist = new HashSet<>();
+	public static final HashSet<ComparableStack> blacklist = new HashSet<>();
 	/*
 	 * List of hazard transformers, called in order before and after unrolling all the HazardEntries.
 	 */
 	public static final List<HazardTransformerBase> trafos = new ArrayList<>();
-
-	/*
-	 * Map for Fluid entries using their unlocalized names.
-	 */
-	public static final HashMap<String, HazardData> fluidMap = new HashMap<>();
-	
-	public static void registerFluid(String o, HazardData data) {
-		if(o != null) fluidMap.put(o, data);
-	}
 	
 	/**
 	 * Automatically casts the first parameter and registers it to the HazSys
@@ -74,56 +60,17 @@ public class HazardSystem {
 		if(o instanceof ComparableStack)
 			stackMap.put((ComparableStack)o, data);
 	}
-
-	public static HazardData getHaz(Object o){
-		if(o == null) return null;
-		if(o instanceof String)
-			return oreMap.get((String)o);
-		if(o instanceof Item)
-			return itemMap.get((Item)o);
-		if(o instanceof Block)
-			return itemMap.get(Item.getItemFromBlock((Block)o));
-		if(o instanceof ItemStack)
-			return stackMap.get(new ComparableStack((ItemStack)o));
-		if(o instanceof ComparableStack)
-			return stackMap.get((ComparableStack)o);
-		return null;
-	}
 	
 	/**
 	 * Prevents the stack from returning any HazardData
 	 * @param stack
 	 */
-	public static void blacklist(Object o) {
-		
-		if(o instanceof ItemStack) {
-			stackBlacklist.add(new ComparableStack((ItemStack) o).makeSingular());
-		} else if(o instanceof String) {
-			dictBlacklist.add((String) o);
-		}
+	public static void blacklist(ItemStack stack) {
+		blacklist.add(new ComparableStack(stack).makeSingular());
 	}
 	
 	public static boolean isItemBlacklisted(ItemStack stack) {
-		
-		if(stackBlacklist.contains(new ComparableStack(stack).makeSingular()))
-			return true;
-
-		int[] ids = OreDictionary.getOreIDs(stack);
-		for(int id : ids) {
-			String name = OreDictionary.getOreName(id);
-			
-			if(dictBlacklist.contains(name))
-				return true;
-		}
-		
-		return false;
-	}
-
-	public static List<HazardEntry> getHazardsFromFluid(String f) {
-		List<HazardEntry> chronological = new ArrayList<>();
-		if(fluidMap.containsKey(f))
-			chronological.addAll(fluidMap.get(f).entries);
-		return chronological;
+		return blacklist.contains(new ComparableStack(stack).makeSingular());
 	}
 	
 	/**
@@ -144,7 +91,7 @@ public class HazardSystem {
 	 */
 	public static List<HazardEntry> getHazardsFromStack(ItemStack stack) {
 		
-		if(stack == null || stack.isEmpty() || isItemBlacklisted(stack)) {
+		if(isItemBlacklisted(stack)) {
 			return new ArrayList<>();
 		}
 		
@@ -194,33 +141,6 @@ public class HazardSystem {
 		return entries;
 	}
 	
-	public static float getHazardLevelFromStack(ItemStack stack, HazardTypeBase hazard) {
-		List<HazardEntry> entries = getHazardsFromStack(stack);
-		
-		for(HazardEntry entry : entries) {
-			if(entry.type == hazard) {
-				return HazardModifier.evalAllModifiers(stack, null, entry.baseLevel, entry.mods);
-			}
-		}
-		
-		return 0F;
-	}
-
-	public static float getRawRadsFromBlock(Block b) {
-		return getHazardLevelFromStack(new ItemStack(Item.getItemFromBlock(b)), HazardRegistry.RADIATION);
-	}
-
-	public static float getRawRadsFromStack(ItemStack stack) {
-		return getHazardLevelFromStack(stack, HazardRegistry.RADIATION);
-	}
-
-	public static float getTotalRadsFromStack(ItemStack stack) {
-		return getHazardLevelFromStack(stack, HazardRegistry.RADIATION) + ContaminationUtil.getNeutronRads(stack);
-	}
-	
-	public static void applyHazards(Block b, EntityLivingBase entity) {
-		applyHazards(new ItemStack(Item.getItemFromBlock(b)), entity);
-	}
 	/**
 	 * Will grab and iterate through all assigned hazards of the given stack and apply their effects to the holder.
 	 * @param stack
@@ -239,45 +159,39 @@ public class HazardSystem {
 	 * @param player
 	 */
 	public static void updatePlayerInventory(EntityPlayer player) {
-		int inventorySize = player.inventory.getSizeInventory();
-		for(int i = 0; i < inventorySize; i++) {
+
+		for(int i = 0; i < player.inventory.mainInventory.size(); i++) {
 			
-			ItemStack stack = player.inventory.getStackInSlot(i);
-			if(!stack.isEmpty()) {
+			ItemStack stack = player.inventory.mainInventory.get(i);
+			if(stack != null) {
 				applyHazards(stack, player);
 				
-				if(stack.getCount() == 0) {
-					player.inventory.setInventorySlotContents(i, ItemStack.EMPTY);
+				if(stack.isEmpty()) {
+					player.inventory.mainInventory.set(i, ItemStack.EMPTY);
 				}
 			}
 		}
-		player.inventoryContainer.detectAndSendChanges();
+		
+		for(ItemStack stack : player.inventory.armorInventory) {
+			if(stack != null) {
+				applyHazards(stack, player);
+			}
+		}
 	}
 
 	public static void updateLivingInventory(EntityLivingBase entity) {
 		
-		for(EntityEquipmentSlot i : EntityEquipmentSlot.values()) {
-			ItemStack stack = entity.getItemStackFromSlot(i);
+		for(int i = 0; i < 6; i++) {
+			ItemStack stack = entity.getItemStackFromSlot(EntityEquipmentSlot.values()[i]);
 
-			if(!stack.isEmpty()) {
+			if(stack != null) {
 				applyHazards(stack, entity);
 			}
 		}
 	}
-
-	public static void updateDroppedItem(EntityItem entity) {
-		if(entity.isDead) return;
-		ItemStack stack = entity.getItem();
-		
-		if(stack.isEmpty() || stack.getCount() <= 0) return;
-		
-		List<HazardEntry> hazards = getHazardsFromStack(stack);
-		for(HazardEntry entry : hazards) {
-			entry.type.updateEntity(entity, HazardModifier.evalAllModifiers(stack, null, entry.baseLevel, entry.mods));
-		}
-	}
 	
-	public static void addHazardInfo(ItemStack stack, EntityPlayer player, List<String> list, ITooltipFlag flagIn) {
+	@SideOnly(Side.CLIENT)
+	public static void addFullTooltip(ItemStack stack, EntityPlayer player, List<String> list) {
 		
 		List<HazardEntry> hazards = getHazardsFromStack(stack);
 		

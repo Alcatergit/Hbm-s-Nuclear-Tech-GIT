@@ -1,20 +1,19 @@
 package com.hbm.tileentity.turret;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 	
@@ -34,7 +33,12 @@ public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 		return "container.turretTauon";
 	}
 
-    @Override
+	@Override
+	public double getDecetorGrace(){
+		return 3D;
+	}
+
+	@Override
 	public double getTurretYawSpeed(){
 		return 9D;
 	}
@@ -86,7 +90,8 @@ public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 			
 			if(this.tPos != null) {
 				Vec3d pos = this.getTurretPos();
-                this.lastDist = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
+				double length = new Vec3d(tPos.x - pos.x, tPos.y - pos.y, tPos.z - pos.z).length();
+				this.lastDist = length;
 			}
 			
 			if(beam > 0)
@@ -117,7 +122,7 @@ public class TileEntityTurretTauon extends TileEntityTurretBaseNT {
 			if(conf != null && this.target != null) {
 				this.target.attackEntityFrom(ModDamageSource.electricity, 30F + world.rand.nextInt(11));
 				this.conusmeAmmo(conf.ammo);
-				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.tauShoot, SoundCategory.BLOCKS, 4.0F, 0.9F + world.rand.nextFloat() * 0.3F);
+				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.tauShoot, SoundCategory.BLOCKS, 4.0F, 0.9F + world.rand.nextFloat() * 0.3F);
 				
 				NBTTagCompound data = new NBTTagCompound();
 				data.setBoolean("shot", true);

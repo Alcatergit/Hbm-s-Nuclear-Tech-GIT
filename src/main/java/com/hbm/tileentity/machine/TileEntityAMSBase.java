@@ -1,14 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCatalyst;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.items.machine.ItemSatChip;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
@@ -16,17 +17,23 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
-
+import com.hbm.saveddata.satellites.SatelliteResonator;
+import com.hbm.saveddata.satellites.SatelliteSavedData;
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -35,7 +42,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import scala.util.Random;
 
-public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor {
+import java.util.List;
+
+public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, IEnergyGenerator {
 
 	public ItemStackHandler inventory;
 
@@ -55,6 +64,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 	public Fluid[] tankTypes;
 	public int color = -1;
 	public boolean needsUpdate;
+	public boolean syncResonators = false;
 	
 	Random rand = new Random();
 
@@ -94,7 +104,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -121,10 +131,14 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 			FFUtils.deserializeTankArray(compound.getTagList("tanks", 10), tanks);
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
-		tankTypes[0] = ModForgeFluids.COOLANT;
-		tankTypes[1] = ModForgeFluids.CRYOGEL;
-		tankTypes[2] = ModForgeFluids.DEUTERIUM;
-		tankTypes[3] = ModForgeFluids.TRITIUM;
+		tankTypes[0] = FluidRegistry.getFluid(compound.getString("coolantA"));
+		if (tankTypes[0] == null) tankTypes[0] =  ModForgeFluids.COOLANT;
+		tankTypes[1] = FluidRegistry.getFluid(compound.getString("coolantB"));
+		if (tankTypes[1] == null) tankTypes[1] = ModForgeFluids.CRYOGEL;
+		tankTypes[2] = FluidRegistry.getFluid(compound.getString("fuelA"));
+		if (tankTypes[2] == null) tankTypes[2] = ModForgeFluids.DEUTERIUM;
+		tankTypes[3] = FluidRegistry.getFluid(compound.getString("fuelB"));
+		if (tankTypes[3] == null) tankTypes[3] = ModForgeFluids.TRITIUM;
 		super.readFromNBT(compound);
 	}
 	
@@ -137,24 +151,44 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 		compound.setBoolean("locked", locked);
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		compound.setString("coolantA", tankTypes[0].getName());
+		compound.setString("coolantB", tankTypes[1].getName());
+		compound.setString("fuelA", tankTypes[2].getName());
+		compound.setString("fuelB", tankTypes[3].getName());
 		return super.writeToNBT(compound);
 	}
 	
 	@Override
 	public void update() {
+		boolean isSetUp = inventory.getStackInSlot(8).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(9).getItem() instanceof ItemCatalyst &&
+				inventory.getStackInSlot(10).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(11).getItem() instanceof ItemCatalyst &&
+				inventory.getStackInSlot(12).getItem() instanceof ItemAMSCore;
 		if (!world.isRemote) {
 			if(needsUpdate){
 				needsUpdate = false;
 			}
 				
 			
-			for(int i = 0; i < tanks.length; i++){
+			/*for(int i = 0; i < tanks.length; i++){
 				tanks[i].fill(new FluidStack(tankTypes[i], tanks[i].getCapacity()), true);
 				needsUpdate = true;
-			}
+			}*/
 			
 			if(!locked) {
-				
+				for (int t = 0; t < 8; t+=2) {
+					if(inventory.getStackInSlot(t).getItem() instanceof ItemForgeFluidIdentifier && inventory.getStackInSlot(t+1).isEmpty()){
+						Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(t));
+						if (tankTypes[t/4*2] == f || tankTypes[t/4*2+1] == f) continue;
+						inventory.setStackInSlot(t+1,inventory.getStackInSlot(t));
+						inventory.setStackInSlot(t,ItemStack.EMPTY);
+						if (f == ModForgeFluids.CRYOGEL || f == ModForgeFluids.COOLANT || f == FluidRegistry.WATER || f == ModForgeFluids.OIL) {
+							if(tankTypes[t/2] != f)
+								tanks[t/2].setFluid(null);
+							tankTypes[t/2] = f;
+						}
+					}
+				}
+
 				age++;
 				if(age >= 20)
 				{
@@ -219,9 +253,7 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 				int heatBase = 0;
 				int fuelBase = 0;
 				
-				if(inventory.getStackInSlot(8).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(9).getItem() instanceof ItemCatalyst &&
-						inventory.getStackInSlot(10).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(11).getItem() instanceof ItemCatalyst &&
-						inventory.getStackInSlot(12).getItem() instanceof ItemAMSCore && hasResonators() && efficiency > 0) {
+				if(isSetUp && hasResonators() && efficiency > 0) {
 					int a = ((ItemCatalyst)inventory.getStackInSlot(8).getItem()).getColor();
 					int b = ((ItemCatalyst)inventory.getStackInSlot(9).getItem()).getColor();
 					int c = ((ItemCatalyst)inventory.getStackInSlot(10).getItem()).getColor();
@@ -229,8 +261,10 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 
 					int e = this.calcAvgHex(a, b);
 					int f = this.calcAvgHex(c, d);
-
-                    this.color = this.calcAvgHex(e, f);
+					
+					int g = this.calcAvgHex(e, f);
+					
+					this.color = g;
 
 					
 					for(int i = 8; i < 12; i++) {
@@ -240,9 +274,9 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 						fuelMod *= ItemCatalyst.getFuelMod(inventory.getStackInSlot(i));
 					}
 
-					powerBase = (int)ItemAMSCore.getPowerBase(inventory.getStackInSlot(12));
-					heatBase = (int)ItemAMSCore.getHeatBase(inventory.getStackInSlot(12));
-					fuelBase = (int)ItemAMSCore.getFuelBase(inventory.getStackInSlot(12));
+					powerBase = ItemAMSCore.getPowerBase(inventory.getStackInSlot(12))*2000000L;
+					heatBase = (int)(Math.sqrt(ItemAMSCore.getHeatBase(inventory.getStackInSlot(12)))*220);
+					fuelBase = (int)(ItemAMSCore.getFuelBase(inventory.getStackInSlot(12))*(100/15f));
 					
 					powerBase *= this.efficiency;
 					powerBase *= Math.pow(1.25F, booster);
@@ -287,15 +321,26 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 				field = 0;
 				efficiency = 0;
 				power = 0;
-				warning = 3;
+				warning = 33;
 			}
+			this.sendPower(world, pos);
 
 			PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos, power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, hasResonators() ? 1 : 0, 4), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, locked ? 1 : 0, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, color, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, efficiency, 2), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new AuxGaugePacket(pos, field, 3), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllTracking(new FluidTankPacket(pos, new FluidTank[] {tanks[0], tanks[1], tanks[2], tanks[3]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+		} else {
+			if (!hasResonators())
+				warning = 3;
+			else if (!isSetUp)
+				warning = 2;
+			else if (efficiency <= 0)
+				warning = 1;
+			else
+				warning = 0;
 		}
 	}
 	
@@ -425,28 +470,30 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 	
 	public boolean hasResonators() {
 		//Drillgon200: Always returns true anyway
-		/*if(slots[13] != null && slots[14] != null && slots[15] != null &&
-				slots[13].getItem() == ModItems.sat_chip && slots[14].getItem() == ModItems.sat_chip && slots[15].getItem() == ModItems.sat_chip) {
+		if (world.isRemote) return syncResonators;
+		// not anymore lmao
+		if(!inventory.getStackInSlot(13).isEmpty() && !inventory.getStackInSlot(14).isEmpty() && !inventory.getStackInSlot(15).isEmpty() &&
+				inventory.getStackInSlot(13).getItem() == ModItems.sat_chip && inventory.getStackInSlot(14).getItem() == ModItems.sat_chip && inventory.getStackInSlot(15).getItem() == ModItems.sat_chip) {
 			
-		    SatelliteSavedData data = (SatelliteSavedData)worldObj.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
+		    SatelliteSavedData data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 		    if(data == null) {
-		        worldObj.perWorldStorage.setData("satellites", new SatelliteSavedData(worldObj));
-		        data = (SatelliteSavedData)worldObj.perWorldStorage.loadData(SatelliteSavedData.class, "satellites");
+		        world.getPerWorldStorage().setData("satellites", new SatelliteSavedData());
+		        data = (SatelliteSavedData)world.getPerWorldStorage().getOrLoadData(SatelliteSavedData.class, "satellites");
 		    }
 		    data.markDirty();
 
-		    int i1 = ItemSatChip.getFreq(slots[13]);
-		    int i2 = ItemSatChip.getFreq(slots[14]);
-		    int i3 = ItemSatChip.getFreq(slots[15]);
+		    int i1 = ItemSatChip.getFreq(inventory.getStackInSlot(13));
+		    int i2 = ItemSatChip.getFreq(inventory.getStackInSlot(14));
+		    int i3 = ItemSatChip.getFreq(inventory.getStackInSlot(15));
 		    
 		    if(data.getSatFromFreq(i1) != null && data.getSatFromFreq(i2) != null && data.getSatFromFreq(i3) != null &&
-		    		data.getSatFromFreq(i1).satelliteType.getID() == SatelliteType.RESONATOR.getID() && data.getSatFromFreq(i2).satelliteType.getID() == SatelliteType.RESONATOR.getID() && data.getSatFromFreq(i3).satelliteType.getID() == SatelliteType.RESONATOR.getID() &&
+		    		data.getSatFromFreq(i1) instanceof SatelliteResonator && data.getSatFromFreq(i2) instanceof SatelliteResonator && data.getSatFromFreq(i3) instanceof SatelliteResonator &&
 		    		i1 != i2 && i1 != i3 && i2 != i3)
 		    	return true;
 			
-		}*/
+		}
 		
-		return true;
+		return false;
 	}
 	
 	@Override
@@ -475,17 +522,21 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 	public int fill(FluidStack resource, boolean doFill) {
 		if(resource == null){
 			return 0;
-		} else if(resource.getFluid() == ModForgeFluids.COOLANT){
+		} /*else if(resource.getFluid() == ModForgeFluids.coolant){
 			return tanks[0].fill(resource, doFill);
-		} else if(resource.getFluid() == ModForgeFluids.CRYOGEL){
+		} else if(resource.getFluid() == ModForgeFluids.cryogel){
 			return tanks[1].fill(resource, doFill);
-		} else if(resource.getFluid() == ModForgeFluids.DEUTERIUM){
+		} else if(resource.getFluid() == ModForgeFluids.deuterium){
 			return tanks[2].fill(resource, doFill);
-		} else if(resource.getFluid() == ModForgeFluids.TRITIUM){
+		} else if(resource.getFluid() == ModForgeFluids.tritium){
 			return tanks[3].fill(resource, doFill);
-		} else {
-			return 0;
+		} else {*/
+		for (int i = 0; i < 4; i++) {
+			if (tankTypes[i] == resource.getFluid())
+				return tanks[i].fill(resource,doFill);
 		}
+			return 0;
+		//}
 	}
 
 	@Override
@@ -510,4 +561,41 @@ public class TileEntityAMSBase extends TileEntity implements ITickable, IFluidHa
 		}
 	}
 
+	@Override
+	public boolean hasCapability(Capability<?> capability,EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return true;
+		} else {
+			return super.hasCapability(capability, facing);
+		}
+	}
+
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		if(capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY){
+			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
+		} else {
+			return super.getCapability(capability, facing);
+		}
+	}
+
+	@Override
+	public long getPower() {
+		return power;
+	}
+
+	@Override
+	public long getMaxPower() {
+		return maxPower;
+	}
+
+	@Override
+	public void setPower(long power) {
+		this.power = power;
+	}
+
+	@Override
+	public boolean isLoaded() {
+		return true;
+	}
 }

@@ -3,8 +3,6 @@ package com.hbm.entity.missile;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.explosion.ExplosionLarge;
-
-import com.hbm.main.MainRegistry;
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -50,7 +48,6 @@ public class EntityMinerRocket extends Entity {
 	
 	@Override
 	public void onUpdate() {
-        super.onUpdate();
 		int i = this.getDataManager().get(TIMER);
 		if(i == 0)
 			motionY = -0.75;
@@ -73,11 +70,11 @@ public class EntityMinerRocket extends Entity {
 			ExplosionLarge.explodeFire(world, posX - 0.5, posY, posZ - 0.5, 10F, true, false, true);
 		}
 		
-		if(this.getDataManager().get(TIMER) == 1 && !this.world.isRemote) {
+		if(this.getDataManager().get(TIMER) == 1) {
 			
 			if(ticksExisted % 2 == 0)
 				ExplosionLarge.spawnShock(world, posX, posY, posZ, 1 + rand.nextInt(3), 1 + rand.nextGaussian());
-
+			
 			timer++;
 			
 			if(timer > 100) {
@@ -86,7 +83,8 @@ public class EntityMinerRocket extends Entity {
 		}
 		int t = this.getDataManager().get(TIMER);
 		
-		if(t != 1 && !this.world.isRemote) {
+		if(t != 1) {
+			
 			if(ticksExisted % 2 == 0) {
 				EntityGasFlameFX fx = new EntityGasFlameFX(world);
 				fx.posY = posY - 0.5D;

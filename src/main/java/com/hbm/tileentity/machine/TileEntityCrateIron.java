@@ -1,23 +1,18 @@
 package com.hbm.tileentity.machine;
 
-import net.minecraftforge.fml.common.Optional;
-import vazkii.quark.api.IDropoffManager;
-
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
-import com.hbm.lib.HBMSoundHandler;
-
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.SoundCategory;
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
-@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
-public class TileEntityCrateIron extends TileEntityLockableBase implements IDropoffManager {
+public class TileEntityCrateIron extends TileEntityLockableBase {
 
 	public ItemStackHandler inventory;
 	
@@ -41,12 +36,12 @@ public class TileEntityCrateIron extends TileEntityLockableBase implements IDrop
 			ItemStack stack = player.getHeldItemMainhand();
 			
 			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 			
 			if(stack.getItem() == ModItems.key_red) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 			
@@ -59,7 +54,7 @@ public class TileEntityCrateIron extends TileEntityLockableBase implements IDrop
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -95,9 +90,5 @@ public class TileEntityCrateIron extends TileEntityLockableBase implements IDrop
 	@Override
 	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
-	}
-
-	public boolean acceptsDropoff(EntityPlayer player) {
-		return true;
 	}
 }

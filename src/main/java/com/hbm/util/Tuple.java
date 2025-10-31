@@ -12,28 +12,36 @@ public class Tuple {
 
 	public static class Pair<X,Y> {
 
-		X key;
-		Y value;
+		X A;
+		Y B;
 		
-		public Pair(X x, Y y) {
-			this.key = x;
-			this.value = y;
+		public Pair(X a, Y b) {
+			this.A = a;
+			this.B = b;
 		}
 		
+		public X getA() {
+			return this.A;
+		}
+		
+		public Y getB() {
+			return this.B;
+		}
+
 		public X getKey() {
-			return this.key;
+			return this.A;
 		}
-		
+
 		public Y getValue() {
-			return this.value;
+			return this.B;
 		}
-		
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((key == null) ? 0 : key.hashCode());
-			result = prime * result + ((value == null) ? 0 : value.hashCode());
+			result = prime * result + ((A == null) ? 0 : A.hashCode());
+			result = prime * result + ((B == null) ? 0 : B.hashCode());
 			return result;
 		}
 
@@ -46,48 +54,59 @@ public class Tuple {
 			if(getClass() != obj.getClass())
 				return false;
 			Pair other = (Pair) obj;
-			if(key == null) {
-				if(other.key != null)
+			if(A == null) {
+				if(other.A != null)
 					return false;
-			} else if(!key.equals(other.key))
+			} else if(!A.equals(other.A))
 				return false;
-			if(value == null) {
-                return other.value == null;
-			} else return value.equals(other.value);
-        }
+			if(B == null) {
+				if(other.B != null)
+					return false;
+			} else if(!B.equals(other.B))
+				return false;
+			return true;
+		}
+
+		public void setA(X a) {
+			this.A = a;
+		}
+
+		public void setB(Y b) {
+			this.B = b;
+		}
 	}
 
 	public static class Triplet<X,Y,Z> {
 
-		X x;
-		Y y;
-		Z z;
+		X A;
+		Y B;
+		Z C;
 		
-		public Triplet(X x, Y y, Z z) {
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		public Triplet(X a,Y b,Z c) {
+			this.A = a;
+			this.B = b;
+			this.C = c;
 		}
 		
-		public X getX() {
-			return this.x;
+		public X getA() {
+			return this.A;
 		}
 		
-		public Y getY() {
-			return this.y;
+		public Y getB() {
+			return this.B;
 		}
 		
-		public Z getZ() {
-			return this.z;
+		public Z getC() {
+			return this.C;
 		}
-		
+
 		@Override
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((x == null) ? 0 : x.hashCode());
-			result = prime * result + ((y == null) ? 0 : y.hashCode());
-			result = prime * result + ((z == null) ? 0 : z.hashCode());
+			result = prime * result + ((A == null) ? 0 : A.hashCode());
+			result = prime * result + ((B == null) ? 0 : B.hashCode());
+			result = prime * result + ((C == null) ? 0 : C.hashCode());
 			return result;
 		}
 
@@ -100,20 +119,35 @@ public class Tuple {
 			if(getClass() != obj.getClass())
 				return false;
 			Triplet other = (Triplet) obj;
-			if(x == null) {
-				if(other.x != null)
+			if(A == null) {
+				if(other.A != null)
 					return false;
-			} else if(!x.equals(other.x))
+			} else if(!A.equals(other.A))
 				return false;
-			if(y == null) {
-				if(other.y != null)
+			if(B == null) {
+				if(other.B != null)
 					return false;
-			} else if(!y.equals(other.y))
+			} else if(!B.equals(other.B))
 				return false;
-			if(z == null) {
-                return other.z == null;
-			} else return z.equals(other.z);
-        }
+			if(C == null) {
+				if(other.C != null)
+					return false;
+			} else if(!C.equals(other.C))
+				return false;
+			return true;
+		}
+
+		public void setA(X a) {
+			this.A = a;
+		}
+
+		public void setB(Y b) {
+			this.B = b;
+		}
+
+		public void setC(Z c) {
+			this.C = c;
+		}
 	}
 
 	public static class Quartet<W,X,Y,Z> {
@@ -122,10 +156,10 @@ public class Tuple {
 		public int hashCode() {
 			final int prime = 31;
 			int result = 1;
-			result = prime * result + ((w == null) ? 0 : w.hashCode());
-			result = prime * result + ((x == null) ? 0 : x.hashCode());
-			result = prime * result + ((y == null) ? 0 : y.hashCode());
-			result = prime * result + ((z == null) ? 0 : z.hashCode());
+			result = prime * result + ((A == null) ? 0 : A.hashCode());
+			result = prime * result + ((B == null) ? 0 : B.hashCode());
+			result = prime * result + ((C == null) ? 0 : C.hashCode());
+			result = prime * result + ((D == null) ? 0 : D.hashCode());
 			return result;
 		}
 
@@ -138,52 +172,71 @@ public class Tuple {
 			if(getClass() != obj.getClass())
 				return false;
 			Quartet other = (Quartet) obj;
-			if(w == null) {
-				if(other.w != null)
+			if(A == null) {
+				if(other.A != null)
 					return false;
-			} else if(!w.equals(other.w))
+			} else if(!A.equals(other.A))
 				return false;
-			if(x == null) {
-				if(other.x != null)
+			if(B == null) {
+				if(other.B != null)
 					return false;
-			} else if(!x.equals(other.x))
+			} else if(!B.equals(other.B))
 				return false;
-			if(y == null) {
-				if(other.y != null)
+			if(C == null) {
+				if(other.C != null)
 					return false;
-			} else if(!y.equals(other.y))
+			} else if(!C.equals(other.C))
 				return false;
-			if(z == null) {
-                return other.z == null;
-			} else return z.equals(other.z);
-        }
+			if(D == null) {
+				if(other.D != null)
+					return false;
+			} else if(!D.equals(other.D))
+				return false;
+			return true;
+		}
 
-		W w;
-		X x;
-		Y y;
-		Z z;
+		W A;
+		X B;
+		Y C;
+		Z D;
 		
-		public Quartet(W w, X x, Y y, Z z) {
-			this.w = w;
-			this.x = x;
-			this.y = y;
-			this.z = z;
+		public Quartet(W a, X b, Y c, Z d) {
+			this.A = a;
+			this.B = b;
+			this.C = c;
+			this.D = d;
 		}
 		
-		public W getW() {
-			return this.w;
+		public W getA() {
+			return this.A;
 		}
 		
-		public X getX() {
-			return this.x;
+		public X getB() {
+			return this.B;
 		}
 		
-		public Y getY() {
-			return this.y;
+		public Y getC() {
+			return this.C;
 		}
 		
-		public Z getZ() {
-			return this.z;
+		public Z getD() {
+			return this.D;
+		}
+
+		public void setA(W a) {
+			this.A = a;
+		}
+
+		public void setB(X b) {
+			this.B = b;
+		}
+
+		public void setC(Y c) {
+			this.C = c;
+		}
+
+		public void setD(Z d) {
+			this.D = d;
 		}
 	}
 }

@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_refinery"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_refinery"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_refinery.desc"
+		}
+	},
+	"parent": "hbm:progress_assembler",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_refinery"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 27
+    }
+}

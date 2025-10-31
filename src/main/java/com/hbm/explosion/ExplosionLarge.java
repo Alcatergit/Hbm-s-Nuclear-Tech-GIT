@@ -1,19 +1,15 @@
 package com.hbm.explosion;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.item.EntityItem;
@@ -25,6 +21,9 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.List;
+import java.util.Random;
 
 public class ExplosionLarge {
 
@@ -59,7 +58,7 @@ public class ExplosionLarge {
 			fx.motionZ = vec.z;
 			world.spawnEntity(fx);
 			
-			vec = vec.rotateYaw((float) 360 / count);
+			vec = vec.rotateYaw(360 / count);
 		}
 	}
 	
@@ -239,11 +238,11 @@ public class ExplosionLarge {
 	public static int shrapnelFunction(int i) {
 		return i / 3;
 	}
-
+	
 	public static void explodeFire(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
 		if(CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRadFire(world, (int)strength, x, y, z));
-
+			
 			ContaminationUtil.radiate(world, x, y, z, strength, 0, 0, strength*20F, strength*5F);
 		}
 		if(cloud)

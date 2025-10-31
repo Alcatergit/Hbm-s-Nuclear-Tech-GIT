@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.ai;
 
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLiving;
@@ -189,8 +188,8 @@ public class EntityAIBreaking extends EntityAIBase {
         float f6 = MathHelper.sin(-pitch * 0.017453292F);
         float f7 = f4 * f5;
         float f8 = f3 * f5;
-        // Ray Distance
-        Vec3 vec31 = vec3.add((double)f7 * dist, (double)f6 * dist, (double)f8 * dist);
+        double d3 = dist; // Ray Distance
+        Vec3 vec31 = vec3.add(new Vec3((double)f7 * d3, (double)f6 * d3, (double)f8 * d3));
         return RayCastBlocks(world, vec3, vec31, liquids);
     }
 

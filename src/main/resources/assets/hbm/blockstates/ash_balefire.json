@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"layers=1":  { "model": "hbm:ash_balefire2" },
+		"layers=2":  { "model": "hbm:ash_balefire4" },
+		"layers=3":  { "model": "hbm:ash_balefire6" },
+		"layers=4":  { "model": "hbm:ash_balefire8" },
+		"layers=5":  { "model": "hbm:ash_balefire10" },
+		"layers=6":  { "model": "hbm:ash_balefire12" },
+		"layers=7":  { "model": "hbm:ash_balefire14" },
+		"layers=8":  { "model": "hbm:ash_balefire" }
+	}
+}

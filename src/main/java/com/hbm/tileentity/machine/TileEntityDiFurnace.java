@@ -4,14 +4,12 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineDiFurnace;
 import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityDiFurnace extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
@@ -21,7 +19,9 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	public static final int maxPower = 12800;
 	public static final int processingSpeed = 400;
 	
-	private static final int[] slots = new int[] {0, 1, 2, 3};
+	private static final int[] slots_top = new int[] {0, 1};
+	private static final int[] slots_bottom = new int[] {3};
+	private static final int[] slots_side = new int[] {2};
 	
 	public TileEntityDiFurnace() {
 		super(4);
@@ -39,7 +39,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("dualPower", this.dualPower);
 		compound.setInteger("cookTime", this.dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());
@@ -77,9 +77,14 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 
 		if(!world.isRemote)
 		{
-			boolean trigger = !flag || !canProcess() || this.dualCookTime != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(flag && canProcess() && this.dualCookTime == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 MachineDiFurnace.updateBlockState(this.dualCookTime > 0, extension, this.world, pos);
             }
@@ -99,11 +104,12 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		return slots;
+		int i = e.ordinal();
+		return i == 0 ? slots_bottom : (i == 1 ? slots_top : slots_side);
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack stack) {
+	public boolean isItemValidForSlotHopper(int i, ItemStack stack) {
 		if(i == 3)
 			return false;
 		if(i == 2)
@@ -112,16 +118,18 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	@Override
-	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
-		if(slot == 0 && isItemValidForSlot(slot, itemStack)) return inventory.getStackInSlot(1).getItem() != itemStack.getItem();
-		if(slot == 1 && isItemValidForSlot(slot, itemStack)) return inventory.getStackInSlot(0).getItem() != itemStack.getItem();
-		return isItemValidForSlot(slot, itemStack);
+	public boolean canInsertItemHopper(int slot, ItemStack itemStack, int amount) {
+		if(slot == 0 && isItemValidForSlotHopper(slot, itemStack)) return inventory.getStackInSlot(1).getItem() != itemStack.getItem();
+		if(slot == 1 && isItemValidForSlotHopper(slot, itemStack)) return inventory.getStackInSlot(0).getItem() != itemStack.getItem();
+		return isItemValidForSlotHopper(slot, itemStack);
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-        return slot == 3;
-    }
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
+		if(slot == 3)
+			return true;
+		return false;
+	}
 	
 	public boolean isUsableByPlayer(EntityPlayer player){
 		if(world.getTileEntity(pos) != this)
@@ -141,7 +149,7 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 	}
 	
 	public boolean canProcess() {
-		if(inventory.getStackInSlot(0).isEmpty() || inventory.getStackInSlot(1).isEmpty())
+		if(inventory.getStackInSlot(0) == null || inventory.getStackInSlot(1) == null)
 		{
 			return false;
 		}
@@ -151,11 +159,11 @@ public class TileEntityDiFurnace extends TileEntityMachineBase implements ITicka
 			return false;
 		}
 		
-		if(inventory.getStackInSlot(3).isEmpty())
+		if(inventory.getStackInSlot(3) == ItemStack.EMPTY)
 		{
 			return true;
 		}
-		if(!inventory.getStackInSlot(3).isItemEqual(itemStack)) {
+		if(inventory.getStackInSlot(3).getItem() != ItemStack.EMPTY.getItem() && !inventory.getStackInSlot(3).isItemEqual(itemStack)) {
 			return false;
 		}
 		

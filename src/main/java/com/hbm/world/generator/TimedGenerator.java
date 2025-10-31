@@ -1,9 +1,9 @@
 package com.hbm.world.generator;
 
+import net.minecraft.world.World;
+
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import net.minecraft.world.World;
 
 public class TimedGenerator {
 
@@ -46,7 +46,7 @@ public class TimedGenerator {
 	//Drillgon200: I mean, a standard java Runnable probably would have worked exactly the same.
 	public interface ITimedJob {
 
-		void work();
+		public void work();
 
 	}
 }

@@ -1,8 +1,8 @@
 package com.hbm.flashlight;
 
-import javax.vecmath.Tuple4f;
-
 import net.minecraft.util.math.Vec3d;
+
+import javax.vecmath.Tuple4f;
 
 
 public class Vec4f extends Tuple4f {

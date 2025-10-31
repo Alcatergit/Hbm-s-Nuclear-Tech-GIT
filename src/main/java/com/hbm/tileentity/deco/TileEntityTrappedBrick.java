@@ -1,17 +1,13 @@
 package com.hbm.tileentity.deco;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ToolSets;
 import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.entity.monster.EntityCaveSpider;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.entity.player.EntityPlayer;
@@ -26,6 +22,10 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class TileEntityTrappedBrick extends TileEntity implements ITickable {
 
@@ -95,8 +95,8 @@ public class TileEntityTrappedBrick extends TileEntity implements ITickable {
 			zombie.setPosition(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
 			switch(world.rand.nextInt(3)) {
 			case 0: zombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.chernobylsign)); break;
-			case 1: zombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.cobalt_sword)); break;
-			case 2: zombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.cmb_hoe)); break;
+			case 1: zombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ToolSets.cobalt_sword)); break;
+			case 2: zombie.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ToolSets.cmb_hoe)); break;
 			}
 			zombie.setDropChance(EntityEquipmentSlot.MAINHAND, 1.0F);
 			world.spawnEntity(zombie);

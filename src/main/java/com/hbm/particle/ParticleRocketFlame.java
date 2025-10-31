@@ -1,9 +1,6 @@
 package com.hbm.particle;
 
-import java.util.Random;
-
 import com.hbm.main.ModEventHandlerClient;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
@@ -11,6 +8,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class ParticleRocketFlame extends Particle {

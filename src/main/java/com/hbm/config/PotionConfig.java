@@ -1,8 +1,8 @@
 package com.hbm.config;
 
-import java.util.HashSet;
-
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.HashSet;
 
 public class PotionConfig {
 

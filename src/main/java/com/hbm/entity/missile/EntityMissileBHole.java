@@ -1,15 +1,13 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Armory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-import static com.hbm.inventory.material.Mats.MAT_ALUMINIUM;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileBHole extends EntityMissileBaseAdvanced {
 
@@ -41,17 +39,18 @@ public class EntityMissileBHole extends EntityMissileBaseAdvanced {
 	public List<ItemStack> getDebris() {
 		List<ItemStack> list = new ArrayList<ItemStack>();
 
-		list.add(new ItemStack(ModItems.wire, 4, MAT_ALUMINIUM.id));
+		list.add(new ItemStack(ModItems.wire_aluminium, 4));
 		list.add(new ItemStack(ModItems.plate_titanium, 4));
 		list.add(new ItemStack(ModItems.hull_small_aluminium, 2));
 		list.add(new ItemStack(ModItems.ducttape, 1));
+		list.add(new ItemStack(ModItems.circuit_targeting_tier1, 1));
 		
 		return list;
 	}
 
 	@Override
 	public ItemStack getDebrisRareDrop() {
-		return new ItemStack(ModItems.grenade_black_hole, 1);
+		return new ItemStack(Armory.grenade_black_hole, 1);
 	}
 
 	@Override

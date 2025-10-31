@@ -1,17 +1,12 @@
 package com.hbm.config;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.HashMap;
-import java.util.HashSet;
-
-import com.google.gson.JsonElement;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
-
 import com.hbm.main.MainRegistry;
+
+import java.util.*;
 
 public class BedrockOreJsonConfig {
 
@@ -45,13 +40,14 @@ public class BedrockOreJsonConfig {
 	public static void setDefaults() {
 		addEntry(0, 15, Arrays.asList(
 			"orePlutonium", 
-			"oreNetherQuartz",
+			"oreQuartz", 
 			"oreInfernalCoal", 
 			"oreRedPhosphorus", 
 			"oreSchrabidium", 
 			"oreNeodymium", 
 			"oreNitanium",
 			"oreDesh",
+			"oreCheese",
 			"oreMercury",
 			"oreCarbon", 
 			"oreCrystal", 
@@ -83,14 +79,15 @@ public class BedrockOreJsonConfig {
 			"oreAdrite"
 		), true);
 		addEntry(-6, 30, Arrays.asList(//Mining Dim
-			"orePlutonium",
-            "oreNetherQuartz",
-            "oreInfernalCoal",
+			"orePlutonium", 
+			"oreQuartz", 
+			"oreInfernalCoal", 
 			"oreRedPhosphorus", 
 			"oreSchrabidium", 
 			"oreNeodymium", 
 			"oreNitanium",
 			"oreDesh",
+			"oreCheese",
 			"oreMercury",
 			"oreCarbon", 
 			"oreCrystal", 
@@ -111,7 +108,8 @@ public class BedrockOreJsonConfig {
 
 	public static void addEntry(int dimID, int rarity, List<String> ores, Boolean isWhiteList){
 		HashSet<String> set = new HashSet();
-        set.addAll(ores);
+		for(String ore : ores)
+			set.add(ore);
 		dimOres.put(dimID, set);
 		dimOreRarity.put(dimID, rarity);
 		dimWhiteList.put(dimID, isWhiteList);

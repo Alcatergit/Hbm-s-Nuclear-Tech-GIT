@@ -2,12 +2,14 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
+import com.hbm.items.ModItems.Foundry;
+
 import com.hbm.inventory.material.MaterialShapes;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import net.minecraft.client.util.ITooltipFlag;
 import com.hbm.items.ModItems;
-import com.hbm.items.special.ItemAutogen;
+import com.hbm.items.special.ItemMaterialsAutogen;
 import com.hbm.inventory.material.NTMMaterial;
 import com.hbm.inventory.material.NTMMaterial.SmeltingBehavior;
 
@@ -17,7 +19,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemScraps extends ItemAutogen {
+public class ItemScraps extends ItemMaterialsAutogen {
 
 	public ItemScraps(String s) {
 		super(s, null);
@@ -34,14 +36,14 @@ public class ItemScraps extends ItemAutogen {
 		MaterialStack contents = getMats(stack);
 		
 		if(contents != null) {
-			if(contents.material.smeltable == SmeltingBehavior.ADDITIVE)
+			if(contents.material.smeltable == contents.material.smeltable.ADDITIVE)
 				list.add("§4Additive, not castable!");
 		}
 	}
 	
 	public static MaterialStack getMats(ItemStack stack) {
 		
-		if(stack.getItem() != ModItems.scraps) return null;
+		if(stack.getItem() != Foundry.scraps) return null;
 		
 		NTMMaterial mat = Mats.matById.get(stack.getItemDamage());
 		if(mat == null) return null;
@@ -62,7 +64,7 @@ public class ItemScraps extends ItemAutogen {
 	public static ItemStack create(MaterialStack stack, boolean liquid) {
 		if(stack.material == null)
 			return new ItemStack(ModItems.nothing); //why do i bother adding checks for fucking everything when they don't work
-		ItemStack scrap = new ItemStack(ModItems.scraps, 1, stack.material.id);
+		ItemStack scrap = new ItemStack(Foundry.scraps, 1, stack.material.id);
 		NBTTagCompound scrapNbt = new NBTTagCompound();
 		scrapNbt.setInteger("amount", stack.amount);
 		if(liquid) scrapNbt.setBoolean("liquid", true);

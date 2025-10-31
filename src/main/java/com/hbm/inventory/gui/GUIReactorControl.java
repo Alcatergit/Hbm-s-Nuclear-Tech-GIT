@@ -1,22 +1,20 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerReactorControl;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityReactorControl;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public class GUIReactorControl extends GuiInfoContainer {
 
@@ -48,11 +46,11 @@ public class GUIReactorControl extends GuiInfoContainer {
 			this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 79, guiTop + 16, 18, 18, new String[] { "Reactor link not found!" });
 		}
 
-		if(control.water < control.maxWater * 0.1) {
+		if(control.water < control.maxWater * 0.4) {
 			this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 79 + 18, guiTop + 16, 18, 18, new String[] { "Water level low!" });
 		}
 		
-		if(control.cool < control.maxCool * 0.1) {
+		if(control.cool < control.maxCool * 0.4) {
 			this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 79 + 18 * 2, guiTop + 16, 18, 18, new String[] { "Coolant level low!" });
 		}
 		
@@ -178,11 +176,11 @@ public class GUIReactorControl extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 79, guiTop + 16, 88, 166, 18, 18);
 		}
 
-		if(control.water < control.maxWater * 0.1) {
+		if(control.water < control.maxWater * 0.4) {
 			drawTexturedModalRect(guiLeft + 79 + 18, guiTop + 16, 88 + 18, 166, 18, 18);
 		}
 		
-		if(control.cool < control.maxCool * 0.1) {
+		if(control.cool < control.maxCool * 0.4) {
 			drawTexturedModalRect(guiLeft + 79 + 18 * 2, guiTop + 16, 88 + 18 * 2, 166, 18, 18);
 		}
 		

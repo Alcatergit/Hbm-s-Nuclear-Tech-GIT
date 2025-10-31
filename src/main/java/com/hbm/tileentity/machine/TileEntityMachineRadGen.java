@@ -1,12 +1,11 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.hazard.HazardSystem;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyGenerator;
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -58,7 +57,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 
@@ -98,7 +97,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 	}
 
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-		return i == 0 && HazardSystem.getTotalRadsFromStack(stack) > 0;
+		return i == 0 && ContaminationUtil.getStackRads(stack) > 0;
 	}
 	
 	@Override
@@ -106,7 +105,7 @@ public class TileEntityMachineRadGen extends TileEntityLoadedBase implements ITi
 		if (!world.isRemote) {
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			sendRADGenPower();
-			int r = (int)Math.sqrt(HazardSystem.getTotalRadsFromStack(inventory.getStackInSlot(0)));
+			int r = (int)Math.sqrt(ContaminationUtil.getStackRads(inventory.getStackInSlot(0)));
 			if(r > 0) {
 				if(inventory.getStackInSlot(0).getItem().hasContainerItem(inventory.getStackInSlot(0))) {
 					if(inventory.getStackInSlot(1).isEmpty()) {

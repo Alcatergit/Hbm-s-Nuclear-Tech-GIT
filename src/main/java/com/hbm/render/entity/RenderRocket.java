@@ -2,7 +2,6 @@ package com.hbm.render.entity;
 
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.items.ModItems;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.RenderItem;

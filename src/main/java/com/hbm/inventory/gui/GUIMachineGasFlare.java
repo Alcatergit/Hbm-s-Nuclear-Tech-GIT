@@ -1,23 +1,21 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.inventory.FluidFlameRecipes;
-import com.hbm.packet.NBTControlPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.util.I18nUtil;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.lib.RefStrings;
+import com.hbm.packet.NBTControlPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
-
-import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.nbt.NBTTagCompound;
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
+import net.minecraft.init.SoundEvents;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 
@@ -86,7 +84,7 @@ public class GUIMachineGasFlare extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 79, guiTop + 49, 176, 10, 35, 14);
 		}
 
-		if(flare.isOn && flare.doesBurn && flare.tank.getFluidAmount() > 0 && FluidFlameRecipes.hasFuelRecipe(flare.tankType))
+		if(flare.isOn && flare.doesBurn && flare.tank.getFluidAmount() > 0 && FluidCombustionRecipes.hasFuelRecipe(flare.tankType))
 			drawTexturedModalRect(guiLeft + 88, guiTop + 29, 176, 24, 18, 18);
 
 		FFUtils.drawLiquid(flare.tank, guiLeft, guiTop, zLevel, 16, 52, 35, 97);

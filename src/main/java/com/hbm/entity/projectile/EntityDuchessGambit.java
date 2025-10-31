@@ -1,13 +1,10 @@
 package com.hbm.entity.projectile;
 
-import java.util.List;
-
-import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
@@ -18,6 +15,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityDuchessGambit extends EntityThrowable {
 
@@ -50,7 +49,7 @@ public class EntityDuchessGambit extends EntityThrowable {
         
         if(!this.world.isRemote && this.world.getBlockState(new BlockPos((int)this.posX, (int)this.posY, (int)this.posZ)).getBlock() != Blocks.AIR)
         {
-            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F);
+            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.alarmGambit, SoundCategory.BLOCKS, 10000.0F, 1F);
     		this.setDead();
     		if(!world.isRemote && CompatibilityConfig.isWarDim(world)){
 	    		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 5, posY - 2, posZ - 9, posX + 5, posY + 2, posZ + 9));

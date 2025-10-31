@@ -1,10 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import org.lwjgl.input.Mouse;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -15,19 +10,14 @@ import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.interfaces.IItemHUD;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.GunAnimationPacket;
-import com.hbm.packet.GunButtonPacket;
-import com.hbm.packet.GunFXPacket;
+import com.hbm.packet.*;
 import com.hbm.packet.GunFXPacket.FXType;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.misc.RenderScreenOverlay;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -51,6 +41,10 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.input.Mouse;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 
@@ -234,7 +228,7 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		
 		world.playSound(null, player.posX, player.posY, player.posZ, mainConfig.firingSound, SoundCategory.PLAYERS, 1.0F, mainConfig.firingPitch);
 
-		if(player.getDisplayName().toString().equals("Vic4Games")) {
+		if(player.getDisplayName().equals("Vic4Games")) {
 			NBTTagCompound nbt = new NBTTagCompound();
 			nbt.setString("type", "justTilt");
 			nbt.setInteger("time", mainConfig.rateOfFire + 1);
@@ -280,7 +274,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 	}
 
 	protected EntityBulletBase getBulletEntity(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand){
-        return new EntityBulletBase(world, config, player, hand);
+		EntityBulletBase bullet = new EntityBulletBase(world, config, player, hand);
+		return bullet;
 	}
 	
 	protected void spawnProjectile(World world, EntityPlayer player, ItemStack stack, int config, EnumHand hand) {
@@ -429,7 +424,8 @@ public class ItemGunBase extends Item implements IHoldableWeapon, IItemHUD {
 		} else {
 
 			Item ammo = BulletConfigSyncingUtil.pullConfig(mainConfig.config.get(getMagType(stack))).ammo;
-            return Library.hasInventoryItem(player.inventory, ammo);
+			if(Library.hasInventoryItem(player.inventory, ammo))
+				return true;
 		}
 
 		return false;

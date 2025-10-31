@@ -7,21 +7,19 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.FluidFlameRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMachineGasFlare;
 import com.hbm.inventory.gui.GUIMachineGasFlare;
-import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -45,7 +43,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 
 public class TileEntityMachineGasFlare extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor, IGUIProvider, IControlReceiver {
@@ -55,7 +52,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	public FluidTank tank;
 	public boolean isOn = false;
 	public boolean doesBurn = false;
-	public long cacheEnergy = 0;
+	public int cacheEnergy = 0;
 	public boolean needsUpdate;
 
 	private final UpgradeManager upgradeManager = new UpgradeManager();
@@ -64,7 +61,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 		super(6);
 		tankType = ModForgeFluids.GAS;
 		tank = new FluidTank(64000);
-		cacheEnergy = FluidFlameRecipes.getHeatEnergy(ModForgeFluids.GAS);
+		cacheEnergy = FluidCombustionRecipes.getFlameEnergy(ModForgeFluids.GAS);
 		needsUpdate = false;
 	}
 
@@ -73,7 +70,16 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 		return "container.gasFlare";
 	}
 
-    @Override
+	public boolean isUseableByPlayer(EntityPlayer player) {
+		if(world.getTileEntity(pos) != this)
+		{
+			return false;
+		}else{
+			return player.getDistanceSq(pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D) <=128;
+		}
+	}
+	
+	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		this.power = compound.getLong("powerTime");
 		tank.readFromNBT(compound);
@@ -86,7 +92,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		tank.writeToNBT(compound);
 		if (tankType != null) {
@@ -134,14 +140,14 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 				maxVent += maxVent * burn;
 				maxBurn += maxBurn * burn;
 
-				cacheEnergy = FluidFlameRecipes.getHeatEnergy(tankType);
+				cacheEnergy = FluidCombustionRecipes.getFlameEnergy(tankType);
 
 				if (doesBurn && cacheEnergy != 0) {
 					int eject = Math.min(maxBurn, tank.getFluidAmount());
 					tank.drain(eject, true);
 					needsUpdate = true;
 
-					long powerGen = cacheEnergy * eject;
+					int powerGen = cacheEnergy * eject;
 					powerGen += powerGen * yield / 3;
 
 					this.power += powerGen;
@@ -153,7 +159,7 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 					ExplosionThermo.setEntitiesOnFire(world, pos.getX(), pos.getY() + 11, pos.getZ(), 5);
 
 					if(this.world.getTotalWorldTime() % 5 == 0)
-						this.world.playSound(null, pos.getX(), pos.getY() + 11, pos.getZ(), HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.5F, 1F);
+						this.world.playSound(null, pos.getX(), pos.getY() + 11, pos.getZ(), HBMSoundEvents.flamethrowerShoot, SoundCategory.BLOCKS, 1.5F, 1F);
 				} else {
 					tank.drain(maxVent, true);
 					needsUpdate = true;
@@ -195,9 +201,9 @@ public class TileEntityMachineGasFlare extends TileEntityMachineBase implements 
 
 		ItemStack slotId = inventory.getStackInSlot(3);
 		Item itemId = slotId.getItem();
-		if (itemId == ModItems.forge_fluid_identifier) {
+		if (itemId instanceof ItemForgeFluidIdentifier) {
 			Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
-			long energy = FluidFlameRecipes.getHeatEnergy(fluid);
+			int energy = FluidCombustionRecipes.getFlameEnergy(fluid);
 
 			if (tankType != fluid) {
 				tankType = fluid;

@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/battery_radspice_top",
+		"front": "hbm:blocks/battery_radspice_front",
+		"side": "hbm:blocks/battery_radspice_side"
+	}
+}

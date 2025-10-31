@@ -1,26 +1,25 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
+import com.hbm.util.I18nUtil;
+import net.minecraft.block.Block;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemWiring extends Item {
 
@@ -71,7 +70,7 @@ public class ItemWiring extends Item {
 							int distance = (int)MathHelper.sqrt(vector.getX() * vector.getX() + vector.getY() * vector.getY() + vector.getZ() * vector.getZ());
 							player.sendMessage(new TextComponentTranslation("chat.wiring.tofar", distance, thisPylon.getMaxWireLength()));
 						}
-					} else if(pos.equals(newPos)){
+					} else if(pos == newPos){
 						if (world.isRemote)
 							player.sendMessage(new TextComponentTranslation("chat.wiring.noself"));
 					} else{

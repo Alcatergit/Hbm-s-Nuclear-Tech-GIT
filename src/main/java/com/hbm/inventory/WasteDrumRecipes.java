@@ -1,16 +1,15 @@
 package com.hbm.inventory;
 
-import java.util.LinkedHashMap;
-import java.util.HashSet;
-
 import com.hbm.items.ModItems;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 
+import java.util.HashMap;
+import java.util.HashSet;
+
 public class WasteDrumRecipes {
 
-	public static LinkedHashMap<Item, ItemStack> recipes = new LinkedHashMap<>();
+	public static HashMap<Item, ItemStack> recipes = new HashMap<>();
 	private static HashSet<Item> outputs = new HashSet<>();
 	
 	public static void registerRecipes() {

@@ -1,15 +1,10 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.main.MainRegistry;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.ArmorUtil;
+import com.hbm.main.MainRegistry;
 import com.hbm.render.model.ModelJetPack;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.renderer.entity.RenderPlayer;
@@ -29,6 +24,9 @@ import net.minecraftforge.client.event.RenderPlayerEvent.Pre;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class JetpackBase extends ItemArmorMod {
 
@@ -81,9 +79,10 @@ public class JetpackBase extends ItemArmorMod {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public void modRender(Pre event, ItemStack armor) {
-        EntityPlayer player = event.getEntityPlayer();
-        if(player.isSpectator()) return;
-        ModelBiped modelJetpack = getArmorModel(event.getEntityLiving(), null, EntityEquipmentSlot.CHEST, null);
+
+		ModelBiped modelJetpack = getArmorModel(event.getEntityLiving(), null, EntityEquipmentSlot.CHEST, null);
+		
+		EntityPlayer player = event.getEntityPlayer();
 
 		RenderPlayer renderer = event.getRenderer();
 		ModelBiped model = renderer.getMainModel();
@@ -127,11 +126,14 @@ public class JetpackBase extends ItemArmorMod {
 	}
 	
 	protected void useUpFuel(EntityPlayer player, ItemStack stack, int rate) {
-		if(player.ticksExisted % rate == 0) setFuel(stack, getFuel(stack) - 1);
+
+		if(player.ticksExisted % rate == 0)
+			setFuel(stack, getFuel(stack) - 1);
 	}
 
     public static int getFuel(ItemStack stack) {
-		if(!stack.hasTagCompound()) {
+		if(stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 

@@ -1,32 +1,20 @@
 package com.hbm.explosion;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.WasteLeaves;
+import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.grenade.EntityGrenadeTau;
 import com.hbm.entity.grenade.EntityGrenadeZOMG;
-import com.hbm.entity.particle.EntityChlorineFX;
-import com.hbm.entity.particle.EntityCloudFX;
-import com.hbm.entity.particle.EntityModFX;
-import com.hbm.entity.particle.EntityOrangeFX;
-import com.hbm.entity.particle.EntityPinkCloudFX;
-import com.hbm.entity.projectile.EntityBullet;
-import com.hbm.entity.projectile.EntityMiniNuke;
-import com.hbm.entity.projectile.EntityRainbow;
-import com.hbm.entity.projectile.EntityRocket;
-import com.hbm.entity.projectile.EntityRubble;
-import com.hbm.entity.projectile.EntitySchrab;
-import com.hbm.util.ArmorRegistry;
-import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.entity.particle.*;
+import com.hbm.entity.projectile.*;
 import com.hbm.handler.ArmorUtil;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.potion.HbmPotion;
-
-import net.minecraft.block.*;
+import com.hbm.util.ArmorRegistry;
+import com.hbm.util.ArmorRegistry.HazardClass;
+import net.minecraft.block.Block;
+import net.minecraft.block.BlockLog;
+import net.minecraft.block.BlockSand;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -36,9 +24,9 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.entity.projectile.EntityTippedArrow;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.SoundCategory;
@@ -47,6 +35,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class ExplosionChaos {
 
@@ -58,15 +49,16 @@ public class ExplosionChaos {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
@@ -245,15 +237,16 @@ public class ExplosionChaos {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos(pos);
 		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos(pos.up());
 
-        int r2 = bound * bound;
+		int r = bound;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -bound; xx < bound; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + pos.getX();
 			int XX = xx * xx;
-			for(int yy = -bound; yy < bound; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + pos.getY();
 				int YY = XX + yy * yy;
-				for(int zz = -bound; zz < bound; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + pos.getZ();
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
@@ -285,21 +278,22 @@ public class ExplosionChaos {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos(pos);
 		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos(pos.up());
 
-        int r2 = bound * bound;
+		int r = bound;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -bound; xx < bound; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + pos.getX();
 			int XX = xx * xx;
-			for(int yy = -bound; yy < bound; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + pos.getY();
 				int YY = XX + yy * yy;
-				for(int zz = -bound; zz < bound; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + pos.getZ();
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
 						mPos.setPos(X, Y, Z);
 						mPosUp.setPos(X, Y + 1, Z);
-						if((world.getBlockState(mPosUp).getBlock() == Blocks.AIR || world.getBlockState(mPosUp).getBlock() == Blocks.SNOW_LAYER) && world.getBlockState(mPos).getBlock() != Blocks.AIR) {
+						if((world.getBlockState(mPosUp).getBlock() == Blocks.AIR || world.getBlockState(mPosUp).getBlock() == Blocks.SNOW_LAYER) && world.getBlockState(mPos) != Blocks.AIR) {
 							world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
 						}
 					}
@@ -515,38 +509,41 @@ public class ExplosionChaos {
 		// double vx2 = vx1 < theta ? vx1 + theta : vx1 - theta;
 		// double vy2 = vy1;
 		// double vz2 = Math.sqrt(Math.pow(1, 2) - Math.pow(vx2, 2));
+		double vx2 = zeta;
+		double vy2 = vy1;
+		double vz2 = zeta;
 
-        mirv5.posX = x;
+		mirv5.posX = x;
 		mirv5.posY = y;
 		mirv5.posZ = z;
-		mirv5.motionY = vy1;
+		mirv5.motionY = vy2;
 		mirv6.posX = x;
 		mirv6.posY = y;
 		mirv6.posZ = z;
-		mirv6.motionY = vy1;
+		mirv6.motionY = vy2;
 		mirv7.posX = x;
 		mirv7.posY = y;
 		mirv7.posZ = z;
-		mirv7.motionY = vy1;
+		mirv7.motionY = vy2;
 		mirv8.posX = x;
 		mirv8.posY = y;
 		mirv8.posZ = z;
-		mirv8.motionY = vy1;
+		mirv8.motionY = vy2;
 
-		mirv5.motionX = zeta * modifier;
-		mirv5.motionZ = zeta * modifier;
+		mirv5.motionX = vx2 * modifier;
+		mirv5.motionZ = vz2 * modifier;
 		world.spawnEntity(mirv5);
 
-		mirv6.motionX = -zeta * modifier;
-		mirv6.motionZ = zeta * modifier;
+		mirv6.motionX = -vz2 * modifier;
+		mirv6.motionZ = vx2 * modifier;
 		world.spawnEntity(mirv6);
 
-		mirv7.motionX = -zeta * modifier;
-		mirv7.motionZ = -zeta * modifier;
+		mirv7.motionX = -vx2 * modifier;
+		mirv7.motionZ = -vz2 * modifier;
 		world.spawnEntity(mirv7);
 
-		mirv8.motionX = zeta * modifier;
-		mirv8.motionZ = -zeta * modifier;
+		mirv8.motionX = vz2 * modifier;
+		mirv8.motionZ = -vx2 * modifier;
 		world.spawnEntity(mirv8);
 	}
 
@@ -555,15 +552,16 @@ public class ExplosionChaos {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
@@ -645,15 +643,16 @@ public class ExplosionChaos {
 		if(!CompatibilityConfig.isWarDim(world)){
 			return;
 		}
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
@@ -677,15 +676,16 @@ public class ExplosionChaos {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = radius * radius;
+		int r = radius;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -radius; xx < radius; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for(int yy = -radius; yy < radius; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for(int zz = -radius; zz < radius; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22 + world.rand.nextInt(r22 / 2)) {
@@ -781,7 +781,7 @@ public class ExplosionChaos {
 			entityZomg.shootingEntity = shooter;
 
 			world.spawnEntity(entityZomg);
-			world.playSound(null, zomg.posX, zomg.posY, zomg.posZ, HBMSoundHandler.zomgShoot, SoundCategory.AMBIENT, 10.0F, 0.8F + (rand.nextFloat() * 0.4F));
+			world.playSound(null, zomg.posX, zomg.posY, zomg.posZ, HBMSoundEvents.zomgShoot, SoundCategory.AMBIENT, 10.0F, 0.8F + (rand.nextFloat() * 0.4F));
 		}
 	}
 
@@ -813,15 +813,16 @@ public class ExplosionChaos {
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		IBlockState save;
 
-        int r2 = radi * radi;
+		int r = radi;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for(int xx = -radi; xx < radi; xx++) {
+		for(int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for(int yy = -radi; yy < radi; yy++) {
+			for(int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for(int zz = -radi; zz < radi; zz++) {
+				for(int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
@@ -969,8 +970,8 @@ public class ExplosionChaos {
 			world.setBlockState(pos, Blocks.MYCELIUM.getDefaultState());
 		}
 
-		else if(bblock instanceof WasteLeaves wLeaf && random.nextInt(5) != 0) {
-			world.setBlockState(pos, Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, wLeaf.getWoodType(wLeaf.getMetaFromState(b))));
+		else if(bblock == ModBlocks.waste_leaves && random.nextInt(5) != 0) {
+			world.setBlockState(pos, Blocks.LEAVES.getDefaultState());
 		}
 
 		else if(bblock == ModBlocks.waste_trinitite && random.nextInt(3) == 0) {
@@ -1032,15 +1033,16 @@ public class ExplosionChaos {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for (int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for (int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for (int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for (int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22) {
@@ -1057,15 +1059,16 @@ public class ExplosionChaos {
 			return;
 		}
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
+		int r = bombStartStrength;
+		int r2 = r * r;
 		int r22 = r2 / 2;
-		for (int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
+		for (int xx = -r; xx < r; xx++) {
 			int X = xx + x;
 			int XX = xx * xx;
-			for (int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
+			for (int yy = -r; yy < r; yy++) {
 				int Y = yy + y;
 				int YY = XX + yy * yy;
-				for (int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
+				for (int zz = -r; zz < r; zz++) {
 					int Z = zz + z;
 					int ZZ = YY + zz * zz;
 					if (ZZ < r22) {

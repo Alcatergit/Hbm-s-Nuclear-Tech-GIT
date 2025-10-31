@@ -1,8 +1,8 @@
 package com.hbm.packet;
 
 import com.hbm.interfaces.ITankPacketAcceptor;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -10,13 +10,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class FluidTankPacket implements IMessage {
+public class FluidTankPacket extends RecordablePacket {
 
 	int x;
 	int y;
@@ -42,7 +43,7 @@ public class FluidTankPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -54,17 +55,20 @@ public class FluidTankPacket implements IMessage {
 			buf.readBytes(bytes);
 			String id = new String(bytes);
 			NBTTagCompound tag = new NBTTagCompound();
+			NBTTagCompound arbitaryTag = buf.readNBT();
 			if(id.equals("HBM_EMPTY") || FluidRegistry.getFluid(id) == null){
 				tag.setString("Empty", "");
 			} else {
-				new FluidStack(FluidRegistry.getFluid(id), amount).writeToNBT(tag);
+				FluidStack stack = new FluidStack(FluidRegistry.getFluid(id), amount);
+				stack.tag = arbitaryTag;
+				stack.writeToNBT(tag);
 			}
 			tags[i] = tag;
 		}
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -74,6 +78,7 @@ public class FluidTankPacket implements IMessage {
 			byte[] bytes = tanks[i].getFluid() == null ? "HBM_EMPTY".getBytes() : FluidRegistry.getFluidName(tanks[i].getFluid()).getBytes();
 			buf.writeInt(bytes.length);
 			buf.writeBytes(bytes);
+			buf.writeNBT((tanks[i].getFluid() != null && tanks[i].getFluid().tag != null) ? tanks[i].getFluid().tag : new NBTTagCompound());
 		}
 	}
 

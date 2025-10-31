@@ -1,20 +1,15 @@
 package com.hbm.items.special;
 
-import java.util.function.BiConsumer;
-
 import com.hbm.util.Tuple.Pair;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.*;
 import net.minecraft.world.World;
+
+import java.util.function.BiConsumer;
 
 public class ItemSimpleConsumable extends ItemCustomLore {
 	

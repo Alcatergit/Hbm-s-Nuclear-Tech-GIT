@@ -6,7 +6,7 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 
 public interface IHasCustomMetaModels {
 
-	Set<Integer> getMetaValues();
+	public Set<Integer> getMetaValues();
 
-	ModelResourceLocation getResourceLocation(int meta);
+	public ModelResourceLocation getResourceLocation(int meta);
 }

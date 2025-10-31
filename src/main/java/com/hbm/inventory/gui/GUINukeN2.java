@@ -1,19 +1,17 @@
 package com.hbm.inventory.gui;
 
-import com.hbm.config.BombConfig;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerNukeN2;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.bomb.TileEntityNukeN2;
-
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
-public class GUINukeN2 extends GuiInfoContainer {
+public class GUINukeN2 extends GuiContainer {
 	
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/n2Schematic.png");
 	private TileEntityNukeN2 testNuke;
@@ -37,7 +35,6 @@ public class GUINukeN2 extends GuiInfoContainer {
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		super.drawScreen(mouseX, mouseY, partialTicks);
-        this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 34, guiTop + 46, 36, 74, mouseX, mouseY, new String[] { "N2 Radius: "+ (int)(BombConfig.n2Radius*testNuke.charges/12F) +"m"});
 		super.renderHoveredToolTip(mouseX, mouseY);
 	}
 	

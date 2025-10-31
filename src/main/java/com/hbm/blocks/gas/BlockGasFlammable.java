@@ -1,19 +1,18 @@
 package com.hbm.blocks.gas;
 
-import java.util.Random;
-
 import com.hbm.interfaces.Untested;
 import com.hbm.lib.ForgeDirection;
-
+import com.leafia.passive.LeafiaPassiveServer;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockGasFlammable extends BlockGasBase {
 
@@ -38,44 +37,44 @@ public class BlockGasFlammable extends BlockGasBase {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
-			if(!world.isChunkGeneratedAt(pos.getX() >> 4, pos.getZ() >> 4)) return;
-			MutableBlockPos posN = new BlockPos.MutableBlockPos();
+			
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-				posN.setPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ);
-				if(!world.isBlockLoaded(posN)) return;
-				IBlockState b = world.getBlockState(posN);
+				IBlockState b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ));
 				
 				if(isFireSource(b)) {
-					combust(world, pos);
+					LeafiaPassiveServer.queueFunction(()->{
+						combust(world, pos.getX(), pos.getY(), pos.getZ());
+					});
+					//((WorldServer)world).addScheduledTask(() -> {
+					//	combust(world, pos.getX(), pos.getY(), pos.getZ());
+					//});
 					return;
 				}
 			}
-            super.updateTick(world, pos, state, rand);
 
-            if(rand.nextInt(20) == 0 && world.isAirBlock(pos.down())) {
+			if(rand.nextInt(20) == 0 && world.isAirBlock(pos.down())) {
 				world.setBlockToAir(pos);
+				return;
 			}
+			//world.scheduleUpdate(pos, this, this.tickRate(world) + rand.nextInt(5));
 		}
+		super.updateTick(world, pos, state, rand);
 	}
 	
 	@Untested
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
-		MutableBlockPos posN = new BlockPos.MutableBlockPos();
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
-			posN.setPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ);
-			if(!world.isBlockLoaded(posN)) return;
-			IBlockState b = world.getBlockState(posN);
+			IBlockState b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ));
 			
 			if(isFireSource(b)) {
-				world.scheduleUpdate(pos, this, getDelay(world));
-                return;
+				world.scheduleUpdate(pos, this, 2);
 			}
 		}
 	}
 	
-	protected void combust(World world, BlockPos p) {
-		world.setBlockState(p, Blocks.FIRE.getDefaultState());
+	protected void combust(World world, int x, int y, int z) {
+		world.setBlockState(new BlockPos(x, y, z), Blocks.FIRE.getDefaultState());
 	}
 	
 	public boolean isFireSource(IBlockState b) {

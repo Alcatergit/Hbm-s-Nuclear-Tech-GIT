@@ -1,9 +1,6 @@
 package com.hbm.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.HbmParticleUtility;
@@ -18,6 +15,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleGiblet extends Particle {
 
@@ -61,7 +59,7 @@ public class ParticleGiblet extends Particle {
 	}
 	
 	@Override
-	public void renderParticle(BufferBuilder buff, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ){
+	public void renderParticle(BufferBuilder buffer, Entity entityIn, float partialTicks, float rotationX, float rotationZ, float rotationYZ, float rotationXY, float rotationXZ){
 		GL11.glPushMatrix();
 		GlStateManager.disableLighting();
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);

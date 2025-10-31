@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.IMultiBlock;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;

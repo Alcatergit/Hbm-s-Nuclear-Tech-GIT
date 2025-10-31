@@ -1,27 +1,24 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.GeneralConfig;
-import com.hbm.util.ContaminationUtil;
+import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.explosion.ExplosionBalefire;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityBalefire extends Entity implements IChunkLoader {
 
@@ -62,6 +59,7 @@ public class EntityBalefire extends Entity implements IChunkLoader {
 
 	public EntityBalefire(World p_i1582_1_) {
 		super(p_i1582_1_);
+		EntityNukeTorex.bindMe = this;
 	}
 
     @Override

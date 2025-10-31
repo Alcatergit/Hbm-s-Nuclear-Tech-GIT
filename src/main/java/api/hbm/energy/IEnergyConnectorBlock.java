@@ -1,7 +1,6 @@
 package api.hbm.energy;
 
 import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 
@@ -22,5 +21,5 @@ public interface IEnergyConnectorBlock {
 	 * @param dir
 	 * @return
 	 */
-    boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirection dir);
+	public boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirection dir);
 }

@@ -1,16 +1,14 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.BeamPronter.EnumBeamType;
 import com.hbm.render.misc.BeamPronter.EnumWaveType;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachineMiningLaser> {
 
@@ -24,17 +22,18 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5, y - 1, z + 0.5);
 
-        double tx = x;
+		TileEntityMachineMiningLaser laser = (TileEntityMachineMiningLaser)te;
+		double tx = x;
 		double ty = 0;
 		double tz = z;
-		if(((TileEntityMachineMiningLaser)te).beam) {
-			tx = (((TileEntityMachineMiningLaser)te).targetX - ((TileEntityMachineMiningLaser)te).lastTargetX) * partialTicks + ((TileEntityMachineMiningLaser)te).lastTargetX;
-			ty = (((TileEntityMachineMiningLaser)te).targetY - ((TileEntityMachineMiningLaser)te).lastTargetY) * partialTicks + ((TileEntityMachineMiningLaser)te).lastTargetY;
-			tz = (((TileEntityMachineMiningLaser)te).targetZ - ((TileEntityMachineMiningLaser)te).lastTargetZ) * partialTicks + ((TileEntityMachineMiningLaser)te).lastTargetZ;
+		if(laser.beam) {
+			tx = (laser.targetX - laser.lastTargetX) * partialTicks + laser.lastTargetX;
+			ty = (laser.targetY - laser.lastTargetY) * partialTicks + laser.lastTargetY;
+			tz = (laser.targetZ - laser.lastTargetZ) * partialTicks + laser.lastTargetZ;
 		}
-		double vx = tx - ((TileEntityMachineMiningLaser)te).getPos().getX();
-		double vy = ty - ((TileEntityMachineMiningLaser)te).getPos().getY() + 3;
-		double vz = tz - ((TileEntityMachineMiningLaser)te).getPos().getZ();
+		double vx = tx - laser.getPos().getX();
+		double vy = ty - laser.getPos().getY() + 3;
+		double vz = tz - laser.getPos().getZ();
 
 		Vec3 nVec = Vec3.createVectorHelper(vx, vy, vz);
 		nVec = nVec.normalize();
@@ -73,7 +72,7 @@ public class RenderLaserMiner extends TileEntitySpecialRenderer<TileEntityMachin
 		GL11.glPopMatrix();
 		//GlStateManager.shadeModel(GL11.GL_FLAT);
 
-		if(((TileEntityMachineMiningLaser)te).beam) {
+		if(laser.beam) {
 			length = vec.length();
 			GL11.glTranslated(nVec.xCoord, nVec.yCoord - 1, nVec.zCoord);
 			int range = (int)Math.ceil(length * 0.5);

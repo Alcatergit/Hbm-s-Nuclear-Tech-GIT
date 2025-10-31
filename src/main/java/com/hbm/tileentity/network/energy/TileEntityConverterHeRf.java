@@ -1,18 +1,17 @@
 package com.hbm.tileentity.network.energy;
 
-import com.hbm.tileentity.TileEntityLoadedBase;
-import com.hbm.config.GeneralConfig;
-import com.hbm.lib.ForgeDirection;
-
 import api.hbm.energy.IEnergyConnector;
 import cofh.redstoneflux.api.IEnergyProvider;
 import cofh.redstoneflux.api.IEnergyReceiver;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.energy.CapabilityEnergy;
+import com.hbm.config.GeneralConfig;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.tileentity.TileEntityLoadedBase;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyProvider", modid = "redstoneflux")})
@@ -84,7 +83,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		recursionBrake = true;
 		
 		// we have to limit the transfer amount because otherwise FEnSUs would overflow the RF output, twice
-		int toRF = (int) Math.min(Integer.MAX_VALUE, power*GeneralConfig.conversionRateHeToRF);
+		int toRF = (int) Math.min(Integer.MAX_VALUE, power);
 		int transfer = 0;
 		int totalTransferred = 0;
 		boolean skipRF = false;
@@ -107,9 +106,9 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 		}
 
 		recursionBrake = false;
-		lastTransfer = (long)(totalTransferred / GeneralConfig.conversionRateHeToRF);
+		lastTransfer = (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
 		
-		return power - (long)(totalTransferred / GeneralConfig.conversionRateHeToRF);
+		return power - (long)(totalTransferred / (float)GeneralConfig.rfConversionRate);
 	}
 	
 	@Override
@@ -119,7 +118,7 @@ public class TileEntityConverterHeRf extends TileEntityLoadedBase implements ITi
 
 	@Override
 	public long getMaxPower() {
-		return (long)(Integer.MAX_VALUE / GeneralConfig.conversionRateHeToRF);
+		return (long)(Integer.MAX_VALUE / (float)GeneralConfig.rfConversionRate);
 	}
 
 	private long lastTransfer = 0;

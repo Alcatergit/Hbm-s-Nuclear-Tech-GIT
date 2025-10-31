@@ -1,16 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.items.ModItems;
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
-import api.hbm.energy.IBatteryItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,7 +19,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -81,12 +79,12 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
 		return slot > 1 && slot < 6;
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setShort("progressTime", (short) progress);
 		return super.writeToNBT(compound);
@@ -115,12 +113,17 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		{
 			return true;
 		}
-
-        return (inventory.getStackInSlot(2).isEmpty() || (itemStack.length > 0 && itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) &&
-                (inventory.getStackInSlot(3).isEmpty() || itemStack.length < 2 || (itemStack.length > 1 && itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) &&
-                (inventory.getStackInSlot(4).isEmpty() || itemStack.length < 3 || (itemStack.length > 2 && itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) &&
-                (inventory.getStackInSlot(5).isEmpty() || itemStack.length < 4 || (itemStack.length > 3 && itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize()));
-    }
+		
+		if((inventory.getStackInSlot(2).isEmpty() || (itemStack.length > 0 && itemStack[0] != null && inventory.getStackInSlot(2).isItemEqual(itemStack[0]) && inventory.getStackInSlot(2).getCount() + itemStack[0].getCount() <= itemStack[0].getMaxStackSize())) && 
+				(inventory.getStackInSlot(3).isEmpty() || itemStack.length < 2 || (itemStack.length > 1 && itemStack[1] != null && inventory.getStackInSlot(3).isItemEqual(itemStack[1]) && inventory.getStackInSlot(3).getCount() + itemStack[1].getCount() <= itemStack[1].getMaxStackSize())) && 
+				(inventory.getStackInSlot(4).isEmpty() || itemStack.length < 3 || (itemStack.length > 2 && itemStack[2] != null && inventory.getStackInSlot(4).isItemEqual(itemStack[2]) && inventory.getStackInSlot(4).getCount() + itemStack[2].getCount() <= itemStack[2].getMaxStackSize())) && 
+				(inventory.getStackInSlot(5).isEmpty() || itemStack.length < 4 || (itemStack.length > 3 && itemStack[3] != null && inventory.getStackInSlot(5).isItemEqual(itemStack[3]) && inventory.getStackInSlot(5).getCount() + itemStack[3].getCount() <= itemStack[3].getMaxStackSize())))
+		{
+			return true;
+		}
+		
+		return false;
+	}
 	
 	private void processItem() {
 		if(canProcess()) {
@@ -187,13 +190,13 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		int level = 0;
 		for(int i = 6; i <= 7; i++) {
 
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_1)
 				level += 1;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_2)
 				level += 2;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_3)
 				level +=3;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_screm)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_screm)
 				level +=6;
 		}
 		return Math.min(level, 6);
@@ -203,11 +206,11 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		int level = 0;
 		for(int i = 6; i <= 7; i++) {
 
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_1)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_1)
 				level += 1;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_2)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_2)
 				level += 2;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_3)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_3)
 				level +=3;
 		}
 		return Math.min(level, 3);
@@ -217,11 +220,11 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 		int level = 0;
 		for(int i = 6; i <= 7; i++) {
 
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_1)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_1)
 				level += 1;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_2)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_2)
 				level += 2;
-			if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_3)
+			if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_3)
 				level +=3;
 		}
 		return Math.min(level, 3);
@@ -262,8 +265,12 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 					this.power = 0;
 				}
 			}
-
-            isProgressing = hasPower() && canProcess();
+			
+			if(hasPower() && canProcess()){
+				isProgressing = true;
+			} else {
+				isProgressing = false;
+			}
 			
 			if(isProgressing){
 				progress += speed;

@@ -6,8 +6,8 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.TileEntityProxyInventory;
-import com.hbm.tileentity.machine.TileEntityMachineCrystallizer;
-
+import com.hbm.tileentity.leafia.TileEntityMachineCrystallizer;
+import com.hbm.tileentity.machine.CrystallizerCopyBase;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,17 +40,15 @@ public class MachineCrystallizer extends BlockDummyable {
 	
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		if(world.isRemote)
-		{
+		if(world.isRemote) {
 			return true;
-		} else if(!player.isSneaking())
-		{
+		} else if(!player.isSneaking()) {
 			int[] pos1 = this.findCore(world, pos.getX(), pos.getY(), pos.getZ());
 
 			if(pos1 == null)
 				return false;
 
-			TileEntityMachineCrystallizer entity = (TileEntityMachineCrystallizer) world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
+			CrystallizerCopyBase entity = (CrystallizerCopyBase) world.getTileEntity(new BlockPos(pos1[0], pos1[1], pos1[2]));
 			if(entity != null)
 			{
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_crystallizer, world, pos1[0], pos1[1], pos1[2]);

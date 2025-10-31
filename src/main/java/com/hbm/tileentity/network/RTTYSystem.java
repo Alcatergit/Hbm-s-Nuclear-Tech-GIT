@@ -1,11 +1,10 @@
 package com.hbm.tileentity.network;
 
+import com.hbm.util.Tuple.Pair;
+import net.minecraft.world.World;
+
 import java.util.HashMap;
 import java.util.Map.Entry;
-
-import com.hbm.util.Tuple.Pair;
-
-import net.minecraft.world.World;
 
 public class RTTYSystem {
 
@@ -22,7 +21,8 @@ public class RTTYSystem {
 	
 	/** Returns the RTTY channel with that name, or null */
 	public static RTTYChannel listen(World world, String channelName) {
-        return broadcast.get(new Pair(world, channelName));
+		RTTYChannel channel = broadcast.get(new Pair(world, channelName));
+		return channel;
 	}
 	
 	/** Moves all new messages to the broadcast map, adding the appropriate timestamp and clearing the new message queue */
@@ -33,7 +33,7 @@ public class RTTYSystem {
 			Object lastSignal = worldEntry.getValue();
 			
 			RTTYChannel channel = new RTTYChannel();
-			channel.timeStamp = identifier.getKey().getTotalWorldTime();
+			channel.timeStamp = identifier.getA().getTotalWorldTime();
 			channel.signal = lastSignal;
 			
 			broadcast.put(identifier, channel);
@@ -48,7 +48,7 @@ public class RTTYSystem {
 	}
 
 	/* Special objects for signifying specific signals to be used with RTTY machines (or telex) */
-	public enum RTTYSpecialSignal {
+	public static enum RTTYSpecialSignal {
 		BEGIN_TTY,		//start a new message block
 		STOP_TTY,		//end the message block
 		PRINT_BUFFER	//print message, literally, it makes a paper printout

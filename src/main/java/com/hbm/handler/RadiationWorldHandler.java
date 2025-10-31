@@ -1,25 +1,24 @@
 package com.hbm.handler;
 
-import java.util.Collection;
-import java.util.Map.Entry;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.handler.RadiationSystemNT.RadPocket;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSaveStructure;
 import com.hbm.saveddata.RadiationSavedData;
-
+import com.leafia.passive.effects.IdkWhereThisShitBelongs;
 import net.minecraft.block.*;
-import net.minecraft.init.Blocks;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.gen.ChunkProviderServer;
+
+import java.util.Collection;
+import java.util.Map.Entry;
 
 public class RadiationWorldHandler {
 
@@ -38,9 +37,13 @@ public class RadiationWorldHandler {
 			if(GeneralConfig.enableDebugMode) {
 				MainRegistry.logger.info("[Debug] Starting world destruction processing");
 			}
+			IdkWhereThisShitBelongs.processPockets(world);
+			IdkWhereThisShitBelongs.processPockets(world);
+			IdkWhereThisShitBelongs.processPockets(world);
+			IdkWhereThisShitBelongs.processPockets(world); // "What is optimization?"
 
 			Collection<RadPocket> activePockets = RadiationSystemNT.getActiveCollection(world);
-			if(activePockets.isEmpty())
+			if(activePockets.size() == 0)
 				return;
 			int randIdx = world.rand.nextInt(activePockets.size());
 			int itr = 0;
@@ -67,7 +70,7 @@ public class RadiationWorldHandler {
 									if(bblock == Blocks.GRASS) {
 										world.setBlockState(pos, ModBlocks.waste_earth.getDefaultState());
 									
-									} else if(bblock == Blocks.DIRT || bblock == Blocks.FARMLAND) {
+									/*} else if(bblock == Blocks.DIRT || bblock == Blocks.FARMLAND) {
 										world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 									} else if(bblock == Blocks.SANDSTONE) {
 										world.setBlockState(pos, ModBlocks.waste_sandstone.getDefaultState());
@@ -80,7 +83,8 @@ public class RadiationWorldHandler {
 										world.setBlockState(pos, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand.getDefaultState() : ModBlocks.waste_sand_red.getDefaultState());
 									} else if(bblock == Blocks.GRAVEL) {
 										world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
-
+									*/ // What's with making contaminated blocks that looks EXACTLY same as normal blocks?
+										// That's just horrible.
 									} else if(bblock == Blocks.MYCELIUM) {
 										world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
 
@@ -101,11 +105,9 @@ public class RadiationWorldHandler {
 											world.setBlockToAir(pos);
 										}
 
-									} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-                                        BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
-                                        if(type == null) type = BlockPlanks.EnumType.OAK;
-                                        world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
-                                    }
+									} else if(bblock instanceof BlockLeaves) {
+										world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
+									}
 								}
 							}
 						}
@@ -121,9 +123,9 @@ public class RadiationWorldHandler {
 		}
 		
 		WorldServer serv = (WorldServer)world;
+		ChunkProviderServer provider = (ChunkProviderServer) serv.getChunkProvider();
 
 		RadiationSavedData data = RadiationSavedData.getData(serv);
-		ChunkProviderServer provider = (ChunkProviderServer) serv.getChunkProvider();
 
 		Object[] entries = data.contamination.entrySet().toArray();
 
@@ -133,7 +135,7 @@ public class RadiationWorldHandler {
 		Entry<ChunkPos, RadiationSaveStructure> randEnt = (Entry<ChunkPos, RadiationSaveStructure>) entries[world.rand.nextInt(entries.length)];
 
 		ChunkPos coords = randEnt.getKey();
-
+		IdkWhereThisShitBelongs.processChunk(provider,coords);
 
 		if(randEnt == null || randEnt.getValue().radiation < threshold)
 			return;
@@ -196,10 +198,8 @@ public class RadiationWorldHandler {
 								world.setBlockToAir(pos);
 							}
 
-						} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-                            BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(c));
-                            if(type == null) type = BlockPlanks.EnumType.OAK;
-                            world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
+						} else if(bblock instanceof BlockLeaves) {
+							world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState());
 						}
 					}
 				}

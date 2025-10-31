@@ -1,7 +1,6 @@
 package com.hbm.entity.grenade;
 
 import com.hbm.explosion.ExplosionChaos;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;

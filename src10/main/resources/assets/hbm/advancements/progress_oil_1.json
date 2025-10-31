@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_well"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_oil_1"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_oil_1.desc"
+		}
+	},
+	"parent": "hbm:progress_assembler",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_well"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 7
+    }
+}

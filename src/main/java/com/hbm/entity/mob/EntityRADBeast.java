@@ -1,15 +1,14 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Materials.Nuggies;
+import com.hbm.items.ModItems.RetroRods;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.saveddata.RadiationSavedData;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
@@ -28,6 +27,8 @@ import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 
@@ -52,7 +53,8 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     public EntityRADBeast makeLeader() {
     	this.setDropChance(EntityEquipmentSlot.MAINHAND, 1);
-    	this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(360.0D);
+    	this.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, new ItemStack(ModItems.coin_radiation));
+        this.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(360.0D);
         this.heal(this.getMaxHealth());
     	return this;
     }
@@ -63,8 +65,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 	        List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
 
 	        for(EntityPlayer player : players) {
-	        	AdvancementManager.grantAchievement(player, AdvancementManager.bossMeltdown);
-                player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_radiation));
+	        	AdvancementManager.grantAchievement(player, AdvancementManager.achMeltdown);
 	        }
         }
         super.onDeath(cause);
@@ -83,7 +84,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     @Override
     protected SoundEvent getAmbientSound() {
-    	return HBMSoundHandler.geigerSounds[rand.nextInt(6)];
+    	return HBMSoundEvents.geigerSounds[rand.nextInt(6)];
     }
     
     @Override
@@ -93,7 +94,7 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     @Override
     protected SoundEvent getDeathSound() {
-    	return HBMSoundHandler.metalStep;
+    	return HBMSoundEvents.metalStep;
     }
     
     @SideOnly(Side.CLIENT)
@@ -204,14 +205,14 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
     
     @Override
     protected Item getDropItem() {
-    	return ModItems.rod_uranium_fuel_depleted;
+    	return RetroRods.rod_uranium_fuel_depleted;
     }
 
     @Override
     protected void dropLoot(boolean wasRecentlyHit, int looting, DamageSource source) {
         super.dropLoot(wasRecentlyHit, looting, source);
         if(looting > 0) {
-                this.dropItem(ModItems.nugget_polonium, looting);
+                this.dropItem(Nuggies.nugget_polonium, looting);
             }
             
         int count = this.rand.nextInt(3) + 1;
@@ -221,13 +222,13 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
             int r = this.rand.nextInt(3);
             
             if(r == 0) {
-                this.dropItem(this.isWet() ? ModItems.waste_uranium : ModItems.rod_uranium_fuel_depleted, 1);
+                this.dropItem(this.isWet() ? ModItems.waste_uranium : RetroRods.rod_uranium_fuel_depleted, 1);
                 
             } else if(r == 1) {
-                this.dropItem(this.isWet() ? ModItems.waste_mox : ModItems.rod_mox_fuel_depleted, 1);
+                this.dropItem(this.isWet() ? ModItems.waste_mox : RetroRods.rod_mox_fuel_depleted, 1);
                 
-            } else {
-                this.dropItem(this.isWet() ? ModItems.waste_plutonium : ModItems.rod_plutonium_fuel_depleted, 1);
+            } else if(r == 2) {
+                this.dropItem(this.isWet() ? ModItems.waste_plutonium : RetroRods.rod_plutonium_fuel_depleted, 1);
                 
             }
         }

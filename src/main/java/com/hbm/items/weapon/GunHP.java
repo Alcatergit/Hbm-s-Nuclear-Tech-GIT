@@ -1,14 +1,11 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityPlasmaBeam;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,6 +22,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunHP extends Item {
 
@@ -59,14 +59,14 @@ public class GunHP extends Item {
 		if(!(player1 instanceof EntityPlayer))
 			return;
 		EntityPlayer player = (EntityPlayer) player1;
-		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == ModItems.gun_hp){
+		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == Armory.gun_hp){
 			player.getHeldItemOffhand().getItem().onUsingTick(player.getHeldItemOffhand(), player, count);
 		}
 		World world = player.world;
 		
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-		if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, ModItems.gun_hp_ammo))) {
+		if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, Armory.gun_hp_ammo))) {
 
 			EnumHand hand = player.getHeldItem(EnumHand.MAIN_HAND) == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 			EntityPlasmaBeam plasma = new EntityPlasmaBeam(world, player, 1F, hand);
@@ -91,13 +91,13 @@ public class GunHP extends Item {
 				plasma.canBePickedUp = 2;
 			} else {
 				if (count % 20 == 0)
-					Library.consumeInventoryItem(player.inventory, ModItems.gun_hp_ammo);
+					Library.consumeInventoryItem(player.inventory, Armory.gun_hp_ammo);
 			}
 
 			if (count == this.getMaxItemUseDuration(stack))
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorIgnite, SoundCategory.PLAYERS, 1.0F, 1F);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.immolatorIgnite, SoundCategory.PLAYERS, 1.0F, 1F);
 			if (count % 10 == 0)
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 1.0F, 1F);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.immolatorShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 
 			if (!world.isRemote) {
 				world.spawnEntity(plasma);

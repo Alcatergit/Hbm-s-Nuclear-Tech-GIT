@@ -1,13 +1,12 @@
 package com.hbm.entity.mob;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -16,9 +15,6 @@ import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.logic.EntityNukeExplosionMK5;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.EntityLivingBase;
@@ -46,6 +42,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 
@@ -195,7 +194,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 				this.beamTimer--;
 				
 				if(!this.getBeam()) {
-					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.ufoBeam, SoundCategory.HOSTILE, 10.0F, 1.0F);
+					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.ufoBeam, SoundCategory.HOSTILE, 10.0F, 1.0F);
 					this.setBeam(true);
 				}
 
@@ -310,7 +309,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 		this.motionY -= 0.05D;
 		
 		if(this.deathTime == -10) {
-			world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.chopperDamage, SoundCategory.HOSTILE, 10.0F, 1.0F);
+			world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.chopperDamage, SoundCategory.HOSTILE, 10.0F, 1.0F);
 		}
 		
 		if(this.deathTime == 19 && !world.isRemote) {
@@ -345,7 +344,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 		bullet.setPosition(pivotX, pivotY, pivotZ);
 		bullet.shoot(heading.xCoord, heading.yCoord, heading.zCoord, 2F, 0.02F);
 		this.world.spawnEntity(bullet);
-		this.playSound(HBMSoundHandler.ballsLaser, 5.0F, 1.0F);
+		this.playSound(HBMSoundEvents.ballsLaser, 5.0F, 1.0F);
 	}
 	
 	private void rocketAttack(Entity e) {
@@ -358,7 +357,7 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 		bullet.shoot(heading.xCoord, heading.yCoord, heading.zCoord, 2F, 0.02F);
 		bullet.getEntityData().setInteger("homingTarget", e.getEntityId());
 		this.world.spawnEntity(bullet);
-		this.playSound(HBMSoundHandler.richard_fire, 5.0F, 1.0F);
+		this.playSound(HBMSoundEvents.richard_fire, 5.0F, 1.0F);
 	}
 	
 	@Override

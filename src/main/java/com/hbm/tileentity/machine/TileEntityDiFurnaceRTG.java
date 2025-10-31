@@ -2,16 +2,16 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.machine.MachineDiFurnaceRTG;
 import com.hbm.inventory.DiFurnaceRecipes;
+import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.RTGUtil;
-
+import com.leafia.contents.control.fuel.nuclearfuel.LeafiaRodItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITickable, ICapabilityProvider {
 
@@ -27,7 +27,7 @@ public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITi
 	private boolean lastTrigger = false;
 	
 	public TileEntityDiFurnaceRTG() {
-		super(9);
+		super(10);
 	}
 	
 	@Override
@@ -36,11 +36,12 @@ public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITi
 		this.rtgPower = compound.getInteger("rtgPower");
 		if(compound.hasKey("inventory"))
 			inventory.deserializeNBT((NBTTagCompound) compound.getTag("inventory"));
+		migrateSlotCount(10);
 		super.readFromNBT(compound);
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setShort("progress", progress);
 		compound.setInteger("rtgPower", rtgPower);
 		compound.setTag("inventory", inventory.serializeNBT());
@@ -50,8 +51,38 @@ public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITi
 	@Override
 	public void update() {
 		if(!world.isRemote)	{
+			migrateSlotCount(10);
 			rtgPower = Math.min(RTGUtil.updateRTGs(inventory, new int[] {3, 4, 5, 6, 7, 8}), maxRTGPower);
-
+			if (inventory.getStackInSlot(9).getItem() instanceof LeafiaRodItem) {
+				ItemStack stack = inventory.getStackInSlot(9);
+				LeafiaRodItem rod = (LeafiaRodItem)stack.getItem();
+				NBTTagCompound nbt = stack.getTagCompound();
+				double fuelHeat = 20;
+				if (nbt != null) {
+					fuelHeat = nbt.getDouble("heat");
+					//if (fuelHeat >= 2000) {
+					if (nbt.getInteger("spillage") > 20*5) {
+						ItemStack prevStack = null;
+						for (int i = 0; i < inventory.getSlots(); i++) {
+							prevStack = LeafiaRodItem.comparePriority(inventory.getStackInSlot(i), prevStack);
+							inventory.setStackInSlot(i, ItemStack.EMPTY);
+						}
+						world.setBlockToAir(pos);
+						LeafiaRodItem detonate = (LeafiaRodItem)prevStack.getItem();
+						detonate.resetDetonate();
+						detonate.detonateRadius = 2;
+						detonate.detonate(world, pos);
+						return;
+					}
+					//}
+				}
+				if (canProcess()) {
+					rtgPower += (int)Math.floor(Math.pow(fuelHeat/250,0.54)*15);
+					rod.HeatFunction(stack,true,rod.getFlux(stack)*2,0,0,0);
+					rod.decay(stack,inventory,0);
+				} else
+					rod.HeatFunction(stack,true,0,0,0,0);
+			}
 			if (hasPower() && canProcess()) {
 				progress += rtgPower;
 				if(progress >= progressRequired) {
@@ -94,8 +125,14 @@ public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITi
 	
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
-        return i != 2;
-    }
+		if(i == 2) {
+			return false;
+		} else if ((i >= 3) && (i <= 8)) {
+			return stack.getItem() instanceof ItemRTGPellet;
+		} else if (i == 9)
+			return stack.getItem() instanceof LeafiaRodItem;
+		return true;
+	}
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
@@ -106,7 +143,7 @@ public class TileEntityDiFurnaceRTG extends TileEntityMachineBase implements ITi
 	
 	@Override
 	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-		return slot == 2;
+		return true;
 	}
 	
 	public boolean isUsableByPlayer(EntityPlayer player){

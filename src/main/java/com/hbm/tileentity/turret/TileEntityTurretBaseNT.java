@@ -1,9 +1,6 @@
 package com.hbm.tileentity.turret;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.entity.logic.EntityBomber;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
@@ -15,14 +12,12 @@ import com.hbm.interfaces.IControlReceiver;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
 import com.hbm.inventory.control_panel.IControllable;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.items.machine.ItemTurretBiometry;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.INpc;
@@ -41,12 +36,16 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.FakePlayer;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase implements IEnergyUser, IControllable, IControlReceiver, ITickable {
 
@@ -119,7 +118,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setLong("power", this.power);
 		nbt.setBoolean("isOn", this.isOn);
 		nbt.setBoolean("targetPlayers", this.targetPlayers);
@@ -363,7 +362,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	 */
 	public List<String> getWhitelist() {
 		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.turret_chip) {
+		if(inventory.getStackInSlot(0).getItem() == Armory.turret_chip) {
 			
 			String[] array = ItemTurretBiometry.getNames(inventory.getStackInSlot(0));
 			
@@ -382,7 +381,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	 */
 	public void addName(String name) {
 		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.turret_chip) {
+		if(inventory.getStackInSlot(0).getItem() == Armory.turret_chip) {
 			ItemTurretBiometry.addName(inventory.getStackInSlot(0), name);
 		}
 	}
@@ -393,7 +392,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	 */
 	public void removeName(int index) {
 		
-		if(inventory.getStackInSlot(0).getItem() == ModItems.turret_chip) {
+		if(inventory.getStackInSlot(0).getItem() == Armory.turret_chip) {
 			
 			String[] array = ItemTurretBiometry.getNames(inventory.getStackInSlot(0));
 			
@@ -522,7 +521,25 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 			this.aligned = true;
 		}
 	}
-	
+
+	public boolean detectFriendlyFire(Entity e) {
+		Vec3d pos = this.getTurretPos();
+		Vec3d ent = this.getEntityPos(e);
+		RayTraceResult res = Library.rayTraceIncludeEntities(world,new Vec3d(pos.x, pos.y, pos.z), new Vec3d(ent.x, ent.y, ent.z), this.target);
+		if (res == null)
+			return false;
+		else {
+			if (res.typeOfHit == RayTraceResult.Type.MISS)
+				return false;
+			if (res.typeOfHit == RayTraceResult.Type.BLOCK)
+				return false;
+			if (res.typeOfHit == RayTraceResult.Type.ENTITY) {
+				Entity hit = res.entityHit;
+				return !this.entityAcceptableTarget(hit);
+			}
+			return false;
+		}
+	}
 	/**
 	 * Checks line of sight to the passed entity along with whether the angle falls within swivel range
 	 * @return
@@ -764,8 +781,13 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 	public int[] getAccessibleSlotsFromSide(EnumFacing e){
 		return new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9 };
 	}
-
-    public boolean hasPower() {
+	
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack stack){
+		return true;
+	}
+	
+	public boolean hasPower() {
 		return this.getPower() >= this.getConsumption();
 	}
 	

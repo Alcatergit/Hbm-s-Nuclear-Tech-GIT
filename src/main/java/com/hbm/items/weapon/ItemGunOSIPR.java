@@ -2,7 +2,7 @@ package com.hbm.items.weapon;
 
 import com.hbm.entity.projectile.EntityCombineBall;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -19,7 +19,7 @@ public class ItemGunOSIPR extends ItemGunBase {
 	protected void altFire(ItemStack stack, World world, EntityPlayer player, EnumHand hand) {
 		
 		setCharge(stack, 1);
-		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.osiprCharging, SoundCategory.PLAYERS, 1.0F, 1F);
+		world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.osiprCharging, SoundCategory.PLAYERS, 1.0F, 1F);
 	}
 	
 	@Override

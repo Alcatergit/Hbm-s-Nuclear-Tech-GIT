@@ -1,9 +1,9 @@
 package com.hbm.hazard;
 
+import com.hbm.hazard.type.HazardTypeBase;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.hbm.hazard.type.HazardTypeBase;
 
 public class HazardData {
 	
@@ -20,15 +20,7 @@ public class HazardData {
 	 */
 	int mutexBits = 0b0000_0000_0000_0000_0000_0000_0000_0000;
 	
-	List<HazardEntry> entries = new ArrayList();
-
-	public List<HazardEntry> createMulList(float mul){
-		List<HazardEntry> entriesCopy = new ArrayList();
-		for(HazardEntry e: entries) {
-			entriesCopy.add(e.clone(mul));
-		}
-		return entriesCopy;
-	}
+	List<HazardEntry> entries = new ArrayList<>();
 	
 	public HazardData addEntry(HazardTypeBase hazard) {
 		return this.addEntry(hazard, 1F, false);
@@ -56,9 +48,5 @@ public class HazardData {
 	
 	public int getMutex() {
 		return mutexBits;
-	}
-
-	public boolean isEmpty(){
-		return entries.isEmpty();
 	}
 }

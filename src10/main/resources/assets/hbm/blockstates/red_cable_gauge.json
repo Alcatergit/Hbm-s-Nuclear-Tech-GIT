@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:red_cable_gauge" },
+ 	   	"facing=south": { "model": "hbm:red_cable_gauge", "y": 180 },
+  	  	"facing=west":  { "model": "hbm:red_cable_gauge", "y": 270 },
+  		"facing=east":  { "model": "hbm:red_cable_gauge", "y": 90 },
+		"facing=up":  	{ "model": "hbm:red_cable_gauge", "x": 270 },
+		"facing=down":  { "model": "hbm:red_cable_gauge", "x": 90 }
+	}
+}

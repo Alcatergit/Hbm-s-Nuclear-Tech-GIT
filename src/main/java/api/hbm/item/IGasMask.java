@@ -1,10 +1,9 @@
 package api.hbm.item;
 
-import java.util.ArrayList;
-
 import com.hbm.util.ArmorRegistry.HazardClass;
-
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
 
 public interface IGasMask {
 	/**
@@ -13,7 +12,7 @@ public interface IGasMask {
 	 * @param entity
 	 * @return an empty list if there's no blacklist
 	 */
-    ArrayList<HazardClass> getBlacklist(ItemStack stack);
+	public ArrayList<HazardClass> getBlacklist(ItemStack stack);
 	
 	/**
 	 * Returns the loaded filter, if there is any
@@ -21,7 +20,7 @@ public interface IGasMask {
 	 * @param entity
 	 * @return null if no filter is installed
 	 */
-    ItemStack getFilter(ItemStack stack);
+	public ItemStack getFilter(ItemStack stack);
 	
 	/**
 	 * Checks whether the provided filter can be screwed into the mask, does not take already applied filters into account (those get ejected)
@@ -30,7 +29,7 @@ public interface IGasMask {
 	 * @param filter
 	 * @return
 	 */
-    boolean isFilterApplicable(ItemStack stack, ItemStack filter);
+	public boolean isFilterApplicable(ItemStack stack, ItemStack filter);
 	
 	/**
 	 * This will write the filter to the stack's NBT, it ignores any previously installed filter and won't eject those
@@ -38,7 +37,7 @@ public interface IGasMask {
 	 * @param entity
 	 * @param filter
 	 */
-    void installFilter(ItemStack stack, ItemStack filter);
+	public void installFilter(ItemStack stack, ItemStack filter);
 	
 	/**
 	 * Damages the installed filter, if there is one
@@ -46,5 +45,5 @@ public interface IGasMask {
 	 * @param entity
 	 * @param damage
 	 */
-    void damageFilter(ItemStack stack, int damage);
+	public void damageFilter(ItemStack stack, int damage);
 }

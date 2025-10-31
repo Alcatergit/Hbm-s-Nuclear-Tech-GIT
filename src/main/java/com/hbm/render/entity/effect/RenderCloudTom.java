@@ -1,13 +1,10 @@
 package com.hbm.render.entity.effect;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -16,6 +13,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
 
 public class RenderCloudTom extends Render<EntityCloudTom> {
 
@@ -39,17 +37,19 @@ public class RenderCloudTom extends Render<EntityCloudTom> {
         GlStateManager.depthMask(false);
         GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
 
-        double scale = ((EntityCloudTom)entity).age + partialTicks;
+		EntityCloudTom blast = (EntityCloudTom)entity;
+
+		double scale = blast.age + partialTicks;
 
 		int segments = 16;
 		float angle = (float) Math.toRadians(360D/segments);
 		int height = 20;
 		int depth = 20;
 
-		Tessellator tess = Tessellator.instance;
+		CompositeBrush tess = CompositeBrush.instance;
 		tess.startDrawingQuads();
 
-		bindTexture(this.getEntityTexture((EntityCloudTom)entity));
+		bindTexture(this.getEntityTexture(blast));
 
         GlStateManager.matrixMode(GL11.GL_TEXTURE);
         GlStateManager.loadIdentity();
@@ -102,9 +102,9 @@ public class RenderCloudTom extends Render<EntityCloudTom> {
         GlStateManager.disableBlend();
         GlStateManager.enableLighting();
 		GL11.glPopMatrix();
-	}
-
-    @Override
+	};
+	
+	@Override
 	protected ResourceLocation getEntityTexture(EntityCloudTom entity) {
 		return ResourceManager.tomblast;
 	}

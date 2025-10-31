@@ -1,12 +1,5 @@
 package com.hbm.particle_instanced;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
-import java.util.Iterator;
-import java.util.Queue;
-
-import org.lwjgl.opengl.GL11;
-
 import com.google.common.collect.Queues;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.HbmShaderManager2;
@@ -14,7 +7,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.GLAllocation;
@@ -29,6 +21,12 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.ByteBuffer;
+import java.util.ArrayDeque;
+import java.util.Iterator;
+import java.util.Queue;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = RefStrings.MODID)

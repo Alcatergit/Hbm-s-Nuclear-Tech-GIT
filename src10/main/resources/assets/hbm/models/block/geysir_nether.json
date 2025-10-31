@@ -1,0 +1,12 @@
+{
+	"parent": "block/cube",
+	"textures": {
+		"particle": "hbm:blocks/geysir_nether",
+		"up": "hbm:blocks/geysir_nether",
+		"down": "blocks/netherrack",
+		"east": "blocks/netherrack",
+		"west": "blocks/netherrack",
+		"north": "blocks/netherrack",
+		"south": "blocks/netherrack"
+	}
+}

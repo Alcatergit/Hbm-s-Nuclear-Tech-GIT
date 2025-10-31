@@ -1,15 +1,9 @@
 package com.hbm.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityTSmokeFX;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.DummyTexs;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
@@ -17,6 +11,11 @@ import net.minecraft.client.renderer.texture.TextureMap;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 
@@ -28,14 +27,14 @@ public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 	protected TSmokeRenderer(RenderManager renderManager) {
 		super(renderManager);
 		this.field_94151_a = ModItems.nuclear_waste;
-		textures.put(ModItems.d_smoke1, RenderHelper.getItemTexture(ModItems.d_smoke1));
-		textures.put(ModItems.d_smoke2, RenderHelper.getItemTexture(ModItems.d_smoke2));
-		textures.put(ModItems.d_smoke3, RenderHelper.getItemTexture(ModItems.d_smoke3));
-		textures.put(ModItems.d_smoke4, RenderHelper.getItemTexture(ModItems.d_smoke4));
-		textures.put(ModItems.d_smoke5, RenderHelper.getItemTexture(ModItems.d_smoke5));
-		textures.put(ModItems.d_smoke6, RenderHelper.getItemTexture(ModItems.d_smoke6));
-		textures.put(ModItems.d_smoke7, RenderHelper.getItemTexture(ModItems.d_smoke7));
-		textures.put(ModItems.d_smoke8, RenderHelper.getItemTexture(ModItems.d_smoke8));
+		textures.put(DummyTexs.d_smoke1, RenderHelper.getItemTexture(DummyTexs.d_smoke1));
+		textures.put(DummyTexs.d_smoke2, RenderHelper.getItemTexture(DummyTexs.d_smoke2));
+		textures.put(DummyTexs.d_smoke3, RenderHelper.getItemTexture(DummyTexs.d_smoke3));
+		textures.put(DummyTexs.d_smoke4, RenderHelper.getItemTexture(DummyTexs.d_smoke4));
+		textures.put(DummyTexs.d_smoke5, RenderHelper.getItemTexture(DummyTexs.d_smoke5));
+		textures.put(DummyTexs.d_smoke6, RenderHelper.getItemTexture(DummyTexs.d_smoke6));
+		textures.put(DummyTexs.d_smoke7, RenderHelper.getItemTexture(DummyTexs.d_smoke7));
+		textures.put(DummyTexs.d_smoke8, RenderHelper.getItemTexture(DummyTexs.d_smoke8));
 		textures.put(ModItems.nuclear_waste, RenderHelper.getItemTexture(ModItems.nuclear_waste));
 
 	}
@@ -44,35 +43,35 @@ public class TSmokeRenderer extends Render<EntityTSmokeFX> {
 	public void doRender(EntityTSmokeFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
 
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
-			field_94151_a = ModItems.d_smoke8;
+			field_94151_a = DummyTexs.d_smoke8;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 7 && fx.particleAge >= fx.maxAge / 8 * 6) {
-			field_94151_a = ModItems.d_smoke7;
+			field_94151_a = DummyTexs.d_smoke7;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 6 && fx.particleAge >= fx.maxAge / 8 * 5) {
-			field_94151_a = ModItems.d_smoke6;
+			field_94151_a = DummyTexs.d_smoke6;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 5 && fx.particleAge >= fx.maxAge / 8 * 4) {
-			field_94151_a = ModItems.d_smoke5;
+			field_94151_a = DummyTexs.d_smoke5;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 4 && fx.particleAge >= fx.maxAge / 8 * 3) {
-			field_94151_a = ModItems.d_smoke4;
+			field_94151_a = DummyTexs.d_smoke4;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 3 && fx.particleAge >= fx.maxAge / 8 * 2) {
-			field_94151_a = ModItems.d_smoke3;
+			field_94151_a = DummyTexs.d_smoke3;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 2 && fx.particleAge >= fx.maxAge / 8 * 1) {
-			field_94151_a = ModItems.d_smoke2;
+			field_94151_a = DummyTexs.d_smoke2;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 && fx.particleAge >= 0) {
-			field_94151_a = ModItems.d_smoke1;
+			field_94151_a = DummyTexs.d_smoke1;
 		}
 
 		TextureAtlasSprite iicon = textures.get(this.field_94151_a);

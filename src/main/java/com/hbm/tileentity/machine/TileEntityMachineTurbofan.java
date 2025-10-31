@@ -1,37 +1,30 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.items.ModItems;
-import com.hbm.main.MainRegistry;
-import com.hbm.inventory.FluidCombustionRecipes;
-import com.hbm.lib.Library;
+import com.hbm.inventory.EngineRecipes;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.packet.*;
 import com.hbm.sound.AudioWrapper;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.AuxParticlePacketNT;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
-import com.hbm.packet.TETurbofanPacket;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.DamageSource;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -44,6 +37,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.List;
 
 public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
@@ -84,7 +79,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -126,13 +121,13 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 			
 			afterburner = 0;
 			if(!inventory.getStackInSlot(2).isEmpty()) {
-				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_1) {
+				if(inventory.getStackInSlot(2).getItem() == Upgrades.upgrade_afterburn_1) {
 					afterburner = 1;
 				}
-				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_2) {
+				if(inventory.getStackInSlot(2).getItem() == Upgrades.upgrade_afterburn_2) {
 					afterburner = 2;
 				}
-				if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_afterburn_3) {
+				if(inventory.getStackInSlot(2).getItem() == Upgrades.upgrade_afterburn_3) {
 					afterburner = 3;
 				}
 			}
@@ -146,8 +141,8 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 			long burnValue = 0;
 			int amount = 1 + this.afterburner;
 			
-			if(tank.getFluid() != null && FluidCombustionRecipes.isAero(tank.getFluid().getFluid())) {
-				burnValue = FluidCombustionRecipes.getCombustionEnergy(tank.getFluid().getFluid()) / 1_000;
+			if(tank.getFluid() != null && EngineRecipes.isAero(tank.getFluid().getFluid())) {
+				burnValue = EngineRecipes.getEnergy(tank.getFluid().getFluid()) / 1_000;
 			}
 			
 			int amountToBurn = Math.min(amount, tank.getFluidAmount());
@@ -335,7 +330,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	}
 
 	public AudioWrapper createAudioLoop() {
-		return MainRegistry.proxy.getLoopedSound(HBMSoundHandler.turbofanOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
+		return MainRegistry.proxy.getLoopedSound(HBMSoundEvents.turbofanOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
 	}
 
 	@Override
@@ -360,7 +355,9 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(!inventory.getStackInSlot(slot).isEmpty()){
-            return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
+				return true;	
+			}
 		}
 		return false;
 	}
@@ -368,7 +365,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 	private boolean isValidFluid(FluidStack stack) {
 		if(stack == null)
 			return false;
-		return FluidCombustionRecipes.isAero(stack.getFluid());
+		return EngineRecipes.isAero(stack.getFluid());
 	}
 
 	protected void sendTurboPower() {

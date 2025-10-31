@@ -1,15 +1,16 @@
 	package com.hbm.inventory.container;
 
-import com.hbm.inventory.SlotMachineOutput;
-import com.hbm.tileentity.machine.TileEntityMachinePress;
-
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.entity.player.InventoryPlayer;
-import net.minecraft.inventory.Container;
-import net.minecraft.inventory.IContainerListener;
-import net.minecraft.inventory.Slot;
-import net.minecraft.item.ItemStack;
-import net.minecraftforge.items.SlotItemHandler;
+    import com.hbm.inventory.SlotMachineOutput;
+    import com.hbm.items.ModItems;
+    import com.hbm.tileentity.machine.TileEntityMachinePress;
+    import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
+    import net.minecraft.entity.player.EntityPlayer;
+    import net.minecraft.entity.player.InventoryPlayer;
+    import net.minecraft.inventory.Container;
+    import net.minecraft.inventory.IContainerListener;
+    import net.minecraft.inventory.Slot;
+    import net.minecraft.item.ItemStack;
+    import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerMachinePress extends Container {
 
@@ -135,7 +136,15 @@ public class ContainerMachinePress extends Container {
 		this.burnTime = this.nukeBoy.burnTime;
 		this.maxBurn = this.nukeBoy.maxBurn;
 	}
-	
+	@Override
+	public void onContainerClosed(EntityPlayer playerIn) {
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.template_folder);
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.stamp_stone_flat);
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.stamp_iron_flat);
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.stamp_titanium_flat);
+		LeafiaRecipeBookServer.unlockRecipe(playerIn,ModItems.stamp_obsidian_flat);
+		super.onContainerClosed(playerIn);
+	}
 	@Override
 	public void updateProgressBar(int i, int j) {
 		if(i == 0)

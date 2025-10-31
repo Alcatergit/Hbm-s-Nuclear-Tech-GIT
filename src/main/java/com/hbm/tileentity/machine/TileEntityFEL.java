@@ -1,42 +1,41 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.machine.MachineSILEX;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
+import com.hbm.packet.LoopedSoundPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-import com.hbm.packet.LoopedSoundPacket;
-import com.hbm.packet.PacketDispatcher;
-
-import api.hbm.energy.IEnergyUser;
-import net.minecraft.util.ITickable;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.init.SoundEvents;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
-import com.hbm.lib.ForgeDirection;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityFEL extends TileEntityMachineBase implements ITickable, IEnergyUser {
 	
@@ -70,9 +69,10 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 			
 			if(this.isOn && !(inventory.getStackInSlot(1).getCount() == 0)) {
 				
-				if(inventory.getStackInSlot(1).getItem() instanceof ItemFELCrystal crystal) {
-
-                    this.mode = crystal.wavelength;
+				if(inventory.getStackInSlot(1).getItem() instanceof ItemFELCrystal) {
+					
+					ItemFELCrystal crystal = (ItemFELCrystal) inventory.getStackInSlot(1).getItem();
+					this.mode = crystal.wavelength;
 					
 				} else { this.mode = EnumWavelengths.NULL; }
 				
@@ -128,7 +128,7 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 						
 						IBlockState b = world.getBlockState(new BlockPos(x, y, z));
 						
-						if(!(b.getMaterial().isOpaque()) && b.getBlock() != Blocks.TNT) {
+						if(!(b.getMaterial().isOpaque()) && b != Blocks.TNT) {
 							this.distance = range;
 							silexSpacing = false;
 							continue;
@@ -138,15 +138,18 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 							BlockPos silex_pos = new BlockPos(x + dir.offsetX, yCoord, z + dir.offsetZ);
 							TileEntity te = world.getTileEntity(silex_pos);
 						
-							if(te instanceof TileEntitySILEX silex) {
-                                int meta = silex.getBlockMetadata() - BlockDummyable.offset;
+							if(te instanceof TileEntitySILEX) {
+								TileEntitySILEX silex = (TileEntitySILEX) te;
+								int meta = silex.getBlockMetadata() - BlockDummyable.offset;
 								if(rotationIsValid(meta, this.getBlockMetadata() - BlockDummyable.offset) && i >= 5 && silexSpacing == false	) {
 									if(silex.mode != this.mode) {
 										silex.mode = this.mode;
 										this.missingValidSilex = false;
 										silexSpacing = true;
+										continue;
 									} 
 								} else {
+									MachineSILEX silexBlock = (MachineSILEX)silex.getBlockType();
 									world.setBlockToAir(silex_pos);
 									world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Item.getItemFromBlock(ModBlocks.machine_silex))));
 								} 
@@ -236,8 +239,12 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 	public boolean rotationIsValid(int silexMeta, int felMeta) {
 		ForgeDirection silexDir = ForgeDirection.getOrientation(silexMeta);
 		ForgeDirection felDir = ForgeDirection.getOrientation(felMeta);
-        return silexDir == felDir || silexDir == felDir.getOpposite();
-    }
+		if(silexDir == felDir || silexDir == felDir.getOpposite()) {
+			return true;
+		}
+		 
+		return false;
+	}
 
 	@Override
 	public void networkUnpack(NBTTagCompound nbt) {
@@ -265,16 +272,14 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 		super.readFromNBT(nbt);
 		
 		this.power = nbt.getLong("power");
-		try {
-			this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
-		}catch(IllegalArgumentException ignored){ this.mode = EnumWavelengths.NULL;}
+		this.mode = EnumWavelengths.valueOf(nbt.getString("mode"));
 		this.isOn = nbt.getBoolean("isOn");
 		this.missingValidSilex = nbt.getBoolean("valid");
 		this.distance = nbt.getInteger("distance");
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		
 		nbt.setLong("power", this.power);

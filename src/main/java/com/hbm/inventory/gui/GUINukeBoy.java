@@ -4,7 +4,6 @@ import com.hbm.inventory.container.ContainerNukeBoy;
 import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.bomb.TileEntityNukeBoy;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -45,22 +44,35 @@ public class GUINukeBoy extends GuiContainer {
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-
-		if(testNuke.isReady())
-		{
-			drawTexturedModalRect(guiLeft + 142, guiTop + 90, 176, 0, 16, 16);
-		}
+		boolean ready = true;
 
 		if(testNuke.inventory.getStackInSlot(0).getItem() == ModItems.boy_shielding)
 			drawTexturedModalRect(guiLeft + 27, guiTop + 87, 176, 16, 21, 22);
+		else ready = false;
 		if(testNuke.inventory.getStackInSlot(1).getItem() == ModItems.boy_target)
 			drawTexturedModalRect(guiLeft + 27, guiTop + 89, 176, 38, 21, 18);
+		else if (testNuke.inventory.getStackInSlot(1).getItem() == ModItems.boy_target_invalid) {
+			drawTexturedModalRect(guiLeft + 27, guiTop + 89, 176, 38, 21, 18);
+			drawTexturedModalRect(guiLeft + 27,guiTop + 94,176,57,19,8);
+			ready = false;
+		} else {
+			ready = false;
+			if ((testNuke.inventory.getStackInSlot(1).getItem() == ModItems.boy_bullet) && testNuke.failed)
+				drawTexturedModalRect(guiLeft + 27,guiTop + 94,176,57,19,8);
+		}
 		if(testNuke.inventory.getStackInSlot(2).getItem() == ModItems.boy_bullet)
 			drawTexturedModalRect(guiLeft + 74, guiTop + 94, 176, 57, 19, 8);
+		else ready = false;
 		if(testNuke.inventory.getStackInSlot(3).getItem() == ModItems.boy_propellant)
 			drawTexturedModalRect(guiLeft + 92, guiTop + 95, 176, 66, 12, 6);
+		else ready = false;
 		if(testNuke.inventory.getStackInSlot(4).getItem() == ModItems.boy_igniter)
 			drawTexturedModalRect(guiLeft + 107, guiTop + 91, 176, 75, 16, 14);
+		else ready = false;
+		if(ready)
+		{
+			drawTexturedModalRect(guiLeft + 142, guiTop + 90, 176, 0, 16, 16);
+		}
 	}
 
 }

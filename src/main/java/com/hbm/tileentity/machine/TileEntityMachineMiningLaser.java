@@ -1,7 +1,8 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
+import api.hbm.block.IDrillInteraction;
+import api.hbm.block.IMiningDrill;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.gas.BlockGasBase;
 import com.hbm.forgefluid.FFUtils;
@@ -11,19 +12,16 @@ import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.items.machine.ItemMachineUpgrade;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.Library;
 import com.hbm.packet.FluidTankPacket;
+import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.util.InventoryUtil;
-
-import api.hbm.energy.IEnergyUser;
-import api.hbm.block.IDrillInteraction;
-import api.hbm.block.IMiningDrill;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
@@ -39,12 +37,12 @@ import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
+import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -52,7 +50,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.items.ItemStackHandler;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TileEntityMachineMiningLaser extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor, IMiningDrill {
 
@@ -88,7 +87,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			public void setStackInSlot(int slot, ItemStack stack) {
 				super.setStackInSlot(slot, stack);
 				if(stack != null && slot >= 1 && slot <= 8 && stack.getItem() instanceof ItemMachineUpgrade)
-					world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundEvents.upgradePlug, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			}
 		};
 		tank = new FluidTank(64000);
@@ -177,7 +176,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 					}
 				}
 				if(doesScream()) {
-					world.playSound(null, targetX + 0.5, targetY + 0.5, targetZ + 0.5, HBMSoundHandler.screm, SoundCategory.BLOCKS, 20.0F, 1.0F);
+					world.playSound(null, targetX + 0.5, targetY + 0.5, targetZ + 0.5, HBMSoundEvents.screm, SoundCategory.BLOCKS, 20.0F, 1.0F);
 				}
 			} else {
 				targetY = pos.getY() - 2;
@@ -429,8 +428,9 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		if(b instanceof BlockGasBase) return false;
 		float hardness = block.getBlockHardness(world, new BlockPos(x, y, z));
 		if(hardness < 0 || hardness > 3_500_000) return false;
-        return !block.getMaterial().isLiquid();
-    }
+		if(block.getMaterial().isLiquid()) return false;
+		return true;
+	}
 
 	public int getOverdrive() {
 
@@ -439,11 +439,11 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 			
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_1)
 					speed += 1;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_2)
 					speed += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_overdrive_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_overdrive_3)
 					speed += 3;
 			}
 		}
@@ -458,11 +458,11 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_1)
 					speed += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_2)
 					speed += 4;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_3)
 					speed += 6;
 			}
 		}
@@ -478,11 +478,11 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 				
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_1)
 					range += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_2)
 					range += 4;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_3)
 					range += 6;
 			}
 		}
@@ -498,11 +498,11 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_fortune_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_fortune_1)
 					fortune += 1;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_fortune_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_fortune_2)
 					fortune += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_fortune_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_fortune_3)
 					fortune += 3;
 			}
 		}
@@ -516,7 +516,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_nullifier)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_nullifier)
 					return true;
 			}
 		}
@@ -530,7 +530,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_smelter)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_smelter)
 					return true;
 			}
 		}
@@ -544,7 +544,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_shredder)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_shredder)
 					return true;
 			}
 		}
@@ -558,7 +558,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_centrifuge)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_centrifuge)
 					return true;
 			}
 		}
@@ -572,7 +572,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_crystallizer)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_crystallizer)
 					return true;
 			}
 		}
@@ -586,7 +586,7 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_screm)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_screm)
 					return true;
 			}
 		}
@@ -596,7 +596,9 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 
 	public int getConsumption() {
 
-        return TileEntityMachineMiningLaser.consumption;
+		int consumption = TileEntityMachineMiningLaser.consumption;
+
+		return consumption;
 	}
 	
 	public int getWidth() {
@@ -624,8 +626,13 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 		return (int) (breakProgress * i);
 	}
 
-    @Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+	@Override
+	public boolean canInsertItem(int i, ItemStack itemStack, int j) {
+		return this.isItemValidForSlot(i, itemStack);
+	}
+
+	@Override
+	public boolean canExtractItemHopper(int i, ItemStack itemStack, int j) {
 		return i >= 9 && i <= 29;
 	}
 
@@ -697,22 +704,22 @@ public class TileEntityMachineMiningLaser extends TileEntityMachineBase implemen
 	
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
-		super.readFromNBT(compound);
 		tank.readFromNBT(compound.getCompoundTag("tank"));
 		isOn = compound.getBoolean("isOn");
 		power = compound.getLong("power");
 		targetX = compound.getInteger("x");
+		targetY = compound.getInteger("y");
 		targetZ = compound.getInteger("z");
-		targetY = pos.getY() - 2;
-		beam = false;
+		super.readFromNBT(compound);
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		compound.setBoolean("isOn", isOn);
 		compound.setLong("power", power);
 		compound.setInteger("x", targetX);
+		compound.setInteger("y", targetY);
 		compound.setInteger("z", targetZ);
 		return super.writeToNBT(compound);
 	}

@@ -1,9 +1,8 @@
 package com.hbm.blocks.turret;
 
 import com.hbm.entity.projectile.EntityBullet;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.turret.TileEntityTurretCheapo;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -33,7 +32,7 @@ public class TurretCheapo extends TurretBase {
 		TileEntityTurretCheapo te = (TileEntityTurretCheapo) world.getTileEntity(pos);
 
 		if (i == 0 && te.spin < 10)
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.weaponSpinUp, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.weaponSpinUp, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 		if (te.spin < 35)
 			te.spin += 5;
@@ -56,7 +55,7 @@ public class TurretCheapo extends TurretBase {
 				bullet.damage = rand.nextInt(3) + 3;
 				world.spawnEntity(bullet);
 			}
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.sawShoot, SoundCategory.BLOCKS, 3.0F, 1.0F);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.sawShoot, SoundCategory.BLOCKS, 3.0F, 1.0F);
 
 			flag = true;
 		}
@@ -69,7 +68,7 @@ public class TurretCheapo extends TurretBase {
 		TileEntityTurretCheapo te = (TileEntityTurretCheapo) world.getTileEntity(pos);
 
 		if (te.spin > 10)
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.weaponSpinDown, SoundCategory.BLOCKS, 1.0F, 1.0F);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.weaponSpinDown, SoundCategory.BLOCKS, 1.0F, 1.0F);
 
 	}
 

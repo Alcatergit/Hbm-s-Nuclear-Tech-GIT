@@ -1,9 +1,8 @@
 package com.hbm.blocks.network.energy;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.network.energy.TileEntityCableSwitch;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -46,10 +45,10 @@ public class CableSwitch extends BlockContainer {
 			boolean isOn = state.getValue(STATE);
 			if(!isOn) {
 				world.setBlockState(pos, state.withProperty(STATE, true), 2);
-				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.reactorStart, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			} else {
 				world.setBlockState(pos, state.withProperty(STATE, false), 2);
-				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.85F);
+				world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.reactorStart, SoundCategory.BLOCKS, 1.0F, 0.85F);
 			}
 			
 			return true;
@@ -70,7 +69,7 @@ public class CableSwitch extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		return this.getDefaultState().withProperty(STATE, meta == 1);
+		return this.getDefaultState().withProperty(STATE, meta == 1 ? true : false);
 	}
 	
 	@Override

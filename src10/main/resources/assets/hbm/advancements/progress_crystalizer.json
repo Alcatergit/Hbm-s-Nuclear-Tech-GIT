@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_crystallizer"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_crystalizer"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_crystalizer.desc"
+		}
+	},
+	"parent": "hbm:progress_desh",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_crystallizer"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 47
+    }
+}

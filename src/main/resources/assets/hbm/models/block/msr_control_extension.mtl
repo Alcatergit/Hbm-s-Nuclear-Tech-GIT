@@ -1,0 +1,14 @@
+# Blender 4.3.2 MTL File: 'None'
+# www.blender.org
+
+newmtl TopMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/leafia/msr/msr_control_top
+
+newmtl SideMTL
+d 1.0
+Ka 0.000000 0.000000 0.000000
+Kd 1.000000 1.000000 1.000000
+map_Kd hbm:blocks/leafia/msr/msr_control_extension

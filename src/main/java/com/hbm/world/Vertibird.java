@@ -1,13 +1,10 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
 import net.minecraft.block.BlockLever;
@@ -22,6 +19,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import java.util.Random;
+
 public class Vertibird extends WorldGenerator
 {
 	Block Block2 = ModBlocks.deco_steel;
@@ -33,11 +32,8 @@ public class Vertibird extends WorldGenerator
 	{
 		return new Block[]
 		{
-            Blocks.GRASS,
-            Blocks.DIRT,
-            Blocks.STONE,
-            Blocks.SAND,
-            Blocks.SANDSTONE,
+			Blocks.SAND,
+			Blocks.SANDSTONE,
 		};
 	}
 
@@ -77,11 +73,19 @@ public class Vertibird extends WorldGenerator
 		return generate(world, rand, pos, false);
 
 	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
 
-    }
+       return true;
+
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

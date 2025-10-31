@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -12,9 +11,9 @@ import net.minecraftforge.items.SlotItemHandler;
 public class ContainerNukeCustom extends Container {
 
 	private TileEntityNukeCustom nukeBoy;
-	
+
 	public ContainerNukeCustom(InventoryPlayer invPlayer, TileEntityNukeCustom tedf) {
-		
+
 		nukeBoy = tedf;
 
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 8, 18));
@@ -71,12 +70,12 @@ public class ContainerNukeCustom extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 26) {
-				if (!this.mergeItemStack(var5, 27, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 27, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if (!this.mergeItemStack(var5, 0, 27, false))
+				if (!this.mergeItemStack(var5, 0, 27, true))
 					return ItemStack.EMPTY;
 			}
             

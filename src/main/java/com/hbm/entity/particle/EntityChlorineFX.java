@@ -1,7 +1,6 @@
 package com.hbm.entity.particle;
 
 import com.hbm.explosion.ExplosionChaos;
-
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;

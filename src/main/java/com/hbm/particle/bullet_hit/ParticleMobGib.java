@@ -1,14 +1,11 @@
 package com.hbm.particle.bullet_hit;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleBatchRenderer;
 import com.hbm.physics.RigidBody;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -20,6 +17,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleMobGib extends Particle {
 
@@ -53,7 +51,7 @@ public class ParticleMobGib extends Particle {
 			mot = mot.scale(0.2F);
 			blood.color(0.5F, 0F, 0F);
 			blood.motion((float)mot.z, (float)mot.y, (float)mot.z);
-			blood.doDecal(rand.nextFloat() < 0.4F);
+			blood.doDecal(rand.nextFloat() < 0.4F ? true : false);
 			blood.doFlow(false);
 			ParticleBatchRenderer.addParticle(blood);
 		}

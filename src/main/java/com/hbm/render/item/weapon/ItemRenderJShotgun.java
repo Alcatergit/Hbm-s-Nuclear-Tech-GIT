@@ -1,14 +1,11 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.animloader.AnimatedModel.IAnimatedModelCallback;
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.items.weapon.ItemGunJShotty;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.GLCompat;
@@ -16,7 +13,6 @@ import com.hbm.render.RenderHelper;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.renderer.GlStateManager;
@@ -27,6 +23,8 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Vector4f;
 
 public class ItemRenderJShotgun extends TEISRBase {
 
@@ -77,10 +75,10 @@ public class ItemRenderJShotgun extends TEISRBase {
 				public boolean onRender(int prevFrame, int currentFrame, int model, float diffN, String modelName) {
 					//Sounds
 					if(prevFrame == 9 && currentFrame == 10){
-						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(HBMSoundHandler.jsg_reload0, 1F, 0.15F));
+						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(HBMSoundEvents.jsg_reload0, 1F, 0.15F));
 					}
 					if(prevFrame == 45 && currentFrame == 46){
-						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(HBMSoundHandler.jsg_reload1, 1F, 0.15F));
+						Minecraft.getMinecraft().getSoundHandler().playSound(PositionedSoundRecord.getRecord(HBMSoundEvents.jsg_reload1, 1F, 0.15F));
 					}
 					if(modelName.startsWith("Main")){
 						firstPersonFlashlightPos = RenderHelper.project(1.31674F, -8.20808F, -1.57076F);
@@ -127,8 +125,10 @@ public class ItemRenderJShotgun extends TEISRBase {
 						if(diff > reload.anim.length)
 							done = true;
 					}
-                    return done && (modelName.startsWith("rightArm") || modelName.startsWith("leftArm") || modelName.startsWith("Boolet"));
-                }
+					if(done && (modelName.startsWith("rightArm") || modelName.startsWith("leftArm") || modelName.startsWith("Boolet")))
+						return true;
+					return false;
+				}
 			});
 			if(time > 0 && time < timeMax){
 				HbmShaderManager2.releaseShader();

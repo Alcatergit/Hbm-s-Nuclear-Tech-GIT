@@ -1,10 +1,10 @@
 package api.hbm.energy;
 
-import com.hbm.render.amlfrom1710.Vec3;
+import api.hbm.energy.network.NTMNetworkMember;
 import com.hbm.lib.ForgeDirection;
-
-import net.minecraft.util.math.BlockPos;
+import com.hbm.render.amlfrom1710.Vec3;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
@@ -12,14 +12,14 @@ import net.minecraft.world.World;
  * This is mean for TILE ENTITIES
  * @author hbm
  */
-public interface IEnergyConnector extends ILoadedTile {
+public interface IEnergyConnector extends ILoadedTile, NTMNetworkMember {
 	
 	/**
 	 * Returns the amount of power that remains in the source after transfer
 	 * @param power
 	 * @return
 	 */
-    long transferPower(long power);
+	public long transferPower(long power);
 	
 	/**
 	 * Whether the given side can be connected to
@@ -27,7 +27,7 @@ public interface IEnergyConnector extends ILoadedTile {
 	 * @param dir
 	 * @return
 	 */
-	default boolean canConnect(ForgeDirection dir) {
+	public default boolean canConnect(ForgeDirection dir) {
 		return dir != ForgeDirection.UNKNOWN;
 	}
 	
@@ -35,15 +35,15 @@ public interface IEnergyConnector extends ILoadedTile {
 	 * The current power of either the machine or an entire network
 	 * @return
 	 */
-    long getPower();
+	public long getPower();
 	
 	/**
 	 * The capacity of either the machine or an entire network
 	 * @return
 	 */
-    long getMaxPower();
+	public long getMaxPower();
 	
-	default long getTransferWeight() {
+	public default long getTransferWeight() {
 		return Math.max(getMaxPower() - getPower(), 0);
 	}
 	
@@ -54,7 +54,7 @@ public interface IEnergyConnector extends ILoadedTile {
 	 * @param y
 	 * @param z
 	 */
-	default void trySubscribe(World world, BlockPos pos, ForgeDirection dir) {
+	public default void trySubscribe(World world, BlockPos pos, ForgeDirection dir) {
 
 		TileEntity te = world.getTileEntity(pos);
 		boolean red = false;
@@ -65,10 +65,10 @@ public interface IEnergyConnector extends ILoadedTile {
 			if(!con.canConnect(dir.getOpposite()))
 				return;
 			
-			if(con.getPowerNet() != null && !con.getPowerNet().isSubscribed(this))
-				con.getPowerNet().subscribe(this);
+			if(con.getNetwork() != null && !con.getNetwork().containsMember(this))
+				con.getNetwork().addMember(this);
 			
-			if(con.getPowerNet() != null)
+			if(con.getNetwork() != null)
 				red = true;
 		}
 		
@@ -86,51 +86,52 @@ public interface IEnergyConnector extends ILoadedTile {
 		// }
 	}
 	
-	default void tryUnsubscribe(World world, BlockPos pos) {
+	public default void tryUnsubscribe(World world, BlockPos pos) {
 
 		TileEntity te = world.getTileEntity(pos);
 		
 		if(te instanceof IEnergyConductor) {
 			IEnergyConductor con = (IEnergyConductor) te;
 			
-			if(con.getPowerNet() != null && con.getPowerNet().isSubscribed(this))
-				con.getPowerNet().unsubscribe(this);
+			if(con.getNetwork() != null && con.getNetwork().containsMember(this))
+				con.getNetwork().removeMember(this);
 		}
 	}
 	
-	boolean particleDebug = true;
+	public static final boolean particleDebug = true;
 	
-	default Vec3 getDebugParticlePos() {
+	public default Vec3 getDebugParticlePos() {
 		BlockPos pos = ((TileEntity) this).getPos();
-        return Vec3.createVectorHelper(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+		Vec3 vec = Vec3.createVectorHelper(pos.getX() + 0.5, pos.getY() + 1, pos.getZ() + 0.5);
+		return vec;
 	}
 	
-	default ConnectionPriority getPriority() {
+	public default ConnectionPriority getPriority() {
 		return ConnectionPriority.NORMAL;
 	}
 	
-	enum ConnectionPriority {
+	public enum ConnectionPriority {
 		LOW,
 		NORMAL,
 		HIGH
 	}
 
-	default boolean isStorage() { //used for batteries
+	public default boolean isStorage() { //used for batteries
 		return false;
 	}
 
-	default void updateStandardConnections(World world, TileEntity te) {
+	public default void updateStandardConnections(World world, TileEntity te) {
 		updateStandardConnections(world, te.getPos());
 	}
 		
-	default void updateStandardConnections(World world, BlockPos pos) {
+	public default void updateStandardConnections(World world, BlockPos pos) {
 		
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 			this.trySubscribe(world, pos.add(dir.offsetX, dir.offsetY, dir.offsetZ), dir);
 		}
 	}
 
-	default void updateConnectionsExcept(World world, BlockPos pos, ForgeDirection nogo) {
+	public default void updateConnectionsExcept(World world, BlockPos pos, ForgeDirection nogo) {
 		
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 			if(dir != nogo)

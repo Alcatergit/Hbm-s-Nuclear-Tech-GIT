@@ -1,11 +1,8 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import api.hbm.entity.IRadarDetectable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
-import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
@@ -14,19 +11,18 @@ import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.handler.MissileStruct;
+import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.items.weapon.ItemMissile.WarheadType;
 import com.hbm.main.MainRegistry;
-import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.LoopedEntitySoundPacket;
+import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
-import api.hbm.entity.IRadarDetectable;
+import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
-import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -44,6 +40,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectable, IConstantRenderer {
 
@@ -459,7 +458,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			bf.destructionRange = (int) strength;
 			world.spawnEntity(bf);
 			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(world, posX, posY, posZ, strength);
+				EntityNukeTorex.statFacBale(world, posX, posY, posZ, strength);
 			}
 			break;
 		case N2:

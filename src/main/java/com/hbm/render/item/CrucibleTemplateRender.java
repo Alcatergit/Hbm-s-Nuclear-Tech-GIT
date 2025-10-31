@@ -2,6 +2,7 @@ package com.hbm.render.item;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
+import java.lang.IndexOutOfBoundsException;
 
 import com.hbm.inventory.CrucibleRecipes;
 import com.hbm.items.machine.ItemCrucibleTemplate;
@@ -32,7 +33,7 @@ public class CrucibleTemplateRender extends TileEntityItemStackRenderer {
 					GlStateManager.enableLighting();
 					ItemStack item = CrucibleRecipes.getIcon(stack);
 					IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player);
-					model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, ItemCameraTransforms.TransformType.GUI, false);
+					model = net.minecraftforge.client.ForgeHooksClient.handleCameraTransforms(model, TransformType.GUI, false);
 					Minecraft.getMinecraft().getRenderItem().renderItem(item, model);
 					GL11.glPopAttrib();
 					GL11.glPopMatrix();

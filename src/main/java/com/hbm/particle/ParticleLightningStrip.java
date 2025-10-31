@@ -1,10 +1,5 @@
 package com.hbm.particle;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.handler.LightningGenerator;
 import com.hbm.handler.LightningGenerator.LightningGenInfo;
@@ -12,7 +7,6 @@ import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.lightning_test.TrailRenderer2;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -23,6 +17,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParticleLightningStrip extends Particle {
 
@@ -45,7 +43,7 @@ public class ParticleLightningStrip extends Particle {
 		Vec3d pos = point.add((world.rand.nextFloat()*2-1)*scale, (world.rand.nextFloat()*2-1)*scale, (world.rand.nextFloat()*2-1)*scale);
 		Vec3d motion = new Vec3d((world.rand.nextFloat()*2-1)*scale2, (world.rand.nextFloat()*2-1)*scale2, (world.rand.nextFloat()*2-1)*scale2);
 		LightningNode fork = null;
-		if(!points.isEmpty()){
+		if(points.size() >= 1){
 			Vec3d direction = point.subtract(points.get(points.size()-1).ogPos);
 			double dot = direction.dotProduct(pos.subtract(points.get(points.size()-1).ogPos));
 			Vec3d project = direction.scale(dot/direction.lengthSquared());

@@ -1,11 +1,9 @@
 package com.hbm.items.gear;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ArmorSets;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
@@ -19,6 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 public class ArmorHazmat extends ItemArmor {
 
@@ -34,28 +33,28 @@ public class ArmorHazmat extends ItemArmor {
 	
 	@Override
 	public String getArmorTexture(ItemStack stack, Entity entity, EntityEquipmentSlot slot, String type) {
-		if(stack.getItem().equals(ModItems.hazmat_plate) || stack.getItem().equals(ModItems.hazmat_boots)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_plate) || stack.getItem().equals(ArmorSets.hazmat_boots)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_legs)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_legs)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_2.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_paa_plate) || stack.getItem().equals(ModItems.hazmat_paa_boots)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_paa_plate) || stack.getItem().equals(ArmorSets.hazmat_paa_boots)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_paa_1.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_paa_legs)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_paa_legs)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_paa_2.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_plate_red) || stack.getItem().equals(ModItems.hazmat_boots_red)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_plate_red) || stack.getItem().equals(ArmorSets.hazmat_boots_red)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1_red.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_legs_red)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_legs_red)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_2_red.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_plate_grey) || stack.getItem().equals(ModItems.hazmat_boots_grey)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_plate_grey) || stack.getItem().equals(ArmorSets.hazmat_boots_grey)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_1_grey.png");
 		}
-		if(stack.getItem().equals(ModItems.hazmat_legs_grey)) {
+		if(stack.getItem().equals(ArmorSets.hazmat_legs_grey)) {
 			return (RefStrings.MODID + ":textures/armor/hazmat_2_grey.png");
 		}
 		return null;
@@ -64,7 +63,7 @@ public class ArmorHazmat extends ItemArmor {
 	@SideOnly(Side.CLIENT)
 	@Override
 	public void renderHelmetOverlay(ItemStack stack, EntityPlayer player, ScaledResolution resolution, float partialTicks) {
-		if(this != ModItems.hazmat_helmet && this != ModItems.hazmat_paa_helmet)
+		if(this != ArmorSets.hazmat_helmet && this != ArmorSets.hazmat_paa_helmet)
     		return;
 		GlStateManager.disableDepth();
         GL11.glDepthMask(false);

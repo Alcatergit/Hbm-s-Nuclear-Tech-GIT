@@ -2,13 +2,8 @@ package com.hbm.inventory.container;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.gui.GUICoreEmitter;
-import com.hbm.packet.AuxElectricityPacket;
-import com.hbm.packet.AuxGaugePacket;
-import com.hbm.packet.AuxLongPacket;
-import com.hbm.packet.FluidTankPacket;
-import com.hbm.packet.PacketDispatcher;
+import com.hbm.packet.*;
 import com.hbm.tileentity.machine.TileEntityCoreEmitter;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -93,7 +88,7 @@ public class ContainerCoreEmitter extends Container {
 	@SideOnly(Side.CLIENT)
 	public void updateProgressBar(int id, int data) {
 		if(id == 3)
-			nukeBoy.isOn = data > 0;
+			nukeBoy.isOn = data > 0 ? true : false;
 		if(id == 1){
 			if(Minecraft.getMinecraft().currentScreen instanceof GUICoreEmitter){
 				((GUICoreEmitter)Minecraft.getMinecraft().currentScreen).syncTextField(watts);

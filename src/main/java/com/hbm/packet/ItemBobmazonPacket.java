@@ -1,14 +1,13 @@
 package com.hbm.packet;
 
-import java.util.Random;
-
 import com.hbm.entity.missile.EntityBobmazon;
 import com.hbm.handler.BobmazonOfferFactory;
 import com.hbm.inventory.gui.GUIScreenBobmazon.Offer;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Foods;
 import com.hbm.lib.ModDamageSource;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -20,7 +19,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class ItemBobmazonPacket implements IMessage {
+import java.util.Random;
+
+public class ItemBobmazonPacket extends RecordablePacket {
 
 	int offer;
 
@@ -44,12 +45,12 @@ public class ItemBobmazonPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		offer = buf.readInt();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(offer);
 	}
 
@@ -129,14 +130,14 @@ public class ItemBobmazonPacket implements IMessage {
 					
 					Item item = stack.getItem();
 					
-					if(item == ModItems.cap_fritz ||
-							item == ModItems.cap_korl ||
-							item == ModItems.cap_nuka ||
-							item == ModItems.cap_quantum ||
-							item == ModItems.cap_rad ||
-							item == ModItems.cap_sparkle ||
-							item == ModItems.cap_star ||
-							item == ModItems.cap_sunset)
+					if(item == Foods.cap_fritz ||
+							item == Foods.cap_korl ||
+							item == Foods.cap_nuka ||
+							item == Foods.cap_quantum ||
+							item == Foods.cap_rad ||
+							item == Foods.cap_sparkle ||
+							item == Foods.cap_star ||
+							item == Foods.cap_sunset)
 						count += stack.getCount();
 					
 				}
@@ -158,14 +159,14 @@ public class ItemBobmazonPacket implements IMessage {
 					
 					Item item = stack.getItem();
 					
-					if(item == ModItems.cap_fritz ||
-							item == ModItems.cap_korl ||
-							item == ModItems.cap_nuka ||
-							item == ModItems.cap_quantum ||
-							item == ModItems.cap_rad ||
-							item == ModItems.cap_sparkle ||
-							item == ModItems.cap_star ||
-							item == ModItems.cap_sunset) {
+					if(item == Foods.cap_fritz ||
+							item == Foods.cap_korl ||
+							item == Foods.cap_nuka ||
+							item == Foods.cap_quantum ||
+							item == Foods.cap_rad ||
+							item == Foods.cap_sparkle ||
+							item == Foods.cap_star ||
+							item == Foods.cap_sunset) {
 						
 						int size = stack.getCount();
 						for(int j = 0; j < size; j++) {

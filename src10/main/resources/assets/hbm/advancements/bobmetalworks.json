@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_metalworks"
+		},
+		"title": {
+			"translate": "hbm.achievement.bobmetalworks"
+		},
+		"description": {
+			"translate": "hbm.achievement.bobmetalworks.desc"
+		}
+	},
+	"parent": "hbm:progress_anvil",
+	"criteria": {
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_red_copper"
+                    }
+                ]
+            }
+        }
+	},
+    "rewards": {
+        "experience": 25
+    }
+}

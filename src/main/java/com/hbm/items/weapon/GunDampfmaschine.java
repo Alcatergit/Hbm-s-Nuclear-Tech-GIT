@@ -1,14 +1,11 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.missile.EntityBombletSelena;
 import com.hbm.entity.projectile.EntityRocket;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,6 +21,9 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunDampfmaschine extends Item {
 
@@ -56,7 +56,7 @@ public class GunDampfmaschine extends Item {
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase player, int count) {
 		World world = player.world;
-		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == ModItems.gun_dampfmaschine){
+		if(player.getHeldItemMainhand() == stack && player.getHeldItemOffhand().getItem() == Armory.gun_dampfmaschine){
 			player.getHeldItemOffhand().getItem().onUsingTick(player.getHeldItemOffhand(), player, count);
 		}
 		if (true) {
@@ -64,9 +64,9 @@ public class GunDampfmaschine extends Item {
 			if(!player.isSneaking()) {
 				EntityRocket entitybullet = new EntityRocket(world, player, 3.0F, player.getHeldItemMainhand() == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
 				
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.crateBreak, SoundCategory.PLAYERS, 10.0F, 0.9F + (rand.nextFloat() * 0.2F));
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.crateBreak, SoundCategory.PLAYERS, 10.0F, 0.9F + (rand.nextFloat() * 0.2F));
 				if(count == this.getMaxItemUseDuration(stack))
-					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.alarmAutopilot, SoundCategory.PLAYERS, 100.0F, 1.0F);
+					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.alarmAutopilot, SoundCategory.PLAYERS, 100.0F, 1.0F);
 				
 				if (!world.isRemote) {
 					world.spawnEntity(entitybullet);
@@ -84,7 +84,7 @@ public class GunDampfmaschine extends Item {
 					bomb.motionY = player.getLookVec().y * 5;
 					bomb.motionZ = player.getLookVec().z * 5;
 					if(count == this.getMaxItemUseDuration(stack))
-						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.chopperDrop, SoundCategory.PLAYERS, 10.0F, 1.0F);
+						world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.chopperDrop, SoundCategory.PLAYERS, 10.0F, 1.0F);
 					
 					if (!world.isRemote) {
 						world.spawnEntity(bomb);

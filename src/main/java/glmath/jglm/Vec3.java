@@ -123,7 +123,9 @@ public class Vec3 extends Vec {
 
         t = t.times(quat.w).plus(q.crossProduct(t));
 
-        return t.plus(this);
+        Vec3 v = t.plus(this);
+
+        return v;
 
 //        return quat.m
     }

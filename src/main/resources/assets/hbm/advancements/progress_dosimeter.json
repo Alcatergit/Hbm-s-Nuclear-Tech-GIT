@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_dosimeter.desc"
 		}
 	},
-	"parent": "hbm:progress_burnerpress",
+	"parent": "hbm:root",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:dfc_receiver" },
+ 	   	"facing=south": { "model": "hbm:dfc_receiver", "y": 180 },
+  	  	"facing=west":  { "model": "hbm:dfc_receiver", "y": 270 },
+  		"facing=east":  { "model": "hbm:dfc_receiver", "y": 90 },
+		"facing=up":  { "model": "hbm:dfc_receiver", "y": 90 },
+		"facing=down":  { "model": "hbm:dfc_receiver", "y": 90 }
+	}
+}

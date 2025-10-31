@@ -1,10 +1,9 @@
 package com.hbm.render.util;
 
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.TextureCoordinate;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.amlfrom1710.Vertex;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -15,13 +14,13 @@ public class HbmFace {
     public TextureCoordinate[] textureCoordinates;
 
     @SideOnly(Side.CLIENT)
-    public void addFaceForRender(Tessellator tessellator)
+    public void addFaceForRender(CompositeBrush tessellator)
     {
         addFaceForRender(tessellator, 0.0005F);
     }
 
     @SideOnly(Side.CLIENT)
-    public void addFaceForRender(Tessellator tessellator, float textureOffset)
+    public void addFaceForRender(CompositeBrush tessellator,float textureOffset)
     {
         if (faceNormal == null)
         {

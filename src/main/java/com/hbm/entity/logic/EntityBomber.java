@@ -1,8 +1,5 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
@@ -12,12 +9,11 @@ import com.hbm.entity.projectile.EntityRocketHoming;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,6 +32,9 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityBomber extends Entity implements IChunkLoader, IConstantRenderer {
 
@@ -89,7 +88,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 	
 	private void killBomber() {
         ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
-    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.planeShotDown, SoundCategory.HOSTILE, 25.0F, 1.0F, false);
+    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.planeShotDown, SoundCategory.HOSTILE, 25.0F, 1.0F, false);
     }
 	
 	public boolean isBomberAlive(){
@@ -130,7 +129,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 				this.setDead();
 				
 				ExplosionLarge.explodeFire(world, posX, posY, posZ, 25, true, false, true);
-		    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.planeCrash, SoundCategory.HOSTILE, 10.0F, 1.0F, true);
+		    	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.planeCrash, SoundCategory.HOSTILE, 10.0F, 1.0F, true);
 				
 				return;
 			}
@@ -150,7 +149,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 				
 			} else if(type == 5) {
 				
-	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
 	        	EntityRocketHoming rocket = new EntityRocketHoming(world);
 	        	rocket.setIsCritical(true);
 	        	//rocket.motionX = motionX;
@@ -168,7 +167,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 	        	
 			} else if(type == 6) {
 				
-	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.missileTakeoff, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
 	        	EntityBoxcar rocket = new EntityBoxcar(world);
 				
 	        	rocket.posX = posX + rand.nextDouble() - 0.5;
@@ -184,7 +183,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 				
 			} else {
 				
-	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundHandler.bombWhistle, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
+	        	world.playSound((double)(posX + 0.5F), (double)(posY + 0.5F), (double)(posZ + 0.5F), HBMSoundEvents.bombWhistle, SoundCategory.HOSTILE, 10.0F, 0.9F + rand.nextFloat() * 0.2F, true);
 	        	
 				EntityBombletZeta zeta = new EntityBombletZeta(world);
 				
@@ -491,6 +490,7 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
 
         for (this.rotationPitch = (float)(Math.atan2(this.motionY, f2) * 180.0D / Math.PI) - 90; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
+            ;
         }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F)

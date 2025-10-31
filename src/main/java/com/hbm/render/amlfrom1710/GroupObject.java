@@ -1,8 +1,9 @@
 package com.hbm.render.amlfrom1710;
-import java.util.ArrayList;
 
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
 
 public class GroupObject
 {
@@ -29,10 +30,10 @@ public class GroupObject
     @SideOnly(Side.CLIENT)
     public void render()
     {
-        if (!faces.isEmpty())
+        if (faces.size() > 0)
         {
         	
-            Tessellator tessellator = Tessellator.instance;
+            CompositeBrush tessellator = CompositeBrush.instance;
             tessellator.startDrawing(glDrawingMode);
             render(tessellator);
             tessellator.draw();
@@ -40,9 +41,9 @@ public class GroupObject
     }
 
     @SideOnly(Side.CLIENT)
-    public void render(Tessellator tessellator)
+    public void render(CompositeBrush tessellator)
     {
-        if (!faces.isEmpty())
+        if (faces.size() > 0)
         {
             for (Face face : faces)
             {
@@ -54,10 +55,10 @@ public class GroupObject
     @SideOnly(Side.CLIENT)
     public void renderSplit(float splitHeight, float scale)
     {
-        if (!faces.isEmpty())
+        if (faces.size() > 0)
         {
             
-            Tessellator tessellator = Tessellator.instance;
+            CompositeBrush tessellator = CompositeBrush.instance;
             tessellator.startDrawing(glDrawingMode);
             renderSplit(tessellator, splitHeight, scale);
             tessellator.draw();
@@ -65,9 +66,9 @@ public class GroupObject
     }
 
     @SideOnly(Side.CLIENT)
-    public void renderSplit(Tessellator tessellator, float splitHeight, float scale)
+    public void renderSplit(CompositeBrush tessellator,float splitHeight,float scale)
     {
-        if (!faces.isEmpty())
+        if (faces.size() > 0)
         {
             for (Face face : faces)
             {

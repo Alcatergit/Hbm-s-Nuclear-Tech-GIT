@@ -1,14 +1,12 @@
 package com.hbm.handler.crt;
 
-import crafttweaker.IAction;
+import com.hbm.inventory.HeatRecipes;
 import crafttweaker.CraftTweakerAPI;
+import crafttweaker.IAction;
 import crafttweaker.annotations.ZenRegister;
+import net.minecraftforge.fluids.FluidRegistry;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import com.hbm.inventory.HeatRecipes;
-
-import net.minecraftforge.fluids.FluidRegistry;
 
 @ZenRegister
 @ZenClass("mods.ntm.FluidHeating")

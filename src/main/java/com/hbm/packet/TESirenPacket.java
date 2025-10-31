@@ -4,8 +4,8 @@ import com.hbm.items.machine.ItemCassette.SoundType;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.sound.SoundLoopSiren;
 import com.hbm.tileentity.machine.TileEntityMachineSiren;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
@@ -16,7 +16,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TESirenPacket implements IMessage {
+public class TESirenPacket extends RecordablePacket {
 
 	int x;
 	int y;
@@ -39,7 +39,7 @@ public class TESirenPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -48,7 +48,7 @@ public class TESirenPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -63,7 +63,7 @@ public class TESirenPacket implements IMessage {
 		public IMessage onMessage(TESirenPacket m, MessageContext ctx) {
 			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
-			if (te instanceof TileEntityMachineSiren) {
+			if (te != null && te instanceof TileEntityMachineSiren) {
 				
 				SoundLoopSiren sound = null;
 				for(int i = 0; i < SoundLoopSiren.list.size(); i++)  {
@@ -90,7 +90,7 @@ public class TESirenPacket implements IMessage {
 						
 							if(!sound.getPath().equals(path)) {
 								//Track switched, stop and restart
-								sound.stop();
+								sound.endSound();
 								if(m.id > 0)
 									Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopSiren(TrackType.getEnum(m.id).getSoundLocation(), te, TrackType.getEnum(m.id).getType()));
 							}
@@ -103,7 +103,7 @@ public class TESirenPacket implements IMessage {
 					
 					if(sound != null) {
 						//Stop sound
-						sound.stop();
+						sound.endSound();
 						SoundLoopSiren.list.remove(sound);
 					}
 				}

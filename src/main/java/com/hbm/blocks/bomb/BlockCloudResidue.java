@@ -1,10 +1,7 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Materials.Powders;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
@@ -15,6 +12,8 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class BlockCloudResidue extends Block {
 
@@ -34,12 +33,13 @@ public class BlockCloudResidue extends Block {
 		Block b3 = world.getBlockState(pos.add(-1, 0, 0)).getBlock();
 		Block b4 = world.getBlockState(pos.add(0, -1, 0)).getBlock();
 		Block b5 = world.getBlockState(pos.add(0, 0, -1)).getBlock();
-        return b0.isNormalCube(world.getBlockState(pos.add(1, 0, 0)), world, pos)
-                || b1.isNormalCube(world.getBlockState(pos.add(0, 1, 0)), world, pos)
-                || b2.isNormalCube(world.getBlockState(pos.add(0, 0, 1)), world, pos)
-                || b3.isNormalCube(world.getBlockState(pos.add(-1, 0, 0)), world, pos)
-                || b4.isNormalCube(world.getBlockState(pos.add(0, -1, 0)), world, pos)
-                || b5.isNormalCube(world.getBlockState(pos.add(0, 0, -1)), world, pos);
+		boolean b = b0.isNormalCube(world.getBlockState(pos.add(1, 0, 0)), world, pos)
+				|| b1.isNormalCube(world.getBlockState(pos.add(0, 1, 0)), world, pos)
+				|| b2.isNormalCube(world.getBlockState(pos.add(0, 0, 1)), world, pos)
+				|| b3.isNormalCube(world.getBlockState(pos.add(-1, 0, 0)), world, pos)
+				|| b4.isNormalCube(world.getBlockState(pos.add(0, -1, 0)), world, pos)
+				|| b5.isNormalCube(world.getBlockState(pos.add(0, 0, -1)), world, pos);
+		return b;
 	}
 
 	@Override
@@ -52,7 +52,12 @@ public class BlockCloudResidue extends Block {
 		return NULL_AABB;
 	}
 
-    @Override
+	@Override
+	public boolean isCollidable(){
+		return true;
+	}
+
+	@Override
 	public boolean isNormalCube(IBlockState state) {
 		return false;
 	}
@@ -76,7 +81,7 @@ public class BlockCloudResidue extends Block {
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
 		if(rand.nextInt(25) == 1){
-			return ModItems.powder_cloud;
+			return Powders.powder_cloud;
 		}
 		return Items.AIR;
 	}

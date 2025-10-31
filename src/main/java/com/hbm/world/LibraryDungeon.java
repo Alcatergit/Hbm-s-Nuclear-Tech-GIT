@@ -1,16 +1,7 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.config.GeneralConfig;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockHalfWoodSlab;
-import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.BlockSlab;
-import net.minecraft.block.BlockStoneBrick;
-import net.minecraft.block.BlockWoodSlab;
+import net.minecraft.block.*;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
@@ -24,6 +15,8 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.common.DungeonHooks;
 
+import java.util.Random;
+
 public class LibraryDungeon extends WorldGenerator
 {
 
@@ -31,19 +24,32 @@ public class LibraryDungeon extends WorldGenerator
 	{
 		IBlockState blockAboveState = world.getBlockState(pos.up(8));
 		IBlockState blockBelow = world.getBlockState(pos.down());
-
-        return blockAboveState.getMaterial().isSolid() && blockBelow.getMaterial().isSolid() && pos.getY() - 1 > 4;
-    }
+		
+		if(blockAboveState.getMaterial().isSolid() && blockBelow.getMaterial().isSolid() && pos.getY() - 1 > 4)
+		{
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean generate(World world, Random rand, BlockPos pos)
 	{
 		return generate(world, rand, pos, false);
 	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
-    }
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
+
+       return true;
+
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

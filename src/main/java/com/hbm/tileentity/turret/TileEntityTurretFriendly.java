@@ -1,9 +1,9 @@
 package com.hbm.tileentity.turret;
 
+import com.hbm.handler.BulletConfigSyncingUtil;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.hbm.handler.BulletConfigSyncingUtil;
 
 public class TileEntityTurretFriendly extends TileEntityTurretChekhov {
 

@@ -1,7 +1,17 @@
 package com.hbm.packet;
 
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.items.tool.ItemGeigerCounter.GeigerLeakPacket;
 import com.hbm.lib.RefStrings;
-
+import com.leafia.CommandLeaf;
+import com.leafia.contents.effects.folkvangr.EntityNukeFolkvangr;
+import com.leafia.contents.gear.detonator_laser.ItemLaserDetonator;
+import com.leafia.dev.LeafiaDebug.Tracker.LeafiaTrackerPacket;
+import com.leafia.dev.container_utility.LeafiaPacket;
+import com.leafia.dev.custompacket.LeafiaCustomPacket;
+import com.leafia.dev.optimization.LeafiaParticlePacket;
+import com.leafia.passive.effects.IdkWhereThisShitBelongs;
+import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
@@ -12,7 +22,7 @@ public class PacketDispatcher {
 	
 	public static final SimpleNetworkWrapper wrapper = NetworkRegistry.INSTANCE.newSimpleChannel(RefStrings.MODID);
 	
-	public static void registerPackets(){
+	public static final void registerPackets(){
 		int i = 0;
 
 		//PressPacket
@@ -43,6 +53,8 @@ public class PacketDispatcher {
 		wrapper.registerMessage(AuxButtonPacket.Handler.class, AuxButtonPacket.class, i++, Side.SERVER);
 		//For handling fluid tank type updates
 		wrapper.registerMessage(FluidTypePacketTest.Handler.class, FluidTypePacketTest.class, i++, Side.CLIENT);
+		//Fluid pipe type update for rendering
+		wrapper.registerMessage(TEFluidTypePacketTest.Handler.class, TEFluidTypePacketTest.class, i++, Side.CLIENT);
 		//Turret basic packet for making the client has the right ammo amounts
 		wrapper.registerMessage(TETurretPacket.Handler.class, TETurretPacket.class, i++, Side.CLIENT);
 		//CIWS has a really long range, so stuff might not even exist on client, so rotation needs to be sent
@@ -75,12 +87,36 @@ public class PacketDispatcher {
 		wrapper.registerMessage(TEControlPacket.Handler.class, TEControlPacket.class, i++, Side.CLIENT);
 		//Pumpjack rotation packet
 		wrapper.registerMessage(TEPumpjackPacket.Handler.class, TEPumpjackPacket.class, i++, Side.CLIENT);
+		//Mining drill rotation for rendering
+		wrapper.registerMessage(TEDrillPacket.Handler.class, TEDrillPacket.class, i++, Side.CLIENT);
 		//Turbofan spin for rendering
 		wrapper.registerMessage(TETurbofanPacket.Handler.class, TETurbofanPacket.class, i++, Side.CLIENT);
 		//Machine type for marker rendering
 		wrapper.registerMessage(TEStructurePacket.Handler.class, TEStructurePacket.class, i++, Side.CLIENT);
 		//Mega packet for large reactor so it doesn't use quite as much network traffic
 		wrapper.registerMessage(LargeReactorPacket.Handler.class, LargeReactorPacket.class, i++, Side.CLIENT);
+		//Registercraft
+		wrapper.registerMessage(LeafiaPacket.Handler.class, LeafiaPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(LeafiaPacket.Handler.class, LeafiaPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(LeafiaCustomPacket.Handler.class, LeafiaCustomPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(LeafiaCustomPacket.Handler.class, LeafiaCustomPacket.class, i++, Side.CLIENT);
+
+		wrapper.registerMessage(LeafiaParticlePacket.Handler.class, LeafiaParticlePacket.class, i++, Side.CLIENT);
+
+		wrapper.registerMessage(IdkWhereThisShitBelongs.TomImpactPacket.Handler.class, IdkWhereThisShitBelongs.TomImpactPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(IdkWhereThisShitBelongs.TomImpactCollapsePacket.Handler.class, IdkWhereThisShitBelongs.TomImpactCollapsePacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(CommandLeaf.ShakecamPacket.Handler.class, CommandLeaf.ShakecamPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(EntityNukeTorex.TorexPacket.Handler.class, EntityNukeTorex.TorexPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(EntityNukeTorex.TorexFinishPacket.Handler.class, EntityNukeTorex.TorexFinishPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(ItemLaserDetonator.LaserDetonatorPacket.Handler.class, ItemLaserDetonator.LaserDetonatorPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(EntityNukeFolkvangr.ClearChunkPacket.Handler.class, EntityNukeFolkvangr.ClearChunkPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(EntityNukeFolkvangr.FolkvangrVacuumPacket.Handler.class, EntityNukeFolkvangr.FolkvangrVacuumPacket.class, i++, Side.CLIENT);
+		//wrapper.registerMessage(EntityNukeFolkvangr.SessrumnirSphereSyncPacket.Handler.class, EntityNukeFolkvangr.SessrumnirSphereSyncPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(LeafiaRecipeBookServer.LeafiaRecipePacket.Handler.class, LeafiaRecipeBookServer.LeafiaRecipePacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(LeafiaRecipeBookServer.LeafiaTransferItemPacket.Handler.class, LeafiaRecipeBookServer.LeafiaTransferItemPacket.class, i++, Side.SERVER);
+		wrapper.registerMessage(LeafiaTrackerPacket.Handler.class, LeafiaTrackerPacket.class, i++, Side.CLIENT);
+		wrapper.registerMessage(GeigerLeakPacket.Handler.class, GeigerLeakPacket.class, i++, Side.CLIENT);
+
 		//Packet to send missile multipart information to TEs
 		wrapper.registerMessage(TEMissileMultipartPacket.Handler.class, TEMissileMultipartPacket.class, i++, Side.CLIENT);
 		//Signals server to consume items and create template

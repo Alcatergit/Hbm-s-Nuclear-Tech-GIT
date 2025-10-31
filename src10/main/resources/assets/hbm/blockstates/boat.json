@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:boat" },
+     	   	"facing=south": { "model": "hbm:boat" },
+      	  	"facing=west":  { "model": "hbm:boat" },
+      		"facing=east":  { "model": "hbm:boat" }
+	}
+}

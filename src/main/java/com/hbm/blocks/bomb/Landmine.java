@@ -1,24 +1,24 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
+import com.hbm.explosion.ExplosionNT;
+import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.interfaces.IBomb;
 import com.hbm.items.ModItems;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityLandmine;
-
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -30,8 +30,12 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class Landmine extends BlockContainer implements IBomb {
 
@@ -89,9 +93,13 @@ public class Landmine extends BlockContainer implements IBomb {
         	explode(world, pos);
         }
         
-		boolean flag = !world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockFence);
+		boolean flag = false;
 
-        if (flag) {
+		if (!world.getBlockState(pos.down()).isSideSolid(world, pos.down(), EnumFacing.UP) && !(world.getBlockState(pos.down()).getBlock() instanceof BlockFence)) {
+			flag = true;
+		}
+
+		if (flag) {
 			this.dropBlockAsItem(world, pos, world.getBlockState(pos), 0);
 			world.setBlockToAir(pos);
 		}
@@ -185,7 +193,16 @@ public class Landmine extends BlockContainer implements IBomb {
 			Landmine.safeMode = false;
 			
 			if (this == ModBlocks.mine_ap) {
-				world.newExplosion(null, x + 0.5, y + 0.5, z + 0.5, 2.5F, false, false);
+				ExplosionNT ex = new ExplosionNT(world,null,x + 0.5,y + 0.5,z + 0.5,1F);
+				ex.addAttrib(ExAttrib.NOHURT);
+				ex.explode();
+				for (Entity entity : world.getEntitiesWithinAABB(Entity.class,new AxisAlignedBB(pos.add(-4,-4,-4),pos.add(4,4,4)))) {
+					Vec3d vec = new Vec3d(pos.getX()+0.5,pos.getY(),pos.getZ()+0.5);
+					double dist = vec.distanceTo(new Vec3d(entity.posX,entity.posY,entity.posZ));
+					int dmg = (int)Math.ceil(19-Math.max(dist-1,0)/3*19);
+					if (dmg > 0)
+						entity.attackEntityFrom(ModDamageSource.mine,dmg);
+				}
 			}
 			if (this == ModBlocks.mine_he) {
 				ExplosionLarge.explode(world, x + 0.5, y + 0.5, z + 0.5, 10F, true, false, false);

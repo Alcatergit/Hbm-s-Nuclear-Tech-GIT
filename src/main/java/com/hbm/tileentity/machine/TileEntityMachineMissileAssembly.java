@@ -5,11 +5,10 @@ import com.hbm.items.weapon.ItemCustomMissile;
 import com.hbm.items.weapon.ItemMissile;
 import com.hbm.items.weapon.ItemMissile.FuelType;
 import com.hbm.items.weapon.ItemMissile.PartType;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ItemStackHandlerWrapper;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEMissileMultipartPacket;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -53,7 +52,7 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -203,7 +202,7 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 		inventory.setStackInSlot(2, ItemStack.EMPTY);
 		inventory.setStackInSlot(4, ItemStack.EMPTY);
 
-		this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.missileAssembly2, SoundCategory.BLOCKS, 1F, 1F);
+		this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.missileAssembly2, SoundCategory.BLOCKS, 1F, 1F);
 	}
 	
 	@Override

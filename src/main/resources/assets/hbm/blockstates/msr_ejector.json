@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:msr_ejector" },
+ 	   	"facing=south": { "model": "hbm:msr_ejector", "y": 180 },
+  	  	"facing=west":  { "model": "hbm:msr_ejector", "y": 270 },
+  		"facing=east":  { "model": "hbm:msr_ejector", "y": 90 },
+		"facing=up": 	{ "model": "hbm:msr_ejector", "x": 270 },
+		"facing=down":  { "model": "hbm:msr_ejector", "x": 90 }
+	}
+}

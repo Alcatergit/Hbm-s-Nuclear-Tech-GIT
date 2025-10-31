@@ -1,15 +1,9 @@
 package com.hbm.particle.tau;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.weapon.ItemGunGauss;
 import com.hbm.main.ResourceManager;
 import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -22,6 +16,10 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ParticleTauMuzzleLightning extends ParticleFirstPerson {
 
@@ -96,7 +94,8 @@ public class ParticleTauMuzzleLightning extends ParticleFirstPerson {
 			Vec3d current = positions.get(i);
 			Vec3d next = positions.get(i+1);
 			Vec3d axis = next.subtract(current);
-            Vec3d pos1 = axis.crossProduct(current).normalize().scale(particleScale*Math.max(fade, 0.75));
+			Vec3d toPlayer = current;
+			Vec3d pos1 = axis.crossProduct(toPlayer).normalize().scale(particleScale*Math.max(fade, 0.75));
 			Vec3d pos2 = pos1.scale(-1);
 			float al = i == 0 || i == 9 ? 0.5F : 1;
 			buffer.pos(pos1.x + current.x, pos1.y + current.y, pos1.z + current.z).tex(randU, 0).color(1.0F, 0.7F, 0.1F, fade*al).endVertex();

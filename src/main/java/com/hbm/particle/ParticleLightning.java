@@ -1,12 +1,8 @@
 package com.hbm.particle;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -18,6 +14,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.apache.commons.lang3.ArrayUtils;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleLightning extends Particle {
 

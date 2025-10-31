@@ -1,19 +1,17 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerMachineShredder;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityMachineShredder;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIMachineShredder extends GuiInfoContainer {
 
-	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/processing/gui_shredder.png");
+	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_shredder.png");
 	private TileEntityMachineShredder diFurnace;
 
 	public GUIMachineShredder(InventoryPlayer invPlayer, TileEntityMachineShredder tedf) {
@@ -21,7 +19,7 @@ public class GUIMachineShredder extends GuiInfoContainer {
 		diFurnace = tedf;
 		
 		this.xSize = 176;
-		this.ySize = 233;
+		this.ySize = 222;
 	}
 	
 	@Override
@@ -30,9 +28,12 @@ public class GUIMachineShredder extends GuiInfoContainer {
 
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 8, guiTop + 106 - 88, 16, 88, diFurnace.power, TileEntityMachineShredder.maxPower);
 		
-		boolean flag = diFurnace.getGearLeft() == 0 || diFurnace.getGearLeft() == 3;
+		boolean flag = false;
 
-        if(diFurnace.getGearRight() == 0 || diFurnace.getGearRight() == 3)
+		if(diFurnace.getGearLeft() == 0 || diFurnace.getGearLeft() == 3)
+			flag = true;
+		
+		if(diFurnace.getGearRight() == 0 || diFurnace.getGearRight() == 3)
 			flag = true;
 		
 		if(flag) {

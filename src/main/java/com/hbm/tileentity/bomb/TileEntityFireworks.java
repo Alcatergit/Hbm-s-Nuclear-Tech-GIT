@@ -1,10 +1,9 @@
 package com.hbm.tileentity.bomb;
 
 import com.hbm.entity.item.EntityFireworks;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
@@ -41,7 +40,7 @@ public class TileEntityFireworks extends TileEntity implements ITickable {
 					EntityFireworks fireworks = new EntityFireworks(world, pos.getX() + 0.5 + offX, pos.getY() + 1.5, pos.getZ() + 0.5 + offZ, color, c);
 					world.spawnEntity(fireworks);
 
-					world.playSound(null, fireworks.posX, fireworks.posY, fireworks.posZ, HBMSoundHandler.rocketFlame, SoundCategory.BLOCKS, 3.0F, 1.0F);
+					world.playSound(null, fireworks.posX, fireworks.posY, fireworks.posZ, HBMSoundEvents.rocketFlame, SoundCategory.BLOCKS, 3.0F, 1.0F);
 
 					charges--;
 					this.markDirty();

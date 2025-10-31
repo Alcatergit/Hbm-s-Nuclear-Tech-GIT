@@ -1,36 +1,39 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
-import com.hbm.blocks.BlockBase;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
+import com.hbm.modules.ItemHazardModule;
+import com.hbm.potion.HbmPotion;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
-import com.hbm.potion.HbmPotion;
-import com.hbm.hazard.HazardSystem;
-
-import net.minecraft.potion.PotionEffect;
+import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.item.Item;
-import net.minecraft.init.Items;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.item.Item;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class BlockHazard extends BlockBase {
+import java.util.Random;
+
+public class BlockHazard extends Block implements IItemHazard {
+	
+	ItemHazardModule module;
 	
 	private float radIn = 0.0F;
 	private float radMax = 0.0F;
@@ -38,10 +41,16 @@ public class BlockHazard extends BlockBase {
 	private ExtDisplayEffect extEffect = null;
 	
 	private boolean beaconable = false;
+
 	
 	
 	public BlockHazard(Material mat, String s) {
-		super(mat, s);
+		super(mat);
+		this.setTranslationKey(s);
+		this.setRegistryName(s);
+		this.module = new ItemHazardModule();
+		
+		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
 	public BlockHazard(String s) {
@@ -61,6 +70,11 @@ public class BlockHazard extends BlockBase {
 	public BlockHazard setDisplayEffect(ExtDisplayEffect extEffect) {
 		this.extEffect = extEffect;
 		return this;
+	}
+
+	@Override
+	public Block setSoundType(SoundType sound) {
+		return super.setSoundType(sound);
 	}
 
 	@Override
@@ -129,7 +143,14 @@ public class BlockHazard extends BlockBase {
 		}
 	}
 
-	public BlockHazard addRadiation(float radiation) {
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
+	}
+
+	@Override
+	public IItemHazard addRadiation(float radiation) {
+		this.getModule().addRadiation(radiation);
 		this.radIn = radiation * 0.1F;
 		this.radMax = radiation;
 		return this;
@@ -154,7 +175,7 @@ public class BlockHazard extends BlockBase {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
 
 		if(this.rad3d > 0){
-			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d, 0, 0, 0, 0);
+			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d, 0, this.module.fire * 5000, 0, 0);
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 		if(this == ModBlocks.block_meteor_molten) {
@@ -195,7 +216,7 @@ public class BlockHazard extends BlockBase {
         }
 	}
 	
-	public enum ExtDisplayEffect {
+	public static enum ExtDisplayEffect {
 		RADFOG,
 		SPARKS,
 		SCHRAB,
@@ -206,10 +227,11 @@ public class BlockHazard extends BlockBase {
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
 		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 
 		
-    	if(entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic) {
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic)
+    	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
     		return;
     	}
@@ -218,10 +240,11 @@ public class BlockHazard extends BlockBase {
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 
 		
-    	if(entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic) {
+    	if (entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic)
+    	{
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
     		return;
     	}

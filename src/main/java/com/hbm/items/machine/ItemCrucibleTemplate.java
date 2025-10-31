@@ -5,6 +5,7 @@ import java.util.List;
 import org.lwjgl.input.Keyboard;
 
 import com.hbm.items.ModItems;
+import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.material.Mats;
 import com.hbm.inventory.material.Mats.MaterialStack;
 import com.hbm.inventory.CrucibleRecipes;
@@ -16,13 +17,14 @@ import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.util.NonNullList;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemCrucibleTemplate extends Item {
+public class ItemCrucibleTemplate extends Item implements IHasCustomModel {
 	
 	public static final ModelResourceLocation cruciModel = new ModelResourceLocation(RefStrings.MODID + ":crucible_template", "inventory");
 	
@@ -76,5 +78,10 @@ public class ItemCrucibleTemplate extends Item {
 		for(MaterialStack in : recipe.input) {
 			list.add(" §c"+I18nUtil.resolveKey(in.material.getTranslationKey()) + ": " + Mats.formatAmount(in.amount, Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)));
 		}
+	}
+
+	@Override
+	public ModelResourceLocation getResourceLocation() {
+		return cruciModel;
 	}
 }

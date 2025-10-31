@@ -1,9 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
@@ -12,8 +8,7 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeMan;
-
-import net.minecraft.client.util.ITooltipFlag;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -21,6 +16,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -35,6 +31,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Random;
 
 public class NukeMan extends BlockContainer implements IBomb {
 
@@ -69,7 +68,7 @@ public class NukeMan extends BlockContainer implements IBomb {
 
             if (tileentity instanceof TileEntityNukeMan)
             {
-                InventoryHelper.dropInventoryItems(world, pos, tileentity);
+                InventoryHelper.dropInventoryItems(world, pos, (TileEntityNukeMan)tileentity);
                 
                 world.updateComparatorOutputLevel(pos, this);
             }
@@ -203,7 +202,7 @@ public class NukeMan extends BlockContainer implements IBomb {
 		if(!(world.getTileEntity(pos) instanceof TileEntityNukeMan))
 			return;
 		TileEntityNukeMan entity = (TileEntityNukeMan) world.getTileEntity(pos);
-        //if (p_149695_1_.getStrongPower(x, y, z))
+        //if (p_149695_1_.getRedstonePowerFromNeighbors(x, y, z))
         {
         	if(entity.isReady())
         	{

@@ -1,7 +1,6 @@
 package com.hbm.entity.effect;
 
 import com.hbm.interfaces.IConstantRenderer;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;

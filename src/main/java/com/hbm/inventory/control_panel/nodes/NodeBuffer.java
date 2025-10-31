@@ -1,8 +1,7 @@
 package com.hbm.inventory.control_panel.nodes;
 
 import com.hbm.inventory.control_panel.*;
-import com.hbm.inventory.control_panel.nodes.Node;
-import com.hbm.inventory.control_panel.DataValue.*;
+import com.hbm.inventory.control_panel.DataValue.DataType;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NodeBuffer extends Node {

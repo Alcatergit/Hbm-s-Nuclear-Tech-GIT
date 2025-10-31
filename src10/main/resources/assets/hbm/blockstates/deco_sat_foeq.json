@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:deco_sat_foeq" },
+     	   	"facing=south": { "model": "hbm:deco_sat_foeq", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:deco_sat_foeq", "y": 270 },
+      		"facing=east":  { "model": "hbm:deco_sat_foeq", "y": 90 }
+	}
+}

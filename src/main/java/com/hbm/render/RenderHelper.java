@@ -1,47 +1,19 @@
 package com.hbm.render;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.util.glu.Project;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector3f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.entity.missile.EntityCarrier;
-import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.entity.missile.EntityMissileBaseAdvanced;
+import com.hbm.entity.missile.EntityMissileCustom;
 import com.hbm.handler.HbmShaderManager2;
 import com.hbm.lib.Library;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GLAllocation;
-import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderGlobal;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.ViewFrustum;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.chunk.RenderChunk;
@@ -65,6 +37,21 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.*;
+import org.lwjgl.util.glu.Project;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector3f;
+import org.lwjgl.util.vector.Vector4f;
+
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 @SideOnly(Side.CLIENT)
 public class RenderHelper {
 	
@@ -184,27 +171,44 @@ public class RenderHelper {
 	public static TextureAtlasSprite getItemTexture(ItemStack item){
 		return Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(item, null, null).getParticleTexture();
 	}
-	
-	public static void addVertexWithUV(double x, double y, double z, double u, double v){
-		addVertexWithUV(x, y, z, u, v, Tessellator.getInstance());
-	}
+
 	public static void addVertex(double x, double y, double z){
 		Tessellator.getInstance().getBuffer().pos(x, y, z).endVertex();
 	}
-	
+
+	public static void addVertexWithUV(double x, double y, double z, double u, double v){
+		addVertexWithUV(x, y, z, u, v, Tessellator.getInstance());
+	}
 	public static void addVertexWithUV(double x, double y, double z, double u, double v, Tessellator tes){
 		BufferBuilder buf = tes.getBuffer();
 		buf.pos(x, y, z).tex(u, v).endVertex();
 	}
 
-	public static void startDrawingTexturedQuads(){
-		startDrawingTexturedQuads(Tessellator.getInstance());
+	public static void addVertexColorWithUV(double x, double y, double z, double u, double v, float red, float green, float blue, float alpha){
+		addVertexColorWithUV(x, y, z, u, v, red, green, blue, alpha, Tessellator.getInstance());
 	}
+	public static void addVertexColorWithUV(double x, double y, double z, double u, double v, float red, float green, float blue, float alpha, Tessellator tes){
+		BufferBuilder buf = tes.getBuffer();
+		buf.pos(x, y, z).tex(u, v).color(red, green, blue, alpha).endVertex();
+	}
+
 	public static void startDrawingQuads(){
 		Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 	}
+	public static void startDrawingColoredQuads(){
+		Tessellator.getInstance().getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+	}
+	public static void startDrawingTexturedQuads(){
+		startDrawingTexturedQuads(Tessellator.getInstance());
+	}
 	public static void startDrawingTexturedQuads(Tessellator tes){
 		tes.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX);
+	}
+	public static void startDrawingColoredTexturedQuads(){
+		startDrawingColoredTexturedQuads(Tessellator.getInstance());
+	}
+	public static void startDrawingColoredTexturedQuads(Tessellator tes){
+		tes.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 	}
 	public static void startDrawingColoredTriangles(Tessellator tes){
 		tes.getBuffer().begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
@@ -974,7 +978,8 @@ public class RenderHelper {
     		if(r_getRenderChunk == null)
 				r_getRenderChunk = ReflectionHelper.findMethod(ViewFrustum.class, "getRenderChunk", "func_178161_a", BlockPos.class);
 			ViewFrustum v = (ViewFrustum) r_viewFrustum.get(Minecraft.getMinecraft().renderGlobal);
-            return (RenderChunk) r_getRenderChunk.invoke(v, pos);
+			RenderChunk r = (RenderChunk) r_getRenderChunk.invoke(v, pos);
+			return r;
 		} catch(IllegalArgumentException | IllegalAccessException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

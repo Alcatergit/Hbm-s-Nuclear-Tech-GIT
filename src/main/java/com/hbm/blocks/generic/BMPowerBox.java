@@ -3,10 +3,9 @@ package com.hbm.blocks.generic;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.ControlEventSystem;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityBMPowerBox;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -18,11 +17,7 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -69,7 +64,7 @@ public class BMPowerBox extends BlockContainer {
 		}
 		if(!worldIn.isRemote){
 			boolean oldIsOn = state.getValue(IS_ON);
-			worldIn.playSound(null, pos.getX(),  pos.getY(),  pos.getZ(), HBMSoundHandler.reactorStart, SoundCategory.BLOCKS, 1, oldIsOn ? 0.9F : 1);
+			worldIn.playSound(null, pos.getX(),  pos.getY(),  pos.getZ(), HBMSoundEvents.reactorStart, SoundCategory.BLOCKS, 1, oldIsOn ? 0.9F : 1);
 			worldIn.setBlockState(pos, state.withProperty(IS_ON, !oldIsOn));
 			worldIn.notifyNeighborsOfStateChange(pos, this, false);
 	        worldIn.notifyNeighborsOfStateChange(pos.offset(state.getValue(FACING).getOpposite()), this, false);
@@ -117,7 +112,7 @@ public class BMPowerBox extends BlockContainer {
 
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
-		boolean on = (meta & 1) == 1;
+		boolean on = (meta & 1) == 1 ? true : false;
 		meta = meta >> 1;
 		EnumFacing enumfacing = EnumFacing.byIndex(meta);
 

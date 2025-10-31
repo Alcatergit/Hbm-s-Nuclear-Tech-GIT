@@ -1,7 +1,6 @@
 package com.hbm.particle;
 
 import com.hbm.main.ModEventHandlerClient;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;

@@ -1,0 +1,7 @@
+{
+    "variants": {
+        "axis=y": { "model": "hbm:waste_log" },
+        "axis=z": { "model": "hbm:waste_log", "x": 90 },
+        "axis=x": { "model": "hbm:waste_log", "x": 90, "y": 90 }
+    }
+}

@@ -10,11 +10,12 @@ public enum NodeType {
 	//Intermediate nodes for logic such as for loops and if statements. Each contains child node systems, which possibly produce outputs.
 	LOGIC(new float[]{.4F, .4F, 1}),
 	//The outputs that get evaluated, such as broadcasting a new event or setting an arbitrary variable
-	OUTPUT(new float[]{1, 0, 0});
+	OUTPUT(new float[]{1, 0, 0}),
+	STRING(new float[]{0.2F,0.8F,1});
 	
-	private final float[] color;
+	private float[] color;
 	
-	NodeType(float[] color){
+	private NodeType(float[] color){
 		this.color = color;
 	}
 	

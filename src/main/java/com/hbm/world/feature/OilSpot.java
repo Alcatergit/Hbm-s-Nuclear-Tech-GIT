@@ -1,7 +1,6 @@
 package com.hbm.world.feature;
 
 import com.hbm.blocks.ModBlocks;
-
 import com.hbm.blocks.generic.BlockDeadPlant;
 import net.minecraft.block.*;
 import net.minecraft.block.material.Material;

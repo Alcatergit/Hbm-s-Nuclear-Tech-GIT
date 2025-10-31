@@ -2,20 +2,25 @@ package com.hbm.blocks.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IFluidVisualConnectable;
-
+import com.leafia.dev.MachineTooltip;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fluids.Fluid;
+
+import javax.annotation.Nullable;
+import java.util.List;
 
 public class BlockReactor extends Block implements IFluidVisualConnectable {
 
@@ -27,6 +32,12 @@ public class BlockReactor extends Block implements IFluidVisualConnectable {
 		this.setRegistryName(s);
 
 		ModBlocks.ALL_BLOCKS.add(this);
+	}
+
+	@Override
+	public void addInformation(ItemStack stack,@Nullable World player,List<String> tooltip,ITooltipFlag advanced) {
+		MachineTooltip.addMultiblock(tooltip);
+		super.addInformation(stack,player,tooltip,advanced);
 	}
 
 	@Override

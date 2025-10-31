@@ -1,12 +1,11 @@
 package com.hbm.blocks.machine;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems.Materials.Ingots;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDiFurnace;
-
+import com.leafia.unsorted.recipe_book.system.LeafiaRecipeBookServer;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -21,18 +20,14 @@ import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.Mirror;
-import net.minecraft.util.Rotation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class MachineDiFurnace extends BlockContainer {
 
@@ -77,6 +72,7 @@ public class MachineDiFurnace extends BlockContainer {
 			TileEntityDiFurnace entity = (TileEntityDiFurnace) world.getTileEntity(pos);
 			if(entity != null)
 			{
+				LeafiaRecipeBookServer.unlockRecipe(player,Ingots.ingot_steel);
 				player.openGui(MainRegistry.instance, ModBlocks.guiID_test_difurnace, world, pos.getX(), pos.getY(), pos.getZ());
 			}
 			return true;

@@ -1,13 +1,13 @@
 package com.hbm.world.generator;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class CellularDungeon {
 
@@ -62,7 +62,7 @@ public class CellularDungeon {
 	public void generate(World world, int x, int y, int z, Random rand) {
 		if(world.isRemote)
 			return;
-
+		
 		x -= dimX * width / 2;
 		z -= dimZ * width / 2;
 

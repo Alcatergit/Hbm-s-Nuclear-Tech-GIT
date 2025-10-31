@@ -1,14 +1,13 @@
 package com.hbm.forgefluid;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.HashMap;
+import java.util.Map;
 
 //That's it, I'm making my own fluid container registry if forge won't provide one. It won't be compatible with other mods, and it's not as
 //good as the forge one, but it'll sure fix that one terrible override in FFUtils.

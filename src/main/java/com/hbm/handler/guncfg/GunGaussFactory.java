@@ -1,17 +1,17 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.anim.BusAnimation;
 import com.hbm.render.anim.BusAnimationKeyframe;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
+
+import java.util.ArrayList;
 
 public class GunGaussFactory {
 	
@@ -30,7 +30,7 @@ public class GunGaussFactory {
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_RAD;
 		config.durability = 6000;
-		config.firingSound = HBMSoundHandler.tauShoot;
+		config.firingSound = HBMSoundEvents.tauShoot;
 		
 		config.animations.put(AnimType.CYCLE, new BusAnimation().addBus("RECOIL", new BusAnimationSequence()
 				.addKeyframe(new BusAnimationKeyframe(0, 90, -4, 50))
@@ -77,7 +77,7 @@ public class GunGaussFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.gun_xvl1456_ammo;
+		bullet.ammo = Armory.gun_xvl1456_ammo;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.trail = 1;

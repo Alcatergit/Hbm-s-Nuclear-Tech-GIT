@@ -2,7 +2,6 @@ package com.hbm.entity.missile;
 
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.explosion.ExplosionLarge;
-
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -74,6 +73,7 @@ public class EntityBombletTheta extends EntityThrowable {
 
         for (this.rotationPitch = (float)(Math.atan2(this.motionY, f2) * 180.0D / Math.PI) - 90; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F)
         {
+            ;
         }
 
         while (this.rotationPitch - this.prevRotationPitch >= 180.0F)

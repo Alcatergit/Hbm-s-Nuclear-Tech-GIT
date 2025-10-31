@@ -1,11 +1,9 @@
 package com.hbm.entity.mob.botprime;
 
-import java.util.List;
-
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
 import com.hbm.items.ModItems;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -21,6 +19,8 @@ import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityBOTPrimeHead extends EntityBOTPrimeBase {
 
@@ -61,6 +61,8 @@ public class EntityBOTPrimeHead extends EntityBOTPrimeBase {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (source == ModDamageSource.back)
+			amount = 0; // avoid cheap kills using Antischrabidium
 		if(super.attackEntityFrom(source, amount)) {
 			this.dmgCooldown = 4;
 			return true;

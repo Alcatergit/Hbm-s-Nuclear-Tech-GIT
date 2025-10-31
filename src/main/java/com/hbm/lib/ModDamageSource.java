@@ -1,15 +1,6 @@
 package com.hbm.lib;
 
-import com.hbm.entity.projectile.EntityBullet;
-import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.entity.projectile.EntityDischarge;
-import com.hbm.entity.projectile.EntityFire;
-import com.hbm.entity.projectile.EntityLN2;
-import com.hbm.entity.projectile.EntityLaserBeam;
-import com.hbm.entity.projectile.EntityMinerBeam;
-import com.hbm.entity.projectile.EntityPlasmaBeam;
-import com.hbm.entity.projectile.EntityRainbow;
-
+import com.hbm.entity.projectile.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
@@ -55,7 +46,14 @@ public class ModDamageSource extends DamageSource {
     public static DamageSource asbestos = (new DamageSource("asbestos")).setDamageIsAbsolute().setDamageBypassesArmor();
     public static DamageSource blacklung = (new DamageSource("blacklung")).setDamageIsAbsolute().setDamageBypassesArmor();
     public static DamageSource mku = (new DamageSource("mku")).setDamageIsAbsolute().setDamageBypassesArmor();
-	
+	public static DamageSource pointed = (new DamageSource("pointed")).setDifficultyScaled();
+
+    public static DamageSource fleija = (new DamageSource("fleija")).setDamageBypassesArmor();
+    public static DamageSource back = (new DamageSource("back")).setDamageBypassesArmor().setDamageIsAbsolute().setDamageAllowedInCreativeMode(); // fuck you :D
+	public static DamageSource mine = (new DamageSource("mine")).setExplosion().setDamageBypassesArmor();
+	public static DamageSource dfc = (new DamageSource("dfc")).setDamageIsAbsolute().setDamageBypassesArmor();
+	public static DamageSource dfcMeltdown = (new DamageSource("dfcMeltdown")).setDamageIsAbsolute().setDamageBypassesArmor().setDamageAllowedInCreativeMode();
+
 	public ModDamageSource(String p_i1566_1_) {
 		super(p_i1566_1_);
 	}

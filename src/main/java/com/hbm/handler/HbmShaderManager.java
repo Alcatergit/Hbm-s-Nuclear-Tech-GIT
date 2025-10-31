@@ -1,30 +1,10 @@
 package com.hbm.handler;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.ByteBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.apache.commons.io.IOUtils;
-import org.apache.logging.log4j.Level;
-import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.ARBFragmentShader;
-import org.lwjgl.opengl.ARBShaderObjects;
-import org.lwjgl.opengl.ARBVertexShader;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL13;
-import org.lwjgl.opengl.GL14;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL30;
-import org.lwjgl.opengl.GLContext;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.Spaghetti;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -38,6 +18,16 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.Level;
+import org.lwjgl.BufferUtils;
+import org.lwjgl.opengl.*;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 @SideOnly(Side.CLIENT)
 @Spaghetti("Oh god, 85% of this class is useless unused trash")
@@ -258,9 +248,9 @@ public class HbmShaderManager {
 			hGauss = createShader("vGauss.frag", "vGauss.vert");
 			vGauss = createShader("hGauss.frag", "hGauss.vert");
 			combine = createShader("combine.frag", "combine.vert");
-			flashlightBeam = createShader("flashlightbeam.frag", "flashlightbeam.vert");
-			flashlightWorld = createShader("flashlightworld.frag", "flashlightworld.vert");
-			deferredFlashlight = createShader("deferredflashlight.frag", "deferredflashlight.vert");
+			//flashlightBeam = createShader("flashlightbeam.frag", "flashlightbeam.vert");
+			//flashlightWorld = createShader("flashlightworld.frag", "flashlightworld.vert");
+			//deferredFlashlight = createShader("deferredflashlight.frag", "deferredflashlight.vert");
 		}
 		if(GeneralConfig.useShaders2){
 			dissolve = createShader("dissolve.frag", "dissolve.vert");
@@ -456,12 +446,14 @@ public class HbmShaderManager {
 
 	}
 
-	public interface FloatSupplier {
-		float getAsFloat();
+	public static interface FloatSupplier {
+		public float getAsFloat();
 	}
 
 	public static boolean isActiveShader(int prog) {
-        return GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) == prog;
-    }
+		if(GL11.glGetInteger(GL20.GL_CURRENT_PROGRAM) == prog)
+			return true;
+		return false;
+	}
 
 }

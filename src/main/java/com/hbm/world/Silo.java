@@ -1,28 +1,14 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockHalfStoneSlab;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockLadder;
-import net.minecraft.block.BlockDirectional;
+import net.minecraft.block.*;
 import net.minecraft.block.BlockSlab.EnumBlockHalf;
-import net.minecraft.block.BlockRedstoneRepeater;
-import net.minecraft.block.BlockRedstoneTorch;
-import net.minecraft.block.BlockRedstoneWire;
-import net.minecraft.block.BlockStairs;
 import net.minecraft.block.BlockStairs.EnumHalf;
 import net.minecraft.block.BlockStoneSlab.EnumType;
-import net.minecraft.block.BlockTorch;
-import net.minecraft.block.BlockWallSign;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -32,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
+
+import java.util.Random;
 
 public class Silo extends WorldGenerator
 {
@@ -53,8 +41,8 @@ public class Silo extends WorldGenerator
 		};
 	}
 
-	public boolean LocationIsValidSpawn(World world, int x, int y, int z) {
-        if(y < 21) return false;
+	public boolean LocationIsValidSpawn(World world, int x, int y, int z)
+ {
 		IBlockState checkBlockState = world.getBlockState(new BlockPos(x, y - 1, z));
 		Block checkBlock = checkBlockState.getBlock();
 		Block blockAbove = world.getBlockState(new BlockPos(x, y , z)).getBlock();
@@ -83,13 +71,22 @@ public class Silo extends WorldGenerator
 	}
 
 	@Override
-	public boolean generate(World world, Random rand, BlockPos pos) {
+	public boolean generate(World world, Random rand, BlockPos pos)
+	{
 		return generate(world, rand, pos, false);
 
 	}
 	
-	public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-       return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
+
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
+
+       return true;
 
 	}
 

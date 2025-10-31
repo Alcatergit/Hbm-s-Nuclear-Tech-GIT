@@ -1,13 +1,10 @@
 package com.hbm.blocks.gas;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +19,8 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public abstract class BlockGasBase extends Block {
 	
@@ -92,13 +91,21 @@ public abstract class BlockGasBase extends Block {
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
-			if(world.rand.nextInt(2)==0){
-				if(!tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ())))
-					tryMove(world, pos.getX(), pos.getY(), pos.getZ(), getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ()));
-			}
+			//if(world.rand.nextInt(2)==0){
+				boolean moved = false;
+				for (int attempts = 0; ((attempts < 5) && (!moved)); attempts++) {
+					moved = this.tryMove(world, pos.getX(), pos.getY(), pos.getZ(), this.getFirstDirection(world, pos.getX(), pos.getY(), pos.getZ()));
+					if (!moved)
+						moved = this.tryMove(world, pos.getX(), pos.getY(), pos.getZ(), this.getSecondDirection(world, pos.getX(), pos.getY(), pos.getZ()));
+				}
+			//}
+			world.scheduleUpdate(pos, this, this.tickRate(world));
 		}
 	}
-	
+	@Override
+	public int tickRate(World world) {
+		return 1;
+	}
 	public abstract ForgeDirection getFirstDirection(World world, int x, int y, int z);
 
 	public ForgeDirection getSecondDirection(World world, int x, int y, int z) {

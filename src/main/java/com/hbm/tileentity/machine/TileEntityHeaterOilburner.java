@@ -5,17 +5,15 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.FluidFlameRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.container.ContainerOilburner;
 import com.hbm.inventory.gui.GUIOilburner;
-import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -38,7 +36,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -48,7 +45,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
     public FluidTank tank;
     public Fluid fluidType;
 
-    private long cacheHeat = 0;
+    private int cacheHeat = 0;
 
     public int setting = 1;
 
@@ -61,7 +58,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
 
         tank = new FluidTank(16000);
         fluidType = ModForgeFluids.GAS;
-        cacheHeat = FluidFlameRecipes.getHeatEnergy(fluidType);
+        cacheHeat = FluidCombustionRecipes.getFlameEnergy(fluidType);
     }
 
     @Override
@@ -109,7 +106,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
             data.setBoolean("isOn", isOn);
             data.setInteger("heatEnergy", heatEnergy);
             data.setByte("setting", (byte) this.setting);
-            data.setLong("cacheHeat", this.cacheHeat);
+            data.setInteger("cacheHeat", this.cacheHeat);
 
             this.networkPack(data, 25);
         }
@@ -118,9 +115,9 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
     private void updateTankType() {
         ItemStack slotId = inventory.getStackInSlot(2);
         Item itemId = slotId.getItem();
-        if(itemId == ModItems.forge_fluid_identifier) {
+        if(itemId instanceof ItemForgeFluidIdentifier) {
             Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
-            long energy = FluidFlameRecipes.getHeatEnergy(fluid);
+            int energy = FluidCombustionRecipes.getFlameEnergy(fluid);
 
             if(fluidType != fluid) {
                 fluidType = fluid;
@@ -165,7 +162,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
         isOn = nbt.getBoolean("isOn");
         heatEnergy = nbt.getInteger("heatEnergy");
         setting = nbt.getByte("setting");
-        cacheHeat = nbt.getLong("cacheHeat");
+        cacheHeat = nbt.getInteger("cacheHeat");
     }
 
     @Override
@@ -180,11 +177,11 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
         isOn = nbt.getBoolean("isOn");
         heatEnergy = nbt.getInteger("heatEnergy");
         setting = nbt.getByte("setting");
-        cacheHeat = nbt.getLong("cacheHeat");
+        cacheHeat = nbt.getInteger("cacheHeat");
     }
 
     @Override
-    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         tank.writeToNBT(nbt);
         if(fluidType != null) {
             nbt.setString("fluidType", fluidType.getName());
@@ -193,7 +190,7 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
         nbt.setBoolean("isOn", isOn);
         nbt.setInteger("heatEnergy", heatEnergy);
         nbt.setByte("setting", (byte) this.setting);
-        nbt.setLong("cacheHeat", this.cacheHeat);
+        nbt.setInteger("cacheHeat", this.cacheHeat);
 
         return super.writeToNBT(nbt);
     }
@@ -223,8 +220,9 @@ public class TileEntityHeaterOilburner extends TileEntityMachineBase implements 
     public int fill(FluidStack resource, boolean doFill) {
         if(resource != null && resource.getFluid() == fluidType && resource.amount > 0) {
             return tank.fill(resource, doFill);
+        } else {
+            return 0;
         }
-        return 0;
     }
 
     @Nullable

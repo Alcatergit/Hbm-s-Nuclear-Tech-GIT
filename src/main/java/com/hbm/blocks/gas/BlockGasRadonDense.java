@@ -1,7 +1,5 @@
 package com.hbm.blocks.gas;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.lib.ForgeDirection;
@@ -10,7 +8,6 @@ import com.hbm.util.ArmorRegistry.HazardClass;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -21,6 +18,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 public class BlockGasRadonDense extends BlockGasBase {
 
@@ -36,10 +35,16 @@ public class BlockGasRadonDense extends BlockGasBase {
 		EntityLivingBase entityLiving = (EntityLivingBase) entity;
 		
 		if(ArmorRegistry.hasProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.RAD_GAS)) {
-			ArmorUtil.damageGasMaskFilter(entityLiving, 2);
-			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.5F);
+			ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+			if(ArmorRegistry.hasProtection(entityLiving, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
+				ArmorUtil.damageGasMaskFilter(entityLiving, 1);
+			else {
+				ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.CREATIVE, 0.2F);
+				ContaminationUtil.applyAsbestos(entity, 2, 1);
+			}
 		} else {
 			ContaminationUtil.contaminate(entityLiving, HazardType.RADIATION, ContaminationType.RAD_BYPASS, 0.5F);
+			ContaminationUtil.applyAsbestos(entity, 4, 1);
 		}
 	}
 	
@@ -85,6 +90,7 @@ public class BlockGasRadonDense extends BlockGasBase {
 		}
 		
 		super.updateTick(world, pos, state, rand);
+		world.scheduleUpdate(pos, this, this.tickRate(world) + rand.nextInt(5));
 	}
 	
 }

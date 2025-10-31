@@ -1,23 +1,17 @@
 package com.hbm.inventory.gui;
 
-import net.minecraft.client.gui.GuiButton;
-import net.minecraftforge.fml.common.Optional;
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.container.ContainerCrateTungsten;
-import com.hbm.lib.RefStrings;
 import com.hbm.lib.Library;
+import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
-import vazkii.quark.api.IChestButtonCallback;
+import org.lwjgl.opengl.GL11;
 
-@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IChestButtonCallback", modid = "quark")})
-public class GUICrateTungsten extends GuiContainer implements IChestButtonCallback {
+public class GUICrateTungsten extends GuiContainer {
 
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crate_tungsten.png");
 	private static ResourceLocation texture_hot = new ResourceLocation(RefStrings.MODID + ":textures/gui/storage/gui_crate_tungsten_hot.png");
@@ -57,10 +51,5 @@ public class GUICrateTungsten extends GuiContainer implements IChestButtonCallba
 			Minecraft.getMinecraft().getTextureManager().bindTexture(texture_hot);
 		
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
-	}
-
-	@Override
-	public boolean onAddChestButton(GuiButton guiButton, int i) {
-		return true;
 	}
 }

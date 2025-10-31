@@ -1,7 +1,5 @@
 package com.hbm.config;
 
-import com.hbm.config.CompatibilityConfig;
-
 public class WorldConfig {
 
 	public static int uraniumSpawn = 6;
@@ -66,7 +64,7 @@ public class WorldConfig {
 	public static int jungleStructure = 2000;
 	public static int pyramidStructure = 4000;
 	
-	public static int meteorStrikeChance = 20 * 60 * 180;
+	public static int meteorStrikeChance = 360000;
 	public static int meteorShowerChance = 20 * 60 * 5;
 	public static int meteorShowerDuration = 6000;
 

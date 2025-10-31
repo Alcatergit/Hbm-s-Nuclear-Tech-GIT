@@ -1,17 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
-
-import com.hbm.items.ModItems;
-import com.hbm.items.tool.ItemKeyPin;
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.interfaces.ILaserable;
+import com.hbm.inventory.DFCRecipes;
+import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.items.weapon.ItemCrucible;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.inventory.DFCRecipes;
 import com.hbm.tileentity.INBTPacketReceiver;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -20,18 +18,17 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
-import vazkii.quark.api.IDropoffManager;
 
-@Optional.InterfaceList({@Optional.Interface(iface = "vazkii.quark.api.IDropoffManager", modid = "quark")})
-public class TileEntityCrateTungsten extends TileEntityLockableBase implements IDropoffManager, ITickable, ILaserable, INBTPacketReceiver {
+import java.util.Random;
+
+public class TileEntityCrateTungsten extends TileEntityLockableBase implements ITickable, ILaserable, INBTPacketReceiver {
 
 	public ItemStackHandler inventory;
 
-	private final Random rand = new Random();
+	private Random rand = new Random();
 
 	public int heatTimer = 0;
 	public int age = 0;
@@ -44,10 +41,6 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 				markDirty();
 			}
 		};
-	}
-
-	public boolean acceptsDropoff(EntityPlayer player) {
-		return true;
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
@@ -66,12 +59,12 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			ItemStack stack = player.getHeldItemMainhand();
 			
 			if(stack.getItem() instanceof ItemKeyPin && ItemKeyPin.getPins(stack) == this.lock) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 			
 			if(stack.getItem() == ModItems.key_red) {
-	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
+	        	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockOpen, SoundCategory.BLOCKS, 1.0F, 1.0F);
 				return true;
 			}
 			
@@ -83,6 +76,7 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 	public void update() {
 		
 		if(!world.isRemote) {
+			this.updateSPKConnections(world,pos);
 			if(heatTimer > 0)
 				heatTimer--;
 	
@@ -115,10 +109,10 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 		heatTimer = 5;
 		
 		for(int i = 0; i < inventory.getSlots(); i++) {
-			
+
 			if(inventory.getStackInSlot(i).isEmpty())
 				continue;
-			
+
 			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
 
 			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
@@ -126,16 +120,18 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			requiredEnergy *= 0.9D;
 			if(requiredEnergy > -1 && energy > requiredEnergy){
 				if(0.001D > count * rand.nextDouble() * ((double)requiredEnergy/(double)energy)){
-					result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
+					ItemStack check = DFCRecipes.getOutput(inventory.getStackInSlot(i));
+					if (check != null)
+						result = check;
 				}
 			}
-			
-			if(inventory.getStackInSlot(i).getItem() == ModItems.crucible && ItemCrucible.getCharges(inventory.getStackInSlot(i)) < 3 && energy > 10000000)
+
+			if(inventory.getStackInSlot(i).getItem() == Armory.crucible && ItemCrucible.getCharges(inventory.getStackInSlot(i)) < 3 && energy > 10000000)
 				ItemCrucible.charge(inventory.getStackInSlot(i));
-			
+
 			if(result != null && !result.isEmpty()){
 				int size = inventory.getStackInSlot(i).getCount();
-			
+
 				if(result.getCount() * size <= result.getMaxStackSize()) {
 					inventory.setStackInSlot(i, result.copy());
 					inventory.getStackInSlot(i).setCount(inventory.getStackInSlot(i).getCount()*size);

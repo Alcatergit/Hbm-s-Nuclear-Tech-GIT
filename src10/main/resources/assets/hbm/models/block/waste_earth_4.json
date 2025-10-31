@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "top": "hbm:blocks/contamination/grass/waste_grass_top_4",
+        "bottom": "hbm:blocks/contamination/dirt/waste_dirt_4",
+        "side": "hbm:blocks/contamination/grass/waste_grass_side_4"
+    }
+}

@@ -1,0 +1,7 @@
+{
+    "parent": "block/door_top",
+    "textures": {
+        "bottom": "hbm:blocks/leafia/door_nuke_lower",
+        "top": "hbm:blocks/leafia/door_nuke_upper"
+    }
+}

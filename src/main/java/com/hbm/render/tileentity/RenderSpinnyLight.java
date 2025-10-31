@@ -1,11 +1,9 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
+import com.hbm.render.LightRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.deco.TileEntitySpinnyLight;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -15,6 +13,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.EnumDyeColor;
+import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
 
 public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinnyLight> {
 	
@@ -34,7 +34,7 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 				if(EnumDyeColor.values()[i] == EnumDyeColor.RED){
 					color = new float[]{1, 0, 0};
 				}
-				coneMeshes[i] = generateConeMesh(5, 3, 12, color[0], color[1], color[2]);
+				coneMeshes[i] = generateConeMesh(5, 3, 12, color[0]*color[0], color[1]*color[1], color[2]*color[2]);
 			}
 		}
 		boolean powered = (te.getBlockMetadata() & 8) > 0;
@@ -51,46 +51,57 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 		}
 		GL11.glTranslated(0, -0.5, 0);
 		GL11.glPushMatrix();
-		GL11.glRotated((time*7)%360, 0, 1, 0);
+		GL11.glRotated((time*/*7*/12)%360, 0, 1, 0);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.spinny_light_tex);
 		if(powered)
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
+		float[] color = te.color.getColorComponentValues();
+		//if(te.color == EnumDyeColor.RED){
+		//	color = new float[]{1, 0, 0};
+		//} // what the hell is this low-iq branch
+		GlStateManager.color(color[0], color[1], color[2]);
 		ResourceManager.spinny_light.renderPart("light");
 		GL11.glPopMatrix();
+		GlStateManager.color(1,1,1);
 		
 		GL11.glPushMatrix();
 		ResourceManager.spinny_light.renderPart("base");
 		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, powered ? DestFactor.ONE : DestFactor.ONE_MINUS_SRC_ALPHA);
-		float[] color = te.color.getColorComponentValues();
-		if(te.color == EnumDyeColor.RED){
-			color = new float[]{1, 0, 0};
-		}
-		GlStateManager.color(color[0], color[1], color[2], 0.61F);
-		ResourceManager.spinny_light.renderPart("dome");
-		GL11.glPopMatrix();
-		
-		if(powered){
-			GL11.glPushMatrix();
-			GL11.glRotated((time*7)%360, 0, 1, 0);
-			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
+		if (!powered)
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.SRC_COLOR);
+		else {
 			GlStateManager.disableTexture2D();
 			GlStateManager.disableLighting();
 			GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
 			GlStateManager.depthMask(false);
 			GlStateManager.disableCull();
-			GL11.glCallList(coneMeshes[te.color.ordinal()]);
-			GlStateManager.color(1, 1, 1, 1);
-			GlStateManager.enableCull();
-			GlStateManager.depthMask(true);
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-			GlStateManager.enableLighting();
-			GlStateManager.enableTexture2D();
-			GlStateManager.disableBlend();
-			GlStateManager.shadeModel(GL11.GL_FLAT);
-			GL11.glPopMatrix();
+			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
 		}
+		GlStateManager.color(color[0]*color[0], color[1]*color[1], color[2]*color[2], powered ? 1 : 0.61F);
+		ResourceManager.spinny_light.renderPart("dome");
+		GL11.glPopMatrix();
+		
+		if(powered){
+			if (false) { // this is ass //(GeneralConfig.useShaders2) {
+				LightRenderer.addPointLight(new Vec3d(x,y,z),new Vec3d(1,0,0),2);
+			} else {
+				GL11.glPushMatrix();
+				GL11.glRotated((time*12)%360, 0, 1, 0);
+				GL11.glCallList(coneMeshes[te.color.ordinal()]);
+				GlStateManager.blendFunc(SourceFactor.DST_COLOR, DestFactor.ONE);
+				GlStateManager.color(1, 1, 1, 1);
+				GlStateManager.enableCull();
+				GlStateManager.depthMask(true);
+				GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+				GlStateManager.enableLighting();
+				GlStateManager.enableTexture2D();
+				//GlStateManager.disableBlend();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
+				GL11.glPopMatrix();
+			}
+		}
+		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 		
 		GL11.glPopMatrix();
 	}
@@ -115,24 +126,24 @@ public class RenderSpinnyLight extends TileEntitySpecialRenderer<TileEntitySpinn
 			vertices[(i+1)*3+1] = (float) vertex.yCoord+oY;
 			vertices[(i+1)*3+2] = (float) vertex.zCoord+oZ;
 		}
-		
-	        Tessellator tes = Tessellator.getInstance();
-	        BufferBuilder buf = tes.getBuffer();
-	        buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
-	        float alpha = 0.65F;
-	        for(int m = -1; m <= 1; m += 2){
-	        	for(int i = 2; i <= sides; i ++){
-	            	buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
-	                buf.pos(vertices[(i-1)*3]*m, vertices[(i-1)*3+1], vertices[(i-1)*3+2]).color(r, g, b, 0).endVertex();
-	                buf.pos(vertices[i*3]*m, vertices[i*3+1], vertices[i*3+2]).color(r, g, b, 0).endVertex();
-	            }
-	            buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
-	            buf.pos(vertices[sides*3]*m, vertices[sides*3+1], vertices[sides*3+2]).color(r, g, b, 0).endVertex();
-	            buf.pos(vertices[1*3]*m, vertices[1*3+1], vertices[1*3+2]).color(r, g, b, 0).endVertex();
-	        }
-	        tes.draw();
-	        
-	        GL11.glEndList();
-	        return list;
+
+		Tessellator tes = Tessellator.getInstance();
+		BufferBuilder buf = tes.getBuffer();
+		buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
+		float alpha = 1;//0.65F;
+		for(int m = -1; m <= 1; m += 2){
+			for(int i = 2; i <= sides; i ++){
+				buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
+				buf.pos(vertices[(i-1)*3]*m, vertices[(i-1)*3+1], vertices[(i-1)*3+2]).color(0,0,0, 0).endVertex();
+				buf.pos(vertices[i*3]*m, vertices[i*3+1], vertices[i*3+2]).color(0,0,0, 0).endVertex();
+			}
+			buf.pos(vertices[0], vertices[1], vertices[2]).color(r, g, b, alpha).endVertex();
+			buf.pos(vertices[sides*3]*m, vertices[sides*3+1], vertices[sides*3+2]).color(0,0,0, 0).endVertex();
+			buf.pos(vertices[1*3]*m, vertices[1*3+1], vertices[1*3+2]).color(0,0,0, 0).endVertex();
+		}
+		tes.draw();
+
+		GL11.glEndList();
+		return list;
 	}
 }

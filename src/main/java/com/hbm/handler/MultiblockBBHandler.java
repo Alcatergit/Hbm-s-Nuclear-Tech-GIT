@@ -1,21 +1,19 @@
 package com.hbm.handler;
 
+import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.RefStrings;
+import com.hbm.main.MainRegistry;
+import net.minecraft.block.Block;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
+import org.apache.commons.io.IOUtils;
+
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.apache.commons.io.IOUtils;
-
-import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.RefStrings;
-import com.hbm.main.MainRegistry;
-
-import net.minecraft.block.Block;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 
 public class MultiblockBBHandler {
 

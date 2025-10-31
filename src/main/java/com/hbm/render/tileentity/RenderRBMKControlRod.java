@@ -1,16 +1,15 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControl;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRBMKControl>{
 
@@ -28,7 +27,7 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		GL11.glTranslated(x + 0.5, y, z + 0.5);
 		
 		bindTexture(((RBMKBase)control.getBlockType()).columnTexture);
-		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
+		CompositeBrush tes = CompositeBrush.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
 
 		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, TileEntityRBMKBase.rbmkHeight);

@@ -1,22 +1,17 @@
 package com.hbm.inventory.gui;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import com.hbm.forgefluid.ModFluidProperties;
 import com.hbm.inventory.AssemblerRecipes;
-import com.hbm.inventory.PressRecipes;
-import com.hbm.forgefluid.FluidTypeHandler;
-import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemCassette;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.CrucibleRecipes;
-import com.hbm.items.machine.ItemForgeFluidIdentifier;
+import com.hbm.inventory.PressRecipes;
+import com.hbm.items.ModItems;
+import com.hbm.items.machine.ItemCassette;
 import com.hbm.items.machine.ItemCassette.TrackType;
+import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.RefStrings;
 import com.hbm.packet.ItemFolderPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
@@ -35,8 +30,12 @@ import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import org.lwjgl.input.Keyboard;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 public class GUIScreenTemplateFolder extends GuiScreen {
-	
+	public static boolean cooldown = false;
     protected static final ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_planner.png");
     protected int xSize = 176;
     protected int ySize = 229;
@@ -86,6 +85,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     	
     	this.player = player;
 		this.allStacks = new ArrayList<>();
+		cooldown = false;
 
     	//Stamps
 		for(Item i : PressRecipes.stamps_plate)
@@ -99,10 +99,12 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 			allStacks.add(new ItemStack(ModItems.siren_track, 1, i));
     	//Fluid IDs
     	for(Fluid fluid : FluidRegistry.getRegisteredFluids().values()){
-    		if(FluidTypeHandler.noID(fluid)) continue;
+    		if(ModFluidProperties.noID(fluid)) continue;
 			allStacks.add(ItemForgeFluidIdentifier.getStackFromFluid(fluid));
     	}
     	//Assembly Templates
+    	//for(int i = 0; i < ItemAssemblyTemplate.recipes.size(); i++)
+    	//	stacks.add(new ItemStack(ModItems.assembly_template, 1, i));
     	for (int i = 0; i < AssemblerRecipes.recipeList.size(); ++i) {
 			NBTTagCompound tag = new NBTTagCompound();
 			tag.setInteger("type", i);
@@ -114,10 +116,10 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     	for (int i: ChemplantRecipes.recipeNames.keySet()){
 			allStacks.add(new ItemStack(ModItems.chemistry_template, 1, i));
 		}
-		//Crucible Templates
-    	for (int i: CrucibleRecipes.recipes.keySet()){
-			allStacks.add(new ItemStack(ModItems.crucible_template, 1, i));
-		}
+	    //Crucible Templates
+	    for (int i: CrucibleRecipes.recipes.keySet()){
+		    allStacks.add(new ItemStack(ModItems.crucible_template, 1, i));
+	    }
 		search(null);
     }
     
@@ -178,7 +180,11 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     }
 
     protected void mouseClicked(int i, int j, int k) {
-        this.search.setFocused(i >= guiLeft + 45 && i < guiLeft + 117 && j >= guiTop + 211 && j < guiTop + 223);
+		if(i >= guiLeft + 45 && i < guiLeft + 117 && j >= guiTop + 211 && j < guiTop + 223) {
+			this.search.setFocused(true);
+		} else  {
+			this.search.setFocused(false);
+		}
 
     	try {
     		for(FolderButton b : buttons)
@@ -298,9 +304,9 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 		}
 		
 		public void executeAction() {
-			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
 			if(type == 0) {
-				PacketDispatcher.wrapper.sendToServer(new ItemFolderPacket(stack.copy()));
+				if (!cooldown)
+					PacketDispatcher.wrapper.sendToServer(new ItemFolderPacket(stack.copy()));
 			} else if(type == 1) {
 				if(currentPage > 0)
 					currentPage--;
@@ -311,5 +317,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
 				updateButtons();
 			}
 		}
+		
 	}
+
 }

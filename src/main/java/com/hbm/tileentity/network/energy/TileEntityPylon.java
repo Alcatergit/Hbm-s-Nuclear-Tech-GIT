@@ -1,12 +1,11 @@
 package com.hbm.tileentity.network.energy;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.lib.ForgeDirection;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityPylon extends TileEntityPylonBase {
 

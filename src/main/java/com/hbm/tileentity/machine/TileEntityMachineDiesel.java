@@ -1,18 +1,15 @@
 package com.hbm.tileentity.machine;
 
-import java.util.HashMap;
-
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.forgefluid.FFUtils;
-import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.lib.Library;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.FluidCombustionRecipes;
-import com.hbm.inventory.FluidCombustionRecipes.FuelGrade;
+import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.EngineRecipes;
+import com.hbm.inventory.EngineRecipes.FuelGrade;
+import com.hbm.lib.Library;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -28,7 +25,8 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
 
 public class TileEntityMachineDiesel extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
@@ -63,7 +61,7 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setLong("powerCap", powerCap);
 		tank.writeToNBT(compound);
@@ -140,10 +138,10 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	}
 	
 	public static long getHEFromFuel(Fluid type) {
-		if(FluidCombustionRecipes.hasFuelRecipe(type)) {
-			FuelGrade grade = FluidCombustionRecipes.getFuelGrade(type);
+		if(EngineRecipes.hasFuelRecipe(type)) {
+			FuelGrade grade = EngineRecipes.getFuelGrade(type);
 			double efficiency = fuelEfficiency.containsKey(grade) ? fuelEfficiency.get(grade) : 0;
-			return (long) (FluidCombustionRecipes.getCombustionEnergy(type) / 1000L * efficiency);
+			return (long) (EngineRecipes.getEnergy(type) / 1000L * efficiency);
 		}
 		
 		return 0;
@@ -172,7 +170,9 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	}
 	protected boolean inputValidForTank(int tank, int slot){
 		if(!inventory.getStackInSlot(slot).isEmpty()){
-            return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
+				return true;	
+			}
 		}
 		return false;
 	}

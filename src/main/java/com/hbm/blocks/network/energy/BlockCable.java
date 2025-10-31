@@ -1,17 +1,16 @@
 package com.hbm.blocks.network.energy;
 
 import com.hbm.blocks.ModBlocks;
-import com.hbm.main.MainRegistry;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
-
-import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.BlockFaceShape;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
@@ -44,21 +43,21 @@ public class BlockCable extends BlockContainer {
 			boolean negY = Library.canConnect(world, cable.getPos().add(0, -1, 0), Library.NEG_Y);
 			boolean posZ = Library.canConnect(world, cable.getPos().add(0, 0, 1), Library.POS_Z);
 			boolean negZ = Library.canConnect(world, cable.getPos().add(0, 0, -1), Library.NEG_Z);
-			
 
-			if (cable != null) {
-				float p = 1F / 16F;
-				float minX = 11 * p / 2 - (negX ? (11 * p / 2) : 0);
-				float minY = 11 * p / 2 - (negY ? (11 * p / 2) : 0);
-				float minZ = 11 * p / 2 - (negZ ? (11 * p / 2) : 0);
-				float maxX = 1 - 11 * p / 2 + (posX ? (11 * p / 2) : 0);
-				float maxY = 1 - 11 * p / 2 + (posY ? (11 * p / 2) : 0);
-				float maxZ = 1 - 11 * p / 2 + (posZ ? (11 * p / 2) : 0);
-
-				return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
-			}
+			return getBB(posX,posY,posZ,negX,negY,negZ);
 		}
 		return FULL_BLOCK_AABB;
+	}
+	protected AxisAlignedBB getBB(boolean posX,boolean posY,boolean posZ,boolean negX,boolean negY,boolean negZ) {
+		float p = 1F / 16F;
+		float minX = 11 * p / 2 - (negX ? (11 * p / 2) : 0);
+		float minY = 11 * p / 2 - (negY ? (11 * p / 2) : 0);
+		float minZ = 11 * p / 2 - (negZ ? (11 * p / 2) : 0);
+		float maxX = 1 - 11 * p / 2 + (posX ? (11 * p / 2) : 0);
+		float maxY = 1 - 11 * p / 2 + (posY ? (11 * p / 2) : 0);
+		float maxZ = 1 - 11 * p / 2 + (posZ ? (11 * p / 2) : 0);
+
+		return new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ);
 	}
 
 	@Override

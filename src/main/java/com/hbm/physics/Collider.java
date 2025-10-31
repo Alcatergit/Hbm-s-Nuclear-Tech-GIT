@@ -1,8 +1,8 @@
 package com.hbm.physics;
 
-import javax.vecmath.Matrix3f;
-
 import com.hbm.render.amlfrom1710.Vec3;
+
+import javax.vecmath.Matrix3f;
 
 public abstract class Collider {
 

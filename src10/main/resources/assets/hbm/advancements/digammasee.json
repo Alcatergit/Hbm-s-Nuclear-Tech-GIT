@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:digamma_see"
+		},
+		"title": {
+			"translate": "hbm.achievement.digammaSee"
+		},
+		"description": {
+			"translate": "hbm.achievement.digammaSee.desc"
+		}
+	},
+	"parent": "hbm:achomega12",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 125
+    }
+}

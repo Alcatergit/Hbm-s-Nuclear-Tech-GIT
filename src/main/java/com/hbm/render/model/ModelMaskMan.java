@@ -1,13 +1,12 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
 import com.hbm.entity.mob.EntityMaskMan;
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.opengl.GL11;
 
 public class ModelMaskMan extends ModelBase {
 
@@ -29,9 +28,11 @@ public class ModelMaskMan extends ModelBase {
 
 
         //float f7 = man.limbSwing - man.limbSwingAmount * (1.0F - f5);
+        float f7 = f;
         //float f6 = (man.prevLimbSwingAmount + (man.limbSwingAmount - man.prevLimbSwingAmount) * f5) * 0.5F;
+        float f6 = f1;
 
-        double swing = Math.toDegrees(MathHelper.cos(f / 2F + (float)Math.PI) * 1.4F * f1);
+        double swing = Math.toDegrees(MathHelper.cos(f7 / 2F + (float)Math.PI) * 1.4F * f6);
 
 		GL11.glRotated(swing * -0.1, 1, 0, 0);
 		ResourceManager.maskman.renderPart("Torso");

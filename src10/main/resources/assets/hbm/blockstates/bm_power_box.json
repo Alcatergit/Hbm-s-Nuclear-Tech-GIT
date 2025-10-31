@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:bm_power_box" }
+	}
+}

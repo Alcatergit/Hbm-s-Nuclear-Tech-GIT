@@ -19,5 +19,5 @@ public interface IDepthRockTool {
 	 * @param z
 	 * @return
 	 */
-    boolean canBreakRock(World world, EntityPlayer player, ItemStack tool, IBlockState block, BlockPos pos);
+	public boolean canBreakRock(World world, EntityPlayer player, ItemStack tool, IBlockState block, BlockPos pos);
 }

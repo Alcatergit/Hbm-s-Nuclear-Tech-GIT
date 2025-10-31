@@ -1,13 +1,12 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
 import com.hbm.handler.ArmorModHandler;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModCladding extends ItemArmorMod {
 	

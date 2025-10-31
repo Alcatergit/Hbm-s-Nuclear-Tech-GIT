@@ -4,9 +4,9 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.main.ResourceManager;
 import com.hbm.lib.RefStrings;
 import com.hbm.inventory.material.Mats.MaterialStack;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.tileentity.machine.TileEntityCrucible;
 
-import com.hbm.render.amlfrom1710.Tessellator;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -39,7 +39,7 @@ public class RenderCrucible extends TileEntitySpecialRenderer<TileEntityCrucible
         ResourceManager.crucible_heat.renderAll();
         
         if(!crucible.recipeStack.isEmpty() || !crucible.wasteStack.isEmpty()) {
-            int totalCap = TileEntityCrucible.recipeZCapacity + TileEntityCrucible.wasteZCapacity;
+            int totalCap = crucible.recipeZCapacity + crucible.wasteZCapacity;
             int totalMass = 0;
 
             for(MaterialStack stack : crucible.recipeStack) totalMass += stack.amount;
@@ -54,7 +54,7 @@ public class RenderCrucible extends TileEntitySpecialRenderer<TileEntityCrucible
             OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 
             bindTexture(lava);
-            Tessellator tess = new Tessellator();
+            CompositeBrush tess = new CompositeBrush();
             tess.setNormal(0F, 1F, 0F);
             tess.setBrightness(240);
             tess.startDrawingQuads();

@@ -8,6 +8,6 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 
 public interface IItemHUD {
 
-	void renderHUD(RenderGameOverlayEvent.Pre event, ElementType type, EntityPlayer player, ItemStack stack, EnumHand hand);
+	public void renderHUD(RenderGameOverlayEvent.Pre event, ElementType type, EntityPlayer player, ItemStack stack, EnumHand hand);
 
 }

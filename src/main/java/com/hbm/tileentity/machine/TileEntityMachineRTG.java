@@ -1,12 +1,11 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IEnergyGenerator;
+import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.tileentity.TileEntityLoadedBase;
 import com.hbm.util.RTGUtil;
-
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -42,8 +41,10 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 			
 			@Override
 			public boolean isItemValid(int slot, ItemStack itemStack) {
-                return itemStack != null && (itemStack.getItem() instanceof ItemRTGPellet);
-            }
+				if(itemStack != null && (itemStack.getItem() instanceof ItemRTGPellet))
+					return true;
+				return false;
+			}
 			@Override
 			public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 				if(isItemValid(slot, stack))
@@ -128,7 +129,7 @@ public class TileEntityMachineRTG extends TileEntityLoadedBase implements ITicka
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {

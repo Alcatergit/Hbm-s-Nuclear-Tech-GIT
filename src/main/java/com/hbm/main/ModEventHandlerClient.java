@@ -1,37 +1,8 @@
 package com.hbm.main;
 
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
-import java.util.*;
-import java.util.Map.Entry;
-
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.forgefluid.ModForgeFluids;
-
-import com.hbm.interfaces.*;
-import com.hbm.render.item.*;
-import com.hbm.util.*;
-import com.hbm.items.IDynamicModels;
-import com.hbm.items.IModelRegister;
-import com.hbm.items.machine.*;
-import com.hbm.render.tileentity.RenderWatzMultiblock;
-import net.minecraft.block.*;
-import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Blocks;
-import net.minecraft.item.ItemLeaves;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidUtil;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-import org.lwjgl.util.glu.Project;
-
 import baubles.api.BaublesApi;
-
 import com.google.common.collect.Queues;
+import com.google.gson.JsonSyntaxException;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.TrappedBrick.Trap;
@@ -41,25 +12,31 @@ import com.hbm.entity.mob.EntityHunterChopper;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.entity.siege.SiegeTier;
 import com.hbm.flashlight.Flashlight;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumGasCanister;
-import com.hbm.handler.ArmorModHandler;
-import com.hbm.handler.HTTPHandler;
-import com.hbm.handler.HazmatRegistry;
-import com.hbm.handler.HbmShaderManager;
-import com.hbm.handler.HbmShaderManager2;
-import com.hbm.handler.JetpackHandler;
+import com.hbm.handler.*;
+import com.hbm.interfaces.*;
 import com.hbm.inventory.AssemblerRecipes;
+import com.hbm.inventory.ChemplantRecipes;
+import com.hbm.inventory.CrucibleRecipes;
+import com.hbm.inventory.OreDictManager;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.inventory.gui.GUIArmorTable;
 import com.hbm.inventory.material.Mats;
+import com.hbm.items.IDynamicModels;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.ElevatorStyles;
+import com.hbm.items.ModItems.Materials.Ingots;
+import com.hbm.items.ModItems.ToolSets;
 import com.hbm.items.armor.ItemArmorMod;
 import com.hbm.items.armor.JetpackBase;
 import com.hbm.items.gear.ArmorFSB;
 import com.hbm.items.gear.RedstoneSword;
+import com.hbm.items.machine.*;
 import com.hbm.items.machine.ItemCassette.TrackType;
 import com.hbm.items.special.ItemHot;
 import com.hbm.items.special.ItemWasteLong;
@@ -67,15 +44,12 @@ import com.hbm.items.special.ItemWasteShort;
 import com.hbm.items.special.weapon.GunB92;
 import com.hbm.items.tool.ItemFluidCanister;
 import com.hbm.items.tool.ItemGuideBook;
-import com.hbm.items.weapon.ItemCrucible;
-import com.hbm.items.weapon.ItemGunBase;
-import com.hbm.items.weapon.ItemGunEgon;
-import com.hbm.items.weapon.ItemGunShotty;
-import com.hbm.items.weapon.ItemSwordCutter;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.weapon.*;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.RecoilHandler;
 import com.hbm.lib.RefStrings;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.GunButtonPacket;
 import com.hbm.packet.MeathookJumpPacket;
@@ -86,17 +60,14 @@ import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.particle.gluon.ParticleGluonBurnTrail;
 import com.hbm.render.LightRenderer;
 import com.hbm.render.RenderHelper;
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.entity.DSmokeRenderer;
-import com.hbm.render.item.weapon.B92BakedModel;
-import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
-import com.hbm.render.item.weapon.ItemRenderGunAnim;
-import com.hbm.render.item.weapon.ItemRenderGunEgon;
-import com.hbm.render.item.weapon.ItemRenderRedstoneSword;
+import com.hbm.render.item.*;
+import com.hbm.render.item.weapon.*;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
@@ -105,45 +76,83 @@ import com.hbm.render.modelrenderer.EgonBackpackRenderer;
 import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
 import com.hbm.render.tileentity.RenderStructureMarker;
+import com.hbm.render.tileentity.RenderWatzMultiblock;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.world.RenderNTMSkybox;
-import com.hbm.sound.GunEgonSoundHandler;
-import com.hbm.sound.MovingSoundChopper;
-import com.hbm.sound.MovingSoundChopperMine;
-import com.hbm.sound.MovingSoundCrashing;
-import com.hbm.sound.MovingSoundPlayerLoop;
+import com.hbm.sound.*;
 import com.hbm.sound.MovingSoundPlayerLoop.EnumHbmSound;
-import com.hbm.sound.MovingSoundXVL1456;
-import com.hbm.sound.MovingSoundRadarLoop;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.CustomNukeEntry;
 import com.hbm.tileentity.bomb.TileEntityNukeCustom.EnumEntryType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
-import com.hbm.inventory.ChemplantRecipes;
-import com.hbm.inventory.CrucibleRecipes;
-import com.hbm.inventory.BreederRecipes;
+import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
-import com.hbm.hazard.HazardSystem;
-
+import com.hbm.util.BobMathUtil;
+import com.hbm.util.ContaminationUtil;
+import com.hbm.util.I18nUtil;
+import com.hbm.util.Tuple.Pair;
+import com.hbm.util.Tuple.Triplet;
+import com.leafia.contents.control.fuel.nuclearfuel.LeafiaRodItem;
+import com.leafia.contents.control.fuel.nuclearfuel.LeafiaRodBakedModel;
+import com.leafia.contents.control.fuel.nuclearfuel.LeafiaRodRender;
+import com.leafia.contents.effects.folkvangr.EntityNukeFolkvangr;
+import com.leafia.contents.gear.utility.FuzzyIdentifierBakedModel;
+import com.leafia.contents.gear.utility.ItemFuzzyIdentifier;
+import com.leafia.contents.machines.elevators.car.styles.EvStyleItem;
+import com.leafia.contents.resources.ItemMaterialsAutogenTint;
+import com.leafia.contents.resources.ItemMaterialsAutogenTintBakedModel;
+import com.leafia.contents.resources.ItemMaterialsAutogenTintRender;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2BakedModel;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2Item;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2Item.V2Grade;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2Item.V2Overlay;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2Item.V2Type;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2OverlayDummyItem;
+import com.leafia.contents.resources.bedrockore.BedrockOreV2Render;
+import com.leafia.contents.worldgen.ModBiome;
+import com.leafia.dev.LeafiaUtil;
+import com.leafia.dev.container_utility.LeafiaPacket;
+import com.leafia.dev.container_utility.LeafiaPacketReceiver;
+import com.leafia.dev.customblock.ICustomBlock;
+import com.leafia.passive.LeafiaPassiveLocal;
+import com.leafia.passive.effects.IdkWhereThisShitBelongs;
+import com.leafia.passive.effects.LeafiaShakecam;
+import com.leafia.passive.rendering.TopRender;
+import com.leafia.shit.leafiashader.BigBruh;
+import com.leafia.shit.recipe_book_elements.LeafiaRecipeBookTab;
+import com.leafia.transformer.LeafiaGls;
+import com.leafia.transformer.LeafiaGls.LeafiaGlStack;
+import com.leafia.unsorted.recipe_book.system.LeafiaDummyRecipe;
 import glmath.glm.vec._2.Vec2;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.MusicTicker;
 import net.minecraft.client.entity.AbstractClientPlayer;
+import net.minecraft.client.gui.toasts.RecipeToast;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelBiped.ArmPose;
 import net.minecraft.client.model.ModelPlayer;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.particle.Particle;
+import net.minecraft.client.renderer.ActiveRenderInfo;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GLAllocation;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.renderer.chunk.RenderChunk;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.client.renderer.texture.TextureMap;
+import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.shader.Framebuffer;
+import net.minecraft.client.shader.ShaderLinkHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -152,14 +161,12 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.*;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEndGateway;
 import net.minecraft.tileentity.TileEntityEndPortal;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.MovementInput;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.util.*;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
@@ -169,24 +176,13 @@ import net.minecraft.util.registry.IRegistry;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProviderSurface;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.gen.NoiseGeneratorPerlin;
+import net.minecraftforge.client.EnumHelperClient;
 import net.minecraftforge.client.IRenderHandler;
-import net.minecraftforge.client.event.ColorHandlerEvent;
-import net.minecraftforge.client.event.DrawBlockHighlightEvent;
-import net.minecraftforge.client.event.EntityViewRenderEvent;
-import net.minecraftforge.client.event.FOVUpdateEvent;
-import net.minecraftforge.client.event.InputUpdateEvent;
-import net.minecraftforge.client.event.ModelBakeEvent;
-import net.minecraftforge.client.event.ModelRegistryEvent;
-import net.minecraftforge.client.event.MouseEvent;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.client.event.*;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import net.minecraftforge.client.event.RenderHandEvent;
-import net.minecraftforge.client.event.RenderItemInFrameEvent;
-import net.minecraftforge.client.event.RenderLivingEvent;
-import net.minecraftforge.client.event.RenderPlayerEvent;
-import net.minecraftforge.client.event.RenderSpecificHandEvent;
-import net.minecraftforge.client.event.RenderWorldLastEvent;
-import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.client.event.sound.PlaySoundEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
@@ -197,7 +193,23 @@ import net.minecraftforge.fml.common.gameevent.TickEvent.ClientTickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.gameevent.TickEvent.RenderTickEvent;
 import net.minecraftforge.fml.common.network.FMLNetworkEvent.ClientDisconnectionFromServerEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.oredict.OreDictionary;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+import org.lwjgl.util.glu.Project;
+
+import java.io.IOException;
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.*;
+import java.util.Map.Entry;
 
 public class ModEventHandlerClient {
 
@@ -208,6 +220,70 @@ public class ModEventHandlerClient {
 	public static float deltaMouseY;
 	
 	public static float currentFOV = 70;
+	public static MusicTicker.MusicType darkness;
+	public static MusicTicker.MusicType darkness2;
+	public static boolean nextMusic = true;
+	private static final Map<String,BigBruh> shaderGroups = new HashMap<>();
+	int lastW = 0;
+	int lastH = 0;
+	//private static final Map<String, Shader> shaders = new HashMap<>();
+	public static final Logger LOGGER = LogManager.getLogger();
+	void addShader(String key,ResourceLocation resourceLocationIn)
+	{
+		if (OpenGlHelper.shadersSupported) {
+			if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
+				ShaderLinkHelper.setNewStaticShaderLinkHelper();
+			}
+			LOGGER.info("Trying to load shader: {}",resourceLocationIn);
+			Minecraft mc = Minecraft.getMinecraft();
+			lastW = mc.getFramebuffer().framebufferWidth;
+			lastH = mc.getFramebuffer().framebufferHeight;
+			try {
+				BigBruh shaderGroup = new BigBruh(mc.getTextureManager(), mc.getResourceManager(), mc.getFramebuffer(), resourceLocationIn);
+				shaderGroup.createBindFramebuffers(mc.displayWidth, mc.displayHeight);
+				shaderGroups.put(key,shaderGroup);
+				LOGGER.warn("Successfully put shader: {}", resourceLocationIn);
+			} catch (IOException ioexception) {
+				LOGGER.warn("Failed to load shader: {}", resourceLocationIn, ioexception);
+			} catch (JsonSyntaxException jsonsyntaxexception) {
+				LOGGER.warn("Failed to load shader: {}", resourceLocationIn, jsonsyntaxexception);
+			}
+		}
+	}
+	/*
+	ShaderManager putShader(String key, String program, Framebuffer canvasRead, Framebuffer canvasWrite) {
+		if (OpenGlHelper.shadersSupported) {
+			LOGGER.info("Putting shader: {}",program);
+			Minecraft mc = Minecraft.getMinecraft();
+			if (ShaderLinkHelper.getStaticShaderLinkHelper() == null) {
+				ShaderLinkHelper.setNewStaticShaderLinkHelper();
+			}
+			try {
+				Shader shader = new Shader(mc.getResourceManager(), program, canvasRead, canvasWrite);
+				shader.setProjectionMatrix(generateMatrix(canvasRead));
+				shaders.put(key, shader);
+				LOGGER.info("Successfully put shader: {}",program);
+				return shader.getShaderManager();
+			} catch (Exception exception) {
+				LOGGER.warn("Failed to put shader: {}", program, exception);
+			}
+		}
+		return null;
+	}*/
+
+	public ModEventHandlerClient() {
+		Minecraft mc = Minecraft.getMinecraft();
+		LeafiaShakecam.noise = new NoiseGeneratorPerlin(new Random(),1);
+		Framebuffer mainCanvas = mc.getFramebuffer();
+		darkness = EnumHelperClient.addMusicType("DARKNESS_GAME", HBMSoundEvents.darkness, 12000, 24000);
+		darkness2 = EnumHelperClient.addMusicType("DARKNESS_MENU", HBMSoundEvents.darkness2, 12000, 14000);
+		this.addShader("tom",new ResourceLocation("hbm:shaders/help/tom_desat.json"));
+		this.addShader("nuclear",new ResourceLocation("hbm:shaders/help/nuclear.json"));
+		//Framebuffer tempCanvas = new Framebuffer(mc.getFramebuffer().framebufferWidth,mc.getFramebuffer().framebufferHeight,mc.getFramebuffer().useDepth);
+		//putShader("myaw","invert",mainCanvas,tempCanvas).getShaderUniformOrDefault("InverseAmount").set(0.8F);
+		//putShader("blit","blit",tempCanvas,mainCanvas);
+	}
+
 	
 	public static void updateMouseDelta() {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -248,7 +324,7 @@ public class ModEventHandlerClient {
 			list[i] = e.getResourceLocation();
 			i++;
 		}
-		ModelLoader.registerItemVariants(ModItems.gas_canister, list);
+		ModelLoader.registerItemVariants(ModItems.cell, list);
 
 		for(Item item : ModItems.ALL_ITEMS) {
 			registerModel(item, 0);
@@ -256,14 +332,15 @@ public class ModEventHandlerClient {
 		for(Block block : ModBlocks.ALL_BLOCKS) {
 			registerBlockModel(block, 0);
 		}
-
+		ICustomBlock.registerModels();
 		IDynamicModels.registerModels();
 
 		registerBedrockOreModels();
-    }
+	}
 
 	public static void registerBedrockOreModels(){
-		for(int i = 0; i < 300; i++) {
+		ResourceLocation[] list = new ResourceLocation[300];
+		for(int i = 0; i < list.length; i++) {
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock, i, new ModelResourceLocation(ModItems.ore_bedrock.getRegistryName(), "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock_centrifuged, i, new ModelResourceLocation(ModItems.ore_bedrock_centrifuged.getRegistryName(), "inventory"));
 			ModelLoader.setCustomModelResourceLocation(ModItems.ore_bedrock_cleaned, i, new ModelResourceLocation(ModItems.ore_bedrock_cleaned.getRegistryName(), "inventory"));
@@ -288,15 +365,15 @@ public class ModEventHandlerClient {
 			return;
 
 		//Drillgon200: I hate myself for making this
-		if (item instanceof IModelRegister)
-            ((IModelRegister) item).registerModels();
+		if(item == ModItems.chemistry_template){
+			ChemplantRecipes.registerRecipes();
+		}
 
 		if(item == ModItems.chemistry_icon) {
 			for(int i: ChemplantRecipes.recipeNames.keySet()){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":chem_icon_" + ChemplantRecipes.getName(i).toLowerCase(), "inventory"));
 			}
 		} else if(item == ModItems.chemistry_template) {
-			ChemplantRecipes.registerRecipes();
 			for(int i: ChemplantRecipes.recipeNames.keySet()){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
@@ -309,7 +386,7 @@ public class ModEventHandlerClient {
 			for(int i = 0; i < TrackType.values().length; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
-		} else if(item == ModItems.ingot_u238m2) {
+		} else if(item == Ingots.ingot_u238m2) {
 			ModelLoader.setCustomModelResourceLocation(item, 0, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			ModelLoader.setCustomModelResourceLocation(item, 1, new ModelResourceLocation(RefStrings.MODID + ":hs-elements", "inventory"));
 			ModelLoader.setCustomModelResourceLocation(item, 2, new ModelResourceLocation(RefStrings.MODID + ":hs-arsenic", "inventory"));
@@ -347,30 +424,27 @@ public class ModEventHandlerClient {
 			for(int i = 0; i < SiegeTier.getLength(); i ++){
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(RefStrings.MODID + ":coin_siege_" + SiegeTier.tiers[i].name, "inventory"));
 			}
-		} else if(item == Item.getItemFromBlock(ModBlocks.volcano_core)){
-			for(int i = 0; i < 4; i ++){
+		} else if(item == Item.getItemFromBlock(ModBlocks.volcano_core)) {
+			for (int i = 0; i < 4; i++) {
 				ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 			}
-        } else if(item == Item.getItemFromBlock(ModBlocks.crashed_balefire)){
-            for(int i = 0; i < 4; i ++){
-                ModelLoader.setCustomModelResourceLocation(item, i, new ModelResourceLocation(item.getRegistryName(), "inventory"));
-            }
-        } else if(item instanceof ItemLeaves leaf) {
-            boolean isOldLeaf = leaf.getBlock() == ModBlocks.ntmLeavesOld;
-            boolean isWasteLeaf = leaf.getBlock() == ModBlocks.waste_leaves;
-            for(BlockPlanks.EnumType type : BlockPlanks.EnumType.values()) {
-                if(isWasteLeaf){
-                    ModelLoader.setCustomModelResourceLocation(leaf, type.ordinal(), new ModelResourceLocation("hbm:waste_leaves_" + type.name(), "inventory"));
-                } else if((isOldLeaf && type.ordinal() < 4) || (!isOldLeaf && type.ordinal() > 3)) {
-                    ModelLoader.setCustomModelResourceLocation(leaf, type.ordinal(), new ModelResourceLocation("minecraft:" + type.name() + "_leaves", "inventory"));
-                }
-            }
+		} else if (item instanceof LeafiaRodItem.EmptyLeafiaRod) {
+			ModelLoader.setCustomModelResourceLocation(item, 15, new ModelResourceLocation(item.getRegistryName() + "_overlay", "inventory"));
+			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName() + "_empty", "inventory"));
 		} else if(item instanceof IHasCustomModel) {
 			ModelLoader.setCustomModelResourceLocation(item, meta, ((IHasCustomModel) item).getResourceLocation());
 		} else if(item instanceof IHasCustomMetaModels) {
 			for(Integer i: ((IHasCustomMetaModels) item).getMetaValues()){
 				ModelLoader.setCustomModelResourceLocation(item, (int)i, ((IHasCustomMetaModels) item).getResourceLocation((int)i));
 			}
+		} else if (item instanceof BedrockOreV2Item ore) {
+			V2Grade[] values = V2Grade.values();
+			for (int i = 0; i < values.length; i++)
+				ModelLoader.setCustomModelResourceLocation(item,i,new ModelResourceLocation(RefStrings.MODID+":"+values[i].type.toPath()+"_"+ore.type.suffix,"inventory"));
+		} else if (item instanceof BedrockOreV2OverlayDummyItem) {
+			V2Overlay[] values = V2Overlay.values();
+			for (int i = 0; i < values.length; i++)
+				ModelLoader.setCustomModelResourceLocation(item,i,new ModelResourceLocation(RefStrings.MODID+":"+values[i].toPath()));
 		} else {
 			ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), "inventory"));
 		}
@@ -378,7 +452,7 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void modelBaking(ModelBakeEvent evt) {
-
+		ICustomBlock.bakeModels(evt);
 		IDynamicModels.bakeModels(evt);
 
 		for(EnumCanister e : EnumCanister.values()) {
@@ -403,116 +477,182 @@ public class ModEventHandlerClient {
 		ResourceManager.init();
 		Object object1 = evt.getModelRegistry().getObject(RedstoneSword.rsModel);
 		if(object1 instanceof IBakedModel) {
-            ItemRedstoneSwordRender.INSTANCE.itemModel = (IBakedModel) object1;
+			IBakedModel model = (IBakedModel) object1;
+			ItemRedstoneSwordRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(RedstoneSword.rsModel, new ItemRenderRedstoneSword());
 		}
 		Object object2 = evt.getModelRegistry().getObject(ItemAssemblyTemplate.location);
 		if(object2 instanceof IBakedModel) {
-            AssemblyTemplateRender.INSTANCE.itemModel = (IBakedModel) object2;
+			IBakedModel model = (IBakedModel) object2;
+			AssemblyTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemAssemblyTemplate.location, new AssemblyTemplateBakedModel());
 		}
 
 		Object object3 = evt.getModelRegistry().getObject(GunB92.b92Model);
 		if(object3 instanceof IBakedModel) {
-            ItemRenderGunAnim.INSTANCE.b92ItemModel = (IBakedModel) object3;
+			IBakedModel model = (IBakedModel) object3;
+			ItemRenderGunAnim.INSTANCE.b92ItemModel = model;
 			evt.getModelRegistry().putObject(GunB92.b92Model, new B92BakedModel());
 		}
 		Object object4 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankModel);
 		if(object4 instanceof IBakedModel) {
-            FluidTankRender.INSTANCE.itemModel = (IBakedModel) object4;
+			IBakedModel model = (IBakedModel) object4;
+			FluidTankRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankModel, new FluidTankBakedModel());
-		}
-		Object object444 = evt.getModelRegistry().getObject(ItemFluidTank.fluidTankLeadModel);
-		if(object444 instanceof IBakedModel) {
-            FluidTankLeadRender.INSTANCE.itemModel = (IBakedModel) object444;
-			evt.getModelRegistry().putObject(ItemFluidTank.fluidTankLeadModel, new FluidTankLeadBakedModel());
 		}
 		Object object5 = evt.getModelRegistry().getObject(ItemFluidTank.fluidBarrelModel);
 		if(object5 instanceof IBakedModel) {
-            FluidBarrelRender.INSTANCE.itemModel = (IBakedModel) object5;
+			IBakedModel model = (IBakedModel) object5;
+			FluidBarrelRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidTank.fluidBarrelModel, new FluidBarrelBakedModel());
 		}
 		Object object6 = evt.getModelRegistry().getObject(ItemFluidCanister.fluidCanisterModel);
 		if(object6 instanceof IBakedModel) {
-            FluidCanisterRender.INSTANCE.itemModel = (IBakedModel) object6;
+			IBakedModel model = (IBakedModel) object6;
+			FluidCanisterRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemFluidCanister.fluidCanisterModel, new FluidCanisterBakedModel());
 		}
 		Object object7 = evt.getModelRegistry().getObject(ItemChemistryTemplate.chemModel);
 		if(object7 instanceof IBakedModel) {
-            ChemTemplateRender.INSTANCE.itemModel = (IBakedModel) object7;
+			IBakedModel model = (IBakedModel) object7;
+			ChemTemplateRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemChemistryTemplate.chemModel, new ChemTemplateBakedModel());
 		}
 		Object object8 = evt.getModelRegistry().getObject(ItemForgeFluidIdentifier.identifierModel);
 		if(object8 instanceof IBakedModel) {
-            FFIdentifierRender.INSTANCE.itemModel = (IBakedModel) object8;
+			IBakedModel model = (IBakedModel) object8;
+			FFIdentifierRender.INSTANCE.itemModel = model;
 			evt.getModelRegistry().putObject(ItemForgeFluidIdentifier.identifierModel, new FFIdentifierModel());
 		}
-		Object object9 = evt.getModelRegistry().getObject(ItemCrucibleTemplate.cruciModel);
+		Object object9 = evt.getModelRegistry().getObject(LeafiaRodItem.rodModel);
 		if(object9 instanceof IBakedModel) {
-            CrucibleTemplateRender.INSTANCE.itemModel = (IBakedModel) object9;
-			evt.getModelRegistry().putObject(ItemCrucibleTemplate.cruciModel, new CrucibleTemplateBakedModel());
+			IBakedModel model = (IBakedModel) object9;
+			LeafiaRodRender.INSTANCE.itemModel = model;
+			evt.getModelRegistry().putObject(LeafiaRodItem.rodModel, new LeafiaRodBakedModel());
+		}
+		for (V2Type type : V2Type.values()) {
+			V2Grade[] values = V2Grade.values();
+			for (int i = 0; i < values.length; i++) {
+				ModelResourceLocation loc = new ModelResourceLocation(RefStrings.MODID+":"+values[i].type.toPath()+"_"+type.suffix,"inventory");
+				Object object = evt.getModelRegistry().getObject(loc);
+				if (object instanceof IBakedModel baked) {
+					if (baked instanceof BedrockOreV2BakedModel already) {
+						BedrockOreV2Render.INSTANCE.itemModels.get(type)[i] = already.original;
+					} else {
+						BedrockOreV2Render.INSTANCE.itemModels.get(type)[i] = baked;
+						evt.getModelRegistry().putObject(loc,new BedrockOreV2BakedModel(type,i,baked));
+					}
+				}
+			}
+		}
+		{
+			V2Overlay[] values = V2Overlay.values();
+			for (int i = 0; i < values.length; i++) {
+				ModelResourceLocation loc = new ModelResourceLocation(RefStrings.MODID+":"+values[i].toPath());
+				Object object = evt.getModelRegistry().getObject(loc);
+				if (object instanceof IBakedModel baked) {
+					BedrockOreV2Render.INSTANCE.overlays[i] = baked;
+				}
+			}
+		}
+		{
+			for (ItemMaterialsAutogenTint item : ItemMaterialsAutogenTint.ALL_AUTOGEN) {
+				for (Integer meta : item.metaValues) {
+					ModelResourceLocation loc = item.getResourceLocation(meta);
+					Object object = evt.getModelRegistry().getObject(loc);
+					if (object instanceof IBakedModel baked) {
+						if (baked instanceof ItemMaterialsAutogenTintBakedModel already) {
+							ItemMaterialsAutogenTintRender.INSTANCE.itemModels.get(item).put(meta,already.original);
+						} else {
+							ItemMaterialsAutogenTintRender.INSTANCE.itemModels.get(item).put(meta,baked);
+							evt.getModelRegistry().putObject(loc,new ItemMaterialsAutogenTintBakedModel(item,meta,baked));
+						}
+					}
+				}
+			}
+		}
+		Object objecta = evt.getModelRegistry().getObject(ItemFuzzyIdentifier.fuzzyModel);
+		if(objecta instanceof IBakedModel) {
+			IBakedModel model = (IBakedModel) objecta;
+			FFIdentifierRender.INSTANCE.itemModelFuzzy = model;
+			evt.getModelRegistry().putObject(ItemFuzzyIdentifier.fuzzyModel, new FuzzyIdentifierBakedModel());
+		}
+
+		for (LeafiaRodItem item : LeafiaRodItem.fromResourceMap.values()) {
+			if (item.specialRodModel != null) {
+				Object objectb = evt.getModelRegistry().getObject(item.specialRodModel);
+				if(objectb instanceof IBakedModel)
+					item.bakedSpecialRod = (IBakedModel)objectb;
+			}
+		}
+		{
+			Object object = evt.getModelRegistry().getObject(ItemCrucibleTemplate.cruciModel);
+			if (object instanceof IBakedModel model) {
+				CrucibleTemplateRender.INSTANCE.itemModel = model;
+				evt.getModelRegistry().putObject(ItemCrucibleTemplate.cruciModel,new CrucibleTemplateBakedModel());
+			}
 		}
 
 		IRegistry<ModelResourceLocation, IBakedModel> reg = evt.getModelRegistry();
-		swapModelsNoGui(ModItems.gun_revolver_nightmare, reg);
-		swapModelsNoGui(ModItems.gun_revolver_nightmare2, reg);
-		swapModels(ModItems.gun_revolver, reg);
-		swapModels(ModItems.gun_revolver_iron, reg);
-		swapModels(ModItems.gun_revolver_gold, reg);
-		swapModels(ModItems.gun_revolver_lead, reg);
-		swapModels(ModItems.gun_revolver_saturnite, reg);
-		swapModels(ModItems.gun_revolver_schrabidium, reg);
-		swapModelsNoGui(ModItems.gun_revolver_cursed, reg);
-		swapModelsNoGui(ModItems.gun_revolver_pip, reg);
-		swapModelsNoGui(ModItems.gun_revolver_nopip, reg);
-		swapModelsNoGui(ModItems.gun_revolver_blackjack, reg);
-		swapModelsNoGui(ModItems.gun_revolver_silver, reg);
-		swapModelsNoGui(ModItems.gun_revolver_red, reg);
-		swapModelsNoGui(ModItems.gun_lever_action, reg);
-		swapModelsNoGui(ModItems.gun_spark, reg);
-		swapModelsNoGui(ModItems.gun_b93, reg);
-		swapModelsNoGui(ModItems.gun_rpg, reg);
-		swapModelsNoGui(ModItems.gun_karl, reg);
-		swapModelsNoGui(ModItems.gun_panzerschreck, reg);
-		swapModels(ModItems.gun_hk69, reg);
-		swapModelsNoGui(ModItems.gun_deagle, reg);
-		swapModelsNoGui(ModItems.gun_supershotgun, reg);
-		swapModelsNoGui(ModItems.gun_fatman, reg);
-		swapModelsNoGui(ModItems.gun_proto, reg);
-		swapModelsNoGui(ModItems.gun_mirv, reg);
-		swapModelsNoGui(ModItems.gun_bf, reg);
-		swapModelsNoGui(ModItems.gun_zomg, reg);
-		swapModelsNoGui(ModItems.gun_xvl1456, reg);
-		swapModelsNoGui(ModItems.gun_hp, reg);
-		swapModelsNoGui(ModItems.gun_defabricator, reg);
-		swapModelsNoGui(ModItems.gun_uboinik, reg);
-		swapModelsNoGui(ModItems.gun_euthanasia, reg);
-		swapModelsNoGui(ModItems.gun_stinger, reg);
-		swapModelsNoGui(ModItems.gun_skystinger, reg);
-		swapModelsNoGui(ModItems.gun_mp, reg);
-		swapModelsNoGui(ModItems.gun_cryolator, reg);
-		swapModelsNoGui(ModItems.gun_jack, reg);
-		swapModelsNoGui(ModItems.gun_immolator, reg);
-		swapModelsNoGui(ModItems.gun_osipr, reg);
-		swapModelsNoGui(ModItems.gun_emp, reg);
-		swapModels(ModItems.gun_revolver_inverted, reg);
-		swapModelsNoGui(ModItems.gun_lever_action_sonata, reg);
-		swapModelsNoGui(ModItems.gun_bolt_action_saturnite, reg);
-		swapModelsNoGui(ModItems.gun_folly, reg);
-		swapModelsNoGui(ModItems.gun_dampfmaschine, reg);
-		swapModelsNoGui(ModItems.gun_calamity, reg);
-		swapModelsNoGui(ModItems.gun_calamity_dual, reg);
-		swapModelsNoGui(ModItems.gun_minigun, reg);
-		swapModelsNoGui(ModItems.gun_avenger, reg);
-		swapModelsNoGui(ModItems.gun_lacunae, reg);
-		swapModelsNoGui(ModItems.gun_lever_action_dark, reg);
-		swapModelsNoGui(ModItems.gun_bolt_action, reg);
-		swapModelsNoGui(ModItems.gun_bolt_action_green, reg);
-		swapModelsNoGui(ModItems.gun_uzi, reg);
-		swapModelsNoGui(ModItems.gun_uzi_silencer, reg);
-		swapModelsNoGui(ModItems.gun_uzi_saturnite, reg);
-		swapModelsNoGui(ModItems.gun_uzi_saturnite_silencer, reg);
-		swapModelsNoGui(ModItems.gun_mp40, reg);
+		swapModelsNoGui(Armory.gun_revolver_nightmare, reg);
+		swapModelsNoGui(Armory.gun_revolver_nightmare2, reg);
+		swapModels(Armory.gun_revolver, reg);
+		swapModels(Armory.gun_revolver_iron, reg);
+		swapModels(Armory.gun_revolver_gold, reg);
+		swapModels(Armory.gun_revolver_lead, reg);
+		swapModels(Armory.gun_revolver_saturnite, reg);
+		swapModels(Armory.gun_revolver_schrabidium, reg);
+		swapModelsNoGui(Armory.gun_revolver_cursed, reg);
+		swapModelsNoGui(Armory.gun_revolver_pip, reg);
+		swapModelsNoGui(Armory.gun_revolver_nopip, reg);
+		swapModelsNoGui(Armory.gun_revolver_blackjack, reg);
+		swapModelsNoGui(Armory.gun_revolver_silver, reg);
+		swapModelsNoGui(Armory.gun_revolver_red, reg);
+		swapModelsNoGui(Armory.gun_lever_action, reg);
+		swapModelsNoGui(Armory.gun_spark, reg);
+		swapModelsNoGui(Armory.gun_b93, reg);
+		swapModelsNoGui(Armory.gun_rpg, reg);
+		swapModelsNoGui(Armory.gun_karl, reg);
+		swapModelsNoGui(Armory.gun_panzerschreck, reg);
+		swapModels(Armory.gun_hk69, reg);
+		swapModelsNoGui(Armory.gun_deagle, reg);
+		swapModelsNoGui(Armory.gun_supershotgun, reg);
+		swapModelsNoGui(Armory.gun_fatman, reg);
+		swapModelsNoGui(Armory.gun_proto, reg);
+		swapModelsNoGui(Armory.gun_mirv, reg);
+		swapModelsNoGui(Armory.gun_bf, reg);
+		swapModelsNoGui(Armory.gun_zomg, reg);
+		swapModelsNoGui(Armory.gun_xvl1456, reg);
+		swapModelsNoGui(Armory.gun_hp, reg);
+		swapModelsNoGui(Armory.gun_defabricator, reg);
+		swapModelsNoGui(Armory.gun_uboinik, reg);
+		swapModelsNoGui(Armory.gun_euthanasia, reg);
+		swapModelsNoGui(Armory.gun_stinger, reg);
+		swapModelsNoGui(Armory.gun_skystinger, reg);
+		swapModelsNoGui(Armory.gun_mp, reg);
+		swapModelsNoGui(Armory.gun_cryolator, reg);
+		swapModelsNoGui(Armory.gun_jack, reg);
+		swapModelsNoGui(Armory.gun_immolator, reg);
+		swapModelsNoGui(Armory.gun_osipr, reg);
+		swapModelsNoGui(Armory.gun_emp, reg);
+		swapModels(Armory.gun_revolver_inverted, reg);
+		swapModelsNoGui(Armory.gun_lever_action_sonata, reg);
+		swapModelsNoGui(Armory.gun_bolt_action_saturnite, reg);
+		swapModelsNoGui(Armory.gun_folly, reg);
+		swapModelsNoGui(Armory.gun_dampfmaschine, reg);
+		swapModelsNoGui(Armory.gun_calamity, reg);
+		swapModelsNoGui(Armory.gun_calamity_dual, reg);
+		swapModelsNoGui(Armory.gun_minigun, reg);
+		swapModelsNoGui(Armory.gun_avenger, reg);
+		swapModelsNoGui(Armory.gun_lacunae, reg);
+		swapModelsNoGui(Armory.gun_lever_action_dark, reg);
+		swapModelsNoGui(Armory.gun_bolt_action, reg);
+		swapModelsNoGui(Armory.gun_bolt_action_green, reg);
+		swapModelsNoGui(Armory.gun_uzi, reg);
+		swapModelsNoGui(Armory.gun_uzi_silencer, reg);
+		swapModelsNoGui(Armory.gun_uzi_saturnite, reg);
+		swapModelsNoGui(Armory.gun_uzi_saturnite_silencer, reg);
+		swapModelsNoGui(Armory.gun_mp40, reg);
 		swapModels(ModItems.cell, reg);
 		swapModels(ModItems.gas_canister, reg);
 		swapModelsNoGui(ModItems.multitool_dig, reg);
@@ -530,50 +670,49 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.shimmer_axe, reg);
 		swapModels(ModItems.ff_fluid_duct, reg);
 		swapModels(ModItems.fluid_icon, reg);
-		swapModelsNoGui(ModItems.gun_brimstone, reg);
+		swapModelsNoGui(Armory.gun_brimstone, reg);
 		swapModelsNoGui(ModItems.stopsign, reg);
 		swapModelsNoGui(ModItems.sopsign, reg);
-		swapModels(ModItems.gun_ks23, reg);
-		swapModels(ModItems.gun_flamer, reg);
-		swapModels(ModItems.gun_flechette, reg);
-		swapModels(ModItems.gun_quadro, reg);
-		swapModels(ModItems.gun_sauer, reg);
+		swapModels(Armory.gun_ks23, reg);
+		swapModels(Armory.gun_flamer, reg);
+		swapModels(Armory.gun_flechette, reg);
+		swapModels(Armory.gun_quadro, reg);
+		swapModels(Armory.gun_sauer, reg);
 		swapModelsNoGui(ModItems.chernobylsign, reg);
 		swapModels(Item.getItemFromBlock(ModBlocks.radiorec), reg);
-		swapModels(ModItems.gun_vortex, reg);
-		swapModels(ModItems.gun_thompson, reg);
+		swapModels(Armory.gun_vortex, reg);
+		swapModels(Armory.gun_thompson, reg);
 		swapModelsNoGui(ModItems.wood_gavel, reg);
 		swapModelsNoGui(ModItems.lead_gavel, reg);
 		swapModelsNoGui(ModItems.diamond_gavel, reg);
 		swapModelsNoGui(ModItems.mese_gavel, reg);
-		swapModels(ModItems.gun_bolter, reg);
-		swapModels(ModItems.ingot_steel_dusted, reg);
-		swapModels(ModItems.ingot_chainsteel, reg);
-		swapModels(ModItems.ingot_meteorite, reg);
-		swapModels(ModItems.ingot_meteorite_forged, reg);
+		swapModels(Armory.gun_bolter, reg);
+		swapModels(Ingots.ingot_steel_dusted, reg);
+		swapModels(Ingots.ingot_chainsteel, reg);
+		swapModels(Ingots.ingot_meteorite, reg);
+		swapModels(Ingots.ingot_meteorite_forged, reg);
 		swapModels(ModItems.blade_meteorite, reg);
-		swapModels(ModItems.crucible, reg);
-		swapModels(ModItems.hs_sword, reg);
-		swapModels(ModItems.hf_sword, reg);
-		swapModels(ModItems.cc_plasma_gun, reg);
-		swapModels(ModItems.gun_egon, reg);
-		swapModels(ModItems.jshotgun, reg);
-		swapModels(ModItems.boltgun, reg);
-		swapModels(ModItems.gun_ar15, reg);
+		swapModels(Armory.crucible, reg);
+		swapModels(Armory.hs_sword, reg);
+		swapModels(Armory.hf_sword, reg);
+		swapModels(Armory.cc_plasma_gun, reg);
+		swapModels(Armory.gun_egon, reg);
+		swapModels(Armory.jshotgun, reg);
+		swapModels(Armory.gun_ar15, reg);
 		
-		swapModels(ModItems.meteorite_sword_seared, reg);
-		swapModels(ModItems.meteorite_sword_reforged, reg);
-		swapModels(ModItems.meteorite_sword_hardened, reg);
-		swapModels(ModItems.meteorite_sword_alloyed, reg);
-		swapModels(ModItems.meteorite_sword_machined, reg);
-		swapModels(ModItems.meteorite_sword_treated, reg);
-		swapModels(ModItems.meteorite_sword_etched, reg);
-		swapModels(ModItems.meteorite_sword_bred, reg);
-		swapModels(ModItems.meteorite_sword_irradiated, reg);
-		swapModels(ModItems.meteorite_sword_fused, reg);
-		swapModels(ModItems.meteorite_sword_baleful, reg);
-		swapModels(ModItems.meteorite_sword_warped, reg);
-		swapModels(ModItems.meteorite_sword_demonic, reg);
+		swapModels(ToolSets.meteorite_sword_seared, reg);
+		swapModels(ToolSets.meteorite_sword_reforged, reg);
+		swapModels(ToolSets.meteorite_sword_hardened, reg);
+		swapModels(ToolSets.meteorite_sword_alloyed, reg);
+		swapModels(ToolSets.meteorite_sword_machined, reg);
+		swapModels(ToolSets.meteorite_sword_treated, reg);
+		swapModels(ToolSets.meteorite_sword_etched, reg);
+		swapModels(ToolSets.meteorite_sword_bred, reg);
+		swapModels(ToolSets.meteorite_sword_irradiated, reg);
+		swapModels(ToolSets.meteorite_sword_fused, reg);
+		swapModels(ToolSets.meteorite_sword_baleful, reg);
+		swapModels(ToolSets.meteorite_sword_warped, reg);
+		swapModels(ToolSets.meteorite_sword_demonic, reg);
 
 		swapModels(ModItems.ore_bedrock, reg);
 		swapModels(ModItems.ore_bedrock_centrifuged, reg);
@@ -587,6 +726,15 @@ public class ModEventHandlerClient {
 		swapModels(ModItems.ore_bedrock_enriched, reg);
 		swapModels(ModItems.ore_bedrock_exquisite, reg);
 		swapModels(ModItems.ore_bedrock_perfect, reg);
+
+		swapModels(ModItems.detonator_laser, reg);
+
+		for (EvStyleItem styleItem : ElevatorStyles.styleItems)
+			swapModels(styleItem,reg);
+
+		swapModels(ModItems.pwr_piece, reg);
+		swapModels(ModItems.pwr_shrapnel, reg);
+		swapModels(ModItems.pwr_shard, reg);
 		
 		for(Entry<Item, ItemRenderBase> entry : ItemRenderLibrary.renderers.entrySet()){
 			swapModels(entry.getKey(), reg);
@@ -598,17 +746,21 @@ public class ModEventHandlerClient {
 
 	public static void swapModels(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
 		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
-		if(item.getTileEntityItemStackRenderer() instanceof TEISRBase render) {
-            render.itemModel = reg.getObject(loc);
-			reg.putObject(loc, new BakedModelCustom(render));
+		IBakedModel model = reg.getObject(loc);
+		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
+		if(render instanceof TEISRBase) {
+			((TEISRBase) render).itemModel = model;
+			reg.putObject(loc, new BakedModelCustom((TEISRBase) render));
 		}
 	}
 
 	public static void swapModelsNoGui(Item item, IRegistry<ModelResourceLocation, IBakedModel> reg) {
-        ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
-        if(item.getTileEntityItemStackRenderer() instanceof TEISRBase render) {
-            render.itemModel = reg.getObject(loc);
-			reg.putObject(loc, new BakedModelNoGui(render));
+		ModelResourceLocation loc = new ModelResourceLocation(item.getRegistryName(), "inventory");
+		IBakedModel model = reg.getObject(loc);
+		TileEntityItemStackRenderer render = item.getTileEntityItemStackRenderer();
+		if(render instanceof TEISRBase) {
+			((TEISRBase) render).itemModel = model;
+			reg.putObject(loc, new BakedModelNoGui((TEISRBase) render));
 		}
 	}
 	
@@ -634,7 +786,8 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent
 	public void textureStitch(TextureStitchEvent.Pre evt) {
-
+		TextureMap map = evt.getMap();
+		ICustomBlock.registerSprites(map);
 		IDynamicModels.registerSprites(evt.getMap());
 
 		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
@@ -695,6 +848,23 @@ public class ModEventHandlerClient {
 		RenderStructureMarker.fusion[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fusion_core_side_alt");
 		RenderStructureMarker.fusion[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
 		RenderStructureMarker.fusion[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/block_tungsten");
+		
+		RenderStructureMarker.watz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[1][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/reinforced_brick");
+		RenderStructureMarker.watz[1][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_hatch");
+		RenderStructureMarker.watz[2][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_top");
+		RenderStructureMarker.watz[2][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_control_side");
+		RenderStructureMarker.watz[3][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
+		RenderStructureMarker.watz[3][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_end");
+		RenderStructureMarker.watz[4][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_top");
+		RenderStructureMarker.watz[4][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_conductor_side");
+		RenderStructureMarker.watz[5][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
+		RenderStructureMarker.watz[5][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_computer");
+		RenderStructureMarker.watz[6][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
+		RenderStructureMarker.watz[6][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler");
+		RenderStructureMarker.watz[7][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
+		RenderStructureMarker.watz[7][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
 
 		RenderStructureMarker.fwatz[0][0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
 		RenderStructureMarker.fwatz[0][1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/fwatz_scaffold");
@@ -715,14 +885,14 @@ public class ModEventHandlerClient {
 		RenderMultiblock.structScaffold = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
 		RenderSoyuzMultiblock.blockIcons[0] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_launcher");
-		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete");
+		RenderSoyuzMultiblock.blockIcons[1] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/concrete_smooth");
 		RenderSoyuzMultiblock.blockIcons[2] = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/struct_scaffold");
 
-		RenderWatzMultiblock.casingSprite = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_casing_tooled");
-		RenderWatzMultiblock.coolerSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_side");
-		RenderWatzMultiblock.coolerSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_cooler_top");
-		RenderWatzMultiblock.elementSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_side");
-		RenderWatzMultiblock.elementSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz_element_top");
+		RenderWatzMultiblock.casingSprite = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz/watz_casing_tooled");
+		RenderWatzMultiblock.coolerSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz/watz_cooler_side");
+		RenderWatzMultiblock.coolerSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz/watz_cooler_top");
+		RenderWatzMultiblock.elementSpriteSide = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz/watz_element_side");
+		RenderWatzMultiblock.elementSpriteTop = evt.getMap().getAtlasSprite(RefStrings.MODID + ":blocks/watz/watz_element_top");
 	}
 
 	public static TextureAtlasSprite contrail;
@@ -810,6 +980,7 @@ public class ModEventHandlerClient {
 	// Called from asm via coremod, in RenderManager#renderEntity
 	@Deprecated
 	public static void onEntityRender(Entity e) {
+		LOGGER.info("I hate this! x1000");
 		if(!GeneralConfig.useShaders || renderingDepthOnly)
 			return;
 		if(!HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
@@ -820,8 +991,9 @@ public class ModEventHandlerClient {
 		} else {
 			GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
 		}
-		if(e instanceof EntityLivingBase living) {
-            if(living.deathTime > 0 || living.hurtTime > 0) {
+		if(e instanceof EntityLivingBase) {
+			EntityLivingBase living = (EntityLivingBase) e;
+			if(living.deathTime > 0 || living.hurtTime > 0) {
 				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 0.0F, 0.0F, 0.3F);
 			} else {
 				GL20.glUniform4f(GL20.glGetUniformLocation(HbmShaderManager.flashlightWorld, "colorMult"), 1.0F, 1.0F, 1.0F, 0.0F);
@@ -848,7 +1020,7 @@ public class ModEventHandlerClient {
 		}
 	}
 
-	// Called from asm via coremod, in GlStateManager#disableLighting
+	// Called from asm via coremod, in LeafiaGls#disableLighting
 	@Deprecated
 	public static void onLightingDisable() {
 		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
@@ -856,7 +1028,7 @@ public class ModEventHandlerClient {
 		}
 	}
 
-	// Called from asm via coremod, in GlStateManager#enableLighting
+	// Called from asm via coremod, in LeafiaGls#enableLighting
 	@Deprecated
 	public static void onLightingEnable() {
 		if(HbmShaderManager.isActiveShader(HbmShaderManager.flashlightWorld)) {
@@ -866,37 +1038,95 @@ public class ModEventHandlerClient {
 	
 	@SubscribeEvent
 	public void renderTick(RenderTickEvent e){
+		if (e.phase == Phase.START) {
+			LeafiaGls.resetStacks();
+		}
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(player != null && player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
-			updateMouseDelta();
-			player.turn(deltaMouseX, deltaMouseY);
-			float oldPitch = player.rotationPitch;
-		    float oldYaw = player.rotationYaw;
-			float y = player.rotationYaw - ItemSwordCutter.yaw;
-			if(y > ItemSwordCutter.MAX_DYAW){
-				player.rotationYaw = ItemSwordCutter.yaw + ItemSwordCutter.MAX_DYAW;
+		if (player != null) {
+			if(player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
+				updateMouseDelta();
+				player.turn(deltaMouseX, deltaMouseY);
+				float oldPitch = player.rotationPitch;
+				float oldYaw = player.rotationYaw;
+				float y = player.rotationYaw - ItemSwordCutter.yaw;
+				if(y > ItemSwordCutter.MAX_DYAW){
+					player.rotationYaw = ItemSwordCutter.yaw + ItemSwordCutter.MAX_DYAW;
+				}
+				if(y < -ItemSwordCutter.MAX_DYAW){
+					player.rotationYaw = ItemSwordCutter.yaw - ItemSwordCutter.MAX_DYAW;
+				}
+				float p = player.rotationPitch - ItemSwordCutter.pitch;
+				if(p > ItemSwordCutter.MAX_DPITCH){
+					player.rotationPitch = ItemSwordCutter.pitch + ItemSwordCutter.MAX_DPITCH;
+				}
+				if(p < -ItemSwordCutter.MAX_DPITCH){
+					player.rotationPitch = ItemSwordCutter.pitch - ItemSwordCutter.MAX_DPITCH;
+				}
+				player.prevRotationYaw += player.rotationYaw-oldYaw;
+				player.prevRotationPitch += player.rotationPitch-oldPitch;
 			}
-			if(y < -ItemSwordCutter.MAX_DYAW){
-				player.rotationYaw = ItemSwordCutter.yaw - ItemSwordCutter.MAX_DYAW;
+			if (e.phase == Phase.END) {
+				LeafiaGls._push();
+				boolean needsUpdate = false;
+				for (BigBruh shaderGroup : shaderGroups.values()) {
+					LeafiaGls.matrixMode(5890);
+					LeafiaGls.pushMatrix();
+					LeafiaGls.loadIdentity();
+					Minecraft mc = Minecraft.getMinecraft();
+					Framebuffer mainCanvas = mc.getFramebuffer();
+					if (shaderGroup != null)
+					{
+						if (lastW != mainCanvas.framebufferWidth || lastH != mainCanvas.framebufferHeight || needsUpdate) {
+							lastW = mc.getFramebuffer().framebufferWidth;
+							lastH = mc.getFramebuffer().framebufferHeight;
+							shaderGroup.createBindFramebuffers(mainCanvas.framebufferWidth,mainCanvas.framebufferHeight);
+							needsUpdate = true;
+						}
+						shaderGroup.render(e.renderTickTime);
+					}
+					LeafiaGls.popMatrix();
+				}
+				LeafiaGls._pop();
+				/*
+				//LeafiaGls.color(1.0F, 1.0F, 1.0F, 1.0F);
+				LeafiaGls.enableBlend();
+				LeafiaGls.enableDepth();
+				LeafiaGls.enableAlpha();
+				//LeafiaGls.enableFog();
+				LeafiaGls.enableLighting();
+				LeafiaGls.enableColorMaterial();*/
 			}
-			float p = player.rotationPitch - ItemSwordCutter.pitch;
-			if(p > ItemSwordCutter.MAX_DPITCH){
-				player.rotationPitch = ItemSwordCutter.pitch + ItemSwordCutter.MAX_DPITCH;
-			}
-			if(p < -ItemSwordCutter.MAX_DPITCH){
-				player.rotationPitch = ItemSwordCutter.pitch - ItemSwordCutter.MAX_DPITCH;
-			}
-			player.prevRotationYaw += player.rotationYaw-oldYaw;
-			player.prevRotationPitch += player.rotationPitch-oldPitch;
 		}
 	}
-	
+	public static float getViewADS(EntityPlayer player) {
+		if (player.isSneaking()) {
+			boolean canADS = true;
+			ItemStack main = player.getHeldItemMainhand();
+			ItemStack sub = player.getHeldItemOffhand();
+			if ((!main.isEmpty() || !sub.isEmpty()) && (main.isEmpty() != sub.isEmpty())) {
+				Item holding = main.isEmpty() ? sub.getItem() : main.getItem();
+				if (holding instanceof IHoldableWeapon) {
+					IHoldableWeapon weapon = (IHoldableWeapon)holding;
+					if (weapon.getADS() != 1f) {
+						return weapon.getADS()*(main.isEmpty()  ? -1 : 1)*(player.getPrimaryHand().equals(EnumHandSide.RIGHT) ? 1 : -1);
+					}
+				}
+			}
+		}
+		return 0;
+	}
 	@SubscribeEvent
 	public void fovUpdate(FOVUpdateEvent e){
 		EntityPlayer player = e.getEntity();
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
-			e.setNewfov(e.getFov()*1.1F);
+		float multiplier = 1.0F;
+		if(player.getHeldItemMainhand().getItem() == Armory.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
+			multiplier *= 1.1F;
 		}
+		float viewADS = getViewADS(player);
+		if (viewADS != 0)
+			multiplier *= Math.abs(viewADS);
+		multiplier *= IdkWhereThisShitBelongs.fovM;
+		e.setNewfov(e.getFov()*multiplier);
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -907,7 +1137,7 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void inputUpdate(InputUpdateEvent e) {
 		EntityPlayer player = e.getEntityPlayer();
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
+		if(player.getHeldItemMainhand().getItem() == Armory.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			MovementInput m = e.getMovementInput();
 			//To make it extra responsive, swings faster if the player is swinging in the opposite direction.
 			float coeff = 0.25F;
@@ -947,6 +1177,80 @@ public class ModEventHandlerClient {
 			RenderNTMSkybox.didLastRender = false;
 		}
 	}
+	Map<ModBiome,Float> getBiomeRatios(Entity entity) {
+		World world = entity.world;
+		int mops = 0;
+		Map<ModBiome,Integer> mop = new HashMap<>();
+		BlockPos pos = entity.getPosition();
+		for (int ox = -3; ox <= 3; ox++) {
+			for (int oz = -3; oz <= 3; oz++) {
+				Biome biome = world.getBiome(pos.add(ox*5,0,oz*5));
+				if (biome instanceof ModBiome)
+					mop.put((ModBiome)biome,mop.getOrDefault((ModBiome)biome,0)+1);
+				mops++;
+			}
+		}
+		Map<ModBiome,Float> map = new HashMap<>();
+		for (Entry<ModBiome,Integer> entry : mop.entrySet())
+			map.put(entry.getKey(),entry.getValue().floatValue()/mops);
+		return map;
+	}
+	@SubscribeEvent
+	public void overrideFog(EntityViewRenderEvent.RenderFogEvent event) {
+		LeafiaGlStack stack = LeafiaGls.getLastStack();
+		float density = stack.fogDensity;
+		float start = stack.fogStart;
+		float end = stack.fogEnd;
+		float ogDensity = density;
+		float ogStart = start;
+		float ogEnd = end;
+		for (Entry<ModBiome,Float> entry : getBiomeRatios(event.getEntity()).entrySet()) {
+			{
+				float delta = entry.getKey().getFogDensity(ogDensity)-density;
+				density += delta*entry.getValue();
+			}
+			{
+				float delta = entry.getKey().getFogStart(ogStart)-start;
+				start += delta*entry.getValue();
+			}
+			{
+				float delta = entry.getKey().getFogEnd(ogEnd)-end;
+				end += delta*entry.getValue();
+			}
+		}
+		density = (float)Math.max(Math.pow(IdkWhereThisShitBelongs.darkness*(IdkWhereThisShitBelongs.dustDisplayTicks/30f),0.1)*4,density);
+		if (density != ogDensity)
+			LeafiaGls.setFogDensity(start);
+		if (start != ogStart)
+			LeafiaGls.setFogStart(start);
+		if (end != ogEnd)
+			LeafiaGls.setFogEnd(end);
+	}
+	@SubscribeEvent
+	public void setFogColor(EntityViewRenderEvent.FogColors event) {
+		Entity entity = event.getEntity();
+		World world = entity.world;
+		Vec3d viewport = ActiveRenderInfo.projectViewFromEntity(entity,event.getRenderPartialTicks());
+		BlockPos viewportPos = new BlockPos(viewport);
+		IBlockState viewportState = world.getBlockState(viewportPos);
+		Vec3d inMaterialColor = viewportState.getBlock().getFogColor(world, viewportPos, viewportState, entity, new Vec3d(1,0,0), (float)event.getRenderPartialTicks());
+
+		Vec3d col = new Vec3d(event.getRed(),event.getGreen(),event.getBlue());
+		for (Entry<ModBiome,Float> entry : getBiomeRatios(entity).entrySet()) {
+			int code = entry.getKey().getFogColor();
+			Vec3d add = new Vec3d(code>>>16&0xFF,code>>>8&0xFF,code&0xFF).scale(1/255d).subtract(col);
+			double alpha = (1-(code>>24&0xFF)/255d)*entry.getValue();
+			col = col.add(add.scale(alpha));
+		}
+
+		event.setRed((float)MathHelper.clamp(col.x+(1-IdkWhereThisShitBelongs.darkness)*IdkWhereThisShitBelongs.infernal*0.7/1.5,0,1));
+		event.setGreen((float)MathHelper.clamp(col.y+(1-IdkWhereThisShitBelongs.darkness)*IdkWhereThisShitBelongs.infernal*0.4/1.5,0,1));
+		event.setBlue((float)MathHelper.clamp(col.z+(1-IdkWhereThisShitBelongs.darkness)*IdkWhereThisShitBelongs.infernal*0.1/1.5,0,1));
+
+		//event.setRed((float)inMaterialColor.x);
+		//event.setGreen((float)inMaterialColor.y);
+		//event.setBlue((float)inMaterialColor.z);
+	}
 	
 	@SubscribeEvent
 	public void clientTick(ClientTickEvent e) {
@@ -962,19 +1266,26 @@ public class ModEventHandlerClient {
 					}
 				}
 			}
-            specialDeathEffectEntities.removeIf(ent -> ent.isDead);
+			Iterator<EntityLivingBase> itr = specialDeathEffectEntities.iterator();
+			while(itr.hasNext()){
+				Entity ent = itr.next();
+				if(ent.isDead)
+					itr.remove();
+			}
 			EntityPlayer player = Minecraft.getMinecraft().player;
 			if(player != null) {
-				boolean isHooked = player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand());
+				boolean isHooked = player.getHeldItemMainhand().getItem() == Armory.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand());
 				if(isHooked)
 					player.distanceWalkedModified = player.prevDistanceWalkedModified; //Stops the held shotgun from bobbing when hooked
 			}
+			if (Minecraft.getMinecraft().world != null)
+				LeafiaPassiveLocal.priorTick(Minecraft.getMinecraft().world);
 		} else {
-			
 			if(Minecraft.getMinecraft().world != null){
+				LeafiaPassiveLocal.onTick(Minecraft.getMinecraft().world);
 				//Drillgon200: If I add more guns like this, I'll abstract it.
 				for(EntityPlayer player : Minecraft.getMinecraft().world.playerEntities){
-					if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && !ItemGunEgon.soundsByPlayer.containsKey(player)){
+					if(player.getHeldItemMainhand().getItem() == Armory.gun_egon && !ItemGunEgon.soundsByPlayer.containsKey(player)){
 						boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 						if(firing){
 							ItemGunEgon.soundsByPlayer.put(player, new GunEgonSoundHandler(player));
@@ -992,8 +1303,59 @@ public class ModEventHandlerClient {
 		}
 		if(Minecraft.getMinecraft().player != null){
 			JetpackHandler.clientTick(e);
+			if (e.phase == Phase.END) {
+				if (Minecraft.getMinecraft().world != null) {
+					try {
+						List<TileEntity> entities = Minecraft.getMinecraft().world.loadedTileEntityList;
+						BlockPos pos = Minecraft.getMinecraft().player.getPosition();
+						if (validatedTEs.size() > 0) {
+							Set<TileEntity> removalQueue = new HashSet<>();
+							for (TileEntity entity : validatedTEs) {
+								if (!entities.contains(entity) || !(entity instanceof LeafiaPacketReceiver))
+									removalQueue.add(entity);
+								else if (!entity.isInvalid()) {
+									LeafiaPacketReceiver receiver = (LeafiaPacketReceiver) entity;
+									if (entity.getPos().getDistance(pos.getX(),pos.getY(),pos.getZ()) > receiver.affectionRange()*1.25) {
+										removalQueue.add(entity);
+									}
+								}
+							}
+							for (TileEntity entity : removalQueue) {
+								validatedTEs.remove(entity);
+							}
+						}
+						for (TileEntity entity : entities) {
+							if (!entity.isInvalid() && entity instanceof LeafiaPacketReceiver && !validatedTEs.contains(entity)) {
+								LeafiaPacketReceiver receiver = (LeafiaPacketReceiver) entity;
+								if (entity.getPos().getDistance(pos.getX(),pos.getY(),pos.getZ()) <= receiver.affectionRange()) {
+									validatedTEs.add(entity);
+									LeafiaPacket._validate(entity);
+								}
+							}
+						}
+					} catch (ConcurrentModificationException exception) {
+						// fuck off
+					}
+				}
+				LeafiaShakecam.localTick();
+				IdkWhereThisShitBelongs.localTick();
+				EntityNukeFolkvangr.FolkvangrVacuumPacket.Handler.localTick();
+				for (String s : shaderGroups.keySet()) {
+					BigBruh shader = shaderGroups.get(s);
+					switch(s) {
+						case "tom":
+							shader.accessor.get("intensity").set((float)(IdkWhereThisShitBelongs.darkness)*(IdkWhereThisShitBelongs.dustDisplayTicks/30f)/2f);
+							break;
+						case "nuclear":
+							shader.accessor.get("blur").set(LeafiaShakecam.blurSum);
+							shader.accessor.get("bloom").set(LeafiaShakecam.bloomSum);
+							break;
+					}
+				}
+			}
 		}
 	}
+	final Set<TileEntity> validatedTEs = new HashSet<>();
 	
 	//Sus
 	@SubscribeEvent
@@ -1007,7 +1369,7 @@ public class ModEventHandlerClient {
 			
 			ItemStack armor = player.inventory.armorItemInSlot(i);
 			
-			if(!armor.isEmpty() && ArmorModHandler.hasMods(armor)) {
+			if(armor != null && ArmorModHandler.hasMods(armor)) {
 				
 				for(ItemStack mod : ArmorModHandler.pryMods(armor)) {
 					
@@ -1018,7 +1380,7 @@ public class ModEventHandlerClient {
 			}
 			
 			//because armor that isn't ItemArmor doesn't render at all
-			if(!armor.isEmpty() && armor.getItem() instanceof JetpackBase) {
+			if(armor != null && armor.getItem() instanceof JetpackBase) {
 				((ItemArmorMod)armor.getItem()).modRender(event, armor);
 			}
 		}
@@ -1027,7 +1389,7 @@ public class ModEventHandlerClient {
 	
 	@SubscribeEvent
 	public void renderSpecificHand(RenderSpecificHandEvent e){
-		if(Minecraft.getMinecraft().player.getHeldItem(e.getHand()).getItem() == ModItems.crucible){
+		if(Minecraft.getMinecraft().player.getHeldItem(e.getHand()).getItem() == Armory.crucible){
 			e.setCanceled(true);
 			Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, e.getPartialTicks(), e.getInterpolatedPitch(), EnumHand.MAIN_HAND, 0, Minecraft.getMinecraft().player.getHeldItem(e.getHand()), 0);
 		} else if(e.getHand() == EnumHand.MAIN_HAND && Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemSwordCutter){
@@ -1043,6 +1405,8 @@ public class ModEventHandlerClient {
 	public void cameraSetup(EntityViewRenderEvent.CameraSetup e){
 		RecoilHandler.modifiyCamera(e);
 		JetpackHandler.handleCameraTransform(e);
+		IdkWhereThisShitBelongs.shakeCam();
+		LeafiaShakecam.shakeCam();
 	}
 	
 	FloatBuffer MODELVIEW = GLAllocation.createDirectFloatBuffer(16);
@@ -1052,10 +1416,8 @@ public class ModEventHandlerClient {
 
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void renderWorld(RenderWorldLastEvent evt) {
-		Clock.update();
-
 		HbmShaderManager2.createInvMVP();
-		GlStateManager.enableDepth();
+		LeafiaGls.enableDepth();
 		List<Entity> list = Minecraft.getMinecraft().world.loadedEntityList;
 		ClientProxy.renderingConstant = true;
 
@@ -1112,7 +1474,7 @@ public class ModEventHandlerClient {
 			double pitch = Math.toDegrees(Math.atan2(tester.y, sqrt));
 
 			GL11.glPushMatrix();
-			GlStateManager.translate(ssgChainPos.x, ssgChainPos.y, ssgChainPos.z);
+			LeafiaGls.translate(ssgChainPos.x, ssgChainPos.y, ssgChainPos.z);
 			GL11.glRotated(yaw + 90, 0, 1, 0);
 			GL11.glRotated(-pitch + 90, 0, 0, 1);
 			GL11.glScaled(0.125, 0.25, 0.125);
@@ -1120,8 +1482,8 @@ public class ModEventHandlerClient {
 			double len = MathHelper.clamp(tester.length()*2, 0, 40);
 
 			RenderHelper.bindTexture(ResourceManager.universal);
-			GlStateManager.enableLighting();
-			Tessellator.instance.startDrawing(GL11.GL_TRIANGLES);
+			LeafiaGls.enableLighting();
+			CompositeBrush.instance.startDrawing(GL11.GL_TRIANGLES);
 			for(int i = 0; i < Math.ceil(len); i++) {
 				float offset = 0;
 				if(ItemGunShotty.motionStrafe != 0){
@@ -1134,11 +1496,11 @@ public class ModEventHandlerClient {
 						offset = -offset;
 				}
 				float scale = (float) (len/20F);
-				Tessellator.instance.setTranslation(0, i, offset*scale);
-				ResourceManager.n45_chain.tessellateAll(Tessellator.instance);
+				CompositeBrush.instance.setTranslation(0, i, offset*scale);
+				ResourceManager.n45_chain.tessellateAll(CompositeBrush.instance);
 			}
 
-			Tessellator.instance.draw();
+			CompositeBrush.instance.draw();
 			GL11.glPopMatrix();
 		}		
 		
@@ -1192,9 +1554,9 @@ public class ModEventHandlerClient {
 				GL11.glRotatef(-90, 0, 1, 0);
 
 				GL11.glScalef(scale, scale, scale);
-				GlStateManager.disableCull();
+				LeafiaGls.disableCull();
 				Minecraft.getMinecraft().fontRenderer.drawString(String.valueOf(c), 0, 0, 0xff00ff);
-				GlStateManager.enableCull();
+				LeafiaGls.enableCull();
 	    		GL11.glPopMatrix();
 			}
 			
@@ -1203,20 +1565,18 @@ public class ModEventHandlerClient {
     		GL11.glPopMatrix();
 		}
 		
-		if(HbmCapability.getData(Minecraft.getMinecraft().player).getEnableHUD()) {
-			RenderOverhead.renderMarkers(evt.getPartialTicks());
+		
+		if(ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player) && HbmCapability.getData(Minecraft.getMinecraft().player).getEnableHUD()) {
+			ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
+			ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 
-			if (ArmorFSB.hasFSBArmor(Minecraft.getMinecraft().player)) {
-				ItemStack plate = Minecraft.getMinecraft().player.inventory.armorInventory.get(2);
-				ArmorFSB chestplate = (ArmorFSB) plate.getItem();
-
-				if (chestplate.thermal)
-					RenderOverhead.renderThermalSight(evt.getPartialTicks());
-			}
+			if(chestplate.thermal)
+				RenderOverhead.renderThermalSight(evt.getPartialTicks());
 		}
 		
-		if(entity instanceof EntityPlayer player){
-            net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
+		if(entity instanceof EntityPlayer){
+			EntityPlayer player = (EntityPlayer) entity;
+			net.minecraft.client.renderer.Tessellator tes = net.minecraft.client.renderer.Tessellator.getInstance();
 			BufferBuilder buf = tes.getBuffer();
 			if(player.getHeldItemMainhand().getItem() instanceof ItemSwordCutter && ItemSwordCutter.clicked){
 				if(Mouse.isButtonDown(1) && ItemSwordCutter.startPos != null){
@@ -1236,41 +1596,41 @@ public class ModEventHandlerClient {
 					GL11.glTranslated(-0.3, 0, 0);
 					GL11.glRotated(Math.toDegrees(angle), 1, 0, 0);
 					GL11.glTranslated(0, 0.2, 0);
-					GlStateManager.disableCull();
-					GlStateManager.disableTexture2D();
-					GlStateManager.enableBlend();
-					GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
-					GlStateManager.color(0.7F, 0.7F, 0.7F, 0.4F);
+					LeafiaGls.disableCull();
+					LeafiaGls.disableTexture2D();
+					LeafiaGls.enableBlend();
+					LeafiaGls.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
+					LeafiaGls.color(0.7F, 0.7F, 0.7F, 0.4F);
 					buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 					buf.pos(0, 0, -2).endVertex();
 					buf.pos(3, 0, -2).endVertex();
 					buf.pos(3, 0, 2).endVertex();
 					buf.pos(0, 0, 2).endVertex();
 					tes.draw();
-					GlStateManager.enableTexture2D();
-					GlStateManager.disableBlend();
-					GlStateManager.enableCull();
+					LeafiaGls.enableTexture2D();
+					LeafiaGls.disableBlend();
+					LeafiaGls.enableCull();
 					
 					Vec3d[] positions = BobMathUtil.worldFromLocal(new Vector4f(0, 0, -2, 1), new Vector4f(3, 0, -2, 1), new Vector4f(3, 0, 2, 1));
 					Vec3d norm = positions[1].subtract(positions[0]).crossProduct(positions[2].subtract(positions[0])).normalize();
 					ItemSwordCutter.plane = new Vec3d[]{positions[0], norm};
 					GL11.glPopMatrix();
-					GlStateManager.disableTexture2D();
-					GlStateManager.color(1F, 0F, 0F, 1F);
+					LeafiaGls.disableTexture2D();
+					LeafiaGls.color(1F, 0F, 0F, 1F);
 					buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 					Vec3d pos1 = positions[1].subtract(player.getPositionEyes(partialTicks));
 					buf.pos(pos1.x, pos1.y+player.getEyeHeight(), pos1.z).endVertex();
 					buf.pos(pos1.x+norm.x, pos1.y+norm.y+player.getEyeHeight(), pos1.z+norm.z).endVertex();
 					tes.draw();
-					GlStateManager.enableTexture2D();
+					LeafiaGls.enableTexture2D();
 					player.turn(deltaMouseX, deltaMouseY);
-					GlStateManager.color(1F, 1F, 1F, 1F);*/
+					LeafiaGls.color(1F, 1F, 1F, 1F);*/
 					if(!(player.getHeldItemMainhand().getItem() instanceof ItemCrucible && ItemCrucible.getCharges(player.getHeldItemMainhand()) == 0)){
 						Vec3d pos1 = ItemSwordCutter.startPos;
 						Vec3d pos2 = player.getLook(partialTicks);
 						Vec3d norm = ItemSwordCutter.startPos.crossProduct(player.getLook(partialTicks));
-						GlStateManager.disableTexture2D();
-						GlStateManager.color(0, 0, 0, 1);
+						LeafiaGls.disableTexture2D();
+						LeafiaGls.color(0, 0, 0, 1);
 						GL11.glPushMatrix();
 						GL11.glLoadIdentity();
 						
@@ -1282,8 +1642,8 @@ public class ModEventHandlerClient {
 						buf.pos(pos2.x, pos2.y, pos2.z).endVertex();
 						tes.draw();
 						GL11.glPopMatrix();
-						GlStateManager.color(1, 1, 1, 1);
-						GlStateManager.enableTexture2D();
+						LeafiaGls.color(1, 1, 1, 1);
+						LeafiaGls.enableTexture2D();
 						if(norm.lengthSquared() > 0.001F){
 							ItemSwordCutter.planeNormal = norm.normalize();
 						}
@@ -1305,7 +1665,7 @@ public class ModEventHandlerClient {
 			GL11.glTranslated(0, player.getEyeHeight(), 0);
 			Vec3d look = player.getLook(partialTicks).scale(2);
 			GL11.glTranslated(look.x, look.y, look.z);
-			GlStateManager.disableTexture2D();
+			LeafiaGls.disableTexture2D();
 			buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION);
 			buf.pos(0, 0, 0).endVertex();
 			buf.pos(c1.x, c1.y, c1.z).endVertex();
@@ -1314,11 +1674,11 @@ public class ModEventHandlerClient {
 			buf.pos(0, 0, 0).endVertex();
 			buf.pos(c3.x, c3.y, c3.z).endVertex();
 			tes.draw();
-			GlStateManager.enableTexture2D();
+			LeafiaGls.enableTexture2D();
 			GL11.glPopMatrix();*/
 			
 			//GLUON GUN//
-			if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && ItemGunEgon.activeTicks > 0 && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
+			if(player.getHeldItemMainhand().getItem() == Armory.gun_egon && ItemGunEgon.activeTicks > 0 && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0){
 				GL11.glPushMatrix();
 				float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
 				Vec3d look = Library.changeByAngle(player.getLook(partialTicks), angles[0], angles[1]);
@@ -1352,8 +1712,10 @@ public class ModEventHandlerClient {
 				ArmorFSB chestplate = (ArmorFSB)plate.getItem();
 				if(chestplate.flashlightPosition != null && plate.hasTagCompound() && plate.getTagCompound().getBoolean("flActive")){
 					Vec3d start = chestplate.flashlightPosition.rotatePitch(-(float) Math.toRadians(player.rotationPitch)).rotateYaw(-(float) Math.toRadians(player.rotationYaw)).add(player.getPositionEyes(partialTicks));
-					boolean volume = player != Minecraft.getMinecraft().player || Minecraft.getMinecraft().gameSettings.thirdPersonView != 0;
-                    LightRenderer.addFlashlight(start, start.add(player.getLook(partialTicks).scale(30)), 30, 200, ResourceManager.fl_cookie, volume, true, true, true);
+					boolean volume = true;
+					if(player == Minecraft.getMinecraft().player && Minecraft.getMinecraft().gameSettings.thirdPersonView == 0)
+						volume = false;
+					LightRenderer.addFlashlight(start, start.add(player.getLook(partialTicks).scale(30)), 30, 200, ResourceManager.fl_cookie, volume, true, true, true);
 				}
 			}
 			
@@ -1366,7 +1728,7 @@ public class ModEventHandlerClient {
 			}
 			
 			//Gluon gun world rendering
-			if(player.getHeldItemMainhand().getItem() != ModItems.gun_egon){
+			if(player.getHeldItemMainhand().getItem() != Armory.gun_egon){
 				ItemGunEgon.activeTrailParticles.remove(player);
 				continue;
 			}
@@ -1396,6 +1758,8 @@ public class ModEventHandlerClient {
 				ItemGunEgon.activeTrailParticles.remove(player);
 			}
 		}
+
+		TopRender.main(evt);
 		
 		for(Runnable r : ClientProxy.deferredRenderers){
 			r.run();
@@ -1484,25 +1848,25 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
+		if(event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == Armory.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			float x1 = ItemGunShotty.prevScreenPos.x + (ItemGunShotty.screenPos.x - ItemGunShotty.prevScreenPos.x) * event.getPartialTicks();
 			float y1 = ItemGunShotty.prevScreenPos.y + (ItemGunShotty.screenPos.y - ItemGunShotty.prevScreenPos.y) * event.getPartialTicks();
 			float x = BobMathUtil.remap(x1, 0, Minecraft.getMinecraft().displayWidth, 0, event.getResolution().getScaledWidth());
 			float y = event.getResolution().getScaledHeight() - BobMathUtil.remap(y1, 0, Minecraft.getMinecraft().displayHeight, 0, event.getResolution().getScaledHeight());
 			RenderHelper.bindTexture(ResourceManager.meathook_marker);
-			GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
-			GlStateManager.enableBlend();
-			GlStateManager.tryBlendFuncSeparate(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO);
+			LeafiaGls.color(1.0F, 1.0F, 1.0F, 1.0F);
+			LeafiaGls.enableBlend();
+			LeafiaGls.tryBlendFuncSeparate(SourceFactor.ONE_MINUS_DST_COLOR, DestFactor.ONE_MINUS_SRC_COLOR, SourceFactor.ONE, DestFactor.ZERO);
 			RenderHelper.drawGuiRect(x - 2.5F, y - 2.5F, 0, 0, 5, 5, 1, 1);
-			GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
-			GlStateManager.disableBlend();
+			LeafiaGls.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
+			LeafiaGls.disableBlend();
 		}
 		/// HANDLE GUN AND AMMO OVERLAYS ///
-		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 			((IItemHUD)player.getHeldItem(EnumHand.MAIN_HAND).getItem()).renderHUD(event, event.getType(), player, player.getHeldItem(EnumHand.MAIN_HAND), EnumHand.MAIN_HAND);
 		}
 
-		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 			((IItemHUD)player.getHeldItem(EnumHand.OFF_HAND).getItem()).renderHUD(event, event.getType(), player, player.getHeldItem(EnumHand.OFF_HAND), EnumHand.OFF_HAND);
 		}
 
@@ -1533,9 +1897,95 @@ public class ModEventHandlerClient {
 			World world = mc.world;
 			RayTraceResult mop = mc.objectMouseOver;
 			
-			if(mop != null && mop.typeOfHit == Type.BLOCK) {
+			if(mop != null && mop.typeOfHit == mop.typeOfHit.BLOCK) {
 				if(world.getBlockState(mop.getBlockPos()).getBlock() instanceof ILookOverlay) {
 					((ILookOverlay) world.getBlockState(mop.getBlockPos()).getBlock()).printHook(event, world, mop.getBlockPos().getX(), mop.getBlockPos().getY(), mop.getBlockPos().getZ());
+				}
+				if (mc.player.getHeldItemOffhand().getItem() == ModItems.wand_d) {
+					Chunk chunk = world.getChunk(mop.getBlockPos());
+					TileEntity entity = chunk.getTileEntity(mop.getBlockPos(),Chunk.EnumCreateEntityType.CHECK);
+					if (entity != null) {
+						NBTTagCompound nbt = new NBTTagCompound();
+						entity.writeToNBT(nbt);
+						LeafiaGls.pushMatrix();
+						LeafiaGls.scale(0.6,0.6,1);
+						mc.fontRenderer.drawStringWithShadow("Replicated blockdata",4,4,LeafiaUtil.colorFromTextFormat(TextFormatting.GREEN));
+						int textX = 10;
+						int textY = 4;
+						List<Triplet<Integer,Integer,List<Pair<String,NBTBase>>>> stack = new ArrayList<>();
+						stack.add(new Triplet<>(0,0,new ArrayList<>()));
+						for (String key : nbt.getKeySet()) {
+							stack.get(0).getC().add(new Pair<>(key,nbt.getTag(key)));
+						}
+						while (stack.size() > 0) {
+							Triplet<Integer,Integer,List<Pair<String,NBTBase>>> stackItem = stack.get(stack.size()-1);
+							List<Pair<String,NBTBase>> compound = stackItem.getC();
+							if (compound.size() > 0) {
+								Pair<String,NBTBase> entry = compound.remove(0);
+								textY += 10;
+								String lineTxt = (entry.getA() != null) ? TextFormatting.YELLOW+"["+entry.getA()+"] " : "["+stackItem.getB()+"] ";
+								stackItem.setB(stackItem.getB()+1);
+								NBTBase value = entry.getB();
+								if (value instanceof NBTTagByte)
+									lineTxt += TextFormatting.BLUE + "" + ((NBTTagByte) value).getByte();
+								if (value instanceof NBTTagShort)
+									lineTxt += TextFormatting.DARK_AQUA + "" + ((NBTTagShort) value).getShort();
+								if (value instanceof NBTTagInt)
+									lineTxt += TextFormatting.AQUA + "" + ((NBTTagInt) value).getInt();
+								if (value instanceof NBTTagLong)
+									lineTxt += TextFormatting.GOLD + "" + ((NBTTagLong) value).getLong();
+								if (value instanceof NBTTagFloat)
+									lineTxt += TextFormatting.GREEN + "" + ((NBTTagFloat) value).getFloat() + "f";
+								if (value instanceof NBTTagDouble)
+									lineTxt += TextFormatting.RED + "" + ((NBTTagDouble) value).getDouble() + "d";
+								if (value instanceof NBTTagByteArray)
+									lineTxt += TextFormatting.DARK_GRAY + "" + value;
+								if (value instanceof NBTTagIntArray)
+									lineTxt += TextFormatting.DARK_GRAY + "" + value;
+								if (value instanceof NBTTagLongArray)
+									lineTxt += TextFormatting.GRAY + "" + value;
+								if (value instanceof NBTTagList) {
+									lineTxt += TextFormatting.RESET + "[";
+									List<Pair<String,NBTBase>> subCompound = new ArrayList<>();
+									for (NBTBase item : ((NBTTagList) value)) {
+										subCompound.add(new Pair<>(null,item));
+									}
+									stack.add(new Triplet<>(1,0,subCompound));
+								} if (value instanceof NBTTagString)
+									lineTxt += TextFormatting.LIGHT_PURPLE + "" + ((NBTTagString)value).getString();
+								if (value instanceof NBTTagCompound) {
+									lineTxt += "{";
+									List<Pair<String,NBTBase>> subCompound = new ArrayList<>();
+									NBTTagCompound nbtValue = (NBTTagCompound)value;
+									for (String key : nbtValue.getKeySet()) {
+										subCompound.add(new Pair<>(key,nbtValue.getTag(key)));
+									}
+									stack.add(new Triplet<>(2,0,subCompound));
+								}
+								mc.fontRenderer.drawStringWithShadow(lineTxt,textX,textY,-1);
+								if (value instanceof NBTTagCompound)
+									textX += 6;
+								if (value instanceof NBTTagList)
+									textX += 6;
+							}
+							if (stack.get(stack.size()-1).getC().size() <= 0) {
+								switch(stack.get(stack.size()-1).getA()) {
+									case 1:
+										textX -= 6;
+										textY += 10;
+										mc.fontRenderer.drawStringWithShadow("]",textX,textY,LeafiaUtil.colorFromTextFormat(TextFormatting.WHITE));
+										break;
+									case 2:
+										textX -= 6;
+										textY += 10;
+										mc.fontRenderer.drawStringWithShadow("}",textX,textY,LeafiaUtil.colorFromTextFormat(TextFormatting.YELLOW));
+										break;
+								}
+								stack.remove(stack.size() - 1);
+							}
+						}
+						LeafiaGls.popMatrix();
+					}
 				}
 			}
 			TileEntityRBMKBase.diagnosticPrintHook(event);
@@ -1553,8 +2003,9 @@ public class ModEventHandlerClient {
 				long time = System.currentTimeMillis() - animation.startMillis;
 
 				int duration = 0;
-				if(animation instanceof BlenderAnimation banim){
-                    //duration = (int) Math.ceil(banim.wrapper.anim.length * (1F/Math.abs(banim.wrapper.speedScale)));
+				if(animation instanceof BlenderAnimation){
+					BlenderAnimation banim = ((BlenderAnimation)animation);
+					//duration = (int) Math.ceil(banim.wrapper.anim.length * (1F/Math.abs(banim.wrapper.speedScale)));
 					EnumHand hand = i < 9 ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 					if(!Minecraft.getMinecraft().player.getHeldItem(hand).getTranslationKey().equals(banim.key))
 						HbmAnimations.hotbar[i] = null;
@@ -1574,11 +2025,18 @@ public class ModEventHandlerClient {
 		if(Keyboard.isKeyDown(Keyboard.KEY_O) && Minecraft.getMinecraft().currentScreen == null) {
 			PacketDispatcher.wrapper.sendToServer(new AuxButtonPacket(0, 0, 0, 999, 0));
 		}
-		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
+		LeafiaGls.color(1.0F, 1.0F, 1.0F, 1.0F);
 		ItemStack helmet = player.inventory.armorInventory.get(3);
 
 		if(helmet.getItem() instanceof ArmorFSB) {
 			((ArmorFSB)helmet.getItem()).handleOverlay(event, player);
+		}
+
+	}
+	@SubscribeEvent
+	public void postOverlayRender(RenderGameOverlayEvent.Post event) {
+		if(event.getType() == ElementType.ALL) {
+			RenderScreenOverlay.renderTomDust(event.getResolution(),Minecraft.getMinecraft().ingameGUI);
 		}
 	}
 	
@@ -1595,15 +2053,15 @@ public class ModEventHandlerClient {
 
 		ModelPlayer renderer = evt.getRenderer().getMainModel();
 		
-		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 			renderer.rightArmPose = ArmPose.BOW_AND_ARROW;
 			// renderer.getMainModel().bipedLeftArm.rotateAngleY = 90;
 		}
-		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 			renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 		}
 		JetpackHandler.preRenderPlayer(player);
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon){
+		if(player.getHeldItemMainhand().getItem() == Armory.gun_egon){
 			EgonBackpackRenderer.showBackpack = true;
 		}
 		
@@ -1620,12 +2078,15 @@ public class ModEventHandlerClient {
 		if(specialDeathEffectEntities.contains(event.getEntity())){
 			event.setCanceled(true);
 		}
-		if(event.getEntity() instanceof AbstractClientPlayer player && event.getRenderer().getMainModel() instanceof ModelBiped renderer){
+		if(event.getEntity() instanceof AbstractClientPlayer && event.getRenderer().getMainModel() instanceof ModelBiped){
+			AbstractClientPlayer player = (AbstractClientPlayer) event.getEntity();
 
-            if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
+			ModelBiped renderer = (ModelBiped) event.getRenderer().getMainModel();
+			
+			if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.rightArmPose = ArmPose.BOW_AND_ARROW;
 			}
-			if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
+			if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof IHoldableWeapon) {
 				renderer.leftArmPose = ArmPose.BOW_AND_ARROW;
 			}
 		}
@@ -1638,7 +2099,7 @@ public class ModEventHandlerClient {
 		//GLUON GUN//
 		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 		EgonBackpackRenderer.showBackpack = false;
-		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){
+		if(player.getHeldItemMainhand().getItem() == Armory.gun_egon && firing){
 			GL11.glPushMatrix();
 			float partialTicks = event.getPartialRenderTick();
 			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+partialTicks);
@@ -1669,7 +2130,7 @@ public class ModEventHandlerClient {
 
 		boolean m1 = ItemGunBase.m1;
 		boolean m2 = ItemGunBase.m2;
-		if(!player.getHeldItem(EnumHand.MAIN_HAND).isEmpty() && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.MAIN_HAND) != null && player.getHeldItem(EnumHand.MAIN_HAND).getItem() instanceof ItemGunBase) {
 
 			if(event.getButton() == 0)
 				event.setCanceled(true);
@@ -1686,7 +2147,7 @@ public class ModEventHandlerClient {
 				item.startActionClient(player.getHeldItemMainhand(), player.world, player, false, EnumHand.MAIN_HAND);
 			}
 		}
-		if(!player.getHeldItem(EnumHand.OFF_HAND).isEmpty() && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
+		if(player.getHeldItem(EnumHand.OFF_HAND) != null && player.getHeldItem(EnumHand.OFF_HAND).getItem() instanceof ItemGunBase) {
 
 			if(event.getButton() == 0)
 				event.setCanceled(true);
@@ -1709,8 +2170,15 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void onPlaySound(PlaySoundEvent e) {
 		ResourceLocation r = e.getSound().getSoundLocation();
-
 		WorldClient wc = Minecraft.getMinecraft().world;
+		if (wc != null) {
+			if (MainRegistry.proxy.getImpactDust(wc, Minecraft.getMinecraft().player.dimension) > 0.75F)
+				if (e.getName().matches("music\\.422fgame") || e.getName().matches("music\\.422fmenu")) {
+					nextMusic = !nextMusic;
+					//e.setResultSound(null);
+					//Minecraft.getMinecraft().getMusicTicker().playMusic(MusicTicker.MusicType.MENU);
+				}
+		}
 
 		// Alright, alright, I give the fuck up, you've wasted my time enough
 		// with this bullshit. You win.
@@ -1722,7 +2190,7 @@ public class ModEventHandlerClient {
 			EntityPlayer ent = Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
 
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop) == null) {
-				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundXVL1456(HBMSoundHandler.tauChargeLoop2, SoundCategory.PLAYERS, ent, EnumHbmSound.soundTauLoop));
+				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundXVL1456(HBMSoundEvents.tauChargeLoop2, SoundCategory.PLAYERS, ent, EnumHbmSound.soundTauLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).setPitch(0.5F);
 			} else {
 				if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundTauLoop).getPitch() < 1.5F)
@@ -1732,7 +2200,7 @@ public class ModEventHandlerClient {
 		if(r.toString().equals("hbm:misc.nullradar") && Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2) != null) {
 			EntityPlayer ent = Library.getClosestPlayerForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundRadarLoop) == null) {
-				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundRadarLoop(HBMSoundHandler.alarmAirRaid, SoundCategory.PLAYERS, ent, EnumHbmSound.soundRadarLoop));
+				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundRadarLoop(HBMSoundEvents.alarmAirRaid, SoundCategory.PLAYERS, ent, EnumHbmSound.soundRadarLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundRadarLoop).setVolume(1.0F);
 			}
 		}
@@ -1741,7 +2209,7 @@ public class ModEventHandlerClient {
 			EntityHunterChopper ent = Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
 
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundChopperLoop) == null) {
-				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopper(HBMSoundHandler.chopperFlyingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundChopperLoop));
+				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopper(HBMSoundEvents.chopperFlyingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundChopperLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundChopperLoop).setVolume(10.0F);
 			}
 		}
@@ -1750,7 +2218,7 @@ public class ModEventHandlerClient {
 			EntityHunterChopper ent = Library.getClosestChopperForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
 
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundCrashingLoop) == null) {
-				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundCrashing(HBMSoundHandler.chopperCrashingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundCrashingLoop));
+				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundCrashing(HBMSoundEvents.chopperCrashingLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundCrashingLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundCrashingLoop).setVolume(10.0F);
 			}
 		}
@@ -1759,7 +2227,7 @@ public class ModEventHandlerClient {
 			EntityChopperMine ent = Library.getClosestMineForSound(wc, e.getSound().getXPosF(), e.getSound().getYPosF(), e.getSound().getZPosF(), 2);
 
 			if(MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundMineLoop) == null) {
-				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopperMine(HBMSoundHandler.chopperMineLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundMineLoop));
+				MovingSoundPlayerLoop.globalSoundList.add(new MovingSoundChopperMine(HBMSoundEvents.chopperMineLoop, SoundCategory.HOSTILE, ent, EnumHbmSound.soundMineLoop));
 				MovingSoundPlayerLoop.getSoundByPlayer(ent, EnumHbmSound.soundMineLoop).setVolume(10.0F);
 			}
 		}
@@ -1772,7 +2240,24 @@ public class ModEventHandlerClient {
 			}
 		}
 	}
-
+	public static Set<Item> unlockedRecipes = new HashSet<>();
+	public static void loadRecipeFromString(String s,boolean isNew) {
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s));
+		unlockedRecipes.add(item);
+		if (!isNew)
+			LeafiaRecipeBookTab.dontAnimate.add(item);
+	}
+	public static void unlockRecipeFromString(String s) {
+		Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(s));
+		unlockedRecipes.add(item);
+		RecipeToast.addOrUpdate(Minecraft.getMinecraft().getToastGui(),new LeafiaDummyRecipe(item));
+	}
+	public static void tryUnlockRecipe(Item item) {
+		if (!unlockedRecipes.contains(item)) {
+			unlockedRecipes.add(item);
+			RecipeToast.addOrUpdate(Minecraft.getMinecraft().getToastGui(),new LeafiaDummyRecipe(item));
+		}
+	}
 	@SubscribeEvent
 	public void clientDisconnectFromServer(ClientDisconnectionFromServerEvent e) {
 		if(FMLCommonHandler.instance().getEffectiveSide() == Side.CLIENT && AssemblerRecipes.backupRecipeList != null) {
@@ -1784,6 +2269,9 @@ public class ModEventHandlerClient {
 			AssemblerRecipes.backupRecipes = null;
 			AssemblerRecipes.backupTime = null;
 			AssemblerRecipes.backupHidden = null;
+			LeafiaShakecam.instances.clear();
+			unlockedRecipes.clear();
+			LeafiaRecipeBookTab.dontAnimate.clear();
 		}
 	}
 
@@ -1794,11 +2282,11 @@ public class ModEventHandlerClient {
 			IBlockState state =  Minecraft.getMinecraft().world.getBlockState(pos);
 			Block block = state.getBlock();
 			if(block instanceof ICustomSelectionBox){
-				GlStateManager.enableBlend();
-	            GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-	            GlStateManager.glLineWidth(2.0F);
-	            GlStateManager.disableTexture2D();
-	            GlStateManager.depthMask(false);
+				LeafiaGls.enableBlend();
+	            LeafiaGls.tryBlendFuncSeparate(LeafiaGls.SourceFactor.SRC_ALPHA, LeafiaGls.DestFactor.ONE_MINUS_SRC_ALPHA, LeafiaGls.SourceFactor.ONE, LeafiaGls.DestFactor.ZERO);
+	            LeafiaGls.glLineWidth(2.0F);
+	            LeafiaGls.disableTexture2D();
+	            LeafiaGls.depthMask(false);
 	            EntityPlayer player = evt.getPlayer();
 	            float partialTicks = evt.getPartialTicks();
 	            double d3 = player.lastTickPosX + (player.posX - player.lastTickPosX) * (double)partialTicks;
@@ -1807,9 +2295,9 @@ public class ModEventHandlerClient {
 				if(((ICustomSelectionBox)block).renderBox(Minecraft.getMinecraft().world, player, state, evt.getTarget().getBlockPos(), pos.getX()-d3, pos.getY()-d4, pos.getZ()-d5, partialTicks)){
 					evt.setCanceled(true);
 				}
-				GlStateManager.depthMask(true);
-	            GlStateManager.enableTexture2D();
-	            GlStateManager.disableBlend();
+				LeafiaGls.depthMask(true);
+	            LeafiaGls.enableTexture2D();
+	            LeafiaGls.disableBlend();
 			}
 		}
 	}
@@ -1820,11 +2308,7 @@ public class ModEventHandlerClient {
 		ItemStack stack = event.getItemStack();
 		List<String> list = event.getToolTip();
 
-        /// RAD SHIELDING ///
-        IRadResistantBlock.addShieldInfo(stack, list, event.getFlags());
-
-
-        /// HAZMAT INFO ///
+		/// HAZMAT INFO ///
 		List<HazardClass> hazInfo = ArmorRegistry.hazardClasses.get(stack.getItem());
 		
 		if(hazInfo != null) {
@@ -1842,7 +2326,7 @@ public class ModEventHandlerClient {
 
 		/// CLADDING ///
 		double rad = HazmatRegistry.getResistance(stack);
-		rad = ((int) (rad * 1000)) / 1000D;
+		rad = ((int) (rad * 100)) / 100D;
 		if(rad > 0)
 			list.add(TextFormatting.YELLOW + I18nUtil.resolveKey("trait.radResistance", rad));
 		
@@ -1862,7 +2346,7 @@ public class ModEventHandlerClient {
 				
 				ItemStack[] mods = ArmorModHandler.pryMods(stack);
 				
-				for(int i = 0; i < ArmorModHandler.MOD_SLOTS; i++) {
+				for(int i = 0; i < 8; i++) {
 					
 					if(mods[i] != null && mods[i].getItem() instanceof ItemArmorMod) {
 						
@@ -1870,28 +2354,6 @@ public class ModEventHandlerClient {
 					}
 				}
 			}
-		}
-
-		/// Fluids ///
-		FluidStack f = FluidUtil.getFluidContained(stack);
-		if(f != null){
-			FFUtils.addFluidInfo(f.getFluid(), list, event.getFlags().isAdvanced());
-		}
-
-		/// NEUTRON RADS ///
-		ContaminationUtil.addNeutronRadInfo(stack, event.getEntityPlayer(), list, event.getFlags());
-
-		/// HAZARDS ///
-		HazardSystem.addHazardInfo(stack, event.getEntityPlayer(), list, event.getFlags());
-		
-		/// BREEDING ///
-		BreederRecipes.addBreedingTips(stack, event.getEntityPlayer(), list, event.getFlags());
-
-
-        //MKU
-		if(stack.hasTagCompound()){
-			if(stack.getTagCompound().getBoolean("ntmContagion"))
-				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");
 		}
 
 		//Foundry
@@ -1914,16 +2376,34 @@ public class ModEventHandlerClient {
 			if(entry.entry == EnumEntryType.MULT)
 				list.add(TextFormatting.GOLD + "Adds multiplier " + entry.value + " to the custom nuke stage " + entry.type);
 		}
-
-		if(event.getFlags().isAdvanced()) {
-			List<String> names = ItemStackUtil.getOreDictNames(stack);
-			
-			if(!names.isEmpty()) {
-				list.add("§bOre Dict:");
-				for(String s : names) {
-					list.add("§3 - " + s);
-				}
+		if (!stack.isEmpty() && !(stack.getItem() instanceof IItemHazard)) {
+			for (int id : OreDictionary.getOreIDs(stack)) {
+				ItemHazardModule module = OreDictManager.fiaOreHazards.get(OreDictionary.getOreName(id));
+				if (module != null)
+					module.addInformation(stack,list,event.getFlags());
 			}
+		}
+
+		/// NEUTRON RADS ///
+		float activationRads = ContaminationUtil.getNeutronRads(stack);
+		if(activationRads > 0) {
+			ItemHazardModule module = new ItemHazardModule();
+			module.radiation.setActivation(activationRads);
+			module.addInformation(stack,list,event.getFlags());
+			/* Why are we still using those
+			list.add(TextFormatting.GREEN + "[" + I18nUtil.resolveKey("trait._hazarditem.radioactive") + "]");
+			float stackRad = activationRads / stack.getCount();
+			list.add(TextFormatting.YELLOW + (Library.roundFloat(ItemHazardModule.getNewValue(stackRad), 3) + ItemHazardModule.getSuffix(stackRad) + " RAD/s"));
+			
+			if(stack.getCount() > 1) {
+				list.add(TextFormatting.YELLOW + ("Stack: " + Library.roundFloat(ItemHazardModule.getNewValue(activationRads), 3) + ItemHazardModule.getSuffix(activationRads) + " RAD/s"));
+			}*/
+		}
+
+		//MKU
+		if(stack.hasTagCompound()){
+			if(stack.getTagCompound().getBoolean("ntmContagion"))
+				list.add("§4§l[" + I18nUtil.resolveKey("trait.mkuinfected") + "§4§l]");
 		}
 	}
 	
@@ -1938,7 +2418,7 @@ public class ModEventHandlerClient {
 			double p = 0.0625D;
 			double o = p * 2.75D;
 
-			GlStateManager.disableLighting();
+			LeafiaGls.disableLighting();
 			Minecraft.getMinecraft().renderEngine.bindTexture(poster);
 			net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
 			BufferBuilder buf = tess.getBuffer();
@@ -1948,7 +2428,7 @@ public class ModEventHandlerClient {
 			buf.pos(-0.5, -0.5 + o, p * 0.5).tex(0, 1).endVertex();
 			buf.pos(0.5, -0.5 + o, p * 0.5).tex(1, 1).endVertex();
 			tess.draw();
-			GlStateManager.enableLighting();
+			LeafiaGls.enableLighting();
 		}
 	}
 }

@@ -1,19 +1,17 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.item.TEISRBase;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderWeaponQuadro extends TEISRBase {
 
@@ -26,7 +24,7 @@ public class ItemRenderWeaponQuadro extends TEISRBase {
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
 		case FIRST_PERSON_RIGHT_HAND:
-			if(item.getItem() == ModItems.gun_quadro) {
+			if(item.getItem() == Armory.gun_quadro) {
 				/*GL11.glTranslatef(0.75F, 0.0F, -0.15F);
 				GL11.glRotatef(90F, 0.0F, 1.0F, 0.0F);
 				GL11.glRotatef(-25F, 1.0F, 0.0F, 0.0F);
@@ -68,7 +66,7 @@ public class ItemRenderWeaponQuadro extends TEISRBase {
 		case HEAD:
 		case GROUND:
 		case FIXED:
-			if(item.getItem() == ModItems.gun_quadro) {
+			if(item.getItem() == Armory.gun_quadro) {
 				GL11.glScaled(0.75, 0.75, 0.75);
 				GL11.glTranslated(0.75, -0.4, 0.5);
 			}
@@ -76,7 +74,7 @@ public class ItemRenderWeaponQuadro extends TEISRBase {
 		case GUI:
 			GlStateManager.enableLighting();
 
-			if(item.getItem() == ModItems.gun_quadro) {
+			if(item.getItem() == Armory.gun_quadro) {
 				GL11.glScaled(0.25, 0.25, 0.25);
 				GL11.glTranslatef(1.4F, 1.1F, 0.0F);
 				GL11.glRotatef(-90F, 0.0F, 1.0F, 0.0F);
@@ -87,7 +85,7 @@ public class ItemRenderWeaponQuadro extends TEISRBase {
 			break;
 		}
 
-		if(item.getItem() == ModItems.gun_quadro) {
+		if(item.getItem() == Armory.gun_quadro) {
 			GlStateManager.shadeModel(GL11.GL_SMOOTH);
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.quadro_tex);
 			ResourceManager.quadro.renderPart("Launcher");

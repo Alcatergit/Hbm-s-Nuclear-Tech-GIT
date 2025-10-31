@@ -1,15 +1,14 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemFELCrystal extends Item {
 
@@ -31,7 +30,7 @@ public class ItemFELCrystal extends Item {
 		list.add(wavelength.textColor + I18nUtil.resolveKey(wavelength.name) + " - " + wavelength.textColor + I18nUtil.resolveKey(this.wavelength.wavelengthRange));
 	}
 
-	public enum EnumWavelengths{
+	public static enum EnumWavelengths{
 		NULL("la creatura", "6 dollar", 0x010101, 0x010101, TextFormatting.WHITE), //why do you exist?
 
 		RADIO("wavelengths.name.radio", "wavelengths.waveRange.radio", 0x3E8010, 0x80FF00, TextFormatting.YELLOW),
@@ -45,11 +44,11 @@ public class ItemFELCrystal extends Item {
 
 		public String name = "";
 		public String wavelengthRange = "";
-		public final int renderedBeamColor;
-		public final int guiColor;
-		public final TextFormatting textColor;
+		public int renderedBeamColor;
+		public int guiColor;
+		public TextFormatting textColor;
 
-		EnumWavelengths(String name, String wavelength, int color, int guiColor, TextFormatting textColor) {
+		private EnumWavelengths(String name, String wavelength, int color, int guiColor, TextFormatting textColor) {
 			this.name = name;
 			this.wavelengthRange = wavelength;
 			this.renderedBeamColor = color;

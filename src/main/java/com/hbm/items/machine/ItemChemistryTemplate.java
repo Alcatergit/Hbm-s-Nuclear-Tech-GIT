@@ -1,7 +1,6 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
+import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.ChemplantRecipes;
 import com.hbm.inventory.RecipesCommon.AStack;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
@@ -10,7 +9,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -24,7 +22,9 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemChemistryTemplate extends Item {
+import java.util.List;
+
+public class ItemChemistryTemplate extends Item implements IHasCustomModel {
 
 	public static final ModelResourceLocation chemModel = new ModelResourceLocation(RefStrings.MODID + ":chemistry_template", "inventory");
 	
@@ -99,11 +99,11 @@ public class ItemChemistryTemplate extends Item {
 							OreDictStack input = (OreDictStack) o;
 							NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 
-							if(!ores.isEmpty()) {
+							if(ores.size() > 0) {
 								ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 					    		list.add(" §c"+ input.count() + "x " + inStack.getDisplayName());
 							} else {
-					    		list.add("I AM ERROR - No OrdDict match found for "+ o);
+					    		list.add("I AM ERROR - No OrdDict match found for "+o.toString());
 							}
 						}
 					}
@@ -121,5 +121,10 @@ public class ItemChemistryTemplate extends Item {
 	    		list.add("###INVALID###");
 	    		list.add("0x334077-0x6A298F-0xDF3795-0x334077");
 	    	}
+	}
+
+	@Override
+	public ModelResourceLocation getResourceLocation() {
+		return chemModel;
 	}
 }

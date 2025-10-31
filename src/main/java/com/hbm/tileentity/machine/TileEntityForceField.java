@@ -1,17 +1,13 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import api.hbm.energy.IEnergyUser;
+import com.hbm.items.ModItems.Upgrades;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEFFPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +20,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityForceField extends TileEntityLoadedBase implements ITickable, IEnergyUser {
 
@@ -64,7 +63,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -124,12 +123,12 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 			radius = 16;
 			maxHealth = 100;
 			
-			if(inventory.getStackInSlot(1).getItem() == ModItems.upgrade_radius) {
+			if(inventory.getStackInSlot(1).getItem() == Upgrades.upgrade_radius) {
 				rStack = inventory.getStackInSlot(1).getCount();
 				radius += rStack * 16;
 			}
 			
-			if(inventory.getStackInSlot(2).getItem() == ModItems.upgrade_health) {
+			if(inventory.getStackInSlot(2).getItem() == Upgrades.upgrade_health) {
 				hStack = inventory.getStackInSlot(2).getCount();
 				maxHealth += hStack * 50;
 			}
@@ -250,7 +249,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 						entity.posY -= entity.motionY;
 						entity.posZ -= entity.motionZ;
 
-			    		world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.sparkShoot, SoundCategory.BLOCKS, 2.5F, 1.0F);
+			    		world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.sparkShoot, SoundCategory.BLOCKS, 2.5F, 1.0F);
 						outside.add(entity);
 						
 						if(!world.isRemote) {
@@ -280,7 +279,7 @@ public class TileEntityForceField extends TileEntityLoadedBase implements ITicka
 						entity.posY -= entity.motionY;
 						entity.posZ -= entity.motionZ;
 
-			    		world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.sparkShoot, SoundCategory.BLOCKS, 2.5F, 1.0F);
+			    		world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.sparkShoot, SoundCategory.BLOCKS, 2.5F, 1.0F);
 						inside.add(entity);
 						
 						if(!world.isRemote) {

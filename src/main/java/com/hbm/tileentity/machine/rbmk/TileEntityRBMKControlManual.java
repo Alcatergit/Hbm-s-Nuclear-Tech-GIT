@@ -1,20 +1,19 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import com.hbm.blocks.machine.rbmk.RBMKControl;
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.render.amlfrom1710.Vec3;
-import net.minecraft.util.math.BlockPos;
 import com.hbm.inventory.control_panel.ControlEvent;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
+import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.math.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class TileEntityRBMKControlManual extends TileEntityRBMKControl implements IControlReceiver {
 
@@ -26,7 +25,8 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 	}
 
 	public void setColor(int color) {
-        this.color = RBMKColor.values()[color];
+		RBMKColor new_color = RBMKColor.values()[color];
+		this.color = new_color;
 	}
 	public boolean isSameColor(int color) {
 		return this.color == RBMKColor.values()[color];
@@ -113,7 +113,7 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		return nbt;
 	}
 	
-	public enum RBMKColor {
+	public static enum RBMKColor {
 		RED,
 		YELLOW,
 		GREEN,

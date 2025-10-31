@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"is_on=true": { "model": "hbm:machine_detector_on" },
+		"is_on=false": { "model": "hbm:machine_detector_off" }
+	}
+}

@@ -1,7 +1,7 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
 import com.hbm.entity.mob.EntityAINearestAttackableTargetNT;
-
+import com.hbm.lib.ModDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.IEntityLivingData;
@@ -55,6 +55,8 @@ public class EntityBallsOTronHead extends EntityBallsOTronBase {
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (source == ModDamageSource.back)
+			amount = 0; // avoid cheap kills using Antischrabidium
 		if(super.attackEntityFrom(source, amount)) {
 			this.dmgCooldown = 4;
 			return true;

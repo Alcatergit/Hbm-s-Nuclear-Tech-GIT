@@ -5,10 +5,10 @@ import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IHoldableWeapon;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -42,25 +42,25 @@ public class GunFolly extends Item implements IHoldableWeapon {
 		
 		if(state == 0) {
 			
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyOpen, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.follyOpen, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			setState(stack, 1);
 			
 		} else if(state == 1) {
 			
-			if(Library.hasInventoryItem(player.inventory, ModItems.ammo_folly)) {
+			if(Library.hasInventoryItem(player.inventory, Armory.ammo_folly)) {
 
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyReload, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				Library.consumeInventoryItem(player.inventory, ModItems.ammo_folly);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.follyReload, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				Library.consumeInventoryItem(player.inventory, Armory.ammo_folly);
 				setState(stack, 2);
 			} else {
 				
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyClose, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.follyClose, SoundCategory.PLAYERS, 1.0F, 1.0F);
 				setState(stack, 0);
 			}
 			
 		} else if(state == 2) {
 
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyClose, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.follyClose, SoundCategory.PLAYERS, 1.0F, 1.0F);
 			setState(stack, 3);
 			setTimer(stack, 100);
 		} else if(state == 3) {
@@ -68,7 +68,7 @@ public class GunFolly extends Item implements IHoldableWeapon {
 			if(getTimer(stack) == 0) {
 				
 				setState(stack, 0);
-				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyFire, SoundCategory.PLAYERS, 1.0F, 1.0F);
+				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.follyFire, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 				double mult = 1.75D;
 				
@@ -115,10 +115,10 @@ public class GunFolly extends Item implements IHoldableWeapon {
 					timer--;
 	
 					if(timer % 20 == 0 && timer != 0)
-						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.follyBuzzer, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.follyBuzzer, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					
 					if(timer == 0)
-						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundHandler.follyAquired, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.follyAquired, SoundCategory.PLAYERS, 1.0F, 1.0F);
 					
 					setTimer(stack, timer);
 				}

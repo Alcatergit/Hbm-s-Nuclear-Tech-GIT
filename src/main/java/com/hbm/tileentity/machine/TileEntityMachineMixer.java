@@ -1,43 +1,42 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.config.MachineConfig;
+import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.inventory.MixerRecipes;
 import com.hbm.inventory.UpgradeManager;
 import com.hbm.inventory.container.ContainerMixer;
 import com.hbm.inventory.gui.GUIMixer;
-import com.hbm.inventory.MixerRecipes;
-import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.items.ModItems;
-import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
-import com.hbm.lib.Library;
+import com.hbm.items.machine.ItemMachineUpgrade;
+import com.hbm.items.machine.ItemMachineUpgrade.UpgradeType;
 import com.hbm.lib.DirPos;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
-import net.minecraft.util.ITickable;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class TileEntityMachineMixer extends TileEntityMachineBase implements ITickable, IGUIProvider, IFluidHandler, IEnergyUser, ITankPacketAcceptor {
 	
@@ -56,10 +55,26 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	public boolean uuMixer = false;
 	public static final int uuConsumption = 1_000_000;
 	public static final long uuMaxPower = 200_000_000;
-	public static final int normalConsumption = 50;
-
+	
 	public FluidTank[] tanks;
 	private final UpgradeManager upgradeManager = new UpgradeManager();
+
+	@Override
+	public boolean canInsertItemHopper(int slot,ItemStack itemStack,int amount) {
+		return super.canInsertItemHopper(slot,itemStack,amount);
+	}
+	@Override
+	public boolean canInsertItem(int slot,ItemStack itemStack,int amount) {
+		return super.canInsertItem(slot,itemStack,amount);
+	}
+	@Override
+	public boolean canExtractItemHopper(int slot,ItemStack itemStack,int amount) {
+		return super.canExtractItemHopper(slot,itemStack,amount);
+	}
+	@Override
+	public boolean canExtractItem(int slot,ItemStack itemStack,int amount) {
+		return super.canExtractItem(slot,itemStack,amount);
+	}
 
 	public TileEntityMachineMixer() {
 		super(5);
@@ -99,9 +114,9 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			this.consumption = getConsumption();
 
 			this.consumption *= (speedLevel+1);
-			this.consumption *= (overLevel * 3 + 1);
 			this.consumption /= (powerLevel+1);
-
+			this.consumption *= (overLevel * 3 + 1);
+			
 			for(DirPos pos : getConPos()) {
 				this.trySubscribe(world, pos.getPos(), pos.getDir());
 			}
@@ -110,7 +125,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			
 			if(this.wasOn) {
 				this.progress++;
-				this.power -= this.consumption;
+				this.power -= this.getConsumption();
 				
 				this.processTime -= this.processTime * speedLevel / 4;
 				this.processTime /= (overLevel + 1);
@@ -141,9 +156,6 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 					data.setString("f", "None");
 				}
 			}
-
-			if(!uuMixer && power > getMaxPower()) power = getMaxPower();
-
 			data.setLong("power", power);
 			data.setInteger("processTime", processTime);
 			data.setInteger("progress", progress);
@@ -152,6 +164,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 			data.setTag("tanks", FFUtils.serializeTankArray(tanks));
 			
 			this.networkPack(data, 50);
+			if(!uuMixer && power > getMaxPower()) power = getMaxPower();
 			
 		} else {
 			
@@ -175,7 +188,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	private void updateTankType() {
         ItemStack slotId = inventory.getStackInSlot(2);
         Item itemId = slotId.getItem();
-        if(itemId == ModItems.forge_fluid_identifier) {
+        if(itemId instanceof ItemForgeFluidIdentifier) {
             Fluid fluid = ItemForgeFluidIdentifier.getType(slotId);
 
             if(outputFluid != fluid && ((uuMixer && MachineConfig.isFluidAllowed(fluid)) || MixerRecipes.hasMixerRecipe(fluid))) {
@@ -255,13 +268,16 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	
 	public boolean canProcess() {
 		//Enought Power?
-		if(this.power < this.consumption) return false;
+		if(this.power < getConsumption()) return false;
 
 		//Mixing uu matter?
 		if(uuMixer){
 			this.processTime = 200;
-            return outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.UU_MATTER, MachineConfig.uuMixerFluidRatio));
-        }
+			if(outputFluid != null && tanks[2].getFluidAmount() < tanks[2].getCapacity() && FFUtils.hasEnoughFluid(tanks[0], new FluidStack(ModForgeFluids.UU_MATTER, MachineConfig.uuMixerFluidRatio))){
+				return true;
+			}
+			return false;
+		}
 
 		//has recipe?
 		if(!MixerRecipes.hasMixerRecipe(outputFluid)) {
@@ -318,7 +334,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	
 	public int getConsumption() {
 		if(uuMixer) return uuConsumption;
-		return normalConsumption;
+		return consumption;
 	}
 	
 	protected DirPos[] getConPos() {
@@ -338,10 +354,17 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		if (i == 0) return itemStack.getItem() instanceof IBatteryItem;
 		if(i == 1) return MixerRecipes.matchesInputItem(outputFluid, itemStack);
+		if(i == 2) return itemStack.getItem() instanceof ItemForgeFluidIdentifier;
+		if (i == 3 || i == 4) return itemStack.getItem() instanceof ItemMachineUpgrade;
 		return false;
 	}
-	
+	@Override
+	public boolean isItemValidForSlotHopper(int i,ItemStack stack) {
+		return isItemValidForSlot(i,stack);
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
@@ -361,7 +384,7 @@ public class TileEntityMachineMixer extends TileEntityMachineBase implements ITi
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		if(outputFluid != null){
 			nbt.setString("f", outputFluid.getName());
 		} else {

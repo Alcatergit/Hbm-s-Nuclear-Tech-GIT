@@ -3,7 +3,6 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.machine.BlockHadronDiode;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityTickingBase;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityHadronDiode extends TileEntityTickingBase {
@@ -103,7 +102,7 @@ public class TileEntityHadronDiode extends TileEntityTickingBase {
 		return super.writeToNBT(compound);
 	}
 
-	public enum DiodeConfig {
+	public static enum DiodeConfig {
 		NONE,
 		IN,
 		OUT

@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:burnt_bark"
+		},
+		"title": {
+			"translate": "hbm.achievement.sacrifice"
+		},
+		"description": {
+			"translate": "hbm.achievement.sacrifice.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_radspice",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 70
+    }
+}

@@ -8,26 +8,26 @@ public interface IRBMKLoadable {
 	 * @param toLoad the ItemStack that should be loaded
 	 * @return TRUE if the provided ItemStack can be inserted into the column
 	 */
-    boolean canLoad(ItemStack toLoad);
+	public boolean canLoad(ItemStack toLoad);
 	
 	/**
 	 * Loads the given ItemStack, canLoad check necessary first
 	 * @param toLoad
 	 */
-    void load(ItemStack toLoad);
+	public void load(ItemStack toLoad);
 	
 	/**
 	 * @return TRUE if the column contains an ItemStack that can be unloaded
 	 */
-    boolean canUnload();
+	public boolean canUnload();
 	
 	/**
 	 * @return The next ItemStack to be unloaded
 	 */
-    ItemStack provideNext();
+	public ItemStack provideNext();
 	
 	/**
 	 * Removes the next ItemStack as part of the unloading process
 	 */
-    void unload();
+	public void unload();
 }

@@ -1,14 +1,11 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.google.common.collect.Multimap;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -28,6 +25,9 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 
+import java.util.List;
+import java.util.Random;
+
 public class GunSuicide extends Item {
 
 	private Item ammo;
@@ -37,7 +37,7 @@ public class GunSuicide extends Item {
     	this.setRegistryName(s);
     	this.maxStackSize = 1;
     	this.setMaxDamage(500);
-    	this.ammo = ModItems.gun_revolver_ammo;
+    	this.ammo = Armory.gun_revolver_ammo;
     	
     	ModItems.ALL_ITEMS.add(this);
 	}
@@ -47,7 +47,7 @@ public class GunSuicide extends Item {
     	if(!(entityLiving instanceof EntityPlayer))
     		return;
     	if(this.ammo == null)
-    		this.ammo = ModItems.gun_revolver_ammo;
+    		this.ammo = Armory.gun_revolver_ammo;
     	EntityPlayer player = (EntityPlayer)entityLiving;
     	int j = this.getMaxItemUseDuration(stack) - timeLeft;
 
@@ -73,7 +73,7 @@ public class GunSuicide extends Item {
             }
             
             stack.damageItem(1, player);
-            worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.revolverShoot, SoundCategory.PLAYERS, 1.0F, 1.0F);
+            worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.revolverShoot, SoundCategory.PLAYERS, 1.0F, 1.0F);
             
             if (flag)
             { }

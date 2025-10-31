@@ -1,24 +1,22 @@
 package com.hbm.inventory.gui;
 
-import java.util.Arrays;
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
+import api.hbm.entity.IRadarDetectable.RadarTargetType;
 import com.hbm.config.WeaponConfig;
 import com.hbm.inventory.container.ContainerMachineRadar;
 import com.hbm.lib.RefStrings;
-import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
-
-import api.hbm.entity.IRadarDetectable.RadarTargetType;
-import net.minecraft.client.audio.PositionedSoundRecord;
+import com.hbm.tileentity.machine.TileEntityMachineRadar;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
+import java.util.Arrays;
 
 public class GUIMachineRadar extends GuiInfoContainer {
 	

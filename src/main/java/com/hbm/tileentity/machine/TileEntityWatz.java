@@ -1,6 +1,7 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModBlocks.WatzNew;
 import com.hbm.entity.projectile.EntityShrapnel;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
@@ -14,7 +15,7 @@ import com.hbm.items.machine.ItemWatzPellet;
 import com.hbm.items.machine.ItemWatzPellet.EnumWatzType;
 import com.hbm.lib.DirPos;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -88,7 +89,7 @@ public class TileEntityWatz extends TileEntityMachineBase implements  ITickable,
 		
 		if(!world.isRemote && !updateLock()) {
 			
-			boolean turnedOn = world.getBlockState(pos.add(0, 3, 0)).getBlock() == ModBlocks.watz_pump && world.getRedstonePower(pos.add(0, 5, 0), EnumFacing.DOWN) > 0;
+			boolean turnedOn = world.getBlockState(pos.add(0, 3, 0)).getBlock() == WatzNew.watz_pump && world.getRedstonePower(pos.add(0, 5, 0), EnumFacing.DOWN) > 0;
 			List<TileEntityWatz> segments = new ArrayList<>();
 			segments.add(this);
 			
@@ -163,7 +164,7 @@ public class TileEntityWatz extends TileEntityMachineBase implements  ITickable,
 				}
 				RadiationSavedData.incrementRad(world, pos.add(0, 1, 0), 1_000F, Integer.MAX_VALUE);
 				
-				world.playSound(null,pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
+				world.playSound(null,pos.getX() + 0.5, pos.getY() + 2, pos.getZ() + 0.5, HBMSoundEvents.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
 				NBTTagCompound data = new NBTTagCompound();
 				data.setString("type", "rbmkmush");
 				data.setFloat("scale", 5);
@@ -478,37 +479,37 @@ public class TileEntityWatz extends TileEntityMachineBase implements  ITickable,
 		world.setBlockState(pos.up(), ModBlocks.mud_block.getDefaultState());
 		world.setBlockState(pos.up(2), ModBlocks.mud_block.getDefaultState());
 		
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 1, 0);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 2, 0);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 0, 1);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 0, 2);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, -1, 0);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, -2, 0);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 0, -1);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 0, -2);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 1, 1);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, 1, -1);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, -1, 1);
-		setBrokenColumn(0, ModBlocks.watz_element, 0, -1, -1);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, 2, 1);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, 2, -1);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, 1, 2);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, -1, 2);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, -2, 1);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, -2, -1);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, 1, -2);
-		setBrokenColumn(0, ModBlocks.watz_cooler, 0, -1, -2);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 1, 0);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 2, 0);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 0, 1);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 0, 2);
+		setBrokenColumn(0, WatzNew.watz_element, 0, -1, 0);
+		setBrokenColumn(0, WatzNew.watz_element, 0, -2, 0);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 0, -1);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 0, -2);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 1, 1);
+		setBrokenColumn(0, WatzNew.watz_element, 0, 1, -1);
+		setBrokenColumn(0, WatzNew.watz_element, 0, -1, 1);
+		setBrokenColumn(0, WatzNew.watz_element, 0, -1, -1);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, 2, 1);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, 2, -1);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, 1, 2);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, -1, 2);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, -2, 1);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, -2, -1);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, 1, -2);
+		setBrokenColumn(0, WatzNew.watz_cooler, 0, -1, -2);
 		
 		for(int j = -1; j < 2; j++) {
-			setBrokenColumn(1, ModBlocks.watz_casing, 1, 3, j);
-			setBrokenColumn(1, ModBlocks.watz_casing, 1, j, 3);
-			setBrokenColumn(1, ModBlocks.watz_casing, 1, -3, j);
-			setBrokenColumn(1, ModBlocks.watz_casing, 1, j, -3);
+			setBrokenColumn(1, WatzNew.watz_casing, 1, 3, j);
+			setBrokenColumn(1, WatzNew.watz_casing, 1, j, 3);
+			setBrokenColumn(1, WatzNew.watz_casing, 1, -3, j);
+			setBrokenColumn(1, WatzNew.watz_casing, 1, j, -3);
 		}
-		setBrokenColumn(1, ModBlocks.watz_casing, 1, 2, 2);
-		setBrokenColumn(1, ModBlocks.watz_casing, 1, 2, -2);
-		setBrokenColumn(1, ModBlocks.watz_casing, 1, -2, 2);
-		setBrokenColumn(1, ModBlocks.watz_casing, 1, -2, -2);
+		setBrokenColumn(1, WatzNew.watz_casing, 1, 2, 2);
+		setBrokenColumn(1, WatzNew.watz_casing, 1, 2, -2);
+		setBrokenColumn(1, WatzNew.watz_casing, 1, -2, 2);
+		setBrokenColumn(1, WatzNew.watz_casing, 1, -2, -2);
 		
 		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5).expand(50, 50, 50));
 		

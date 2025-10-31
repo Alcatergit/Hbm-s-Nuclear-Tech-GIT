@@ -1,12 +1,15 @@
 package com.hbm.items.tool;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.BombConfig;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.BlockItems;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockDoor;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
@@ -17,6 +20,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModDoor extends Item {
 
@@ -46,10 +51,12 @@ public class ItemModDoor extends Item {
             }
             Block block1;
 
-            if(this == ModItems.door_metal)
+            if(this == BlockItems.door_metal)
             	block1 = ModBlocks.door_metal;
-            else if(this == ModItems.door_office)
+            else if(this == BlockItems.door_office)
             	block1 = ModBlocks.door_office;
+            else if(this == BlockItems.door_fuckoff)
+                block1 = ModBlocks.door_fuckoff;
             else
             	block1 = ModBlocks.door_bunker;
 
@@ -102,5 +109,17 @@ public class ItemModDoor extends Item {
         worldIn.setBlockState(blockpos2, iblockstate.withProperty(BlockDoor.HALF, BlockDoor.EnumDoorHalf.UPPER), 2);
         worldIn.notifyNeighborsOfStateChange(pos, door, false);
         worldIn.notifyNeighborsOfStateChange(blockpos2, door, false);
+    }
+
+    @Override
+    public void addInformation(ItemStack stack,World player,List<String> tooltip,ITooltipFlag advanced) {
+        if (this == BlockItems.door_fuckoff) {
+            tooltip.add("§2["+ I18nUtil.resolveKey("trait.nuclearbomb")+"]"+"§r");
+            tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", "220"));
+            if(!BombConfig.disableNuclear){
+                tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
+                tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius","???"));
+            }
+        }
     }
 }

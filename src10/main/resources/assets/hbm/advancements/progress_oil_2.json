@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_pumpjack"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_oil_2"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_oil_2.desc"
+		}
+	},
+	"parent": "hbm:progress_oil_1",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_pumpjack"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 16
+    }
+}

@@ -1,7 +1,7 @@
 package com.hbm.entity.effect;
 
 import com.hbm.config.CompatibilityConfig;
-
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.effect.EntityLightningBolt;
 import net.minecraft.nbt.NBTTagCompound;
@@ -14,7 +14,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EntityCloudSolinium extends Entity {
 
-	public static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityCloudSolinium.class, DataSerializers.VARINT);
+	public static final DataParameter<Integer> MAXAGE = EntityDataManager.createKey(EntityCloudFleijaRainbow.class, DataSerializers.VARINT);
 	
 	public int maxAge = 100;
 	public int age;

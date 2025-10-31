@@ -1,16 +1,16 @@
 package com.hbm.render.anim;
 
+import com.hbm.render.anim.BusAnimationKeyframe.InterpolationType;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import com.hbm.render.anim.BusAnimationKeyframe.InterpolationType;
 
 //the actual bus, a sequence of keyframes with their own behavior and such
 public class BusAnimationSequence {
 
 	//not actually useful for anything since the renderer usually handles
 	//this part, but it's nice to have for distinction just in case
-	public enum EnumTransformation {
+	public static enum EnumTransformation {
 		UNDEFINED,
 		ROTATION,
 		TRANSLATION,

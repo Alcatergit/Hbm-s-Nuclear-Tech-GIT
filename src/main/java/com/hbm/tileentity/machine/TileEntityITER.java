@@ -1,9 +1,10 @@
 package com.hbm.tileentity.machine;
 
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineITER;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -11,19 +12,18 @@ import com.hbm.inventory.BreederRecipes;
 import com.hbm.inventory.BreederRecipes.BreederRecipe;
 import com.hbm.inventory.FusionRecipes;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ToolSets;
 import com.hbm.items.special.ItemFusionShield;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.Library;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.saveddata.RadiationSavedData;
-
-import api.hbm.energy.IEnergyUser;
+import com.hbm.tileentity.TileEntityMachineBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -43,7 +43,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TileEntityITER extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
@@ -108,8 +109,16 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 				this.disassemble();
 				Vec3 vec = Vec3.createVectorHelper(5.5, 0, 0);
 				vec.rotateAroundY(world.rand.nextFloat() * (float) Math.PI * 2F);
-
-				world.newExplosion(null, pos.getX() + 0.5 + vec.xCoord, pos.getY() + 0.5 + world.rand.nextGaussian() * 1.5D, pos.getZ() + 0.5 + vec.zCoord, 2.5F, true, true);
+				if (this.plasmaType == ModForgeFluids.PLASMA_BF) {
+					EntityBalefire bf = new EntityBalefire(world);
+					bf.posX = pos.getX();
+					bf.posY = pos.getY();
+					bf.posZ = pos.getZ();
+					bf.destructionRange = 10;
+					world.spawnEntity(bf);
+					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, 10);
+				} else
+					world.newExplosion(null, pos.getX() + 0.5 + vec.xCoord, pos.getY() + 0.5 + world.rand.nextGaussian() * 1.5D, pos.getZ() + 0.5 + vec.zCoord, 2.5F, true, true);
 				RadiationSavedData.incrementRad(world, pos, 2000F, 10000F);
 			}
 
@@ -130,7 +139,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
 					if(ItemFusionShield.getShieldDamage(inventory.getStackInSlot(3)) > ((ItemFusionShield)inventory.getStackInSlot(3).getItem()).maxDamage){
 						inventory.setStackInSlot(3, ItemStack.EMPTY);
-						world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.shutdown, SoundCategory.BLOCKS, 5F, 1F);
+						world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.shutdown, SoundCategory.BLOCKS, 5F, 1F);
 						this.isOn = false;
 						this.markDirty();
 					}
@@ -156,7 +165,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 			/// END Processing part ///
 
 			/// START Notif packets ///
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0], tanks[1], plasma), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 120));
+			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1], plasma }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 120));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{plasmaType}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 20));
 			/// END Notif packets ///
 			NBTTagCompound data = new NBTTagCompound();
@@ -207,11 +216,11 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
 		BreederRecipe out = BreederRecipes.getOutput(inventory.getStackInSlot(1));
 		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.meteorite_sword_irradiated)
-			out = new BreederRecipe(ModItems.meteorite_sword_fused, 1);
+		if(inventory.getStackInSlot(1).getItem() == ToolSets.meteorite_sword_irradiated)
+			out = new BreederRecipe(ToolSets.meteorite_sword_fused, 1);
 
-		if(inventory.getStackInSlot(1).getItem() == ModItems.meteorite_sword_fused)
-			out = new BreederRecipe(ModItems.meteorite_sword_baleful, 4);
+		if(inventory.getStackInSlot(1).getItem() == ToolSets.meteorite_sword_fused)
+			out = new BreederRecipe(ToolSets.meteorite_sword_baleful, 4);
 
 		if(out == null) {
 			this.progress = 0;
@@ -310,7 +319,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	}
 
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("water", tanks[0].writeToNBT(new NBTTagCompound()));
 		compound.setTag("steam", tanks[1].writeToNBT(new NBTTagCompound()));
 		compound.setTag("plasma", plasma.writeToNBT(new NBTTagCompound()));
@@ -423,8 +432,13 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	public FluidStack drain(int maxDrain, boolean doDrain) {
 		return tanks[1].drain(maxDrain, doDrain);
 	}
-
-    @Override
+	
+	@Override
+	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+		return true;
+	}
+	
+	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] { 2, 4 };
 	}

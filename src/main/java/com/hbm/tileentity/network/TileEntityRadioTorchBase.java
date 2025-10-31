@@ -1,15 +1,14 @@
 package com.hbm.tileentity.network;
 
-import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.packet.NBTPacket;
 import com.hbm.packet.PacketDispatcher;
-
-import net.minecraft.util.ITickable;
+import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.INBTPacketReceiver;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
 public class TileEntityRadioTorchBase extends TileEntity implements ITickable, INBTPacketReceiver, IControlReceiver {

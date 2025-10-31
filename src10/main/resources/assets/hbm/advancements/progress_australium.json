@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_australium"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_australium"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_australium.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_cyclotron",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:powder_australium"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 90
+    }
+}

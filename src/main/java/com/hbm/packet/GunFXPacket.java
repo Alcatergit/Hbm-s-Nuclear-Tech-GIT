@@ -1,10 +1,8 @@
 package com.hbm.packet;
 
-import java.util.UUID;
-
 import com.hbm.items.weapon.ItemGunBase;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -15,7 +13,9 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class GunFXPacket implements IMessage {
+import java.util.UUID;
+
+public class GunFXPacket extends RecordablePacket {
 
 	public String playerUUID;
 	public EnumHand hand;
@@ -31,7 +31,7 @@ public class GunFXPacket implements IMessage {
 	}
 	
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		hand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 		byte[] bytes = new byte[buf.readInt()];
 		buf.readBytes(bytes);
@@ -40,8 +40,8 @@ public class GunFXPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
-		buf.writeBoolean(hand == EnumHand.MAIN_HAND);
+	public void toBits(LeafiaBuf buf) {
+		buf.writeBoolean(hand == EnumHand.MAIN_HAND ? true : false);
 		byte[] bytes = playerUUID.getBytes();
 		buf.writeInt(bytes.length);
 		buf.writeBytes(bytes);
@@ -67,7 +67,7 @@ public class GunFXPacket implements IMessage {
 		
 	}
 	
-	public enum FXType {
-		FIRE
-    }
+	public static enum FXType {
+		FIRE;
+	}
 }

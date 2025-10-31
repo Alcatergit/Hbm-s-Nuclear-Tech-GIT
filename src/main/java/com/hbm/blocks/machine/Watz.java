@@ -1,10 +1,8 @@
 package com.hbm.blocks.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModBlocks.WatzNew;
 import com.hbm.handler.MultiblockHandlerXR;
-import com.hbm.inventory.material.Mats;
-import com.hbm.items.ModItems;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityWatz;
@@ -95,11 +93,11 @@ public class Watz extends BlockDummyable {
 
 		if(this.getMetaFromState(state) >= 12 && drop) {
 
-			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.watz_casing, 48)));
-			for(int j = 0; j < 3; j++) world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, Mats.MAT_DURA.make(ModItems.bolt, 64)));
-			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.watz_element, 36)));
-			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.watz_cooler, 26)));
-			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.struct_watz_core, 1)));
+			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(WatzNew.watz_casing, 48)));
+			//for(int j = 0; j < 3; j++) world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, Mats.MAT_DURA.make(ModItems.bolt, 64)));
+			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(WatzNew.watz_element, 36)));
+			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(WatzNew.watz_cooler, 26)));
+			//world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(WatzNew.struct_watz_core, 1)));
 		}
 
 		super.breakBlock(world, pos, state);

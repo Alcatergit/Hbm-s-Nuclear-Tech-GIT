@@ -4,14 +4,12 @@ import com.hbm.blocks.machine.MachineRtgFurnace;
 import com.hbm.items.machine.ItemRTGPellet;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.RTGUtil;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITickable {
 
@@ -39,7 +37,7 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -67,7 +65,7 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setShort("cookTime", (short) dualCookTime);
 		compound.setTag("inventory", this.inventory.serializeNBT());
 		return super.writeToNBT(compound);
@@ -159,9 +157,14 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 			}else{
 				dualCookTime = 0;
 			}
-			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(hasPower() && canProcess() && this.dualCookTime == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 flag1 = true;
                 MachineRtgFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);
@@ -181,14 +184,17 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
 		if(slot < 4){
 			if(!(itemStack.getItem() instanceof ItemRTGPellet)){
 				return true;
 			}
 		}
-        return slot == 4;
-    }
+		if(slot == 4){
+			return true;
+		}
+		return false;
+	}
 
 	@Override
 	public boolean isItemValidForSlot(int i, ItemStack stack) {
@@ -196,8 +202,11 @@ public class TileEntityRtgFurnace extends TileEntityMachineBase implements ITick
 			if(stack.getItem() instanceof ItemRTGPellet)
 				return true;
 		}
-        return i == 0;
-    }
+		if(i == 0){
+			return true;
+		}
+		return false;
+	}
 	
 	@Override
 	public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {

@@ -6,13 +6,13 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public interface IModelCustom
 {
-	String getType();
-    void renderAll();
-    void renderOnly(String... groupNames);
-    void renderPart(String partName);
-    void renderAllExcept(String... excludedGroupNames);
-    void tessellateAll(Tessellator tes);
-    void tessellatePart(Tessellator tes, String name);
-    void tessellateOnly(Tessellator tes, String... names);
-    void tessellateAllExcept(Tessellator tes, String... excluded);
+	public String getType();
+    public void renderAll();
+    public void renderOnly(String... groupNames);
+    public void renderPart(String partName);
+    public void renderAllExcept(String... excludedGroupNames);
+    public void tessellateAll(CompositeBrush tes);
+    public void tessellatePart(CompositeBrush tes,String name);
+    public void tessellateOnly(CompositeBrush tes,String... names);
+    public void tessellateAllExcept(CompositeBrush tes,String... excluded);
 }

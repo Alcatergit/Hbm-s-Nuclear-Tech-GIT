@@ -1,12 +1,5 @@
 package com.hbm.render.item.weapon;
 
-import java.util.Collections;
-import java.util.List;
-
-import javax.vecmath.Matrix4f;
-
-import org.apache.commons.lang3.tuple.Pair;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.block.model.BakedQuad;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -14,6 +7,11 @@ import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformT
 import net.minecraft.client.renderer.block.model.ItemOverrideList;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.util.EnumFacing;
+import org.apache.commons.lang3.tuple.Pair;
+
+import javax.vecmath.Matrix4f;
+import java.util.Collections;
+import java.util.List;
 
 public class B92BakedModel implements IBakedModel {
 	
@@ -27,12 +25,12 @@ public class B92BakedModel implements IBakedModel {
 
 	@Override
 	public boolean isAmbientOcclusion() {
-		return type == TransformType.GUI && ItemRenderGunAnim.INSTANCE.b92ItemModel.isAmbientOcclusion();
+		return type != TransformType.GUI ? false : ItemRenderGunAnim.INSTANCE.b92ItemModel.isAmbientOcclusion();
 	}
 
 	@Override
 	public boolean isGui3d() {
-		return type == TransformType.GUI && ItemRenderGunAnim.INSTANCE.b92ItemModel.isGui3d();
+		return type != TransformType.GUI ? false :ItemRenderGunAnim.INSTANCE.b92ItemModel.isGui3d();
 	}
 
 	@Override

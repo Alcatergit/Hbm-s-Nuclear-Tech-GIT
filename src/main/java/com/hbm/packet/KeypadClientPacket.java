@@ -2,8 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.interfaces.IKeypadHandler;
 import com.hbm.util.KeypadClient;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class KeypadClientPacket implements IMessage {
+public class KeypadClientPacket extends RecordablePacket {
 
 	public int x, y, z;
 	byte[] data;
@@ -29,7 +29,7 @@ public class KeypadClientPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -38,7 +38,7 @@ public class KeypadClientPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -56,8 +56,10 @@ public class KeypadClientPacket implements IMessage {
 				for(int i = 0; i < 12; i ++){
 					pad.buttons[i].cooldown = m.data[i];
 				}
-				pad.isSettingCode = m.data[12] == 1;
-                System.arraycopy(m.data, 13, pad.code, 0, 6);
+				pad.isSettingCode = m.data[12] == 1 ? true : false;
+				for(int i = 0; i < 6; i ++){
+					pad.code[i] = m.data[13 + i];
+				}
 				pad.successColorTicks = m.data[19];
 				pad.failColorTicks = m.data[20];
 			}

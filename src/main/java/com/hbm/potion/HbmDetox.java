@@ -1,10 +1,9 @@
 package com.hbm.potion;
 
-import java.util.HashSet;
-
 import com.hbm.config.PotionConfig;
-
 import net.minecraft.potion.Potion;
+
+import java.util.HashSet;
 
 public class HbmDetox {
 

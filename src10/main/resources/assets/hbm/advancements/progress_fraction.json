@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_fraction_tower"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_fraction"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_fraction.desc"
+		}
+	},
+	"parent": "hbm:progress_refinery",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_fraction_tower"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 37
+    }
+}

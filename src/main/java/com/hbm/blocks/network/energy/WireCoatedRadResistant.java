@@ -1,16 +1,15 @@
 package com.hbm.blocks.network.energy;
 
-import java.util.List;
-
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.interfaces.IRadResistantBlock;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class WireCoatedRadResistant extends WireCoated implements IRadResistantBlock {
 
@@ -29,8 +28,13 @@ public class WireCoatedRadResistant extends WireCoated implements IRadResistantB
 		RadiationSystemNT.markChunkForRebuild(worldIn, pos);
 		super.breakBlock(worldIn, pos, state);
 	}
+	
+	@Override
+	public boolean isRadResistant(World worldIn, BlockPos blockPos){
+		return true;
+	}
 
-    @Override
+	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		super.addInformation(stack, player, tooltip, advanced);
 		tooltip.add("§2[Radiation Shielding]§r");

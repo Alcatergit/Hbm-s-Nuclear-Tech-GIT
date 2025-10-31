@@ -1,18 +1,18 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.interfaces.IControlReceiver;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.SAFERecipes;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ToolSets;
 import com.hbm.items.machine.ItemFWatzCore;
 import com.hbm.lib.Library;
-import com.hbm.world.FWatz;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyGenerator;
+import com.hbm.world.FWatz;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -36,7 +36,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	public final static long maxPower = 1000000000000L;
 	public boolean cooldown = false;
 
-	public FluidTank[] tanks;
+	public FluidTank tanks[];
 	public Fluid[] tankTypes;
 	public boolean needsUpdate;
 	public boolean isOn = false;
@@ -80,7 +80,7 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 
 	public void setCustomName(String name) {
@@ -88,7 +88,11 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 	}
 
 	public boolean isUseableByPlayer(EntityPlayer player) {
-        return world.getTileEntity(pos) == this;
+		if(world.getTileEntity(pos) != this) {
+			return false;
+		} else {
+			return true;
+		}
 	}
 
 	public int getSingularityType(){
@@ -130,8 +134,8 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 
 			if(this.isRunning()){
 				ItemStack stack = inventory.getStackInSlot(2);
-				if(stack.getItem() == ModItems.meteorite_sword_baleful){
-					inventory.setStackInSlot(2, new ItemStack(ModItems.meteorite_sword_warped));
+				if(stack.getItem() == ToolSets.meteorite_sword_baleful){
+					inventory.setStackInSlot(2, new ItemStack(ToolSets.meteorite_sword_warped));
 				} else if(stack.hasTagCompound()){
 					NBTTagCompound nbt = stack.getTagCompound();
 					if(nbt.getBoolean("ntmContagion")) nbt.removeTag("ntmContagion");
@@ -139,8 +143,9 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 				}
 			}
 
-			if(this.isOn && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore itemCore) {
-                if(cooldown) {
+			if(this.isOn && inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore) {
+				ItemFWatzCore itemCore = (ItemFWatzCore)inventory.getStackInSlot(2).getItem();
+				if(cooldown) {
 					
 					tanks[0].fill(new FluidStack(tankTypes[0], itemCore.coolantRefill), true);
 
@@ -156,9 +161,6 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 						tanks[2].drain(itemCore.aschrabDrain, true);
 						needsUpdate = true;
 						power += itemCore.powerOutput;
-
-						if(world.rand.nextInt(2048) == 0)
-							tryGrowCore();
 					}
 
 					if(power > maxPower)
@@ -167,6 +169,9 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 					if(tanks[0].getFluidAmount() <= 0) {
 						cooldown = true;
 					}
+
+					if(world.rand.nextInt(4096) == 0)
+						tryGrowCore();
 				}
 			}
 
@@ -246,7 +251,9 @@ public class TileEntityFWatzCore extends TileEntityLoadedBase implements IContro
 
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(tanks[tank] != null) {
-            return inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+			if(inventory.getStackInSlot(slot).getItem() == ModItems.fluid_barrel_infinite || isValidFluidForTank(tank, FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))) {
+				return true;
+			}
 		}
 		return false;
 	}

@@ -1,7 +1,6 @@
 package com.hbm.tileentity;
 
 import api.hbm.energy.IEnergyUser;
-
 import api.hbm.tile.IHeatSource;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
@@ -14,10 +13,10 @@ import net.minecraftforge.items.CapabilityItemHandler;
 
 public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser, IHeatSource {
 
-	TileEntity tile;
-	boolean inventory;
-	boolean power;
-	boolean fluid;
+	protected TileEntity tile;
+	protected boolean inventory;
+	protected boolean power;
+	protected boolean fluid;
 
 	boolean heat;
 

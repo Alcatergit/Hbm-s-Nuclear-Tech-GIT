@@ -1,10 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.BlockHadronCoil;
 import com.hbm.blocks.machine.BlockHadronPlating;
@@ -17,8 +13,6 @@ import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.TileEntityHadronDiode.DiodeConfig;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -33,7 +27,11 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class TileEntityHadron extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -75,7 +73,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
 		return slot == 2 || slot == 3;
 	}
 	
@@ -91,7 +89,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 			power = Library.chargeTEFromItems(inventory, 4, power, maxPower);
 			drawPower();
 
-			if(delay <= 0 && this.isOn && particles.isEmpty() && !inventory.getStackInSlot(0).isEmpty() && !inventory.getStackInSlot(1).isEmpty() && power >= maxPower * 0.75) {
+			if(delay <= 0 && this.isOn && particles.size() < maxParticles && !inventory.getStackInSlot(0).isEmpty() && !inventory.getStackInSlot(1).isEmpty() && power >= maxPower * 0.75) {
 				if(!hopperMode || (inventory.getStackInSlot(0).getCount() > 1 && inventory.getStackInSlot(1).getCount() > 1)) {
 					ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata());
 					particles.add(new Particle(inventory.getStackInSlot(0), inventory.getStackInSlot(1), dir, pos.getX(), pos.getY(), pos.getZ()));
@@ -233,7 +231,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("isOn", isOn);
 		compound.setLong("power", power);
 		compound.setBoolean("analysis", analysisOnly);
@@ -710,7 +708,7 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 				b == ModBlocks.hadron_analysis_glass;
 	}
 	
-	public enum EnumHadronState {
+	public static enum EnumHadronState {
 		IDLE(0x8080ff),
 		PROGRESS(0xffff00),
 		ANALYSIS(0xffff00),
@@ -730,14 +728,14 @@ public class TileEntityHadron extends TileEntityMachineBase implements ITickable
 		ERROR_BRANCHING_TURN(0xff0000, true),
 		ERROR_GENERIC(0xff0000, true);
 
-		public final int color;
-		public final boolean showCoord;
+		public int color;
+		public boolean showCoord;
 		
-		EnumHadronState(int color) {
+		private EnumHadronState(int color) {
 			this(color, false);
 		}
 		
-		EnumHadronState(int color, boolean showCoord) {
+		private EnumHadronState(int color, boolean showCoord) {
 			this.color = color;
 			this.showCoord = showCoord;
 		}

@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:injector_knife"
+		},
+		"title": {
+			"translate": "hbm.achievement.someWounds"
+		},
+		"description": {
+			"translate": "hbm.achievement.someWounds.desc"
+		}
+	},
+	"parent": "hbm:progress_modtable",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 17
+    }
+}

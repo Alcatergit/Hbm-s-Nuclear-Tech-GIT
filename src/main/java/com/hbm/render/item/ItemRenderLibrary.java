@@ -1,19 +1,18 @@
 package com.hbm.render.item;
 
-import java.util.HashMap;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
 import com.hbm.animloader.AnimationWrapper.EndType;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModBlocks.WatzNew;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.tileentity.RenderDemonLamp;
-
+import com.leafia.contents.machines.reactors.zirnox.ZirnoxItemRender;
+import com.leafia.contents.machines.reactors.zirnox.DestroyedZirnoxItemRender;
+import com.leafia.dev.blockitems.LeafiaQuickModel;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
@@ -21,12 +20,20 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+
+import static com.hbm.main.MainRegistry.rendererWaiting;
 
 public class ItemRenderLibrary {
 
 	public static HashMap<Item, ItemRenderBase> renderers = new HashMap<>();
 
 	public static void init() {
+		for (LeafiaQuickModel te : rendererWaiting) {
+			renderers.put(Item.getItemFromBlock(te._block()),te._itemRenderer());
+		}
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_selenium), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
@@ -342,86 +349,10 @@ public class ItemRenderLibrary {
 				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Tank");
 			}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_catalytic_reformer), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -3, 0);
-				GL11.glScaled(3.5, 3.5, 3.5);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.catalytic_reformer_tex);
-				ResourceManager.catalytic_reformer.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_coker), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -5, 0);
-				GL11.glScaled(2.75, 2.75, 2.75);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.25, 0.25, 0.25);
-				GL11.glDisable(GL11.GL_CULL_FACE);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.coker_tex);
-				ResourceManager.coker.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
-				GL11.glEnable(GL11.GL_CULL_FACE);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_hydrotreater), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(4, 4, 4);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.hydrotreater_tex);
-				ResourceManager.hydrotreater.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_vacuum_distill), new ItemRenderBase( ) {
-			public void renderInventory() {
-				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(3, 3, 3);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.5, 0.5, 0.5);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.vacuum_distill_tex);
-				ResourceManager.vacuum_distill.renderAll();
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_solidifier), new ItemRenderBase( ) {
-			public void renderInventory() {
-				GL11.glTranslated(0, -2.5, 0);
-				GL11.glScaled(3, 3, 3);
-			}
-			public void renderCommon() {
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.solidifier_tex); ResourceManager.solidifier.renderPart("Main");
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_liquefactor), new ItemRenderBase( ) {
-			public void renderInventory() {
-				GL11.glTranslated(0, -2.5, 0);
-				GL11.glScaled(3, 3, 3);
-			}
-			public void renderCommon() {
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.liquefactor_tex); ResourceManager.liquefactor.renderPart("Main");
-				GL11.glShadeModel(GL11.GL_FLAT);
-			}});
-		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_well), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -4, 0);
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(4, 4, 4);
 			}
 			public void renderCommon() {
 				GL11.glScaled(0.5, 0.5, 0.5);
@@ -496,9 +427,7 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GL11.glScaled(0.5, 0.5, 0.5);
 		        GlStateManager.disableCull();
-                GlStateManager.shadeModel(GL11.GL_SMOOTH);
-                bindTexture(ResourceManager.oilflare_tex); ResourceManager.oilflare.renderAll();
-                GlStateManager.shadeModel(GL11.GL_FLAT);
+				bindTexture(ResourceManager.oilflare_tex); ResourceManager.oilflare.renderAll();
 		        GlStateManager.enableCull();
 			}});
 
@@ -513,6 +442,19 @@ public class ItemRenderLibrary {
 		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.refinery_tex);  ResourceManager.refinery.renderAll();
 		        GlStateManager.shadeModel(GL11.GL_FLAT);
+			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_drill), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -2, 0);
+				GL11.glScaled(3, 3, 3);
+			}
+			public void renderCommon() {
+				GL11.glRotated(180, 0, 1, 0);
+				GlStateManager.disableCull();
+				bindTexture(ResourceManager.drill_body_tex); ResourceManager.drill_body.renderAll();
+				bindTexture(ResourceManager.drill_bolt_tex); ResourceManager.drill_bolt.renderAll();
+				GlStateManager.enableCull();
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_mining_laser), new ItemRenderBase() {
@@ -688,27 +630,9 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GL11.glRotated(180, 0, 1, 0);
 				GL11.glScaled(1.9, 1.9, 1.9);
-		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.combination_oven_tex);  ResourceManager.combination_oven.renderAll();
-		        GlStateManager.shadeModel(GL11.GL_FLAT);
-			}});
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_soldering_station), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -1, 0);
-				GL11.glScaled(5, 5, 5);
-			}
-			public void renderCommon() {
-				bindTexture(ResourceManager.soldering_station_tex);
-				ResourceManager.soldering_station.renderAll();
-			}});
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_arc_welder), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(0, -2, 0);
-				GL11.glScaled(4, 4, 4);
-			}
-			public void renderCommon() {
-				bindTexture(ResourceManager.arc_welder_tex);
-				ResourceManager.arc_welder.renderAll();
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		renderers.put(Item.getItemFromBlock(ModBlocks.tesla), new ItemRenderBase() {
 			public void renderInventory() {
@@ -810,12 +734,10 @@ public class ItemRenderLibrary {
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_prototype), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, 0.125, 0);
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(2.25, 2.25, 2.25);
 			}
 			public void renderCommon() {
 				GL11.glRotated(90, 0, 1, 0);
-				GL11.glTranslated(0, 0.125, 0);
 		        GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		        bindTexture(ResourceManager.bomb_prototype_tex);
 		        ResourceManager.bomb_prototype.renderAll();
@@ -825,7 +747,7 @@ public class ItemRenderLibrary {
 		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_fleija), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -2, 0);
-				GL11.glScaled(3, 3, 3);
+				GL11.glScaled(4.5, 4.5, 4.5);
 			}
 			public void renderCommon() {
 				GL11.glScaled(2, 2, 2);
@@ -838,12 +760,11 @@ public class ItemRenderLibrary {
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.nuke_solinium), new ItemRenderBase() {
 			public void renderInventory() {
-				GL11.glTranslated(0, -0.125, 0);
-				GL11.glScaled(5, 5, 5);
+				GL11.glScaled(4, 4, 4);
 			}
 			public void renderCommon() {
+				GL11.glTranslated(0.5, 0, 0);
 				GL11.glRotated(90, 0, 1, 0);
-				GL11.glTranslated(0, -0.125, 0);
 	            GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		        bindTexture(ResourceManager.bomb_solinium_tex);
 		        ResourceManager.bomb_solinium.renderAll();
@@ -1073,6 +994,26 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(-0.125, 0, 0);
 				bindTexture(ResourceManager.radar_dish_tex); ResourceManager.radar.renderPart("Dish");
 	            GlStateManager.enableCull();
+			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_uf6_tank), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, -1, 0);
+		        bindTexture(ResourceManager.uf6_tex); ResourceManager.tank.renderAll();
+			}});
+
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_puf6_tank), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -4, 0);
+				GL11.glScaled(6, 6, 6);
+			}
+			public void renderCommon() {
+				GL11.glRotated(90, 0, -1, 0);
+		        bindTexture(ResourceManager.puf6_tex); ResourceManager.tank.renderAll();
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.sat_dock), new ItemRenderBase() {
@@ -1489,7 +1430,7 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon(ItemStack stack){
 				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
+				CompositeBrush tes = CompositeBrush.instance;
 				tes.startDrawing(GL11.GL_TRIANGLES);
 				ResourceManager.rbmk_element.tessellatePartSplit(tes, "Column", 0.5F, 3);
 				tes.draw();
@@ -1505,7 +1446,7 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon(ItemStack stack){
 				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
+				CompositeBrush tes = CompositeBrush.instance;
 				tes.startDrawing(GL11.GL_TRIANGLES);
 				ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, 3);
 				tes.addTranslation(0, 3, 0);
@@ -1524,7 +1465,7 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon(ItemStack stack){
 				bindTexture(((RBMKBase)Block.getBlockFromItem(stack.getItem())).columnTexture);
-				Tessellator tes = Tessellator.instance;
+				CompositeBrush tes = CompositeBrush.instance;
 				tes.startDrawing(GL11.GL_TRIANGLES);
 				ResourceManager.rbmk_reflector.tessellatePartSplit(tes, "Column", 0.5F, 3);
 				tes.draw();
@@ -1558,7 +1499,6 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				bindTexture(ResourceManager.splitter_tex); ResourceManager.crane_splitter.renderAll();
 			}});
-		
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_bat9000), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -3, 0);
@@ -1588,11 +1528,11 @@ public class ItemRenderLibrary {
 			}
 			public void renderCommon() {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.uu_creator_tex); ResourceManager.watz.renderAll();
+				bindTexture(ResourceManager.uu_creator_tex); ResourceManager.uu_creator.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.watz), new ItemRenderBase() {
+		renderers.put(Item.getItemFromBlock(WatzNew.watz), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -1, 0);
 				GL11.glScaled(2, 2, 2);
@@ -1603,19 +1543,18 @@ public class ItemRenderLibrary {
 				GL11.glShadeModel(GL11.GL_FLAT);
 			}});
 
-		renderers.put(Item.getItemFromBlock(ModBlocks.watz_pump), new ItemRenderBase() {
-				public void renderInventory() {
-					GL11.glTranslated(0, -1.5, 0);
-					double scale = 5;
-					GL11.glScaled(scale, scale, scale);
-				}
-				public void renderCommon() {
-					GL11.glShadeModel(GL11.GL_SMOOTH);
-					bindTexture(ResourceManager.watz_pump_tex);
-					ResourceManager.watz_pump.renderAll();
-					GL11.glShadeModel(GL11.GL_FLAT);
-				}});
-
+		renderers.put(Item.getItemFromBlock(WatzNew.watz_pump), new ItemRenderBase() {
+			public void renderInventory() {
+				GL11.glTranslated(0, -1.5, 0);
+				double scale = 5;
+				GL11.glScaled(scale, scale, scale);
+			}
+			public void renderCommon() {
+				GL11.glShadeModel(GL11.GL_SMOOTH);
+				bindTexture(ResourceManager.watz_pump_tex);
+				ResourceManager.watz_pump.renderAll();
+				GL11.glShadeModel(GL11.GL_FLAT);
+			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_fraction_tower), new ItemRenderBase() {
 			public void renderInventory() {
@@ -1657,19 +1596,6 @@ public class ItemRenderLibrary {
 				GL11.glScaled(0.25, 0.25, 0.25);
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.tower_large_tex); ResourceManager.tower_large.renderAll();
-				GlStateManager.shadeModel(GL11.GL_FLAT);
-			}});
-
-		renderers.put(Item.getItemFromBlock(ModBlocks.machine_condenser_powered), new ItemRenderBase() {
-			public void renderInventory() {
-				GL11.glTranslated(-1, -1, 0);
-				GL11.glScaled(2.75, 2.75, 2.75);
-			}
-			public void renderCommon() {
-				GL11.glScaled(0.75, 0.75, 0.75);
-				GL11.glTranslated(0.5, 0, 0);
-				GL11.glShadeModel(GL11.GL_SMOOTH);
-				bindTexture(ResourceManager.condenser_tex); ResourceManager.condenser.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 		
@@ -1901,6 +1827,8 @@ public class ItemRenderLibrary {
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}
 		});
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_zirnox),new ZirnoxItemRender());
+		renderers.put(Item.getItemFromBlock(ModBlocks.machine_zirnox_destroyed),new DestroyedZirnoxItemRender());
 	}
 
 	private static void bindTexture(ResourceLocation res) {

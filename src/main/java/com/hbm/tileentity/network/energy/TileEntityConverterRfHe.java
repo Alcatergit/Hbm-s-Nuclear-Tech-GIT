@@ -1,14 +1,13 @@
 package com.hbm.tileentity.network.energy;
 
-import com.hbm.config.GeneralConfig;
-import com.hbm.tileentity.TileEntityLoadedBase;
-
 import api.hbm.energy.IEnergyGenerator;
 import cofh.redstoneflux.api.IEnergyReceiver;
-import net.minecraftforge.energy.IEnergyStorage;
+import com.hbm.config.GeneralConfig;
+import com.hbm.tileentity.TileEntityLoadedBase;
+import net.minecraft.util.EnumFacing;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraft.util.EnumFacing;
+import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.fml.common.Optional;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "cofh.redstoneflux.api.IEnergyReceiver", modid = "redstoneflux")})
@@ -59,14 +58,14 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 		
 		recursionBrake = true;
 		
-		long capacity = (long)(maxReceive / GeneralConfig.conversionRateHeToRF);
+		long capacity = (long)(maxReceive / (float)GeneralConfig.rfConversionRate);
 		subBuffer = capacity;
 		
 		this.sendPower(world, pos);
 		
 		recursionBrake = false;
 		
-		return (int) ((capacity - subBuffer) * GeneralConfig.conversionRateHeToRF);
+		return (int) ((capacity - subBuffer) * GeneralConfig.rfConversionRate);
 	}
 
 	//FE
@@ -105,14 +104,14 @@ public class TileEntityConverterRfHe extends TileEntityLoadedBase implements IEn
 		
 		recursionBrake = true;
 		
-		long capacity = (long)(maxReceive / GeneralConfig.conversionRateHeToRF);
+		long capacity = (long)(maxReceive / (float)GeneralConfig.rfConversionRate);
 		subBuffer = capacity;
 		
 		this.sendPower(world, pos);
 		
 		recursionBrake = false;
 		
-		return (int) ((capacity - subBuffer) * GeneralConfig.conversionRateHeToRF);
+		return (int) ((capacity - subBuffer) * GeneralConfig.rfConversionRate);
 	}
 
 	@Override

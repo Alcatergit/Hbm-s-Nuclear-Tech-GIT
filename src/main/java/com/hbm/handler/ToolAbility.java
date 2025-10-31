@@ -1,25 +1,19 @@
 package com.hbm.handler;
 
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import com.hbm.blocks.generic.BlockStorageCrate;
+import com.hbm.blocks.machine.MachineBattery;
+import com.hbm.blocks.machine.MachineFENSU;
 import com.hbm.config.ToolConfig;
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.inventory.CentrifugeRecipes;
 import com.hbm.inventory.CrystallizerRecipes;
 import com.hbm.inventory.ShredderRecipes;
-import com.hbm.blocks.generic.BlockStorageCrate;
-import com.hbm.blocks.machine.MachineBattery;
-import com.hbm.blocks.machine.MachineFENSU;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Materials.Nuggies;
 import com.hbm.items.tool.IItemAbility;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.EnchantmentUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockRedstoneOre;
 import net.minecraft.block.state.IBlockState;
@@ -36,6 +30,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.*;
 
 public abstract class ToolAbility {
 	
@@ -474,7 +470,7 @@ public abstract class ToolAbility {
 
 			if(mercury > 0) {
 				world.setBlockToAir(new BlockPos(x, y, z));
-				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModItems.nugget_mercury, mercury)));
+				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(Nuggies.nugget_mercury, mercury)));
 			}
 		}
 

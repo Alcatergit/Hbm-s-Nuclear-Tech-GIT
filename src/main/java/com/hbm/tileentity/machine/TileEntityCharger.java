@@ -1,20 +1,19 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.machine.MachineCharger;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyUser;
-import net.minecraft.util.ITickable;
-import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityCharger extends TileEntityLoadedBase implements ITickable, IEnergyUser, INBTPacketReceiver {
 	
@@ -54,9 +53,9 @@ public class TileEntityCharger extends TileEntityLoadedBase implements ITickable
 					ItemStack stack = inv.getStackInSlot(i);
 					if(stack != null && stack.getItem() instanceof IBatteryItem) {
 						IBatteryItem battery = (IBatteryItem) stack.getItem();
-						totalCapacity += battery.getMaxCharge(stack);
+						totalCapacity += battery.getMaxCharge();
 						totalEnergy += battery.getCharge(stack);
-						charge += Math.min(battery.getMaxCharge(stack) - battery.getCharge(stack), battery.getChargeRate());
+						charge += Math.min(battery.getMaxCharge() - battery.getCharge(stack), battery.getChargeRate());
 					}
 				}
 			}
@@ -120,7 +119,7 @@ public class TileEntityCharger extends TileEntityLoadedBase implements ITickable
 					if(stack != null && stack.getItem() instanceof IBatteryItem) {
 						IBatteryItem battery = (IBatteryItem) stack.getItem();
 						
-						long toCharge = Math.min(battery.getMaxCharge(stack) - battery.getCharge(stack), battery.getChargeRate());
+						long toCharge = Math.min(battery.getMaxCharge() - battery.getCharge(stack), battery.getChargeRate());
 						toCharge = Math.min(toCharge, chargeBudget);
 						toCharge = Math.min(toCharge, power);
 						battery.chargeBattery(stack, toCharge);

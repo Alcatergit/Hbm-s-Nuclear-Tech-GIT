@@ -1,11 +1,7 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-import java.util.Set;
-
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -18,6 +14,9 @@ import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
+import java.util.List;
+import java.util.Set;
 
 public class ItemMultitoolTool extends ItemTool {
 
@@ -39,7 +38,7 @@ public class ItemMultitoolTool extends ItemTool {
 		ItemStack stack = player.getHeldItem(hand);
 		if(player.isSneaking()) {
 			
-	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.PLAYERS, 2.0F, 1.0F);
+	        world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.techBoop, SoundCategory.PLAYERS, 2.0F, 1.0F);
 	        
 			if(this == ModItems.multitool_dig) {
 				ItemStack item = new ItemStack(ModItems.multitool_silk, 1, stack.getItemDamage());

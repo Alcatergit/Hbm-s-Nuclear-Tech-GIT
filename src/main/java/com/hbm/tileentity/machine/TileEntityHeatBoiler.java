@@ -1,13 +1,13 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.tile.IHeatSource;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.INBTPacketReceiver;
-
-import api.hbm.tile.IHeatSource;
+import com.leafia.contents.gear.utility.IFuzzyCompatible;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -25,7 +25,7 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiver, ITickable, IFluidHandler {
+public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiver, IFuzzyCompatible, ITickable, IFluidHandler {
 
     public FluidTank[] tanks;
     public Fluid[] types = new Fluid[2];
@@ -117,7 +117,8 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain){
-        return tanks[1].drain(maxDrain, doDrain);
+        FluidStack drain = tanks[1].drain(maxDrain, doDrain);
+        return drain;
     }
 
     @Override
@@ -222,8 +223,8 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
                 diff = (int) Math.ceil(diff * diffusion);
                 source.useUpHeat(diff);
                 this.heat += diff;
-                if(this.heat > maxHeat)
-                    this.heat = maxHeat;
+                if(this.heat > this.maxHeat)
+                    this.heat = this.maxHeat;
                 return;
             }
         }
@@ -256,4 +257,8 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
         return 65536.0D;
     }
 
+    @Override
+    public Fluid getOutputType() {
+        return types[1];
+    }
 }

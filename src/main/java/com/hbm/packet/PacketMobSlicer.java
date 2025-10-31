@@ -1,14 +1,11 @@
 package com.hbm.packet;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.items.weapon.ItemCrucible;
 import com.hbm.items.weapon.ItemSwordCutter;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
@@ -20,7 +17,10 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class PacketMobSlicer implements IMessage {
+import java.util.ArrayList;
+import java.util.List;
+
+public class PacketMobSlicer extends RecordablePacket {
 
 	public Vec3d pos;
 	public Vec3d norm;
@@ -36,14 +36,14 @@ public class PacketMobSlicer implements IMessage {
 	}
 	
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		pos = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		norm = new Vec3d(buf.readDouble(), buf.readDouble(), buf.readDouble());
 		this.tex = buf.readByte();
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeDouble(pos.x);
 		buf.writeDouble(pos.y);
 		buf.writeDouble(pos.z);

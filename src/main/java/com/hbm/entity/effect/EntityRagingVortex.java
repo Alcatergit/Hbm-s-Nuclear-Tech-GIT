@@ -1,7 +1,6 @@
 package com.hbm.entity.effect;
 
 import com.hbm.config.CompatibilityConfig;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 

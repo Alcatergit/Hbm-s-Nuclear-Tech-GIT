@@ -450,7 +450,10 @@ public class Quat {
      * @return true if empty, false otherwise
      */
     public boolean isEmpty() {
-        return w == 1 && x == 0 && y == 0 && z == 0;
+        if (w == 1 && x == 0 && y == 0 && z == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -459,7 +462,10 @@ public class Quat {
      * @return true if it is an identity rep., false otherwise
      */
     public boolean isIdentity() {
-        return w == 0 && x == 0 && y == 0 && z == 0;
+        if (w == 0 && x == 0 && y == 0 && z == 0) {
+            return true;
+        }
+        return false;
     }
 
     /**

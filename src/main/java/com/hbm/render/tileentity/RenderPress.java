@@ -1,10 +1,7 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachinePress;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.IBakedModel;
@@ -14,8 +11,10 @@ import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.client.ForgeHooksClient;
+import org.lwjgl.opengl.GL11;
 
 public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePress> {
 
@@ -122,7 +121,6 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 
 		
 		renderTileEntityAt2(te, x, y, z, partialTicks);
-        renderTileEntityAt3(te, x, y, z, partialTicks);
 		GL11.glPopMatrix();
 		//GL11.glDisable(GL11.GL_CLIP_PLANE0);
 		//if(model.controller.getAnim() == AnimationWrapper.EMPTY)
@@ -152,49 +150,33 @@ public class RenderPress extends TileEntitySpecialRenderer<TileEntityMachinePres
 		// GL11.glDisable(GL11.GL_STENCIL_TEST);
 	}
 
-	public void renderTileEntityAt2(TileEntityMachinePress press, double x, double y, double z, float f) {
+	public void renderTileEntityAt2(TileEntity tileEntity, double x, double y, double z, float f) {
 		GL11.glPushMatrix();
-		GL11.glTranslated(0, 0.875D, 0);
+		GL11.glTranslated(0, 1 - 0.125D, 0);
 		GL11.glScalef(0.95F, 1, 0.95F);
 
-		float f1 = 0.875F * (press.prevProgress + (press.progress-press.prevProgress) * f)  / TileEntityMachinePress.maxProgress;
+		TileEntityMachinePress press = (TileEntityMachinePress) tileEntity;
+		float f1 = press.progress * (1 - 0.125F) / TileEntityMachinePress.maxProgress;
 		GL11.glTranslated(0, -f1, 0);
 		this.bindTexture(ResourceManager.press_head_tex);
 
 		ResourceManager.press_head.renderAll();
 
-
-        GlStateManager.enableLighting();
-        GL11.glRotatef(180, 0F, 1F, 0F);
-        GL11.glRotatef(-90, 1F, 0F, 0F);
-        ItemStack stack = new ItemStack(Item.getItemById(press.stampItem), 1, press.stampMeta);
-
-        if(!(stack.getItem() instanceof ItemBlock) && !stack.isEmpty()) {
-            IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, press.getWorld(), null);
-            model = ForgeHooksClient.handleCameraTransforms(model, TransformType.FIXED, false);
-            Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
-            GL11.glTranslatef(0, 0.0F, -1F);
-            GL11.glRotatef(180, 0F, 1F, 0F);
-            GL11.glScalef(0.5F, 0.5F, 0.5F);
-
-
-            Minecraft.getMinecraft().getRenderItem().renderItem(stack, model);
-        }
-
 		GL11.glPopMatrix();
-
+		renderTileEntityAt3(tileEntity, x, y, z, f);
 	}
 
-	public void renderTileEntityAt3(TileEntityMachinePress press, double x, double y, double z, float f) {
+	public void renderTileEntityAt3(TileEntity tileEntity, double x, double y, double z, float f) {
 		GL11.glTranslated(0, 1, -1);
 		GlStateManager.enableLighting();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 		GL11.glRotatef(-90, 1F, 0F, 0F);
-
+		
+		TileEntityMachinePress press = (TileEntityMachinePress) tileEntity;
 		ItemStack stack = new ItemStack(Item.getItemById(press.item), 1, press.meta);
 
 		if(!(stack.getItem() instanceof ItemBlock) && !stack.isEmpty()) {
-			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, press.getWorld(), null);
+			IBakedModel model = Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(stack, tileEntity.getWorld(), null);
 			model = ForgeHooksClient.handleCameraTransforms(model, TransformType.FIXED, false);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(TextureMap.LOCATION_BLOCKS_TEXTURE);
 			GL11.glTranslatef(0.0F, 1.0F, 0.0F);

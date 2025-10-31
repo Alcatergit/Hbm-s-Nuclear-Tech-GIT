@@ -1,19 +1,17 @@
 package com.hbm.handler.crt;
 
+import com.hbm.inventory.DiFurnaceRecipes;
 import com.hbm.inventory.RecipesCommon;
-import crafttweaker.IAction;
+import com.hbm.inventory.RecipesCommon.ComparableStack;
 import crafttweaker.CraftTweakerAPI;
-import crafttweaker.api.minecraft.CraftTweakerMC;
+import crafttweaker.IAction;
+import crafttweaker.annotations.ZenRegister;
 import crafttweaker.api.item.IIngredient;
 import crafttweaker.api.item.IItemStack;
-import crafttweaker.annotations.ZenRegister;
+import crafttweaker.api.minecraft.CraftTweakerMC;
+import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.inventory.DiFurnaceRecipes;
-
-import net.minecraft.item.ItemStack;
 
 @ZenRegister
 @ZenClass("mods.ntm.BlastFurnace")

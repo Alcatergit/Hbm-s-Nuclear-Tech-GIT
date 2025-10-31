@@ -1,15 +1,12 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityBaleflare;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -29,6 +26,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 
+import java.util.List;
+import java.util.UUID;
+
 public class GunBaleFlare extends Item {
 
 	public GunBaleFlare(String s) {
@@ -45,7 +45,7 @@ public class GunBaleFlare extends Item {
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if(!(entityLiving instanceof EntityPlayer))
 			return;
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_bf) {
+		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == Armory.gun_bf) {
 			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
 		}
 		EntityPlayer player = (EntityPlayer)entityLiving;
@@ -58,7 +58,7 @@ public class GunBaleFlare extends Item {
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.gun_bf_ammo)) {
+		if (flag || Library.hasInventoryItem(player.inventory, Armory.gun_bf_ammo)) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -79,10 +79,10 @@ public class GunBaleFlare extends Item {
 			stack.damageItem(1, player);
 			// p_77615_2_.playSoundAtEntity(p_77615_3_, "tile.piston.out", 1.0F,
 			// 0.5F);
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 
 			if (!flag) {
-				Library.consumeInventoryItem(player.inventory, ModItems.gun_bf_ammo);
+				Library.consumeInventoryItem(player.inventory, Armory.gun_bf_ammo);
 			}
 
 			if (!worldIn.isRemote) {

@@ -1,38 +1,27 @@
 package com.hbm.explosion;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.BitSet;
-import java.util.Map.Entry;
-import java.util.List;
-
-import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.render.amlfrom1710.Vec3;
-
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.BlockPos.MutableBlockPos;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.nbt.NBTTagLongArray;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.common.ObfuscationReflectionHelper;
+
+import java.util.*;
 
 public class ExplosionNukeRayBatched {
+	final static int calculateSpeed = 4;
 
-	public HashMap<ChunkPos, BitSet> perChunk = new HashMap<ChunkPos, BitSet>();
-	public List<ChunkPos> orderedChunks = new ArrayList<>();
-	private final CoordComparator comparator = new CoordComparator();
+	public HashMap<ChunkPos, HashSet<IntTriplet>> perChunk = new HashMap(); //for future: optimize blockmap further by using sub-chunks instead of chunks
+	public List<ChunkPos> orderedChunks = new ArrayList();
+	private CoordComparator comparator = new CoordComparator();
 	public boolean isContained = true;
-	double posX;
-	double posY;
-	double posZ;
+	int posX;
+	int posY;
+	int posZ;
 	World world;
 
 	int strength;
@@ -45,13 +34,10 @@ public class ExplosionNukeRayBatched {
 
 	private static final int maxY = 255;
 	private static final int minY = 0;
-	public boolean ignoreWater = false;
 
 	public boolean isAusf3Complete = false;
-	public int rayCheckInterval = 100;
-	public int waterLevel;
 
-	public ExplosionNukeRayBatched(World world, double x, double y, double z, int strength, int radius, boolean ignoreWater) {
+	public ExplosionNukeRayBatched(World world, int x, int y, int z, int strength, int radius) {
 		this.world = world;
 		this.posX = x;
 		this.posY = y;
@@ -66,14 +52,6 @@ public class ExplosionNukeRayBatched {
 		// The beginning of the generalized spiral points
 		this.gspX = Math.PI;
 		this.gspY = 0.0;
-		this.rayCheckInterval = 10000/radius;
-		this.ignoreWater = ignoreWater;
-		this.waterLevel = EntityFalloutRain.getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
-		if(this.waterLevel == 0){
-			this.waterLevel = world.getSeaLevel();
-		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
-			this.waterLevel = world.getSeaLevel() - this.waterLevel;
-		}
 	}
 
 	private void generateGspUp(){
@@ -93,29 +71,24 @@ public class ExplosionNukeRayBatched {
 	}
 
 	// Get Cartesian coordinates for spherical coordinates
-	// 90 X-Axis rotation for more efficient chunk scanning
 	private Vec3 getSpherical2cartesian(){
 		double dx = Math.sin(this.gspX) * Math.cos(this.gspY);
-		double dy = Math.sin(this.gspX) * Math.sin(this.gspY);
-		double dz = Math.cos(this.gspX);
+		double dz = Math.sin(this.gspX) * Math.sin(this.gspY);
+		double dy = Math.cos(this.gspX);
 		return Vec3.createVectorHelper(dx, dy, dz);
 	}
 
 	public void addPos(int x, int y, int z){
-		chunk = new ChunkPos(x >> 4, z >> 4);
-        BitSet hitPositions = perChunk.computeIfAbsent(chunk, k -> new BitSet(65536));
-
-        //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
-        hitPositions.set(((255-y) << 8) + ((x - chunk.getXStart()) << 4) + (z - chunk.getZStart()));
+		HashSet<IntTriplet> triplets = perChunk.get(new ChunkPos(x >> 4, z >> 4));
+				
+		if(triplets == null) {
+			triplets = new HashSet();
+			perChunk.put(new ChunkPos(x >> 4, z >> 4), triplets); //we re-use the same pos instead of using individualized per-chunk ones to save on RAM
+		}
+				
+		triplets.add(new IntTriplet(x, y, z));
 	}
 
-	public boolean waterCheck(Block b, int y){
-		if(b == Blocks.AIR) return false;
-		if(this.ignoreWater && y < this.waterLevel) return b != Blocks.WATER && b != Blocks.FLOWING_WATER;
-		return true;
-	}
-
-	int age = 0;
 	public void collectTip(int time) {
 		if(!CompatibilityConfig.isWarDim(world)){
 			isAusf3Complete = true;
@@ -125,21 +98,18 @@ public class ExplosionNukeRayBatched {
 		long raysProcessed = 0;
 		long start = System.currentTimeMillis();
 
+
 		IBlockState blockState;
 		Block b;
 		int iX, iY, iZ, radius;
 		float rayStrength;
 		Vec3 vec;
-		age++;
-		if(age == 1200){
-//			System.out.println("NTM C "+raysProcessed+" "+Math.round(10000D * 100D*gspNum/(double)gspNumMax)/10000D+"% "+gspNum+"/"+gspNumMax);
-			age = 0;
-		}
-		while(this.gspNumMax >= this.gspNum){
+
+		while (this.gspNumMax >= this.gspNum){
 			// Get Cartesian coordinates for spherical coordinates
 			vec = this.getSpherical2cartesian();
 
-			radius = (int) (double) this.radius;
+			radius = (int)Math.ceil(this.radius);
 			rayStrength = strength * 0.3F;
 
 			//Finding the end of the ray
@@ -162,11 +132,11 @@ public class ExplosionNukeRayBatched {
 				if(b.getExplosionResistance(null) >= 2_000_000)
 					break;
 
-				rayStrength -= (float) (Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1);
+				rayStrength -= Math.pow(getNukeResistance(blockState, b)+1, 3 * ((double) r) / ((double) radius))-1;
 
-				//save block positions in to-destroy-boolean[] until rayStrength is 0 
+				//save block positions in to-destroy-hashset until rayStrength is 0 
 				if(rayStrength > 0){
-					if(waterCheck(b, iY)) {
+					if(b != Blocks.AIR) {
 						//all-air chunks don't need to be buffered at all
 						addPos(iX, iY, iZ);
 					}
@@ -181,10 +151,12 @@ public class ExplosionNukeRayBatched {
 			// Raise one generalized spiral points
 			this.generateGspUp();
 			raysProcessed++;
-			if(raysProcessed % rayCheckInterval == 0 && System.currentTimeMillis()+1 > start + time) {
+			if(raysProcessed % 50*calculateSpeed == 0 && System.currentTimeMillis()+1 > start + time) {
+				// System.out.println("NTM C "+raysProcessed+" "+Math.round(1000D * 100D*gspNum/(double)gspNumMax)/1000D+"% "+gspNum+"/"+gspNumMax+" "+(System.currentTimeMillis()-start)+"ms");
 				return;
 			}
 		} 
+		
 		orderedChunks.addAll(perChunk.keySet());
 		orderedChunks.sort(comparator);
 		
@@ -207,13 +179,13 @@ public class ExplosionNukeRayBatched {
 		@Override
 		public int compare(ChunkPos o1, ChunkPos o2) {
 
-			int chunkX = (int)ExplosionNukeRayBatched.this.posX >> 4;
-			int chunkZ = (int)ExplosionNukeRayBatched.this.posZ >> 4;
+			int chunkX = ExplosionNukeRayBatched.this.posX >> 4;
+			int chunkZ = ExplosionNukeRayBatched.this.posZ >> 4;
 
-			int diff1 = Math.abs((chunkX - (o1.getXStart() >> 4))) + Math.abs((chunkZ - (o1.getZStart() >> 4)));
-			int diff2 = Math.abs((chunkX - (o2.getXStart() >> 4))) + Math.abs((chunkZ - (o2.getZStart() >> 4)));
+			int diff1 = Math.abs((chunkX - (int) (o1.getXStart() >> 4))) + Math.abs((chunkZ - (int) (o1.getZStart() >> 4)));
+			int diff2 = Math.abs((chunkX - (int) (o2.getXStart() >> 4))) + Math.abs((chunkZ - (int) (o2.getZStart() >> 4)));
 			
-			return Integer.compare(diff1, diff2);
+			return diff1 > diff2 ? 1 : diff1 < diff2 ? -1 : 0;
 		}
 	}
 
@@ -224,107 +196,75 @@ public class ExplosionNukeRayBatched {
 		}
 	}
 
-	BitSet hitArray;
+	HashSet<IntTriplet> positions = new HashSet();
 	ChunkPos chunk;
-	boolean needsNewHitArray = true;
-	int index = 0;
 
 	public void processChunkBlocks(long start, int time){
 		if(!CompatibilityConfig.isWarDim(world)){
 			this.perChunk.clear();
 		}
 		if(this.perChunk.isEmpty()) return;
-		if(needsNewHitArray){
+		int i = 0;
+
+		if(positions.size() == 0)
 			chunk = orderedChunks.get(0);
-			hitArray = perChunk.get(chunk);
-			index = hitArray.nextSetBit(0);
-			needsNewHitArray = false;
-		}
+			positions = perChunk.get(chunk);
 		
-		int chunkX = chunk.getXStart();
-		int chunkZ = chunk.getZStart();
-		
+		List<IntTriplet> done = new ArrayList<IntTriplet>();
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-		int blocksRemoved = 0;
-		while(index > -1) {
-			pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
+		for(IntTriplet coord : positions) {
+			pos.setPos(coord.xCoord, coord.yCoord, coord.zCoord);
 			world.setBlockToAir(pos);
-			index = hitArray.nextSetBit(index+1);
-			blocksRemoved++;
-			if(blocksRemoved % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+			done.add(coord);
+			i++;
+			if(i % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+				// System.out.println("NTM B "+Math.round(1000D * 100D*i/(double)positions.size())/1000D+"% "+i+"/"+positions.size()+" "+(System.currentTimeMillis()-start)+"ms");
 				break;
 			}
 		}
+		positions.removeAll(done);
 
-		if(index < 0){
+		if(positions.size() == 0){
 			perChunk.remove(chunk);
 			orderedChunks.remove(0);
-			needsNewHitArray = true;
 		}
 	}
 	
-	public void readEntityFromNBT(NBTTagCompound nbt) {
-		radius = nbt.getInteger("radius");
-		strength = nbt.getInteger("strength");
-		posX = nbt.getDouble("posX");
-		posY = nbt.getDouble("posY");
-		posZ = nbt.getDouble("posZ");
-		gspNumMax = (int)(2.5 * Math.PI * Math.pow(strength, 2));
-		rayCheckInterval = 10000/radius;
-		if(nbt.hasKey("igW")) ignoreWater = nbt.getBoolean("igW");
-		this.waterLevel = EntityFalloutRain.getInt(CompatibilityConfig.fillCraterWithWater.get(world.provider.getDimension()));
-		if(this.waterLevel == 0){
-			this.waterLevel = world.getSeaLevel();
-		} else if(this.waterLevel < 0 && this.waterLevel > -world.getSeaLevel()){
-			this.waterLevel = world.getSeaLevel() - this.waterLevel;
-		}
+	public class IntTriplet {
+		public final int xCoord;
+		public final int yCoord;
+		public final int zCoord;
+		private final int hashCode;
 
-		if(nbt.hasKey("gspNum")){
-			gspNum = nbt.getInteger("gspNum");
-			isAusf3Complete = nbt.getBoolean("f3");
-			isContained = nbt.getBoolean("isContained");
-
-			int i = 0;
-			while(nbt.hasKey("chunks"+i)){
-				NBTTagCompound c = (NBTTagCompound)nbt.getTag("chunks"+i);
-
-				perChunk.put(new ChunkPos(c.getInteger("cX"), c.getInteger("cZ")), BitSet.valueOf(getLongArray((NBTTagLongArray)c.getTag("cB"))));
-				i++;
-			}
-			if(isAusf3Complete){
-				orderedChunks.addAll(perChunk.keySet());
-				orderedChunks.sort(comparator);
-			}
-		}
-	}
-
-	public void writeEntityToNBT(NBTTagCompound nbt) {
-		nbt.setInteger("radius", radius);
-		nbt.setInteger("strength", strength);
-		nbt.setDouble("posX", posX);
-		nbt.setDouble("posY", posY);
-		nbt.setDouble("posZ", posZ);
-		nbt.setBoolean("igW", ignoreWater);
 		
-		if(BombConfig.enableNukeNBTSaving){
-			nbt.setInteger("gspNum", gspNum);
-			nbt.setBoolean("f3", isAusf3Complete);
-			nbt.setBoolean("isContained", isContained);
-		
-			int i = 0;
-			for(Entry<ChunkPos, BitSet> e : perChunk.entrySet()){
-				NBTTagCompound c = new NBTTagCompound();
-				c.setInteger("cX", e.getKey().x);
-				c.setInteger("cZ", e.getKey().z);
-				c.setTag("cB", new NBTTagLongArray(e.getValue().toLongArray()));
-				nbt.setTag("chunks"+i, c.copy());
-				i++;
-			}
+		public IntTriplet(int x, int y, int z) {
+			this.xCoord = x;
+			this.yCoord = y;
+			this.zCoord = z;
+			this.hashCode = Objects.hash(x, y, z);
 		}
-	}
 
-	// Who tf forgot to add a way to retrieve the long array from NBTTagLongArray??
-	public static long[] getLongArray(NBTTagLongArray nbt) {
-		return ObfuscationReflectionHelper.getPrivateValue(NBTTagLongArray.class, nbt, 0);
+		@Override
+		public boolean equals(Object obj) {
+			if (this == obj)
+				return true;
+			if (obj == null)
+				return false;
+			if (!(obj instanceof IntTriplet))
+				return false;
+			IntTriplet other = (IntTriplet) obj;
+			if (xCoord != other.xCoord)
+				return false;
+			if (yCoord != other.yCoord)
+				return false;
+			if (zCoord != other.zCoord)
+				return false;
+			return true;
+		}
+
+		@Override
+	    public int hashCode() {
+	        return this.hashCode;
+	    }
 	}
 }

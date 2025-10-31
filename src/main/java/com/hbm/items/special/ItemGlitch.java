@@ -1,8 +1,5 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.entity.missile.EntityMIRV;
@@ -10,9 +7,11 @@ import com.hbm.entity.projectile.EntityBoxcar;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Foods;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
@@ -26,6 +25,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemGlitch extends Item {
 
@@ -72,7 +73,7 @@ public class ItemGlitch extends Item {
 					player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.block_meteor_treasure.getItemDropped(ModBlocks.block_meteor_treasure.getDefaultState(), itemRand, 0)));
 				break;
 			case 8:
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_container, 10));
+				player.inventory.addItemStackToInventory(new ItemStack(Armory.ammo_container, 10));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.8"));
 				break;
 			case 9:
@@ -98,8 +99,8 @@ public class ItemGlitch extends Item {
 				}
 				break;
 			case 13:
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_revolver_pip));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.bottle_rad));
+				player.inventory.addItemStackToInventory(new ItemStack(Armory.gun_revolver_pip));
+				player.inventory.addItemStackToInventory(new ItemStack(Foods.bottle_rad));
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.geiger_counter));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.13a"));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.13b"));
@@ -119,8 +120,8 @@ public class ItemGlitch extends Item {
 				player.sendMessage(new TextComponentTranslation("chat.glitch.17"));
 				break;
 			case 18:
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_lever_action));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_20gauge, 12));
+				player.inventory.addItemStackToInventory(new ItemStack(Armory.gun_lever_action));
+				player.inventory.addItemStackToInventory(new ItemStack(Armory.ammo_20gauge, 12));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.18"));
 				break;
 			case 19:

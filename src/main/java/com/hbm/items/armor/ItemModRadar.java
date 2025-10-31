@@ -1,18 +1,17 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
-import com.hbm.handler.ArmorModHandler;
-import com.hbm.lib.HBMSoundHandler;
-import com.hbm.capability.HbmLivingProps;
-
 import api.hbm.entity.IRadarDetectable;
+import com.hbm.capability.HbmLivingProps;
+import com.hbm.handler.ArmorModHandler;
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModRadar extends ItemArmorMod {
 	
@@ -37,7 +36,7 @@ public class ItemModRadar extends ItemArmorMod {
 	@Override
 	public void modUpdate(EntityLivingBase entity, ItemStack armor){
 		if(entity.ticksExisted % 10 == 0 && isApproachingMissileDetected(entity, this.range)){
-			entity.playSound(HBMSoundHandler.nullRadar, 1.0F, 1.0F);
+			entity.playSound(HBMSoundEvents.nullRadar, 1.0F, 1.0F);
 		}
 	}
 

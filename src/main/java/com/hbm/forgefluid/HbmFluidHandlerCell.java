@@ -1,9 +1,6 @@
 package com.hbm.forgefluid;
 
-import javax.annotation.Nonnull;
-
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCell;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -14,6 +11,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.FluidTankProperties;
 import net.minecraftforge.fluids.capability.IFluidHandlerItem;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
+
+import javax.annotation.Nonnull;
 
 public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerItem {
 
@@ -35,7 +34,7 @@ public class HbmFluidHandlerCell implements ICapabilityProvider, IFluidHandlerIt
 
 	private FluidStack getFluid(){
 		if(!container.hasTagCompound()){
-			return null;
+			container.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagCompound tag = container.getTagCompound();
 		if(!tag.hasKey(FLUID_NBT_KEY)){

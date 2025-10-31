@@ -1,14 +1,12 @@
 package com.hbm.main;
 
-import org.apache.logging.log4j.Level;
-
 import com.hbm.lib.RefStrings;
-
 import net.minecraft.advancements.Advancement;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
+import org.apache.logging.log4j.Level;
 
 public class AdvancementManager {
 
@@ -22,6 +20,7 @@ public class AdvancementManager {
 	public static Advancement achRadDeath;
 
 	public static Advancement achSacrifice;
+	public static Advancement achPotato;
 	public static Advancement achSpace;
 	public static Advancement achFOEQ;
 	public static Advancement achFiend;
@@ -43,11 +42,11 @@ public class AdvancementManager {
 	public static Advancement achSomeWounds;
 	public static Advancement progress_dfc;
 	public static Advancement progress_rbmk_boom;
-    public static Advancement progress_watz_boom;
-    public static Advancement progress_nuke;
-
-
-    public static Advancement bossCreeper;
+	public static Advancement progress_watz_boom;
+	public static Advancement progress_nuke;
+	
+	
+	public static Advancement bossCreeper;
 	public static Advancement bossMeltdown;
 	public static Advancement bossMaskman;
 	public static Advancement bossWorm;
@@ -85,10 +84,10 @@ public class AdvancementManager {
 		achSomeWounds = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "achsomewounds"));
 		progress_dfc = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_dfc"));
 		progress_rbmk_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_rbmk_boom"));
-        progress_watz_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_watz_boom"));
-        progress_nuke = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_nuke"));
+		progress_watz_boom = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_watz_boom"));
+		progress_nuke = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "progress_nuke"));
 
-        bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "x_bosscreeper"));
+		bossCreeper = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bosscreeper"));
 		bossMeltdown = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmeltdown"));
 		bossMaskman = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossmaskman"));
 		bossWorm = adv.getAdvancement(new ResourceLocation(RefStrings.MODID, "bossworm"));

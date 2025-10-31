@@ -1,10 +1,10 @@
 package com.hbm.config;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import net.minecraft.world.World;
 import net.minecraftforge.common.config.Configuration;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class CompatibilityConfig {
 
@@ -33,7 +33,7 @@ public class CompatibilityConfig {
 	public static HashMap explosivebubbleSpawn;
 	public static HashMap cobaltSpawn;
 	public static HashMap coltanSpawn;
-
+	
 	public static HashMap ironClusterSpawn;
 	public static HashMap titaniumClusterSpawn;
 	public static HashMap aluminiumClusterSpawn;
@@ -86,7 +86,6 @@ public class CompatibilityConfig {
 	public static HashMap arcticStructure;
 	public static HashMap jungleStructure;
 	public static HashMap pyramidStructure;
-    public static HashMap vaulttecStructure;
 	
 	public static HashMap meteorStrikeChance;
 	public static HashMap meteorShowerChance;
@@ -102,6 +101,8 @@ public class CompatibilityConfig {
 
 	public static boolean modLoot = true;
 
+	public static boolean doEvaporateWater = true;
+	public static HashSet evaporateWater;
 	public static boolean doFillCraterWithWater = true;
 	public static HashMap fillCraterWithWater;
 
@@ -218,9 +219,9 @@ public class CompatibilityConfig {
 		titaniumClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.23_titaniumClusterSpawn", "Amount of titanium cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:2", "-6:2" }, ":");
 		aluminiumClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.24_aluminiumClusterSpawn", "Amount of aluminium cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:3", "-6:3" }, ":");
 		copperClusterSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.24_copperClusterSpawn", "Amount of copper cluster veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:3", "-6:3" }, ":");
-		
+
 		malachiteSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.24_malachiteSpawn", "Amount of malachite veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "0:1" }, ":");
-		
+
 		reiiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.25_reiiumSpawnRate", "Amount of reiium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-29:1" }, ":");
 		weidaniumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.26_weidaniumSpawnRate", "Amount of weidanium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-31:1" }, ":");
 		australiumSpawn = CommonConfig.createConfigHashMap(config, CATEGORY_DIMORE, "01.27_australiumSpawnRate", "Amount of australium ore veins per chunk - <dimID:amount> (Int:Int)", "Int", "Int", new String[]{ "-31:1" }, ":");
@@ -269,14 +270,16 @@ public class CompatibilityConfig {
 		capsuleStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.24_capsuleSpawn", "Spawn landing capsule on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:100" }, ":");
 		arcticStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.25_arcticVaultSpawn", "Spawn artic code vault on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");
 		jungleStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.26_jungleDungeonSpawn", "Spawn jungle dungeon on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:2000" }, ":");
-        vaulttecStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.26.1_vaultDungeonSpawn", "Spawn vaulttec dungeon on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:20000", "-1:1000000" }, ":");
-        pyramidStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.27_pyramidSpawn", "Spawn pyramid on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:4000" }, ":");
+		pyramidStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.27_pyramidSpawn", "Spawn pyramid on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:4000" }, ":");
 		
 		meteorStrikeChance = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.01_meteorStrikeChance", "The probability of a meteor spawning per tick (an average of once every nTH ticks) - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ 
-			"0:"+20 * 10 * 60 * 5, //Earth
-			"-28:"+20 * 10 * 5, //Moon
-			"-29:"+20 * 10 * 13, //Mars
-			"-31:"+20 * 10 * 60 * 15,  //Venus
+			"0:"+360000, //Earth
+			"-28:"+1200, //Moon
+			"-26:"+12000, //Idfk lol it was on my configs
+			"-27:"+12000, //Idfk lol it was on my configs
+			"-29:"+15600, //Mars
+			"-31:"+42000,  //Venus
+			"-30:"+1200000, //Idfk lol it was on my configs
 			"-13:"+20 * 10 * 30, //Mercury
 			"-20:"+20 * 10 * 60 * 10, //Ceres
 			"-1500:"+20 * 10 * 3, //IO
@@ -429,8 +432,7 @@ public class CompatibilityConfig {
 			"thaumcraft:mindspider",
 			"thaumcraft:spellbat",
 			"thaumcraft:turretadvanced",
-			"thaumcraft:turretbasic",
-			"tombstone:ghostly_shape"
+			"thaumcraft:turretbasic"
 		});
 	
 		mobGear = CommonConfig.createConfigBool(config, CATEGORY_MOB, "06.05_mobGear", "If true then mobs will be given gear (armor/weapons/gasmasks) from this mod when spawned", true);
@@ -448,8 +450,7 @@ public class CompatibilityConfig {
 			"oreTh232",
 			"oreThorium232",
 			"oreVolcanic",
-			"oreSteel",
-            "oreNetherQuartz"
+			"oreSteel"
 		});
 	}
 

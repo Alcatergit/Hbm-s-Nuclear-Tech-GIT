@@ -1,20 +1,17 @@
 package com.hbm.tileentity.turret;
 
-import java.util.List;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.inventory.FluidFlameRecipes;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.inventory.FluidCombustionRecipes;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -26,7 +23,8 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFluidHandler, ITankPacketAcceptor {
 
@@ -48,8 +46,13 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 	protected List<Integer> getAmmoList() {
 		return null;
 	}
-
-    @Override
+	
+	@Override
+	public double getDecetorRange() {
+		return 32D;
+	}
+	
+	@Override
 	public double getDecetorGrace() {
 		return 2D;
 	}
@@ -77,10 +80,10 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 	@Override
 	public void updateFiringTick() {
 		
-		if(this.tank.getFluid() != null && FluidFlameRecipes.hasFuelRecipe(tank.getFluid().getFluid()) && this.tank.getFluidAmount() >= drain) {
+		if(this.tank.getFluid() != null && FluidCombustionRecipes.hasFuelRecipe(tank.getFluid().getFluid()) && this.tank.getFluidAmount() >= drain) {
 			
 			BulletConfiguration conf = BulletConfigSyncingUtil.pullConfig(BulletConfigSyncingUtil.FLA_NORMAL);
-			this.spawnBullet(conf, FluidFlameRecipes.getHeatEnergy(tank.getFluid().getFluid()) * 0.002F);
+			this.spawnBullet(conf, FluidCombustionRecipes.getFlameEnergy(tank.getFluid().getFluid()) * 0.002F);
 			this.tank.drain(drain, true);
 			
 			Vec3 pos = new Vec3(this.getTurretPos());
@@ -88,7 +91,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			vec.rotateAroundZ((float) -this.rotationPitch);
 			vec.rotateAroundY((float) -(this.rotationYaw + Math.PI * 0.5));
 			
-			world.playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 2F, 1F + world.rand.nextFloat() * 0.5F);
+			world.playSound(null, this.pos.getX(), this.pos.getY(), this.pos.getZ(), HBMSoundEvents.flamethrowerShoot, SoundCategory.BLOCKS, 2F, 1F + world.rand.nextFloat() * 0.5F);
 			
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "vanillaburst");
@@ -110,7 +113,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			FFUtils.fillFromFluidContainer(inventory, tank, 5, 9);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tank), new TargetPoint(world.provider.getDimension(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), 10));
 			for(int i = 1; i < 10; i++) {
-				if(inventory.getStackInSlot(i).getItem() == ModItems.ammo_fuel) {
+				if(inventory.getStackInSlot(i).getItem() == Armory.ammo_fuel) {
 					if((this.tank.getFluid() == null || tank.getFluid().getFluid() == ModForgeFluids.DIESEL) && this.tank.getFluidAmount() + 1000 <= this.tank.getCapacity()) {
 						this.tank.fill(new FluidStack(ModForgeFluids.DIESEL, 1000), true);
 						inventory.getStackInSlot(i).shrink(1);
@@ -123,7 +126,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt){
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt){
 		nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		return super.writeToNBT(nbt);
 	}
@@ -146,7 +149,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource == null || !FluidFlameRecipes.hasFuelRecipe(resource.getFluid()))
+		if(resource == null || !FluidCombustionRecipes.hasFuelRecipe(resource.getFluid()))
 			return 0;
 		return tank.fill(resource, doFill);
 	}

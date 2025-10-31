@@ -4,25 +4,23 @@ import com.hbm.inventory.control_panel.controls.DialLarge;
 import com.hbm.inventory.control_panel.controls.DisplaySevenSeg;
 import com.hbm.inventory.control_panel.controls.DisplayText;
 import com.hbm.inventory.control_panel.controls.Label;
-import com.hbm.main.ResourceManager;
-import net.minecraft.item.EnumDyeColor;
-import org.lwjgl.input.Keyboard;
-import org.lwjgl.input.Mouse;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ClientProxy;
+import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
+import org.lwjgl.input.Keyboard;
+import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
 
 public class SubElementPlacement extends SubElement {
 
@@ -339,8 +337,10 @@ public class SubElementPlacement extends SubElement {
 				return false;
 			}
 		}
-        return RenderHelper.boxContainsOther(gui.control.getBox(), gui.currentEditControl.getBox());
-    }
+		if(!RenderHelper.boxContainsOther(gui.control.getBox(), gui.currentEditControl.getBox()))
+			return false;
+		return true;
+	}
 	
 	@Override
 	protected void mouseClicked(int mouseX, int mouseY, int button){

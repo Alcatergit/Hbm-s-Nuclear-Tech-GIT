@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.bossMaskman.desc"
 		}
 	},
-	"parent": "hbm:bossmeltdown",
+	"parent": "hbm:bosscreeper",
 	"criteria": {
 		"impossible": {
 			"trigger": "minecraft:impossible"

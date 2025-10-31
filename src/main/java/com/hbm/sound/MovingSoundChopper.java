@@ -1,7 +1,6 @@
 package com.hbm.sound;
 
 import com.hbm.entity.mob.EntityHunterChopper;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;

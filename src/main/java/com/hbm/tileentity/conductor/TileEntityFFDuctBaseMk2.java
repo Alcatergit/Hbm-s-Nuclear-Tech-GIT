@@ -1,14 +1,10 @@
 package com.hbm.tileentity.conductor;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PipeUpdatePacket;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.nbt.NBTTagCompound;
@@ -29,6 +25,9 @@ import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2, IFluidHandler {
 
@@ -187,8 +186,9 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		TileEntity center = world.getTileEntity(pos);
 		for(EnumFacing e : EnumFacing.VALUES) {
 			TileEntity te = world.getTileEntity(pos.offset(e));
-			if(te instanceof IFluidPipeMk2 pipe) {
-                if(pipe.getNetwork() != null)
+			if(te instanceof IFluidPipeMk2) {
+				IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
+				if(pipe.getNetwork() != null)
 					pipe.getNetwork().destroy();
 			}
 		}
@@ -206,8 +206,9 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		for(EnumFacing e : EnumFacing.VALUES) {
 			BlockPos offset = pos.offset(e);
 			TileEntity te = world.getTileEntity(offset);
-			if(te instanceof IFluidPipeMk2 pipe) {
-                if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
+			if(te instanceof IFluidPipeMk2) {
+				IFluidPipeMk2 pipe = (IFluidPipeMk2) te;
+				if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
 					otherNetworks.add(pipe.getNetwork());
 				}
 			}
@@ -215,9 +216,10 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		if(otherNetworks.isEmpty()) {
 			network = new FFPipeNetworkMk2(this);
 			network.tryAdd(this);
+			return;
 		} else {
 			FFPipeNetworkMk2 net = otherNetworks.remove(0);
-			while(!otherNetworks.isEmpty())
+			while(otherNetworks.size() > 0)
 				net = FFPipeNetworkMk2.mergeNetworks(net, otherNetworks.remove(0));
 			network = net;
 			net.tryAdd(this);
@@ -251,9 +253,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 				}
 			}
 		}
-        //System.out.println(this + " " + this.getPos() + " " + changed);
-        //new Exception().printStackTrace();
-        return changed;
+		if(world.isRemote){
+			//System.out.println(this + " " + this.getPos() + " " + changed);
+			//new Exception().printStackTrace();
+		}
+		return changed;
 	}
 
 	public void updateConnections() {

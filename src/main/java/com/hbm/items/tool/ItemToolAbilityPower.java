@@ -1,16 +1,15 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
-import com.hbm.lib.Library;
-
 import api.hbm.energy.IBatteryItem;
+import com.hbm.lib.Library;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemToolAbilityPower extends ItemToolAbility implements IBatteryItem {
 
@@ -113,7 +112,7 @@ public class ItemToolAbilityPower extends ItemToolAbility implements IBatteryIte
     }
     
     @Override
-    public long getMaxCharge(ItemStack stack) {
+    public long getMaxCharge() {
     	return maxPower;
     }
     

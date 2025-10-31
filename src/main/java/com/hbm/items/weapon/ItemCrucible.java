@@ -1,13 +1,10 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IPostRender;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -16,7 +13,6 @@ import com.hbm.particle.ParticleCrucibleLightning;
 import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
-
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
@@ -39,6 +35,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
+import java.util.UUID;
 
 public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 
@@ -89,7 +88,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 			PacketDispatcher.wrapper.sendTo(new AuxParticlePacketNT(nbt, 0, 0, 0), (EntityPlayerMP)entityLiving);
 		}
 		if(getCharges(stack) > 0)
-			entityLiving.world.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.crucibleSwing, SoundCategory.PLAYERS, 1, 1);
+			entityLiving.world.playSound(null, entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundEvents.crucibleSwing, SoundCategory.PLAYERS, 1, 1);
 
 		return true;
 	}

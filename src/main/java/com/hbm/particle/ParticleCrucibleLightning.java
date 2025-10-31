@@ -6,7 +6,6 @@ import com.hbm.handler.LightningGenerator.LightningGenInfo;
 import com.hbm.handler.LightningGenerator.LightningNode;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.item.weapon.ItemRenderCrucible;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.math.Vec3d;

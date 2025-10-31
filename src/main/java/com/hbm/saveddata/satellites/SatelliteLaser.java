@@ -1,7 +1,6 @@
 package com.hbm.saveddata.satellites;
 
 import com.hbm.entity.logic.EntityDeathBlast;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 

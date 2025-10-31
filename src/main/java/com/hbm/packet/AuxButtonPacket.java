@@ -1,28 +1,17 @@
 package com.hbm.packet;
 
-import com.hbm.entity.mob.EntityDuck;
-import com.hbm.items.weapon.ItemMissile.PartSize;
-import com.hbm.items.weapon.ItemCrucible;
+import api.hbm.energy.IEnergyConnector.ConnectionPriority;
 import com.hbm.config.GeneralConfig;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.entity.mob.EntityDuck;
+import com.hbm.items.weapon.ItemCrucible;
+import com.hbm.items.weapon.ItemMissile.PartSize;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.bomb.TileEntityLaunchTable;
 import com.hbm.tileentity.bomb.TileEntityRailgun;
-import com.hbm.tileentity.machine.TileEntityBarrel;
-import com.hbm.tileentity.machine.TileEntityCoreEmitter;
-import com.hbm.tileentity.machine.TileEntityCoreStabilizer;
-import com.hbm.tileentity.machine.TileEntityForceField;
-import com.hbm.tileentity.machine.TileEntityMachineBattery;
-import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
-import com.hbm.tileentity.machine.TileEntityMachineMissileAssembly;
-import com.hbm.tileentity.machine.TileEntityMachineReactorLarge;
-import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
-import com.hbm.tileentity.machine.TileEntityMachineRadar;
-import com.hbm.tileentity.machine.TileEntityReactorControl;
-import com.hbm.tileentity.machine.TileEntitySoyuzLauncher;
-
-import io.netty.buffer.ByteBuf;
-import api.hbm.energy.IEnergyConnector.ConnectionPriority;
+import com.hbm.tileentity.machine.*;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -33,7 +22,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
-public class AuxButtonPacket implements IMessage {
+public class AuxButtonPacket extends RecordablePacket {
 
 	int x;
 	int y;
@@ -60,7 +49,7 @@ public class AuxButtonPacket implements IMessage {
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -69,7 +58,7 @@ public class AuxButtonPacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);
@@ -86,6 +75,7 @@ public class AuxButtonPacket implements IMessage {
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
 				
 				//why make new packets when you can just abuse and uglify the existing ones?
+				// no  ~leafia
 				if(m.value == 999) {
 					if(GeneralConfig.duckButton){
 						NBTTagCompound perDat = p.getEntityData().getCompoundTag(EntityPlayer.PERSISTED_NBT_TAG);
@@ -99,7 +89,7 @@ public class AuxButtonPacket implements IMessage {
 							ducc.motionZ = vec.z;
 
 							p.world.spawnEntity(ducc);
-							p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundHandler.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
+							p.world.playSound(null, p.posX, p.posY, p.posZ, HBMSoundEvents.ducc, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 							perDat.setBoolean("hasDucked", true);
 
@@ -220,11 +210,11 @@ public class AuxButtonPacket implements IMessage {
 						
 						if(m.id == 0) {
 							if(gun.setAngles(false)) {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.railgunOrientation, SoundCategory.BLOCKS, 1.0F, 1.0F);
 								PacketDispatcher.wrapper.sendToAll(new RailgunCallbackPacket(m.x, m.y, m.z, gun.pitch, gun.yaw));
 							} else {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 							}
 						}
 						
@@ -232,10 +222,10 @@ public class AuxButtonPacket implements IMessage {
 							if(gun.canFire()) {
 								gun.fireDelay = TileEntityRailgun.cooldownDurationTicks;
 								PacketDispatcher.wrapper.sendToAll(new RailgunFirePacket(m.x, m.y, m.z));
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.railgunCharge, SoundCategory.BLOCKS, 10.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.buttonYes, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.railgunCharge, SoundCategory.BLOCKS, 10.0F, 1.0F);
 							} else {
-								p.world.playSound(null, m.x, m.y, m.z, HBMSoundHandler.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
+								p.world.playSound(null, m.x, m.y, m.z, HBMSoundEvents.buttonNo, SoundCategory.BLOCKS, 1.0F, 1.0F);
 							}
 						}
 					}

@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.IStructTE;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModBlocks.WatzNew;
 import com.hbm.blocks.machine.Watz;
 import com.hbm.lib.ForgeDirection;
 import net.minecraft.block.Block;
@@ -26,46 +27,46 @@ public class TileEntityWatzStruct extends TileEntity implements ITickable, IStru
 		 * and it remains readable and not terribly long, so who the fuck cares.
 		 * Th3_Sl1ze: I don't give a fuck about my miserable life, so why should I care about this mess..
 		 */
-		if(!cbr(ModBlocks.watz_cooler, 0, 1, 0)) return;
-		if(!cbr(ModBlocks.watz_cooler, 0, 2, 0)) return;
+		if(!cbr(WatzNew.watz_cooler, 0, 1, 0)) return;
+		if(!cbr(WatzNew.watz_cooler, 0, 2, 0)) return;
 		
 		for(int i = 0; i < 3; i++) {
-			if(!cbr(ModBlocks.watz_element, 1, i, 0)) return;
-			if(!cbr(ModBlocks.watz_element, 2, i, 0)) return;
-			if(!cbr(ModBlocks.watz_element, 0, i, 1)) return;
-			if(!cbr(ModBlocks.watz_element, 0, i, 2)) return;
-			if(!cbr(ModBlocks.watz_element, -1, i, 0)) return;
-			if(!cbr(ModBlocks.watz_element, -2, i, 0)) return;
-			if(!cbr(ModBlocks.watz_element, 0, i, -1)) return;
-			if(!cbr(ModBlocks.watz_element, 0, i, -2)) return;
-			if(!cbr(ModBlocks.watz_element, 1, i, 1)) return;
-			if(!cbr(ModBlocks.watz_element, 1, i, -1)) return;
-			if(!cbr(ModBlocks.watz_element, -1, i, 1)) return;
-			if(!cbr(ModBlocks.watz_element, -1, i, -1)) return;
-			if(!cbr(ModBlocks.watz_cooler, 2, i, 1)) return;
-			if(!cbr(ModBlocks.watz_cooler, 2, i, -1)) return;
-			if(!cbr(ModBlocks.watz_cooler, 1, i, 2)) return;
-			if(!cbr(ModBlocks.watz_cooler, -1, i, 2)) return;
-			if(!cbr(ModBlocks.watz_cooler, -2, i, 1)) return;
-			if(!cbr(ModBlocks.watz_cooler, -2, i, -1)) return;
-			if(!cbr(ModBlocks.watz_cooler, 1, i, -2)) return;
-			if(!cbr(ModBlocks.watz_cooler, -1, i, -2)) return;
+			if(!cbr(WatzNew.watz_element, 1, i, 0)) return;
+			if(!cbr(WatzNew.watz_element, 2, i, 0)) return;
+			if(!cbr(WatzNew.watz_element, 0, i, 1)) return;
+			if(!cbr(WatzNew.watz_element, 0, i, 2)) return;
+			if(!cbr(WatzNew.watz_element, -1, i, 0)) return;
+			if(!cbr(WatzNew.watz_element, -2, i, 0)) return;
+			if(!cbr(WatzNew.watz_element, 0, i, -1)) return;
+			if(!cbr(WatzNew.watz_element, 0, i, -2)) return;
+			if(!cbr(WatzNew.watz_element, 1, i, 1)) return;
+			if(!cbr(WatzNew.watz_element, 1, i, -1)) return;
+			if(!cbr(WatzNew.watz_element, -1, i, 1)) return;
+			if(!cbr(WatzNew.watz_element, -1, i, -1)) return;
+			if(!cbr(WatzNew.watz_cooler, 2, i, 1)) return;
+			if(!cbr(WatzNew.watz_cooler, 2, i, -1)) return;
+			if(!cbr(WatzNew.watz_cooler, 1, i, 2)) return;
+			if(!cbr(WatzNew.watz_cooler, -1, i, 2)) return;
+			if(!cbr(WatzNew.watz_cooler, -2, i, 1)) return;
+			if(!cbr(WatzNew.watz_cooler, -2, i, -1)) return;
+			if(!cbr(WatzNew.watz_cooler, 1, i, -2)) return;
+			if(!cbr(WatzNew.watz_cooler, -1, i, -2)) return;
 			
 			for(int j = -1; j < 2; j++) {
-				if(!cbr(ModBlocks.watz_casing, 1, 3, i, j)) return;
-				if(!cbr(ModBlocks.watz_casing, 1, j, i, 3)) return;
-				if(!cbr(ModBlocks.watz_casing, 1, -3, i, j)) return;
-				if(!cbr(ModBlocks.watz_casing, 1, j, i, -3)) return;
+				if(!cbr(WatzNew.watz_casing, 1, 3, i, j)) return;
+				if(!cbr(WatzNew.watz_casing, 1, j, i, 3)) return;
+				if(!cbr(WatzNew.watz_casing, 1, -3, i, j)) return;
+				if(!cbr(WatzNew.watz_casing, 1, j, i, -3)) return;
 			}
-			if(!cbr(ModBlocks.watz_casing, 1, 2, i, 2)) return;
-			if(!cbr(ModBlocks.watz_casing, 1, 2, i, -2)) return;
-			if(!cbr(ModBlocks.watz_casing, 1, -2, i, 2)) return;
-			if(!cbr(ModBlocks.watz_casing, 1, -2, i, -2)) return;
+			if(!cbr(WatzNew.watz_casing, 1, 2, i, 2)) return;
+			if(!cbr(WatzNew.watz_casing, 1, 2, i, -2)) return;
+			if(!cbr(WatzNew.watz_casing, 1, -2, i, 2)) return;
+			if(!cbr(WatzNew.watz_casing, 1, -2, i, -2)) return;
 		}
 		
-		Watz watz = (Watz)ModBlocks.watz;
+		Watz watz = (Watz)WatzNew.watz;
 		BlockDummyable.safeRem = true;
-		world.setBlockState(pos, ModBlocks.watz.getStateFromMeta(12), 3);
+		world.setBlockState(pos, WatzNew.watz.getStateFromMeta(12), 3);
 		watz.fillSpace(world, pos.getX(), pos.getY(), pos.getZ(), ForgeDirection.NORTH, 0);
 		BlockDummyable.safeRem = false;
 	}

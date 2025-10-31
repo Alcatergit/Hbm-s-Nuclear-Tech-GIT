@@ -1,6 +1,5 @@
 {
 	"variants": {
-		"activated=true": { "model": "hbm:reactor_element_nonuke" },
-     	   	"activated=false": { "model": "hbm:reactor_element_nuke" }
+		"normal": { "model": "hbm:reactor_element_nuke" }
 	}
 }

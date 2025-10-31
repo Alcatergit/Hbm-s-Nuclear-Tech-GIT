@@ -1,7 +1,5 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.DecoPoleSatelliteReceiver;
 import com.hbm.blocks.generic.DecoSteelPoles;
@@ -11,16 +9,7 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockLadder;
-import net.minecraft.block.BlockLever;
-import net.minecraft.block.BlockRedstoneRepeater;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockVine;
-import net.minecraft.block.BlockWallSign;
+import net.minecraft.block.*;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemDoor;
 import net.minecraft.tileentity.TileEntityChest;
@@ -28,6 +17,8 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class DesertAtom003
 {
@@ -49,8 +40,8 @@ public class DesertAtom003
 	Block Block17 = ModBlocks.ore_schrabidium;
 	Block Block18 = ModBlocks.waste_planks;
 	Block Block19 = ModBlocks.machine_centrifuge;
-    Block Block20 = ModBlocks.barrel_iron;
-    Block Block21 = ModBlocks.barrel_corroded;
+	Block Block20 = ModBlocks.machine_uf6_tank;
+	Block Block21 = ModBlocks.machine_puf6_tank;
 	Block Block22 = ModBlocks.reinforced_brick;
 	Block Block23 = ModBlocks.waste_earth;
 	Block Block24 = ModBlocks.deco_lead;
@@ -379,10 +370,10 @@ public class DesertAtom003
 		world.setBlockState(pos.setPos(x + 25, y + 4, z + 7), Block8.getDefaultState().withProperty(DecoSteelPoles.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 26, y + 4, z + 7), Block19.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 27, y + 4, z + 7), Block19.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
-		world.setBlockState(pos.setPos(x + 28, y + 4, z + 7), Block20.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 29, y + 4, z + 7), Block20.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 30, y + 4, z + 7), Block21.getDefaultState(), 3);
-		world.setBlockState(pos.setPos(x + 31, y + 4, z + 7), Block21.getDefaultState(), 3);
+		world.setBlockState(pos.setPos(x + 28, y + 4, z + 7), Block20.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 29, y + 4, z + 7), Block20.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 30, y + 4, z + 7), Block21.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
+		world.setBlockState(pos.setPos(x + 31, y + 4, z + 7), Block21.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
 		world.setBlockState(pos.setPos(x + 32, y + 4, z + 7), Block2.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 33, y + 4, z + 7), Block22.getDefaultState(), 3);
 		world.setBlockState(pos.setPos(x + 34, y + 4, z + 7), Block23.getDefaultState(), 3);

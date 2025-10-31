@@ -2,7 +2,6 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.TileEntityNukeFurnace;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -60,7 +59,7 @@ public class ContainerNukeFurnace extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 2) {
-				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}

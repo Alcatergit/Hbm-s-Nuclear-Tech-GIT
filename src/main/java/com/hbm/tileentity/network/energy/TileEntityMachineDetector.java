@@ -1,9 +1,8 @@
 package com.hbm.tileentity.network.energy;
 
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.network.energy.PowerDetector;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.util.ITickable;
 
 public class TileEntityMachineDetector extends TileEntityLoadedBase implements ITickable, IEnergyUser {
@@ -30,7 +29,7 @@ public class TileEntityMachineDetector extends TileEntityLoadedBase implements I
 			}
 
 			if(meta != state) {
-				PowerDetector.updateBlockState(state == 1, world, pos);
+				PowerDetector.updateBlockState(state==1 ? true: false, world, pos);
 				this.markDirty();
 			}
 		}

@@ -1,8 +1,8 @@
 package com.hbm.packet;
 
 import com.hbm.items.weapon.ItemGunBase;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 
-public class GunButtonPacket implements IMessage {
+public class GunButtonPacket extends RecordablePacket {
 
 	//true or false, whether or not the key is pressed
 		boolean state;
@@ -31,14 +31,14 @@ public class GunButtonPacket implements IMessage {
 		}
 
 		@Override
-		public void fromBytes(ByteBuf buf) {
+		public void fromBits(LeafiaBuf buf) {
 			state = buf.readBoolean();
 			button = buf.readByte();
 			hand = buf.readBoolean() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 		}
 
 		@Override
-		public void toBytes(ByteBuf buf) {
+		public void toBits(LeafiaBuf buf) {
 			buf.writeBoolean(state);
 			buf.writeByte(button);
 			buf.writeBoolean(hand == EnumHand.MAIN_HAND);

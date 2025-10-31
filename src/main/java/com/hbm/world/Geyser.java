@@ -1,21 +1,27 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import java.util.Random;
+
 public class Geyser extends WorldGenerator {
 
-    @Override
-    public boolean generate(World world, Random rand, BlockPos pos) {
-        return generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ());
-    }
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos) {
+		int i = rand.nextInt(1);
+
+		if (i == 0) {
+			generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ());
+		}
+
+		return true;
+
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z) {
 

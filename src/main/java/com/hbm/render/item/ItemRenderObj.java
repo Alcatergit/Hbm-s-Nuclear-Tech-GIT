@@ -1,20 +1,18 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.main.ResourceManager;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderObj extends TEISRBase {
 
 	
 	@Override
 	public void renderByItem(ItemStack item) {
-		if(item.getItem() == ModItems.gun_brimstone)
+		if(item.getItem() == Armory.gun_brimstone)
 			Minecraft.getMinecraft().renderEngine.bindTexture(ResourceManager.brimstone_tex);
 		switch(type) {
 		case FIRST_PERSON_LEFT_HAND:
@@ -37,7 +35,7 @@ public class ItemRenderObj extends TEISRBase {
 		default:
 			break;
 		}
-		if(item.getItem() == ModItems.gun_brimstone){
+		if(item.getItem() == Armory.gun_brimstone){
 			GlStateManager.disableCull();
 			ResourceManager.brimstone.renderAll();
 			GlStateManager.enableCull();

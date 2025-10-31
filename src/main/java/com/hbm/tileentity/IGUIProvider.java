@@ -10,7 +10,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public interface IGUIProvider {
 
-	Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z);
+	public Container provideContainer(int ID, EntityPlayer player, World world, int x, int y, int z);
 	@SideOnly(Side.CLIENT)
-    GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z);
+	public GuiScreen provideGUI(int ID, EntityPlayer player, World world, int x, int y, int z);
 }

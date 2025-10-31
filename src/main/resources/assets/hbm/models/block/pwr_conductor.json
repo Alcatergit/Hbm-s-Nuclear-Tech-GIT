@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"side": "hbm:blocks/pwr/pwr_conductor_side",
+		"end": "hbm:blocks/pwr/pwr_channel_top"
+	}
+}

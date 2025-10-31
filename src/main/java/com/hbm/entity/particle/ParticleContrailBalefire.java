@@ -1,7 +1,5 @@
 package com.hbm.entity.particle;
 
-import com.hbm.entity.particle.ParticleContrail;
-
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.world.World;
 

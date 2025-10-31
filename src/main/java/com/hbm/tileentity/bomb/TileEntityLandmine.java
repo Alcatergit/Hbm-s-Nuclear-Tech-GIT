@@ -1,11 +1,8 @@
 package com.hbm.tileentity.bomb;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.Landmine;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -16,6 +13,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TileEntityLandmine extends TileEntity implements ITickable {
 
@@ -29,7 +28,7 @@ public class TileEntityLandmine extends TileEntity implements ITickable {
 			double height = 1;
 
 			if (block == ModBlocks.mine_ap) {
-				range = 1.5D;
+				range = 0.5D;
 			}
 			if (block == ModBlocks.mine_he) {
 				range = 2;
@@ -62,7 +61,7 @@ public class TileEntityLandmine extends TileEntity implements ITickable {
 			
 			if(!isPrimed && !flag) {
 	
-				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.techBoop, SoundCategory.BLOCKS, 2.0F, 1.0F);
+				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.fstbmbStart, SoundCategory.BLOCKS, 2.0F, 1.0F);
 				isPrimed = true;
 			}
 		}

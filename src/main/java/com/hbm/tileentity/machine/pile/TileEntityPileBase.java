@@ -1,16 +1,15 @@
 package com.hbm.tileentity.machine.pile;
 
-import java.util.Random;
-
+import api.hbm.block.IPileNeutronReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.pile.BlockGraphiteRod;
 import com.hbm.render.amlfrom1710.Vec3;
-
-import api.hbm.block.IPileNeutronReceiver;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public abstract class TileEntityPileBase extends TileEntity implements ITickable {
 
@@ -46,18 +45,19 @@ public abstract class TileEntityPileBase extends TileEntity implements ITickable
 			if(b.getBlock() == ModBlocks.block_boron)
 				return;
 			
-			if(b.getBlock() == ModBlocks.block_graphite_rod && !b.getValue(BlockGraphiteRod.OUT))
+			if(b == ModBlocks.block_graphite_rod && !b.getValue(BlockGraphiteRod.OUT))
 				return;
 			
 			TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 			
-			if(te instanceof IPileNeutronReceiver rec) {
+			if(te instanceof IPileNeutronReceiver) {
 				
 				//this part throttles neutron efficiency for reactions that are way too close, efficiency reaches 100% after 2.5 meters
-				float mult = Math.min((float)i / 2.5F, 1F);
+				float mult = Math.min((float)range / 2.5F, 1F);
 				int n = (int)(flux * mult);
-
-                rec.receiveNeutrons(n);
+				
+				IPileNeutronReceiver rec = (IPileNeutronReceiver) te;
+				rec.receiveNeutrons(n);
 				return;
 			}
 		}

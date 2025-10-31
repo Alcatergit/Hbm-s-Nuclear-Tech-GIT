@@ -1,12 +1,11 @@
 package com.hbm.config;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.hbm.main.MainRegistry;
-
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.config.Property;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 public class CommonConfig {
 
@@ -53,16 +52,16 @@ public class CommonConfig {
 	}
 
 	private static Object parseType(String value, String type){
-		if(type.equals("Float")){
+		if(type == "Float"){
 			return Float.parseFloat(value);
 		}
-		if(type.equals("Int")){
+		if(type == "Int"){
 			return Integer.parseInt(value);
 		}
-		if(type.equals("Long")){
+		if(type == "Long"){
 			return Float.parseFloat(value);
 		}
-		if(type.equals("Double")){
+		if(type == "Double"){
 			return Double.parseDouble(value);
 		}
 		return value;
@@ -73,13 +72,6 @@ public class CommonConfig {
 	    Property prop = config.get(category, name, def);
 	    prop.setComment(comment);
 	    return prop.getInt();
-	}
-
-	public static double createConfigDouble(Configuration config, String category, String name, String comment, double def) {
-	
-	    Property prop = config.get(category, name, def);
-	    prop.setComment(comment);
-	    return prop.getDouble();
 	}
 
 	public static int setDefZero(int value, int def) {

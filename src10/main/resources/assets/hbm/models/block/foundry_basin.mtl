@@ -1,0 +1,12 @@
+# Made in Blockbench 4.9.4
+newmtl m_23224c38-973f-9f1f-bc34-76f56aee25d2
+map_Kd hbm:blocks/foundry_basin_side
+
+newmtl m_c322d5-13eb-678f-b55d-b8f3782ee944
+map_Kd hbm:blocks/foundry_basin_bottom
+
+newmtl m_2086b5e3-49bd-e050-0ac1-2810e1ba1fe2
+map_Kd hbm:blocks/foundry_basin_inner
+
+newmtl m_d761e6cf-69bd-8e14-79e9-7283d3fc29d6
+map_Kd hbm:blocks/foundry_basin_top

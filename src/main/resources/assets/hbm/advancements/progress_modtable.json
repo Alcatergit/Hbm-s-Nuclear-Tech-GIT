@@ -10,7 +10,7 @@
 			"translate": "hbm.achievement.progress_modtable.desc"
 		}
 	},
-	"parent": "hbm:progress_difurnace",
+	"parent": "hbm:root",
 	"criteria": {
         "crafting_table": {
             "trigger": "minecraft:inventory_changed",

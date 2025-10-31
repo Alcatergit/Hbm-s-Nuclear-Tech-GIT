@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:stone_gneiss"
+		},
+		"title": {
+			"translate": "hbm.achievement.stratum"
+		},
+		"description": {
+			"translate": "hbm.achievement.stratum.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_crystalizer",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:stone_gneiss"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 4
+    }
+}

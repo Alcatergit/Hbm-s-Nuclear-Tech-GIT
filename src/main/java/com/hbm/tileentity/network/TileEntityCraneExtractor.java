@@ -1,6 +1,7 @@
 package com.hbm.tileentity.network;
 
 import api.hbm.block.IConveyorBelt;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.lib.Library;
 import com.hbm.entity.item.EntityMovingItem;
 import com.hbm.interfaces.IControlReceiver;
@@ -24,10 +25,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.items.IItemHandler;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+import net.minecraftforge.items.IItemHandlerModifiable;
+
+import javax.annotation.Nonnull;
 
 public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGUIProvider, IControlReceiver {
     public boolean isWhitelist = false;
@@ -57,13 +62,12 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
             int yCoord = pos.getY();
             int zCoord = pos.getZ();
             int delay = 20;
-            inventory.getStackInSlot(19);
-            if(!inventory.getStackInSlot(19).isEmpty()){
-                if(inventory.getStackInSlot(19).getItem() == ModItems.upgrade_ejector_1) {
+            if(inventory.getStackInSlot(19) != null && inventory.getStackInSlot(19) != ItemStack.EMPTY){
+                if(inventory.getStackInSlot(19).getItem() == ModItems.Upgrades.upgrade_ejector_1) {
                     delay = 10;
-                } else if(inventory.getStackInSlot(19).getItem() == ModItems.upgrade_ejector_2){
+                } else if(inventory.getStackInSlot(19).getItem() == ModItems.Upgrades.upgrade_ejector_2){
                     delay = 5;
-                } else if(inventory.getStackInSlot(19).getItem() == ModItems.upgrade_ejector_3){
+                } else if(inventory.getStackInSlot(19).getItem() == ModItems.Upgrades.upgrade_ejector_3){
                     delay = 2;
                 }
             }
@@ -72,13 +76,12 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                 tickCounter = 0;
                 int amount = 1;
 
-                inventory.getStackInSlot(18);
-                if(!inventory.getStackInSlot(18).isEmpty()){
-                    if(inventory.getStackInSlot(18).getItem() == ModItems.upgrade_stack_1) {
+                if(inventory.getStackInSlot(18)!=null && inventory.getStackInSlot(18) != ItemStack.EMPTY){
+                    if(inventory.getStackInSlot(18).getItem() == ModItems.Upgrades.upgrade_stack_1) {
                         amount = 4;
-                    } else if(inventory.getStackInSlot(18).getItem() == ModItems.upgrade_stack_2){
+                    } else if(inventory.getStackInSlot(18).getItem() == ModItems.Upgrades.upgrade_stack_2){
                         amount = 16;
-                    } else if(inventory.getStackInSlot(18).getItem() == ModItems.upgrade_stack_3){
+                    } else if(inventory.getStackInSlot(18).getItem() == ModItems.Upgrades.upgrade_stack_3){
                         amount = 64;
                     }
                 }
@@ -100,30 +103,26 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                 if(te != null) {
 
                     /* try to send items from a connected inv, if present */
-                    if(te.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inputSide)) {
-                        IItemHandler inv = te.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inputSide);
+                    ICapabilityProvider capte = te;
+                    if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inputSide)) {
+                        IItemHandler inv = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, inputSide);
 
-                        int size;
-                        if(access == null) {
-                            size = inv.getSlots();
-                        } else {
-                            size = access.length;
-                        }
+                        int size = access == null ? inv.getSlots() : access.length;
 
                         for(int i = 0; i < size; i++) {
                             int index = access == null ? i : access[i];
                             ItemStack stack = inv.getStackInSlot(index);
 
-                            if(!stack.isEmpty() && (sided == null || canExtract(sided, index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
+                            if(stack != ItemStack.EMPTY && (sided == null || sided.canExtractItem(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
 
                                 boolean match = this.matchesFilter(stack);
 
-                                if(isWhitelist == match) {
+                                if((isWhitelist && match) || (!isWhitelist && !match)) {
                                     int toSend = stack.getCount();
 
-                                    ItemStack extracted = inv.extractItem(i, toSend, true);
-                                    if(!extracted.isEmpty()){
-                                        int fill = tryInsertItemCap(inventory, extracted.copy(), allowed_slots);
+                                    ItemStack excrated = inv.extractItem(i, toSend, true);
+                                    if(excrated != null && !excrated.isEmpty()){
+                                        int fill = tryInsertItemCap(inventory, excrated.copy(), allowed_slots);
                                         if(fill > 0 && fill <= toSend) inv.extractItem(i, fill, false);
                                     }
                                 }
@@ -133,16 +132,18 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
                 }
 
                 //send buffered items
-                if(b instanceof IConveyorBelt belt) {
+                if(b instanceof IConveyorBelt) {
+
+                    IConveyorBelt belt = (IConveyorBelt) b;
 
                     for(int index : allowed_slots) {
                         ItemStack stack = inventory.getStackInSlot(index);
 
-                        if(!stack.isEmpty()){
+                        if(stack != ItemStack.EMPTY && (sided == null || sided.canExtractItem(index, stack, EnumFacing.byIndex(inputSide.getOpposite().ordinal())))){
 
                             boolean match = this.matchesFilter(stack);
 
-                            if(isWhitelist == match) {
+                            if((isWhitelist && match) || (!isWhitelist && !match)) {
                                 int toSend = Math.min(amount, stack.getCount());
                                 ItemStack cStack = stack.copy();
                                 stack.shrink(toSend);
@@ -170,16 +171,6 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
         }
     }
 
-    public static boolean canExtract(ISidedInventory sided, int index, ItemStack stack, EnumFacing dir){
-        boolean can = false;
-        try{
-            can = sided.canExtractItem(index, stack, dir);
-        } catch (IndexOutOfBoundsException e){
-            return false;
-        }
-        return can;
-    }
-
     //Unloads output into chests. Capability version.
     public int tryInsertItemCap(IItemHandler chest, ItemStack stack, int[] allowed_slots) {
         //Check if we have something to output
@@ -187,23 +178,21 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
             return 0;
         int filledAmount = 0;
         for(int i : allowed_slots) {
-
+            
             if(stack.isEmpty() || stack.getCount() < 1)
                 return filledAmount;
             ItemStack outputStack = stack.copy();
-
+            
             ItemStack chestItem = chest.getStackInSlot(i).copy();
             if(chestItem.isEmpty() || (Library.areItemStacksCompatible(outputStack, chestItem, false) && chestItem.getCount() < chestItem.getMaxStackSize())) {
                 int fillAmount = Math.min(chestItem.getMaxStackSize()-chestItem.getCount(), outputStack.getCount());
-
+                
                 outputStack.setCount(fillAmount);
 
                 ItemStack rest = chest.insertItem(i, outputStack, true);
-                if(rest.getCount() < outputStack.getCount()){
-                    stack.shrink(fillAmount-rest.getCount());
-                    filledAmount += fillAmount-rest.getCount();
-                    chest.insertItem(i, outputStack, false);
-                }
+                stack.shrink(fillAmount-rest.getCount());
+                filledAmount += fillAmount-rest.getCount();
+                chest.insertItem(i, outputStack, false);
             }
         }
 
@@ -247,6 +236,14 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
 
     @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+        if (i == 18)
+            return itemStack.getItem() == Upgrades.upgrade_stack_1 ||
+                    itemStack.getItem() == Upgrades.upgrade_stack_2 ||
+                    itemStack.getItem() == Upgrades.upgrade_stack_3;
+        if (i == 19)
+            return itemStack.getItem() == Upgrades.upgrade_ejector_1 ||
+                    itemStack.getItem() == Upgrades.upgrade_ejector_2 ||
+                    itemStack.getItem() == Upgrades.upgrade_ejector_3;
         return i > 8 && i < 18;
     }
 
@@ -270,7 +267,7 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
     }
 
     @Override
-    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         nbt.setBoolean("isWhitelist", this.isWhitelist);
         this.matcher.writeToNBT(nbt);
@@ -296,9 +293,14 @@ public class TileEntityCraneExtractor extends TileEntityCraneBase implements IGU
     public int[] getAccessibleSlotsFromSide(EnumFacing e) {
         return allowed_slots;
     }
+    
+    @Override
+    public boolean canInsertItem(int slot, ItemStack itemStack, int amount) {
+        return this.isItemValidForSlot(slot, itemStack);
+    }
 
     @Override
-    public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+    public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
         return false;
     }
 }

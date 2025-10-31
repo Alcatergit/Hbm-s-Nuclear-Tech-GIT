@@ -1,11 +1,8 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.client.util.ITooltipFlag;
@@ -19,6 +16,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemReactorSensor extends Item {
 
@@ -43,7 +42,7 @@ public class ItemReactorSensor extends Item {
 			stack.getTagCompound().setInteger("y", pos.getY());
 			stack.getTagCompound().setInteger("z", pos.getZ());
 
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 			player.swingArm(hand);
 			return EnumActionResult.SUCCESS;
@@ -84,7 +83,7 @@ public class ItemReactorSensor extends Item {
 			stack.getTagCompound().setInteger("y", pos.getY());
 			stack.getTagCompound().setInteger("z", pos.getZ());
 
-			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
 
 			player.swingArm(hand);
 			return EnumActionResult.SUCCESS;

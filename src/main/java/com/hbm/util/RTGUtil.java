@@ -1,8 +1,8 @@
 package com.hbm.util;
 
 import com.hbm.items.machine.ItemRTGPellet;
-import net.minecraftforge.items.ItemStackHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.ItemStackHandler;
 
 public class RTGUtil {
 	

@@ -1,0 +1,8 @@
+{
+	"parent": "block/orientable",
+	"textures": {
+		"top": "hbm:blocks/leafia/msr/msr_element",
+		"front": "hbm:blocks/leafia/msr/msr_fuel_ejector",
+		"side": "hbm:blocks/leafia/msr/msr_element"
+	}
+}

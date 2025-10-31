@@ -1,19 +1,18 @@
 package com.hbm.items.bomb;
 
-import java.util.List;
-
-import com.hbm.items.ItemBase;
+import com.hbm.items.special.ItemHazard;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
-public class ItemSolinium extends ItemBase {
+import java.util.List;
 
-	public ItemSolinium(String s) {
-		super(s);
+public class ItemSolinium extends ItemHazard {
+
+	public ItemSolinium(float radiation, boolean blinding, String s) {
+		super(radiation, false, blinding, s);
 		this.setCreativeTab(MainRegistry.nukeTab);
 	}
 

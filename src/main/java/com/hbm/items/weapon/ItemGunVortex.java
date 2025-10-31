@@ -1,9 +1,5 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.lib.Library;
@@ -14,16 +10,10 @@ import com.hbm.packet.GunAnimationPacket;
 import com.hbm.packet.GunFXPacket;
 import com.hbm.packet.GunFXPacket.FXType;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.particle.vortex.ParticleVortexBeam;
-import com.hbm.particle.vortex.ParticleVortexCircle;
-import com.hbm.particle.vortex.ParticleVortexFireFlash;
-import com.hbm.particle.vortex.ParticleVortexGlow;
-import com.hbm.particle.vortex.ParticleVortexHit;
-import com.hbm.particle.vortex.ParticleVortexParticle;
+import com.hbm.particle.vortex.*;
 import com.hbm.render.RenderHelper;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -49,6 +39,9 @@ import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.List;
 
 public class ItemGunVortex extends ItemGunBase {
 

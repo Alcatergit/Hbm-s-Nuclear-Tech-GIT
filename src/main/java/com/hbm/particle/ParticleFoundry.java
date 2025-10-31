@@ -2,11 +2,11 @@ package com.hbm.particle;
 
 import java.awt.Color;
 
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.lib.ForgeDirection;
 import com.hbm.lib.RefStrings;
-import com.hbm.render.amlfrom1710.Tessellator;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
@@ -84,7 +84,7 @@ public class ParticleFoundry extends Particle {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(lava);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 		
-		Tessellator tess = new Tessellator();
+		CompositeBrush tess = new CompositeBrush();
         
 		tess.startDrawingQuads();
 		tess.setNormal(0.0F, 1.0F, 0.0F);

@@ -1,15 +1,14 @@
 package com.hbm.entity.projectile;
 
-import java.util.List;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Foods;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -29,14 +28,12 @@ import net.minecraft.network.play.server.SPacketChangeGameState;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityPlasmaBeam extends Entity implements IProjectile {
 
@@ -525,7 +522,7 @@ public class EntityPlasmaBeam extends Entity implements IProjectile {
     }
     
     private boolean surviveImmolation(EntityPlayer player) {
-    	if(player instanceof EntityPlayerMP && Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_pip) && Library.hasInventoryItem(player.inventory, ModItems.bottle_rad) && Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
+    	if(player instanceof EntityPlayerMP && Library.hasInventoryItem(player.inventory, Armory.gun_revolver_pip) && Library.hasInventoryItem(player.inventory, Foods.bottle_rad) && Library.hasInventoryItem(player.inventory, ModItems.geiger_counter)) {
     		AdvancementManager.grantAchievement((EntityPlayerMP) player, AdvancementManager.achSacrifice);
     		player.addPotionEffect(new PotionEffect(MobEffects.REGENERATION, 3 * 20, 6));
     		return true;

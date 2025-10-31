@@ -1,22 +1,21 @@
 package com.hbm.tileentity.network.energy;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.hbm.render.amlfrom1710.Vec3;
+import api.hbm.energy.IEnergyConductor;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPylonSenderPacket;
-
-import api.hbm.energy.IEnergyConductor;
+import com.hbm.render.amlfrom1710.Vec3;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 	
@@ -49,8 +48,8 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 			return;
 		connected.add(targetPos);
 		
-		if(this.getPowerNet() != null) {
-			this.getPowerNet().reevaluate();
+		if(this.getNetwork() != null) {
+			this.getNetwork().reevaluate();
 			this.network = null;
 		}
 		
@@ -100,12 +99,12 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 				
 				IEnergyConductor conductor = (IEnergyConductor) te;
 				
-				if(this.getPowerNet() == null && conductor.getPowerNet() != null) {
-					conductor.getPowerNet().joinLink(this);
+				if(this.getNetwork() == null && conductor.getNetwork() != null) {
+					conductor.getNetwork().assignConductor(this);
 				}
 				
-				if(this.getPowerNet() != null && conductor.getPowerNet() != null && this.getPowerNet() != conductor.getPowerNet()) {
-					conductor.getPowerNet().joinNetworks(this.getPowerNet());
+				if(this.getNetwork() != null && conductor.getNetwork() != null && this.getNetwork() != conductor.getNetwork()) {
+					conductor.getNetwork().assert_joinFrom(this.getNetwork());
 				}
 			}
 		}
@@ -131,6 +130,7 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+		super.writeToNBT(nbt);
 		
 		int[] conX = new int[connected.size()];
 		int[] conY = new int[connected.size()];
@@ -145,7 +145,7 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 		nbt.setIntArray("conX", conX);
 		nbt.setIntArray("conY", conY);
 		nbt.setIntArray("conZ", conZ);
-		return super.writeToNBT(nbt);
+		return nbt;
 	}
 	
 	@Override
@@ -184,7 +184,7 @@ public abstract class TileEntityPylonBase extends TileEntityCableBaseNT {
 		this.readFromNBT(pkt.getNbtCompound());
 	}
 
-	public enum ConnectionType {
+	public static enum ConnectionType {
 		SINGLE,
 		QUAD
 		//more to follow

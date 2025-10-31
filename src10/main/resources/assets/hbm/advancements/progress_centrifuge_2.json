@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_gascent"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_centrifuge_2"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_centrifuge_2.desc"
+		}
+	},
+	"parent": "hbm:progress_desh",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_gascent"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 30
+    }
+}

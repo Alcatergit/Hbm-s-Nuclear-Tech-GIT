@@ -1,7 +1,6 @@
 package com.hbm.tileentity.network;
 
 import com.hbm.tileentity.TileEntityMachineBase;
-
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.nbt.NBTTagCompound;
@@ -10,7 +9,6 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.util.Constants;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class TileEntityCraneBase extends TileEntityMachineBase implements ITickable {
 
@@ -43,12 +41,18 @@ public abstract class TileEntityCraneBase extends TileEntityMachineBase implemen
     public EnumFacing getInputSide() {
         IBlockState state = world.getBlockState(pos);
         EnumFacing currentFacing = state.getValue(BlockHorizontal.FACING);
-        return switch (currentFacing) {
-            case NORTH -> EnumFacing.NORTH;
-            case EAST -> EnumFacing.EAST;
-            case WEST -> EnumFacing.WEST;
-            default -> EnumFacing.SOUTH;
-        };
+        switch (currentFacing) {
+            case NORTH:
+                return EnumFacing.NORTH;
+            case SOUTH:
+                return EnumFacing.SOUTH;
+            case EAST:
+                return EnumFacing.EAST;
+            case WEST:
+                return EnumFacing.WEST;
+            default:
+                return EnumFacing.SOUTH;
+        }
     }
 
     public EnumFacing getOutputSide() {
@@ -59,12 +63,18 @@ public abstract class TileEntityCraneBase extends TileEntityMachineBase implemen
         IBlockState state = world.getBlockState(pos);
         EnumFacing currentFacing = state.getValue(BlockHorizontal.FACING);
 
-        return switch (currentFacing) {
-            case NORTH -> EnumFacing.SOUTH;
-            case EAST -> EnumFacing.WEST;
-            case WEST -> EnumFacing.EAST;
-            default -> EnumFacing.NORTH;
-        };
+        switch (currentFacing) {
+            case NORTH:
+                return EnumFacing.SOUTH;
+            case SOUTH:
+                return EnumFacing.NORTH;
+            case EAST:
+                return EnumFacing.WEST;
+            case WEST:
+                return EnumFacing.EAST;
+            default:
+                return EnumFacing.NORTH;
+        }
     }
 
     public EnumFacing getOutputOverride() {
@@ -126,7 +136,7 @@ public abstract class TileEntityCraneBase extends TileEntityMachineBase implemen
     }
 
     @Override
-    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         super.writeToNBT(nbt);
         if (outputOverride != null) {
             nbt.setByte("CraneOutputOverride", (byte) outputOverride.ordinal());

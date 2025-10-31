@@ -1,16 +1,15 @@
 package com.hbm.tileentity.deco;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.particle.EntityChlorineFX;
 import com.hbm.entity.particle.EntityCloudFX;
 import com.hbm.entity.particle.EntityPinkCloudFX;
-
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
+
+import java.util.Random;
 
 public class TileEntityVent extends TileEntity implements ITickable {
 

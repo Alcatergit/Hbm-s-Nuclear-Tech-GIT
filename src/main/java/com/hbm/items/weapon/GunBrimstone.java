@@ -1,12 +1,10 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityLaser;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.Library;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -22,6 +20,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class GunBrimstone extends Item {
 
@@ -51,7 +51,7 @@ public class GunBrimstone extends Item {
 	
 	@Override
 	public void onUsingTick(ItemStack stack, EntityLivingBase ent, int count) {
-		if(ent.getHeldItemMainhand() == stack && ent.getHeldItemOffhand().getItem() == ModItems.gun_brimstone){
+		if(ent.getHeldItemMainhand() == stack && ent.getHeldItemOffhand().getItem() == Armory.gun_brimstone){
 			ent.getHeldItemOffhand().getItem().onUsingTick(ent.getHeldItemOffhand(), ent, count);
 		}
 		if(!(ent instanceof EntityPlayer))
@@ -61,7 +61,7 @@ public class GunBrimstone extends Item {
 
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
-		if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, ModItems.ammo_566_gold)) && count % 1 == 0) {
+		if ((player.capabilities.isCreativeMode || Library.hasInventoryItem(player.inventory, Armory.ammo_566_gold)) && count % 1 == 0) {
 			
 			
 			EntityLaser laser = new EntityLaser(world, player, player.getHeldItemMainhand() == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);
@@ -69,7 +69,7 @@ public class GunBrimstone extends Item {
 			//world.playSoundAtEntity(player, "hbm:weapon.rifleShoot", 1.0F, 0.8F + (rand.nextFloat() * 0.4F));
 
 			if (!flag) {
-				Library.consumeInventoryItem(player.inventory, ModItems.gun_dash_ammo);
+				Library.consumeInventoryItem(player.inventory, Armory.gun_dash_ammo);
 			}
 
 			if (!world.isRemote) {

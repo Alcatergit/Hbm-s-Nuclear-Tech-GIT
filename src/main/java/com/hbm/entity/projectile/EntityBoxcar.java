@@ -1,14 +1,11 @@
 package com.hbm.entity.projectile;
 
-import java.util.List;
-
-import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.projectile.EntityThrowable;
@@ -20,6 +17,8 @@ import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
 
@@ -51,7 +50,7 @@ public class EntityBoxcar extends EntityThrowable implements IConstantRenderer {
         Block b = this.world.getBlockState(pos).getBlock();
         if(b != Blocks.AIR && b != Blocks.WATER && b != Blocks.FLOWING_WATER && !b.isReplaceable(world, pos))
         {
-            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.oldExplosion, SoundCategory.HOSTILE, 10000.0F, 0.5F + this.rand.nextFloat() * 0.1F);
+            this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.oldExplosion, SoundCategory.HOSTILE, 10000.0F, 0.5F + this.rand.nextFloat() * 0.1F);
             this.setDead();
         	ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 3);
     		ExplosionLarge.spawnShock(world, posX, posY + 1, posZ, 24, 2.5);

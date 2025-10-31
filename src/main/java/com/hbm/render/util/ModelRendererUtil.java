@@ -1,19 +1,5 @@
 package com.hbm.render.util;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.*;
-import java.util.function.Consumer;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Vector3f;
-
-import org.apache.commons.lang3.tuple.Pair;
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-
 import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.main.ResourceManager;
@@ -25,7 +11,6 @@ import com.hbm.physics.RigidBody;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.render.util.Triangle.TexVertex;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelBox;
@@ -44,6 +29,21 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
+import org.apache.commons.lang3.tuple.Pair;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Vector3f;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.function.Consumer;
 
 public class ModelRendererUtil {
 
@@ -249,7 +249,8 @@ public class ModelRendererUtil {
 		float f;
 		
 		for(f = yawOffset - prevYawOffset; f < -180.0F; f += 360.0F) {
-        }
+			;
+		}
 
 		while(f >= 180.0F) {
 			f -= 360.0F;
@@ -442,8 +443,8 @@ public class ModelRendererUtil {
 			}
 			returnData[2] = compress(cap);
 		}
-		returnData[0] = compress(side1.toArray(new Triangle[0]));
-		returnData[1] = compress(side2.toArray(new Triangle[0]));
+		returnData[0] = compress(side1.toArray(new Triangle[side1.size()]));
+		returnData[1] = compress(side2.toArray(new Triangle[side2.size()]));
 		return returnData;
 	}
 	
@@ -541,7 +542,9 @@ public class ModelRendererUtil {
 			List<Triangle> tris = new ArrayList<>();
 			for(CutModelData d : top){
 				if(d.cap != null)
-                    tris.addAll(Arrays.asList(decompress(d.cap)));
+					for(Triangle t : decompress(d.cap)){
+						tris.add(t);
+					}
 			}
 			capConsumer.accept(tris);
 		}
@@ -570,7 +573,7 @@ public class ModelRendererUtil {
 				colliders[i++] = dat.collider;
 			}
 			body.addColliders(colliders);
-			body.impulseVelocityDirect(new Vec3(plane[0]*scale, plane[1]*scale, plane[2]*scale), body.globalCentroid.add(0, 0, 0));
+			body.impulseVelocityDirect(new Vec3(plane[0]*scale, plane[1]*scale, plane[2]*scale), body.globalCentroid.add(new Vec3(0, 0, 0)));
 			
 			//Create rendering display lists
 			int bodyDL = GL11.glGenLists(1);
@@ -596,7 +599,7 @@ public class ModelRendererUtil {
 			particles.add(new ParticleSlicedMob(ent.world, body, bodyDL, capDL, tex, capTex, capBloom));
 		}
 		
-		return particles.toArray(new ParticleSlicedMob[0]);
+		return particles.toArray(new ParticleSlicedMob[particles.size()]);
 	}
 	
 	public static RigidBody[] generateRigidBodiesFromBoxes(Entity ent, List<Pair<Matrix4f, ModelRenderer>> boxes){

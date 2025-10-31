@@ -1,0 +1,8 @@
+{
+    "parent": "block/cube_bottom_top",
+    "textures": {
+        "top": "hbm:blocks/contamination/sandstone/waste_sandstone_top_5",
+        "bottom": "hbm:blocks/contamination/sandstone/waste_sandstone_bottom_5",
+        "side": "hbm:blocks/contamination/sandstone/waste_sandstone_normal_5"
+    }
+}

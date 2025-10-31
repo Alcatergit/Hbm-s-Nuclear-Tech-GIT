@@ -1,16 +1,15 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.inventory.PressRecipes;
 import com.hbm.items.machine.ItemStamp;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.TEPressPacket;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -22,20 +21,16 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineEPress extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
 	public int progress = 0;
-    public int prevProgress = 0;
-    public long power = 0;
+	public long power = 0;
 	public final static int maxProgress = 200;
 	public final static long maxPower = 50000;
 	public int item;
 	public int meta;
-    public int stampItem;
-    public int stampMeta;
-    boolean isRetracting = false;
+	boolean isRetracting = false;
 
 	public TileEntityMachineEPress() {
 		super(4);
@@ -61,13 +56,15 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 		
 		if(i == 0 && stack.getItem() instanceof IBatteryItem)
 			return true;
-
-        return !(stack.getItem() instanceof ItemStamp) && i == 2;
-    }
+		
+		if(!(stack.getItem() instanceof ItemStamp) && i == 2)
+			return true;
+		return false;
+	}
 	
 	@Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e){
-		return new int[]{ 0, 1, 2, 3 };
+		return e.ordinal() == 0 ? new int[] { 3 } : new int[]{ 0, 1, 2 };
 	}
 	
 	@Override
@@ -76,12 +73,12 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount){
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount){
 		return slot == 3;
 	}
 
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setInteger("progress", progress);
 		compound.setLong("power", power);
 		compound.setBoolean("ret", isRetracting);
@@ -128,8 +125,8 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 							else
 								inventory.getStackInSlot(3).grow(stack.getCount());
 							
-							inventory.getStackInSlot(2).shrink(1);
-                            if(inventory.getStackInSlot(2).isEmpty())
+							inventory.getStackInSlot(2).shrink(1);;
+							if(inventory.getStackInSlot(2).isEmpty())
 								inventory.setStackInSlot(2, ItemStack.EMPTY);
 
 							if(inventory.getStackInSlot(1).getMaxDamage() > 0){
@@ -138,7 +135,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 									inventory.setStackInSlot(1, ItemStack.EMPTY);
 							}
 
-					        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
+					        this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.pressOperate, SoundCategory.BLOCKS, 1.5F, 1.0F);
 						}
 						
 						if(!isRetracting)
@@ -163,9 +160,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 			}
 
 			detectAndSendChanges();
-		} else {
-            prevProgress = progress;
-        }
+		}
 	}
 	
 	private int detectProgress;
@@ -192,7 +187,7 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 			detectItem = inventory.getStackInSlot(2).copy();
 		}
 		PacketDispatcher.wrapper.sendToAllAround(new AuxElectricityPacket(pos.getX(), pos.getY(), pos.getZ(), power), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), inventory.getStackInSlot(1), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
+		PacketDispatcher.wrapper.sendToAllAround(new TEPressPacket(pos.getX(), pos.getY(), pos.getZ(), inventory.getStackInSlot(2), progress), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 100));
 		if(mark)
 			markDirty();
 		

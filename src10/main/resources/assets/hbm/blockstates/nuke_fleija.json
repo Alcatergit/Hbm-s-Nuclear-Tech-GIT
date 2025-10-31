@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=2": { "model": "hbm:nuke_fleija" },
+		"facing=3": { "model": "hbm:nuke_fleija" },
+		"facing=4": { "model": "hbm:nuke_fleija" },
+		"facing=5": { "model": "hbm:nuke_fleija" }
+	}
+}

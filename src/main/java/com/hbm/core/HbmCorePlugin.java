@@ -1,11 +1,11 @@
 package com.hbm.core;
 
-import java.util.Map;
-
 import net.minecraftforge.fml.relauncher.IFMLLoadingPlugin;
 
+import java.util.Map;
+
 @IFMLLoadingPlugin.MCVersion("1.12.2")
-@IFMLLoadingPlugin.TransformerExclusions({"com.hbm.core"})
+@IFMLLoadingPlugin.TransformerExclusions({"com.hbm.core","com.hbm.core.leafia"})
 public class HbmCorePlugin implements IFMLLoadingPlugin {
 
 	@Override
@@ -23,7 +23,10 @@ public class HbmCorePlugin implements IFMLLoadingPlugin {
 			}
 		}
 		System.out.println("Shaders are disabled! Not applying transformers!");*/
-		return new String[]{/*"com.hbm.core.EntityRendererTransformer"*/};
+		return new String[]{
+				"com.hbm.core.leafia.TransformerCoreLeafia"
+				//took me long enough >:( "com.hbm.core.leafia.LeafiaGlsTransformer","com.hbm.core.leafia.LeafiaWorldServerTransformer"/*"com.hbm.core.EntityRendererTransformer"*/};
+		};
 	}
 
 	@Override

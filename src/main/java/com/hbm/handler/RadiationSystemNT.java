@@ -1,18 +1,5 @@
 package com.hbm.handler;
 
-import java.nio.ByteBuffer;
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
@@ -27,20 +14,19 @@ import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
-import com.hbm.hazard.HazardSystem;
-
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
-
+import com.llib.group.LeafiaSet;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.monster.EntityZombieVillager;
-import net.minecraft.entity.passive.*;
+import net.minecraft.entity.passive.EntityCow;
+import net.minecraft.entity.passive.EntityMooshroom;
+import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.MobEffects;
@@ -66,6 +52,10 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.Phase;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
+import javax.annotation.Nullable;
+import java.nio.ByteBuffer;
+import java.util.*;
+
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class RadiationSystemNT {
 
@@ -75,7 +65,10 @@ public class RadiationSystemNT {
 	private static Map<World, WorldRadiationData> worldMap = new HashMap<>();
 	/**A tick counter so radiation only updates once every second.*/
 	private static int ticks;
-	
+
+	public static Collection<ChunkRadiationStorage> getAll(World world) {
+		return getWorldRadData(world).data.values();
+	}
 	/**
 	 * Increments the radiation at the specified block position. Only increments if the current radiaion stored is less than max
 	 * @param world - the world to increment radiation in
@@ -88,7 +81,7 @@ public class RadiationSystemNT {
 			return;
 		RadPocket p = getPocket(world, pos);
 		if(p.radiation < max){
-			p.radiation += amount;
+			p.radiation = Math.min(p.radiation+amount,max);
 		}
 		//Mark this pocket as active so it gets updated
 		if(amount > 0){
@@ -199,8 +192,11 @@ public class RadiationSystemNT {
 		}
 		//Finally, check if the chunk has a sub chunk at the specified y level
 		SubChunkRadiationStorage sc = st.getForYLevel(pos.getY());
-        return sc != null;
-    }
+		if(sc == null){
+			return false;
+		}
+		return true;
+	}
 	
 	/**
 	 * Gets the sub chunk from the specified pos. Loads it if it doesn't exist
@@ -232,6 +228,16 @@ public class RadiationSystemNT {
 		if(st == null){
 			st = new ChunkRadiationStorage(worldRadData, world.getChunk(pos));
 			worldRadData.data.put(new ChunkPos(pos), st);
+		}
+		return st;
+	}
+	@Nullable
+	public static ChunkRadiationStorage getChunkStorage2(World world, ChunkPos pos){
+		WorldRadiationData worldRadData = getWorldRadData(world);
+		ChunkRadiationStorage st = worldRadData.data.get(pos);
+		if(st == null){
+			st = new ChunkRadiationStorage(worldRadData, world.getChunk(pos.x,pos.z));
+			worldRadData.data.put(pos, st);
 		}
 		return st;
 	}
@@ -278,7 +284,7 @@ public class RadiationSystemNT {
 			int thunder = AuxSavedData.getThunder(world);
 
 			if(thunder > 0)
-				AuxSavedData.setThunder(world, thunder - 1);
+				AuxSavedData.decreaseThunder(world,1);
 
 			if(!world.loadedEntityList.isEmpty()) {
 
@@ -292,7 +298,8 @@ public class RadiationSystemNT {
 					updateRadSaveData(world);
 				}
 
-                List<Object> oList = new ArrayList<Object>(world.loadedEntityList);
+				List<Object> oList = new ArrayList<Object>();
+				oList.addAll(world.loadedEntityList);
 
 				for(Object e : oList) {
 					if(e instanceof EntityLivingBase) {
@@ -302,11 +309,12 @@ public class RadiationSystemNT {
 
 						if(entity instanceof EntityPlayer){
 							EntityPlayer player = (EntityPlayer) entity;
+							ContaminationUtil.applyOreDictHazards(player);
 							if(RadiationConfig.neutronActivation){
 								double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-(0.00004D * RadiationConfig.neutronActivationThreshold); //20Rad/s threshold
 								float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
 								if(neutronRads > 0){
-									ContaminationUtil.contaminate(player, ContaminationUtil.HazardType.NEUTRON, ContaminationUtil.ContaminationType.CREATIVE, neutronRads * 0.05F);
+									ContaminationUtil.contaminate(player, ContaminationUtil.HazardType.ACTIVATION, ContaminationUtil.ContaminationType.CREATIVE, neutronRads * 0.05F);
 								}
 								else{
 									HbmLivingProps.setNeutron(entity, 0);
@@ -370,7 +378,7 @@ public class RadiationSystemNT {
 									world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(eRad >= 800 && entity instanceof EntityHorse) {
+						/*} else if(eRad >= 800 && entity instanceof EntityHorse) {
 							EntityHorse horsie = (EntityHorse)entity;
 							EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
 							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
@@ -384,7 +392,7 @@ public class RadiationSystemNT {
 								if(!world.isRemote)
 									world.spawnEntity(zomhorsie);
 							entity.setDead();
-							continue;
+							continue;*/ // my opninion but they creeps me so i removed it and no one's gonna convineceinc mee
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
 
 							EntityQuackos quacc = new EntityQuackos(world);
@@ -472,8 +480,6 @@ public class RadiationSystemNT {
 								AdvancementManager.grantAchievement((EntityPlayerMP) entity, AdvancementManager.achRadPoison);
 						}
 
-					} else if(e instanceof EntityItem) {
-						HazardSystem.updateDroppedItem((EntityItem) e);
 					}
 				}
 			}
@@ -656,6 +662,10 @@ public class RadiationSystemNT {
 	 * Pockets transfer some of their radiation to pockets they're connected to.
 	 * It tries to do pretty much the same algorithm as the regular system, but in 3d with pockets.
 	 */
+	static float getScaledPow(float x,float y) {
+		if (x < 0) x = 0f;
+		return (float)Math.pow(x+1,y)-1f;
+	}
 	public static void updateRadiation() {
 		long time = System.currentTimeMillis();
 		//long lTime = System.nanoTime();
@@ -717,7 +727,9 @@ public class RadiationSystemNT {
 				for (EnumFacing e : EnumFacing.VALUES) {
 					count += p.connectionIndices[e.ordinal()].size();
 				}
-				float amountPer = 0.7F / count;
+				float spreadBase = getScaledPow(p.radiation,0.1f)+getScaledPow(p.radiation-10f,0.4f)+getScaledPow(p.radiation-100f,0.75f)/2;
+				// Just remember amountPer used to be ratio, instead of direct RADs amount. Not anymore.
+				float amountPer = spreadBase / count;
 				if (count == 0 || p.radiation < 1) {
 					//Don't update if we have no connections or our own radiation is less than 1. Prevents micro radiation bleeding.
 					amountPer = 0;
@@ -730,7 +742,7 @@ public class RadiationSystemNT {
 						MainRegistry.logger.info("[Debug] Pocket " + p.index + " will spread " + amountPer + " rads to each adjacent pocket");
 					}
 				}
-
+				float sharedRad = 0;
 				// TODO: This might also cause leaks from sealed pockets to unsealed
 				if (p.radiation > 0 && amountPer > 0) {
 					//Only update other values if this one has radiation to update with
@@ -753,7 +765,9 @@ public class RadiationSystemNT {
 								// Don't spread to sealed pockets
 								if (!sc2.pockets[idx].isSealed()) {
 									// Only accumulated rads get updated so the system doesn't interfere with itself while working
-									sc2.pockets[idx].accumulatedRads += p.radiation * amountPer;
+									//float shareAmt = p.radiation * amountPer;
+									sc2.pockets[idx].radiation += amountPer; // fuck it //shareAmt;
+									sharedRad += amountPer; //shareAmt;
 									w.addActivePocket(sc2.pockets[idx]);
 								}
 							}
@@ -761,7 +775,8 @@ public class RadiationSystemNT {
 					}
 				}
 				if (amountPer != 0) {
-					p.accumulatedRads += p.radiation * 0.3F;
+					//p.accumulatedRads += p.radiation
+					p.radiation -= sharedRad;
 				}
 				//Make sure we only use around 20 ms max per tick, to help reduce lag.
 				//The lag should die down by itself after a few minutes when all radioactive chunks get built.
@@ -776,8 +791,11 @@ public class RadiationSystemNT {
 			itr = itrActiveCheck.iterator();
 			while(itr.hasNext()){
 				RadPocket act = itr.next();
-				act.radiation = act.accumulatedRads;
-				act.accumulatedRads = 0;
+				/*
+				if (act.accumulatedRads != 0) {
+					act.radiation = act.accumulatedRads;
+					act.accumulatedRads = 0;
+				}*/
 				if(act.radiation <= 0) {
 					w.removeActivePocket(act);
 					itr.remove();
@@ -799,12 +817,6 @@ public class RadiationSystemNT {
 	
 	//Reduces array reallocations
 	private static RadPocket[] pocketsByBlock = null;
-
-    public static boolean isRadResistant(World world, Block block, BlockPos pos){
-        if(block instanceof IRadResistantBlock radBlock)
-            return radBlock.isRadResistant(world, pos);
-        return block.getExplosionResistance(null) >=  2_160_000;
-    }
 	
 	/**
 	 * Divides a 16x16x16 sub chunk into pockets that are separated by radiation resistant blocks.
@@ -846,7 +858,7 @@ public class RadiationSystemNT {
 
 						// If it's not a radiation resistant block, and there isn't currently a pocket here,
 						// do a flood fill pocket build
-						if (!isRadResistant(chunk.getWorld(), block, new BlockPos(x, y, z).add(subChunkPos))) {
+						if (!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), new BlockPos(x, y, z).add(subChunkPos)))) {
 							if (GeneralConfig.enableDebugMode) {
 								MainRegistry.logger.info("[Debug] Block " + block + " at " + new BlockPos(x, y, z).add(subChunkPos) + " was not rad resistant; add pocket");
 							}
@@ -915,7 +927,7 @@ public class RadiationSystemNT {
 
 		if(subChunk.pocketsByBlock != null)
 			pocketsByBlock = null;
-		subChunk.pockets = pockets.toArray(new RadPocket[0]);
+		subChunk.pockets = pockets.toArray(new RadPocket[pockets.size()]);
 
 		//Finally, put the newly built sub chunk into the chunk
 		st.setForYLevel(yIndex << 4, subChunk);
@@ -934,7 +946,7 @@ public class RadiationSystemNT {
 		BlockPos outPos = newPos.add(subChunkPos);
 		Block block = chunk.getWorld().getBlockState(outPos).getBlock();
 		//If the block isn't radiation resistant...
-		if(!isRadResistant(chunk.getWorld(), block, outPos)){
+		if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(chunk.getWorld(), outPos))){
 			if(!isSubChunkLoaded(chunk.getWorld(), outPos)){
 				//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 				//Chunk still needs to be loaded to propagate radiation into it
@@ -983,7 +995,7 @@ public class RadiationSystemNT {
 		while(!stack.isEmpty()){
 			BlockPos pos = stack.poll();
 			Block block = chunk.get(pos.getX(), pos.getY(), pos.getZ()).getBlock();
-			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || isRadResistant(world, block, pos.add(subChunkWorldPos))){
+			if(pocketsByBlock[pos.getX()*16*16+pos.getY()*16+pos.getZ()] != null || (block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, pos.add(subChunkWorldPos)))){
 				//If the block is radiation resistant or we've already flood filled here, continue
 				continue;
 			}
@@ -1001,19 +1013,22 @@ public class RadiationSystemNT {
 					//Will also attempt to load the chunk, which will cause neighbor data to be updated correctly if it's unloaded.
 					block = world.getBlockState(outPos).getBlock();
 					//If the block isn't radiation resistant...
-					if(!isRadResistant(world, block, outPos)){
+					if(!(block instanceof IRadResistantBlock && ((IRadResistantBlock) block).isRadResistant(world, outPos))){
 						if(!isSubChunkLoaded(world, outPos)){
 							//if it's not loaded, mark it with a single -1 value. This will tell the update method that the
 							//Chunk still needs to be loaded to propagate radiation into it
 							if(!pocket.connectionIndices[facing.ordinal()].contains(-1)){
 								pocket.connectionIndices[facing.ordinal()].add(-1);
+								pocket.leaks.add(outPos);
 							}
 						} else {
 							//If it is loaded, see if the pocket at that position is already connected to us. If not, add it as a connection.
 							//Setting outPocket's connection will be handled in setForYLevel
 							RadPocket outPocket = getPocket(world, outPos);
-							if(!pocket.connectionIndices[facing.ordinal()].contains(Integer.valueOf(outPocket.index)))
+							if(!pocket.connectionIndices[facing.ordinal()].contains(Integer.valueOf(outPocket.index))) {
 								pocket.connectionIndices[facing.ordinal()].add(outPocket.index);
+								pocket.leaks.add(outPos);
+							}
 						}
 					}
 					continue;
@@ -1046,10 +1061,12 @@ public class RadiationSystemNT {
 		public int index;
 		public float radiation;
 		//Used internally so the system doesn't interfere with itself when updating
+		@Deprecated
 		private float accumulatedRads = 0;
 		//If an array contains -1, that means the chunk on that side hasn't been initialized, so it's an implicit connection
 		@SuppressWarnings("unchecked")
 		public List<Integer>[] connectionIndices = new List[EnumFacing.VALUES.length];
+		public final Set<BlockPos> leaks = new LeafiaSet<>();
 		
 		public RadPocket(SubChunkRadiationStorage parent, int index) {
 			this.parent = parent;
@@ -1224,14 +1241,20 @@ public class RadiationSystemNT {
 		private static ByteBuffer buf = ByteBuffer.allocate(524288);
 		
 		public WorldRadiationData parent;
-		private Chunk chunk;
-		private SubChunkRadiationStorage[] chunks = new SubChunkRadiationStorage[16];
+		public Chunk chunk;
+		public SubChunkRadiationStorage[] chunks = new SubChunkRadiationStorage[16];
 		
 		public ChunkRadiationStorage(WorldRadiationData parent, Chunk chunk) {
 			this.parent = parent;
 			this.chunk = chunk;
 		}
-		
+
+		public SubChunkRadiationStorage queryGetSubChunk(int i) {
+			SubChunkRadiationStorage storage = chunks[i];
+			if (storage == null)
+				rebuildChunkPockets(chunk,i);
+			return chunks[i];
+		}
 		/**
 		 * Gets the sub chunk for the specified y coordinate
 		 * @param y - the y coordinate of the sub chunk
@@ -1371,7 +1394,7 @@ public class RadiationSystemNT {
 			ByteBuffer data = ByteBuffer.wrap(tag.getByteArray("chunkRadData"));
 			//For each chunk, try to deserialize it
 			for(int i = 0; i < chunks.length; i ++){
-				boolean subChunkExists = data.get() == 1;
+				boolean subChunkExists = data.get() == 1 ? true : false;
 				if(subChunkExists){
 					//Y level could be implicitly defined with i, but this works too
 					int yLevel = data.getShort();
@@ -1387,7 +1410,7 @@ public class RadiationSystemNT {
 							parent.addActivePocket(st.pockets[j]);
 						}
 					}
-					boolean perBlockDataExists = data.get() == 1;
+					boolean perBlockDataExists = data.get() == 1 ? true : false;
 					if(perBlockDataExists){
 						//If the per block data exists, read indices sequentially and set each array slot to the rad pocket at that index
 						st.pocketsByBlock = new RadPocket[16*16*16];

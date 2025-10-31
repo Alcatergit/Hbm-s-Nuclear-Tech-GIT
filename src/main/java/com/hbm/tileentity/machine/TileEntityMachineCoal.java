@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.blocks.machine.MachineCoal;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.ITankPacketAcceptor;
@@ -9,9 +11,6 @@ import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -22,16 +21,11 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCoal extends TileEntityMachineBase implements ITickable, ITankPacketAcceptor, IEnergyGenerator, IFluidHandler {
 	
@@ -64,8 +58,7 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 		if(i == 0)
 			return isValidFluid(FluidUtil.getFluidContained(stack));
 		if(i == 1)
-			if(TileEntityFurnace.getItemBurnTime(stack) > 0)
-				return true;
+			return (TileEntityFurnace.getItemBurnTime(stack) > 0);
 		if(i == 2)
 			return (stack.getItem() instanceof IBatteryItem);
 		return true;
@@ -77,9 +70,11 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 	}
 	
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
-        return slot == 3;
-    }
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
+		if(slot == 3)
+			return true;
+		return false;
+	}
 	
 	@Override
 	public void update() {
@@ -96,9 +91,14 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 			//Battery Item
 			power = Library.chargeItemsFromTE(inventory, 2, power, maxPower);
 			
-			boolean trigger = !isItemValid() || this.burnTime != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(isItemValid() && this.burnTime == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 MachineCoal.updateBlockState(this.burnTime > 0, this.world, this.pos);
             }
@@ -146,12 +146,19 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 	
 	public boolean isItemValid() {
 
-        return inventory.getStackInSlot(1) != ItemStack.EMPTY && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(1)) > 0;
-    }
+		if(inventory.getStackInSlot(1) != ItemStack.EMPTY && TileEntityFurnace.getItemBurnTime(inventory.getStackInSlot(1)) > 0)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 	
 	protected boolean inputValidForTank(int tank, int slot){
 		if(inventory.getStackInSlot(slot) != null && !inventory.getStackInSlot(slot).isEmpty()){
-            return isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)));
+			if(isValidFluid(FluidUtil.getFluidContained(inventory.getStackInSlot(slot)))){
+				return true;	
+			}
 		}
 		return false;
 	}
@@ -186,7 +193,7 @@ public class TileEntityMachineCoal extends TileEntityMachineBase implements ITic
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setLong("powerTime", power);
 		nbt.setInteger("burnTime", burnTime);
 		

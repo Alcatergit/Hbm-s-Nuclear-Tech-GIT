@@ -1,15 +1,11 @@
 package com.hbm.render.tileentity;
 
-import java.io.IOException;
-
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.config.GeneralConfig;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -17,9 +13,16 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import org.lwjgl.opengl.GL11;
+
+import java.io.IOException;
 
 public class RenderFluidTank extends TileEntitySpecialRenderer<TileEntityMachineFluidTank> {
-	
+	@Override
+	public boolean isGlobalRenderer(TileEntityMachineFluidTank te) {
+		return GeneralConfig.enableGlobalRenderers;
+	}
+
 	@Override
 	public void render(TileEntityMachineFluidTank te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();

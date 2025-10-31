@@ -1,10 +1,7 @@
 package com.hbm.items.armor;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.Library;
 import com.hbm.render.model.ModelArmorHEV;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
@@ -18,6 +15,7 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
 
 public class ArmorHEV extends ArmorFSBPowered {
 
@@ -103,7 +101,7 @@ public class ArmorHEV extends ArmorFSBPowered {
 			ItemStack armor = player.inventory.armorInventory.get(i);
 			ArmorFSBPowered item = ((ArmorFSBPowered)player.inventory.armorInventory.get(i).getItem());
 
-			c += (double)item.getCharge(armor) / (double)item.getMaxCharge(armor);
+			c += (double)item.getCharge(armor) / (double)item.getMaxCharge();
 		}
 
 		int aX = (int)(70 / scale);

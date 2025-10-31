@@ -1,16 +1,14 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.SpecialContainerFillLists.EnumCanister;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.client.renderer.tileentity.TileEntityItemStackRenderer;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.FluidUtil;
+import org.lwjgl.opengl.GL11;
 
 public class FluidCanisterRender extends TileEntityItemStackRenderer {
 

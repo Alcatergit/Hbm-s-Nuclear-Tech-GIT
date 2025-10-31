@@ -235,7 +235,8 @@ abstract class matrixTransform extends funcMatrix {
 
     private static Mat4 perspectiveFovRH(float fov, float width, float height, float zNear, float zFar, Mat4 res) {
         float h = (float) (Math.cos(0.5f * fov) / Math.sin(0.5f * fov));
-        res.m00 = h * height / width;
+        float w = h * height / width;
+        res.m00 = w;
         res.m01 = 0.0f;
         res.m02 = 0.0f;
         res.m03 = 0.0f;
@@ -256,7 +257,8 @@ abstract class matrixTransform extends funcMatrix {
 
     private static Mat4 perspectiveFovLH(float fov, float width, float height, float zNear, float zFar, Mat4 res) {
         float h = (float) (Math.cos(0.5f * fov) / Math.sin(0.5f * fov));
-        res.m00 = h * height / width;
+        float w = h * height / width;
+        res.m00 = w;
         res.m01 = 0.0f;
         res.m02 = 0.0f;
         res.m03 = 0.0f;
@@ -452,7 +454,8 @@ abstract class matrixTransform extends funcMatrix {
 
     private static Mat4d perspectiveFovRH(double fov, double width, double height, double zNear, double zFar, Mat4d res) {
         double h = (Math.cos(0.5 * fov) / Math.sin(0.5 * fov));
-        res.m00 = h * height / width;
+        double w = h * height / width;
+        res.m00 = w;
         res.m01 = 0.0;
         res.m02 = 0.0;
         res.m03 = 0.0;
@@ -473,7 +476,8 @@ abstract class matrixTransform extends funcMatrix {
 
     private static Mat4d perspectiveFovLH(double fov, double width, double height, double zNear, double zFar, Mat4d res) {
         double h = (Math.cos(0.5 * fov) / Math.sin(0.5 * fov));
-        res.m00 = h * height / width;
+        double w = h * height / width;
+        res.m00 = w;
         res.m01 = 0.0;
         res.m02 = 0.0;
         res.m03 = 0.0;

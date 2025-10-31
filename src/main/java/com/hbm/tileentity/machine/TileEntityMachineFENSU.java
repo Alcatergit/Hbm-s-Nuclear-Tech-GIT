@@ -1,14 +1,12 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 
@@ -91,7 +89,7 @@ public class TileEntityMachineFENSU extends TileEntityMachineBattery {
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setByte("color", (byte) this.color.getMetadata());
 		return super.writeToNBT(compound);
 	}

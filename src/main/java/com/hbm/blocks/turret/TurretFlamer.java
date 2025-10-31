@@ -1,9 +1,8 @@
 package com.hbm.blocks.turret;
 
 import com.hbm.entity.projectile.EntityFire;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.turret.TileEntityTurretFlamer;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
@@ -59,9 +58,9 @@ public class TurretFlamer extends TurretBase {
 			}
 			
 			if(i == 0)
-				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerIgnite, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundEvents.flamethrowerIgnite, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			else
-				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.0F);
+				world.playSound(null, x + 0.5, y + 0.5, z + 0.5, HBMSoundEvents.flamethrowerShoot, SoundCategory.BLOCKS, 1.0F, 1.0F);
 			
 			flag = true;
 		}

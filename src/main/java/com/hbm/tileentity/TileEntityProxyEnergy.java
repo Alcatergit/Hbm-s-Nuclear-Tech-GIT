@@ -1,7 +1,6 @@
 package com.hbm.tileentity;
 
 import api.hbm.energy.IEnergyUser;
-
 import net.minecraft.tileentity.TileEntity;
 
 //can be used as a soruce too since the core TE handles that anyway

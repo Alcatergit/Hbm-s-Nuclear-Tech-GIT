@@ -1,11 +1,9 @@
 package com.hbm.items.food;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
-import com.hbm.items.gear.ArmorFSB;
-
 import api.hbm.energy.IBatteryItem;
+import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.ArmorSets;
+import com.hbm.items.gear.ArmorFSB;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemFood;
@@ -16,6 +14,8 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemPancake extends ItemFood {
 
@@ -36,14 +36,14 @@ public class ItemPancake extends ItemFood {
     			continue;
 
     		if(st.getItem() instanceof IBatteryItem) {
-    			((IBatteryItem)st.getItem()).setCharge(st, ((IBatteryItem)st.getItem()).getMaxCharge(st));
+    			((IBatteryItem)st.getItem()).setCharge(st, ((IBatteryItem)st.getItem()).getMaxCharge());
     		}
     	}
 	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if(ArmorFSB.hasFSBArmorIgnoreCharge(player) && player.inventory.armorInventory.get(3).getItem() == ModItems.bj_helmet) {
+		if(ArmorFSB.hasFSBArmorIgnoreCharge(player) && player.inventory.armorInventory.get(3).getItem() == ArmorSets.bj_helmet) {
         	return super.onItemRightClick(world, player, hand);
     	}
 

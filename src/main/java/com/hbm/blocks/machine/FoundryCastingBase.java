@@ -7,10 +7,10 @@ import java.util.Random;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.material.Mats.MaterialStack;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Foundry;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.InventoryHelper;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemMold;
 import com.hbm.items.machine.ItemMold.Mold;
 import com.hbm.items.machine.ItemScraps;
@@ -133,7 +133,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 		}
 		
 		//insert mold
-		if(!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() == ModItems.mold) {
+		if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() == Foundry.mold) {
 			Mold mold = ((ItemMold) player.getHeldItem(hand).getItem()).getMold(player.getHeldItem(hand));
 			
 			if(mold.size == cast.getMoldSize()) {
@@ -150,14 +150,14 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 				player.getHeldItem(hand).shrink(1);
 				
 				player.inventoryContainer.detectAndSendChanges();
-				world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
+				world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundEvents.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
 				cast.markDirty();
 				world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
 				return true;
 			}
 		}
 		//shovel scrap
-		if(!player.getHeldItem(hand).isEmpty() && player.getHeldItem(hand).getItem() instanceof ItemTool && ((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel")) {
+		if(player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemTool && ((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel")) {
 			if(cast.amount > 0) {
 				ItemStack scrap = ItemScraps.create(new MaterialStack(cast.type, cast.amount));
 				if(!player.inventory.addItemStackToInventory(scrap)) {
@@ -235,7 +235,7 @@ public abstract class FoundryCastingBase extends BlockContainer implements ICruc
 		
 		if(cast.inventory.getStackInSlot(0).isEmpty()) {
 			text.add("§c" + I18nUtil.resolveKey("foundry.noCast"));
-		} else if(cast.inventory.getStackInSlot(0).getItem() == ModItems.mold){
+		} else if(cast.inventory.getStackInSlot(0).getItem() == Foundry.mold){
 			Mold mold = ((ItemMold) cast.inventory.getStackInSlot(0).getItem()).getMold(cast.inventory.getStackInSlot(0));
 			text.add("§e" + mold.getTitle());
 		}

@@ -1,14 +1,14 @@
 package com.hbm.animloader;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
+import com.hbm.main.MainRegistry;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.client.resources.IResource;
+import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
@@ -18,16 +18,13 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import com.hbm.main.MainRegistry;
-
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.client.resources.IResource;
-import net.minecraft.util.ResourceLocation;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @SideOnly(Side.CLIENT)
 public class ColladaLoader {
@@ -369,7 +366,7 @@ public class ColladaLoader {
 			if(e.getAttribute("id").equals(output)){
 				int[] hiddenFrames = parseIntegerArray(e.getElementsByTagName("float_array").item(0).getTextContent());
 				for(int i = 0; i < hiddenFrames.length; i ++){
-					t[i].hidden = hiddenFrames[i] > 0;
+					t[i].hidden = hiddenFrames[i] > 0 ? true : false;
 				}
 			}
 		}
@@ -390,7 +387,8 @@ public class ColladaLoader {
 		Transform[] transforms = new Transform[floats.length/16];
 		for(int i = 0; i < floats.length/16; i++){
 			float[] rawTransform = new float[16];
-            System.arraycopy(floats, i * 16 + 0, rawTransform, 0, 16);
+			for(int j = 0; j < 16; j ++)
+				rawTransform[j] = floats[i*16 + j];
 			transforms[i] = new Transform(rawTransform);
 		}
 		return transforms;

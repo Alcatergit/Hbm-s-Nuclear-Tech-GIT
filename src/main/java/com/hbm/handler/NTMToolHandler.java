@@ -1,6 +1,7 @@
 package com.hbm.handler;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.ModBlocks.WatzNew;
 import com.hbm.inventory.OreDictManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.Tuple.Pair;
@@ -51,7 +52,7 @@ public class NTMToolHandler {
     }
 
     public static void register() {
-        conversions.put(new Pair<>(ToolType.BOLT, new MetaBlock(ModBlocks.watz_casing, 0)), new Pair<>(new AStack[]{new OreDictStack(OreDictManager.DURA.bolt(), 4)}, new MetaBlock(ModBlocks.watz_casing, 1)));
+        conversions.put(new Pair<>(ToolType.BOLT, new MetaBlock(WatzNew.watz_casing, 0)), new Pair<>(new AStack[]{new OreDictStack(OreDictManager.DURA.bolt(), 4)}, new MetaBlock(WatzNew.watz_casing, 1)));
         conversions.put(new Pair<>(ToolType.BOLT, new MetaBlock(Blocks.STONE)), new Pair<>(new AStack[]{new OreDictStack(OreDictManager.DURA.bolt(), 1)}, new MetaBlock(Blocks.COBBLESTONE)));
     }
 

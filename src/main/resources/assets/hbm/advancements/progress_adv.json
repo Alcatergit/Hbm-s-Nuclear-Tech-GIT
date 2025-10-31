@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_advanced_alloy"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_adv"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_adv.desc"
+		}
+	},
+	"parent": "hbm:progress_steel",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_advanced_alloy"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 23
+    }
+}

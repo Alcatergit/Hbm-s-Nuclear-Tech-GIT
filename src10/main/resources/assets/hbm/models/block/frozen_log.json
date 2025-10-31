@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/frozen_log_top",
+		"side": "hbm:blocks/frozen_log_side"
+	}
+}

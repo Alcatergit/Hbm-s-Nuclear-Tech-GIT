@@ -1,15 +1,9 @@
 package com.hbm.render.entity;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL12;
-
 import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.DummyTexs;
 import com.hbm.render.RenderHelper;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
@@ -20,6 +14,11 @@ import net.minecraft.entity.Entity;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL12;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 
@@ -35,46 +34,46 @@ public class GasFlameRenderer extends Render<EntityGasFlameFX> {
 	@Override
 	public void doRender(EntityGasFlameFX fx, double x, double y, double z, float entityYaw, float partialTicks) {
 
-		if(textures.isEmpty()){
-			textures.put(ModItems.gasflame1, RenderHelper.getItemTexture(ModItems.gasflame1));
-			textures.put(ModItems.gasflame2, RenderHelper.getItemTexture(ModItems.gasflame2));
-			textures.put(ModItems.gasflame3, RenderHelper.getItemTexture(ModItems.gasflame3));
-			textures.put(ModItems.gasflame4, RenderHelper.getItemTexture(ModItems.gasflame4));
-			textures.put(ModItems.gasflame5, RenderHelper.getItemTexture(ModItems.gasflame5));
-			textures.put(ModItems.gasflame6, RenderHelper.getItemTexture(ModItems.gasflame6));
-			textures.put(ModItems.gasflame7, RenderHelper.getItemTexture(ModItems.gasflame7));
-			textures.put(ModItems.gasflame8, RenderHelper.getItemTexture(ModItems.gasflame8));
+		if(textures.size() == 0){
+			textures.put(DummyTexs.gasflame1, RenderHelper.getItemTexture(DummyTexs.gasflame1));
+			textures.put(DummyTexs.gasflame2, RenderHelper.getItemTexture(DummyTexs.gasflame2));
+			textures.put(DummyTexs.gasflame3, RenderHelper.getItemTexture(DummyTexs.gasflame3));
+			textures.put(DummyTexs.gasflame4, RenderHelper.getItemTexture(DummyTexs.gasflame4));
+			textures.put(DummyTexs.gasflame5, RenderHelper.getItemTexture(DummyTexs.gasflame5));
+			textures.put(DummyTexs.gasflame6, RenderHelper.getItemTexture(DummyTexs.gasflame6));
+			textures.put(DummyTexs.gasflame7, RenderHelper.getItemTexture(DummyTexs.gasflame7));
+			textures.put(DummyTexs.gasflame8, RenderHelper.getItemTexture(DummyTexs.gasflame8));
 		}
 		if (fx.particleAge <= fx.maxAge && fx.particleAge >= fx.maxAge / 8 * 7) {
-			renderItem = ModItems.gasflame8;
+			renderItem = DummyTexs.gasflame8;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 7 && fx.particleAge >= fx.maxAge / 8 * 6) {
-			renderItem = ModItems.gasflame7;
+			renderItem = DummyTexs.gasflame7;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 6 && fx.particleAge >= fx.maxAge / 8 * 5) {
-			renderItem = ModItems.gasflame6;
+			renderItem = DummyTexs.gasflame6;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 5 && fx.particleAge >= fx.maxAge / 8 * 4) {
-			renderItem = ModItems.gasflame5;
+			renderItem = DummyTexs.gasflame5;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 4 && fx.particleAge >= fx.maxAge / 8 * 3) {
-			renderItem = ModItems.gasflame4;
+			renderItem = DummyTexs.gasflame4;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 3 && fx.particleAge >= fx.maxAge / 8 * 2) {
-			renderItem = ModItems.gasflame3;
+			renderItem = DummyTexs.gasflame3;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 * 2 && fx.particleAge >= fx.maxAge / 8 * 1) {
-			renderItem = ModItems.gasflame2;
+			renderItem = DummyTexs.gasflame2;
 		}
 
 		if (fx.particleAge < fx.maxAge / 8 && fx.particleAge >= 0) {
-			renderItem = ModItems.gasflame1;
+			renderItem = DummyTexs.gasflame1;
 		}
 
 		TextureAtlasSprite icon = textures.get(renderItem);

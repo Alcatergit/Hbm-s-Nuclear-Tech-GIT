@@ -2,13 +2,14 @@ package com.hbm.tileentity.machine.oil;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.MachineConfig;
+import com.hbm.entity.particle.EntityGasFX;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.tileentity.TileEntity;
@@ -31,7 +32,12 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 		return this.hasCustomInventoryName() ? this.getCustomName() : "container.oilWell";
 	}
 
-    @SuppressWarnings("deprecation")
+	@Override
+    public long getMaxPower() {
+        return 100000L;
+    }
+
+	@SuppressWarnings("deprecation")
 	@Override
 	public void update() {
 		int timer = MachineConfig.delayPerOperationDerrick;
@@ -103,6 +109,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 								this.tanks[1].fill(new FluidStack(tankTypes[1], gasCollected), true);
 								needsUpdate = true;
 
+								ExplosionLarge.spawnOilSpills(world, pos.getX() + 0.5F, pos.getY() + 5.5F, pos.getZ() + 0.5F, 3);
 								world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_SWIM, SoundCategory.BLOCKS, 2.0F, 0.5F);
 
 								break;
@@ -132,6 +139,7 @@ public class TileEntityMachineOilWell extends TileEntityOilDrillBase {
 					warning2 = 2;
 					tanks[1].drain(50, true);
 					needsUpdate = true;
+					world.spawnEntity(new EntityGasFX(world, pos.getX() + 0.5F, pos.getY() + 6.5F, pos.getZ() + 0.5F, 0.0, 0.0, 0.0));
 				} else {
 					warning2 = 1;
 				}

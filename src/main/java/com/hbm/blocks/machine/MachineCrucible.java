@@ -9,11 +9,14 @@ import com.hbm.items.machine.ItemScraps;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.TileEntityProxyInventory;
-import com.hbm.tileentity.machine.TileEntityCrucible;
+//import com.hbm.tileentity.machine.TileEntityCrucible;
 
 import api.hbm.block.ICrucibleAcceptor;
+import com.hbm.tileentity.machine.TileEntityCrucible;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -40,12 +43,11 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
         this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, -1.25D, -1D, 1.5D, 1.25D));
         this.bounding.add(new AxisAlignedBB(-1.25D, 0.5D, 1D, 1.25D, 1.5D, 1.25D));
         this.bounding.add(new AxisAlignedBB(1D, 0.5D, -1.25D, 1.25D, 1.5D, 1.25D));
-        FULL_BLOCK_AABB.setMaxY(0.999D); //item bounce prevention
+        this.FULL_BLOCK_AABB.setMaxY(0.999D); //item bounce prevention
 	}
 
 	@Override
 	public TileEntity createNewTileEntity(World world, int meta) {
-		
 		if(meta >= 12) return new TileEntityCrucible();
 		return new TileEntityProxyInventory();
 	}
@@ -53,10 +55,10 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 	public boolean hasShovelInHand(EntityPlayer player, EnumHand hand){
 		return player.getHeldItem(hand) != null && player.getHeldItem(hand).getItem() instanceof ItemTool && (((ItemTool) player.getHeldItem(hand).getItem()).getToolClasses(player.getHeldItem(hand)).contains("shovel"));
 	}
-	
+
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
-		
+
 		if(world.isRemote) {
 			return true;
 		} else if(!player.isSneaking()) {
@@ -69,18 +71,18 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 				List<MaterialStack> stacks = new ArrayList();
 				stacks.addAll(crucible.recipeStack);
 				stacks.addAll(crucible.wasteStack);
-				
+
 				for(MaterialStack stack : stacks) {
 					ItemStack scrap = ItemScraps.create(new MaterialStack(stack.material, stack.amount));
 					if(!player.inventory.addItemStackToInventory(scrap)) {
 						player.dropItem(scrap, false);
 					}
 				}
-				
+
 				crucible.recipeStack.clear();
 				crucible.wasteStack.clear();
 				crucible.markDirty();
-				
+
 			} else {
 				FMLNetworkHandler.openGui(player, MainRegistry.instance, 0, world, p.getX(), p.getY(), p.getZ());
 			}
@@ -90,7 +92,7 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 		}
 	}
 
-	
+
 
 	@Override
 	public int[] getDimensions() {
@@ -101,29 +103,29 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 	public int getOffset() {
 		return 1;
 	}
-
+/*
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		
+
 		TileEntity te = world.getTileEntity(pos);
-		
+
 		if(te instanceof TileEntityCrucible) {
 			TileEntityCrucible crucible = (TileEntityCrucible) te;
-			
+
 			List<MaterialStack> stacks = new ArrayList();
 			stacks.addAll(crucible.recipeStack);
 			stacks.addAll(crucible.wasteStack);
-			
+
 			for(MaterialStack stack : stacks) {
 				world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, ItemScraps.create(new MaterialStack(stack.material, stack.amount))));
 			}
-			
+
 			crucible.recipeStack.clear();
 			crucible.wasteStack.clear();
 		}
-		
+
 		super.breakBlock(world, pos, state);
-	}
+	}*/
 
     @Override
 	public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess world, BlockPos pos) {
@@ -137,31 +139,31 @@ public class MachineCrucible extends BlockDummyable implements ICrucibleAcceptor
 		}
         return FULL_BLOCK_AABB;
     }
-	
+
 	@Override
 	public boolean canAcceptPartialPour(World world, BlockPos p, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {
-		
+
 		BlockPos pos = this.findCore(world, p);
 		if(pos == null) return false;
 		TileEntity tile = world.getTileEntity(pos);
 		if(!(tile instanceof TileEntityCrucible)) return false;
 		TileEntityCrucible crucible = (TileEntityCrucible) tile;
-		
+
 		return crucible.canAcceptPartialPour(world, p, dX, dY, dZ, side, stack);
 	}
 
 	@Override
 	public MaterialStack pour(World world, BlockPos p, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {
-		
+
 		BlockPos pos = this.findCore(world, p);
 		if(pos == null) return stack;
 		TileEntity tile = world.getTileEntity(pos);
 		if(!(tile instanceof TileEntityCrucible)) return stack;
 		TileEntityCrucible crucible = (TileEntityCrucible) tile;
-		
+
 		return crucible.pour(world, p, dX, dY, dZ, side, stack);
 	}
 
-	@Override public boolean canAcceptPartialFlow(World world, BlockPos p, ForgeDirection side, MaterialStack stack) { return false; }
+	@Override public boolean canAcceptPartialFlow(World world,BlockPos p,ForgeDirection side,MaterialStack stack) { return false; }
 	@Override public MaterialStack flow(World world, BlockPos p, ForgeDirection side, MaterialStack stack) { return null; }
 }

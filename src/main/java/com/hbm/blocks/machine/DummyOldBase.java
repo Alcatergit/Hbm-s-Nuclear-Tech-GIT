@@ -1,14 +1,13 @@
 package com.hbm.blocks.machine;
 
-import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.ForgeDirection;
-import com.hbm.interfaces.IDummy;
-
 import api.hbm.energy.IEnergyConnectorBlock;
+import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IDummy;
+import com.hbm.lib.ForgeDirection;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
-import net.minecraft.world.IBlockAccess;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.IBlockAccess;
 
 public abstract class DummyOldBase extends BlockContainer implements IDummy, IEnergyConnectorBlock {
 

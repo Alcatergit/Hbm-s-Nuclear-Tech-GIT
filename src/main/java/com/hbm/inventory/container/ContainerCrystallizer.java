@@ -2,8 +2,7 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.inventory.SlotUpgrade;
-import com.hbm.tileentity.machine.TileEntityMachineCrystallizer;
-
+import com.hbm.tileentity.machine.CrystallizerCopyBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -13,9 +12,9 @@ import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerCrystallizer extends Container {
 
-	private TileEntityMachineCrystallizer diFurnace;
+	private CrystallizerCopyBase diFurnace;
 
-	public ContainerCrystallizer(InventoryPlayer invPlayer, TileEntityMachineCrystallizer tedf) {
+	public ContainerCrystallizer(InventoryPlayer invPlayer, CrystallizerCopyBase tedf) {
 		diFurnace = tedf;
 
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 0, 62, 45));
@@ -44,7 +43,7 @@ public class ContainerCrystallizer extends Container {
     public ItemStack transferStackInSlot(EntityPlayer p_82846_1_, int par2)
     {
 		ItemStack var3 = ItemStack.EMPTY;
-		Slot var4 = this.inventorySlots.get(par2);
+		Slot var4 = (Slot) this.inventorySlots.get(par2);
 		
 		if (var4 != null && var4.getHasStack())
 		{

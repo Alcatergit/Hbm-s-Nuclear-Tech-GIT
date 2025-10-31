@@ -1,17 +1,15 @@
 package com.hbm.entity.grenade;
 
-import java.util.Random;
-
 import com.hbm.config.BombConfig;
-import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.entity.effect.EntityNukeTorex;
-
-import com.hbm.items.ModItems;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.items.weapon.ItemGrenade;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
+
+import java.util.Random;
 
 public class EntityGrenadeNuclear extends EntityGrenadeBouncyBase {
     private static Random rand = new Random();
@@ -49,7 +47,7 @@ public class EntityGrenadeNuclear extends EntityGrenadeBouncyBase {
 
 	@Override
 	protected int getMaxTimer() {
-		return ItemGrenade.getFuseTicks(ModItems.grenade_nuclear);
+		return ItemGrenade.getFuseTicks(Armory.grenade_nuclear);
 	}
 
 	@Override

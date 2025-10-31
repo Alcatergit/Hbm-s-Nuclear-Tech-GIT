@@ -1,9 +1,9 @@
 package com.hbm.packet;
 
 import com.hbm.interfaces.IAnimatedDoor;
-
 import com.hbm.interfaces.IDoor;
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
@@ -13,7 +13,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TEDoorAnimationPacket implements IMessage {
+public class TEDoorAnimationPacket extends RecordablePacket {
 
 	public int x, y, z;
 	public byte state;
@@ -35,18 +35,18 @@ public class TEDoorAnimationPacket implements IMessage {
 	}
 	
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
 		state = buf.readByte();
-		if(buf.readableBytes() == 1){
+		if(buf.readableBits() >= 8){
 			texture = buf.readByte();
 		}
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);

@@ -1,9 +1,9 @@
 package com.hbm.tileentity.machine.pile;
 
+import api.hbm.block.IPileNeutronReceiver;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.pile.BlockGraphiteDrilledBase;
-
-import api.hbm.block.IPileNeutronReceiver;
+import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutronReceiver {
@@ -23,7 +23,7 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 			react();
 			
 			if(this.heat >= maxHeat) {
-				world.setBlockToAir(pos);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				world.newExplosion(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 5, true, true);
 			}
 			
@@ -34,7 +34,7 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 	}
 	
 	private void dissipateHeat() {
-		this.heat -= (int) (heat * 0.05); //remove 5% of the stored heat per tick
+		this.heat -= heat * 0.05; //remove 5% of the stored heat per tick
 	}
 	
 	private void react() {
@@ -42,9 +42,9 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 		int reaction = (int) (this.neutrons * (1D - ((double)this.heat / (double)maxHeat) * 0.5D)); //max heat reduces reaction by 50% due to thermal expansion
 		
 		this.lastNeutrons = this.neutrons;
-		this.neutrons = 0;
-
-        this.progress += reaction;
+		this.neutrons = 0;;
+		
+		this.progress += reaction;
 		
 		if(reaction <= 0)
 			return;
@@ -64,14 +64,12 @@ public class TileEntityPileFuel extends TileEntityPileBase implements IPileNeutr
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 		this.heat = nbt.getInteger("heat");
-		if(nbt.hasKey("progress")) this.progress = nbt.getInteger("progress");
 	}
 	
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
 		nbt.setInteger("heat", this.heat);
-		nbt.setInteger("progress", this.progress);
 		return nbt;
 	}
 }

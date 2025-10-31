@@ -1,14 +1,13 @@
 package com.hbm.tileentity.machine.rbmk;
 
-import java.util.Map;
-
+import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
-import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Map;
 
 public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 
@@ -72,8 +71,13 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 	public double getMult() {
 		return this.level;
 	}
-
-    @Override
+	
+	@Override
+	public int trackingRange() {
+		return 150;
+	}
+	
+	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
 

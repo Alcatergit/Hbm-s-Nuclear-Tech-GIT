@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:pellet_charged"
+		},
+		"title": {
+			"translate": "hbm.achievement.radPoison"
+		},
+		"description": {
+			"translate": "hbm.achievement.radPoison.desc"
+		}
+	},
+	"parent": "hbm:root",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 17
+    }
+}

@@ -2,11 +2,10 @@ package com.hbm.tileentity.machine.oil;
 
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.inventory.FractionRecipes;
+import com.hbm.inventory.RefineryRecipes;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.util.Tuple.Quartet;
 import com.hbm.tileentity.INBTPacketReceiver;
-
+import com.hbm.util.Tuple.Quartet;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -60,9 +59,10 @@ public class TileEntityMachineFractionTower extends TileEntity  implements INBTP
 			TileEntity stack = world.getTileEntity(pos.up(3));
 			
 			
-			if(stack instanceof TileEntityMachineFractionTower frac) {
-
-                //make types equal
+			if(stack instanceof TileEntityMachineFractionTower) {
+				TileEntityMachineFractionTower frac = (TileEntityMachineFractionTower) stack;
+				
+				//make types equal
 				for(int i = 0; i < 3; i++) {
 					frac.setTankType(i, types[i]);
 				}
@@ -121,22 +121,22 @@ public class TileEntityMachineFractionTower extends TileEntity  implements INBTP
 	
 	private void setupTanks() {
 		
-		Quartet<Fluid, Fluid, Integer, Integer> quart = FractionRecipes.getFractions(types[0]);
+		Quartet<Fluid, Fluid, Integer, Integer> quart = RefineryRecipes.getFractions(types[0]);
 		
 		if(quart != null) {
-			setTankType(1, quart.getW());
-			setTankType(2, quart.getX());
+			setTankType(1, quart.getA());
+			setTankType(2, quart.getB());
 		}
 	}
 	
 	private void fractionate() {
 		
-		Quartet<Fluid, Fluid, Integer, Integer> quart = FractionRecipes.getFractions(types[0]);
+		Quartet<Fluid, Fluid, Integer, Integer> quart = RefineryRecipes.getFractions(types[0]);
 		
 		if(quart != null) {
 			
-			int left = quart.getY();
-			int right = quart.getZ();
+			int left = quart.getC();
+			int right = quart.getD();
 			
 			if(tanks[0].getFluidAmount() >= 100 && hasSpace(left, right)) {
 				tanks[0].drain(100, true);

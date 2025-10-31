@@ -1,5 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.machine.MachineArcFurnace;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -7,9 +9,6 @@ import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.FurnaceRecipes;
@@ -17,7 +16,6 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineArcFurnace extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -62,7 +60,7 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("powerTime", power);
 		compound.setInteger("cookTime", dualCookTime);
 		compound.setTag("inventory", inventory.serializeNBT());
@@ -88,9 +86,10 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 	private boolean hasElectrodes() {
 		
 		if(!inventory.getStackInSlot(2).isEmpty() && !inventory.getStackInSlot(3).isEmpty() && !inventory.getStackInSlot(4).isEmpty()) {
-            return (inventory.getStackInSlot(2).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(2).getItem() == ModItems.arc_electrode_desh) &&
-                    (inventory.getStackInSlot(3).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(3).getItem() == ModItems.arc_electrode_desh) &&
-                    (inventory.getStackInSlot(4).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(4).getItem() == ModItems.arc_electrode_desh);
+			if((inventory.getStackInSlot(2).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(2).getItem() == ModItems.arc_electrode_desh) &&
+					(inventory.getStackInSlot(3).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(3).getItem() == ModItems.arc_electrode_desh) &&
+					(inventory.getStackInSlot(4).getItem() == ModItems.arc_electrode || inventory.getStackInSlot(4).getItem() == ModItems.arc_electrode_desh))
+				return true;
 		}
 		
 		return false;
@@ -193,9 +192,14 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 				dualCookTime = 0;
 			}
 			
-			boolean trigger = !hasPower() || !canProcess() || this.dualCookTime != 0;
-
-            if(trigger)
+			boolean trigger = true;
+			
+			if(hasPower() && canProcess() && this.dualCookTime == 0)
+			{
+				trigger = false;
+			}
+			
+			if(trigger)
             {
                 flag1 = true;
                 MachineArcFurnace.updateBlockState(this.dualCookTime > 0, this.world, pos);
@@ -237,12 +241,12 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 	}
 
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemStack, int j) {
-		return this.isItemValidForSlot(i, itemStack);
+	public boolean canInsertItemHopper(int i, ItemStack itemStack, int j) {
+		return this.isItemValidForSlotHopper(i, itemStack);
 	}
 
 	@Override
-	public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+	public boolean canExtractItemHopper(int slot, ItemStack itemStack, int amount) {
 		
 		if(slot == 1)
 			return true;
@@ -251,13 +255,14 @@ public class TileEntityMachineArcFurnace extends TileEntityMachineBase implement
 			return itemStack.getItem() == ModItems.arc_electrode_burnt;
 
 		if(slot == 5)
-            return itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem) itemStack.getItem()).getCharge(itemStack) == 0;
+			if (itemStack.getItem() instanceof IBatteryItem && ((IBatteryItem)itemStack.getItem()).getCharge(itemStack) == 0)
+				return true;
 		
 		return false;
 	}
 	
 	@Override
-	public boolean isItemValidForSlot(int slot, ItemStack stack) {
+	public boolean isItemValidForSlotHopper(int slot, ItemStack stack) {
 		if(slot == 2 || slot == 3 || slot == 4)
 			return stack.getItem() == ModItems.arc_electrode || stack.getItem() == ModItems.arc_electrode_desh;
 		if(slot == 5)

@@ -1,17 +1,16 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
+import api.hbm.energy.IBatteryItem;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
-
-import api.hbm.energy.IBatteryItem;
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemSelfcharger extends Item implements IBatteryItem {
 	
@@ -48,7 +47,7 @@ public class ItemSelfcharger extends Item implements IBatteryItem {
 	}
 
 	@Override
-	public long getMaxCharge(ItemStack stack) {
+	public long getMaxCharge() {
 		return charge;
 	}
 

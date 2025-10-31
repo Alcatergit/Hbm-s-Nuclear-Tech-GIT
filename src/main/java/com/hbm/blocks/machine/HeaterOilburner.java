@@ -4,13 +4,12 @@ import api.hbm.block.IToolable;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ITooltipProvider;
-import com.hbm.inventory.FluidFlameRecipes;
+import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.items.tool.ItemTooling;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.tileentity.TileEntityProxyCombo;
 import com.hbm.tileentity.machine.TileEntityHeaterOilburner;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.util.ITooltipFlag;
@@ -108,9 +107,9 @@ public class HeaterOilburner extends BlockDummyable implements ITooltipProvider,
         text.add(String.format("%,d", heater.heatEnergy) + " TU");
         text.add("§a-> §r" + heater.setting + " mB/t");
         Fluid type = heater.fluidType;
-        long energy = FluidFlameRecipes.getHeatEnergy(type);
+        int energy = FluidCombustionRecipes.getFlameEnergy(type);
         if (energy != 0) {
-            long heat = energy * heater.setting;
+            int heat = energy * heater.setting;
             text.add("§c<- §r" + String.format("%,d", heat) + " TU/t");
         }
 

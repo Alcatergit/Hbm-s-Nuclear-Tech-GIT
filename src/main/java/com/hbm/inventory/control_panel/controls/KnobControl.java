@@ -4,8 +4,8 @@ import com.hbm.inventory.control_panel.*;
 import com.hbm.inventory.control_panel.nodes.*;
 import com.hbm.main.ClientProxy;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.IModelCustom;
-import com.hbm.render.amlfrom1710.Tessellator;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.GlStateManager;
@@ -60,7 +60,7 @@ public class KnobControl extends Control {
     public void render() {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_knob_control_tex);
-        Tessellator tes = Tessellator.instance;
+        CompositeBrush tes = CompositeBrush.instance;
         IModelCustom model = getModel();
 
         int value = (int) getVar("value").getNumber();

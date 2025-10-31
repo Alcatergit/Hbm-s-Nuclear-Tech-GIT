@@ -1,35 +1,27 @@
 package com.hbm.tileentity.machine;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
+import api.hbm.energy.*;
 import com.hbm.blocks.machine.MachineBattery;
-import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.Library;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyConductor;
-import api.hbm.energy.IEnergyConnector;
-import api.hbm.energy.IEnergyUser;
-import api.hbm.energy.IPowerNet;
-import api.hbm.energy.PowerNet;
-import api.hbm.energy.IBatteryItem;
+import li.cil.oc.api.machine.Arguments;
+import li.cil.oc.api.machine.Callback;
+import li.cil.oc.api.machine.Context;
+import li.cil.oc.api.network.SimpleComponent;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.Optional;
 
-import li.cil.oc.api.machine.Arguments;
-import li.cil.oc.api.machine.Callback;
-import li.cil.oc.api.machine.Context;
-import li.cil.oc.api.network.SimpleComponent;
-import org.jetbrains.annotations.NotNull;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "li.cil.oc.api.network.SimpleComponent", modid = "OpenComputers")})
 public class TileEntityMachineBattery extends TileEntityMachineBase implements ITickable, IEnergyUser, SimpleComponent {
@@ -67,7 +59,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {
@@ -98,7 +90,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", this.power);
 		compound.setShort("redLow", this.redLow);
 		compound.setShort("redHigh", this.redHigh);
@@ -151,18 +143,20 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		if(i == 2)
 			if(stack.getItem() instanceof IBatteryItem){
 				IBatteryItem batteryItem = ((IBatteryItem)stack.getItem());
-                return batteryItem.getCharge(stack) < batteryItem.getMaxCharge(stack) && batteryItem.getChargeRate() > 0;
+				if(batteryItem.getCharge(stack) < batteryItem.getMaxCharge() && batteryItem.getChargeRate() > 0){
+					return true;
+				}
 			}
 		return false;
 	}
 	
 	@Override
-	public boolean canInsertItem(int i, ItemStack itemStack, int j) {
-		return this.isItemValidForSlot(i, itemStack);
+	public boolean canInsertItemHopper(int i, ItemStack itemStack, int j) {
+		return this.isItemValidForSlotHopper(i, itemStack);
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+	public boolean canExtractItemHopper(int i, ItemStack itemStack, int j) {
 		return (i == 1 || i == 3);
 	}
 
@@ -180,7 +174,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		ItemStack itemStackFill = inventory.getStackInSlot(2);
 		if(itemStackFill.getItem() instanceof IBatteryItem) {
 			IBatteryItem itemFill = ((IBatteryItem)itemStackFill.getItem());
-			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge(itemStackFill)) {
+			if(itemFill.getCharge(itemStackFill) == itemFill.getMaxCharge()) {
 				if(inventory.getStackInSlot(3) == null || inventory.getStackInSlot(3).isEmpty()){
 					inventory.setStackInSlot(3, itemStackFill);
 					inventory.setStackInSlot(2, ItemStack.EMPTY);
@@ -240,7 +234,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		short mode = (short) this.getRelevantMode();
 		
 		//HasSets to we don't have any duplicates
-		Set<IPowerNet> nets = new HashSet();
+		Set<PowerNet> nets = new HashSet();
 		Set<IEnergyConnector> consumers = new HashSet();
 		
 		//iterate over all sides
@@ -251,10 +245,10 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 			//if it's a cable, buffer both the network and all subscribers of the net
 			if(te instanceof IEnergyConductor) {
 				IEnergyConductor con = (IEnergyConductor) te;
-				if(con.canConnect(dir.getOpposite()) && con.getPowerNet() != null) {
-					nets.add(con.getPowerNet());
-					con.getPowerNet().unsubscribe(this);
-					consumers.addAll(con.getPowerNet().getSubscribers());
+				if(con.canConnect(dir.getOpposite()) && con.getNetwork() != null) {
+					nets.add(con.getNetwork());
+					con.getNetwork().removeMember(this);
+					consumers.addAll(con.getNetwork().getMembers());
 				}
 				
 			//if it's just a consumer, buffer it as a subscriber
@@ -268,7 +262,8 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 
 		//send power to buffered consumers, independent of nets
 		if(this.power > 0 && (mode == mode_buffer || mode == mode_output)) {
-            List<IEnergyConnector> con = new ArrayList(consumers);
+			List<IEnergyConnector> con = new ArrayList();
+			con.addAll(consumers);
 			
 			if(PowerNet.trackingInstances == null) {
 				PowerNet.trackingInstances = new ArrayList();
@@ -287,7 +282,7 @@ public class TileEntityMachineBattery extends TileEntityMachineBase implements I
 		
 		//resubscribe to buffered nets, if necessary
 		if(mode == mode_buffer || mode == mode_input) {
-			nets.forEach(x -> x.subscribe(this));
+			nets.forEach(x -> x.addMember(this));
 		}
 	}
 

@@ -1,8 +1,6 @@
 package com.hbm.inventory.container;
 
-import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.oil.TileEntityMachineGasFlare;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -25,7 +23,12 @@ public class ContainerMachineGasFlare extends Container {
 		//Fluid in
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 1, 17, 17));
 		//Fluid out
-		this.addSlotToContainer(new SlotMachineOutput(tedf.inventory, 2, 17, 53));
+		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 2, 17, 53) {
+			@Override
+			public boolean isItemValid(@Nonnull ItemStack stack) {
+				return false;
+			}
+		});
 		//Fluid ID
 		this.addSlotToContainer(new SlotItemHandler(tedf.inventory, 3, 35, 71));
 		//Upgrades
@@ -58,13 +61,13 @@ public class ContainerMachineGasFlare extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 			
-            if (par2 <= 5) {
-				if (!this.mergeItemStack(var5, 6, this.inventorySlots.size(), false))
+            if (par2 <= 1) {
+				if (!this.mergeItemStack(var5, 3, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 6, false))
+			else if (!this.mergeItemStack(var5, 0, 3, false))
 			{
 					return ItemStack.EMPTY;
 			}

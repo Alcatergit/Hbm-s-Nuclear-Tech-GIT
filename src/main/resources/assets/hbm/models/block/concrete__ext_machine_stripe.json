@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/concrete_colored_ext.machine",
+		"side": "hbm:blocks/concrete_colored_ext.machine_stripe"
+	}
+}

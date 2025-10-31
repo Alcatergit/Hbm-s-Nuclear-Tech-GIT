@@ -6,6 +6,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.packet.NBTControlPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.machine.TileEntityHeaterHeatex;
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
@@ -19,7 +20,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.List;
 
 public class GUIHeaterHeatex extends GuiInfoContainer {
     private final static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/machine/gui_heatex.png");
@@ -40,11 +40,11 @@ public class GUIHeaterHeatex extends GuiInfoContainer {
         super.initGui();
 
         Keyboard.enableRepeatEvents(true);
-        this.fieldCycles = new GuiTextField(0, this.fontRenderer, guiLeft + 74, guiTop + 31, 30, 10);
+        this.fieldCycles = new GuiTextField(0, this.fontRenderer, guiLeft + 74, guiTop + 31, 28, 10);
         initText(this.fieldCycles);
         this.fieldCycles.setText(String.valueOf(heater.amountToCool));
 
-        this.fieldDelay = new GuiTextField(1, this.fontRenderer, guiLeft + 74, guiTop + 49, 30, 10);
+        this.fieldDelay = new GuiTextField(1, this.fontRenderer, guiLeft + 74, guiTop + 49, 28, 10);
         initText(this.fieldDelay);
         this.fieldDelay.setText(String.valueOf(heater.tickDelay));
     }
@@ -53,7 +53,7 @@ public class GUIHeaterHeatex extends GuiInfoContainer {
         field.setTextColor(0x00ff00);
         field.setDisabledTextColour(0x00ff00);
         field.setEnableBackgroundDrawing(false);
-        field.setMaxStringLength(5);
+        field.setMaxStringLength(4);
     }
 
     @Override
@@ -64,10 +64,10 @@ public class GUIHeaterHeatex extends GuiInfoContainer {
         FFUtils.renderTankInfo(this, x, y, guiLeft + 116, guiTop + 36, 16, 52, heater.tanks[1], heater.tankTypes[1]);
 
         if (guiLeft + 70 <= x && guiLeft + 70 + 36 > x && guiTop + 26 < y && guiTop + 26 + 18 >= y) {
-            drawHoveringText(Arrays.asList("Amount per cycle"), x, y);
+            drawHoveringText(Arrays.asList(I18nUtil.resolveKey("gui.heatex.amount")), x, y);
         }
         if (guiLeft + 70 <= x && guiLeft + 70 + 36 > x && guiTop + 44 < y && guiTop + 44 + 18 >= y) {
-            drawHoveringText(Arrays.asList("Cycle tick delay"), x, y);
+            drawHoveringText(Arrays.asList(I18nUtil.resolveKey("gui.heatex.cycle")), x, y);
         }
 
         super.renderHoveredToolTip(x, y);

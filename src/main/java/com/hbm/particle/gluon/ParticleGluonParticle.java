@@ -1,12 +1,7 @@
 package com.hbm.particle.gluon;
 
-import java.nio.FloatBuffer;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.main.ClientProxy;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -15,6 +10,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
+
+import java.nio.FloatBuffer;
 
 public class ParticleGluonParticle extends Particle {
 

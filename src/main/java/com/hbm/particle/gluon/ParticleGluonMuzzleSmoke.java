@@ -3,7 +3,6 @@ package com.hbm.particle.gluon;
 import com.hbm.particle.ParticleFirstPerson;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;

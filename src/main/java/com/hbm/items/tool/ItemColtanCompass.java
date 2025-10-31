@@ -1,13 +1,9 @@
 package com.hbm.items.tool;
 
-import java.util.Random;
-
-import javax.annotation.Nullable;
-
+import com.hbm.config.GeneralConfig;
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItemFrame;
@@ -21,6 +17,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import javax.annotation.Nullable;
+import java.util.Random;
+
 public class ItemColtanCompass extends Item {
 
 	public int lastX = 0;
@@ -30,6 +29,11 @@ public class ItemColtanCompass extends Item {
 	public ItemColtanCompass(String s){
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
+		if (!GeneralConfig.enable528 || !GeneralConfig.enable528ColtanDeposit) {
+			this.setCreativeTab(null);
+		} else {
+			setCreativeTab(MainRegistry.consumableTab);
+		}
 		this.addPropertyOverride(new ResourceLocation("angle"), new IItemPropertyGetter(){
 
 			@SideOnly(Side.CLIENT)
@@ -116,20 +120,23 @@ public class ItemColtanCompass extends Item {
 	@Override
 	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected){
 		if(world.isRemote) {
-			if(stack.hasTagCompound()) {
-				lastX = stack.getTagCompound().getInteger("colX");
-				lastZ = stack.getTagCompound().getInteger("colZ");
-				lease = System.currentTimeMillis() + 1000;
-				
-				Vec3 vec = Vec3.createVectorHelper(entity.posX - lastX, 0, entity.posZ - lastZ);
-				MainRegistry.proxy.displayTooltip(((int) vec.length()) + "m");
+			if (GeneralConfig.enable528 && GeneralConfig.enable528ColtanDeposit) {
+				if (stack.hasTagCompound()) {
+					lastX = stack.getTagCompound().getInteger("colX");
+					lastZ = stack.getTagCompound().getInteger("colZ");
+					lease = System.currentTimeMillis()+1000;
+
+					Vec3 vec = Vec3.createVectorHelper(entity.posX-lastX,0,entity.posZ-lastZ);
+					MainRegistry.proxy.displayTooltip(((int) vec.length())+"m");
+				}
+
+				if (ItemColtanCompass.this.lease < System.currentTimeMillis()) {
+					lastX = 0;
+					lastZ = 0;
+				}
+			} else {
+				MainRegistry.proxy.displayTooltip("528 mode is disabled. Check hbm/hbm.config if you'd like to use this feature.");
 			}
-			
-			if(ItemColtanCompass.this.lease < System.currentTimeMillis()) {
-				lastX = 0;
-				lastZ = 0;
-			}
-			
 		} else {
 			if(!stack.hasTagCompound()) {
 				stack.setTagCompound(new NBTTagCompound());

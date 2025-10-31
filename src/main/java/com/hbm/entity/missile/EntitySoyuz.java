@@ -1,16 +1,13 @@
 package com.hbm.entity.missile;
 
-import java.util.List;
-
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.items.ISatChip;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.machine.ItemSatChip;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.satellites.Satellite;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -25,6 +22,8 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.IChunkProvider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class EntitySoyuz extends Entity {
 
@@ -65,7 +64,7 @@ public class EntitySoyuz extends Entity {
 				if(e instanceof EntityPlayer) {
 					if(!memed) {
 						memed = true;
-						world.playSound(null, posX, posY, posZ, HBMSoundHandler.soyuzed, SoundCategory.NEUTRAL, 100, 1.0F);
+						world.playSound(null, posX, posY, posZ, HBMSoundEvents.soyuzed, SoundCategory.NEUTRAL, 100, 1.0F);
 					}
 					
 					AdvancementManager.grantAchievement(((EntityPlayer)e), AdvancementManager.soyuz);
@@ -117,8 +116,8 @@ public class EntitySoyuz extends Entity {
 						AdvancementManager.grantAchievement(p, AdvancementManager.achFOEQ);
 				}
 				
-				if(load.getItem() instanceof ISatChip) {
-				    int freq = ISatChip.getFreqS(load);
+				if(load.getItem() instanceof ItemSatChip) {
+				    int freq = ItemSatChip.getFreq(load);
 			    	Satellite.orbit(world, Satellite.getIDFromItem(load.getItem()), freq, posX, posY, posZ);
 				}
 			}

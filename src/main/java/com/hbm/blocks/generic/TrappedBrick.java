@@ -1,12 +1,9 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.tileentity.deco.TileEntityTrappedBrick;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
@@ -31,6 +28,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class TrappedBrick extends BlockContainer {
 
@@ -85,7 +84,7 @@ public class TrappedBrick extends BlockContainer {
 			List<Entity> targets = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x, y + 1, z, x + 1, y + 2, z + 1));
 			for(Entity e : targets)
 				e.attackEntityFrom(ModDamageSource.spikes, 10);
-			world.playSound(null, x + 0.5, y + 1.5, z + 0.5, HBMSoundHandler.slicer, SoundCategory.HOSTILE, 1.0F, 1.0F);
+			world.playSound(null, x + 0.5, y + 1.5, z + 0.5, HBMSoundEvents.slicer, SoundCategory.HOSTILE, 1.0F, 1.0F);
 			break;
 		case MINE:
 			world.createExplosion(null, x + 0.5, y + 1.5, z + 0.5, 1F, false);
@@ -164,12 +163,12 @@ public class TrappedBrick extends BlockContainer {
 			}
 	}
 	
-	public enum TrapType {
+	public static enum TrapType {
 		ON_STEP,
 		DETECTOR
 	}
 
-	public enum Trap {
+	public static enum Trap {
 
 		FALLING_ROCKS(TrapType.DETECTOR),
 		FIRE(TrapType.ON_STEP),
@@ -187,9 +186,9 @@ public class TrappedBrick extends BlockContainer {
 		ZOMBIE(TrapType.DETECTOR),
 		SPIDERS(TrapType.DETECTOR);
 
-		public final TrapType type;
+		public TrapType type;
 
-		Trap(TrapType type) {
+		private Trap(TrapType type) {
 			this.type = type;
 		}
 

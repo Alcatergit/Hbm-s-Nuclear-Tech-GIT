@@ -1,9 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityShrapnel;
@@ -11,7 +7,6 @@ import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyInteger;
@@ -27,6 +22,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 public class BlockVolcano extends Block {
 
@@ -69,7 +68,7 @@ public class BlockVolcano extends Block {
 	
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
-		if(!world.isRemote && world.isAreaLoaded(pos, 20)) {
+		if(!world.isRemote) {
 			int x = pos.getX();
 			int y = pos.getY();
 			int z = pos.getZ();
@@ -113,7 +112,7 @@ public class BlockVolcano extends Block {
 		for(int i = 0; i < 3; i++) {
 			EntityShrapnel frag = new EntityShrapnel(world);
 			frag.setLocationAndAngles(x + 0.5, y + 1.5, z + 0.5, 0.0F, 0.0F);
-			frag.motionY = 2D + rand.nextDouble();
+			frag.motionY = 1D + rand.nextDouble();
 			frag.motionX = rand.nextGaussian() * 0.2D;
 			frag.motionZ = rand.nextGaussian() * 0.2D;
 			frag.setVolcano(true);

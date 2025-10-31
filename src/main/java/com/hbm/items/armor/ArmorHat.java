@@ -1,7 +1,6 @@
 package com.hbm.items.armor;
 
 import com.hbm.items.gear.ArmorModel;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.inventory.EntityEquipmentSlot;
 

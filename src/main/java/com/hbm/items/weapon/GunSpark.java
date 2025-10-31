@@ -1,14 +1,11 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.entity.projectile.EntitySparkBeam;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -25,6 +22,9 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
+
+import java.util.List;
+import java.util.Random;
 
 public class GunSpark extends Item {
 
@@ -60,7 +60,7 @@ public class GunSpark extends Item {
 			if(((EntityPlayer)entityLiving).capabilities.isCreativeMode){
 				creative = true;
 			}
-			hasAmmo = Library.hasInventoryItem(((EntityPlayer) entityLiving).inventory, ModItems.gun_spark_ammo);
+			hasAmmo = Library.hasInventoryItem(((EntityPlayer) entityLiving).inventory, Armory.gun_spark_ammo);
 		}
 		boolean flag = creative || EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 		if (flag || hasAmmo) {
@@ -77,12 +77,12 @@ public class GunSpark extends Item {
 
 			stack.damageItem(1, entityLiving);
 
-			world.playSound(entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundHandler.sparkShoot, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
+			world.playSound(entityLiving.posX, entityLiving.posY, entityLiving.posZ, HBMSoundEvents.sparkShoot, SoundCategory.PLAYERS, 1.0F, 1.0F, true);
 
 			if (flag) {
 			} else {
 				if(entityLiving instanceof EntityPlayer)
-					Library.consumeInventoryItem(((EntityPlayer) entityLiving).inventory, ModItems.gun_spark_ammo);
+					Library.consumeInventoryItem(((EntityPlayer) entityLiving).inventory, Armory.gun_spark_ammo);
 			}
 
 			EntitySparkBeam beam = new EntitySparkBeam(world, entityLiving, 3F, entityLiving.getHeldItem(EnumHand.MAIN_HAND) == stack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND);

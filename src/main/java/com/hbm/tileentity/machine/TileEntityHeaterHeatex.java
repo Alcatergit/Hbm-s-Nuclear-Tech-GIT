@@ -9,7 +9,6 @@ import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.container.ContainerHeaterHeatex;
 import com.hbm.inventory.gui.GUIHeaterHeatex;
-import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
@@ -18,7 +17,7 @@ import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityMachineBase;
-
+import com.leafia.contents.machines.reactors.msr.components.MSRTEBase;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -30,16 +29,15 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -50,7 +48,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     public Fluid[] tankTypes;
 
-    public int amountToCool = 32_000;
+    public int amountToCool = 1;
     public int tickDelay = 1;
     public int heatGen;
     public int heatEnergy;
@@ -61,9 +59,9 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         this.tanks = new FluidTank[2];
         this.tankTypes = new Fluid[2];
 
-        this.tanks[0] = new FluidTank(ModForgeFluids.HOTCOOLANT, 0, 32_000);
+        this.tanks[0] = new FluidTank(ModForgeFluids.HOTCOOLANT, 0, 24_000);
         this.tankTypes[0] = ModForgeFluids.HOTCOOLANT;
-        this.tanks[1] = new FluidTank(ModForgeFluids.COOLANT, 0, 32_000);
+        this.tanks[1] = new FluidTank(ModForgeFluids.COOLANT, 0, 24_000);
         this.tankTypes[1] = ModForgeFluids.COOLANT;
     }
 
@@ -81,6 +79,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
             setFluidType();
 
             PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[]{tanks[0], tanks[1]}), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+            PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), tankTypes), new NetworkRegistry.TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 
             this.heatEnergy *= 0.999;
 
@@ -105,10 +104,10 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
         ForgeDirection rot = dir.getRotation(ForgeDirection.UP);
 
-        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 + rot.offsetX, 0, dir.offsetZ * 2 + rot.offsetZ), 32000);
-        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 - rot.offsetX, 0, dir.offsetZ * 2 - rot.offsetZ), 32000);
-        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 + rot.offsetX, 0, -dir.offsetZ * 2 + rot.offsetZ), 32000);
-        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 - rot.offsetX, 0, -dir.offsetZ * 2 - rot.offsetZ), 32000);
+        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 + rot.offsetX, 0, dir.offsetZ * 2 + rot.offsetZ), 12000);
+        FFUtils.fillFluid(this, tank, world, pos.add(dir.offsetX * 2 - rot.offsetX, 0, dir.offsetZ * 2 - rot.offsetZ), 12000);
+        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 + rot.offsetX, 0, -dir.offsetZ * 2 + rot.offsetZ), 12000);
+        FFUtils.fillFluid(this, tank, world, pos.add(-dir.offsetX * 2 - rot.offsetX, 0, -dir.offsetZ * 2 - rot.offsetZ), 12000);
     }
 
     @Override
@@ -127,20 +126,28 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     public void setFluidType(){
         ItemStack inFluid = this.inventory.getStackInSlot(0);
-        if(inFluid.getItem() == ModItems.forge_fluid_identifier) {
+        if(inFluid.getItem() instanceof ItemForgeFluidIdentifier) {
             setFluidTypes(ItemForgeFluidIdentifier.getType(inFluid));
         }
         if(tankTypes[0] == null) setFluidTypes(ModForgeFluids.HOTCOOLANT);
     }
 
     public void setFluidTypes(Fluid f){
-        if(HeatRecipes.hasCoolRecipe(f) && tankTypes[0] != f) {
-            tankTypes[0] = f;
-            tankTypes[1] = HeatRecipes.getCoolFluid(f);
-            // clear input tank fluid
-            tanks[0].setFluid(new FluidStack(f, 0));
-            tanks[1].setFluid(new FluidStack(tankTypes[1], 0));
-            this.markDirty();
+        if (tankTypes[0] != f) {
+            if (HeatRecipes.hasCoolRecipe(f)) {
+                tankTypes[0] = f;
+                tankTypes[1] = HeatRecipes.getCoolFluid(f);
+                // clear input tank fluid
+                tanks[0].setFluid(new FluidStack(f,0));
+                tanks[1].setFluid(new FluidStack(tankTypes[1],0));
+                this.markDirty();
+            } else if (f == ModForgeFluids.FLUORIDE) {
+                tankTypes[0] = f;
+                tankTypes[1] = f;
+                tanks[0].setFluid(new FluidStack(f,0));
+                tanks[1].setFluid(new FluidStack(f,0));
+                this.markDirty();
+            }
         }
     }
 
@@ -148,21 +155,41 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
         if(tickDelay < 1) tickDelay = 1;
         if(world.getTotalWorldTime() % tickDelay != 0) return;
 
-        if(!HeatRecipes.hasCoolRecipe(tankTypes[0])) {
-            return;
-        }
+        int amountReq = 0;
+        int amountProduced = 0;
+        int heat = 0;
 
-        int amountReq = HeatRecipes.getInputAmountCold(tankTypes[0]);
-        int amountProduced = HeatRecipes.getOutputAmountCold(tankTypes[0]);
-        int heat = HeatRecipes.getResultingHeat(tankTypes[0]);
+        FluidStack stack1 = new FluidStack(tankTypes[1],1);
+
+        if(HeatRecipes.hasCoolRecipe(tankTypes[0])) {
+            amountReq = HeatRecipes.getInputAmountCold(tankTypes[0]);
+            amountProduced = HeatRecipes.getOutputAmountCold(tankTypes[0]);
+            heat = HeatRecipes.getResultingHeat(tankTypes[0]);
+        } else if (tankTypes[0] == ModForgeFluids.FLUORIDE) {
+            amountProduced = 1;
+            amountReq = 1;
+            FluidStack stack = tanks[0].getFluid();
+            if (stack != null) {
+                NBTTagCompound compound = MSRTEBase.nbtProtocol(stack.tag);
+                double h = compound.getDouble("heat");
+                compound.setDouble("heat",0);
+                heat = (int)(h*8);
+                stack.tag = compound;
+                stack1 = stack;
+            } else return;
+        } else
+            return;
 
         int inputOps = tanks[0].getFluidAmount() / amountReq;
         int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / amountProduced;
         int opCap = this.amountToCool;
 
         int ops = Math.min(inputOps, Math.min(outputOps, opCap));
+        if (tanks[1].getFluidAmount() == 0)
+            tanks[1].setFluid(null);
+        int filled = tanks[1].fill(new FluidStack(stack1, ops * amountProduced), true);
+        if (filled == 0) return; // failure
         tanks[0].drain(ops * amountReq, true);
-        tanks[1].fill(new FluidStack(tankTypes[1], ops * amountProduced), true);
 
         this.heatGen = (heat * ops)>>1;
         this.heatEnergy += heatGen;
@@ -184,7 +211,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     }
 
     @Override
-    public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+    public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
         nbt.setInteger("heatEnergy", heatEnergy);
         nbt.setInteger("toCool", amountToCool);
         nbt.setInteger("delay", tickDelay);
@@ -207,7 +234,9 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
 
     @Override
     public void recievePacket(NBTTagCompound[] tags) {
-        if (tags.length == 2) {
+        if (tags.length != 2) {
+            return;
+        } else {
             tanks[0].readFromNBT(tags[0]);
             tanks[1].readFromNBT(tags[1]);
         }
@@ -221,8 +250,14 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     @Override
     public int fill(FluidStack resource, boolean doFill) {
         if (resource != null && resource.getFluid() == tankTypes[0] && resource.amount > 0) {
+            if (resource.getFluid() == ModForgeFluids.FLUORIDE) {
+                if (MSRTEBase.nbtProtocol(resource.tag).getDouble("heat") <= 0) return 0; // deny non-heated fluorides
+            }
+            if (tanks[0].getFluidAmount() == 0)
+                tanks[0].setFluid(null);
             return tanks[0].fill(resource, doFill);
         }
+
         return 0;
     }
 
@@ -249,9 +284,8 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     @Override
     public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
-            if(facing == null) return true;
             ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing()) {
+            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing() || facing == null) {
                 return true;
             }
         }
@@ -263,7 +297,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
         if (capability == CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY) {
             ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-            if (facing == null || facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing()) {
+            if (facing == dir.toEnumFacing().getOpposite() || facing == dir.toEnumFacing() || facing == null) {
                 return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
             }
         }
@@ -310,7 +344,7 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public void receiveControl(NBTTagCompound data) {
         if (data.hasKey("toCool")) this.amountToCool = Math.max(data.getInteger("toCool"), 1);
         if (data.hasKey("delay")) this.tickDelay = Math.max(data.getInteger("delay"), 1);
-        this.amountToCool = Math.min(this.amountToCool, tanks[0].getCapacity());
+
         markDirty();
     }
 }

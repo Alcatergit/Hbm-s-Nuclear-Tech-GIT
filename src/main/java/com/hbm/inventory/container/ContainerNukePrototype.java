@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukePrototype;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -58,11 +57,11 @@ public class ContainerNukePrototype extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 13) {
-				if (!this.mergeItemStack(var5, 14, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 14, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 14, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
             

@@ -5,12 +5,12 @@
  */
 package glmath.glm.mat._4.d;
 
-import java.nio.ByteBuffer;
-
 import glmath.glm.Glm;
 import glmath.glm.mat._4.Mat4;
 import glmath.glm.vec._3.d.Vec3d;
 import glmath.glm.vec._4.d.Vec4d;
+
+import java.nio.ByteBuffer;
 
 /**
  *

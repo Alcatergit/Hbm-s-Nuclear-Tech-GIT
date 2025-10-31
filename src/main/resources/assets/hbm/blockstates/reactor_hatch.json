@@ -1,8 +1,8 @@
 {
 	"variants": {
-		"facing=north": { "model": "hbm:reactor_hatch" },
-     	   	"facing=south": { "model": "hbm:reactor_hatch", "y": 180 },
-      	  	"facing=west":  { "model": "hbm:reactor_hatch", "y": 270 },
-      		"facing=east":  { "model": "hbm:reactor_hatch", "y": 90 }
+		"facing=north": { "model": "hbm:pwr_terminal" },
+     	   	"facing=south": { "model": "hbm:pwr_terminal", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:pwr_terminal", "y": 270 },
+      		"facing=east":  { "model": "hbm:pwr_terminal", "y": 90 }
 	}
 }

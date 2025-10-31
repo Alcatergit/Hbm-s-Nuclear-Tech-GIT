@@ -1,17 +1,16 @@
 package com.hbm.tileentity.machine.oil;
 
+import api.hbm.energy.IEnergyUser;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.lib.Library;
-import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.Tuple.Pair;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -19,18 +18,13 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.fluids.Fluid;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.FluidTank;
-import net.minecraftforge.fluids.FluidRegistry;
-import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.*;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineRefinery extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
@@ -69,6 +63,11 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 		if(nbt.hasKey("f")) {
             this.tankTypes[0] = FluidRegistry.getFluid(nbt.getString("f"));
         }
+		Pair<FluidStack[], ItemStack> recipe = RefineryRecipes.getRecipe(tankTypes[0]);
+		if (recipe != null) {
+			FluidStack[] outputFluids = recipe.getA();
+			setupTanks(outputFluids);
+		}
 		power = nbt.getLong("power");
 		itemOutputTimer = nbt.getInteger("itemOutputTimer");
 		if(nbt.hasKey("tanks"))
@@ -77,7 +76,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		if(tankTypes[0] != null){
 			nbt.setString("f", tankTypes[0].getName());
 		} else {
@@ -166,8 +165,8 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 
 	private void refine(){
 		Pair<FluidStack[], ItemStack> recipe = RefineryRecipes.getRecipe(tankTypes[0]);
-		FluidStack[] outputFluids = recipe.getKey();
-		ItemStack outputItem = recipe.getValue();
+		FluidStack[] outputFluids = recipe.getA();
+		ItemStack outputItem = recipe.getB();
 		setupTanks(outputFluids);
 		
 		if(power >= 5 && tanks[0].getFluidAmount() >= 100 &&
@@ -256,7 +255,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack stack, int amount) {
+	public boolean canExtractItemHopper(int i, ItemStack stack, int amount) {
 		return i==2 || i==4 || i==6 || i==8 || i==10 || i==11;
 	}
 	
@@ -359,7 +358,9 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 
 	@Override
 	public void recievePacket(NBTTagCompound[] tags) {
-		if(tags.length == 5){
+		if(tags.length != 5){
+			return;
+		} else {
 			tanks[0].readFromNBT(tags[0]);
 			tanks[1].readFromNBT(tags[1]);
 			tanks[2].readFromNBT(tags[2]);

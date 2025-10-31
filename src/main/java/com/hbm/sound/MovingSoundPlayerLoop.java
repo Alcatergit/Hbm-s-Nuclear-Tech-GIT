@@ -1,21 +1,20 @@
 package com.hbm.sound;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public abstract class MovingSoundPlayerLoop extends MovingSound {
 
 	public static List<MovingSoundPlayerLoop> globalSoundList = new ArrayList<MovingSoundPlayerLoop>();
 	public List<Entity> playerForSound = new ArrayList<Entity>();
 	public Entity player;
-	public enum EnumHbmSound { soundTauLoop, soundChopperLoop, soundCrashingLoop, soundMineLoop, soundRadarLoop }
-
-    public EnumHbmSound type;
+	public enum EnumHbmSound { soundTauLoop, soundChopperLoop, soundCrashingLoop, soundMineLoop, soundRadarLoop };
+	public EnumHbmSound type;
 	public boolean init;
 
 	public MovingSoundPlayerLoop(SoundEvent res, SoundCategory c, Entity player, EnumHbmSound type) {

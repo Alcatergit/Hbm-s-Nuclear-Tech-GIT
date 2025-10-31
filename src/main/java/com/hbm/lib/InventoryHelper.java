@@ -1,7 +1,5 @@
 package com.hbm.lib;
 
-import java.util.Random;
-
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
@@ -9,6 +7,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
+
+import java.util.Random;
 
 public class InventoryHelper {
 	
@@ -20,7 +20,8 @@ public class InventoryHelper {
 		if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
 			return;
 		IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-		for (int i = 0; i < inventory.getSlots(); ++i) {
+		for (int i = 0; i < inventory.getSlots(); ++i)
+        {
             ItemStack itemstack = inventory.getStackInSlot(i);
 
             if (!itemstack.isEmpty())
@@ -29,23 +30,6 @@ public class InventoryHelper {
             }
         }
 	}
-
-    public static void dropInventoryItems(World world, BlockPos pos, ICapabilityProvider t, int from, int to) {
-        if(t == null)
-            return;
-        if(!t.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null))
-            return;
-        IItemHandler inventory = t.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, null);
-        for (int i = 0; i < inventory.getSlots(); ++i) {
-            if(i < from || i > to) continue;
-            ItemStack itemstack = inventory.getStackInSlot(i);
-
-            if (!itemstack.isEmpty())
-            {
-                spawnItemStack(world, pos.getX(), pos.getY(), pos.getZ(), itemstack);
-            }
-        }
-    }
 	
 	public static void spawnItemStack(World worldIn, double x, double y, double z, ItemStack stack)
     {

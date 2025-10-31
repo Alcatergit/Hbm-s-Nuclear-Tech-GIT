@@ -1,35 +1,21 @@
-# <u>**HBM Nuclear Tech Mod - 1.12.2 Extended Edition**</u>
+# <u>**The cursed meme fork eddition**</u> made by a stupid lefeon
 
-This is my 1.12.2 custom version of the mod
+Here's my playground of NTM modding: This mod does not focus on porting stuff from 1.7.10, but rather throw in bunch of exclusive contents to make some flavor.<br>
+This mod aims on making frequent updates, <i>in exchange for less reliability and stability</i>. This is a local project not focused on production.<br>
+<b>Downloads can be found [here](https://github.com/abysschroma/NTM-but-uncomfortable/releases).</b>
 
-which is forked from the fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT)
-which is forked from the port made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)
+If you've found a bug or feature requests, feel free to [open an issue](https://github.com/abysschroma/NTM-but-uncomfortable/issues/new).<br>
+
+It is forked from Extended Edition made by [Alcater](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT)<br>
+which is forked from the fork made by [TheOriginalGolem](https://github.com/TheOriginalGolem/Hbm-s-Nuclear-Tech-GIT)<br>
+which is forked from the port made by [Drillgon200](https://github.com/Drillgon200/Hbm-s-Nuclear-Tech-GIT)<br>
 which is ported from the original mod made by [HBMTheBobcat](https://github.com/HbmMods/Hbm-s-Nuclear-Tech-GIT).
 
+Thatchie created a [discord server](https://discord.gg/CKfuXcjRve)! If you have questions, feel free to join!
 
-The latest version can be found on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/hbms-nuclear-tech-mod-extended-edition) or [Modrinth](https://modrinth.com/mod/ntm-extended) or under the [Releases page](https://github.com/Alcatergit/Hbm-s-Nuclear-Tech-GIT/releases).
+![2025-01-05_11 50 16](https://github.com/user-attachments/assets/db2d0f36-9a31-4647-9ba3-45f6beebdd5b)
 
-If you have question or suggestions you can post them on our [NTM Extended Discord](https://discord.gg/Auq95eCEtD)
+# <u>Technical information</u>
+If you'd like to build the mod and you're struggling on it, go read the README on [FireDragon91245's fork](https://github.com/FireDragon91245/NTM-Ext-Ext), since I have no idea how the build configurations work anymore ever since merging their fork lmao
 
-### **Want to contribute?**
-
-If you want to contribute make a pull request and I'll review it as soon as possible.
-Every contribution is very much appreciated by me and the players.
-
-### **Build Guide:**
-
-Download the repository, then open a shell prompt in that folder, then type the following:
-
-`.\gradlew build`
-
-Press enter.
-
-Now just wait for the build to finish and the new Jar file will be in `Hbm-s-Nuclear-Tech-GIT\build\libs`.
-
-
-#### Discords:
-
-Alcater#2644
-Golem#9568
-Drillgon200#0288
-The Bobcat#8817
+Not my fault ^-^

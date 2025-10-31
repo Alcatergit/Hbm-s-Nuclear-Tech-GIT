@@ -1,8 +1,7 @@
 package com.hbm.inventory.container;
 
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.tileentity.machine.TileEntitySILEX;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -59,7 +58,7 @@ public class ContainerSILEX extends Container {
 				if(!this.mergeItemStack(var5, silex.inventory.getSlots(), this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if(var5.getItem() == ModItems.turret_chip) { //did i copy this from turrets? tf is happening lol
+			} else if(var5.getItem() == Armory.turret_chip) { //did i copy this from turrets? tf is happening lol
 				
 				if(!this.mergeItemStack(var5, 0, 1, false))
 					return ItemStack.EMPTY;

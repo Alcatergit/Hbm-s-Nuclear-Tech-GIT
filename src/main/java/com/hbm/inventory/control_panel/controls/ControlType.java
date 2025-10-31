@@ -11,7 +11,7 @@ public enum ControlType {
     METER("Meter"),
     LABEL("Label");
 
-    public final String name;
+    public String name;
     ControlType(String name){
         this.name = name;
     }

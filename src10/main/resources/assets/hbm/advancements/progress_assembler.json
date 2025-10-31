@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_assembler"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_assembler"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_assembler.desc"
+		}
+	},
+	"parent": "hbm:progress_difurnace",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_assembler"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 25
+    }
+}

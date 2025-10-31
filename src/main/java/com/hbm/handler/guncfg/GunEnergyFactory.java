@@ -1,7 +1,5 @@
 package com.hbm.handler.guncfg;
 
-import java.util.ArrayList;
-
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
@@ -9,8 +7,9 @@ import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.handler.GunConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
-import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Materials.Nuggies;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -19,12 +18,13 @@ import com.hbm.render.anim.BusAnimationKeyframe;
 import com.hbm.render.anim.BusAnimationSequence;
 import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
-
 import net.minecraft.init.MobEffects;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
 
 public class GunEnergyFactory {
 
@@ -44,8 +44,8 @@ public class GunEnergyFactory {
 		config.ammoCap = 1000;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_ARROWS;
-		config.firingSound = HBMSoundHandler.zomgShoot;
-		config.reloadSound = HBMSoundHandler.b92Reload;
+		config.firingSound = HBMSoundEvents.zomgShoot;
+		config.reloadSound = HBMSoundEvents.b92Reload;
 
 		config.name = "EMC101 Prismatic Negative Energy Cannon";
 		config.manufacturer = "MWT Prototype Labs";
@@ -73,7 +73,7 @@ public class GunEnergyFactory {
 		config.reloadType = GunConfiguration.RELOAD_NONE;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_SPLIT;
-		config.firingSound = HBMSoundHandler.teslaShoot;
+		config.firingSound = HBMSoundEvents.teslaShoot;
 
 		config.name = "EMP Orb Projector";
 		config.manufacturer = "MWT Prototype Labs";
@@ -88,7 +88,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = new BulletConfiguration();
 
-		bullet.ammo = ModItems.gun_emp_ammo;
+		bullet.ammo = Armory.gun_emp_ammo;
 
 		bullet.velocity = 1F;
 		bullet.spread = 0.0F;
@@ -129,8 +129,8 @@ public class GunEnergyFactory {
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCLE;
-		config.firingSound = HBMSoundHandler.flamethrowerShoot;
-		config.reloadSound = HBMSoundHandler.flamerReload;
+		config.firingSound = HBMSoundEvents.flamethrowerShoot;
+		config.reloadSound = HBMSoundEvents.flamerReload;
 
 		config.name = "Heavy Duty Flamer";
 		config.manufacturer = "MWT Prototype Labs";
@@ -167,7 +167,7 @@ public class GunEnergyFactory {
 		config.crosshair = Crosshair.NONE;
 		config.durability = 10000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.hksShoot;
+		config.firingSound = HBMSoundEvents.hksShoot;
 		config.reloadSoundEnd = false;
 
 		config.name = "Visual Operation Ranged Tactical Electromagnetic Xenoblaster";
@@ -204,7 +204,7 @@ public class GunEnergyFactory {
 		config.crosshair = Crosshair.NONE;
 		config.durability = 10000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.osiprShoot;
+		config.firingSound = HBMSoundEvents.osiprShoot;
 		config.reloadSoundEnd = false;
 
 		config.name = "ChickenCom Light Duty Plasma Gun";
@@ -249,7 +249,7 @@ public class GunEnergyFactory {
 		config.crosshair = Crosshair.NONE;
 		config.durability = 10000;
 		config.reloadSound = GunConfiguration.RSOUND_MAG;
-		config.firingSound = HBMSoundHandler.osiprShoot;
+		config.firingSound = HBMSoundEvents.osiprShoot;
 		config.reloadSoundEnd = false;
 
 		config.name = "Gluon Gun";
@@ -268,7 +268,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = new BulletConfiguration();
 
-		bullet.ammo = ModItems.ammo_fuel;
+		bullet.ammo = Armory.ammo_fuel;
 		bullet.ammoCount = 100;
 
 		bullet.velocity = 0.75F;
@@ -328,7 +328,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_napalm;
+		bullet.ammo = Armory.ammo_fuel_napalm;
 		bullet.wear = 2;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 6;
@@ -341,7 +341,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_phosphorus;
+		bullet.ammo = Armory.ammo_fuel_phosphorus;
 		bullet.wear = 2;
 		bullet.spread = 0.0F;
 		bullet.bulletsMin = 1;
@@ -360,7 +360,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_vaporizer;
+		bullet.ammo = Armory.ammo_fuel_vaporizer;
 		bullet.wear = 4;
 		bullet.spread = 0.25F;
 		bullet.bulletsMin = 8;
@@ -383,7 +383,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_gas;
+		bullet.ammo = Armory.ammo_fuel_gas;
 		bullet.wear = 1;
 		bullet.spread = 0.05F;
 		bullet.gravity = 0D;
@@ -403,7 +403,7 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = new BulletConfiguration();
 
-		bullet.ammo = ModItems.nugget_euphemium;
+		bullet.ammo = Nuggies.nugget_euphemium;
 		bullet.ammoCount = 1000;
 		bullet.wear = 1;
 		bullet.velocity = 1F;
@@ -416,7 +416,7 @@ public class GunEnergyFactory {
 		bullet.dmgMax = 25000;
 
 		bullet.style = BulletConfiguration.STYLE_BOLT;
-		bullet.trail = BulletConfiguration.BOLT_ZOMG;
+		bullet.trail = bullet.BOLT_ZOMG;
 
 		bullet.effects = new ArrayList<>();
 		bullet.effects.add(new PotionEffect(HbmPotion.bang, 10 * 20, 0));
@@ -428,7 +428,7 @@ public class GunEnergyFactory {
 
 				if(!bullet.world.isRemote) {
 					ExplosionChaos.explodeZOMG(bullet.world, (int) bullet.posX, (int) bullet.posY, (int) bullet.posZ, 5);
-					bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, HBMSoundHandler.bombDet, SoundCategory.HOSTILE, 5.0F, 1.0F);
+					bullet.world.playSound(null, bullet.posX, bullet.posY, bullet.posZ, HBMSoundEvents.bombDet, SoundCategory.HOSTILE, 5.0F, 1.0F);
 					ExplosionLarge.spawnParticles(bullet.world, bullet.posX, bullet.posY, bullet.posZ, 5);
 				}
 			}

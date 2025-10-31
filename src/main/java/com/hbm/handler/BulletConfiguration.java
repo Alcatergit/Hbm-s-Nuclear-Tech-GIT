@@ -1,16 +1,11 @@
 package com.hbm.handler;
 
-import java.util.List;
-
 import com.hbm.handler.guncfg.BulletConfigFactory;
-import com.hbm.interfaces.IBulletHitBehavior;
-import com.hbm.interfaces.IBulletHurtBehavior;
-import com.hbm.interfaces.IBulletImpactBehavior;
-import com.hbm.interfaces.IBulletRicochetBehavior;
-import com.hbm.interfaces.IBulletUpdateBehavior;
-
+import com.hbm.interfaces.*;
 import net.minecraft.item.Item;
 import net.minecraft.potion.PotionEffect;
+
+import java.util.List;
 
 public class BulletConfiguration {
 

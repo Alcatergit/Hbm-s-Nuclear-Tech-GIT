@@ -1,20 +1,16 @@
 package com.hbm.blocks.machine;
 
-import java.util.List;
-
-import com.hbm.util.I18nUtil;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.RadiationSystemNT;
-import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IBomb;
+import com.hbm.interfaces.IDoor;
 import com.hbm.interfaces.IMultiBlock;
 import com.hbm.interfaces.IRadResistantBlock;
-import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemLock;
 import com.hbm.tileentity.machine.TileEntityVaultDoor;
-
+import com.hbm.util.I18nUtil;
 import micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
@@ -22,6 +18,7 @@ import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyDirection;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -34,6 +31,8 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.Optional;
+
+import java.util.List;
 
 @Optional.InterfaceList({@Optional.Interface(iface = "micdoodle8.mods.galacticraft.api.block.IPartialSealableBlock", modid = "galacticraftcore")})
 public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRadResistantBlock, IPartialSealableBlock {
@@ -73,171 +72,172 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 		if(!te.isLocked())
 			te.tryToggle();
 	}
-
-    public static void placeVaultDoor(World world, BlockPos pos, EnumFacing dir){
-        world.setBlockState(pos, ModBlocks.vault_door.getDefaultState().withProperty(FACING, dir), 2);
-        TileEntityVaultDoor te = (TileEntityVaultDoor) world.getTileEntity(pos);
-
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-
-        if(dir == EnumFacing.NORTH) {
-            //frame
-            if(!(te.placeDummy(x + 1, y, z) &&
-                    te.placeDummy(x + 2, y, z) &&
-                    te.placeDummy(x + 2, y + 1, z) &&
-                    te.placeDummy(x + 2, y + 2, z) &&
-                    te.placeDummy(x + 2, y + 3, z) &&
-                    te.placeDummy(x + 2, y + 4, z) &&
-                    te.placeDummy(x + 1, y + 4, z) &&
-                    te.placeDummy(x, y + 4, z) &&
-                    te.placeDummy(x - 1, y + 4, z) &&
-                    te.placeDummy(x - 2, y + 4, z) &&
-                    te.placeDummy(x - 2, y + 3, z) &&
-                    te.placeDummy(x - 2, y + 2, z) &&
-                    te.placeDummy(x - 2, y + 1, z) &&
-                    te.placeDummy(x - 2, y, z) &&
-                    te.placeDummy(x - 1, y, z) &&
-                    //cog
-                    te.placeDummy(x - 1, y + 1, z) &&
-                    te.placeDummy(x - 1, y + 2, z) &&
-                    te.placeDummy(x - 1, y + 3, z) &&
-                    te.placeDummy(x, y + 1, z) &&
-                    te.placeDummy(x, y + 2, z) &&
-                    te.placeDummy(x, y + 3, z) &&
-                    te.placeDummy(x + 1, y + 1, z) &&
-                    te.placeDummy(x + 1, y + 2, z) &&
-                    te.placeDummy(x + 1, y + 3, z) &&
-                    //teeth
-                    te.placeDummy(x + 2, y, z + 1) &&
-                    te.placeDummy(x + 1, y, z + 1) &&
-                    te.placeDummy(x, y, z + 1) &&
-                    te.placeDummy(x - 1, y, z + 1) &&
-                    te.placeDummy(x - 2, y, z + 1))) {
-
-                world.destroyBlock(pos, true);
-            }
-        }
-        else if(dir == EnumFacing.EAST) {
-
-            //frame
-            if(!(te.placeDummy(x, y, z + 1) &&
-                    te.placeDummy(x, y, z + 2) &&
-                    te.placeDummy(x, y + 1, z + 2) &&
-                    te.placeDummy(x, y + 2, z + 2) &&
-                    te.placeDummy(x, y + 3, z + 2) &&
-                    te.placeDummy(x, y + 4, z + 2) &&
-                    te.placeDummy(x, y + 4, z + 1) &&
-                    te.placeDummy(x, y + 4, z) &&
-                    te.placeDummy(x, y + 4, z - 1) &&
-                    te.placeDummy(x, y + 4, z - 2) &&
-                    te.placeDummy(x, y + 3, z - 2) &&
-                    te.placeDummy(x, y + 2, z - 2) &&
-                    te.placeDummy(x, y + 1, z - 2) &&
-                    te.placeDummy(x, y, z - 2) &&
-                    te.placeDummy(x, y, z - 1) &&
-                    //cog
-                    te.placeDummy(x, y + 1, z - 1) &&
-                    te.placeDummy(x, y + 2, z - 1) &&
-                    te.placeDummy(x, y + 3, z - 1) &&
-                    te.placeDummy(x, y + 1, z) &&
-                    te.placeDummy(x, y + 2, z) &&
-                    te.placeDummy(x, y + 3, z) &&
-                    te.placeDummy(x, y + 1, z + 1) &&
-                    te.placeDummy(x, y + 2, z + 1) &&
-                    te.placeDummy(x, y + 3, z + 1) &&
-                    //teeth
-                    te.placeDummy(x - 1, y, z + 2) &&
-                    te.placeDummy(x - 1, y, z + 1) &&
-                    te.placeDummy(x - 1, y, z) &&
-                    te.placeDummy(x - 1, y, z - 1) &&
-                    te.placeDummy(x - 1, y, z - 2))) {
-
-                world.destroyBlock(pos, true);
-            }
-        }
-        else if(dir == EnumFacing.SOUTH) {
-
-            //frame
-            if(!(te.placeDummy(x + 1, y, z) &&
-                    te.placeDummy(x + 2, y, z) &&
-                    te.placeDummy(x + 2, y + 1, z) &&
-                    te.placeDummy(x + 2, y + 2, z) &&
-                    te.placeDummy(x + 2, y + 3, z) &&
-                    te.placeDummy(x + 2, y + 4, z) &&
-                    te.placeDummy(x + 1, y + 4, z) &&
-                    te.placeDummy(x, y + 4, z) &&
-                    te.placeDummy(x - 1, y + 4, z) &&
-                    te.placeDummy(x - 2, y + 4, z) &&
-                    te.placeDummy(x - 2, y + 3, z) &&
-                    te.placeDummy(x - 2, y + 2, z) &&
-                    te.placeDummy(x - 2, y + 1, z) &&
-                    te.placeDummy(x - 2, y, z) &&
-                    te.placeDummy(x - 1, y, z) &&
-                    //cog
-                    te.placeDummy(x - 1, y + 1, z) &&
-                    te.placeDummy(x - 1, y + 2, z) &&
-                    te.placeDummy(x - 1, y + 3, z) &&
-                    te.placeDummy(x, y + 1, z) &&
-                    te.placeDummy(x, y + 2, z) &&
-                    te.placeDummy(x, y + 3, z) &&
-                    te.placeDummy(x + 1, y + 1, z) &&
-                    te.placeDummy(x + 1, y + 2, z) &&
-                    te.placeDummy(x + 1, y + 3, z) &&
-                    //teeth
-                    te.placeDummy(x + 2, y, z - 1) &&
-                    te.placeDummy(x + 1, y, z - 1) &&
-                    te.placeDummy(x, y, z - 1) &&
-                    te.placeDummy(x - 1, y, z - 1) &&
-                    te.placeDummy(x - 2, y, z - 1))) {
-
-                world.destroyBlock(pos, true);
-            }
-        }
-        else if(dir == EnumFacing.WEST) {
-
-            //frame
-            if(!(te.placeDummy(x, y, z + 1) &&
-                    te.placeDummy(x, y, z + 2) &&
-                    te.placeDummy(x, y + 1, z + 2) &&
-                    te.placeDummy(x, y + 2, z + 2) &&
-                    te.placeDummy(x, y + 3, z + 2) &&
-                    te.placeDummy(x, y + 4, z + 2) &&
-                    te.placeDummy(x, y + 4, z + 1) &&
-                    te.placeDummy(x, y + 4, z) &&
-                    te.placeDummy(x, y + 4, z - 1) &&
-                    te.placeDummy(x, y + 4, z - 2) &&
-                    te.placeDummy(x, y + 3, z - 2) &&
-                    te.placeDummy(x, y + 2, z - 2) &&
-                    te.placeDummy(x, y + 1, z - 2) &&
-                    te.placeDummy(x, y, z - 2) &&
-                    te.placeDummy(x, y, z - 1) &&
-                    //cog
-                    te.placeDummy(x, y + 1, z - 1) &&
-                    te.placeDummy(x, y + 2, z - 1) &&
-                    te.placeDummy(x, y + 3, z - 1) &&
-                    te.placeDummy(x, y + 1, z) &&
-                    te.placeDummy(x, y + 2, z) &&
-                    te.placeDummy(x, y + 3, z) &&
-                    te.placeDummy(x, y + 1, z + 1) &&
-                    te.placeDummy(x, y + 2, z + 1) &&
-                    te.placeDummy(x, y + 3, z + 1) &&
-                    //teeth
-                    te.placeDummy(x + 1, y, z + 2) &&
-                    te.placeDummy(x + 1, y, z + 1) &&
-                    te.placeDummy(x + 1, y, z) &&
-                    te.placeDummy(x + 1, y, z - 1) &&
-                    te.placeDummy(x + 1, y, z - 2))) {
-
-                world.destroyBlock(pos, true);
-            }
-        }
-    }
 	
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        placeVaultDoor(world, pos, placer.getHorizontalFacing().getOpposite());
+		TileEntityVaultDoor te = (TileEntityVaultDoor) world.getTileEntity(pos);
+		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()), 2);
+		
+		int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		int x = pos.getX();
+		int y = pos.getY();
+		int z = pos.getZ();
+		
+		if(i == 0)
+		{
+			//frame
+			if(!(te.placeDummy(x + 1, y, z) &&
+				te.placeDummy(x + 2, y, z) &&
+				te.placeDummy(x + 2, y + 1, z) &&
+				te.placeDummy(x + 2, y + 2, z) &&
+				te.placeDummy(x + 2, y + 3, z) &&
+				te.placeDummy(x + 2, y + 4, z) &&
+				te.placeDummy(x + 1, y + 4, z) &&
+				te.placeDummy(x, y + 4, z) &&
+				te.placeDummy(x - 1, y + 4, z) &&
+				te.placeDummy(x - 2, y + 4, z) &&
+				te.placeDummy(x - 2, y + 3, z) &&
+				te.placeDummy(x - 2, y + 2, z) &&
+				te.placeDummy(x - 2, y + 1, z) &&
+				te.placeDummy(x - 2, y, z) &&
+				te.placeDummy(x - 1, y, z) &&
+				//cog
+				te.placeDummy(x - 1, y + 1, z) &&
+				te.placeDummy(x - 1, y + 2, z) &&
+				te.placeDummy(x - 1, y + 3, z) &&
+				te.placeDummy(x, y + 1, z) &&
+				te.placeDummy(x, y + 2, z) &&
+				te.placeDummy(x, y + 3, z) &&
+				te.placeDummy(x + 1, y + 1, z) &&
+				te.placeDummy(x + 1, y + 2, z) &&
+				te.placeDummy(x + 1, y + 3, z) &&
+				//teeth
+				te.placeDummy(x + 2, y, z + 1) &&
+				te.placeDummy(x + 1, y, z + 1) &&
+				te.placeDummy(x, y, z + 1) &&
+				te.placeDummy(x - 1, y, z + 1) &&
+				te.placeDummy(x - 2, y, z + 1))) {
+				
+				world.destroyBlock(pos, true);
+			}
+		}
+		if(i == 1)
+		{
+			
+			//frame
+			if(!(te.placeDummy(x, y, z + 1) &&
+				te.placeDummy(x, y, z + 2) &&
+				te.placeDummy(x, y + 1, z + 2) &&
+				te.placeDummy(x, y + 2, z + 2) &&
+				te.placeDummy(x, y + 3, z + 2) &&
+				te.placeDummy(x, y + 4, z + 2) &&
+				te.placeDummy(x, y + 4, z + 1) &&
+				te.placeDummy(x, y + 4, z) &&
+				te.placeDummy(x, y + 4, z - 1) &&
+				te.placeDummy(x, y + 4, z - 2) &&
+				te.placeDummy(x, y + 3, z - 2) &&
+				te.placeDummy(x, y + 2, z - 2) &&
+				te.placeDummy(x, y + 1, z - 2) &&
+				te.placeDummy(x, y, z - 2) &&
+				te.placeDummy(x, y, z - 1) &&
+				//cog
+				te.placeDummy(x, y + 1, z - 1) &&
+				te.placeDummy(x, y + 2, z - 1) &&
+				te.placeDummy(x, y + 3, z - 1) &&
+				te.placeDummy(x, y + 1, z) &&
+				te.placeDummy(x, y + 2, z) &&
+				te.placeDummy(x, y + 3, z) &&
+				te.placeDummy(x, y + 1, z + 1) &&
+				te.placeDummy(x, y + 2, z + 1) &&
+				te.placeDummy(x, y + 3, z + 1) &&
+				//teeth
+				te.placeDummy(x - 1, y, z + 2) &&
+				te.placeDummy(x - 1, y, z + 1) &&
+				te.placeDummy(x - 1, y, z) &&
+				te.placeDummy(x - 1, y, z - 1) &&
+				te.placeDummy(x - 1, y, z - 2))) {
+				
+				world.destroyBlock(pos, true);
+			}
+		}
+		if(i == 2)
+		{
+			
+			//frame
+			if(!(te.placeDummy(x + 1, y, z) &&
+				te.placeDummy(x + 2, y, z) &&
+				te.placeDummy(x + 2, y + 1, z) &&
+				te.placeDummy(x + 2, y + 2, z) &&
+				te.placeDummy(x + 2, y + 3, z) &&
+				te.placeDummy(x + 2, y + 4, z) &&
+				te.placeDummy(x + 1, y + 4, z) &&
+				te.placeDummy(x, y + 4, z) &&
+				te.placeDummy(x - 1, y + 4, z) &&
+				te.placeDummy(x - 2, y + 4, z) &&
+				te.placeDummy(x - 2, y + 3, z) &&
+				te.placeDummy(x - 2, y + 2, z) &&
+				te.placeDummy(x - 2, y + 1, z) &&
+				te.placeDummy(x - 2, y, z) &&
+				te.placeDummy(x - 1, y, z) &&
+				//cog
+				te.placeDummy(x - 1, y + 1, z) &&
+				te.placeDummy(x - 1, y + 2, z) &&
+				te.placeDummy(x - 1, y + 3, z) &&
+				te.placeDummy(x, y + 1, z) &&
+				te.placeDummy(x, y + 2, z) &&
+				te.placeDummy(x, y + 3, z) &&
+				te.placeDummy(x + 1, y + 1, z) &&
+				te.placeDummy(x + 1, y + 2, z) &&
+				te.placeDummy(x + 1, y + 3, z) &&
+				//teeth
+				te.placeDummy(x + 2, y, z - 1) &&
+				te.placeDummy(x + 1, y, z - 1) &&
+				te.placeDummy(x, y, z - 1) &&
+				te.placeDummy(x - 1, y, z - 1) &&
+				te.placeDummy(x - 2, y, z - 1))) {
+				
+				world.destroyBlock(pos, true);
+			}
+		}
+		if(i == 3)
+		{
+			
+			//frame
+			if(!(te.placeDummy(x, y, z + 1) &&
+				te.placeDummy(x, y, z + 2) &&
+				te.placeDummy(x, y + 1, z + 2) &&
+				te.placeDummy(x, y + 2, z + 2) &&
+				te.placeDummy(x, y + 3, z + 2) &&
+				te.placeDummy(x, y + 4, z + 2) &&
+				te.placeDummy(x, y + 4, z + 1) &&
+				te.placeDummy(x, y + 4, z) &&
+				te.placeDummy(x, y + 4, z - 1) &&
+				te.placeDummy(x, y + 4, z - 2) &&
+				te.placeDummy(x, y + 3, z - 2) &&
+				te.placeDummy(x, y + 2, z - 2) &&
+				te.placeDummy(x, y + 1, z - 2) &&
+				te.placeDummy(x, y, z - 2) &&
+				te.placeDummy(x, y, z - 1) &&
+				//cog
+				te.placeDummy(x, y + 1, z - 1) &&
+				te.placeDummy(x, y + 2, z - 1) &&
+				te.placeDummy(x, y + 3, z - 1) &&
+				te.placeDummy(x, y + 1, z) &&
+				te.placeDummy(x, y + 2, z) &&
+				te.placeDummy(x, y + 3, z) &&
+				te.placeDummy(x, y + 1, z + 1) &&
+				te.placeDummy(x, y + 2, z + 1) &&
+				te.placeDummy(x, y + 3, z + 1) &&
+				//teeth
+				te.placeDummy(x + 1, y, z + 2) &&
+				te.placeDummy(x + 1, y, z + 1) &&
+				te.placeDummy(x + 1, y, z) &&
+				te.placeDummy(x + 1, y, z - 1) &&
+				te.placeDummy(x + 1, y, z - 2))) {
+				
+    			world.destroyBlock(pos, true);
+			}
+		}
 	}
 	
 	@Override
@@ -349,5 +349,14 @@ public class VaultDoor extends BlockContainer implements IBomb, IMultiBlock, IRa
 		}
 
 		return false;
+	}
+
+	@Override
+	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+		float hardness = this.getExplosionResistance(null);
+		tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
+		if(hardness > 50){
+			tooltip.add("§6" + I18nUtil.resolveKey("trait.blastres", hardness));
+		}
 	}
 }

@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine.rbmk;
 
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
-
 import net.minecraft.item.ItemStack;
 
 public class TileEntityRBMKStorage extends TileEntityRBMKSlottedBase implements IRBMKLoadable {
@@ -44,7 +43,17 @@ public class TileEntityRBMKStorage extends TileEntityRBMKSlottedBase implements 
 		return ColumnType.STORAGE;
 	}
 
-    @Override
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		return true;
+	}
+
+	@Override
+	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+		return true;
+	}
+
+	@Override
 	public boolean canLoad(ItemStack toLoad) {
 		return toLoad != null && inventory.getStackInSlot(11).isEmpty();
 	}

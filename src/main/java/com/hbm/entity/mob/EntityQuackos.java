@@ -1,8 +1,7 @@
 package com.hbm.entity.mob;
 
 import com.hbm.entity.particle.EntityBSmokeFX;
-import com.hbm.lib.HBMSoundHandler;
-
+import com.hbm.lib.HBMSoundEvents;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -39,7 +38,7 @@ public class EntityQuackos extends EntityDuck {
      */
 	@Override
 	protected SoundEvent getAmbientSound() {
-		return HBMSoundHandler.megaquacc;
+		return HBMSoundEvents.megaquacc;
 	}
 	
 	/**
@@ -47,7 +46,7 @@ public class EntityQuackos extends EntityDuck {
      */
 	@Override
 	protected SoundEvent getDeathSound() {
-		return HBMSoundHandler.megaquacc;
+		return HBMSoundEvents.megaquacc;
 	}
 	
 	/**
@@ -55,7 +54,7 @@ public class EntityQuackos extends EntityDuck {
      */
 	@Override
 	protected SoundEvent getHurtSound(DamageSource damageSourceIn) {
-		return HBMSoundHandler.megaquacc;
+		return HBMSoundEvents.megaquacc;
 	}
 	
 	/**
@@ -63,7 +62,7 @@ public class EntityQuackos extends EntityDuck {
      */
 	@Override
 	protected SoundEvent getFallSound(int heightIn) {
-		return HBMSoundHandler.megaquacc;
+		return HBMSoundEvents.megaquacc;
 	}
 	
 	/**
@@ -104,7 +103,7 @@ public class EntityQuackos extends EntityDuck {
 	public boolean processInteract(EntityPlayer player, EnumHand hand) {
 		if(super.processInteract(player, hand)){
 			return true;
-		} else if(!this.world.isRemote && this.getPassengers().isEmpty()) {
+		} else if(!this.world.isRemote && this.getPassengers().size() == 0) {
 			player.startRiding(this);
 			return true;
 

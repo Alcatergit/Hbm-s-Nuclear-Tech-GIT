@@ -1,12 +1,11 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.lib.ForgeDirection;
 import com.hbm.config.GeneralConfig;
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.lib.ForgeDirection;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.saveddata.RadiationSavedData;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
@@ -15,15 +14,20 @@ import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
-public class BlockOutgas extends BlockNTMOre {
+import java.util.Random;
+
+public class BlockOutgas extends BlockNTMOre implements IItemHazard {
 	
 	boolean randomTick;
 	int rate;
 	boolean onBreak;
 	boolean onNeighbour;
+	
+	ItemHazardModule module;
 
 	public BlockOutgas(boolean randomTick, int rate, boolean onBreak, String s) {
 		super(s, 1);
+		this.module = new ItemHazardModule();
 		this.setTickRandomly(randomTick);
 		this.randomTick = randomTick;
 		this.rate = rate;
@@ -33,11 +37,17 @@ public class BlockOutgas extends BlockNTMOre {
 
 	public BlockOutgas(boolean randomTick, int rate, boolean onBreak, boolean onNeighbour, String s) {
 		this(randomTick, rate, onBreak, s);
+		this.module = new ItemHazardModule();
 		this.onNeighbour = onNeighbour;
 	}
 
 	@Override
-	public int tickRate(World world) {
+	public ItemHazardModule getModule() {
+		return module;
+	}
+
+	@Override
+	public int tickRate(World p_149738_1_) {
 		return rate;
 	}
 	

@@ -1,17 +1,16 @@
 package com.hbm.items.armor;
 
-import java.util.List;
-
-import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorModHandler;
+import com.hbm.items.ModItems.Inserts;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemModLodestone extends ItemArmorMod {
 
@@ -26,7 +25,7 @@ public class ItemModLodestone extends ItemArmorMod {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.DARK_GRAY + "Attracts nearby items");
 		list.add(TextFormatting.DARK_GRAY + "Item attraction range: " + range);
-		if(this == ModItems.lodestone)
+		if(this == Inserts.lodestone)
 			list.add("Dropped by 1:64 Smelted Iron Ingots");
 		list.add("");
 		super.addInformation(stack, worldIn, list, flagIn);

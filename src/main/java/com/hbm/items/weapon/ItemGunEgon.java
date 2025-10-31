@@ -1,14 +1,8 @@
 package com.hbm.items.weapon;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.handler.GunConfiguration;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
@@ -24,7 +18,6 @@ import com.hbm.render.RenderHelper;
 import com.hbm.render.item.weapon.ItemRenderGunEgon;
 import com.hbm.sound.GunEgonSoundHandler;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.ScaledResolution;
@@ -44,10 +37,15 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 public class ItemGunEgon extends ItemGunBase {
 
-	public float charge = 1F;
+	public float charge = 0.25F;
 	public static float chargeScaling = 1.011619F; //double dmg every 2 sec
 	public static int activeTicks = 0;
 	public static Map<EntityPlayer, ParticleGluonBurnTrail> activeTrailParticles = new HashMap<>();
@@ -136,14 +134,15 @@ public class ItemGunEgon extends ItemGunBase {
 			float[] angles = ItemGunEgon.getBeamDirectionOffset(player.world.getTotalWorldTime()+1);
 			Vec3d look = Library.changeByAngle(player.getLook(1), angles[0], angles[1]);
 			RayTraceResult r = Library.rayTraceIncludeEntitiesCustomDirection(player, look, 50, 1);
-			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase ent && CompatibilityConfig.isWarDim(world)){
-                if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
+			if(r != null && r.typeOfHit == Type.ENTITY && r.entityHit instanceof EntityLivingBase && CompatibilityConfig.isWarDim(world)){
+				EntityLivingBase ent = ((EntityLivingBase)r.entityHit);
+				if(ent instanceof EntityPlayer && ((EntityPlayer)ent).isCreative()){
 					return;
 				}
-				this.charge = this.charge * chargeScaling;
+				this.charge = this.charge * this.chargeScaling;
 				float damage = Math.min(ent.getHealth(), this.charge);
 				ent.getCombatTracker().trackDamage(ModDamageSource.gluon, ent.getHealth(), damage);
-				ent.attackEntityFrom(ModDamageSource.gluon, damage);
+				ent.setHealth(ent.getHealth()-damage);
 				
 				PacketDispatcher.wrapper.sendToAllTracking(new PacketSpecialDeath(ent, 1), ent);
 				//Why doesn't the player count as tracking itself? I don't know.
@@ -161,16 +160,13 @@ public class ItemGunEgon extends ItemGunBase {
 						PacketDispatcher.wrapper.sendTo(new PacketSpecialDeath(ent, 0), (EntityPlayerMP) ent);
 					}
 				}
-                return;
-			}
+			} else {
+				this.charge = 1F;
+			}	
 		} else {
 			setIsFiring(stack, false);
 		}
-        if(this.charge > 1){
-            this.charge *= 0.95F;
-            this.charge = Math.max(1, this.charge);
-        }
-    }
+	}
 	
 	/// if the gun is firing ///
 	public static void setIsFiring(ItemStack stack, boolean b) {
@@ -187,7 +183,7 @@ public class ItemGunEgon extends ItemGunBase {
 	}
 	
 	public static float getFirstPersonAnimFade(EntityPlayer ent){
-		if(ent.getHeldItemMainhand().getItem() != ModItems.gun_egon)
+		if(ent.getHeldItemMainhand().getItem() != Armory.gun_egon)
 			return 0;
 		return MathHelper.clamp((m1 && Library.countInventoryItem(ent.inventory, getBeltType(ent, ent.getHeldItemMainhand(), true)) >= 2 ? activeTicks + MainRegistry.proxy.partialTicks() : activeTicks - MainRegistry.proxy.partialTicks() )/5F, 0, 1);
 	}

@@ -1,9 +1,6 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
-import javax.annotation.Nonnull;
-
+import com.hbm.interfaces.IHasCustomModel;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.inventory.RecipesCommon.ComparableStack;
 import com.hbm.inventory.RecipesCommon.OreDictStack;
@@ -11,7 +8,6 @@ import com.hbm.items.ModItems;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -25,9 +21,21 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary;
 
-public class ItemAssemblyTemplate extends Item {
+import javax.annotation.Nonnull;
+import java.util.List;
+
+public class ItemAssemblyTemplate extends Item implements IHasCustomModel {
+
+	public static final ModelResourceLocation location = new ModelResourceLocation(
+			RefStrings.MODID + ":assembly_template", "inventory");
 	
-	public static final ModelResourceLocation location = new ModelResourceLocation(RefStrings.MODID + ":assembly_template", "inventory");
+	//private static IForgeRegistry<Item> itemRegistry;
+	//private static IForgeRegistry<Block> blockRegistry;
+
+
+	//public static List<AssemblerRecipe> recipes = new ArrayList<AssemblerRecipe>();
+	//public static List<AssemblerRecipe> recipesBackup = null;
+	
 
 	public ItemAssemblyTemplate(String s) {
 		this.setTranslationKey(s);
@@ -45,7 +53,7 @@ public class ItemAssemblyTemplate extends Item {
 		String s = ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 		int damage = getTagWithRecipeNumber(stack).getInteger("type");
 		ItemStack out = damage < AssemblerRecipes.recipeList.size() ? AssemblerRecipes.recipeList.get(damage).toStack() : ItemStack.EMPTY;
-		String s1 = out!=null ? out.getDisplayName() : "ERROR";
+		String s1 = ("" + I18n.format((out != ItemStack.EMPTY ? out.getTranslationKey() : "") + ".name")).trim();
 
 		if (s1 != null) {
 			s = s + " " + s1;
@@ -122,17 +130,38 @@ public class ItemAssemblyTemplate extends Item {
 				OreDictStack input = (OreDictStack) o;
 				NonNullList<ItemStack> ores = OreDictionary.getOres(input.name);
 
-				if(!ores.isEmpty()) {
+				if(ores.size() > 0) {
 					ItemStack inStack = ores.get((int) (Math.abs(System.currentTimeMillis() / 1000) % ores.size()));
 		    		list.add(" §c"+ input.count() + "x " + inStack.getDisplayName());
 				} else {
-		    		list.add("I AM ERROR - No OrdDict match found for "+ o);
+		    		list.add("I AM ERROR - No OrdDict match found for "+o.toString());
 				}
 			}
 		}
 
 		list.add("§l" + I18nUtil.resolveKey("info.template_time"));
     	list.add(" §3" + Math.floor((float)(getProcessTime(stack)) / 20 * 100) / 100 + " " + I18nUtil.resolveKey("info.template_seconds"));
+
+		list.add("§l" + I18nUtil.resolveKey("info.template_load"));
+		list.add(" §2" + getLoad(stack));
+	}
+
+	public static int getLoad(ItemStack stack) {
+		if (!(stack.getItem() instanceof ItemAssemblyTemplate))
+			return 10;
+
+		int i = getTagWithRecipeNumber(stack).getInteger("type");
+
+		if(i < 0 || i >= AssemblerRecipes.recipeList.size())
+			return 10;
+
+		ComparableStack out = AssemblerRecipes.recipeList.get(i);
+		Integer load = AssemblerRecipes.loads.get(out);
+
+		if(load != null)
+			return load;
+		else
+			return 10;
 	}
 
 	public static int getProcessTime(ItemStack stack) {
@@ -152,6 +181,11 @@ public class ItemAssemblyTemplate extends Item {
     	else
     		return 100;
 
+	}
+
+	@Override
+	public ModelResourceLocation getResourceLocation() {
+		return location;
 	}
 	
 	public static int getRecipeIndex(ItemStack stack){

@@ -1,0 +1,8 @@
+{
+	"parent": "block/cube_bottom_top",
+	"textures": {
+		"top": "hbm:blocks/machine_transformer_bottom",
+		"bottom": "hbm:blocks/machine_transformer_top",
+		"side": "hbm:blocks/machine_transformer"
+	}
+}

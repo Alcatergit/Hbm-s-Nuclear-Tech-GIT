@@ -1,9 +1,7 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Armory;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -11,6 +9,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class GunB92Cell extends Item {
 
@@ -27,7 +27,7 @@ public class GunB92Cell extends Item {
 			EntityPlayer player = (EntityPlayer) entity;
 			
 			for(int j = 0; j < player.inventory.mainInventory.size(); j++) {
-				if(player.inventory.mainInventory.get(j).getItem() == ModItems.gun_b92) {
+				if(player.inventory.mainInventory.get(j).getItem() == Armory.gun_b92) {
 					int p = getPower(player.inventory.mainInventory.get(j));
 					if(p > 1) {
 						setPower(player.inventory.mainInventory.get(j), p - 1);
@@ -53,7 +53,8 @@ public class GunB92Cell extends Item {
 	}
 	
 	private static int getPower(ItemStack stack) {
-		if(!stack.hasTagCompound()) {
+		if (stack.getTagCompound() == null) {
+			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 
@@ -62,7 +63,7 @@ public class GunB92Cell extends Item {
 	}
 
 	private static void setPower(ItemStack stack, int i) {
-		if(!stack.hasTagCompound()) {
+		if (stack.getTagCompound() == null) {
 			stack.setTagCompound(new NBTTagCompound());
 		}
 
@@ -71,7 +72,7 @@ public class GunB92Cell extends Item {
 	}
 	
 	public static ItemStack getFullCell() {
-		ItemStack stack = new ItemStack(ModItems.gun_b92_ammo, 1, 0);
+		ItemStack stack = new ItemStack(Armory.gun_b92_ammo, 1, 0);
 		setPower(stack, 25);
 		return stack.copy();
 	}

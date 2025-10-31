@@ -1,7 +1,5 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,6 +8,7 @@ import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import org.lwjgl.opengl.GL11;
 
 public class ModelFolly extends ModelBase {
 
@@ -275,9 +274,11 @@ public class ModelFolly extends ModelBase {
 			
 			Tessellator tessellator = Tessellator.getInstance();
 			BufferBuilder buf = tessellator.getBuffer();
-			boolean red = timer == 0;
+			boolean red = false;
 
-            buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
+			if (timer == 0)
+				red = true;
+			buf.begin(GL11.GL_LINES, DefaultVertexFormats.POSITION_COLOR);
 			
 			buf.pos(-32F / 16F, 0 + 4F / 16F, 0).color(red ? 1.0F : 0.0F, red ? 0.0F : 1.0F, 0.0F, 1.0F).endVertex();
 			buf.pos(-150, timer, 0).color(red ? 1.0F : 0.0F, red ? 0.0F : 1.0F, 0.0F, 1.0F).endVertex();

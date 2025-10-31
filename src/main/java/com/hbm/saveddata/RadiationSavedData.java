@@ -1,15 +1,10 @@
 package com.hbm.saveddata;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.handler.RadiationSystemNT;
 import com.hbm.packet.AuxParticlePacket;
 import com.hbm.packet.PacketDispatcher;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
@@ -17,6 +12,10 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.WorldSavedData;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class RadiationSavedData extends WorldSavedData {
 	public Map<ChunkPos, RadiationSaveStructure> contamination = new HashMap<ChunkPos, RadiationSaveStructure>();
@@ -116,6 +115,16 @@ public class RadiationSavedData extends WorldSavedData {
     		return rad.radiation;
     	return 0F;
     }
+
+	public boolean isSealed(BlockPos pos,boolean fallback) {
+		if (!GeneralConfig.advancedRadiation) return false;
+		if (!RadiationSystemNT.isSubChunkLoaded(worldObj,pos))
+			return fallback;
+		RadiationSystemNT.RadPocket pocket = RadiationSystemNT.getPocket(worldObj,pos);
+		if (pocket == null)
+			return fallback;
+		return pocket.isSealed();
+	}
 
     public void updateSystem() {
     	if(GeneralConfig.advancedRadiation)

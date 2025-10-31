@@ -1,23 +1,19 @@
 package com.hbm.particle;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.RenderHelper;
-import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class ParticleRBMKMush extends Particle {
 
 	private static final ResourceLocation texture = new ResourceLocation(com.hbm.lib.RefStrings.MODID + ":textures/particle/rbmk_mush.png");
-	
+	public boolean isPink = false;
+
 	public ParticleRBMKMush(World worldIn, double posXIn, double posYIn, double posZIn, float scale){
 		super(worldIn, posXIn, posYIn, posZIn);
 		particleMaxAge = 80;
@@ -57,12 +53,12 @@ public class ParticleRBMKMush extends Particle {
 		// how many frames we're in
 		int prog = particleAge * segs / particleMaxAge;
 
-		GlStateManager.color(1, 1, 1, 1);
+		GlStateManager.color(1, isPink ? 0 : 1, 1, 1);
 		GlStateManager.glNormal3f(0, 1, 0);
 		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240, 240);
 		GlStateManager.disableLighting();
 		GlStateManager.enableBlend();
-		GlStateManager.depthMask(false);
+		GlStateManager.depthMask(false);GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
 		RenderHelper.disableStandardItemLighting();
 
 		Tessellator tes = Tessellator.getInstance();
@@ -80,6 +76,7 @@ public class ParticleRBMKMush extends Particle {
 		buf.pos((double) (pX + rotationX * scale + rotationXY * scale), (double) (pY + rotationZ * scale), (double) (pZ + rotationYZ * scale + rotationXZ * scale)).tex(0, prog * frame).endVertex();
 		buf.pos((double) (pX + rotationX * scale - rotationXY * scale), (double) (pY - rotationZ * scale), (double) (pZ + rotationYZ * scale - rotationXZ * scale)).tex(0, (prog + 1) * frame).endVertex();
 		tes.draw();
+		GlStateManager.color(1, 1, 1, 1);
 
 		GlStateManager.doPolygonOffset(0, 0);
 		GlStateManager.enableLighting();

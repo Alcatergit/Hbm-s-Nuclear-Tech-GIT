@@ -2,7 +2,6 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.TileEntityMachineExcavator;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -55,13 +54,13 @@ public class ContainerMachineExcavator extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 			
-            if (par2 <= 13) {
-				if (!this.mergeItemStack(var5, 13, this.inventorySlots.size(), false))
+            if (par2 <= 3) {
+				if (!this.mergeItemStack(var5, 4, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
 			}
-			else if (!this.mergeItemStack(var5, 0, 13, false))
+			else if (!this.mergeItemStack(var5, 0, 3, false))
 			{
 				return ItemStack.EMPTY;
 			}

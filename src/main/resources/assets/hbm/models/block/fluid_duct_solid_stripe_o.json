@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/leafia/fluid_duct_tinge_o",
+		"side": "hbm:blocks/leafia/fluid_duct_stripe_o"
+	}
+}

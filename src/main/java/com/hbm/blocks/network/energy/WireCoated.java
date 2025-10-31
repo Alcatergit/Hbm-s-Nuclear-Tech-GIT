@@ -2,7 +2,6 @@ package com.hbm.blocks.network.energy;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.network.energy.TileEntityCableBaseNT;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;

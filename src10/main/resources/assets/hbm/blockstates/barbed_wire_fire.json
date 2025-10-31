@@ -1,0 +1,14 @@
+{
+	"forge_marker": 1,
+	"defaults": {
+		"textures": {},
+		"model": "hbm:barbed_wire_fire.obj"
+	},
+	"variants": {
+		"facing=north": [{}],
+		"facing=south": [{ "y": 180 }],
+		"facing=west": [{ "y": 270 }],
+		"facing=east": [{ "y": 90 }],
+		"inventory": [{ "transform": "forge:default-block" }]
+	}
+}

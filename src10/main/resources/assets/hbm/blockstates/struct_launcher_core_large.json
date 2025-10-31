@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:struct_launcher_core_large" }
+	}
+}

@@ -1,6 +1,7 @@
 package com.hbm.handler.crt;
 
 
+import com.hbm.inventory.AnvilRecipes;
 import com.hbm.inventory.RecipesCommon;
 import crafttweaker.CraftTweakerAPI;
 import crafttweaker.IAction;
@@ -11,9 +12,6 @@ import crafttweaker.api.minecraft.CraftTweakerMC;
 import net.minecraft.item.ItemStack;
 import stanhebben.zenscript.annotations.ZenClass;
 import stanhebben.zenscript.annotations.ZenMethod;
-
-
-import com.hbm.inventory.AnvilRecipes;
 
 import java.util.Arrays;
 
@@ -111,15 +109,15 @@ public class Anvil {
 	}
 
 	@ZenMethod
-	public static void removeRecipe(IItemStack[] outputs){
-		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(outputs));
-		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(outputs));
+	public static void removeRecipe(IItemStack[] output){
+		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(output));
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(output));
 	}
 
 	@ZenMethod
-	public static void removeRecipeByInput(IIngredient[] inputs){
-		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(inputs));
-		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(inputs, null));
+	public static void removeRecipeByInput(IIngredient[] input){
+		CraftTweakerAPI.logInfo("start remove recipe"+ Arrays.toString(input));
+		NTMCraftTweaker.postInitActions.add(new Anvil.ActionRemoveRecipe(input, null));
 	}
 
 	@ZenMethod

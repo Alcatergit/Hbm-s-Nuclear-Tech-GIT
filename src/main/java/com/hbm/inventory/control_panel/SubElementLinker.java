@@ -1,14 +1,10 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.inventory.control_panel.ContainerControlEdit.SlotDisableable;
 import com.hbm.inventory.control_panel.ContainerControlEdit.SlotItemHandlerDisableable;
 import com.hbm.items.tool.ItemMultiDetonator;
 import com.hbm.lib.RefStrings;
-
 import com.hbm.tileentity.machine.TileEntityDummy;
 import net.minecraft.block.Block;
 import net.minecraft.client.gui.GuiButton;
@@ -18,6 +14,9 @@ import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SubElementLinker extends SubElement {
 

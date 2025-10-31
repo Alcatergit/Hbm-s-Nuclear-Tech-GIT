@@ -1,23 +1,24 @@
 package com.hbm.sound;
 
+import java.util.function.BiFunction;
+
 public class AudioWrapper {
 	
-	public void updatePosition(float x, float y, float z) { }
-	public void keepAlive() { }
+	public AudioWrapper updatePosition(float x, float y, float z) { return this; }
 	
-	public void updateVolume(float volume) { }
+	public AudioWrapper updateVolume(float volume) { return this; }
 	
-	public void updatePitch(float pitch) { }
+	public AudioWrapper updatePitch(float pitch) { return this; }
 	
 	public float getVolume() { return 0F; }
 	
 	public float getPitch() { return 0F; }
 	
-	public void setDoesRepeat(boolean repeats) { }
+	public AudioWrapper startSound() { return this; }
 	
-	public void startSound() { }
-	
-	public void stopSound() { }
+	public AudioWrapper stopSound() { return this; }
 
-	public boolean isPlaying() { return false; }
+	public AudioWrapper setCustomAttentuation(BiFunction<Float,Double,Double> attentuationFunction) { return this; }
+
+	public AudioWrapper setLooped(boolean looped) { return this; }
 }

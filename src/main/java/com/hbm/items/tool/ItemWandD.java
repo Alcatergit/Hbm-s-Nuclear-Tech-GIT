@@ -1,7 +1,5 @@
 package com.hbm.items.tool;
 
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -14,18 +12,20 @@ import com.hbm.render.util.BakedModelUtil;
 import com.hbm.render.util.BakedModelUtil.DecalType;
 import com.hbm.tileentity.conductor.TileEntityFFDuctBaseMk2;
 import com.hbm.tileentity.network.energy.TileEntityPylonBase;
-
 import com.hbm.util.I18nUtil;
+import com.leafia.dev.LeafiaDebug;
+import com.leafia.dev.LeafiaDebug.Tracker;
+import com.llib.group.LeafiaMap;
 import net.minecraft.block.Block;
+import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumActionResult;
 import net.minecraft.util.EnumFacing;
@@ -34,13 +34,15 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
-import net.minecraft.world.storage.loot.LootTableList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class ItemWandD extends Item {
+import java.util.List;
 
+public class ItemWandD extends Item {
+	public static boolean remote = false;
 	public ItemWandD(String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
@@ -72,11 +74,11 @@ public class ItemWandD extends Item {
 					if(world.isRemote)
 						player.sendMessage(new TextComponentString(te.connected.get(i).getX() + " " + te.connected.get(i).getY() + " " + te.connected.get(i).getZ()));
 			}
-			
+
 			if(player.isSneaking()){
 				RayTraceResult pos1 = Library.rayTrace(player, 500, 1);
 				if(pos1 != null && pos1.typeOfHit == RayTraceResult.Type.BLOCK) {
-					
+					/*
 					int x = pos1.getBlockPos().getX();
 					int z = pos1.getBlockPos().getZ();
 					int y = world.getHeight(x, z);
@@ -87,7 +89,40 @@ public class ItemWandD extends Item {
 					//CellularDungeonFactory.jungle.generate(world, x, y, z, world.rand);
 					//CellularDungeonFactory.jungle.generate(world, x, y + 4, z, world.rand);
 					//CellularDungeonFactory.jungle.generate(world, x, y + 8, z, world.rand);
+					 */
+					Tracker.selected = pos1.getBlockPos();
+					LeafiaDebug.flagDebug();
+					LeafiaMap<BlockPos,String> subjects = Tracker.getSubjects();
+					if (!subjects.containsKey(pos1.getBlockPos())) {
+						subjects.put(pos1.getBlockPos(),Character.toString((char)(97+ subjects.size())));
+						Tracker.notifySubjectMapChanges(remote);
+						LeafiaDebug.debugLog(world,"Added "+(remote ? "remote" : "server")+" watch \""+ subjects.get(pos1.getBlockPos())+"\"");
+					} else {
+						LeafiaDebug.debugLog(world,"Selected "+(remote ? "remote" : "server")+" watch \""+ subjects.get(pos1.getBlockPos())+"\"");
+					}
+					Tracker.notifySelectionChange();
 				}
+			} else {
+				pos = player.getPosition().down();
+				IBlockState state = world.getBlockState(pos);
+				Block block = state.getBlock();
+				Material mat = state.getMaterial();
+				LeafiaDebug.debugPos(world,pos,15,0x40FF00,
+						TextFormatting.GREEN+"BLK: !isPassable: "+pfx(!block.isPassable(world,pos)),
+						"BLK: isCollidable: "+pfx(block.isCollidable()),
+						"BLK: isNormalCube: "+pfx(block.isNormalCube(state,world,pos)),
+						TextFormatting.YELLOW+"-----------",
+						"STAT: isFullBlock: "+pfx(state.isFullBlock()),
+						"STAT: isFullCube: "+pfx(state.isFullCube()),
+						"STAT: isNormalCube: "+pfx(state.isOpaqueCube()),
+						"STAT: isBlockNormalCube: "+pfx(state.isBlockNormalCube()),
+						"STAT: isOpaqueCube: "+pfx(state.isOpaqueCube()),
+						TextFormatting.GREEN+"BLK: !isTranslucent: "+pfx(!state.isTranslucent()),
+						"STAT: renderType: "+state.getRenderType().name(),
+						TextFormatting.YELLOW+"-----------",
+						"MAT: isOpaque: "+pfx(mat.isOpaque()),
+						"MAT: isSolid: "+pfx(mat.isSolid())
+				);
 			}
 		} else {
 			clickClient(world, player, pos, hitX, hitY, hitZ);
@@ -111,6 +146,9 @@ public class ItemWandD extends Item {
 		MainRegistry.time = System.currentTimeMillis();
 		
 		return EnumActionResult.SUCCESS;
+	}
+	public String pfx(boolean shit) {
+		return shit ? TextFormatting.DARK_GREEN+"true" : TextFormatting.DARK_RED+"false";
 	}
 	
 	@SideOnly(Side.CLIENT)
@@ -145,16 +183,24 @@ public class ItemWandD extends Item {
 	
 	@Override
 	public boolean itemInteractionForEntity(ItemStack stack, EntityPlayer playerIn, EntityLivingBase target, EnumHand hand) {
-        //DisintegrationParticleHandler.spawnGluonDisintegrateParticles(target);
-        return super.itemInteractionForEntity(stack, playerIn, target, hand);
+		if(target.world.isRemote){
+			//DisintegrationParticleHandler.spawnGluonDisintegrateParticles(target);
+		} else {
+		}
+		return super.itemInteractionForEntity(stack, playerIn, target, hand);
 	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand hand) {
-		if(player.isSneaking())
-		{
+		if(player.isSneaking()) {
 			if(world.isRemote)
 				player.sendMessage(new TextComponentString(MainRegistry.x + " " + MainRegistry.y + " " + MainRegistry.z));
+			else if (Tracker.selected != null) {
+				LeafiaDebug.flagDebug();
+				Tracker.selected = null;
+				LeafiaDebug.debugLog(world,"Unselected watch");
+				Tracker.notifySelectionChange();
+			}
 		} else {
 			if(!world.isRemote){
 				RayTraceResult r = Library.rayTraceIncludeEntities(player, 50, 1);
@@ -181,5 +227,6 @@ public class ItemWandD extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(I18nUtil.resolveKey("desc.debugwand"));
+		tooltip.add("Hold on offhand to show NTM:LCE debugging info");
 	}
 }

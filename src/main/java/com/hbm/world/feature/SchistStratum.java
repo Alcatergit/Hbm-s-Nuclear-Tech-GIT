@@ -1,8 +1,8 @@
 package com.hbm.world.feature;
 
+import com.hbm.blocks.ModBlocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.NoiseGeneratorPerlin;
@@ -12,20 +12,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class SchistStratum {
 
 	NoiseGeneratorPerlin noise;
-
-	Block b;
-	double scale;
-	double threshold;
-	double thickness;
-	int heigth;
-
-	public SchistStratum(Block s, double scale, double threshold, double thickness, int heigth){
-		this.b = s;
-		this.scale = scale;
-		this.threshold = threshold;
-		this.thickness = thickness;
-		this.heigth = heigth;
-	}
 
 	@SubscribeEvent
 	public void onDecorate(DecorateBiomeEvent.Pre event) {
@@ -41,28 +27,30 @@ public class SchistStratum {
 		
 		int cX = event.getChunkPos().x * 16;
 		int cZ = event.getChunkPos().z * 16;
+		
+		double scale = 0.01D;
+		int threshold = 5;
 
 		for(int x = cX; x < cX + 16; x++) {
+			
 			for(int z = cZ; z < cZ + 16; z++) {
 				
 				double n = noise.getValue(x * scale, z * scale);
 				if(n > threshold) {
-					double range = (n - threshold) * (thickness * 0.5 -1);
+					int range = (int)((n - threshold) * 3);
 					
-					if(range > thickness * 0.5)
-						range = thickness - range;
+					if(range > 4)
+						range = 8 - range;
 					
 					if(range < 0)
 						continue;
 					
-					int r = (int)range;
-					
-					for(int y = heigth - r; y <= heigth + r; y++) {
-						BlockPos pos = new BlockPos(x, y, z);
-						IBlockState target = world.getBlockState(pos);
+					for(int y = 30 - range; y <= 30 + range; y++) {
+						
+						IBlockState target = world.getBlockState(new BlockPos(x, y, z));
 						
 						if(target.isNormalCube() && target.getMaterial() == Material.ROCK) {
-							world.setBlockState(pos, b.getDefaultState());
+							world.setBlockState(new BlockPos(x, y, z), ModBlocks.stone_gneiss.getDefaultState(), 2);
 						}
 					}
 				}

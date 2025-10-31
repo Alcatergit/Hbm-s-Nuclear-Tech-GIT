@@ -1,7 +1,6 @@
 package com.hbm.inventory.control_panel;
 
 import com.hbm.inventory.control_panel.nodes.Node;
-
 import net.minecraft.nbt.NBTTagCompound;
 
 public class NodeElement {

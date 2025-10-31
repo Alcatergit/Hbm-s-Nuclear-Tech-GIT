@@ -1,16 +1,14 @@
 package com.hbm.inventory.gui;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.inventory.container.ContainerAMSBase;
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class GUIAMSBase extends GuiInfoContainer {
 
@@ -29,10 +27,10 @@ public class GUIAMSBase extends GuiInfoContainer {
 	public void drawScreen(int mouseX, int mouseY, float f) {
 		super.drawScreen(mouseX, mouseY, f);
 
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 70 - 52, 16, 52, base.tanks[0]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 70 - 52, 16, 52, base.tanks[1]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 124 - 52, 16, 52, base.tanks[2]);
-		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 124 - 52, 16, 52, base.tanks[3]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 70 - 52, 16, 52, base.tanks[0], base.tankTypes[0]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 70 - 52, 16, 52, base.tanks[1], base.tankTypes[1]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 26, guiTop + 124 - 52, 16, 52, base.tanks[2], base.tankTypes[2]);
+		FFUtils.renderTankInfo(this, mouseX, mouseY, guiLeft + 134, guiTop + 124 - 52, 16, 52, base.tanks[3], base.tankTypes[3]);
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 116, guiTop + 124 - 104, 7, 104, base.power, TileEntityAMSBase.maxPower);
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 44, guiTop + 124 - 106, 7, 106, new String[] { "Restriction Field:", base.field + "%" });
 		this.drawCustomInfo(this, mouseX, mouseY, guiLeft + 53, guiTop + 124 - 106, 7, 106, new String[] { "Efficiency:", base.efficiency + "%" });
@@ -76,11 +74,11 @@ public class GUIAMSBase extends GuiInfoContainer {
 		
 		int m = base.mode;
 		if(m > 0)
-		drawTexturedModalRect(guiLeft + 80, guiTop + 108, 176, 32 + 16 * m, 16, 16);
+			drawTexturedModalRect(guiLeft + /*80*/89, guiTop + /*108*/18, 176, 32 + 16 * m, 16, 16);
 		
 		int n = base.warning;
 		if(n > 0)
-		drawTexturedModalRect(guiLeft + 80, guiTop + 18, 176, 32 + 16 * n, 16, 16);
+			drawTexturedModalRect(guiLeft + /*80*/71, guiTop + 18, 176, /*32*/-16 + 16 * n, 16, 16);
 		
 		if(base.color > -1) {
 			GL11.glColor3ub((byte)((base.color & 0xFF0000) >> 16), (byte)((base.color & 0x00FF00) >> 8), (byte)((base.color & 0x0000FF) >> 0));

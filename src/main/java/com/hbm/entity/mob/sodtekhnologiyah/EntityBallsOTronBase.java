@@ -1,9 +1,10 @@
 package com.hbm.entity.mob.sodtekhnologiyah;
 
 import com.google.common.base.Predicate;
-
+import com.hbm.lib.ModDamageSource;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 
@@ -12,8 +13,11 @@ public abstract class EntityBallsOTronBase extends EntityWormBase {
 	public int attackCounter = 0;
 
 	protected final Predicate<Entity> selector = ent -> {
-        return !(ent instanceof EntityWormBase) || ((EntityWormBase) ent).getUniqueWormID() != EntityBallsOTronBase.this.getUniqueWormID();
-    };
+			if(ent instanceof EntityWormBase && ((EntityWormBase)ent).getUniqueWormID() == EntityBallsOTronBase.this.getUniqueWormID())
+				return false;
+
+			return true;
+		};
 	
 	public EntityBallsOTronBase(World world) {
 		super(world);
@@ -25,7 +29,14 @@ public abstract class EntityBallsOTronBase extends EntityWormBase {
 		this.dragInGround = 0.98F;
 		this.knockbackDivider = 1.0D;
 	}
-	
+
+	@Override
+	public boolean attackEntityFrom(DamageSource source,float amount) {
+		if (source == ModDamageSource.back)
+			amount = 0; // avoid cheap kills using Antischrabidium
+		return super.attackEntityFrom(source,amount);
+	}
+
 	@Override
 	public boolean canEntityBeSeen(Entity entityIn) {
 		return this.world.rayTraceBlocks(new Vec3d(this.posX, this.posY + (double)this.getEyeHeight(), this.posZ), new Vec3d(entityIn.posX, entityIn.posY + (double)entityIn.getEyeHeight(), entityIn.posZ), false, true, false) == null;

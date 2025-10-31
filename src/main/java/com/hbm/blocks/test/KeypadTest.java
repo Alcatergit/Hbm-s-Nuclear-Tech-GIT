@@ -2,7 +2,6 @@ package com.hbm.blocks.test;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.TileEntityKeypadBase;
-
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;

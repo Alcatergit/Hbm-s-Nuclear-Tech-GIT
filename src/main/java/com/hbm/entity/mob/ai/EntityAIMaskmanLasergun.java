@@ -2,9 +2,8 @@ package com.hbm.entity.mob.ai;
 
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -55,7 +54,7 @@ public class EntityAIMaskmanLasergun extends EntityAIBase {
 				orb.motionY += 0.5D;
 
 				owner.world.spawnEntity(orb);
-				owner.playSound(HBMSoundHandler.teslaShoot, 1.0F, 1.0F);
+				owner.playSound(HBMSoundEvents.teslaShoot, 1.0F, 1.0F);
 				break;
 
 			case MISSILE:
@@ -66,7 +65,7 @@ public class EntityAIMaskmanLasergun extends EntityAIBase {
 				missile.motionZ = vec.zCoord * 0.05D;
 
 				owner.world.spawnEntity(missile);
-				owner.playSound(HBMSoundHandler.hkShoot, 1.0F, 1.0F);
+				owner.playSound(HBMSoundEvents.hkShoot, 1.0F, 1.0F);
 				break;
 
 			case SPLASH:
@@ -95,16 +94,16 @@ public class EntityAIMaskmanLasergun extends EntityAIBase {
 		this.owner.rotationYaw = this.owner.rotationYawHead;
 	}
 	
-	private enum EnumLaserAttack {
+	private static enum EnumLaserAttack {
 
 		ORB(60, 5),
 		MISSILE(10, 10),
 		SPLASH(40, 3);
 
-		public final int delay;
-		public final int amount;
+		public int delay;
+		public int amount;
 
-		EnumLaserAttack(int delay, int amount) {
+		private EnumLaserAttack(int delay, int amount) {
 			this.delay = delay;
 			this.amount = amount;
 		}

@@ -1,0 +1,9 @@
+{
+    "ctm":{
+        "ctm_version": 1,
+        "type":"CTM",
+        "textures":[
+            "hbm:blocks/leafia/cable_oc_ctm"
+        ]
+    }
+}

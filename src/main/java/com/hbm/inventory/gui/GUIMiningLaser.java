@@ -1,7 +1,5 @@
 package com.hbm.inventory.gui;
 
-import java.io.IOException;
-
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.container.ContainerMiningLaser;
@@ -10,13 +8,14 @@ import com.hbm.packet.AuxButtonPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityMachineMiningLaser;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
+
+import java.io.IOException;
 
 public class GUIMiningLaser extends GuiInfoContainer {
 

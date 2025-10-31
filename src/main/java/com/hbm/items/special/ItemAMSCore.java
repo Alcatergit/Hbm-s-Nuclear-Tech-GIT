@@ -1,11 +1,8 @@
 package com.hbm.items.special;
 
-import java.util.List;
-
-import com.hbm.lib.Library;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.Item;
@@ -13,6 +10,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.List;
 
 public class ItemAMSCore extends Item {
 
@@ -99,8 +98,13 @@ public class ItemAMSCore extends Item {
 	@Override
 	@SideOnly(Side.CLIENT)
 	public boolean hasEffect(ItemStack stack) {
-        return this == ModItems.ams_core_thingy && MainRegistry.polaroidID == 11;
-    }
+		if(this == ModItems.ams_core_thingy && MainRegistry.polaroidID == 11)
+    	{
+    		return true;
+    	}
+    	
+    	return false;
+	}
 	
 	public static int getPowerBase(ItemStack stack) {
 		if(stack == null || !(stack.getItem() instanceof ItemAMSCore))

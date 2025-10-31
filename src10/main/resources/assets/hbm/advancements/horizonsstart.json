@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:sat_gerald"
+		},
+		"title": {
+			"translate": "hbm.achievement.horizonsStart"
+		},
+		"description": {
+			"translate": "hbm.achievement.horizonsStart.desc"
+		}
+	},
+	"parent": "hbm:bossufo",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 100
+    }
+}

@@ -1,16 +1,11 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.handler.WeaponAbility;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.util.I18nUtil;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
@@ -35,28 +30,26 @@ import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+
 public class ItemSwordAbility extends ItemSword implements IItemAbility {
 
 	private EnumRarity rarity = EnumRarity.COMMON;
 	//was there a reason for this to be private?
 	protected float damage;
-	protected double attackSpeed;
 	protected double movement;
 	private List<WeaponAbility> hitAbility = new ArrayList<>();
 
-	public ItemSwordAbility(float damage, double attackSpeed, double movement, ToolMaterial material, String s) {
+	public ItemSwordAbility(float damage, double movement, ToolMaterial material, String s) {
 		super(material);
 		this.damage = damage;
 		this.movement = movement;
-		this.attackSpeed = attackSpeed;
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
 
 		ModItems.ALL_ITEMS.add(this);
-	}
-
-	public ItemSwordAbility(float damage, double movement, ToolMaterial material, String s) {
-		this(damage, -2.4, movement, material, s);
 	}
 
 	public ItemSwordAbility addHitAbility(WeaponAbility weaponAbility) {
@@ -82,7 +75,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 
 			//hacky hacky hack
 			if(this == ModItems.mese_gavel)
-				attacker.world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundHandler.whack, SoundCategory.HOSTILE, 3.0F, 1.F);
+				attacker.world.playSound(null, target.posX, target.posY, target.posZ, HBMSoundEvents.whack, SoundCategory.HOSTILE, 3.0F, 1.F);
 
 			for(WeaponAbility ability : this.hitAbility) {
 				ability.onHit(attacker.world, (EntityPlayer) attacker, target, this);
@@ -97,8 +90,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 		Multimap<String, AttributeModifier> map = HashMultimap.<String, AttributeModifier> create();
 		if(slot == EntityEquipmentSlot.MAINHAND) {
 			map.put(SharedMonsterAttributes.MOVEMENT_SPEED.getName(), new AttributeModifier(UUID.fromString("91AEAA56-376B-4498-935B-2F7F68070635"), "Tool modifier", movement, 1));
-			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Weapon modifier", this.damage, 0));
-			map.put(SharedMonsterAttributes.ATTACK_SPEED.getName(), new AttributeModifier(ATTACK_SPEED_MODIFIER, "Weapon modifier", this.attackSpeed, 0));
+			map.put(SharedMonsterAttributes.ATTACK_DAMAGE.getName(), new AttributeModifier(ATTACK_DAMAGE_MODIFIER, "Tool modifier", (double) this.damage, 0));
 		}
 		return map;
 	}
@@ -162,7 +154,7 @@ public class ItemSwordAbility extends ItemSword implements IItemAbility {
 				block.getBlock().onPlayerDestroy(world, pos, block);
 			}
 			ItemStack itemstack = player.getHeldItem(hand);
-			if(!itemstack.isEmpty()) {
+			if(itemstack != null) {
 				itemstack.onBlockDestroyed(world, block, new BlockPos(x, y, z), player);
 
 				if(itemstack.isEmpty()) {

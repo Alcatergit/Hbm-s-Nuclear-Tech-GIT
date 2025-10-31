@@ -1,15 +1,14 @@
 package com.hbm.inventory.control_panel.nodes;
 
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Objects;
-
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.NodeConnection;
 import com.hbm.inventory.control_panel.NodeSystem;
 import com.hbm.inventory.control_panel.NodeType;
-
 import net.minecraft.nbt.NBTTagCompound;
+
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Objects;
 
 public class NodeInput extends Node {
 

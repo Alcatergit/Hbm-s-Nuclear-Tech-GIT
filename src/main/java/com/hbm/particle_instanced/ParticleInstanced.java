@@ -1,9 +1,9 @@
 package com.hbm.particle_instanced;
 
-import java.nio.ByteBuffer;
-
 import net.minecraft.client.particle.Particle;
 import net.minecraft.world.World;
+
+import java.nio.ByteBuffer;
 
 public class ParticleInstanced extends Particle {
 

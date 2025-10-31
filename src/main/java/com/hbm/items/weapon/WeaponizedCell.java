@@ -1,13 +1,10 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-
-import com.hbm.config.WeaponConfig;
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityCloudFleijaRainbow;
+import com.hbm.config.WeaponConfig;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
 import com.hbm.items.ModItems;
-
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleijaRainbow;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.SoundEvents;
@@ -16,6 +13,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class WeaponizedCell extends Item {
 

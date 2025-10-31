@@ -1,0 +1,5 @@
+{
+	"variants": {
+		"normal": { "model": "hbm:dummy_port_ams_base" }
+	}
+}

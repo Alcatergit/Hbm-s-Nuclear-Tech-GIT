@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:iter"
+		},
+		"title": {
+			"translate": "hbm.achievement.meltdown"
+		},
+		"description": {
+			"translate": "hbm.achievement.meltdown.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:progress_fusion",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 27
+    }
+}

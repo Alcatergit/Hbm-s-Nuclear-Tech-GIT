@@ -1,9 +1,9 @@
 package com.hbm.render.amlfrom1710;
 
-import java.util.Comparator;
-
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Comparator;
 
 @SideOnly(Side.CLIENT)
 public class QuadComparator implements Comparator<Object>

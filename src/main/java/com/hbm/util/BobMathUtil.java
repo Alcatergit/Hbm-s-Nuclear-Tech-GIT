@@ -1,22 +1,8 @@
 package com.hbm.util;
 
-import java.lang.reflect.Field;
-import java.nio.FloatBuffer;
-import java.util.Random;
-import java.text.NumberFormat;
-
-import javax.annotation.Nullable;
-import javax.vecmath.Matrix3f;
-import javax.vecmath.Quat4f;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.util.vector.Matrix4f;
-import org.lwjgl.util.vector.Vector4f;
-
 import com.hbm.main.ClientProxy;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.entity.Entity;
@@ -25,6 +11,17 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.util.vector.Matrix4f;
+import org.lwjgl.util.vector.Vector4f;
+
+import javax.annotation.Nullable;
+import javax.vecmath.Matrix3f;
+import javax.vecmath.Quat4f;
+import java.lang.reflect.Field;
+import java.nio.FloatBuffer;
+import java.text.NumberFormat;
+import java.util.Random;
 
 public class BobMathUtil {
 
@@ -34,54 +31,20 @@ public class BobMathUtil {
 	public static String getShortNumber(long number){
 		if(number < 1000D){
 			return ""+number;
-		}else if(number < 1000000D){
+		}else if(number < 1000D){
 			return String.format("%6.2fk", number/1000F);
-		}else if(number < 1000000000D){
+		}else if(number < 1000000D){
 			return String.format("%6.2fM", number/1000000F);
-		}else if(number < 1000000000000D){
+		}else if(number < 1000000000D){
 			return String.format("%6.2fG", number/1000000000F);
-		}else if(number < 1000000000000000D){
+		}else if(number < 1000000000000D){
 			return String.format("%6.2fT", number/1000000000000F);
-		}else if(number < 1000000000000000000D){
+		}else if(number < 1000000000000000D){
 			return String.format("%6.2fE", number/1000000000000000F);
+		}else if(number < 1000000000000000000D){
+			return String.format("%6.2fP", number/1000000000000000000F);
 		}
 		return "INFINTE";
-	}
-
-	public static String getShortNumberNew(long l) {
-
-		if(l >= Math.pow(10, 18)) {
-			double res = l / Math.pow(10, 18);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "E";
-		}
-		if(l >= Math.pow(10, 15)) {
-			double res = l / Math.pow(10, 15);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "P";
-		}
-		if(l >= Math.pow(10, 12)) {
-			double res = l / Math.pow(10, 12);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "T";
-		}
-		if(l >= Math.pow(10, 9)) {
-			double res = l / Math.pow(10, 9);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "G";
-		}
-		if(l >= Math.pow(10, 6)) {
-			double res = l / Math.pow(10, 6);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "M";
-		}
-		if(l >= Math.pow(10, 3)) {
-			double res = l / Math.pow(10, 3);
-			res = Math.round(res * 100.0) / 100.0;
-			return res + "k";
-		}
-
-		return Long.toString(l);
 	}
 			
 	public static double getAngleFrom2DVecs(double x1, double z1, double x2, double z2) {
@@ -382,6 +345,11 @@ public class BobMathUtil {
 			return input[3]+ "m " + input[4]+ "s";
 		else
 			return input[4]+ "s";
+	}
+
+	/** Soft peak sine */
+	public static double sps(double x) {
+		return Math.sin(Math.PI / 2D * Math.cos(x));
 	}
 
 	public static int interpolateColor(int colorA, int colorB, float percentB) {

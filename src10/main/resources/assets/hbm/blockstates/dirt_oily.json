@@ -1,0 +1,12 @@
+{
+	"variants": {
+		"normal":[
+		    {
+			    "model": "hbm:dirt_oily"
+		    },
+            {
+				"model": "hbm:dirt_oily_alt"
+			}
+		]
+	}
+}

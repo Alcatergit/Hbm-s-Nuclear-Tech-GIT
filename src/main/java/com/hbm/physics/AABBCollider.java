@@ -1,11 +1,10 @@
 package com.hbm.physics;
 
-import javax.vecmath.Matrix3f;
-
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.client.renderer.RenderGlobal;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import javax.vecmath.Matrix3f;
 
 public class AABBCollider extends Collider {
 

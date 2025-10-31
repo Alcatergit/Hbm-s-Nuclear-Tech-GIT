@@ -1,12 +1,15 @@
 package com.hbm.inventory.material;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class MaterialShapes {
-	
+
+
+	public static final HashMap<String, MaterialShapes> prefixByName = new HashMap<>();
 	public static final List<MaterialShapes> allShapes = new ArrayList();
-	
+
 	public static final MaterialShapes QUANTUM = new MaterialShapes(1); // 1/72 of an ingot, allows the ingot to be divisible through 2, 4, 6, 8, 9, 12, 24 and 36
 	public static final MaterialShapes NUGGET = new MaterialShapes(8, "nugget");
 	public static final MaterialShapes DUSTTINY = new MaterialShapes(NUGGET.quantity, "dustTiny");
@@ -26,26 +29,29 @@ public class MaterialShapes {
 	public static final MaterialShapes QUART = new MaterialShapes(162);
 	public static final MaterialShapes BLOCK = new MaterialShapes(INGOT.quantity * 9, "block");
 	public static final MaterialShapes HEAVY_COMPONENT = new MaterialShapes(CASTPLATE.quantity * 256, "componentHeavy");
-	
-	
+
+	public static final MaterialShapes FRAGMENT = new MaterialShapes(8, "bedrockorefragment");
+	public static final MaterialShapes STOCK = new MaterialShapes(INGOT.quantity * 4, "stock");
+	public static final MaterialShapes GRIP = new MaterialShapes(INGOT.quantity * 2, "grip");
+
 	private final int quantity;
 	public final String[] prefixes;
-	
+
 	private MaterialShapes(int quantity, String... prefixes) {
 		this.quantity = quantity;
 		this.prefixes = prefixes;
-		
+
 		for(String prefix : prefixes) {
-			Mats.prefixByName.put(prefix, this);
+			prefixByName.put(prefix, this);
 		}
-		
+
 		allShapes.add(this);
 	}
-	
+
 	public int q(int amount) {
 		return this.quantity * amount;
 	}
-	
+
 	public int q(int unitsUsed, int itemsProduced) { //eg rails: INOGT.q(6, 16) since the recipe uses 6 iron ingots producing 16 individual rail blocks
 		return (this.quantity * unitsUsed) / itemsProduced;
 	}

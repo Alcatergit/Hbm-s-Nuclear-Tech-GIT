@@ -1,9 +1,9 @@
 package com.hbm.entity.projectile;
 
 import com.hbm.blocks.bomb.NukeCustom;
-
 import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Blocks;
+import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
@@ -98,6 +98,32 @@ public class EntityFallingNuke extends EntityThrowable {
 	@Override
 	protected void onImpact(RayTraceResult result) {
 		
+	}
+
+	@Override
+	public void readEntityFromNBT(NBTTagCompound nbt) {
+		super.readEntityFromNBT(nbt);
+		this.tnt = nbt.getFloat("custom_tnt");
+		this.nuke = nbt.getFloat("custom_nuke");
+		this.hydro = nbt.getFloat("custom_hydro");
+		this.bale = nbt.getFloat("custom_bale");
+		this.dirty = nbt.getFloat("custom_dirty");
+		this.schrab = nbt.getFloat("custom_schrab");
+		this.sol = nbt.getFloat("custom_sol");
+		this.euph = nbt.getFloat("custom_euph");
+	}
+
+	@Override
+	public void writeEntityToNBT(NBTTagCompound nbt) {
+		super.writeEntityToNBT(nbt);
+		nbt.setFloat("custom_tnt",this.tnt);
+		nbt.setFloat("custom_nuke",this.nuke);
+		nbt.setFloat("custom_hydro",this.hydro);
+		nbt.setFloat("custom_bale",this.bale);
+		nbt.setFloat("custom_dirty",this.dirty);
+		nbt.setFloat("custom_schrab",this.schrab);
+		nbt.setFloat("custom_sol",this.sol);
+		nbt.setFloat("custom_euph",this.euph);
 	}
 	
 	@Override

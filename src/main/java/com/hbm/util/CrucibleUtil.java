@@ -112,7 +112,7 @@ public class CrucibleUtil {
 			mopHolder[0] = mop;
 		}
 		
-		if(mop == null || mop.typeOfHit != RayTraceResult.Type.BLOCK) {
+		if(mop == null || mop.typeOfHit != mop.typeOfHit.BLOCK) {
 			return null;
 		}
 		

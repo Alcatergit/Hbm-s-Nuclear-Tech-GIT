@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=north": { "model": "hbm:msr_plug" },
+     	   	"facing=south": { "model": "hbm:msr_plug", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:msr_plug", "y": 270 },
+      		"facing=east":  { "model": "hbm:msr_plug", "y": 90 }
+	}
+}

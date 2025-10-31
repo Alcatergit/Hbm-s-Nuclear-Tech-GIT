@@ -4,7 +4,6 @@ import com.hbm.interfaces.IControlReceiver;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual.RBMKColor;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.math.MathHelper;
@@ -118,7 +117,7 @@ public class TileEntityRBMKControlAuto extends TileEntityRBMKControl implements 
 		this.markDirty();
 	}
 	
-	public enum RBMKFunction {
+	public static enum RBMKFunction {
 		LINEAR,
 		QUAD_UP,
 		QUAD_DOWN

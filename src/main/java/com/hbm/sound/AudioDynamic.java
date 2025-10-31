@@ -9,10 +9,13 @@ import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.function.BiFunction;
+
 @SideOnly(Side.CLIENT)
 public class AudioDynamic extends MovingSound {
 
 	public float intendedVolume;
+	public BiFunction<Float,Double,Double> attentuationFunction = null;
 
 	protected AudioDynamic(SoundEvent loc, SoundCategory cat) {
 		super(loc, cat);
@@ -31,13 +34,24 @@ public class AudioDynamic extends MovingSound {
 		this.attenuationType = type;
 		volume = intendedVolume;
 	}
+	public void setCustomAttentuation(BiFunction<Float,Double,Double> attentuationFunction) {
+		this.attentuationFunction = attentuationFunction;
+	}
+
+	public void setLooped(boolean repeat) {
+		this.repeat = repeat;
+	}
 	
 	@Override
 	public void update() {
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		float f = 0;
 		if(player != null) {
-			if(attenuationType == ISound.AttenuationType.LINEAR){
+			double distance = Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
+			if (attentuationFunction != null) {
+				double castLiteral = attentuationFunction.apply(intendedVolume,distance);
+				volume = (float)castLiteral; // java doesn't allow directly applying the value to here lol
+			} else if(attenuationType == ISound.AttenuationType.LINEAR){
 				/*float f3 = intendedVolume;
                 float f2 = 16.0F;
 
@@ -49,7 +63,7 @@ public class AudioDynamic extends MovingSound {
                 volume = 1-f2/f;
                 System.out.println(volume);*/
 			} else {
-				f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
+				f = (float)distance;
 				volume = func(f, intendedVolume);
 			}
 		} else {
@@ -58,7 +72,9 @@ public class AudioDynamic extends MovingSound {
 	}
 	
 	public void start() {
-		Minecraft.getMinecraft().getSoundHandler().playSound(this);
+		try {
+			Minecraft.getMinecraft().getSoundHandler().playSound(this);
+		} catch (IllegalArgumentException ignored) {} // seriously fuck you
 	}
 	
 	public void stop() {

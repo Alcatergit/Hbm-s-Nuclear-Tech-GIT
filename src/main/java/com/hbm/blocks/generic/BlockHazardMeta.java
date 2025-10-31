@@ -1,15 +1,15 @@
 package com.hbm.blocks.generic;
 
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.block.SoundType;
 
 public class BlockHazardMeta extends BlockHazard {
 	
-	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 7);
+	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 15);
 	
 	public BlockHazardMeta(Material m, String s){
 		super(m, s);

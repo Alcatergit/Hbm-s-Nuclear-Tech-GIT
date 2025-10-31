@@ -1,15 +1,17 @@
 package com.hbm.util;
 
-import java.util.*;
-
+import api.hbm.item.IGasMask;
 import com.hbm.handler.ArmorModHandler;
 import com.hbm.handler.ArmorUtil;
-
-import api.hbm.item.IGasMask;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
 
 public class ArmorRegistry {
 
@@ -25,7 +27,7 @@ public class ArmorRegistry {
 			return false;
 		
 		List<HazardClass> list = getProtectionFromItem(entity.getItemStackFromSlot(slot));
-		return new HashSet<>(list).containsAll(Arrays.asList(clazz));
+		return list.containsAll(Arrays.asList(clazz));
 	}
 	
 	public static boolean hasAnyProtection(EntityLivingBase entity, EntityEquipmentSlot slot, HazardClass... clazz) {
@@ -68,8 +70,9 @@ public class ArmorRegistry {
 		if(hazardClasses.containsKey(item))
 			prot.addAll(hazardClasses.get(item));
 		
-		if(item instanceof IGasMask mask) {
-            ItemStack filter = mask.getFilter(stack);
+		if(item instanceof IGasMask) {
+			IGasMask mask = (IGasMask) item;
+			ItemStack filter = mask.getFilter(stack);
 
 			if(filter != null && !filter.isEmpty()) {
 				//add the HazardClasses from the filter, then remove the ones blacklisted by the mask
@@ -97,7 +100,7 @@ public class ArmorRegistry {
 		return prot;
 	}
 	
-	public enum HazardClass {
+	public static enum HazardClass {
 		GAS_CHLORINE("hazard.gasChlorine"),				//also attacks eyes -> no half mask (chlorine seal)
 		GAS_MONOXIDE("hazard.gasMonoxide"),				//only affects lungs (nether coal gas)
 		GAS_INERT("hazard.gasInert"),					//SA
@@ -112,7 +115,7 @@ public class ArmorRegistry {
 		
 		public final String lang;
 		
-		HazardClass(String lang) {
+		private HazardClass(String lang) {
 			this.lang = lang;
 		}
 	}

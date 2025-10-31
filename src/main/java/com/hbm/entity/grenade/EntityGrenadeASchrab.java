@@ -1,9 +1,8 @@
 package com.hbm.entity.grenade;
 
 import com.hbm.config.BombConfig;
-import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-
+import com.leafia.contents.effects.folkvangr.visual.EntityCloudFleija;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.EnumHand;
@@ -42,7 +41,7 @@ public class EntityGrenadeASchrab extends EntityGrenadeBase {
 
 				this.world.spawnEntity(entity);
 
-				EntityCloudFleija cloud = new EntityCloudFleija(this.world, BombConfig.aSchrabRadius);
+				EntityCloudFleija cloud = new EntityCloudFleija(this.world, BombConfig.aSchrabRadius).setAntischrab();
 				cloud.posX = this.posX;
 				cloud.posY = this.posY;
 				cloud.posZ = this.posZ;

@@ -1,11 +1,10 @@
 package com.hbm.render.model;
 
-import org.lwjgl.opengl.GL11;
-
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
+import org.lwjgl.opengl.GL11;
 
 public class ModelGasMask extends ModelBiped {
 
@@ -77,7 +76,11 @@ public class ModelGasMask extends ModelBiped {
 
 		if (entity instanceof EntityPlayer) {
 			EntityPlayer player = (EntityPlayer) entity;
-            this.isSneak = player.isSneaking();
+			if (player.isSneaking()) {
+				this.isSneak = true;
+			} else {
+				this.isSneak = false;
+			}
 		}
 
 		super.setRotationAngles(f, f1, f2, f3, f4, f5, entity);

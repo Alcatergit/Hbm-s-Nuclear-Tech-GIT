@@ -1,18 +1,11 @@
 package com.hbm.world;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
 import com.hbm.lib.Library;
 import com.hbm.tileentity.machine.TileEntityCrateSteel;
-
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockChest;
-import net.minecraft.block.BlockHorizontal;
-import net.minecraft.block.BlockStairs;
-import net.minecraft.block.BlockTrapDoor;
+import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
@@ -24,6 +17,8 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
+import java.util.Random;
+
 public class Radio01 extends WorldGenerator
 {
 	protected Block[] GetValidSpawnBlocks()
@@ -34,7 +29,6 @@ public class Radio01 extends WorldGenerator
 			Blocks.DIRT,
 			Blocks.STONE,
 			Blocks.SAND,
-            Blocks.SANDSTONE,
 		};
 	}
 
@@ -73,11 +67,19 @@ public class Radio01 extends WorldGenerator
 	{
 		return generate(world, rand, pos, false);
 	}
+	
+	public boolean generate(World world, Random rand, BlockPos pos, boolean force)
+	{
+		int i = rand.nextInt(1);
 
-    public boolean generate(World world, Random rand, BlockPos pos, boolean force) {
-        return  generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		if(i == 0)
+		{
+		    generate_r0(world, rand, pos.getX(), pos.getY(), pos.getZ(), force);
+		}
 
-    }
+       return true;
+
+	}
 
 	public boolean generate_r0(World world, Random rand, int x, int y, int z, boolean force)
 	{

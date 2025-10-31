@@ -1,0 +1,10 @@
+{
+	"variants": {
+		"facing=down": { "model": "hbm:msr_control" },
+ 	   	"facing=up": { "model": "hbm:msr_control", "x": 180 },
+  	  	"facing=west":  { "model": "hbm:msr_control", "x": 90, "y": 90 },
+  		"facing=east":  { "model": "hbm:msr_control", "x": 90, "y": 270 },
+		"facing=north": 	{ "model": "hbm:msr_control", "x": 270 },
+		"facing=south":  { "model": "hbm:msr_control", "x": 90 }
+	}
+}

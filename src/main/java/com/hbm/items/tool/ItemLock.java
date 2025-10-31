@@ -1,12 +1,11 @@
 package com.hbm.items.tool;
 
-import com.hbm.lib.HBMSoundHandler;
 import com.hbm.blocks.BlockDummyable;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityLockableBase;
-
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.block.Block;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumActionResult;
@@ -54,7 +53,7 @@ public class ItemLock extends ItemKeyPin {
 						lockTe.setPins(getPins(stack));
 						lockTe.lock();
 						lockTe.setMod(this.lockMod);
-						world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, HBMSoundHandler.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
+						world.playSound((EntityPlayer) null, player.posX, player.posY, player.posZ, HBMSoundEvents.lockHang, SoundCategory.PLAYERS, 1.0F, 1.0F);
 						stack.shrink(1);
 						return EnumActionResult.SUCCESS;
 					}

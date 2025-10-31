@@ -1,9 +1,8 @@
 package com.hbm.entity.grenade;
 
 import com.hbm.entity.effect.EntityBlackHole;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.items.weapon.ItemGrenade;
-
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
@@ -44,7 +43,7 @@ public class EntityGrenadeBlackHole extends EntityGrenadeBouncyBase
 
 	@Override
 	protected int getMaxTimer() {
-		return ItemGrenade.getFuseTicks(ModItems.grenade_black_hole);
+		return ItemGrenade.getFuseTicks(Armory.grenade_black_hole);
 	}
 
 	@Override

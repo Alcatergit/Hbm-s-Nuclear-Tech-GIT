@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeBalefire;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -46,11 +45,11 @@ public class ContainerNukeFstbmb extends Container {
 			var3 = var5.copy();
 
             if (par2 <= 2) {
-				if (!this.mergeItemStack(var5, 2, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 2, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 2, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
 

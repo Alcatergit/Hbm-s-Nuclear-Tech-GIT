@@ -5,11 +5,10 @@ import com.hbm.entity.projectile.EntityBullet;
 import com.hbm.entity.projectile.EntityChopperMine;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityFlying;
 import net.minecraft.entity.SharedMonsterAttributes;
@@ -18,11 +17,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
-import net.minecraft.util.DamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
+import net.minecraft.util.*;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
@@ -61,6 +56,8 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 	
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
+		if (source == ModDamageSource.back)
+			amount = 0; // avoid cheap kills using Antischrabidium
 		if (this.isEntityInvulnerable(source) || !(source == ModDamageSource.nuclearBlast || source == ModDamageSource.blackhole || source.isExplosion()  || ModDamageSource.getIsTau(source) || ModDamageSource.getIsSubatomic(source) || ModDamageSource.getIsDischarge(source))) {
 			return false;
 		} else if(amount >= this.getHealth()) {
@@ -116,7 +113,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 			this.setDead();
 		}
 		if (!isDying) {
-			this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.nullChopper, SoundCategory.HOSTILE, 10.0F, 0.5F);
+			this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.nullChopper, SoundCategory.HOSTILE, 10.0F, 0.5F);
 
 			this.prevAttackCounter = this.attackCounter;
 			double d0 = this.waypointX - this.posX;
@@ -164,8 +161,10 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 				// 100.0D);
 				this.targetedEntity = Library.getClosestEntityForChopper(world, this.posX, this.posY, this.posZ, 250);
 
-                //this.aggroCooldown = 20;
-            }
+				if (this.targetedEntity != null) {
+					//this.aggroCooldown = 20;
+				}
+			}
 
 			double d4 = 64.0D;
 
@@ -186,7 +185,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 				}
 
 				if (this.attackCounter % 2 == 0 && attackCounter >= 120) {
-					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.osiprShoot, SoundCategory.HOSTILE, 10.0F, 1.0F);
+					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.osiprShoot, SoundCategory.HOSTILE, 10.0F, 1.0F);
 					// EntityLargeFireball entitylargefireball = new
 					// EntityLargeFireball(this.world, this, d5, d6, d7);
 					EntityBullet entityarrow = new EntityBullet(this.world, this, 3.0F, 35, 45, false, "chopper", EnumHand.MAIN_HAND);
@@ -211,12 +210,12 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 					this.world.spawnEntity(entityarrow);
 				}
 				if (this.attackCounter == 80) {
-					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.chopperCharge, SoundCategory.HOSTILE, 5.0F, 1.0F);
+					world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.chopperCharge, SoundCategory.HOSTILE, 5.0F, 1.0F);
 				}
 
 				this.mineDropCounter++;
 				if (mineDropCounter > 100 && rand.nextInt(15) == 0) {
-		    		world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.chopperDrop, SoundCategory.HOSTILE, 15.0F, 1.0F);
+		    		world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.chopperDrop, SoundCategory.HOSTILE, 15.0F, 1.0F);
 					EntityChopperMine mine = new EntityChopperMine(world, this.posX, this.posY - 0.5, this.posZ, 0, -0.3, 0, this);
 					this.mineDropCounter = 0;
 					this.world.spawnEntity(mine);
@@ -274,7 +273,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 				this.setDead();
 			}
 			if (this.ticksExisted % 2 == 0)
-				this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.nullCrashing, SoundCategory.HOSTILE, 10.0F, 0.5F);
+				this.world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.nullCrashing, SoundCategory.HOSTILE, 10.0F, 0.5F);
 		}
 		if (this.targetedEntity == null) {
 			float f3 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
@@ -373,6 +372,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 
 		this.dropItem(ModItems.combine_scrap, rand.nextInt(8) + 1);
 		this.dropItem(ModItems.plate_combine_steel, rand.nextInt(5) + 1);
+		this.dropItem(ModItems.wire_magnetized_tungsten, rand.nextInt(3) + 1);
 	}
 	
 	@Override
@@ -400,7 +400,7 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 	public void initDeath() {
     	this.world.createExplosion(this, this.posX, this.posY, this.posZ, 10F, true);
     	if(!this.isDying)
-    		world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundHandler.chopperDamage, SoundCategory.HOSTILE, 10.0F, 1.0F);
+    		world.playSound(null, this.posX, this.posY, this.posZ, HBMSoundEvents.chopperDamage, SoundCategory.HOSTILE, 10.0F, 1.0F);
     	isDying = true;
     }
     
@@ -409,8 +409,10 @@ public class EntityHunterChopper extends EntityFlying implements IMob, IRadiatio
 
     	if(i < 6)
 			this.dropItem(ModItems.combine_scrap, 1);
-    	else
+    	else if(i > 7)
 			this.dropItem(ModItems.plate_combine_steel, 1);
+    	else
+			this.dropItem(ModItems.wire_magnetized_tungsten, 1);
     }
 
 	public void setIsDying(boolean b) {

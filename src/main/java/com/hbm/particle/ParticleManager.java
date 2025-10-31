@@ -1,10 +1,10 @@
 package com.hbm.particle;
 
-import java.util.Random;
-
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.Random;
 
 @SideOnly(Side.CLIENT)
 public class ParticleManager {

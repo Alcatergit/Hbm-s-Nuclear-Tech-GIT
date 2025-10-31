@@ -1,0 +1,8 @@
+{
+	"variants": {
+		"facing=2": { "model": "hbm:nuke_man" },
+		"facing=3": { "model": "hbm:nuke_man" },
+		"facing=4": { "model": "hbm:nuke_man" },
+		"facing=5": { "model": "hbm:nuke_man" }
+	}
+}

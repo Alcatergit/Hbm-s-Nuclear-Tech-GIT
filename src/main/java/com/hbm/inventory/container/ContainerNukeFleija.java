@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -55,11 +54,11 @@ public class ContainerNukeFleija extends Container {
 			var3 = var5.copy();
 			
             if (par2 <= 10) {
-				if (!this.mergeItemStack(var5, 11, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 11, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 11, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
             

@@ -1,46 +1,48 @@
 package com.hbm.inventory;
 
-import java.util.HashSet;
-import java.util.HashMap;
-import java.util.Map;
-
-import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.BlockBaseVisualFluidConnectable;
+import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
-
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 
 public class HeatRecipes {
 	
-	public static HashMap<String, Fluid> hotFluids = new HashMap<String, Fluid>();
-	public static HashMap<String, Integer> requiredTU = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> inputAmountHot = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> outputAmountHot = new HashMap<String, Integer>();
+	public static HashMap<Fluid, Fluid> hotFluids = new HashMap<Fluid, Fluid>();
+	public static HashMap<Fluid, Integer> requiredTU = new HashMap<Fluid, Integer>();
+	public static HashMap<Fluid, Integer> inputAmountHot = new HashMap<Fluid, Integer>();
+	public static HashMap<Fluid, Integer> outputAmountHot = new HashMap<Fluid, Integer>();
 
-	public static HashMap<String, Fluid> coolFluids = new HashMap<String, Fluid>();
-	public static HashMap<String, Integer> resultingTU = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> inputAmountCold = new HashMap<String, Integer>();
-	public static HashMap<String, Integer> outputAmountCold = new HashMap<String, Integer>();
+	public static HashMap<Fluid, Fluid> coolFluids = new HashMap<Fluid, Fluid>();
+	public static HashMap<Fluid, Integer> resultingTU = new HashMap<Fluid, Integer>();
+	public static HashMap<Fluid, Integer> inputAmountCold = new HashMap<Fluid, Integer>();
+	public static HashMap<Fluid, Integer> outputAmountCold = new HashMap<Fluid, Integer>();
+
 	//for 100 mb
 	public static void registerHeatRecipes() {
-		addBoilRecipe(FluidRegistry.WATER, 1, ModForgeFluids.STEAM, 100, 100);
-		addCoolRecipe(ModForgeFluids.STEAM, 100, ModForgeFluids.SPENTSTEAM, 1, 100);
+		addBoilRecipe(new FluidStack(FluidRegistry.WATER, 1), new FluidStack(ModForgeFluids.STEAM, 100), 100);
+		addCoolRecipe(new FluidStack(ModForgeFluids.STEAM, 100), new FluidStack(ModForgeFluids.SPENTSTEAM, 1), 100);
 		
-		addBoilAndCoolRecipe(ModForgeFluids.STEAM, 10, ModForgeFluids.HOTSTEAM, 1, 15);
-		addBoilAndCoolRecipe(ModForgeFluids.HOTSTEAM, 10, ModForgeFluids.SUPERHOTSTEAM, 1, 30);
-		addBoilAndCoolRecipe(ModForgeFluids.SUPERHOTSTEAM, 10, ModForgeFluids.ULTRAHOTSTEAM, 1, 120);
-		addBoilAndCoolRecipe(ModForgeFluids.OIL, 1, ModForgeFluids.HOTOIL, 1, 300);
-		addBoilAndCoolRecipe(ModForgeFluids.CRACKOIL, 1, ModForgeFluids.HOTCRACKOIL, 1, 300);
-		addBoilAndCoolRecipe(ModForgeFluids.OIL_DS, 1, ModForgeFluids.HOTOIL_DS, 1, 300);
-		addBoilAndCoolRecipe(ModForgeFluids.CRACKOIL_DS, 1, ModForgeFluids.HOTCRACKOIL_DS, 1, 300);
-		addBoilAndCoolRecipe(ModForgeFluids.COOLANT, 1, ModForgeFluids.HOTCOOLANT, 1, 500);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.STEAM, 10), new FluidStack(ModForgeFluids.HOTSTEAM, 1), 15);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.HOTSTEAM, 10), new FluidStack(ModForgeFluids.SUPERHOTSTEAM, 1), 30);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.SUPERHOTSTEAM, 10), new FluidStack(ModForgeFluids.ULTRAHOTSTEAM, 1), 120);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.ULTRAHOTSTEAM, 10), new FluidStack(ModForgeFluids.DEATHSTEAM, 1), 960);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.OIL, 1), new FluidStack(ModForgeFluids.HOTOIL, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.CRACKOIL, 1), new FluidStack(ModForgeFluids.HOTCRACKOIL, 1), 300);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.COOLANT, 1), new FluidStack(ModForgeFluids.HOTCOOLANT, 1), 500);
+		addBoilAndCoolRecipe(new FluidStack(ModForgeFluids.HOTCOOLANT, 1), new FluidStack(ModForgeFluids.MALCOOLANT, 1), 1000);
 
 		//Compat
-        addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
+		addBoilRecipe("crude_oil", 1, "hotoil", 1, 300); //thermalfoundation
 		addBoilRecipe("oil_medium", 1, "hotoil", 1, 300);
 		addBoilRecipe("oilgc", 1, "hotoil", 1, 300); //galacticraft
 		addBoilRecipe("biofuel", 1, "fuel", 1, 100); //galacticraft & industrialforegoing
+		addBoilRecipe("petroil", 1, "fuel", 1, 100); //galacticraft
 		addBoilRecipe("refined_fuel", 1, "petroil", 1, 100); //thermalfoundation
 		addBoilRecipe("sulphuricacid", 1, "sulfuric_acid", 1, 100); //galacticraft
 		addBoilRecipe("sulfuricacid", 1, "sulfuric_acid", 1, 100); //mekanism 
@@ -49,13 +51,13 @@ public class HeatRecipes {
 		addBoilAndCoolRecipe("liquiddeuterium", 1, "deuterium", 1, 1); //mekanism
 		addBoilAndCoolRecipe("liquidhydrogen", 1, "hydrogen", 1, 1); //mekanism
 		addBoilRecipe("refined_biofuel", 1, "biofuel", 1, 10); //thermalfoundation
-		addBoilAndCoolRecipe("ic2coolant", 1, "ic2hot_coolant", 1, 450); //IC2
+		addBoilAndCoolRecipe("ic2coolant", 1, "ic2hot_coolant", 1, 450); //mekanism", 1, 1); //IC2
 	}
 
 	public static void setFluidsForRBMKLoader(){
 		HashSet<Fluid> fluids = new HashSet<Fluid>();
-		for(Map.Entry<String, Fluid> entry : hotFluids.entrySet()) {
-			fluids.add(FluidRegistry.getFluid(entry.getKey()));
+		for(Map.Entry<Fluid, Fluid> entry : hotFluids.entrySet()) {
+			fluids.add(entry.getKey());
 			fluids.add(entry.getValue());
 		}
 		((BlockBaseVisualFluidConnectable)ModBlocks.rbmk_loader).addFluids(fluids.toArray(new Fluid[0]));
@@ -63,26 +65,26 @@ public class HeatRecipes {
 
 	public static Fluid getBoilFluid(Fluid f){
 		if(f != null)
-			return hotFluids.get(f.getName());
+			return hotFluids.get(f);
 		return null;
 	}
 
 	public static int getRequiredHeat(Fluid f){
-		Integer heat = requiredTU.get(f.getName());
+		Integer heat = requiredTU.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
 	}
 
 	public static int getInputAmountHot(Fluid f){
-		Integer heat = inputAmountHot.get(f.getName());
+		Integer heat = inputAmountHot.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
 	}
 
 	public static int getOutputAmountHot(Fluid f){
-		Integer heat = outputAmountHot.get(f.getName());
+		Integer heat = outputAmountHot.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
@@ -90,92 +92,94 @@ public class HeatRecipes {
 
 	public static Fluid getCoolFluid(Fluid f){
 		if(f != null)
-			return coolFluids.get(f.getName());
+			return coolFluids.get(f);
 		return null;
 	}
 
 	public static int getResultingHeat(Fluid f){
-		Integer heat = resultingTU.get(f.getName());
+		Integer heat = resultingTU.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
 	}
 
 	public static int getInputAmountCold(Fluid f){
-		Integer heat = inputAmountCold.get(f.getName());
+		Integer heat = inputAmountCold.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
 	}
 
 	public static int getOutputAmountCold(Fluid f){
-		Integer heat = outputAmountCold.get(f.getName());
+		Integer heat = outputAmountCold.get(f);
 		if(heat != null)
 			return heat;
 		return -1;
 	}
 
+	public static void addBoilAndCoolRecipe(FluidStack cold, FluidStack hot, int heat){
+		addBoilRecipe(cold, hot, heat);
+		addCoolRecipe(hot, cold, heat);
+	}
+
+	public static void addBoilRecipe(FluidStack cold, FluidStack hot, int heat){
+		hotFluids.put(cold.getFluid(), hot.getFluid());
+		requiredTU.put(cold.getFluid(), heat);
+		inputAmountHot.put(cold.getFluid(), cold.amount);
+		outputAmountHot.put(cold.getFluid(), hot.amount);
+	}
+
+	public static void addCoolRecipe(FluidStack hot, FluidStack cold, int heat){
+		coolFluids.put(hot.getFluid(), cold.getFluid());
+		resultingTU.put(hot.getFluid(), heat);
+		inputAmountCold.put(hot.getFluid(), hot.amount);
+		outputAmountCold.put(hot.getFluid(), cold.amount);
+	}
+
 	public static boolean hasBoilRecipe(Fluid cold){
-        if(cold == null) return false;
-		return hotFluids.containsKey(cold.getName());
+		return hotFluids.containsKey(cold);
 	}
 
 	public static boolean hasCoolRecipe(Fluid hot){
-		return coolFluids.containsKey(hot.getName());
+		return coolFluids.containsKey(hot);
 	}
-
-    public static void addBoilRecipe(Fluid cold, int coldAmount, Fluid hot, int hotAmount, int heat) {
-        addBoilRecipe(cold.getName(), coldAmount, hot.getName(), hotAmount, heat);
-    }
 
 	public static void addBoilRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-            hotFluids.put(cold, FluidRegistry.getFluid(hot));
-            requiredTU.put(cold, heat);
-            inputAmountHot.put(cold, coldAmount);
-            outputAmountHot.put(cold, hotAmount);
+			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
 		}
 	}
-
-    public static void  addCoolRecipe(Fluid hot, int hotAmount, Fluid cold, int coldAmount, int heat) {
-        addCoolRecipe(hot.getName(), hotAmount, cold.getName(), coldAmount, heat);
-    }
 
 	public static void addCoolRecipe(String hot, int hotAmount, String cold, int coldAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-            coolFluids.put(hot, FluidRegistry.getFluid(cold));
-            resultingTU.put(hot, heat);
-            inputAmountCold.put(hot, hotAmount);
-            outputAmountCold.put(hot, coldAmount);
+			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
 		}
 	}
 
-    public static void addBoilAndCoolRecipe(Fluid cold, int coldAmount, Fluid hot, int hotAmount, int heat) {
-        addBoilAndCoolRecipe(cold.getName(), coldAmount, hot.getName(), hotAmount, heat);
-    }
-
-    public static void addBoilAndCoolRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
+	public static void addBoilAndCoolRecipe(String cold, int coldAmount, String hot, int hotAmount, int heat){
 		if(FluidRegistry.isFluidRegistered(hot) && FluidRegistry.isFluidRegistered(cold)){
-			addBoilRecipe(cold, coldAmount, hot, hotAmount, heat);
-			addCoolRecipe(hot, hotAmount, cold, coldAmount, heat);
+			addBoilRecipe(new FluidStack(FluidRegistry.getFluid(cold), coldAmount), new FluidStack(FluidRegistry.getFluid(hot), hotAmount), heat);
+			addCoolRecipe(new FluidStack(FluidRegistry.getFluid(hot), hotAmount), new FluidStack(FluidRegistry.getFluid(cold), coldAmount), heat);
 		}
 	}
 
 	public static void removeBoilRecipe(String cold){
 		if(FluidRegistry.isFluidRegistered(cold)){
-			hotFluids.remove(cold);
-			requiredTU.remove(cold);
-			inputAmountHot.remove(cold);
-			outputAmountHot.remove(cold);
+			Fluid f = FluidRegistry.getFluid(cold);
+			hotFluids.remove(f);
+			requiredTU.remove(f);
+			inputAmountHot.remove(f);
+			outputAmountHot.remove(f);
 		}
 	}
 
 	public static void removeCoolRecipe(String hot){
 		if(FluidRegistry.isFluidRegistered(hot)){
-			coolFluids.remove(hot);
-			resultingTU.remove(hot);
-			inputAmountCold.remove(hot);
-			outputAmountCold.remove(hot);
+			Fluid f = FluidRegistry.getFluid(hot);
+			coolFluids.remove(f);
+			resultingTU.remove(f);
+			inputAmountCold.remove(f);
+			outputAmountCold.remove(f);
 		}
 	}
 

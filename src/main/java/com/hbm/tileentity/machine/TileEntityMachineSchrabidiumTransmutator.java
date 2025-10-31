@@ -1,23 +1,21 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyUser;
 import com.hbm.inventory.NuclearTransmutationRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemCapacitor;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -67,7 +65,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	}
 	
 	@Override
-	public boolean canExtractItem(int i, ItemStack stack, int amount) {
+	public boolean canExtractItemHopper(int i, ItemStack stack, int amount) {
 		if(i == 2 && stack.getItem() != null && stack.getItem() == ModItems.redcoil_capacitor && ItemCapacitor.getDura(stack) <= 0) {
 			return true;
 		}
@@ -76,7 +74,8 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 		}
 
 		if(i == 3) {
-            return stack.getItem() instanceof IBatteryItem && ((IBatteryItem) stack.getItem()).getCharge(stack) == 0;
+			if(stack.getItem() instanceof IBatteryItem && ((IBatteryItem)stack.getItem()).getCharge(stack) == 0)
+				return true;
 		}
 
 		return false;
@@ -90,7 +89,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setLong("power", power);
 		compound.setInteger("process", process);
 		return super.writeToNBT(compound);
@@ -118,7 +117,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			if(process > 0) {
 
 				if(audio == null) {
-					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.tauChargeLoop, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundEvents.tauChargeLoop, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 1.0F);
 					audio.startSound();
 				}
 			} else {
@@ -177,15 +176,17 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 	public boolean hasCoil(){
 		if(inventory.getStackInSlot(2).getItem() == ModItems.redcoil_capacitor && ItemCapacitor.getDura(inventory.getStackInSlot(2)) > 0)
 			return true;
-        return inventory.getStackInSlot(2).getItem() == ModItems.euphemium_capacitor;
-    }
+		if(inventory.getStackInSlot(2).getItem() == ModItems.euphemium_capacitor)
+			return true;
+		return false;
+	}
 
 	public boolean canProcess() {
 		if(!hasCoil())
 			return false;
 		if(inventory.getStackInSlot(0) == null || inventory.getStackInSlot(0).isEmpty())
 			return false;
-		long recipePower = NuclearTransmutationRecipes.getCombustionEnergy(inventory.getStackInSlot(0));
+		long recipePower = NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
 
 		if(recipePower < 0)
 			return false;
@@ -194,9 +195,12 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 			return false;
 
 		ItemStack outputItem = NuclearTransmutationRecipes.getOutput(inventory.getStackInSlot(0));
-        return inventory.getStackInSlot(1) == null || inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == outputItem.getItem()
-                && inventory.getStackInSlot(1).getCount() < inventory.getStackInSlot(1).getMaxStackSize());
-    }
+		if(inventory.getStackInSlot(1) == null || inventory.getStackInSlot(1).isEmpty() || (inventory.getStackInSlot(1).getItem() == outputItem.getItem()
+			&& inventory.getStackInSlot(1).getCount() < inventory.getStackInSlot(1).getMaxStackSize())) {
+			return true;
+		}
+		return false;
+	}
 
 	public boolean isProcessing() {
 		return process > 0;
@@ -207,7 +211,7 @@ public class TileEntityMachineSchrabidiumTransmutator extends TileEntityMachineB
 
 		if(process >= processSpeed) {
 			
-			power -= NuclearTransmutationRecipes.getCombustionEnergy(inventory.getStackInSlot(0));
+			power -= NuclearTransmutationRecipes.getEnergy(inventory.getStackInSlot(0));
 			if(power < 0)
 				power = 0;
 			process = 0;

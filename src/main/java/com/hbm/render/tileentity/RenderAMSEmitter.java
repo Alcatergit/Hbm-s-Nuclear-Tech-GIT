@@ -1,16 +1,15 @@
 package com.hbm.render.tileentity;
 
-import java.util.Random;
-
-import org.lwjgl.opengl.GL11;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderHelper;
 import com.hbm.tileentity.machine.TileEntityAMSBase;
 import com.hbm.tileentity.machine.TileEntityAMSEmitter;
-
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
+import org.lwjgl.opengl.GL11;
+
+import java.util.Random;
 
 public class RenderAMSEmitter extends TileEntitySpecialRenderer<TileEntityAMSEmitter> {
 

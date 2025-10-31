@@ -1,7 +1,6 @@
 package com.hbm.creativetabs;
 
-import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Armory;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
@@ -14,8 +13,8 @@ public class WeaponTab extends CreativeTabs {
 
 	@Override
 	public ItemStack createIcon() {
-		if(ModItems.gun_lever_action != null){
-			return new ItemStack(ModItems.gun_lever_action);
+		if(Armory.gun_lever_action != null){
+			return new ItemStack(Armory.gun_lever_action);
 		}
 		return new ItemStack(Items.IRON_PICKAXE);
 	}

@@ -1,9 +1,7 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.energy.IEnergyUser;
 import com.hbm.config.BombConfig;
-import com.hbm.handler.MultiblockHandler;
-import com.hbm.inventory.RecipesCommon.AStack;
-import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
@@ -11,23 +9,26 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionThermo;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.handler.MultiblockHandler;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.CyclotronRecipes;
+import com.hbm.inventory.RecipesCommon.AStack;
+import com.hbm.inventory.RecipesCommon.NbtComparableStack;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Materials.Powders;
+import com.hbm.items.ModItems.Upgrades;
 import com.hbm.items.machine.ItemMachineUpgrade;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyUser;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.item.Item;
 import net.minecraft.init.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -35,8 +36,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -45,14 +44,15 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
+import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import net.minecraftforge.oredict.OreDictionary;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityMachineCyclotron extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public static final long maxPower = 1_000_000_000;
+	public static final long maxPower = 100000000;
 	public int consumption = 1000000;
 
 	public boolean isOn;
@@ -86,7 +86,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 			@Override
 			public void setStackInSlot(int slot, ItemStack stack) {
 				if(stack != null && slot >= 14 && slot <= 15 && stack.getItem() instanceof ItemMachineUpgrade)
-					world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
+					world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundEvents.upgradePlug, SoundCategory.BLOCKS, 1.5F, 1.0F);
 				super.setStackInSlot(slot, stack);
 			}
 		};
@@ -152,8 +152,9 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	private void fillFromContainers(TileEntity tile, int inputSlot, int tagetSlot){
 		int meta = this.getBlockMetadata();
 		if(tile != null && tile instanceof ICapabilityProvider) {
-            if(tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
-				IItemHandler cap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+			ICapabilityProvider capte = (ICapabilityProvider) tile;
+			if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
+				IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 				int[] slots;
 				if(tile instanceof TileEntityMachineBase){
 					slots = ((TileEntityMachineBase)tile).getAccessibleSlotsFromSide(MultiblockHandler.intToEnumFacing(meta).rotateY());
@@ -185,10 +186,12 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		int inputDelta = inputAmount;
 		int targetDelta = targetAmount;
 		for(int slot : allowedSlots) {
-			if(!container.getStackInSlot(slot).isEmpty()){ // check next slot in chest if it is empty
+			if(container.getStackInSlot(slot) == null || container.getStackInSlot(slot).isEmpty()){ // check next slot in chest if it is empty
+				continue;
+			}else{ // found an item in chest
 				ItemStack stack = container.getStackInSlot(slot).copy();
 				// check input
-				if(inventory.getStackInSlot(inputSlot).isEmpty()){
+				if(inventory.getStackInSlot(inputSlot) == null || inventory.getStackInSlot(inputSlot).isEmpty()){
 					if(isItemATarget(stack.getItem())){
 						inputDelta = this.moveItem(container, inputSlot, slot, inputDelta, te);
 						continue;
@@ -202,7 +205,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 					}
 				}
 				// check target
-				if(inventory.getStackInSlot(targetSlot).isEmpty()){
+				if(inventory.getStackInSlot(targetSlot) == null || inventory.getStackInSlot(targetSlot).isEmpty()){
 					if(!isItemATarget(stack.getItem())){
 						targetDelta = this.moveItem(container, targetSlot, slot, targetDelta, te);
 						continue;
@@ -229,7 +232,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			container.extractItem(containerSlot, foundCount, false);
 
-			if(inventory.getStackInSlot(inventorySlot).isEmpty()){
+			if(inventory.getStackInSlot(inventorySlot) == null || inventory.getStackInSlot(inventorySlot).isEmpty()){
 
 				stack.setCount(foundCount);
 				inventory.setStackInSlot(inventorySlot, stack);
@@ -245,9 +248,10 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 	private void exportIntoContainers(TileEntity tile, int slot){
 		int meta = this.getBlockMetadata();
-		if(tile != null) {
-            if(tile.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
-				IItemHandler cap = tile.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
+		if(tile != null && tile instanceof ICapabilityProvider) {
+			ICapabilityProvider capte = (ICapabilityProvider) tile;
+			if(capte.hasCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY())) {
+				IItemHandler cap = capte.getCapability(CapabilityItemHandler.ITEM_HANDLER_CAPABILITY, MultiblockHandler.intToEnumFacing(meta).rotateY());
 				tryFillContainerCap(cap, slot);
 			}
 		}
@@ -255,29 +259,55 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 	//Unloads output into chests. Capability version.
 	public boolean tryFillContainerCap(IItemHandler inv, int slot) {
-        if(inv == null) return false;
+
 		int size = inv.getSlots();
 
 		for(int i = 0; i < size; i++) {
-			if(inventory.getStackInSlot(slot).isEmpty()) return false;
+			if(inv.getStackInSlot(i) != null) {
 
-            ItemStack chestStack = inv.getStackInSlot(i).copy();
-            ItemStack outputStack = inventory.getStackInSlot(slot).copy();
-            chestStack.setCount(1);
-            outputStack.setCount(1);
+				if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+					return false;
 
-            if((chestStack.isEmpty() || (isItemAcceptable(chestStack, outputStack) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize())) && inv.insertItem(i, outputStack, true).isEmpty()) {
+				ItemStack sta1 = inv.getStackInSlot(i).copy();
+				ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+				if(sta1 != null && sta2 != null) {
+					sta1.setCount(1);
+					sta2.setCount(1);
 
-                inventory.getStackInSlot(slot).shrink(1);
+					if(isItemAcceptable(sta1, sta2) && inv.getStackInSlot(i).getCount() < inv.getStackInSlot(i).getMaxStackSize()) {
+						inventory.getStackInSlot(slot).shrink(1);
 
-                if(inventory.getStackInSlot(slot).isEmpty())
-                    inventory.setStackInSlot(slot, ItemStack.EMPTY);
+						if(inventory.getStackInSlot(slot).isEmpty())
+							inventory.setStackInSlot(slot, ItemStack.EMPTY);
 
-                inv.insertItem(i, outputStack, false);
+						ItemStack sta3 = inv.getStackInSlot(i).copy();
+						sta3.setCount(1);
+						inv.insertItem(i, sta3, false);
 
-                return true;
-            }
+						return true;
+					}
+				}
+			}
 		}
+		for(int i = 0; i < size; i++) {
+
+			if(inventory.getStackInSlot(slot).getItem() == Items.AIR)
+				return false;
+
+			ItemStack sta2 = inventory.getStackInSlot(slot).copy();
+			if(inv.getStackInSlot(i).getItem() == Items.AIR && sta2 != null) {
+				sta2.setCount(1);
+				inventory.getStackInSlot(slot).shrink(1);
+
+				if(inventory.getStackInSlot(slot).isEmpty())
+					inventory.setStackInSlot(slot, ItemStack.EMPTY);
+
+				inv.insertItem(i, sta2, false);
+
+				return true;
+			}
+		}
+
 		return false;
 	}
 	
@@ -313,7 +343,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 				int defConsumption = consumption - 100000 * getConsumption();
 
 				if(canProcess() && power >= defConsumption) {
-					progress += (isPlugged() ? 8 : 0) + this.getSpeed();
+					progress += this.getSpeed();
 					power -= defConsumption;
 					
 					if(progress >= duration) {
@@ -321,40 +351,38 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 						progress = 0;
 						this.markDirty();
 					}
-                    if(!isPlugged()) {
-                        if (coolant.getFluidAmount() > 0) {
-                            countdown = 0;
+					if(coolant.getFluidAmount() > 0) {
+						countdown = 0;
 
-                            if (world.rand.nextInt(3) == 0)
-                                coolant.drain(1, true);
+						if(world.rand.nextInt(3) == 0)
+							coolant.drain(1, true);
 
-                        } else if (world.rand.nextInt(this.getSafety()) == 0) {
+					} else if(world.rand.nextInt(this.getSafety()) == 0) {
 
-                            countdown++;
+						countdown++;
 
-                            int chance = 7 - Math.min((int) Math.ceil(countdown / 200D), 6);
+						int chance = 7 - Math.min((int) Math.ceil(countdown / 200D), 6);
 
-                            if (world.rand.nextInt(chance) == 0)
-                                ExplosionLarge.spawnTracers(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 1);
+						if(world.rand.nextInt(chance) == 0)
+							ExplosionLarge.spawnTracers(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 1);
 
-                            if (countdown > 1000) {
-                                ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 25);
-                                ExplosionThermo.scorchLight(world, pos.getX(), pos.getY(), pos.getZ(), 7);
+						if(countdown > 1000) {
+							ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 25);
+							ExplosionThermo.scorchLight(world, pos.getX(), pos.getY(), pos.getZ(), 7);
 
-                                if (countdown % 4 == 0)
-                                    ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 18, 1);
+							if(countdown % 4 == 0)
+								ExplosionLarge.spawnBurst(world, pos.getX() + 0.5, pos.getY() + 3.25, pos.getZ() + 0.5, 18, 1);
 
-                            } else if (countdown > 600) {
-                                ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 10);
-                            }
+						} else if(countdown > 600) {
+							ExplosionThermo.setEntitiesOnFire(world, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, 10);
+						}
 
-                            if (countdown == 1140)
-                                world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundHandler.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
+						if(countdown == 1140)
+							world.playSound(null, pos.getX() + 0.5, pos.getY() + 1.5, pos.getZ() + 0.5, HBMSoundEvents.shutdown, SoundCategory.BLOCKS, 10.0F, 1.0F);
 
-                            if (countdown > 1200)
-                                explode();
-                        }
-                    }
+						if(countdown > 1200)
+							explode();
+					}
 				} else {
 					progress = 0;
 				}
@@ -402,17 +430,17 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	public boolean isItemAcceptable(ItemStack stack1, ItemStack stack2) {
 
 		if(stack1 != null && stack2 != null && !stack1.isEmpty() && !stack2.isEmpty()) {
-			if(Library.areItemStacksCompatible(stack1, stack2, false))
+			if(Library.areItemStacksCompatible(stack1, stack2))
 				return true;
 
 			int[] ids1 = OreDictionary.getOreIDs(stack1);
 			int[] ids2 = OreDictionary.getOreIDs(stack2);
 
 			if(ids1 != null && ids2 != null && ids1.length > 0 && ids2.length > 0) {
-                for (int k : ids1)
-                    for (int i : ids2)
-                        if (k == i)
-                            return true;
+				for(int i = 0; i < ids1.length; i++)
+					for(int j = 0; j < ids2.length; j++)
+						if(ids1[i] == ids2[j])
+							return true;
 			}
 		}
 
@@ -430,7 +458,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "muke");
 			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
 		} else if(rand < 4) {
 			EntityBalefire bf = new EntityBalefire(world).mute();
 			bf.posX = pos.getX() + 0.5;
@@ -443,7 +471,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 			data.setString("type", "muke");
 			data.setBoolean("balefire", true);
 			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 250));
-			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundHandler.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
+			world.playSound(null, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, HBMSoundEvents.mukeExplosion, SoundCategory.BLOCKS, 15.0F, 1.0F);
 		} else if(rand < 5) {
 			EntityBlackHole bl = new EntityBlackHole(world, 1.5F + world.rand.nextFloat());
 			bl.posX = pos.getX() + 0.5F;
@@ -515,11 +543,11 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_1)
 					speed += 1;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_2)
 					speed += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_speed_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_speed_3)
 					speed += 3;
 			}
 		}
@@ -535,11 +563,11 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_1)
 					speed += 1;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_2)
 					speed += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_power_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_power_3)
 					speed += 3;
 			}
 		}
@@ -555,11 +583,11 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 			if(!inventory.getStackInSlot(i).isEmpty()) {
 
-				if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_1)
+				if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_1)
 					speed += 1;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_2)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_2)
 					speed += 2;
-				else if(inventory.getStackInSlot(i).getItem() == ModItems.upgrade_effect_3)
+				else if(inventory.getStackInSlot(i).getItem() == Upgrades.upgrade_effect_3)
 					speed += 3;
 			}
 		}
@@ -590,7 +618,7 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("coolant", coolant.writeToNBT(new NBTTagCompound()));
 		compound.setTag("amat", amat.writeToNBT(new NBTTagCompound()));
 
@@ -601,12 +629,9 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 		compound.setLong("power", power);
 		return super.writeToNBT(compound);
 	}
-    public boolean isPlugged(){
-        return this.plugs == (byte) 15;
-    }
 	
 	public void setPlug(int index) {
-		this.plugs |= (byte) (1 << index);
+		this.plugs |= (1 << index);
 		this.markDirty();
 	}
 
@@ -616,15 +641,15 @@ public class TileEntityMachineCyclotron extends TileEntityMachineBase implements
 
 	public static Item getItemForPlug(int i) {
 
-        return switch (i) {
-            case 0 -> ModItems.powder_balefire;
-            case 1 -> ModItems.book_of_;
-            case 2 -> ModItems.diamond_gavel;
-            case 3 -> ModItems.coin_maskman;
-            default -> null;
-        };
+		switch(i) {
+		case 0: return Powders.powder_balefire;
+		case 1: return ModItems.book_of_;
+		case 2: return ModItems.diamond_gavel;
+		case 3: return ModItems.coin_maskman;
+		}
 
-    }
+		return null;
+	}
 	
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {

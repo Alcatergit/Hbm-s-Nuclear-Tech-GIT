@@ -2,7 +2,6 @@ package com.hbm.physics;
 
 import com.hbm.physics.GJK.GJKInfo;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.util.math.MathHelper;
 
 public class Contact {

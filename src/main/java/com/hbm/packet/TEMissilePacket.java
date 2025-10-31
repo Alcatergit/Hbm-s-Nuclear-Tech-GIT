@@ -2,8 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.items.ModItems;
 import com.hbm.tileentity.bomb.TileEntityLaunchPad;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
@@ -15,7 +15,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class TEMissilePacket implements IMessage {
+public class TEMissilePacket extends RecordablePacket {
 
 	int x;
 	int y;
@@ -88,11 +88,13 @@ public class TEMissilePacket implements IMessage {
 				type = 26;
 			if(stack.getItem() == ModItems.missile_n2)
 				type = 27;
+			if(stack.getItem() == ModItems.missile_customnuke)
+				type = 28;
 		}
 	}
 
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		x = buf.readInt();
 		y = buf.readInt();
 		z = buf.readInt();
@@ -101,7 +103,7 @@ public class TEMissilePacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(x);
 		buf.writeInt(y);
 		buf.writeInt(z);

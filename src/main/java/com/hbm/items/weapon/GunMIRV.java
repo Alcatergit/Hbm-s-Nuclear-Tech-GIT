@@ -1,15 +1,12 @@
 package com.hbm.items.weapon;
 
-import java.util.List;
-import java.util.UUID;
-
 import com.google.common.collect.Multimap;
 import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
@@ -27,6 +24,9 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.entity.player.ArrowLooseEvent;
+
+import java.util.List;
+import java.util.UUID;
 
 public class GunMIRV extends Item {
 
@@ -54,7 +54,7 @@ public class GunMIRV extends Item {
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_mirv)) {
+		if (flag || Library.hasInventoryItem(player.inventory, Armory.ammo_mirv)) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -73,10 +73,10 @@ public class GunMIRV extends Item {
 			entityarrow.setDamage(1000);
 
 			stack.damageItem(1, player);
-			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
+			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundEvents.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 
 			if (!flag) {
-				Library.consumeInventoryItem(player.inventory, ModItems.ammo_mirv);
+				Library.consumeInventoryItem(player.inventory, Armory.ammo_mirv);
 			}
 
 			if (!worldIn.isRemote) {

@@ -1,13 +1,13 @@
 package com.hbm.tileentity.bomb;
 
+import api.hbm.energy.IBatteryItem;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Batteries;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IBatteryItem;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -16,7 +16,6 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITickable {
 
@@ -46,7 +45,7 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 				timer--;
 
 				if(timer % 20 == 0)
-					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.fstbmbPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
+					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.fstbmbPing, SoundCategory.BLOCKS, 5.0F, 1.0F);
 			}
 
 			if(timer <= 0) {
@@ -64,7 +63,7 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 	public void handleButtonPacket(int value, int meta) {
 
 		if(meta == 0 && this.isLoaded()) {
-			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.fstbmbStart, SoundCategory.BLOCKS, 5.0F, 1.0F);
+			world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.fstbmbStart, SoundCategory.BLOCKS, 5.0F, 1.0F);
 			started = true;
 		}
 
@@ -86,8 +85,12 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 
 	public boolean hasEgg() {
 
-        return inventory.getStackInSlot(0).getItem() == ModItems.egg_balefire;
-    }
+		if(inventory.getStackInSlot(0).getItem() == ModItems.egg_balefire) {
+			return true;
+		}
+
+		return false;
+	}
 
 	public boolean hasBattery() {
 
@@ -96,12 +99,12 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 
 	public int getBattery() {
 		
-		if(inventory.getStackInSlot(1).getItem() == ModItems.battery_spark &&
-				((IBatteryItem)ModItems.battery_spark).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_spark).getMaxCharge(inventory.getStackInSlot(1))) {
+		if(inventory.getStackInSlot(1).getItem() == Batteries.battery_spark &&
+				((IBatteryItem) Batteries.battery_spark).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem) Batteries.battery_spark).getMaxCharge()) {
 			return 1;
 		}
-		if(inventory.getStackInSlot(1).getItem() == ModItems.battery_trixite &&
-				((IBatteryItem)ModItems.battery_trixite).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem)ModItems.battery_trixite).getMaxCharge(inventory.getStackInSlot(1))) {
+		if(inventory.getStackInSlot(1).getItem() == Batteries.battery_trixite &&
+				((IBatteryItem) Batteries.battery_trixite).getCharge(inventory.getStackInSlot(1)) == ((IBatteryItem) Batteries.battery_trixite).getMaxCharge()) {
 			return 2;
 		}
 
@@ -153,7 +156,7 @@ public class TileEntityNukeBalefire extends TileEntityMachineBase implements ITi
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
+	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setBoolean("started", started);
 		compound.setInteger("timer", timer);
 		return super.writeToNBT(compound);

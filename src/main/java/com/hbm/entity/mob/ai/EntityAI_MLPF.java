@@ -1,16 +1,15 @@
 package com.hbm.entity.mob.ai;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
-
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.util.math.AxisAlignedBB;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 public class EntityAI_MLPF extends EntityAIBase {
 

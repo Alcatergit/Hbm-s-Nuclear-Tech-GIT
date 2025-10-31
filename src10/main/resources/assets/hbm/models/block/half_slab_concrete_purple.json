@@ -1,0 +1,9 @@
+{
+    "parent": "block/half_slab",
+    "textures": {
+        "bottom": "hbm:blocks/concrete_purple",
+        "top": "hbm:blocks/concrete_purple",
+        "side": "hbm:blocks/concrete_purple"
+    }
+}
+

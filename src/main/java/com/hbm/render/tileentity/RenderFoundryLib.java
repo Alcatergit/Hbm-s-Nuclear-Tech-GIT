@@ -2,12 +2,13 @@ package com.hbm.render.tileentity;
 
 import java.awt.Color;
 
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.lib.RefStrings;
 import com.hbm.tileentity.machine.IRenderFoundry;
 import com.hbm.tileentity.machine.TileEntityFoundryCastingBase;
-import com.hbm.render.amlfrom1710.Tessellator;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.OpenGlHelper;
@@ -80,7 +81,7 @@ public class RenderFoundryLib {
 			OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
 			Minecraft.getMinecraft().getTextureManager().bindTexture(lava);
 			
-			Tessellator tess = new Tessellator();
+			CompositeBrush tess = new CompositeBrush();
         	tess.setNormal(0F, 1F, 0F);
         	tess.setBrightness(240);
 			tess.startDrawingQuadsColor();

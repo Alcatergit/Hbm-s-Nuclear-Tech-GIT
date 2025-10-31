@@ -1,7 +1,6 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.items.machine.ItemTurretBiometry;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -53,7 +52,7 @@ public class TileEntityMachineTeleLinker extends TileEntity implements ITickable
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {

@@ -1,19 +1,18 @@
 package com.hbm.inventory.control_panel;
 
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.hbm.lib.RefStrings;
-
+import com.leafia.dev.LeafiaDebug;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.event.world.WorldEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent.WorldTickEvent;
+
+import java.util.*;
 
 @Mod.EventBusSubscriber(modid = RefStrings.MODID)
 public class ControlEventSystem {
@@ -47,7 +46,9 @@ public class ControlEventSystem {
 				tickables.remove(c);
 				continue;
 			}
-			controllablesByEventName.get(s).remove(c);
+			Map<BlockPos,IControllable> map = controllablesByEventName.get(s);
+			if (map != null)
+				map.remove(c);
 		}
 		allControllables.remove(c);
 	}
@@ -110,10 +111,19 @@ public class ControlEventSystem {
 			for(BlockPos pos : positions){
 				IControllable c = map.get(pos);
 				if(c != null){
-					c.receiveEvent(from, evt);
+					try {
+						c.receiveEvent(from,evt);
+					} catch (IllegalArgumentException ignored) {}
 				}
 			}
 		}
+	}
+
+	public void playSound(World world,BlockPos from,SoundEvent evt,float volume,float pitch) {
+		volume = MathHelper.clamp(volume,0,10);
+		pitch = MathHelper.clamp(pitch,0.5f,2);
+		//LeafiaDebug.debugLog(world,"PlaySound "+volume+": "+pitch); yipeeee
+		world.playSound(null,from.getX()+0.5,from.getY()+0.5,from.getZ()+0.5,evt,SoundCategory.BLOCKS,volume,pitch);
 	}
 	
 	public void broadcastEvent(BlockPos from, ControlEvent c){

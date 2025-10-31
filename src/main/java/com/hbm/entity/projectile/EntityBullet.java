@@ -1,21 +1,18 @@
 package com.hbm.entity.projectile;
 
-import java.lang.reflect.Field;
-import java.util.List;
-
-import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.EntityGrenadeTau;
 import com.hbm.blocks.generic.RedBarrel;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import com.hbm.entity.particle.EntityBSmokeFX;
-import com.hbm.entity.grenade.EntityGrenadeTau;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.ParticleBurstPacket;
-
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
@@ -45,15 +42,14 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.math.*;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.lang.reflect.Field;
+import java.util.List;
 
 public class EntityBullet extends Entity implements IProjectile {
 
@@ -502,7 +498,7 @@ public class EntityBullet extends Entity implements IProjectile {
 
 										world.spawnEntity(pippo);
 										
-										world.playSound(null, movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, HBMSoundHandler.trainHorn, SoundCategory.HOSTILE, 10000F, 1F);
+										world.playSound(null, movingobjectposition.entityHit.posX, movingobjectposition.entityHit.posY + 50, movingobjectposition.entityHit.posZ, HBMSoundEvents.trainHorn, SoundCategory.HOSTILE, 10000F, 1F);
 									}
 									
 								}
@@ -518,8 +514,10 @@ public class EntityBullet extends Entity implements IProjectile {
 										((EntityLivingBase) movingobjectposition.entityHit).setHealth(0.0F);
 									}
 								}
-                                this.getIsCritical();// this.setDead();
-                            }
+								if (!this.getIsCritical())
+									// this.setDead();
+									;
+							}
 						} else {
 
 							if (movingobjectposition.entityHit instanceof EntityLivingBase) {
@@ -590,7 +588,8 @@ public class EntityBullet extends Entity implements IProjectile {
 			// this.prevRotationPitch < -180.0F; this.prevRotationPitch -=
 			// 360.0F)
 			{
-            }
+				;
+			}
 
 			/*
 			 * while (this.rotationPitch - this.prevRotationPitch >= 180.0F) {
@@ -640,7 +639,7 @@ public class EntityBullet extends Entity implements IProjectile {
 		if (!this.world.isRemote && this.inGround && this.arrowShake <= 0) {
 			boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && entityIn.capabilities.isCreativeMode;
 
-			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_rocket, 1))) {
+			if (this.canBePickedUp == 1 && !entityIn.inventory.addItemStackToInventory(new ItemStack(Armory.gun_rpg_ammo, 1))) {
 				flag = false;
 			}
 

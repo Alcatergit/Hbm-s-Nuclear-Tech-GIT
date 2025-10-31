@@ -1,0 +1,23 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:gun_dampfmaschine"
+		},
+		"title": {
+			"translate": "hbm.achievement.bobhidden"
+		},
+		"description": {
+			"translate": "hbm.achievement.bobhidden.desc"
+		},
+		"frame": "challenge"
+	},
+	"parent": "hbm:bobnuclear",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 1000
+    }
+}

@@ -1,8 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.machine.TileEntityCrateTungsten;
-
-import invtweaks.api.container.ChestContainer;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -10,7 +8,6 @@ import net.minecraft.inventory.Slot;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 
-@ChestContainer
 public class ContainerCrateTungsten extends Container {
 
 	private TileEntityCrateTungsten crate;
@@ -45,7 +42,7 @@ public class ContainerCrateTungsten extends Container {
 			var3 = var5.copy();
 
 			if(par2 <= crate.inventory.getSlots() - 1) {
-				if(!this.mergeItemStack(var5, crate.inventory.getSlots(), this.inventorySlots.size(), false)){
+				if(!this.mergeItemStack(var5, crate.inventory.getSlots(), this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
 			} else if(!this.mergeItemStack(var5, 0, crate.inventory.getSlots(), false)) {

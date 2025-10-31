@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"extracts=false": { "model": "hbm:fluid_duct_solid_sealed" },
+		"extracts=true": { "model": "hbm:fluid_duct_solid_sealed_o" }
+	}
+}

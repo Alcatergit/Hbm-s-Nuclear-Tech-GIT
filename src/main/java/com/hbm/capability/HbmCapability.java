@@ -1,10 +1,7 @@
 package com.hbm.capability;
 
-import java.util.concurrent.Callable;
-
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.entity.Entity;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
@@ -15,17 +12,19 @@ import net.minecraftforge.common.capabilities.Capability.IStorage;
 import net.minecraftforge.common.capabilities.CapabilityInject;
 import net.minecraftforge.common.capabilities.ICapabilitySerializable;
 
+import java.util.concurrent.Callable;
+
 public class HbmCapability {
 
 	public interface IHBMData {
-		boolean getKeyPressed(EnumKeybind key);
-		void setKeyPressed(EnumKeybind key, boolean pressed);
-		boolean getEnableBackpack();
-		boolean getEnableHUD();
-		void setEnableBackpack(boolean b);
-		void setEnableHUD(boolean b);
+		public boolean getKeyPressed(EnumKeybind key);
+		public void setKeyPressed(EnumKeybind key, boolean pressed);
+		public boolean getEnableBackpack();
+		public boolean getEnableHUD();
+		public void setEnableBackpack(boolean b);
+		public void setEnableHUD(boolean b);
 		
-		default boolean isJetpackActive() {
+		public default boolean isJetpackActive() {
 			return getEnableBackpack() && getKeyPressed(EnumKeybind.JETPACK);
 		}
 	}

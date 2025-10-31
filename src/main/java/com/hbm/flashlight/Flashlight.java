@@ -1,16 +1,8 @@
 package com.hbm.flashlight;
 
-import java.nio.IntBuffer;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.lwjgl.opengl.GL11;
-import org.lwjgl.opengl.GL20;
-
 import com.hbm.handler.HbmShaderManager;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.portals.DummyRenderEntity;
-
 import glmath.glm.mat._3.Mat3;
 import glmath.glm.mat._4.Mat4;
 import glmath.glm.vec._3.Vec3;
@@ -22,6 +14,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
+import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL20;
+
+import java.nio.IntBuffer;
+import java.util.ArrayList;
+import java.util.List;
 
 @Deprecated
 public class Flashlight {
@@ -144,7 +142,9 @@ public class Flashlight {
 			
 			Entity entity = Minecraft.getMinecraft().getRenderViewEntity();
 			float partialTicks = Minecraft.getMinecraft().getRenderPartialTicks();
-            if (Minecraft.getMinecraft().gameSettings.viewBobbing)
+			if(Minecraft.getMinecraft().isGamePaused()){
+			}
+			if (Minecraft.getMinecraft().gameSettings.viewBobbing)
 	        {
 	            applyBobbing(partialTicks, modelMatrix, rotMatrix);
 	        }

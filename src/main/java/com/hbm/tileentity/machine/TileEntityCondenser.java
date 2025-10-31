@@ -7,13 +7,14 @@ import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.INBTPacketReceiver;
-
+import com.leafia.contents.gear.utility.IFuzzyCompatible;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
@@ -22,13 +23,18 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityCondenser extends TileEntity implements ITickable, IFluidHandler, ITankPacketAcceptor, INBTPacketReceiver {
+public class TileEntityCondenser extends TileEntity implements ITickable, IFuzzyCompatible, IFluidHandler, ITankPacketAcceptor, INBTPacketReceiver {
 
 	public int age = 0;
 	public FluidTank[] tanks;
 	
 	public int waterTimer = 0;
-	
+
+	@Override
+	public Fluid getOutputType() {
+		return FluidRegistry.WATER;
+	}
+
 	public TileEntityCondenser() {
 		tanks = new FluidTank[2];
 		//spentsteam
@@ -53,29 +59,21 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 150));
 			
 			int convert = Math.min(tanks[0].getFluidAmount(), tanks[1].getCapacity() - tanks[1].getFluidAmount());
-			if(extraCondition(convert)) {
-				if (convert > 0)
-					this.waterTimer = 20;
+			if(convert > 0)
+				this.waterTimer = 20;
 
-				tanks[0].drain(convert, true);
-				tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
-				postConvert(convert);
-
-				fillFluidInit(tanks[1]);
-				networkPack();
-			}
+			tanks[0].drain(convert, true);
+			tanks[1].fill(new FluidStack(FluidRegistry.WATER, convert), true);
+			
+			networkPack();
+			fillFluidInit(tanks[1]);
 		}
 	}
-
-	public void packExtra(NBTTagCompound data) { }
-	public boolean extraCondition(int convert) { return true; }
-	public void postConvert(int convert) { }
 
 	public void networkPack() {
 		NBTTagCompound data = new NBTTagCompound();
 		data.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		data.setByte("timer", (byte) this.waterTimer);
-		packExtra(data);
 		INBTPacketReceiver.networkPack(this, data, 150);
 	}
 

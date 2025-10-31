@@ -1,13 +1,12 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.machine.TileEntityFEL;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.Slot;
-import net.minecraftforge.items.SlotItemHandler;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.items.SlotItemHandler;
 
 public class ContainerFEL extends Container {
 
@@ -42,12 +41,12 @@ public class ContainerFEL extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 
-			if(par2 <= 1) {
+			if(par2 == 0) {
 				if(!this.mergeItemStack(var5, 1, this.inventorySlots.size(), false)) {
 					return ItemStack.EMPTY;
 				}
 			} else {
-				if(!this.mergeItemStack(var5, 0, 2, false))
+				if(!this.mergeItemStack(var5, 0, 1, false))
 					return ItemStack.EMPTY;
 			}
 

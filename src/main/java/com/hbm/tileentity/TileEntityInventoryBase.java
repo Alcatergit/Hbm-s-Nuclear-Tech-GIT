@@ -1,7 +1,6 @@
 package com.hbm.tileentity;
 
 import com.hbm.lib.ItemStackHandlerWrapper;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -27,7 +26,7 @@ public abstract class TileEntityInventoryBase extends TileEntity {
 	public abstract String getName();
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {

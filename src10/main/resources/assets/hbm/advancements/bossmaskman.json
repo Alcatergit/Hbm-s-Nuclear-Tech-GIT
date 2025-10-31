@@ -1,0 +1,22 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:coin_maskman"
+		},
+		"title": {
+			"translate": "hbm.achievement.bossMaskman"
+		},
+		"description": {
+			"translate": "hbm.achievement.bossMaskman.desc"
+		}
+	},
+	"parent": "hbm:bossmeltdown",
+	"criteria": {
+		"impossible": {
+			"trigger": "minecraft:impossible"
+		}
+	},
+    "rewards": {
+        "experience": 80
+    }
+}

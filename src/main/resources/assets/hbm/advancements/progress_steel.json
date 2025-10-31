@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:ingot_steel"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_steel"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_steel.desc"
+		}
+	},
+	"parent": "hbm:progress_difurnace",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:ingot_steel"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 17
+    }
+}

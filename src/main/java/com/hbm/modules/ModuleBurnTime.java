@@ -1,20 +1,19 @@
 package com.hbm.modules;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
-import com.hbm.items.ModItems;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.items.ModItems;
 import com.hbm.tileentity.IConfigurableMachine;
 import com.hbm.util.ItemStackUtil;
-
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.text.TextFormatting;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple module for determining the burn time of a stack with added options to define bonuses
@@ -105,15 +104,7 @@ public class ModuleBurnTime {
 		
 		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel))						return mod[modSolid];
 		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto)) 				return mod[modSolid];
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet))			return mod[modSolid];
-
-		if(stack.getItem() == ModItems.solid_fuel_bf)					return mod[modBalefire];
-		if(stack.getItem() == ModItems.solid_fuel_presto_bf) 			return mod[modBalefire];
-		if(stack.getItem() == ModItems.solid_fuel_presto_triplet_bf)	return mod[modBalefire];
-		
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_bf))						return mod[modBalefire];
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_bf)) 				return mod[modBalefire];
-		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet_bf))		return mod[modBalefire];
+		if(stack.getItem() == Item.getItemFromBlock(ModBlocks.block_solid_fuel_presto_triplet))		return mod[modSolid];
 
 		
 		if(stack.getItem() == ModItems.rocket_fuel)						return mod[modRocket];

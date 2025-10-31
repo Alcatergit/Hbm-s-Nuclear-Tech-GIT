@@ -1,13 +1,15 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
+import com.hbm.items.ModItems.Batteries;
+import com.hbm.items.ModItems.Materials.Ingots;
+import com.hbm.items.ModItems.Materials.Nuggies;
+import com.hbm.items.ModItems.Materials.Powders;
 import com.hbm.main.MainRegistry;
-import com.hbm.hazard.HazardSystem;
-
+import com.hbm.modules.ItemHazardModule;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 import net.minecraft.block.SoundType;
@@ -17,22 +19,28 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 import net.minecraft.world.IBlockAccess;
+import net.minecraft.world.World;
 
-public class BlockNTMOre extends BlockOre {
+import java.util.List;
+import java.util.Random;
+
+public class BlockNTMOre extends BlockOre implements IItemHazard {
 	
+	ItemHazardModule module;
 	public static int xp;
 
 	public BlockNTMOre(String name, int harvestLvl, int xp) {
 		super();
-		BlockNTMOre.xp = xp;
+		this.xp = xp;
 		this.setTranslationKey(name);
 		this.setRegistryName(name);
 		this.setCreativeTab(MainRegistry.controlTab);
 		this.setTickRandomly(false);
 		this.setHarvestLevel("pickaxe", harvestLvl);
+		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
@@ -46,6 +54,11 @@ public class BlockNTMOre extends BlockOre {
 	}
 
 	@Override
+	public ItemHazardModule getModule() {
+		return module;
+	}
+
+	@Override
 	public int getExpDrop(IBlockState state, IBlockAccess world, BlockPos pos, int fortune){
 		if(this.getItemDropped(state, RANDOM, fortune) != Item.getItemFromBlock(this))
 			return xp;
@@ -54,11 +67,12 @@ public class BlockNTMOre extends BlockOre {
 	
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		if(this == ModBlocks.ore_asbestos || this == ModBlocks.ore_gneiss_asbestos || this == ModBlocks.basalt_asbestos){
-			return ModItems.ingot_asbestos;
+		if(this == ModBlocks.ore_asbestos || this == ModBlocks.ore_gneiss_asbestos || this == ModBlocks.basalt_asbestos)
+		{
+			return Ingots.ingot_asbestos;
 		}
 		if(this == ModBlocks.ore_nether_fire){
-			return rand.nextInt(10) == 0 ? ModItems.ingot_phosphorus : ModItems.powder_fire;
+			return rand.nextInt(10) == 0 ? Ingots.ingot_phosphorus : Powders.powder_fire;
 		}
 		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur || this == ModBlocks.basalt_sulfur){
 			return ModItems.sulfur;
@@ -67,7 +81,7 @@ public class BlockNTMOre extends BlockOre {
 			return ModItems.niter;
 		}
 		if(this == ModBlocks.ore_fluorite){
-			return ModItems.fluorite;
+			return Ingots.fluorite;
 		}
 		if(this == ModBlocks.ore_lignite){
 			return ModItems.lignite;
@@ -92,22 +106,22 @@ public class BlockNTMOre extends BlockOre {
 			switch(rand.nextInt(35)) {
 			case 0: return ModItems.coil_advanced_alloy;
 			case 1: return ModItems.plate_advanced_alloy;
-			case 2: return ModItems.powder_desh_mix;
-			case 3: return ModItems.ingot_desh;
-			case 4: return ModItems.battery_advanced;
-			case 5: return ModItems.battery_lithium_cell;
-			case 6: return ModItems.battery_advanced_cell;
-			case 7: return ModItems.nugget_schrabidium;
-			case 8: return ModItems.ingot_plutonium;
-			case 9: return ModItems.ingot_thorium_fuel;
-			case 10: return ModItems.ingot_u233;
+			case 2: return Powders.powder_desh_mix;
+			case 3: return Ingots.ingot_desh;
+			case 4: return Batteries.battery_advanced;
+			case 5: return Batteries.battery_lithium_cell;
+			case 6: return Batteries.battery_advanced_cell;
+			case 7: return Nuggies.nugget_schrabidium;
+			case 8: return Ingots.ingot_plutonium;
+			case 9: return Ingots.ingot_thorium_fuel;
+			case 10: return Ingots.ingot_u233;
 			case 11: return ModItems.turbine_tungsten;
-			case 12: return ModItems.ingot_dura_steel;
-			case 13: return ModItems.ingot_polymer;
-			case 14: return ModItems.ingot_tungsten;
-			case 15: return ModItems.ingot_combine_steel;
-			case 16: return ModItems.ingot_lanthanium;
-			case 17: return ModItems.ingot_actinium;
+			case 12: return Ingots.ingot_dura_steel;
+			case 13: return Ingots.ingot_polymer;
+			case 14: return Ingots.ingot_tungsten;
+			case 15: return Ingots.ingot_combine_steel;
+			case 16: return Ingots.ingot_lanthanium;
+			case 17: return Ingots.ingot_actinium;
 			case 18: return Item.getItemFromBlock(ModBlocks.block_meteor);
 			case 19: return Item.getItemFromBlock(ModBlocks.fusion_heater);
 			case 20: return Item.getItemFromBlock(ModBlocks.fusion_core);
@@ -120,44 +134,44 @@ public class BlockNTMOre extends BlockOre {
 			case 27: return ModItems.pellet_rtg;
 			case 28: return ModItems.pellet_rtg_weak;
 			case 29: return ModItems.rtg_unit;
-			case 30: return ModItems.gun_spark_ammo;
-			case 31: return ModItems.ammo_nuke;
-			case 32: return ModItems.ammo_mirv;
-			case 33: return ModItems.gun_defabricator_ammo;
-			case 34: return ModItems.gun_osipr_ammo2;
+			case 30: return Armory.gun_spark_ammo;
+			case 31: return Armory.ammo_nuke;
+			case 32: return Armory.ammo_mirv;
+			case 33: return Armory.gun_defabricator_ammo;
+			case 34: return Armory.gun_osipr_ammo2;
 			}
 		}
 		if(this == ModBlocks.deco_aluminium)
 		{
-			return ModItems.ingot_aluminium;
+			return Ingots.ingot_aluminium;
 		}
 		if(this == ModBlocks.deco_beryllium)
 		{
-			return ModItems.ingot_beryllium;
+			return Ingots.ingot_beryllium;
 		}
 		if(this == ModBlocks.deco_lead)
 		{
-			return ModItems.ingot_lead;
+			return Ingots.ingot_lead;
 		}
 		if(this == ModBlocks.deco_red_copper)
 		{
-			return ModItems.ingot_red_copper;
+			return Ingots.ingot_red_copper;
 		}
 		if(this == ModBlocks.deco_steel)
 		{
-			return ModItems.ingot_steel;
+			return Ingots.ingot_steel;
 		}
 		if(this == ModBlocks.deco_titanium)
 		{
-			return ModItems.ingot_titanium;
+			return Ingots.ingot_titanium;
 		}
 		if(this == ModBlocks.deco_tungsten)
 		{
-			return ModItems.ingot_tungsten;
+			return Ingots.ingot_tungsten;
 		}
 		if(this == ModBlocks.deco_asbestos)
 		{
-			return ModItems.ingot_asbestos;
+			return Ingots.ingot_asbestos;
 		}
 		if(this == ModBlocks.ore_cinnebar) {
 			return ModItems.cinnebar;
@@ -175,6 +189,9 @@ public class BlockNTMOre extends BlockOre {
 	public int quantityDropped(IBlockState state, int fortune, Random rand) {
 		if(this == ModBlocks.ore_sulfur || this == ModBlocks.ore_nether_sulfur || this == ModBlocks.ore_meteor_sulfur || this == ModBlocks.basalt_sulfur){
 			return 2 + rand.nextInt(3) * fortune;
+		}
+		if(this == ModBlocks.block_niter){
+			return 4 + rand.nextInt(3);
 		}
 		if(this == ModBlocks.ore_niter){
 			return 1 + rand.nextInt(2) * fortune;
@@ -207,10 +224,10 @@ public class BlockNTMOre extends BlockOre {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-		if (this == ModBlocks.ore_oil && world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty) {
-			world.setBlockState(pos, ModBlocks.ore_oil_empty.getDefaultState());
-			world.setBlockState(pos.down(), ModBlocks.ore_oil.getDefaultState());
-		}
+		if (world.getBlockState(pos.down()).getBlock() == ModBlocks.ore_oil_empty) {
+        	world.setBlockState(pos, ModBlocks.ore_oil_empty.getDefaultState());
+        	world.setBlockState(pos.down(), ModBlocks.ore_oil.getDefaultState());
+        }
 	}
 	
 	@Override
@@ -230,13 +247,13 @@ public class BlockNTMOre extends BlockOre {
 	@Override
 	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
 		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 	}
 
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
 		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
+			this.module.applyEffects((EntityLivingBase)entity, 0.5F, 0, false, EnumHand.MAIN_HAND);
 	}
 
 	@Override

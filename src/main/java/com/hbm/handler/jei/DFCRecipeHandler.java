@@ -2,7 +2,6 @@ package com.hbm.handler.jei;
 
 import com.hbm.inventory.DFCRecipes.DFCRecipe;
 import com.hbm.lib.RefStrings;
-
 import com.hbm.util.I18nUtil;
 import mezz.jei.api.IGuiHelper;
 import mezz.jei.api.gui.IDrawable;

@@ -1,13 +1,11 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.render.model.ModelTestRender;
 import com.hbm.tileentity.deco.TileEntityTestRender;
-
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderTestRender extends TileEntitySpecialRenderer<TileEntityTestRender> {
 

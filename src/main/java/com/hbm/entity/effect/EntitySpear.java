@@ -1,18 +1,15 @@
 package com.hbm.entity.effect;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.explosion.ExplosionNT;
 import com.hbm.explosion.ExplosionNT.ExAttrib;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -23,6 +20,9 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntitySpear extends Entity {
 	
@@ -98,26 +98,29 @@ public class EntitySpear extends Entity {
 			
 			ticksInGround++;
 			
-			if(!world.isRemote && ticksInGround > 100) {
-				
-				List<Entity> entities =  new ArrayList<>(world.loadedEntityList);
-				for(Object obj : entities) {
-					
-					if(obj instanceof EntityLivingBase)
-						ContaminationUtil.contaminate((EntityLivingBase) obj, HazardType.DIGAMMA, ContaminationType.DIGAMMA2, 10F);
-				}
+			if(ticksInGround > 100) {
 				this.setDead();
-				
-				world.playSound(null, posX, posY, posZ, HBMSoundHandler.dflash, SoundCategory.HOSTILE, 25000.0F, 1.0F);
-				
-				NBTTagCompound data = new NBTTagCompound();
-				data.setString("type", "smoke");
-				data.setString("mode", "radialDigamma");
-				data.setInteger("count", 100);
-				data.setDouble("posX", posX);
-				data.setDouble("posY", posY + 7);
-				data.setDouble("posZ", posZ);
-				MainRegistry.proxy.effectNT(data);
+				if (!world.isRemote) {
+					List<Entity> entities = new ArrayList<>(world.loadedEntityList);
+					for (Object obj : entities) {
+
+						if (obj instanceof EntityLivingBase) {
+							ContaminationUtil.contaminate((EntityLivingBase) obj,HazardType.DIGAMMA,ContaminationType.DIGAMMA2,10F);
+							((EntityLivingBase) obj).attackEntityFrom(ModDamageSource.digamma,((EntityLivingBase) obj).getMaxHealth());
+						}
+					}
+
+					world.playSound(null,posX,posY,posZ,HBMSoundEvents.dflash,SoundCategory.HOSTILE,25000.0F,1.0F);
+
+					NBTTagCompound data = new NBTTagCompound();
+					data.setString("type","smoke");
+					data.setString("mode","radialDigamma");
+					data.setInteger("count",100);
+					data.setDouble("posX",posX);
+					data.setDouble("posY",posY+7);
+					data.setDouble("posZ",posZ);
+					MainRegistry.proxy.effectNT(data);
+				}
 			}
 		}
 	}

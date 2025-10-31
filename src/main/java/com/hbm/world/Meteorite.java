@@ -1,9 +1,5 @@
 package com.hbm.world;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
 import com.hbm.config.BombConfig;
@@ -11,10 +7,9 @@ import com.hbm.config.GeneralConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
@@ -24,6 +19,10 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class Meteorite {
 	
@@ -45,7 +44,8 @@ public class Meteorite {
 				return;
 			case 1:
 				//Large ore-only meteorite
-                List<ItemStack> list1 = new ArrayList<ItemStack>(this.getRandomOre(rand));
+				List<ItemStack> list1 = new ArrayList<ItemStack>();
+				list1.addAll(this.getRandomOre(rand));
 				int i = list1.size();
 				for(int j = 0; j < i; j++)
 					list1.add(new ItemStack(Blocks.STONE));
@@ -53,7 +53,8 @@ public class Meteorite {
 				return;
 			case 2:
 				//Medium ore-only meteorite
-                List<ItemStack> list2 = new ArrayList<ItemStack>(this.getRandomOre(rand));
+				List<ItemStack> list2 = new ArrayList<ItemStack>();
+				list2.addAll(this.getRandomOre(rand));
 				int k = list2.size() / 2;
 				for(int j = 0; j < k; j++)
 					list2.add(new ItemStack(Blocks.STONE));
@@ -61,7 +62,8 @@ public class Meteorite {
 				return;
 			case 3:
 				//Small pure ore meteorite
-                List<ItemStack> list3 = new ArrayList<ItemStack>(this.getRandomOre(rand));
+				List<ItemStack> list3 = new ArrayList<ItemStack>();
+				list3.addAll(this.getRandomOre(rand));
 				generateBox(world, rand, x, y, z, list3);
 				return;
 			case 4:
@@ -125,7 +127,7 @@ public class Meteorite {
 			case 12:
 				//Star Blaster
 				world.createExplosion(null, x + 0.5, y + 0.5, z + 0.5, 10F, true);
-				ItemStack stack = new ItemStack(ModItems.gun_b92);
+				ItemStack stack = new ItemStack(Armory.gun_b92);
 				stack.setStackDisplayName("§9Star Blaster§r");
 				EntityItem blaster = new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, stack);
 				world.spawnEntity(blaster);

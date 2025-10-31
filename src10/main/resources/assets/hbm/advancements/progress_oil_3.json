@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:machine_fracking_tower"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_oil_3"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_oil_3.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_oil_2",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:machine_fracking_tower"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 20
+    }
+}

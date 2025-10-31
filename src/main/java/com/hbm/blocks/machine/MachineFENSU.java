@@ -1,34 +1,33 @@
 package com.hbm.blocks.machine;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import com.hbm.lib.InventoryHelper;
-import com.hbm.blocks.ILookOverlay;
-import com.hbm.lib.Library;
 import com.hbm.blocks.BlockDummyableMBB;
+import com.hbm.blocks.ILookOverlay;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.InventoryHelper;
+import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityMachineFENSU;
-
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.EnumDyeColor;
-import net.minecraft.item.ItemStack;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
-import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.Pre;
 import net.minecraftforge.fml.common.network.internal.FMLNetworkHandler;
+import net.minecraftforge.oredict.OreDictionary;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 
@@ -112,7 +111,8 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 							name = "dyeSilver";
 						if(name.length() > 3 && name.startsWith("dye")){
 							try {
-                                entity.color = EnumDyeColor.valueOf(name.substring(3, name.length()).toUpperCase());
+								EnumDyeColor color = EnumDyeColor.valueOf(name.substring(3, name.length()).toUpperCase());
+								entity.color = color;
 								entity.markDirty();
 								world.notifyBlockUpdate(corePos, state, state, 2 | 4);
 								if(!player.isCreative())

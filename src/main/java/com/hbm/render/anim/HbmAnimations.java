@@ -2,7 +2,6 @@ package com.hbm.render.anim;
 
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -19,7 +18,7 @@ public class HbmAnimations {
 	//animation is playing, though this will cancel the animation entirely.
 	public static final Animation[] hotbar = new Animation[10];
 
-	public enum AnimType {
+	public static enum AnimType {
 		RELOAD,		//animation for every reload cycle
 		CYCLE,		//animation for every firing cycle
 		ALT_CYCLE,	//animation for alt fire cycles
@@ -72,7 +71,7 @@ public class HbmAnimations {
 			slot = 9;
 		ItemStack stack = player.getHeldItem(hand);
 
-		if(stack.isEmpty())
+		if(stack == null || stack.isEmpty())
 			return null;
 
 		if(hotbar[slot] == null)

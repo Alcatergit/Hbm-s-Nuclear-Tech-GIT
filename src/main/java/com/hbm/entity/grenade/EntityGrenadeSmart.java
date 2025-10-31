@@ -1,8 +1,7 @@
 package com.hbm.entity.grenade;
 
 import com.hbm.explosion.ExplosionLarge;
-import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Armory;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.ItemStack;
@@ -36,7 +35,7 @@ public class EntityGrenadeSmart extends EntityGrenadeBase {
             if(this.ticksExisted > 10)
             	ExplosionLarge.explode(world, posX, posY, posZ, 5.0F, true, false, false);
             else
-            	world.spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(ModItems.grenade_smart)));
+            	world.spawnEntity(new EntityItem(world, posX, posY, posZ, new ItemStack(Armory.grenade_smart)));
         }
     }
 }

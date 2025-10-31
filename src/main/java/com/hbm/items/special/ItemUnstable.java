@@ -1,21 +1,97 @@
 package com.hbm.items.special;
 
+import com.hbm.config.BombConfig;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.items.ModItems;
-
+import com.hbm.lib.HBMSoundEvents;
+import com.hbm.lib.ModDamageSource;
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.util.ITooltipFlag;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.List;
+
 public class ItemUnstable extends Item {
 
-	public ItemUnstable(String s) {
+	int radius;
+	int timer;
+
+	public ItemUnstable(int radius, int timer, String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
+		this.radius = radius;
+		this.timer = timer;
 		this.setHasSubtypes(true);
 
 		ModItems.ALL_ITEMS.add(this);
+	}
+
+	@Override
+	public void onUpdate(ItemStack stack, World world, Entity entity, int itemSlot, boolean isSelected) {
+		if(stack.getItemDamage() != 0)
+    		return;
+		this.setTimer(stack, this.getTimer(stack) + 1);
+
+		if(this.getTimer(stack) == timer && !world.isRemote) {
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, radius, entity.posX, entity.posY, entity.posZ));
+
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, entity.posX, entity.posY, entity.posZ, radius);
+			}
+			world.playSound(null, entity.posX, entity.posY, entity.posZ, HBMSoundEvents.oldExplosion, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			entity.attackEntityFrom(ModDamageSource.nuclearBlast, 10000);
+		}
+	}
+
+	@Override
+	public boolean onEntityItemUpdate(EntityItem itemEntity) {
+		if(itemEntity.getItem().getItemDamage() != 0)
+    		return false;
+		World world = itemEntity.world;
+
+		this.setTimer(itemEntity.getItem(), this.getTimer(itemEntity.getItem()) + 1);
+
+		if(this.getTimer(itemEntity.getItem()) == timer && !world.isRemote) {
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, radius, itemEntity.posX, itemEntity.posY, itemEntity.posZ));
+
+			if(BombConfig.enableNukeClouds) {
+				EntityNukeTorex.statFac(world, itemEntity.posX, itemEntity.posY, itemEntity.posZ, radius);
+			}
+			world.playSound(null, itemEntity.posX, itemEntity.posY, itemEntity.posZ, HBMSoundEvents.oldExplosion, SoundCategory.PLAYERS, 1.0F, 1.0F);
+			itemEntity.attackEntityFrom(ModDamageSource.nuclearBlast, 10000);
+			itemEntity.setDead();
+			return true;
+		}
+		return false;
+	}
+
+	private void setTimer(ItemStack stack, int time) {
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+
+		stack.getTagCompound().setInteger("timer", time);
+	}
+
+	private int getTimer(ItemStack stack) {
+		if(!stack.hasTagCompound())
+			stack.setTagCompound(new NBTTagCompound());
+
+		return stack.getTagCompound().getInteger("timer");
+	}
+	
+	@Override
+	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
+		return !oldStack.isItemEqual(newStack);
 	}
 
 	@Override
@@ -32,9 +108,14 @@ public class ItemUnstable extends Item {
 			return ("" + I18n.format(this.getTranslationKey() + ".name")).trim();
 		}
 	}
-
+	
 	@Override
-	public boolean shouldCauseReequipAnimation(ItemStack oldStack, ItemStack newStack, boolean slotChanged) {
-		return !oldStack.isItemEqual(newStack);
+	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+		if(stack.getItemDamage() != 0)
+    		return;
+    	tooltip.add("§4["+ I18nUtil.resolveKey("trait._hazarditem.unstable") +"]§r");
+		tooltip.add("§cDecay Time: " + (int)timer/20 + "s - Explosion Radius: "+ radius+"m§r");
+		tooltip.add("§cDecay: " + (getTimer(stack) * 100 / timer) + "%§r");
 	}
+
 }

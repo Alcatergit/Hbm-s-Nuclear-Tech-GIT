@@ -1,11 +1,9 @@
 package com.hbm.main;
 
-import java.io.File;
-
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.sound.AudioWrapper;
-
+import com.leafia.passive.effects.IdkWhereThisShitBelongs;
 import net.minecraft.client.renderer.block.model.IBakedModel;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraft.entity.Entity;
@@ -18,6 +16,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+
+import java.io.File;
 
 public class ServerProxy
 {
@@ -43,9 +43,9 @@ public class ServerProxy
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
 	
-	public void checkGLCaps(){}
-
-    public File getDataDir(){
+	public void checkGLCaps(){};
+	
+	public File getDataDir(){
 		return FMLCommonHandler.instance().getMinecraftServerInstance().getDataDirectory();
 	}
 	
@@ -65,15 +65,23 @@ public class ServerProxy
 	
 	public float partialTicks(){
 		return 1;
-	}
-
-    public void playSound(String sound, Object data) { }
+	};
+	
+	public void playSound(String sound, Object data) { }
 	
 	public void displayTooltip(String msg) { }
 	
-	public void setRecoil(float rec){}
-
-    public boolean isVanished(Entity e) {
+	public void setRecoil(float rec){};
+	
+	public boolean isVanished(Entity e) {
 		return false;
+	}
+
+    public float getImpactDust(World world,int dimension) {
+		return (float)IdkWhereThisShitBelongs.getTomImpactLargest(world,"dust",dimension);
+    }
+
+	public float getImpactFire(World world,int dimension) {
+		return (float)IdkWhereThisShitBelongs.getTomImpactLargest(world,"infernal",dimension);
 	}
 }

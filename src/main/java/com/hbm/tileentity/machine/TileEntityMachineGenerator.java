@@ -1,22 +1,19 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
-
+import api.hbm.energy.IBatteryItem;
+import api.hbm.energy.IEnergyGenerator;
 import com.hbm.blocks.machine.MachineGenerator;
 import com.hbm.explosion.ExplosionNukeGeneric;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.RetroRods;
 import com.hbm.items.machine.ItemFuelRod;
 import com.hbm.lib.Library;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IBatteryItem;
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
@@ -35,6 +32,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+
+import java.util.Random;
 
 public class TileEntityMachineGenerator extends TileEntityLoadedBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
@@ -74,7 +73,8 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 					if(FFUtils.containsFluid(itemStack, ModForgeFluids.COOLANT))
 						return true;
 				if(i == 11)
-                    return itemStack.getItem() instanceof IBatteryItem;
+					if(itemStack.getItem() instanceof IBatteryItem)
+						return true;
 				return false;
 			}
 			
@@ -116,7 +116,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 			
 			for(int i = 0; i < 9; i++)
 			{
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_uranium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_uranium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -125,10 +125,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 				
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_uranium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_uranium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_dual_uranium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_dual_uranium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -137,10 +137,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_dual_uranium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_dual_uranium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_quad_uranium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_quad_uranium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -149,10 +149,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_quad_uranium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_quad_uranium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_plutonium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_plutonium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -161,10 +161,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_plutonium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_plutonium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_dual_plutonium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_dual_plutonium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -173,10 +173,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_dual_plutonium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_dual_plutonium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_quad_plutonium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_quad_plutonium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -185,10 +185,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_quad_plutonium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_quad_plutonium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_mox_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_mox_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -197,10 +197,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_mox_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_mox_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_dual_mox_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_dual_mox_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -209,10 +209,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_dual_mox_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_dual_mox_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_quad_mox_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_quad_mox_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -221,10 +221,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_quad_mox_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_quad_mox_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_schrabidium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_schrabidium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -233,10 +233,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_schrabidium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_schrabidium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_dual_schrabidium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_dual_schrabidium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -245,10 +245,10 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_dual_schrabidium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_dual_schrabidium_fuel_depleted));
 					}
 				}
-				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == ModItems.rod_quad_schrabidium_fuel)
+				if(inventory.getStackInSlot(i) != ItemStack.EMPTY && inventory.getStackInSlot(i).getItem() == RetroRods.rod_quad_schrabidium_fuel)
 				{
 					int j = ItemFuelRod.getLifeTime(inventory.getStackInSlot(i));
 					ItemFuelRod.setLifetime(inventory.getStackInSlot(i), j + 1);
@@ -257,7 +257,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 
 					if(ItemFuelRod.getLifeTime(inventory.getStackInSlot(i)) == ((ItemFuelRod)inventory.getStackInSlot(i).getItem()).getMaxLifeTime())
 					{
-						inventory.setStackInSlot(i, new ItemStack(ModItems.rod_quad_schrabidium_fuel_depleted));
+						inventory.setStackInSlot(i, new ItemStack(RetroRods.rod_quad_schrabidium_fuel_depleted));
 					}
 				}
 			}
@@ -391,7 +391,7 @@ public class TileEntityMachineGenerator extends TileEntityLoadedBase implements 
 	}
 
 	public boolean hasCustomInventoryName() {
-		return this.customName != null && !this.customName.isEmpty();
+		return this.customName != null && this.customName.length() > 0;
 	}
 	
 	public void setCustomName(String name) {

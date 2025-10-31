@@ -1,16 +1,14 @@
 package com.hbm.render.util;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.lib.RefStrings;
 import com.hbm.render.amlfrom1710.IModelCustom;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
+import org.lwjgl.opengl.GL11;
 
 public class RenderMiscEffects {
 
@@ -21,7 +19,8 @@ public class RenderMiscEffects {
         GL11.glPushMatrix();
     	float offset = Minecraft.getMinecraft().player.ticksExisted + interpol;
         GlStateManager.enableBlend();
-        GlStateManager.color(colorMod, colorMod, colorMod, 1.0F);
+        float color = colorMod;
+        GlStateManager.color(color, color, color, 1.0F);
         GlStateManager.depthFunc(GL11.GL_EQUAL);
         GlStateManager.depthMask(false);
 

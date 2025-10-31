@@ -2,8 +2,8 @@ package com.hbm.packet;
 
 import com.hbm.particle.EnumHbmParticles;
 import com.hbm.particle.ParticleManager;
-
-import io.netty.buffer.ByteBuf;
+import com.leafia.dev.optimization.bitbyte.LeafiaBuf;
+import com.leafia.dev.optimization.diagnosis.RecordablePacket;
 import net.minecraft.client.Minecraft;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -11,7 +11,7 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EnumParticlePacket implements IMessage {
+public class EnumParticlePacket extends RecordablePacket {
 
 	EnumHbmParticles particle;
 	double x, y, z, strength;
@@ -34,7 +34,7 @@ public class EnumParticlePacket implements IMessage {
 	}
 	
 	@Override
-	public void fromBytes(ByteBuf buf) {
+	public void fromBits(LeafiaBuf buf) {
 		particle = EnumHbmParticles.values()[buf.readInt()];
 		x = buf.readDouble();
 		y = buf.readDouble();
@@ -45,7 +45,7 @@ public class EnumParticlePacket implements IMessage {
 	}
 
 	@Override
-	public void toBytes(ByteBuf buf) {
+	public void toBits(LeafiaBuf buf) {
 		buf.writeInt(particle.ordinal());
 		buf.writeDouble(x);
 		buf.writeDouble(y);

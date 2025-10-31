@@ -4,7 +4,6 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.tileentity.INBTPacketReceiver;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -116,7 +115,8 @@ public class TileEntitySolarBoiler extends TileEntity implements INBTPacketRecei
 
     @Override
     public FluidStack drain(int maxDrain, boolean doDrain){
-        return tanks[1].drain(maxDrain, doDrain);
+        FluidStack drain = tanks[1].drain(maxDrain, doDrain);
+        return drain;
     }
 
     @Override
@@ -196,7 +196,7 @@ public class TileEntitySolarBoiler extends TileEntity implements INBTPacketRecei
             
             int inputOps = tanks[0].getFluidAmount() / inputAmount;
             int outputOps = (tanks[1].getCapacity() - tanks[1].getFluidAmount()) / outputAmount;
-            int tempOps = (int) (double) (this.heat / heatReq);
+            int tempOps = (int) Math.floor(this.heat / heatReq);
             int ops = Math.min(inputOps, Math.min(outputOps, tempOps));
             
             tanks[0].drain(inputAmount * ops, true);

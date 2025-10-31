@@ -2,7 +2,6 @@ package com.hbm.inventory.container;
 
 import com.hbm.inventory.SlotMachineOutput;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKOutgasser;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -40,11 +39,11 @@ public class ContainerRBMKOutgasser extends Container {
 			ItemStack var5 = var4.getStack();
 			var3 = var5.copy();
 
-			if(par2 <= 1) {
-				if(!this.mergeItemStack(var5, 2, this.inventorySlots.size(), false)) {
+			if(par2 == 0) {
+				if(!this.mergeItemStack(var5, rbmk.inventory.getSlots(), this.inventorySlots.size(), true)) {
 					return ItemStack.EMPTY;
 				}
-			} else if(!this.mergeItemStack(var5, 0, 2, false)) {
+			} else if(!this.mergeItemStack(var5, 0, 1, false)) {
 				return ItemStack.EMPTY;
 			}
 

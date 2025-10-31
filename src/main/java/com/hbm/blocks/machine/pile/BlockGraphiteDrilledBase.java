@@ -1,11 +1,8 @@
 package com.hbm.blocks.machine.pile;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.blocks.generic.BlockFuel;
-import com.hbm.items.ModItems;
-
+import com.hbm.blocks.generic.BlockHazardFuel;
+import com.hbm.items.ModItems.Materials.Ingots;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.BlockStateContainer;
@@ -20,12 +17,14 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockGraphiteDrilledBase extends BlockFuel {
+import java.util.Random;
+
+public class BlockGraphiteDrilledBase extends BlockHazardFuel {
 
 	public static final PropertyEnum<EnumFacing.Axis> AXIS = PropertyEnum.create("axis", EnumFacing.Axis.class);
 
 	public BlockGraphiteDrilledBase(String s) {
-		super(ModBlocks.block_graphite.getDefaultState().getMaterial(), s, ((BlockFuel) ModBlocks.block_graphite).encouragement, ((BlockFuel) ModBlocks.block_graphite).flammability, 16000);
+		super(ModBlocks.block_graphite.getDefaultState().getMaterial(), s, ((BlockHazardFuel) ModBlocks.block_graphite).encouragement, ((BlockHazardFuel) ModBlocks.block_graphite).flammability, 16000);
 		this.setCreativeTab(null);
 		this.setSoundType(SoundType.METAL);
 		this.setHardness(5.0F);
@@ -48,7 +47,7 @@ public class BlockGraphiteDrilledBase extends BlockFuel {
 	
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
-		drops.add(new ItemStack(ModItems.ingot_graphite, 8));
+		drops.add(new ItemStack(Ingots.ingot_graphite, 8));
 	}
 	
 	@Override

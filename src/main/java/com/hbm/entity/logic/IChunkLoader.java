@@ -4,6 +4,6 @@ import net.minecraftforge.common.ForgeChunkManager.Ticket;
 
 public interface IChunkLoader {
 
-	void init(Ticket ticket);
-	void loadNeighboringChunks(int newChunkX, int newChunkZ);
+	public void init(Ticket ticket);
+	public void loadNeighboringChunks(int newChunkX, int newChunkZ);
 }

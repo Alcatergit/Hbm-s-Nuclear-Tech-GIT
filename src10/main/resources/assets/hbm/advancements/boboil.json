@@ -1,0 +1,29 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:bob_oil"
+		},
+		"title": {
+			"translate": "hbm.achievement.boboil"
+		},
+		"description": {
+			"translate": "hbm.achievement.boboil.desc"
+		}
+	},
+	"parent": "hbm:bobchemistry",
+	"criteria": {
+		"crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:oil_tar"
+                    }
+                ]
+            }
+        }
+	},
+    "rewards": {
+        "experience": 100
+    }
+}

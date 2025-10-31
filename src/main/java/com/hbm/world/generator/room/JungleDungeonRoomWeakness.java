@@ -6,7 +6,6 @@ import com.hbm.blocks.generic.TrappedBrick.Trap;
 import com.hbm.world.generator.CellularDungeon;
 import com.hbm.world.generator.TimedGenerator;
 import com.hbm.world.generator.TimedGenerator.ITimedJob;
-
 import net.minecraft.block.Block;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;

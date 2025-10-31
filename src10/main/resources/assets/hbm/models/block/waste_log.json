@@ -1,0 +1,7 @@
+{
+	"parent": "block/cube_column",
+	"textures": {
+		"end": "hbm:blocks/waste_log_top",
+		"side": "hbm:blocks/waste_log_side"
+	}
+}

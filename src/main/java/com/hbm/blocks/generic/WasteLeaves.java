@@ -1,15 +1,12 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.items.ModItems;
-
-import net.minecraft.block.BlockLeaves;
+import com.hbm.interfaces.IItemHazard;
+import com.hbm.modules.ItemHazardModule;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks;
-import net.minecraft.block.properties.PropertyEnum;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.state.BlockStateContainer;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -23,36 +20,61 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
-public class WasteLeaves extends BlockLeaves {
+import java.util.Random;
 
-    public static final PropertyEnum<BlockPlanks.EnumType> VARIANT = PropertyEnum.create("variant", BlockPlanks.EnumType.class);
+public class WasteLeaves extends BlockOldLeaf implements IItemHazard {
 
-    public WasteLeaves(String s) {
+	ItemHazardModule module;
+
+	public WasteLeaves(String s) {
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
-		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK));
+		this.setDefaultState(this.blockState.getBaseState().withProperty(VARIANT, BlockPlanks.EnumType.OAK).withProperty(CHECK_DECAY, Boolean.valueOf(false)).withProperty(DECAYABLE, Boolean.valueOf(false)));
 		this.setTickRandomly(false);
+		this.module = new ItemHazardModule();
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
 
+	@Override
+	protected BlockStateContainer createBlockState(){
+		return new BlockStateContainer(this, VARIANT, CHECK_DECAY, DECAYABLE);
+	}
+
+	@Override
+	public int getMetaFromState(IBlockState state) {
+		int i = 0;
+
+		if (!state.getValue(DECAYABLE)) {
+			i |= 4;
+		}
+
+		if (state.getValue(CHECK_DECAY)) {
+			i |= 8;
+		}
+
+		return i;
+	}
+
     @Override
-    protected BlockStateContainer createBlockState() {
-        return new BlockStateContainer(this, VARIANT);
+    public IBlockState getStateFromMeta(int meta) {
+        return this.getDefaultState().withProperty(DECAYABLE, (meta & 4) == 0).withProperty(CHECK_DECAY, (meta & 8) > 0);
     }
 
     @Override
     public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
+    	return;
     }
 
     @Override
     public void randomTick(World worldIn, BlockPos pos, IBlockState state, Random random){
+    	return;
     }
 
-    @Override
-    public void beginLeavesDecay(IBlockState state, World world, BlockPos pos) {
-    }
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
+	}
 
 	@Override
 	public void getDrops(NonNullList<ItemStack> drops, IBlockAccess world, BlockPos pos, IBlockState state, int fortune){
@@ -66,7 +88,13 @@ public class WasteLeaves extends BlockLeaves {
 	public Item getItemDropped(IBlockState state, Random rand, int fortune){
 		if(rand.nextInt(4) == 0)
 			return Item.getItemFromBlock(Blocks.DEADBUSH);
-		return Items.AIR;
+		return null;
+	}
+
+	public NonNullList<ItemStack> onSheared(ItemStack item, IBlockAccess world, BlockPos pos, int fortune){
+		NonNullList<ItemStack> output = NonNullList.create();
+		output.add(new ItemStack(ModBlocks.waste_leaves, fortune+1));
+		return output;
 	}
 
 	@Override
@@ -75,45 +103,21 @@ public class WasteLeaves extends BlockLeaves {
 	}
 
 	@Override
-	public void dropBlockAsItemWithChance(@NotNull World worldIn, @NotNull BlockPos pos, @NotNull IBlockState state, float chance, int fortune){
+	public void dropBlockAsItemWithChance(World worldIn, BlockPos pos, IBlockState state, float chance, int fortune){
+		return;
 	}
 
 	@Override
 	protected void dropApple(World worldIn, BlockPos pos, IBlockState state, int chance){
-		if(worldIn.rand.nextInt(chance) == 0) {
-			spawnAsEntity(worldIn, pos, new ItemStack(ModItems.nuclear_waste_tiny));
-		}
+		return;
 	}
 
 	@Override
-	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
-        for(BlockPlanks.EnumType type : BlockPlanks.EnumType.values()){
-		    items.add(new ItemStack(this, 1, type.getMetadata()));
-        }
+	public BlockPlanks.EnumType getWoodType(int meta){
+		return BlockPlanks.EnumType.OAK;
 	}
 
-    @Override
-    public IBlockState getStateFromMeta(int meta) {
-        return this.getDefaultState().withProperty(VARIANT, this.getWoodType(meta));
-    }
-
-    @Override
-    public int getMetaFromState(IBlockState state) {
-        return state.getValue(VARIANT).getMetadata();
-    }
-
-    @Override
-    public BlockPlanks.EnumType getWoodType(int meta) {
-        return BlockPlanks.EnumType.byMetadata(meta);
-    }
-
-    @Override
-    public int damageDropped(IBlockState state) {
-        return state.getValue(VARIANT).getMetadata();
-    }
-
-
-    @Override
+	@Override
 	@SideOnly(Side.CLIENT)
 	public BlockRenderLayer getRenderLayer() {
 		return Blocks.LEAVES.getRenderLayer();
@@ -125,13 +129,21 @@ public class WasteLeaves extends BlockLeaves {
 	}
 
 	@Override
-	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
+  	public boolean shouldSideBeRendered(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side) {
 		this.leavesFancy = !Blocks.LEAVES.isOpaqueCube(blockState);
 		return super.shouldSideBeRendered(blockState, blockAccess, pos, side);
 	}
 
-    @Override
-    public NonNullList<ItemStack> onSheared(ItemStack item, net.minecraft.world.IBlockAccess world, BlockPos pos, int fortune) {
-        return NonNullList.withSize(1, new ItemStack(this, 1, world.getBlockState(pos).getValue(VARIANT).getMetadata()));
-    }
+	@Override
+	public void getSubBlocks(CreativeTabs itemIn, NonNullList<ItemStack> items){
+		return;
+	}
+
+	public int getFlammability(IBlockAccess world, BlockPos pos, EnumFacing face)
+	{
+		return 60;
+	}
+	public int getFireSpreadSpeed(IBlockAccess world, BlockPos pos, EnumFacing face) {
+		return 30;
+	}
 }

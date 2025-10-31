@@ -8,7 +8,7 @@ import com.hbm.inventory.container.ContainerFurnaceCombo;
 import com.hbm.inventory.gui.GUIFurnaceCombo;
 import com.hbm.inventory.CombinationRecipes;
 import com.hbm.lib.ForgeDirection;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -31,6 +31,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ITickable;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -39,7 +40,6 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public class TileEntityFurnaceCombination extends TileEntityMachineBase implements IGUIProvider, IFluidHandler, ITickable, ITankPacketAcceptor {
 
@@ -124,7 +124,7 @@ public class TileEntityFurnaceCombination extends TileEntityMachineBase implemen
 					
 					for(Entity e : entities) e.setFire(5);
 					
-					if(world.getTotalWorldTime() % 10 == 0) this.world.playSound(null, pos.up(), HBMSoundHandler.flamethrowerShoot, SoundCategory.BLOCKS, 0.25F, 0.5F);
+					if(world.getTotalWorldTime() % 10 == 0) this.world.playSound(null, pos.up(), HBMSoundEvents.flamethrowerShoot, SoundCategory.BLOCKS, 0.25F, 0.5F);
 				}
 			} else {
 				this.progress = 0;
@@ -239,12 +239,17 @@ public class TileEntityFurnaceCombination extends TileEntityMachineBase implemen
 	}
 
 	@Override
-	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+	public boolean isItemValidForSlotHopper(int i, ItemStack itemStack) {
 		return i == 0 && CombinationRecipes.getOutput(itemStack) != null;
+	}
+	@Override
+	public boolean isItemValidForSlot(int i, ItemStack itemStack) {
+		if (i != 0) return true;
+		return CombinationRecipes.getOutput(itemStack) != null;
 	}
 
 	@Override
-	public boolean canExtractItem(int i, ItemStack itemStack, int j) {
+	public boolean canExtractItemHopper(int i, ItemStack itemStack, int j) {
 		return i == 1;
 	}
 
@@ -262,7 +267,7 @@ public class TileEntityFurnaceCombination extends TileEntityMachineBase implemen
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		nbt.setTag("tank", tank.writeToNBT(new NBTTagCompound()));
 		nbt.setInteger("prog", progress);
 		nbt.setInteger("heat", heat);

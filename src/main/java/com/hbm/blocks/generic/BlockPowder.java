@@ -1,12 +1,11 @@
 package com.hbm.blocks.generic;
 
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
-import com.hbm.util.ContaminationUtil;
+import com.hbm.interfaces.IItemHazard;
 import com.hbm.items.ModItems;
+import com.hbm.modules.ItemHazardModule;
 import com.hbm.potion.HbmPotion;
-
+import com.hbm.util.ContaminationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
@@ -24,9 +23,13 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class BlockPowder extends Block {
+import java.util.Random;
+
+public class BlockPowder extends Block implements IItemHazard {
 	
 	public static final PropertyInteger META = PropertyInteger.create("meta", 0, 6);
+	
+	ItemHazardModule module;
 
 	public BlockPowder(Material mat, SoundType soundType, String s) {
 		super(mat);
@@ -34,6 +37,7 @@ public class BlockPowder extends Block {
 		this.setRegistryName(s);
 		this.setSoundType(soundType);
 		this.setHarvestLevel("shovel", 0);
+		this.module = new ItemHazardModule();
 		
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -75,7 +79,7 @@ public class BlockPowder extends Block {
 	public boolean canPlaceBlockAt(World world, BlockPos pos){
 		IBlockState state = world.getBlockState(pos.down());
 		Block block = state.getBlock();
-		return block != Blocks.ICE && block != Blocks.PACKED_ICE && (block.isLeaves(state, world, pos.down()) || (block == this && (state.getValue(META) & 7) == 7 || state.isOpaqueCube() && state.getMaterial().blocksMovement()));
+		return block != Blocks.ICE && block != Blocks.PACKED_ICE ? (block.isLeaves(state, world, pos.down()) ? true : (block == this && (state.getValue(META) & 7) == 7 ? true : state.isOpaqueCube() && state.getMaterial().blocksMovement())) : false;
 	}
 	
 	@Override
@@ -95,6 +99,11 @@ public class BlockPowder extends Block {
 	@Override
 	public boolean isReplaceable(IBlockAccess worldIn, BlockPos pos){
 		return true;
+	}
+	
+	@Override
+	public ItemHazardModule getModule() {
+		return module;
 	}
 	
 	@Override

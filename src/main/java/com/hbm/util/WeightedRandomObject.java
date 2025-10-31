@@ -36,12 +36,4 @@ public class WeightedRandomObject extends WeightedRandom.Item {
 
 		return null;
 	}
-
-    public Integer asInteger() {
-
-        if(item instanceof Integer)
-            return (Integer) item;
-
-        return null;
-    }
 }

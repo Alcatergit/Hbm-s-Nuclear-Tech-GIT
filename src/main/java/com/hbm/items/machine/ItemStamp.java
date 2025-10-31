@@ -1,15 +1,14 @@
 package com.hbm.items.machine;
 
-import java.util.List;
-
 import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
-
 import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class ItemStamp extends Item {
 
@@ -47,6 +46,5 @@ public class ItemStamp extends Item {
 				this == ModItems.stamp_stone_plate ||
 				this == ModItems.stamp_stone_wire)
 			tooltip.add("§e" + I18nUtil.resolveKey("info.templatefolder"));
-			if(stack.getMaxDamage() > 0 && stack.getItemDamage() == 0) tooltip.add("Durability: "+ stack.getMaxDamage() + " / " + stack.getMaxDamage());
 	}
 }

@@ -1,0 +1,8 @@
+{
+    "parent": "block/outer_stairs",
+    "textures": {
+        "bottom": "hbm:blocks/tile_lab",
+        "top": "hbm:blocks/tile_lab",
+        "side": "hbm:blocks/tile_lab"
+    }
+}

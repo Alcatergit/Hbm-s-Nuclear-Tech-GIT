@@ -1,12 +1,11 @@
 package com.hbm.particle_instanced;
 
-import java.nio.ByteBuffer;
-import java.util.Random;
-
 import com.hbm.main.ModEventHandlerClient;
-
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
+
+import java.nio.ByteBuffer;
+import java.util.Random;
 
 public class ParticleRocketFlameInstanced extends ParticleInstanced {
 

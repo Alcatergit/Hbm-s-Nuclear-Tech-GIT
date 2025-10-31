@@ -1,12 +1,8 @@
 package com.hbm.items.tool;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Materials.Ingots;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -17,6 +13,10 @@ import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
 
 public class ItemMS extends Item {
 
@@ -42,9 +42,9 @@ public class ItemMS extends Item {
     	    	Random rand = new Random();
     	    	List<ItemStack> list = new ArrayList<ItemStack>();
 
-    	    	list.add(new ItemStack(ModItems.ingot_u238m2, 1, 1));
-    	    	list.add(new ItemStack(ModItems.ingot_u238m2, 1, 2));
-    	    	list.add(new ItemStack(ModItems.ingot_u238m2, 1, 3));
+    	    	list.add(new ItemStack(Ingots.ingot_u238m2, 1, 1));
+    	    	list.add(new ItemStack(Ingots.ingot_u238m2, 1, 2));
+    	    	list.add(new ItemStack(Ingots.ingot_u238m2, 1, 3));
     	    	
     	    	for(ItemStack sta : list) {
     	            float f = rand.nextFloat() * 0.8F + 0.1F;

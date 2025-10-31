@@ -1,18 +1,16 @@
 package com.hbm.render.tileentity;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
+import com.hbm.render.amlfrom1710.CompositeBrush;
 import com.hbm.render.amlfrom1710.WavefrontObject;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKHeater;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
-
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
@@ -21,6 +19,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase> {
 
@@ -79,7 +78,7 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			columnModel = ResourceManager.rbmk_element;
 
 		bindTexture(block.columnTexture);
-		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
+		CompositeBrush tes = CompositeBrush.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
 		boolean doJump = control.jumpheight > 0;
 		
@@ -126,7 +125,7 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			GlStateManager.color(fuelR, fuelG, fuelB, 1);
 			bindTexture(texture_rods);
 			
-			com.hbm.render.amlfrom1710.Tessellator tesss = com.hbm.render.amlfrom1710.Tessellator.instance;
+			CompositeBrush tesss = CompositeBrush.instance;
 			tes.startDrawing(GL11.GL_TRIANGLES);
 			
 			ResourceManager.rbmk_element.tessellatePartSplit(tesss, "Rods", 0.5F, offset);

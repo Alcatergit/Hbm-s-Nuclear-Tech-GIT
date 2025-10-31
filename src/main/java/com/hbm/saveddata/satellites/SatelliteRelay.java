@@ -1,7 +1,6 @@
 package com.hbm.saveddata.satellites;
 
 import com.hbm.main.AdvancementManager;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.World;
 

@@ -1,19 +1,17 @@
 package com.hbm.core;
 
-import static org.objectweb.asm.Opcodes.INVOKESTATIC;
-
-import java.util.Arrays;
-
+import com.hbm.main.ModEventHandlerClient;
+import net.minecraft.launchwrapper.IClassTransformer;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.Type;
 import org.objectweb.asm.tree.ClassNode;
 import org.objectweb.asm.tree.MethodInsnNode;
 import org.objectweb.asm.tree.MethodNode;
 
-import com.hbm.main.ModEventHandlerClient;
-import org.objectweb.asm.Type;
+import java.util.Arrays;
 
-import net.minecraft.launchwrapper.IClassTransformer;
+import static org.objectweb.asm.Opcodes.INVOKESTATIC;
 
 public class GlStateManagerClassTransformer implements IClassTransformer {
 

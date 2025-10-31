@@ -1,16 +1,11 @@
 package com.hbm.tileentity.machine.oil;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-
+import api.hbm.energy.IEnergyUser;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.tileentity.TileEntityLoadedBase;
-
-import api.hbm.energy.IEnergyUser;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
@@ -26,10 +21,13 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+
 public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor
 {
     public ItemStackHandler inventory;
-    public static final int maxRecursions = 2000;
 
     public long power;
     public int warning;
@@ -66,7 +64,7 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
 
 
     public boolean hasCustomInventoryName() {
-        return this.customName != null && !this.customName.isEmpty();
+        return this.customName != null && this.customName.length() > 0;
     }
 
     public void setCustomName(String name) {
@@ -120,8 +118,8 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
 
         list.clear();
 
-        succ1(x, y, z, 1);
-        succ2(x, y, z, 1);
+        succ1(x, y, z);
+        succ2(x, y, z);
 
         if(!list.isEmpty()) {
 
@@ -147,37 +145,37 @@ public abstract class TileEntityOilDrillBase extends TileEntityLoadedBase implem
         return 0;
     }
 
-    public void succInit1(int x, int y, int z, int recDepth) {
-        succ1(x + 1, y, z, recDepth+1);
-        succ1(x - 1, y, z, recDepth+1);
-        succ1(x, y + 1, z, recDepth+1);
-        succ1(x, y - 1, z, recDepth+1);
-        succ1(x, y, z + 1, recDepth+1);
-        succ1(x, y, z - 1, recDepth+1);
+    public void succInit1(int x, int y, int z) {
+        succ1(x + 1, y, z);
+        succ1(x - 1, y, z);
+        succ1(x, y + 1, z);
+        succ1(x, y - 1, z);
+        succ1(x, y, z + 1);
+        succ1(x, y, z - 1);
     }
 
-    public void succInit2(int x, int y, int z, int recDepth) {
-        succ2(x + 1, y, z, recDepth+1);
-        succ2(x - 1, y, z, recDepth+1);
-        succ2(x, y + 1, z, recDepth+1);
-        succ2(x, y - 1, z, recDepth+1);
-        succ2(x, y, z + 1, recDepth+1);
-        succ2(x, y, z - 1, recDepth+1);
+    public void succInit2(int x, int y, int z) {
+        succ2(x + 1, y, z);
+        succ2(x - 1, y, z);
+        succ2(x, y + 1, z);
+        succ2(x, y - 1, z);
+        succ2(x, y, z + 1);
+        succ2(x, y, z - 1);
     }
 
-    public void succ1(int x, int y, int z, int recDepth) {
+    public void succ1(int x, int y, int z) {
         BlockPos newPos = new BlockPos(x, y, z);
-        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && !processed.contains(newPos) && recDepth < maxRecursions) {
+        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && !processed.contains(newPos)) {
             processed.add(newPos);
-            succInit1(x, y, z, recDepth+1);
+            succInit1(x, y, z);
         }
     }
 
-    public void succ2(int x, int y, int z, int recDepth) {
+    public void succ2(int x, int y, int z) {
         BlockPos newPos = new BlockPos(x, y, z);
-        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && processed.contains(newPos) && recDepth < maxRecursions) {
+        if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil_empty && processed.contains(newPos)) {
             processed.remove(newPos);
-            succInit2(x, y, z, recDepth+1);
+            succInit2(x, y, z);
         } else if(world.getBlockState(newPos).getBlock() == ModBlocks.ore_oil || world.getBlockState(newPos).getBlock() == ModBlocks.ore_bedrock_oil) {
             list.add(new int[] { x, y, z });
         }

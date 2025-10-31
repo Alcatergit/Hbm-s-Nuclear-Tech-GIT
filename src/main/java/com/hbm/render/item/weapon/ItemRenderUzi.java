@@ -1,19 +1,17 @@
 package com.hbm.render.item.weapon;
 
-import org.lwjgl.opengl.GL11;
-
-import com.hbm.items.ModItems;
+import com.hbm.items.ModItems.Armory;
 import com.hbm.lib.RefStrings;
 import com.hbm.render.item.TEISRBase;
 import com.hbm.render.model.ModelUzi;
 import com.hbm.render.model.ModelUziBarrel;
 import com.hbm.render.model.ModelUziSilencer;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRenderUzi extends TEISRBase {
 
@@ -35,13 +33,13 @@ public class ItemRenderUzi extends TEISRBase {
 	@Override
 	public void renderByItem(ItemStack item) {
 		GlStateManager.enableCull();
-		if(item.getItem() == ModItems.gun_uzi/* || item.getItem() == ModItems.gun_lever_action_sonata*/)
+		if(item.getItem() == Armory.gun_uzi/* || item.getItem() == ModItems.gun_lever_action_sonata*/)
 			Minecraft.getMinecraft().renderEngine.bindTexture(uzi_rl);
-		if(item.getItem() == ModItems.gun_uzi_silencer)
+		if(item.getItem() == Armory.gun_uzi_silencer)
 			Minecraft.getMinecraft().renderEngine.bindTexture(uzi_rl);
-		if(item.getItem() == ModItems.gun_uzi_saturnite)
+		if(item.getItem() == Armory.gun_uzi_saturnite)
 			Minecraft.getMinecraft().renderEngine.bindTexture(sat_rl);
-		if(item.getItem() == ModItems.gun_uzi_saturnite_silencer)
+		if(item.getItem() == Armory.gun_uzi_saturnite_silencer)
 			Minecraft.getMinecraft().renderEngine.bindTexture(sat_rl);
 		
 		switch(type){
@@ -62,11 +60,11 @@ public class ItemRenderUzi extends TEISRBase {
 			}
 			
 			uzi.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_uzi_silencer || item.getItem() == ModItems.gun_uzi_saturnite_silencer){
+			if(item.getItem() == Armory.gun_uzi_silencer || item.getItem() == Armory.gun_uzi_saturnite_silencer){
 				Minecraft.getMinecraft().renderEngine.bindTexture(silencer_rl);
 				silencer.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			}
-			if(item.getItem() == ModItems.gun_uzi || item.getItem() == ModItems.gun_uzi_saturnite){
+			if(item.getItem() == Armory.gun_uzi || item.getItem() == Armory.gun_uzi_saturnite){
 				Minecraft.getMinecraft().renderEngine.bindTexture(barrel_rl);
 				barrel.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			}
@@ -82,11 +80,11 @@ public class ItemRenderUzi extends TEISRBase {
 			GL11.glRotated(180, 1, 0, 0);
 
 			uzi.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
-			if(item.getItem() == ModItems.gun_uzi_silencer || item.getItem() == ModItems.gun_uzi_saturnite_silencer){
+			if(item.getItem() == Armory.gun_uzi_silencer || item.getItem() == Armory.gun_uzi_saturnite_silencer){
 				Minecraft.getMinecraft().renderEngine.bindTexture(silencer_rl);
 				silencer.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			}
-			if(item.getItem() == ModItems.gun_uzi || item.getItem() == ModItems.gun_uzi_saturnite){
+			if(item.getItem() == Armory.gun_uzi || item.getItem() == Armory.gun_uzi_saturnite){
 				Minecraft.getMinecraft().renderEngine.bindTexture(barrel_rl);
 				barrel.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.0625F);
 			}

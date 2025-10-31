@@ -1,7 +1,6 @@
 package com.hbm.entity.mob.ai;
 
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.ai.EntityAIBase;
@@ -72,8 +71,10 @@ public class EntityAIMaskmanCasualApproach extends EntityAIBase {
 	public boolean shouldContinueExecuting() {
 		EntityLivingBase entitylivingbase = this.attacker.getAttackTarget();
 
-		return entitylivingbase != null && (entitylivingbase.isEntityAlive() && (!this.longMemory ? !this.attacker.getNavigator().noPath()
-                : this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(entitylivingbase.posX), MathHelper.floor(entitylivingbase.posY), MathHelper.floor(entitylivingbase.posZ)))));
+		return entitylivingbase == null ? false
+				: (!entitylivingbase.isEntityAlive() ? false
+				: (!this.longMemory ? !this.attacker.getNavigator().noPath()
+				: this.attacker.isWithinHomeDistanceFromPosition(new BlockPos(MathHelper.floor(entitylivingbase.posX), MathHelper.floor(entitylivingbase.posY), MathHelper.floor(entitylivingbase.posZ)))));
 	}
 	
 	@Override

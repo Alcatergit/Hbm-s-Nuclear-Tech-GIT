@@ -1,14 +1,12 @@
 package com.hbm.render.item;
 
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.items.special.ItemBedrockOre;
 import com.hbm.render.RenderHelper;
 import com.hbm.util.BobMathUtil;
-
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.item.ItemStack;
+import org.lwjgl.opengl.GL11;
 
 public class ItemRendererBedrockOre extends TEISRBase {
 
@@ -30,6 +28,7 @@ public class ItemRendererBedrockOre extends TEISRBase {
 		GL11.glTranslated(0.5, 0.5, 0.5);
 		Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
 		if(stack.getItem() instanceof ItemBedrockOre){
+			ItemBedrockOre oreItem = (ItemBedrockOre)stack.getItem();
 			int color = BobMathUtil.interpolateColor(this.dirtyColor, ItemBedrockOre.getColor(stack), this.cleanliness);
 			
 			if(layerTex == null){

@@ -1,28 +1,25 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
-import org.apache.logging.log4j.Level;
-
 import com.hbm.config.GeneralConfig;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.explosion.ExplosionTom;
 import com.hbm.main.MainRegistry;
-
+import com.hbm.util.ContaminationUtil;
+import com.leafia.passive.effects.IdkWhereThisShitBelongs;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.World;
+import net.minecraftforge.common.ForgeChunkManager;
+import net.minecraftforge.common.ForgeChunkManager.Ticket;
+import net.minecraftforge.common.ForgeChunkManager.Type;
+import org.apache.logging.log4j.Level;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityTomBlast extends Entity implements IChunkLoader {
 
@@ -34,6 +31,7 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 	
 	public EntityTomBlast(World worldIn) {
 		super(worldIn);
+		IdkWhereThisShitBelongs.waitFor.add(this);
 	}
 
 	@Override
@@ -41,6 +39,7 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 		super.onUpdate();
     	if(!CompatibilityConfig.isWarDim(world)){
 			this.setDead();
+			IdkWhereThisShitBelongs.waitFor.remove(this);
 			return;
 		}
         if(!this.did)
@@ -56,11 +55,14 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
         long start = System.currentTimeMillis();
 		boolean flag = false;
 		int columnsProcessed = 0;
+		if (!this.isDead)
+			IdkWhereThisShitBelongs.waitFor.add(this); // I SAID WAIT. MOTHERFUCKER.
 		while(!(columnsProcessed % 32 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5)) {
         	flag = exp.update();
         	
         	if(flag) {
         		this.setDead();
+				IdkWhereThisShitBelongs.waitFor.remove(this);
         		break;
         	}
         	columnsProcessed++;
@@ -86,7 +88,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 	@Override
 	public void init(Ticket ticket) {
 		if(!world.isRemote) {
-			
             if(ticket != null) {
             	
                 if(loaderTicket == null) {

@@ -1,12 +1,11 @@
 package com.hbm.tileentity.machine;
 
+import api.hbm.tile.IHeatSource;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.modules.ModuleBurnTime;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.tile.IHeatSource;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -18,7 +17,6 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
 
 public abstract class TileEntityFireboxBase extends TileEntityMachineBase implements ITickable, IGUIProvider, IHeatSource {
 
@@ -55,11 +53,13 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 						if(fuel > 0) {
 							this.maxBurnTime = this.burnTime = fuel;
 							this.burnHeat = getModule().getBurnHeat(getBaseHeat(),inventory.getStackInSlot(i));
-							ItemStack copy = inventory.getStackInSlot(i).copy();
 							inventory.getStackInSlot(i).shrink(1);
 
-							if(inventory.getStackInSlot(i).isEmpty())
-								inventory.setStackInSlot(i, copy.getItem().getContainerItem(copy));
+							if(inventory.getStackInSlot(i).getCount() == 0) {
+								ItemStack copy = inventory.getStackInSlot(0).copy();
+								if(copy.getItem().getContainerItem() != null)
+									inventory.setStackInSlot(i, new ItemStack(copy.getItem().getContainerItem()));
+							}
 
 							this.wasOn = true;
 							break;
@@ -152,7 +152,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 
 		nbt.setInteger("maxBurnTime", maxBurnTime);
 		nbt.setInteger("burnTime", burnTime);
@@ -182,7 +182,7 @@ public abstract class TileEntityFireboxBase extends TileEntityMachineBase implem
 					pos.getY(),
 					pos.getZ() - 1,
 					pos.getX() + 2,
-					pos.getY() + 1,
+					pos.getY()+ 1,
 					pos.getZ() + 2
 					);
 		}

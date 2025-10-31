@@ -1,18 +1,17 @@
 package com.hbm.tileentity.turret;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.handler.BulletConfiguration;
-import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.HBMSoundEvents;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
-
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityTurretJeremy extends TileEntityTurretBaseNT {
 
@@ -70,7 +69,7 @@ public class TileEntityTurretJeremy extends TileEntityTurretBaseNT {
 			reload--;
 		
 		if(reload == 1)
-			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.jeremy_reload, SoundCategory.BLOCKS, 2.0F, 1.0F);
+			this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.jeremy_reload, SoundCategory.BLOCKS, 2.0F, 1.0F);
 		
 		super.update();
 	}
@@ -83,10 +82,14 @@ public class TileEntityTurretJeremy extends TileEntityTurretBaseNT {
 
 			BulletConfiguration conf = this.getFirstConfigLoaded();
 
+			if (this.target != null) {
+				if (this.detectFriendlyFire(this.target)) return;
+			}
+
 			if(conf != null) {
 				this.spawnBullet(conf);
 				this.conusmeAmmo(conf.ammo);
-				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.jeremy_fire, SoundCategory.BLOCKS, 4.0F, 1.0F);
+				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundEvents.jeremy_fire, SoundCategory.BLOCKS, 4.0F, 1.0F);
 				
 				Vec3 pos = new Vec3(this.getTurretPos());
 				Vec3 vec = Vec3.createVectorHelper(this.getBarrelLength(), 0, 0);

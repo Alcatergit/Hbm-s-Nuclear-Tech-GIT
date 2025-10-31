@@ -6,26 +6,26 @@ import net.minecraft.nbt.NBTTagCompound;
 
 public interface IBatteryItem {
 
-	void chargeBattery(ItemStack stack, long i);
-	void setCharge(ItemStack stack, long i);
-	void dischargeBattery(ItemStack stack, long i);
-	long getCharge(ItemStack stack);
-	long getMaxCharge(ItemStack stack);
-	long getChargeRate();
-	long getDischargeRate();
+	public void chargeBattery(ItemStack stack, long i);
+	public void setCharge(ItemStack stack, long i);
+	public void dischargeBattery(ItemStack stack, long i);
+	public long getCharge(ItemStack stack);
+	public long getMaxCharge();
+	public long getChargeRate();
+	public long getDischargeRate();
 	
 	/** Returns a string for the NBT tag name of the long storing power */
-	default String getChargeTagName() {
+	public default String getChargeTagName() {
 		return "charge";
 	}
 
 	/** Returns a string for the NBT tag name of the long storing power */
-	static String getChargeTagName(ItemStack stack) {
+	public static String getChargeTagName(ItemStack stack) {
 		return ((IBatteryItem) stack.getItem()).getChargeTagName();
 	}
 
 	/** Returns an empty battery stack from the passed ItemStack, the original won't be modified */
-	static ItemStack emptyBattery(ItemStack stack) {
+	public static ItemStack emptyBattery(ItemStack stack) {
 		if(stack != null && stack.getItem() instanceof IBatteryItem) {
 			String keyName = getChargeTagName(stack);
 			ItemStack stackOut = stack.copy();
@@ -42,7 +42,7 @@ public interface IBatteryItem {
 	}
 
 	/** Returns an empty battery stack from the passed Item */
-	static ItemStack emptyBattery(Item item) {
+	public static ItemStack emptyBattery(Item item) {
 		return item instanceof IBatteryItem ? emptyBattery(new ItemStack(item)) : null;
 	}
 }

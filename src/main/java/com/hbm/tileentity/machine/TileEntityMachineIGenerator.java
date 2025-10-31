@@ -1,8 +1,6 @@
 package com.hbm.tileentity.machine;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import api.hbm.energy.IEnergyGenerator;
 import com.google.common.collect.HashBiMap;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.forgefluid.FFUtils;
@@ -15,8 +13,6 @@ import com.hbm.lib.Library;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-
-import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -33,7 +29,9 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class TileEntityMachineIGenerator extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
@@ -473,7 +471,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	}
 	
 	@Override
-	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
+	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		for(int i = 0; i < pellets.length; i++) {
 			
@@ -492,7 +490,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	
 	private static HashBiMap<Item, IGenRTG> rtgPellets = HashBiMap.create();
 	
-	public enum IGenRTG {
+	public static enum IGenRTG {
 		RADIUM(ModItems.pellet_rtg_radium, 9, 3),
 		URANIUM(ModItems.pellet_rtg_weak, 9, 5),
 		PLUTONIUM(ModItems.pellet_rtg, 18, 10),
@@ -501,10 +499,10 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 		ACTINIUM(ModItems.pellet_rtg_actinium, 0, 20),
 		AMERICIUM(ModItems.pellet_rtg_americium, 0, 25);
 		
-		public final int offset;
-		public final int heat;
+		public int offset;
+		public int heat;
 		
-		IGenRTG(Item item, int offset, int heat) {
+		private IGenRTG(Item item, int offset, int heat) {
 			rtgPellets.put(item, this);
 			this.offset = offset;
 			this.heat = heat;

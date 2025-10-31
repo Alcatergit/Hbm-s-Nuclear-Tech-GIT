@@ -1,33 +1,29 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
 import com.hbm.entity.mob.ai.EntityAIMaskmanCasualApproach;
 import com.hbm.entity.mob.ai.EntityAIMaskmanLasergun;
 import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
+import com.hbm.handler.ArmorUtil;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
-import com.hbm.handler.ArmorUtil;
+import com.hbm.items.ModItems.Inserts;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
-
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIHurtByTarget;
-import net.minecraft.entity.ai.EntityAILookIdle;
-import net.minecraft.entity.ai.EntityAINearestAttackableTarget;
-import net.minecraft.entity.ai.EntityAISwimming;
-import net.minecraft.entity.ai.EntityAIWander;
-import net.minecraft.entity.ai.EntityAIWatchClosest;
+import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityEgg;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EntityDamageSourceIndirect;
 import net.minecraft.world.BossInfo;
 import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
+
+import java.util.List;
 
 public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 
@@ -66,11 +62,16 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 	@Override
 	public boolean attackEntityFrom(DamageSource source, float amount) {
 
-		if(source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect) source).getImmediateSource() instanceof EntityEgg && rand.nextInt(10) == 0) {
-			this.experienceValue = 0;
-			this.setHealth(0);
-			return true;
+		if (!world.isRemote) {
+			if (source instanceof EntityDamageSourceIndirect && ((EntityDamageSourceIndirect) source).getImmediateSource() instanceof EntityEgg && rand.nextInt(10) == 0) {
+				this.experienceValue = 0;
+				this.setHealth(0);
+				return true;
+			}
 		}
+
+		if (source == ModDamageSource.back)
+			amount = 0; // avoid cheap kills using Antischrabidium
 
 		if(source.isFireDamage())
     		amount = 0;
@@ -106,7 +107,6 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 			
 		for(EntityPlayer player : players) {
 			AdvancementManager.grantAchievement(player, AdvancementManager.bossMaskman);
-            player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_maskman));
 		}
 	}
 	
@@ -147,7 +147,8 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 			ArmorUtil.installGasMaskFilter(mask, new ItemStack(ModItems.gas_mask_filter_combo));
 			
 			this.entityDropItem(mask, 0F);
-			this.dropItem(ModItems.v1, 1);
+			this.dropItem(ModItems.coin_maskman, 1);
+			this.dropItem(Inserts.v1, 1);
 			this.dropItem(Items.SKULL, 1);
 		}
 	}

@@ -1,20 +1,18 @@
 package com.hbm.render.item;
 
-import java.util.HashMap;
-import java.util.function.Consumer;
-
-import org.lwjgl.opengl.GL11;
-
 import com.hbm.inventory.RecipesCommon.ComparableStack;
-import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.items.ModItems;
 import com.hbm.main.ResourceManager;
-
+import com.hbm.render.amlfrom1710.IModelCustom;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
+
+import java.util.HashMap;
+import java.util.function.Consumer;
 
 public class ItemRenderMissileGeneric extends TEISRBase {
 	
@@ -22,7 +20,7 @@ public class ItemRenderMissileGeneric extends TEISRBase {
 	
 	protected RenderMissileType category;
 	
-	public enum RenderMissileType {
+	public static enum RenderMissileType {
 		TYPE_TIER0,
 		TYPE_TIER1,
 		TYPE_TIER2,
@@ -31,7 +29,8 @@ public class ItemRenderMissileGeneric extends TEISRBase {
 		TYPE_NUCLEAR,
 		TYPE_THERMAL,
 		TYPE_DOOMSDAY,
-		TYPE_CARRIER
+		TYPE_CARRIER,
+		TYPE_NUCLEARLEAF
 	}
 	
 	public ItemRenderMissileGeneric(RenderMissileType category) {
@@ -50,15 +49,16 @@ public class ItemRenderMissileGeneric extends TEISRBase {
 		double guiOffset = 0;
 
 		switch(this.category) {
-		case TYPE_TIER0: guiScale = 4.2D; guiOffset = 1D; break; //Micro
-		case TYPE_TIER1: guiScale = 2.75D; guiOffset = 0.5D; break; //Normal
-		case TYPE_TIER2: guiScale = 1.1D; guiOffset = 0.5D; break; //Strong
-		case TYPE_TIER3: guiScale = 1D; guiOffset = 0D; break; //Huge
-		case TYPE_ABM: guiScale = 2.25D; guiOffset = 0.5D; break;
-		case TYPE_NUCLEAR: guiScale = 1.75D; guiOffset = 0D; break;
-		case TYPE_THERMAL: guiScale = 1.75D; guiOffset = 1D; break;
-		case TYPE_DOOMSDAY: guiScale = 1.5D; guiOffset = 1D; break;
-		case TYPE_CARRIER: guiScale = 0.625D; break;
+			case TYPE_TIER0: guiScale = 4.2D; guiOffset = 1D; break; //Micro
+			case TYPE_TIER1: guiScale = 2.75D; guiOffset = 0.5D; break; //Normal
+			case TYPE_TIER2: guiScale = 1.1D; guiOffset = 0.5D; break; //Strong
+			case TYPE_TIER3: guiScale = 1D; guiOffset = 0D; break; //Huge
+			case TYPE_ABM: guiScale = 2.25D; guiOffset = 0.5D; break;
+			case TYPE_NUCLEAR: guiScale = 1.75D; guiOffset = 0D; break;
+			case TYPE_THERMAL: guiScale = 1.75D; guiOffset = 1D; break;
+			case TYPE_DOOMSDAY: guiScale = 1.5D; guiOffset = 1D; break;
+			case TYPE_CARRIER: guiScale = 0.625D; break;
+			case TYPE_NUCLEARLEAF: guiScale = 4.0D; guiOffset = 1D; break; //Micro
 		}
 
 		GL11.glEnable(GL11.GL_LIGHTING);
@@ -154,6 +154,8 @@ public class ItemRenderMissileGeneric extends TEISRBase {
 		renderers.put(new ComparableStack(ModItems.missile_exo), generateLarge(ResourceManager.missileExo_tex, ResourceManager.missileThermo));
 
 		renderers.put(new ComparableStack(ModItems.missile_doomsday), generateDouble(ResourceManager.missileDoomsday_tex, ResourceManager.missileDoomsday));
+
+		renderers.put(new ComparableStack(ModItems.missile_customnuke), generateStandard(ResourceManager.missileCustomNuke_tex, ResourceManager.missileNuclearLeaf));
 
 		renderers.put(new ComparableStack(ModItems.missile_carrier), x -> {
 			GL11.glScalef(2F, 2F, 2F);

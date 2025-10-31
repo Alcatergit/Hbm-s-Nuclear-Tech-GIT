@@ -1,7 +1,6 @@
 package com.hbm.inventory.container;
 
 import com.hbm.tileentity.bomb.TileEntityNukeMike;
-
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.inventory.Container;
@@ -52,11 +51,11 @@ private TileEntityNukeMike nukeMike;
 			var3 = var5.copy();
 			
             if (par2 <= 7) {
-				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), false))
+				if (!this.mergeItemStack(var5, 8, this.inventorySlots.size(), true))
 				{
 					return ItemStack.EMPTY;
 				}
-			} else if (!this.mergeItemStack(var5, 0, 8, false)){
+			} else {
 				return ItemStack.EMPTY;
 			}
             

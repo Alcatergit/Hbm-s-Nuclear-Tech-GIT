@@ -1,0 +1,6 @@
+{
+	"variants": {
+		"state=true": { "model": "hbm:fluid_duct_valve_1_rs" },
+		"state=false": { "model": "hbm:fluid_duct_valve_0_rs" }
+	}
+}

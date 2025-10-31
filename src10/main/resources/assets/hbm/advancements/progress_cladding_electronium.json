@@ -1,0 +1,30 @@
+{
+	"display": {
+		"icon": {
+			"item": "hbm:cladding_electronium"
+		},
+		"title": {
+			"translate": "hbm.achievement.progress_cladding_electronium"
+		},
+		"description": {
+			"translate": "hbm.achievement.progress_cladding_electronium.desc"
+		},
+		"frame": "goal"
+	},
+	"parent": "hbm:progress_modtable",
+	"criteria": {
+        "crafting_table": {
+            "trigger": "minecraft:inventory_changed",
+            "conditions": {
+                "items": [
+                    {
+                        "item": "hbm:cladding_electronium"
+                    }
+                ]
+            }
+        }
+    },
+    "rewards": {
+        "experience": 50000
+    }
+}

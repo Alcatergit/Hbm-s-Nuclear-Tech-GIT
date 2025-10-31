@@ -2,7 +2,7 @@ package com.hbm.inventory;
 
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ModItems;
-
+import com.hbm.items.ModItems.Materials.Powders;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fluids.Fluid;
 
@@ -33,11 +33,11 @@ public class FusionRecipes {
 		} else if(plasma == ModForgeFluids.PLASMA_HT){
 			return new ItemStack(ModItems.pellet_charged);
 		} else if(plasma == ModForgeFluids.PLASMA_MX){
-			return new ItemStack(ModItems.powder_chlorophyte);
+			return new ItemStack(Powders.powder_chlorophyte);
 		} else if(plasma == ModForgeFluids.PLASMA_PUT){
-			return new ItemStack(ModItems.powder_xe135);
+			return new ItemStack(Powders.powder_xe135);
 		} else if(plasma == ModForgeFluids.PLASMA_BF){
-			return new ItemStack(ModItems.powder_balefire);
+			return new ItemStack(Powders.powder_balefire);
 		}
 		return ItemStack.EMPTY;
 	}
