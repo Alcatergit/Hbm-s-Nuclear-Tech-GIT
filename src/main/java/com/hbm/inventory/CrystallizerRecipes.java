@@ -94,7 +94,7 @@ public class CrystallizerRecipes {
 		
 		addRecipe(new ComparableStack(Items.SNOWBALL), new FluidStack(FluidRegistry.WATER, 8000), new ItemStack(Blocks.ICE, 1));
 		addRecipe(new ComparableStack(Blocks.ICE), new FluidStack(ModForgeFluids.COOLANT, 500), new ItemStack(Blocks.PACKED_ICE, 1));
-		addRecipe(KEY_GRAVEL, new FluidStack(FluidRegistry.LAVA, 1000), new ItemStack(ModBlocks.gravel_obsidian, 1));
+		addRecipe(KEY_GRAVEL, new FluidStack(FluidRegistry.LAVA, 500), new ItemStack(ModBlocks.gravel_obsidian, 1));
 		addRecipe(new ComparableStack(Items.ROTTEN_FLESH), new FluidStack(ModForgeFluids.ACID, 500), new ItemStack(Items.LEATHER));
 		addRecipe(new ComparableStack(Items.BONE), new FluidStack(ModForgeFluids.SULFURIC_ACID, 1000), new ItemStack(Items.SLIME_BALL, 16));
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.SULFURIC_ACID, 250), new ItemStack(Items.SLIME_BALL, 4));

@@ -1,18 +1,11 @@
 
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.main.AdvancementManager;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.world.biome.*;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
 
 import org.apache.logging.log4j.Level;
 
@@ -26,14 +19,13 @@ import com.hbm.explosion.ExplosionNukeRayBatched;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
 
-public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
+public class EntityNukeExplosionMK5 extends EntityChunky {
 	//Strength of the blast
 	public int strength;
 	//Radius
@@ -46,7 +38,6 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 	public boolean fallout = true;
 	private boolean floodPlease = false;
 	private int falloutAdd = 0;
-	private Ticket loaderTicket;
 
 	ExplosionNukeRayBatched explosion;
 	EntityFalloutRain falloutRain;
@@ -63,13 +54,9 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 		if(world.isRemote) return;
 
 		if(strength == 0 || !CompatibilityConfig.isWarDim(world)) {
-			this.clearLoadedChunks();
-			this.unloadMainChunk();
 			this.setDead();
 			return;
 		}
-		//load own chunk
-		loadMainChunk();
 		
 		float rads, fire, blast;
 		rads = 0;
@@ -139,78 +126,8 @@ public class EntityNukeExplosionMK5 extends Entity implements IChunkLoader {
 				}
 				fallingStarted = true;
 			} else if (this.ticksExisted * shockSpeed > 160){ //wait for shockwave to complete
-
-				this.clearLoadedChunks();
-				this.unloadMainChunk();
 				this.setDead();
 			}
-		}
-	}
-
-	@Override
-	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-	}
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote && ticket != null) {
-            	
-            if(loaderTicket == null) {
-            	loaderTicket = ticket;
-            	loaderTicket.bindEntity(this);
-            	loaderTicket.getModData();
-            }
-
-            ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-        }
-	}
-
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks) {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks) {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-	}
-
-	public void clearLoadedChunks() {
-		if(!world.isRemote && loaderTicket != null && loadedChunks != null) {
-			for(ChunkPos chunk : loadedChunks) {
-				ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-			}
-		}
-	}
-
-	private ChunkPos mainChunk;
-	public void loadMainChunk() {
-		if(!world.isRemote && loaderTicket != null && this.mainChunk == null) {
-			this.mainChunk = new ChunkPos((int) Math.floor(this.posX / 16D), (int) Math.floor(this.posZ / 16D));
-			ForgeChunkManager.forceChunk(loaderTicket, this.mainChunk);
-		}
-	}
-	public void unloadMainChunk() {
-		if(!world.isRemote && loaderTicket != null && this.mainChunk != null) {
-			ForgeChunkManager.unforceChunk(loaderTicket, this.mainChunk);
 		}
 	}
 

@@ -6,6 +6,7 @@ import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.render.amlfrom1710.Vec3;
 
@@ -103,7 +104,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 		
 		for(Entity e : entities) {
 			
-			if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+			if(Library.isCreative(e))
 				continue;
 			
 			if(e instanceof EntityFallingBlock && !world.isRemote && e.ticksExisted > 1) {

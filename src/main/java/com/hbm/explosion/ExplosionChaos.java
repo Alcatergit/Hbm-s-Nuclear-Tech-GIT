@@ -970,7 +970,7 @@ public class ExplosionChaos {
 		}
 
 		else if(bblock instanceof WasteLeaves wLeaf && random.nextInt(5) != 0) {
-			world.setBlockState(pos, Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, wLeaf.getWoodType(wLeaf.getMetaFromState(b))));
+            world.setBlockState(pos, wLeaf.getBaseLeafState(b));
 		}
 
 		else if(bblock == ModBlocks.waste_trinitite && random.nextInt(3) == 0) {

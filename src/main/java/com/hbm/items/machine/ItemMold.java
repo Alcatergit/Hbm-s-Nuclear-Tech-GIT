@@ -77,19 +77,20 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 
 		registerMold(new MoldShape(		10, S, "shell", MaterialShapes.SHELL));
 		registerMold(new MoldShape(		11, S, "pipe", MaterialShapes.PIPE));
-		
-		registerMold(new MoldShape(		12, L, "ingots", MaterialShapes.INGOT, 9));
-		registerMold(new MoldShape(		13, L, "plates", MaterialShapes.PLATE, 9));
-        registerMold(new MoldShape(		14, L, "wires", MaterialShapes.WIRE, 16));
-        registerMold(new MoldShape(		15, L, "wires_dense", MaterialShapes.DENSEWIRE, 9));
-		registerMold(new MoldBlock(		16, L, "block", MaterialShapes.BLOCK));
-		registerMold(new MoldSingle(	17, L, "pipes", new ItemStack(ModItems.pipes_steel), Mats.MAT_STEEL, MaterialShapes.BLOCK.q(3)));
+        registerMold(new MoldShape(		12, S, "bolt", MaterialShapes.BOLT));
 
-		registerMold(new MoldSingle(	18, S, "c357", new ItemStack(ModItems.casing_357), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
-		registerMold(new MoldSingle(	19, S, "c44", new ItemStack(ModItems.casing_44), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
-		registerMold(new MoldSingle(	20, S, "c9", new ItemStack(ModItems.casing_9), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
-		registerMold(new MoldSingle(	21, S, "c50", new ItemStack(ModItems.casing_50), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
-		registerMold(new MoldSingle(	22, S, "cbuckshot", new ItemStack(ModItems.casing_buckshot), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
+        registerMold(new MoldShape(		13, L, "ingots", MaterialShapes.INGOT, 9));
+		registerMold(new MoldShape(		14, L, "plates", MaterialShapes.PLATE, 9));
+        registerMold(new MoldShape(		15, L, "wires", MaterialShapes.WIRE, 16));
+        registerMold(new MoldShape(		16, L, "wires_dense", MaterialShapes.DENSEWIRE, 9));
+		registerMold(new MoldBlock(		17, L, "block", MaterialShapes.BLOCK));
+		registerMold(new MoldSingle(	18, L, "pipes", new ItemStack(ModItems.pipes_steel), Mats.MAT_STEEL, MaterialShapes.BLOCK.q(3)));
+
+		registerMold(new MoldSingle(	19, S, "c357", new ItemStack(ModItems.casing_357), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
+		registerMold(new MoldSingle(	20, S, "c44", new ItemStack(ModItems.casing_44), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
+		registerMold(new MoldSingle(	21, S, "c9", new ItemStack(ModItems.casing_9), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
+		registerMold(new MoldSingle(	22, S, "c50", new ItemStack(ModItems.casing_50), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
+		registerMold(new MoldSingle(	23, S, "cbuckshot", new ItemStack(ModItems.casing_buckshot), Mats.MAT_COPPER, MaterialShapes.PLATE.q(1)));
 		ModItems.ALL_ITEMS.add(this);
 	}
 	

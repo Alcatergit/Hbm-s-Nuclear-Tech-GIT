@@ -57,6 +57,7 @@ public class TEPumpjackPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEPumpjackPacket m, MessageContext ctx) {
+            if(m == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				try {
 					TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));

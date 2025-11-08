@@ -1,8 +1,5 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.particle.EntityGasFlameFX;
@@ -14,11 +11,9 @@ import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.MainRegistry;
 import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.packet.PacketDispatcher;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
@@ -27,17 +22,13 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityBomber extends Entity implements IChunkLoader, IConstantRenderer {
+public class EntityBomber extends EntityChunky implements IConstantRenderer {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityBomber.class, DataSerializers.VARINT);
 	public static final DataParameter<Byte> STYLE = EntityDataManager.createKey(EntityBomber.class, DataSerializers.BYTE);
@@ -226,26 +217,26 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
     	int i = 1;
     	
     	int rand = world.rand.nextInt(7);
-    	
-    	switch(rand) {
-    	case 0:
-    	case 1: i = 1; break;
-    	case 2:
-    	case 3: i = 2; break;
-    	case 4: i = 5; break;
-    	case 5: i = 6; break;
-    	case 6: i = 7; break;
-    	}
+
+        i = switch (rand) {
+            case 0, 1 -> 1;
+            case 2, 3 -> 2;
+            case 4 -> 5;
+            case 5 -> 6;
+            case 6 -> 7;
+            default -> i;
+        };
     	
     	if(world.rand.nextInt(100) == 0) {
         	rand = world.rand.nextInt(4);
 
-        	switch(rand) {
-        	case 0: i = 0; break;
-        	case 1: i = 3; break;
-        	case 2: i = 4; break;
-        	case 3: i = 8; break;
-        	}
+            i = switch (rand) {
+                case 0 -> 0;
+                case 1 -> 3;
+                case 2 -> 4;
+                case 3 -> 8;
+                default -> i;
+            };
     	}
     	
     	this.getDataManager().set(STYLE, (byte)i);
@@ -330,12 +321,13 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
     	int i = 1;
     	
     	int rand = world.rand.nextInt(3);
-    	
-    	switch(rand) {
-    	case 0: i = 5; break;
-    	case 1: i = 6; break;
-    	case 2: i = 7; break;
-    	}
+
+        i = switch (rand) {
+            case 0 -> 5;
+            case 1 -> 6;
+            case 2 -> 7;
+            default -> i;
+        };
     	
     	if(world.rand.nextInt(100) == 0) {
         	i = 8;
@@ -402,60 +394,11 @@ public class EntityBomber extends Entity implements IChunkLoader, IConstantRende
     	return bomber;
     }
 
-    private Ticket loaderTicket;
-    List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-    
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-                
-        		
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-	
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ)
-    {
-        if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-    }
-
 	@Override
 	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-        this.getDataManager().register(STYLE, Byte.valueOf((byte)0));
-        this.getDataManager().register(HEALTH, Integer.valueOf((int)50));
+		super.entityInit();
+        this.getDataManager().register(STYLE, (byte) 0);
+        this.getDataManager().register(HEALTH, 50);
 		
 	}
 

@@ -272,7 +272,7 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.thruster_large, 1),
                 new ComparableStack(ModItems.low_density_element, 8),
 				new ComparableStack(ModItems.plate_desh, 4),
-				new NbtComparableStack(ItemFluidTank.getFullBarrel(ModForgeFluids.KEROSENE)),
+				new NbtComparableStack(ItemFluidTank.getFullBarrel(ModForgeFluids.KEROSENE_REFORM)),
 				new ComparableStack(ModItems.photo_panel, 24),
 				new ComparableStack(ModItems.circuit, 12, EnumCircuitType.BASIC.ordinal()),
 				new ComparableStack(ModBlocks.machine_lithium_battery, 1)

@@ -22,7 +22,7 @@ public class SoundLoopChemplant extends SoundLoopMachine {
 
     public static boolean isProcessing(TileEntity te){
         boolean shouldPlay = false;
-        if(te instanceof TileEntityMachineChemfac plant) {
+        if(te instanceof TileEntityMachineChemplant plant) {
             shouldPlay = plant.isProgressing;
         } else if(te instanceof TileEntityMachineChemfac plant) {
             shouldPlay = plant.isProgressing;

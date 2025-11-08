@@ -159,7 +159,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			boolean isPlayer = e instanceof EntityPlayer;
 			if(!(isPlayer && ArmorUtil.checkForHazmat((EntityPlayer)e))){
 				if(!(Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ))){
-					if(!isPlayer || (isPlayer && !((EntityPlayer)e).capabilities.isCreativeMode))
+					if(!isPlayer || !((EntityPlayer) e).capabilities.isCreativeMode)
 						e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
 					e.setFire(3);
 				}

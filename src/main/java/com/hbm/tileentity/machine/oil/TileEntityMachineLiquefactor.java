@@ -186,13 +186,19 @@ public class TileEntityMachineLiquefactor extends TileEntityMachineBase implemen
     }
 
     @Override
+    public int[] getAccessibleSlotsFromSide(EnumFacing e) {
+        return new int[] {0, 1, 2, 3};
+    }
+
+
+    @Override
     public boolean isItemValidForSlot(int i, ItemStack itemStack) {
         return i == 0 && LiquefactionRecipes.getOutput(itemStack) != null;
     }
 
     @Override
     public boolean canExtractItem(int i, ItemStack itemStack, int j) {
-        return LiquefactionRecipes.getOutput(itemStack) == null;
+        return false;
     }
 
     @Override
@@ -242,7 +248,6 @@ public class TileEntityMachineLiquefactor extends TileEntityMachineBase implemen
 
     @Override
     public AxisAlignedBB getRenderBoundingBox() {
-
         if(bb == null) {
             bb = new AxisAlignedBB(
                     pos.getX() - 1,
@@ -253,7 +258,6 @@ public class TileEntityMachineLiquefactor extends TileEntityMachineBase implemen
                     pos.getZ() + 2
             );
         }
-
         return bb;
     }
 

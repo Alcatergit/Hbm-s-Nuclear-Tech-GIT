@@ -66,11 +66,10 @@ public class SoyuzLauncher extends BlockDummyable {
 
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack itemStack) {
-		if(!(player instanceof EntityPlayer))
+		if(!(player instanceof EntityPlayer pl))
 			return;
 
-		EntityPlayer pl = (EntityPlayer) player;
-		EnumHand hand = player.getHeldItemMainhand() == itemStack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
+        EnumHand hand = player.getHeldItemMainhand() == itemStack ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
 
 		int o = -getOffset();
 
@@ -158,20 +157,18 @@ public class SoyuzLauncher extends BlockDummyable {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		if(world.getTileEntity(pos) != null) {
-			InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
-			int x = pos.getX();
-			int y = pos.getY();
-			int z = pos.getZ();
-			for(int l = 0; l < 10; l++)
-				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_launcher, 38)));
-			for(int l = 0; l < 8; l++)
-				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.concrete_smooth, 41)));
-			for(int l = 0; l < 6; l++)
-				world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 64)));
-			world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 53)));
-			world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
-		}
+        InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
+        int x = pos.getX();
+        int y = pos.getY();
+        int z = pos.getZ();
+        for(int l = 0; l < 10; l++)
+            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_launcher, 38)));
+        for(int l = 0; l < 8; l++)
+            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.concrete_smooth, 41)));
+        for(int l = 0; l < 6; l++)
+            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 64)));
+        world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 53)));
+        world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
 		super.breakBlock(world, pos, state);
 	}
 

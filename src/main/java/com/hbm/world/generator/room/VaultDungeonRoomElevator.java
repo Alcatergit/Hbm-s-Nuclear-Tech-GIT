@@ -2,6 +2,7 @@ package com.hbm.world.generator.room;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.VaultDoor;
+import com.hbm.lib.Library;
 import com.hbm.world.generator.CellularDungeon;
 import com.hbm.world.generator.DungeonToolbox;
 import com.hbm.world.generator.TimedGenerator;
@@ -45,23 +46,6 @@ public class VaultDungeonRoomElevator extends VaultDungeonRoom {
         bricks.add(ModBlocks.brick_concrete_mossy.getDefaultState());
     }
 
-    public static int getGroundHeight(World world, int x, int z){
-        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 255, z);
-        for(int y = 255; y > 1; y--){
-            pos.setY(y);
-            IBlockState state = world.getBlockState(pos);
-            Block b = state.getBlock();
-            if(!b.isReplaceable(world, pos)){
-                if(b.isOpaqueCube(state)){
-                    if(b.getMaterial(state) != Material.WOOD){
-                        return y;
-                    }
-                }
-            }
-        }
-        return 1;
-    }
-
     @Override
     public IBlockState getLine(int x, int z){
         if(parent instanceof VaultDungeon vault && vault.hasElevator && vault.elevatorRoom == this){
@@ -88,7 +72,7 @@ public class VaultDungeonRoomElevator extends VaultDungeonRoom {
                 this.line = Blocks.CONCRETE.getStateFromMeta(4);
                 vault.elevatorRoom = this;
 
-                int h = Math.max(getGroundHeight(world, vault.eX, vault.eZ)-25, y+parent.height+10);
+                int h = Math.max(Library.getGroundHeight(world, vault.eX, vault.eZ)-25, y+parent.height+10);
                 generateVaultDoorRoom(world, vault.eX, h, vault.eZ);
                 generateElevator(world, vault.eX, y, vault.eZ, h, doorRoomY-2);
             } else {
@@ -139,7 +123,7 @@ public class VaultDungeonRoomElevator extends VaultDungeonRoom {
 
 
 
-        int h = getGroundHeight(world, x+doorRoomX+8, z-2)+1;
+        int h = Library.getGroundHeight(world, x+doorRoomX+8, z-2)+1;
         DungeonToolbox.generateHollowBox(world, x+doorRoomX-3, y, z-6, 10, 9, 9, bricks);
         DungeonToolbox.generateHollowBox(world, x+doorRoomX+6, y, z-4, 5, h-y, 5, bricks);
         DungeonToolbox.generateBox(world, x+doorRoomX+7, y+1, z-3, 3, h-y, 3, air);

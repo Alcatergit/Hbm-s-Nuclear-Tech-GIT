@@ -6,8 +6,10 @@ import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.hazard.modifier.HazardModifier;
+import com.hbm.lib.Library;
 import com.hbm.util.ArmorRegistry;
 import com.hbm.util.ArmorRegistry.HazardClass;
+import com.hbm.util.ContaminationUtil;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -22,10 +24,7 @@ public class HazardTypeAsbestos extends HazardTypeBase {
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
         if(!GeneralConfig.enableAsbestos) return;
         level *= stack.getCount();
-        if(ArmorRegistry.hasProtection(target, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE))
-			ArmorUtil.damageGasMaskFilter(target, (int) level);
-		else
-			HbmLivingProps.incrementAsbestos(target, (int) Math.min(level, 10));
+        ContaminationUtil.applyAsbestos(target, level/100F, level/500F);
 	}
 
 	@Override
@@ -34,7 +33,8 @@ public class HazardTypeAsbestos extends HazardTypeBase {
 	@Override
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
         if(GeneralConfig.enableAsbestos) {
-            list.add("§f[" + I18nUtil.resolveKey("trait.asbestos") + "]");
+            level *= stack.getCount();
+            list.add("§f[" + I18nUtil.resolveKey("trait.asbestos") + "] "+Library.roundFloat(level, 3));
         }
 	}
 }

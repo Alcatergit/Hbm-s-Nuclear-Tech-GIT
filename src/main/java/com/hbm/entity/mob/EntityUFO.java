@@ -8,6 +8,7 @@ import com.hbm.handler.BulletConfigSyncingUtil;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -133,12 +134,12 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 				if(!entity.isEntityAlive() || !canAttackClass(entity.getClass()))
 					continue;
 				
-				if(entity instanceof EntityPlayer) {
+				if(entity instanceof EntityPlayer p) {
 					
-					if(((EntityPlayer)entity).capabilities.isCreativeMode)
+					if(Library.isCreative(entity))
 						continue;
 					
-					if(((EntityPlayer)entity).isPotionActive(MobEffects.INVISIBILITY))
+					if(p.isPotionActive(MobEffects.INVISIBILITY))
 						continue;
 					
 					if(this.target == null) {

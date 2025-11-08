@@ -1,83 +1,19 @@
 package com.hbm.entity.projectile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityChunky;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
-import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
 
-import net.minecraft.entity.Entity;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 
-public class EntityRailgunBlast extends Entity implements IChunkLoader {
+public class EntityRailgunBlast extends EntityChunky {
 
 	public EntityRailgunBlast(World w) {
 		super(w);
-	}
-
-	private Ticket loaderTicket;
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-
-			if(ticket != null) {
-
-				if(loaderTicket == null) {
-
-					loaderTicket = ticket;
-					loaderTicket.bindEntity(this);
-					loaderTicket.getModData();	
-				}
-
-				ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-			}
-		}
-	}
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ)
-    {
-        if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-    }
-	
-	@Override
-	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
 	}
 
 	@Override
@@ -104,10 +40,6 @@ public class EntityRailgunBlast extends Entity implements IChunkLoader {
 			}
 			this.setDead();
 			return;
-		}
-
-		if(!world.isRemote) {
-			loadNeighboringChunks((int) (posX / 16), (int) (posZ / 16));
 		}
 
 		// gravity needs the sec/tick converter squared since it's in seconds
@@ -138,13 +70,5 @@ public class EntityRailgunBlast extends Entity implements IChunkLoader {
 	@Override
 	public boolean isInRangeToRenderDist(double distance) {
 		return distance < 500000;
-	}
-
-	@Override
-	protected void readEntityFromNBT(NBTTagCompound compound) {
-	}
-
-	@Override
-	protected void writeEntityToNBT(NBTTagCompound compound) {
 	}
 }

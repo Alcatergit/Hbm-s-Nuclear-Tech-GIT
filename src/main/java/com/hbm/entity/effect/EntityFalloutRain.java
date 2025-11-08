@@ -8,24 +8,17 @@ import com.hbm.config.BombConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
+import com.hbm.entity.logic.EntityChunky;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 
-//Chunkloading stuff
-
-import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
 import com.hbm.blocks.generic.WasteLog;
 import net.minecraft.block.*;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraft.util.math.ChunkPos;
 
 
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
@@ -36,17 +29,14 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
-import org.lwjgl.Sys;
 
-public class EntityFalloutRain extends Entity implements IConstantRenderer, IChunkLoader {
+public class EntityFalloutRain extends EntityChunky implements IConstantRenderer {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
 	public boolean done = false;
 	public boolean doFallout = false;
 	public boolean doFlood = false;
 	public boolean doDrop = false;
 	public int waterLevel = 0;
-
-	private Ticket loaderTicket;
 
 	private double s0;
 	private double s1;
@@ -107,54 +97,8 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 	@Override
 	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
+		super.entityInit();
 		this.dataManager.register(SCALE, 0);
-	}
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
 	}
 
 	private void gatherChunks() {
@@ -180,14 +124,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 		outerChunksToProcess.addAll(outerChunks);
 		Collections.reverse(chunksToProcess); // So it starts nicely from the middle
 		Collections.reverse(outerChunksToProcess);
-	}
-
-	private void unloadAllChunks() {
-		if(loaderTicket != null){
-			for(ChunkPos chunk : loadedChunks) {
-		        ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-		    }
-		}
 	}
 
 	public void stompAround(){
@@ -241,7 +177,6 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 			falloutTickNumber++;
 
 			if(this.isDead) {
-				unloadAllChunks();
 				this.done = true;
 				if(RadiationConfig.rain > 0 && doFlood) {
                     int scale = getScale();
@@ -363,7 +298,12 @@ public class EntityFalloutRain extends Entity implements IConstantRenderer, IChu
 
 			if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
 				if(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F)))){
-                    BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                    BlockPlanks.EnumType type = null;
+                    try {
+                        type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                    } catch(UnsupportedOperationException ignored) {
+                        //TK bag programming catch
+                    }
                     if(type == null) type = BlockPlanks.EnumType.OAK;
                     world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 				} else {

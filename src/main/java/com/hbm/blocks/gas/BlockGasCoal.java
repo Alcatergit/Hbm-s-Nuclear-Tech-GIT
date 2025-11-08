@@ -29,7 +29,7 @@ public class BlockGasCoal extends BlockGasBase {
 
 	@Override
 	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
-		ContaminationUtil.applyCoal(entity, 5, 1, 5);
+		ContaminationUtil.applyCoal(entity, 5, 0.05F);
 	}
 
 	@Override

@@ -61,7 +61,7 @@ public class TEDoorAnimationPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEDoorAnimationPacket m, MessageContext ctx) {
-			
+            if(m == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				BlockPos pos = new BlockPos(m.x, m.y, m.z);
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);

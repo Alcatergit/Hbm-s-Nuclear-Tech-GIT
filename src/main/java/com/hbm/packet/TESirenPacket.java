@@ -61,6 +61,7 @@ public class TESirenPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TESirenPacket m, MessageContext ctx) {
+            if(m == null) return null;
 			TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
 			if (te instanceof TileEntityMachineSiren) {

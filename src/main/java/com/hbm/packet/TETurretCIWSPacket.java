@@ -51,6 +51,7 @@ public class TETurretCIWSPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TETurretCIWSPacket message, MessageContext ctx) {
+            if(message == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				BlockPos pos = new BlockPos(message.x, message.y, message.z);
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(pos);

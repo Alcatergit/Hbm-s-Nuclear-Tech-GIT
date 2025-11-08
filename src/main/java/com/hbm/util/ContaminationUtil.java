@@ -90,7 +90,7 @@ public class ContaminationUtil {
 		if(!(e instanceof EntityLivingBase entity))
 			return;
 
-		if(e instanceof EntityPlayer && (((EntityPlayer) e).capabilities.isCreativeMode || ((EntityPlayer) e).isSpectator()))
+		if(entity instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 		
 		if(e instanceof EntityPlayer && e.ticksExisted < 200)
@@ -112,7 +112,7 @@ public class ContaminationUtil {
 		if(entity.getEntityData().hasKey("hbmradmultiplier", 99))
 			f *= entity.getEntityData().getFloat("hbmradmultiplier");
 		
-		if(entity instanceof EntityPlayer && (((EntityPlayer) entity).capabilities.isCreativeMode || ((EntityPlayer) entity).isSpectator()))
+		if(entity instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 		
 		if(!(entity instanceof EntityLivingBase))
@@ -427,75 +427,46 @@ public class ContaminationUtil {
 	}
 	
 	/// ASBESTOS ///
-
-	public static void applyAsbestos(Entity e, int i, int dmg) {
-		applyAsbestos(e, i, dmg, 1);
-	}
-
-	public static void applyAsbestos(Entity e, int i, int dmg, int chance) {
+	public static void applyAsbestos(Entity e, float asbestos, float dmg) {
 
 		if(!GeneralConfig.enableAsbestos)
 			return;
 
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return;
 		
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
 			return;
 		
-		if(e instanceof EntityPlayer && e.ticksExisted < 200)
+		if(e instanceof EntityPlayer && e.ticksExisted < 20)
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		
-		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)){
-			if(chance > 1){
-				if(entity.world.rand.nextInt(chance) == 0){
-					ArmorUtil.damageGasMaskFilter(entity, 1);
-				}
-			}
-			else{
-				ArmorUtil.damageGasMaskFilter(entity, dmg);
-			}
-		}
-		else{
-			HbmLivingProps.incrementAsbestos(entity, i);
-		}
-	}
 
-	public static void applyCoal(Entity e, int i, int dmg) {
-		applyCoal(e, i, dmg, 1);
+        if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_FINE)){
+			ArmorUtil.damageGasMaskFilter(entity, dmg);
+		} else{
+			HbmLivingProps.incrementAsbestos(entity, asbestos);
+		}
 	}
 
 	/// COAL ///
-	public static void applyCoal(Entity e, int i, int dmg, int chance) {
+	public static void applyCoal(Entity e, float coal, float dmg) {
 
 		if(!GeneralConfig.enableCoal)
 			return;
 
-		if(!(e instanceof EntityLivingBase))
+		if(!(e instanceof EntityLivingBase entity))
 			return;
 		
 		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
 			return;
 		
-		if(e instanceof EntityPlayer && e.ticksExisted < 200)
+		if(e instanceof EntityPlayer && e.ticksExisted < 20)
 			return;
-		
-		EntityLivingBase entity = (EntityLivingBase)e;
-		
-		if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE)){
-			if(chance > 1){
-				if(entity.world.rand.nextInt(chance) == 0){
-					ArmorUtil.damageGasMaskFilter(entity, 1);
-				}
-			}
-			else{
-				ArmorUtil.damageGasMaskFilter(entity, dmg);
-			}
-		}
-		else{
-			HbmLivingProps.incrementBlackLung(entity, i);
+
+        if(ArmorRegistry.hasProtection(entity, EntityEquipmentSlot.HEAD, HazardClass.PARTICLE_COARSE)){
+			ArmorUtil.damageGasMaskFilter(entity, dmg);
+		} else{
+			HbmLivingProps.incrementBlackLung(entity, coal);
 		}
 	}
 		

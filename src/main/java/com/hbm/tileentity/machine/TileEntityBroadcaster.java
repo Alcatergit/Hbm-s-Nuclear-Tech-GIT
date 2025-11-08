@@ -32,7 +32,7 @@ public class TileEntityBroadcaster extends TileEntity implements ITickable {
 				if(d <= 25) {
 					double t = (25 - d) / 25 * 10;
 					e.attackEntityFrom(ModDamageSource.broadcast, (float) t);
-					if(!(e instanceof EntityPlayer && (((EntityPlayer) e).capabilities.isCreativeMode || ((EntityPlayer) e).isSpectator())))
+					if(!(e instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator())))
 						if(e.getActivePotionEffect(MobEffects.NAUSEA) == null || e.getActivePotionEffect(MobEffects.NAUSEA).getDuration() < 100)
 							e.addPotionEffect(new PotionEffect(MobEffects.NAUSEA, 300, 0));
 				}

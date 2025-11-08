@@ -12,6 +12,7 @@ import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 
@@ -30,7 +31,7 @@ public class Meteorite {
 	public void generate(World world, Random rand, int x, int y, int z) {
 		
 		List<Entity> list = (List<Entity>)world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(x - 7.5, y - 7.5, z - 7.5, x + 7.5, y + 7.5, z + 7.5));
-		
+		y = Library.getGroundHeight(world, x, z);
 		for(Entity e : list) {
 			e.attackEntityFrom(ModDamageSource.meteorite, 1000);
 		}

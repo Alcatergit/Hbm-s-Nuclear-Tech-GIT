@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import com.hbm.lib.Library;
 import net.minecraft.block.*;
 import org.apache.logging.log4j.Level;
 
@@ -105,7 +106,7 @@ public class ExplosionNukeGeneric {
 					d6 /= d9;
 					d7 /= d9;
 					
-					if (!(entity instanceof EntityPlayer && ((EntityPlayer) entity).capabilities.isCreativeMode)) {
+					if (!Library.isCreative(entity)) {
 						double d8 = 0.125 + (random.nextDouble() * 0.25);
 						entity.motionX -= d5 * d8;
 						entity.motionY -= d6 * d8;

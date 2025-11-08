@@ -683,14 +683,7 @@ public class HbmWorldGen implements IWorldGenerator {
         if(GeneralConfig.enableDebugMode)
             MainRegistry.logger.info("[Debug] Successfully spawned meteor dungeon at x=" + x + " y=10 z=" + z);
 
-        int y = world.getHeight(x, z);
-        int columnY = y;
-        for(int y1 = y+1; y1 > 1; y1--){
-            if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z)) && world.getBlockState(new BlockPos(x, y1, z)).getBlock().isOpaqueCube(world.getBlockState(new BlockPos(x, y1, z)))){
-                columnY = y1+1;
-                break;
-            }
-        }
+        int columnY = Library.getGroundHeight(world, x, z);
 
         for(int f = 0; f < 3; f++)
             world.setBlockState(new BlockPos(x, columnY + f, z), ModBlocks.meteor_pillar.getDefaultState().withProperty(BlockRotatedPillar.AXIS, EnumFacing.Axis.Y));
@@ -702,11 +695,11 @@ public class HbmWorldGen implements IWorldGenerator {
             sx = x + (int)(rand.nextGaussian() * 4);
             sz = z + (int)(rand.nextGaussian() * 4);
             if(x == sx && sz == z) continue;
-            y = world.getHeight(sx, sz);
+            columnY = Library.getGroundHeight(world, sx, sz);
 
-            if(world.getBlockState(new BlockPos(sx, y - 1, sz)).isSideSolid(world, new BlockPos(sx, y - 1, sz), EnumFacing.UP)) {
-                world.setBlockState(new BlockPos(sx, y, sz), Blocks.SKULL.getDefaultState().withProperty(BlockSkull.FACING, EnumFacing.UP));
-                TileEntitySkull skull = (TileEntitySkull)world.getTileEntity(new BlockPos(sx, y, sz));
+            if(world.getBlockState(new BlockPos(sx, columnY - 1, sz)).isSideSolid(world, new BlockPos(sx, columnY - 1, sz), EnumFacing.UP)) {
+                world.setBlockState(new BlockPos(sx, columnY, sz), Blocks.SKULL.getDefaultState().withProperty(BlockSkull.FACING, EnumFacing.UP));
+                TileEntitySkull skull = (TileEntitySkull)world.getTileEntity(new BlockPos(sx, columnY, sz));
 
                 if(skull != null) skull.setSkullRotation(rand.nextInt(16));
             }
@@ -721,14 +714,7 @@ public class HbmWorldGen implements IWorldGenerator {
         if(GeneralConfig.enableDebugMode)
             MainRegistry.logger.info("[Debug] Successfully spawned jungle dungeon at x=" + x + " y=10 z=" + z);
 
-        int y = Math.max(world.getHeight(x, z), 33);
-        int columnY = y;
-        for(int y1 = y+1; y1 > 1; y1--){
-            if(!world.getBlockState(new BlockPos(x, y1, z)).getBlock().isReplaceable(world, new BlockPos(x, y1, z)) && world.getBlockState(new BlockPos(x, y1, z)).getBlock().isOpaqueCube(world.getBlockState(new BlockPos(x, y1, z)))){
-                columnY = y1+1;
-                break;
-            }
-        }
+        int columnY = Math.max(Library.getGroundHeight(world, x, z), 33);
 
         for(int f = 0; f < 3; f++)
             world.setBlockState(new BlockPos(x, columnY + f, z), ModBlocks.deco_titanium.getDefaultState());

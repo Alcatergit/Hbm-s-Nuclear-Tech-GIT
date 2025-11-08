@@ -5,7 +5,7 @@ import net.minecraftforge.common.config.Property;
 
 public class WeaponConfig {
 
-	public static int radarRange = 1000;
+	public static int radarRange = 2000;
 	public static int radarBuffer = 30;
 	public static int radarAltitude = 55;
 	public static int ciwsHitrate = 50;
@@ -20,7 +20,7 @@ public class WeaponConfig {
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_MISSILE = "07_missile_machines";
-		Property propRadarRange = config.get(CATEGORY_MISSILE, "7.00_radarRange", 1000);
+		Property propRadarRange = config.get(CATEGORY_MISSILE, "7.00_radarRange", 2000);
 		propRadarRange.setComment("Range of the radar, 50 will result in 100x100 block area covered");
 		radarRange = propRadarRange.getInt();
 		Property propRadarBuffer = config.get(CATEGORY_MISSILE, "7.01_radarBuffer", 30);

@@ -1,15 +1,7 @@
 package com.hbm.entity.logic;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
 
 import org.apache.logging.log4j.Level;
 
@@ -18,20 +10,18 @@ import com.hbm.util.ContaminationUtil;
 import com.hbm.explosion.ExplosionTom;
 import com.hbm.main.MainRegistry;
 
-import net.minecraft.entity.Entity;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
-public class EntityTomBlast extends Entity implements IChunkLoader {
+public class EntityTomBlast extends EntityChunky {
 
 	public int age = 0;
 	public int destructionRange = 0;
 	public ExplosionTom exp;
 	public boolean did = false;
-	private Ticket loaderTicket;
-	
+
 	public EntityTomBlast(World worldIn) {
 		super(worldIn);
 	}
@@ -77,57 +67,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
         
         age++;
 	}
-	
-	@Override
-	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-	}
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -147,8 +86,6 @@ public class EntityTomBlast extends Entity implements IChunkLoader {
 		nbt.setInteger("destructionRange", destructionRange);
 		nbt.setBoolean("did", did);
     	
-		if(exp != null)
-			exp.saveToNbt(nbt, "exp_");
+		if(exp != null) exp.saveToNbt(nbt, "exp_");
 	}
-
 }

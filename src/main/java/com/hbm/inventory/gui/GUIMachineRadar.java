@@ -24,6 +24,7 @@ public class GUIMachineRadar extends GuiInfoContainer {
 	
 	private static ResourceLocation texture = new ResourceLocation(RefStrings.MODID + ":textures/gui/gui_radar.png");
 	private TileEntityMachineRadar diFurnace;
+    private double radarWidth;
 
 	public GUIMachineRadar(InventoryPlayer invPlayer, TileEntityMachineRadar tedf) {
 		super(new ContainerMachineRadar(invPlayer, tedf));
@@ -47,15 +48,22 @@ public class GUIMachineRadar extends GuiInfoContainer {
 
 		if(!diFurnace.nearbyMissiles.isEmpty()) {
 			for(int[] m : diFurnace.nearbyMissiles) {
-				int x = guiLeft + (int)((m[0] - diFurnace.getPos().getX()) / ((double)WeaponConfig.radarRange * 2 + 1) * (200D - 8D)) + 108;
-				int z = guiTop + (int)((m[1] - diFurnace.getPos().getZ()) / ((double)WeaponConfig.radarRange * 2 + 1) * (200D - 8D)) + 117;
+                this.radarWidth = WeaponConfig.radarRange * 2 + 1;
+				int x = guiLeft + 108 + (int)((m[0] - diFurnace.getPos().getX()) / radarWidth * 192D);
+				int z = guiTop + 117 + (int)((m[2] - diFurnace.getPos().getZ()) / radarWidth * 192D);
 				
-				if(mouseX + 4 > x && mouseX - 4 < x && mouseY + 4 > z && mouseY - 4 < z) {
-					double relX = m[0] - diFurnace.getPos().getX();
-					double relY = m[3] - diFurnace.getPos().getY();
-					double relZ = m[1] - diFurnace.getPos().getZ();
+				if(mouseX + 5 > x && mouseX - 4 < x && mouseY + 5 > z && mouseY - 4 < z) {
+					int relX = m[0] - diFurnace.getPos().getX();
+                    int relY = m[1] - diFurnace.getPos().getY();
+                    int relZ = m[2] - diFurnace.getPos().getZ();
 					int distanceToMissile = (int)Math.sqrt(relX*relX+relY*relY+relZ*relZ);
-					String[] text = new String[] { RadarTargetType.values()[m[2]].name, "Dist.: "+distanceToMissile+"m", "Alt.: " + m[3] };
+                    int distanceToMissileH = (int)Math.sqrt(relX*relX+relZ*relZ);
+                    String[] text = new String[] {
+                            RadarTargetType.values()[m[4]].name,
+                            "Vel.: "+m[3]+"m/s",
+                            "Dist.: "+distanceToMissile+"m",
+                            "Dist. H.: "+distanceToMissileH+"m",
+                            "Coords.: " + m[0] +"/"+ m[1] +"/"+ m[2]};
 					
 					this.drawHoveringText(Arrays.asList(text), x, z);
 					
@@ -135,9 +143,9 @@ public class GUIMachineRadar extends GuiInfoContainer {
 		
 		if(!diFurnace.nearbyMissiles.isEmpty()) {
 			for(int[] m : diFurnace.nearbyMissiles) {
-				int x = (int)((m[0] - diFurnace.getPos().getX()) / ((double)WeaponConfig.radarRange * 2 + 1) * (200D - 8D)) - 4;
-				int z = (int)((m[1] - diFurnace.getPos().getZ()) / ((double)WeaponConfig.radarRange * 2 + 1) * (200D - 8D)) - 4;
-				int t = m[2];
+				int x = (int)((m[0] - diFurnace.getPos().getX()) / radarWidth * 192D) - 4;
+				int z = (int)((m[2] - diFurnace.getPos().getZ()) / radarWidth * 192D) - 4;
+				int t = m[4];
 
 				drawTexturedModalRect(guiLeft + 108 + x, guiTop + 117 + z, 216, 8 * t, 8, 8);
 			}

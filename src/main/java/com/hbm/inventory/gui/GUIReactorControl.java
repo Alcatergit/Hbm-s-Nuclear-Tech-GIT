@@ -132,7 +132,7 @@ public class GUIReactorControl extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 80, guiTop + 65, 0, 170, i, 4);
 		}
 		
-		if(control.steam > 0) {
+		if(control.steam > 0 && control.maxSteam > 0) {
 			int i = (control.steam * 88 / control.maxSteam);
 			
 			i = (int) Math.min(i, 160);
@@ -140,7 +140,7 @@ public class GUIReactorControl extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 80, guiTop + 53, 0, 174 + 4 * control.compression, i, 4);
 		}
 		
-		if(control.cool > 0) {
+		if(control.cool > 0 && control.maxCool > 0) {
 			int i = (control.cool * 88 / control.maxCool);
 			
 			i = (int) Math.min(i, 160);
@@ -148,7 +148,7 @@ public class GUIReactorControl extends GuiInfoContainer {
 			drawTexturedModalRect(guiLeft + 80, guiTop + 47, 0, 194, i, 4);
 		}
 		
-		if(control.water > 0) {
+		if(control.water > 0 && control.maxWater > 0) {
 			int i = (control.water * 88 / control.maxWater);
 			
 			i = (int) Math.min(i, 160);

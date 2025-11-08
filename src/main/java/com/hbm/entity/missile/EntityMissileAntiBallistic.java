@@ -22,85 +22,57 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
-	
-	public static final double particleSpeed = 1.75D;
 
-	private static final double steps = 5;
+    private static final int explosionRange = 25;
+    private static final int dmg = 50;
 
-	public EntityMissileAntiBallistic(World p_i1582_1_) {
-		super(p_i1582_1_);
-		this.motionY = 0.5;
+    public Entity tracking;
+    public static final int activationTimer = 40;
+    public static final double baseSpeed = 1.5D;
+    private static final int maxSpeed = 10;
+
+	public EntityMissileAntiBallistic(World world) {
+		super(world);
 		this.setSize(1F, 8F);
-		this.velocity = 0.0;
 	}
-	
-	@Override
-    public void onUpdate() {
-		double oldPosY = this.posY;
-		if(this.ticksExisted < 10){
-			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
-			return;
-		} else if(this.ticksExisted < 60){
-			this.motionY = 0.5;
-			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
 
-		if(this.world.isRemote) {
-				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exHydrogen", new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
-			}
-			return;
-		}
+    @Override
+    public void doMovement(){
+        if(this.velocity < maxSpeed) this.velocity += 0.1;
+        if (this.ticksExisted < activationTimer) {
+            this.motionY = baseSpeed;
+        } else {
+            Entity prevTracking = this.tracking;
+            if (this.tracking == null || this.tracking.isDead) this.targetMissile();
+            if (world.isRemote && prevTracking == null && this.tracking != null) {
+                ExplosionLarge.spawnShock(world, posX, posY, posZ, 24, 3F);
+            }
+            if (this.ticksExisted > 600 || this.posY > 5000) {
+                this.setDead();
+            } else if (this.tracking != null && !this.tracking.isDead) {
+                this.aimAtTarget();
+            }
+        }
+        this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
 
-		this.getDataManager().set(HEALTH, Integer.valueOf(this.health));
-		
-		if(this.velocity < 20)
-			this.velocity += 0.05;
-
-		for(int i = 0; i < steps; i++) {
-			double[] targetVec = targetMissile();
-			if(targetVec != null){
-				this.motionX = targetVec[0] * velocity;
-				this.motionY = targetVec[1] * velocity;
-				this.motionZ = targetVec[2] * velocity;
-			}
-			this.setLocationAndAngles(posX + this.motionX * velocity, posY + this.motionY * velocity, posZ + this.motionZ * velocity, (float)(Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI), (float)(Math.atan2(this.motionY, MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ)) * 180.0D / Math.PI) - 90);
-		
-			if(this.world.isRemote) {
-				MainRegistry.proxy.spawnParticle(posX, posY, posZ, "exDark", new float[]{(float)(this.motionX * -particleSpeed), (float)(this.motionY * -particleSpeed), (float)(this.motionZ * -particleSpeed)});
-			}
-			explodeIfNearTarget();
-
-		}
-		Block b = this.world.getBlockState(new BlockPos((int) this.posX, (int) this.posY, (int) this.posZ)).getBlock();
-		if((b != Blocks.AIR && b != Blocks.WATER && b != Blocks.FLOWING_WATER) || posY < 1 || posY > 7000) {
-			if(posY < 1){
-				this.setLocationAndAngles((int)this.posX, world.getHeight((int)this.posX, (int)this.posZ), (int)this.posZ, 0, 0);
-			}
-			if (!this.world.isRemote) {
-				onImpact();
-			}
-			this.setDead();
-			return;
-		}
-
-		PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
-		if((int) (posX / 16) != this.chunkX || (int) (posZ / 16) != this.chunkZ){
-			this.chunkX = (int) (posX / 16);
-			this.chunkZ = (int) (posZ / 16);
-			loadNeighboringChunks(this.chunkX, this.chunkZ);
-		}
-		this.prevPosY = oldPosY;
+        float f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionZ * this.motionZ);
+        this.rotationYaw = (float) (Math.atan2(this.motionX, this.motionZ) * 180.0D / Math.PI);
+        for(this.rotationPitch = (float) (Math.atan2(this.motionY, f2) * 180.0D / Math.PI) - 90; this.rotationPitch - this.prevRotationPitch < -180.0F; this.prevRotationPitch -= 360.0F);
+        while(this.rotationPitch - this.prevRotationPitch >= 180.0F) this.prevRotationPitch += 360.0F;
+        while(this.rotationYaw - this.prevRotationYaw < -180.0F) this.prevRotationYaw -= 360.0F;
+        while(this.rotationYaw - this.prevRotationYaw >= 180.0F) this.prevRotationYaw += 360.0F;
     }
 
-    private double[] targetMissile() {
-    	//Targeting missiles - returns normalized vector pointing towards closest rocket
+    private void targetMissile() {
+    	//Targeting missiles
 		List<Entity> listOfMissiles = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - WeaponConfig.radarRange, 0, posZ - WeaponConfig.radarRange, posX + WeaponConfig.radarRange, 5000, posZ + WeaponConfig.radarRange));
 		
 		Entity target = null;
-		double closest = WeaponConfig.radarRange*2;
+		double closest = Double.MAX_VALUE;
 		
 		for(Entity e : listOfMissiles) {
-			if(!(e instanceof EntityMissileAntiBallistic) && (e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom)) {
-				double dis = Math.sqrt(Math.pow(e.posX - posX, 2) + Math.pow(e.posY - posY, 2) + Math.pow(e.posZ - posZ, 2));
+			if(!(e instanceof EntityMissileAntiBallistic) && (e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom || e instanceof EntityMIRV)) {
+				double dis = Math.pow(e.posX - posX, 2) + Math.pow(e.posY - posY, 2) + Math.pow(e.posZ - posZ, 2);
 				
 				if(dis < closest) {
 					closest = dis;
@@ -108,31 +80,25 @@ public class EntityMissileAntiBallistic extends EntityMissileBaseAdvanced {
 				}
 			}
 		}
-		
-		if(target != null) {
-			Vec3 vec = Vec3.createVectorHelper(target.posX - posX, target.posY - posY, target.posZ - posZ);
-			vec = vec.normalize();
-			
-			return new double[]{vec.xCoord/steps, vec.yCoord/steps, vec.zCoord/steps};
-		}
-		return null;
+        this.tracking = target;
     }
 
-    private void explodeIfNearTarget(){
-    	List<Entity> listOfMissilesInExplosionRange = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(posX - 7.5, posY - 7.5, posZ - 7.5, posX + 7.5, posY + 7.5, posZ + 7.5));
+    /** Predictive targeting system */
+    protected void aimAtTarget() {
 
-		boolean hasHits = false;
-		for(Entity e : listOfMissilesInExplosionRange) {
-			if(!(e instanceof EntityMissileAntiBallistic) && (e instanceof EntityMissileBaseAdvanced || e instanceof EntityMissileCustom)) {
-				e.attackEntityFrom(ModDamageSource.blast, 40);
-				hasHits = true;
-			}
-		}
-		if(hasHits){
-			ExplosionLarge.explode(world, posX, posY, posZ, 15F, true, false, true);
-			this.setDead();
-			return;
-		}
+        Vec3 delta = Vec3.createVectorHelper(tracking.posX - posX, tracking.posY - posY, tracking.posZ - posZ);
+        double intercept = delta.length() / (baseSpeed * this.velocity);
+        Vec3 predicted = Vec3.createVectorHelper(tracking.posX + (tracking.posX - tracking.lastTickPosX) * intercept, tracking.posY + (tracking.posY - tracking.lastTickPosY) * intercept, tracking.posZ + (tracking.posZ - tracking.lastTickPosZ) * intercept);
+        Vec3 motion = Vec3.createVectorHelper(predicted.xCoord - posX, predicted.yCoord - posY, predicted.zCoord - posZ).normalize();
+
+        if(delta.length() < explosionRange && activationTimer < ticksExisted) {
+            this.setDead();
+            ExplosionLarge.explodeArea(world, posX, posY, posZ, explosionRange, dmg, true, false, false);
+        }
+
+        this.motionX = motion.xCoord * baseSpeed;
+        this.motionY = motion.yCoord * baseSpeed;
+        this.motionZ = motion.zCoord * baseSpeed;
     }
 
 	@Override

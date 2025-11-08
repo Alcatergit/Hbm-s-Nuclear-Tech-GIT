@@ -89,8 +89,6 @@ public class PacketDispatcher {
 		wrapper.registerMessage(ItemBobmazonPacket.Handler.class, ItemBobmazonPacket.class, i++, Side.SERVER);
 		//Update packet for force field
 		wrapper.registerMessage(TEFFPacket.Handler.class, TEFFPacket.class, i++, Side.CLIENT);
-		//Siren packet for looped sounds Drillgon200: Wrong descriptions, but eh, whatever.
-		wrapper.registerMessage(TERadarPacket.Handler.class, TERadarPacket.class, i++, Side.CLIENT);
 		//Packet for causing pipes to rebuild their connections
 		wrapper.registerMessage(PipeUpdatePacket.Handler.class, PipeUpdatePacket.class, i++, Side.CLIENT);
 		//Packet for updating entities being zapped

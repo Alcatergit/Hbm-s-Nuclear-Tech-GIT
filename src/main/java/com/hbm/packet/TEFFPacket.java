@@ -75,15 +75,15 @@ public class TEFFPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEFFPacket m, MessageContext ctx) {
+            if(m == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 
 				try {
 					
-					if(te instanceof TileEntityForceField) {
-						TileEntityForceField ff = (TileEntityForceField)te;
+					if(te instanceof TileEntityForceField ff) {
 
-						ff.radius = m.rad;
+                        ff.radius = m.rad;
 						ff.health = m.health;
 						ff.maxHealth = m.maxHealth;
 						ff.power = m.power;

@@ -11,6 +11,7 @@ import com.hbm.capability.HbmLivingProps.ContaminationEffect;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.RadiationConfig;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
@@ -120,7 +121,7 @@ public class EntityEffectHandler {
 				ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, RadiationConfig.cont * 0.0005F);
 			}
 			
-			if(entity instanceof EntityPlayer && ((EntityPlayer)entity).capabilities.isCreativeMode)
+			if(Library.isCreative(entity))
 				return;
 			
 			Random rand = new Random(entity.getEntityId());

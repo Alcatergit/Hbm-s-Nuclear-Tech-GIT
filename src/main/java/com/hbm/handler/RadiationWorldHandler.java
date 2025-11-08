@@ -102,7 +102,12 @@ public class RadiationWorldHandler {
 										}
 
 									} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-                                        BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                                        BlockPlanks.EnumType type = null;
+                                        try {
+                                            type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                                        } catch(UnsupportedOperationException ignored) {
+                                            //TK bag programming catch
+                                        }
                                         if(type == null) type = BlockPlanks.EnumType.OAK;
                                         world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
                                     }
@@ -197,7 +202,12 @@ public class RadiationWorldHandler {
 							}
 
 						} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-                            BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(c));
+                            BlockPlanks.EnumType type = null;
+                            try {
+                                type = bLeaf.getWoodType(bLeaf.getMetaFromState(c));
+                            } catch(UnsupportedOperationException ignored) {
+                                //TK bag programming catch
+                            }
                             if(type == null) type = BlockPlanks.EnumType.OAK;
                             world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 						}

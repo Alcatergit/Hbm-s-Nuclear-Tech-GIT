@@ -68,9 +68,9 @@ public class HazardTypeRadiation extends HazardTypeBase {
 	}
 
 	public static String getSuffix(float radiation){
-		if(radiation < 1000000){
+		if(radiation < 1_000_000){
 			return "";
-		} else if(radiation < 1000000000){
+		} else if(radiation < 1_000_000_000){
 			return I18nUtil.resolveKey("desc.mil");
 		} else{
 			return I18nUtil.resolveKey("desc.bil");

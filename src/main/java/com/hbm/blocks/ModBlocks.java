@@ -98,6 +98,7 @@ import com.hbm.blocks.turret.TurretRocket;
 import com.hbm.blocks.turret.TurretSpitfire;
 import com.hbm.blocks.turret.TurretTau;
 import com.hbm.blocks.turret.TurretTauon;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.main.MainRegistry;
@@ -1560,7 +1561,7 @@ public class ModBlocks {
     }
 
 	public static void preInit(){
-        registerVanillaLeafOverride();
+        if(CompatibilityConfig.overWriteVanillaLeafForBugFix) registerVanillaLeafOverride();
 		for(Block block : ALL_BLOCKS){
 			ForgeRegistries.BLOCKS.register(block);
 		}

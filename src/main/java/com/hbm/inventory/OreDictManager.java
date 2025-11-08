@@ -9,6 +9,7 @@ import static com.hbm.items.ModItems.*;
 import static com.hbm.blocks.ModBlocks.*;
 import static com.hbm.inventory.OreDictManager.DictFrame.*;
 import static com.hbm.inventory.OreNames.*;
+import static com.hbm.items.ModItems.billet_australium;
 
 
 import com.hbm.config.GeneralConfig;
@@ -447,7 +448,7 @@ public class OreDictManager {
 		NEO 	.rad(HazardRegistry.radspice).hot(15).toxic(1000).blinding(50F).hydro(4F).cont(HazardRegistry.radspice).nugget(nugget_radspice).ingot(ingot_radspice).dust(powder_radspice).dustSmall(powder_radspice_tiny).block(block_radspice);
 		MUD 	.rad(HazardRegistry.mud).toxic(200)																		.ingot(ingot_mud);
 
-		AUSTRALIUM													.nugget(nugget_australium)								.ingot(ingot_australium)	.dust(powder_australium)								.block(block_australium)																				.ore(ore_australium);
+		AUSTRALIUM													.nugget(nugget_australium)	.billet(billet_australium)	.ingot(ingot_australium)	.dust(powder_australium)								.block(block_australium)																				.ore(ore_australium);
 		REIIUM														.nugget(nugget_reiium)									.ingot(ingot_reiium)		.dust(powder_reiium)									.block(block_reiium)																					.ore(ore_reiium);
 		WEIDANIUM													.nugget(nugget_weidanium)								.ingot(ingot_weidanium)		.dust(powder_weidanium)									.block(block_weidanium)																					.ore(ore_weidanium);
 		UNOBTAINIUM													.nugget(nugget_unobtainium)								.ingot(ingot_unobtainium)	.dust(powder_unobtainium)								.block(block_unobtainium)																				.ore(ore_unobtainium);

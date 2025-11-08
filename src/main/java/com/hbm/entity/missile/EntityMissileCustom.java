@@ -1,16 +1,13 @@
 package com.hbm.entity.missile;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.bomb.BlockTaint;
+import com.hbm.entity.logic.EntityChunky;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
-import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.explosion.ExplosionChaos;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.handler.MissileStruct;
@@ -24,7 +21,6 @@ import com.hbm.packet.LoopedEntitySoundPacket;
 import com.hbm.render.amlfrom1710.Vec3;
 
 import api.hbm.entity.IRadarDetectable;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
@@ -35,24 +31,18 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
-import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
+
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarDetectable, IConstantRenderer {
+public class EntityMissileCustom extends EntityChunky implements IRadarDetectable, IConstantRenderer {
 
 	public static final DataParameter<Integer> HEALTH = EntityDataManager.createKey(EntityMissileCustom.class, DataSerializers.VARINT);
 	public static final DataParameter<MissileStruct> TEMPLATE = EntityDataManager.createKey(EntityMissileCustom.class, MissileStruct.SERIALIZER);
 	public static final double particleSpeed = 1.75D;
-
-	int chunkX = 0;
-	int chunkZ = 0;
 
 	int startX;
 	int startZ;
@@ -63,7 +53,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	double accelXZ;
 	float fuel;
 	float consumption;
-    private Ticket loaderTicket;
     public int health = 50;
     MissileStruct template;
 	
@@ -118,7 +107,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			return false;
 		} else {
 			if (!this.isDead && !this.world.isRemote) {
-				health -= amount;
+				health -= (int) amount;
 
 				if (this.health <= 0) {
 					this.setDead();
@@ -134,82 +123,10 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
         ExplosionLarge.explode(world, posX, posY, posZ, 5, true, false, true);
         ExplosionLarge.spawnShrapnelShower(world, posX, posY, posZ, motionX, motionY, motionZ, 15, 0.075);
     }
-	
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-	
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null) {
-            for(ChunkPos chunk : loadedChunks) {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks) {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-	}
-
-	public void clearLoadedChunks() {
-		if(!world.isRemote && loaderTicket != null && loadedChunks != null) {
-			for(ChunkPos chunk : loadedChunks) {
-				ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-			}
-		}
-	}
-
-	private ChunkPos mainChunk;
-	public void loadMainChunk() {
-		if(!world.isRemote && loaderTicket != null){
-			ChunkPos currentChunk = new ChunkPos((int) Math.floor(this.posX / 16D), (int) Math.floor(this.posZ / 16D));
-			if(mainChunk == null){
-				ForgeChunkManager.forceChunk(loaderTicket, currentChunk);
-				this.mainChunk = currentChunk;
-			} else if(!mainChunk.equals(currentChunk)){
-				ForgeChunkManager.forceChunk(loaderTicket, currentChunk);
-				ForgeChunkManager.unforceChunk(loaderTicket, this.mainChunk);
-				this.mainChunk = currentChunk;
-			}
-		}
-	}
-	public void unloadMainChunk() {
-		if(!world.isRemote && loaderTicket != null && this.mainChunk != null) {
-			ForgeChunkManager.unforceChunk(loaderTicket, this.mainChunk);
-		}
-	}
 
 	@Override
 	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
+		super.entityInit();
         this.getDataManager().register(HEALTH, this.health);
         this.getDataManager().register(TEMPLATE, template);
 	}
@@ -273,8 +190,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
-		//load own chunk
-		loadMainChunk();
 		if(this.ticksExisted < 10){
 			ExplosionLarge.spawnParticlesRadial(world, posX, posY, posZ, 15);
 			return;
@@ -287,7 +202,7 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		this.prevPosY = oldPosY;
 		
 		
-		if(fuel > 0 || world.isRemote) {
+		if(fuel > 0) {
 			
 			fuel -= consumption;
 	
@@ -324,21 +239,13 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 			if(posY < 1){
 				this.setLocationAndAngles((int)this.posX, world.getHeight((int)this.posX, (int)this.posZ), (int)this.posZ, 0, 0);
 			}
-			if (!this.world.isRemote) {
-				if(this.ticksExisted > 100)
-					onImpact();
+			if (!this.world.isRemote && this.ticksExisted > 100){
+                onImpact();
 			}
-			this.clearLoadedChunks();
-			unloadMainChunk();
 			this.setDead();
 			return;
 		}
 		PacketDispatcher.wrapper.sendToAll(new LoopedEntitySoundPacket(this.getEntityId()));
-		if((int) (posX / 16) != chunkX || (int) (posZ / 16) != chunkZ){
-			chunkX = (int) (posX / 16);
-			chunkZ = (int) (posZ / 16);
-			loadNeighboringChunks(chunkX, chunkZ);
-		}
 
 		if(world.isRemote){
 			template = this.getDataManager().get(TEMPLATE);
@@ -347,23 +254,17 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 		WarheadType wType = (WarheadType)template.warhead.attributes[0];
 
-		if(wType == WarheadType.MIRV){
+		if(!world.isRemote && wType == WarheadType.MIRV){
 			mirvSplit();   		
 		}
 	}
 	  public void mirvSplit(){
-    	if(motionY <= 0) {
-			
-			if(world.isRemote)
-				return;    
-			               
-			this.setDead();
-			           
+    	if(motionY < -1) {
 			double modx = 0;
 			double modz = 0;
 			for(int i = 0; i < 7; i++) {
 				EntityMIRV nuke3 = new EntityMIRV(this.world);
-				nuke3.setPosition(posX,posY,posZ);
+				nuke3.setPosition(posX, posY, posZ);
 				if(i==0){ modx = 0; modz = 0;}
 				if(i==1){ modx = 0.45; modz = 0;}
 				if(i==2){ modx = -0.45; modz = 0;}
@@ -376,7 +277,8 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 				nuke3.motionY = this.motionY;
 				nuke3.motionZ = this.motionZ+modz;
 				this.world.spawnEntity(nuke3);
-			}	
+			}
+            this.setDead();
 		}
 	}
 
@@ -417,7 +319,6 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 		
 		WarheadType type = (WarheadType)template.warhead.attributes[0];
 		float strength = (Float)template.warhead.attributes[1];
-		int maxLifetime = (int)Math.max(100, 5 * 48 * (Math.pow(strength, 3)/Math.pow(48, 3)));
 		switch(type) {
 		case HE:
 			ExplosionLarge.explode(world, posX, posY, posZ, strength, true, false, true);
@@ -511,5 +412,4 @@ public class EntityMissileCustom extends Entity implements IChunkLoader, IRadarD
 
 		return RadarTargetType.PLAYER;
 	}
-
 }

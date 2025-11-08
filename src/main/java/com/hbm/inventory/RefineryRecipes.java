@@ -25,8 +25,8 @@ public class RefineryRecipes {
 			new ItemStack(ModItems.sulfur, 1)));
 		
 		refineryRecipesMap.put(ModForgeFluids.HOTCRACKOIL, new Pair(new FluidStack[]{
-			new FluidStack(ModForgeFluids.NAPHTHA, 40),
-			new FluidStack(ModForgeFluids.LIGHTOIL, 30),
+			new FluidStack(ModForgeFluids.NAPHTHA_CRACK, 40),
+			new FluidStack(ModForgeFluids.LIGHTOIL_CRACK, 30),
 			new FluidStack(ModForgeFluids.AROMATICS, 15),
 			new FluidStack(ModForgeFluids.UNSATURATEDS, 15)	},
 			DictFrame.fromOne(ModItems.oil_tar, EnumTarType.CRACK)));

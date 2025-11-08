@@ -57,7 +57,7 @@ public class ContainerLiquefactor extends Container {
                 return ItemStack.EMPTY;
             }
 
-            if(var5.getCount() == 0) {
+            if(var5.isEmpty()) {
                 var4.putStack(ItemStack.EMPTY);
             } else {
                 var4.onSlotChanged();

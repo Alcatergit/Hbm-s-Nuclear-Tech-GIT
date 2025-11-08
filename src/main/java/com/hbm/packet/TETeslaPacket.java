@@ -61,6 +61,7 @@ public class TETeslaPacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TETeslaPacket m, MessageContext ctx) {
+            if(m == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(m.pos);
 				if(te instanceof TileEntityTesla){

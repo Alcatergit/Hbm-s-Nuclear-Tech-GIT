@@ -11,6 +11,7 @@ import com.hbm.entity.effect.EntityFalloutRain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.hbm.entity.logic.EntityChunky;
 import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.main.MainRegistry;
 import com.hbm.blocks.generic.WasteLog;
@@ -33,14 +34,12 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
 
-public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
+public class EntityFalloutUnderGround extends EntityChunky {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutUnderGround.class, DataSerializers.VARINT);
 	public boolean done;
 	private int maxSamples;
 	private int currentSample;
 	private int radius;
-
-	private Ticket loaderTicket;
 
 	private double s0;
 	private double s1;
@@ -79,62 +78,8 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 
 	@Override
 	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-		this.dataManager.register(SCALE, Integer.valueOf(0));
-	}
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-	}
-
-	private void unloadAllChunks() {
-		if(loaderTicket != null){
-			for(ChunkPos chunk : loadedChunks) {
-		        ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-		    }
-		}
+		super.entityInit();
+		this.dataManager.register(SCALE, 0);
 	}
 
 	int age = 0;
@@ -144,7 +89,6 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 		if(!world.isRemote) {
 			if(!CompatibilityConfig.isWarDim(world)){
 				this.done=true;
-				unloadAllChunks();
 				this.setDead();
 				return;
 			}
@@ -182,7 +126,7 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 					falloutRain.setScale(falloutRainRadius1, falloutRainRadius2);
 					this.world.spawnEntity(falloutRain);
 				}
-				unloadAllChunks();
+
 				this.setDead();
 			}
 		}
@@ -226,7 +170,12 @@ public class EntityFalloutUnderGround extends Entity implements IChunkLoader {
 			
 			} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
 				if(l > s1){
-                    BlockPlanks.EnumType type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                    BlockPlanks.EnumType type = null;
+                    try {
+                        type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
+                    } catch(UnsupportedOperationException ignored) {
+                        //TK bag programming catch
+                    }
                     if(type == null) type = BlockPlanks.EnumType.OAK;
                     world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 				}else{

@@ -3,21 +3,14 @@ package com.hbm.entity.logic;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map.Entry;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.logic.IChunkLoader;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.util.ContaminationUtil;
 
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import net.minecraft.util.math.ChunkPos;
 
 import org.apache.logging.log4j.Level;
 
@@ -38,7 +31,7 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 
 @Spaghetti("why???")
-public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
+public class EntityNukeExplosionMK3 extends EntityChunky {
 	
 	public int age = 0;
 	public int destructionRange = 0;
@@ -56,7 +49,6 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 	public boolean waste = true;
 	//Extended Type
 	public int extType = 0;
-	private Ticket loaderTicket;
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -132,8 +124,8 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
 		
 	}
 
-	public EntityNukeExplosionMK3(World p_i1582_1_) {
-		super(p_i1582_1_);
+	public EntityNukeExplosionMK3(World world) {
+		super(world);
 	}
 
     @Override
@@ -180,18 +172,12 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
         		flag3 = vap.update();
         		
         		if(flag3) {
-        			this.setDead();
+                    this.setDead();
         		}
         	} else {
-        		if(extType == 0)
-        			if(expl.update())
-        				this.setDead();
-        		if(extType == 1)
-        			if(sol.update())
-        				this.setDead();
-        		if(extType == 2)
-        			if(dry.update())
-        				this.setDead();
+        		if(extType == 0 && expl.update()) this.setDead();
+        		if(extType == 1 && sol.update()) this.setDead();
+        		if(extType == 2 && dry.update()) this.setDead();
         	}
         }
         	
@@ -219,57 +205,6 @@ public class EntityNukeExplosionMK3 extends Entity implements IChunkLoader {
         }
         age++;
     }
-
-	@Override
-	protected void entityInit() {
-		init(ForgeChunkManager.requestTicket(MainRegistry.instance, world, Type.ENTITY));
-	}
-
-	@Override
-	public void init(Ticket ticket) {
-		if(!world.isRemote) {
-			
-            if(ticket != null) {
-            	
-                if(loaderTicket == null) {
-                	
-                	loaderTicket = ticket;
-                	loaderTicket.bindEntity(this);
-                	loaderTicket.getModData();
-                }
-
-                ForgeChunkManager.forceChunk(loaderTicket, new ChunkPos(chunkCoordX, chunkCoordZ));
-            }
-        }
-	}
-
-	List<ChunkPos> loadedChunks = new ArrayList<ChunkPos>();
-	@Override
-	public void loadNeighboringChunks(int newChunkX, int newChunkZ) {
-		if(!world.isRemote && loaderTicket != null)
-        {
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.unforceChunk(loaderTicket, chunk);
-            }
-
-            loadedChunks.clear();
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ - 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX + 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ + 1));
-            loadedChunks.add(new ChunkPos(newChunkX - 1, newChunkZ));
-            loadedChunks.add(new ChunkPos(newChunkX, newChunkZ - 1));
-
-            for(ChunkPos chunk : loadedChunks)
-            {
-                ForgeChunkManager.forceChunk(loaderTicket, chunk);
-            }
-        }
-	}
 
 	public static HashMap<ATEntry, Long> at = new HashMap();
 

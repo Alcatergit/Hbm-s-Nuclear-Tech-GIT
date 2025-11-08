@@ -49,12 +49,9 @@ public class ContainerMachineCoker extends Container {
                 return ItemStack.EMPTY;
             }
 
-            if (var5.isEmpty())
-            {
+            if (var5.isEmpty()) {
                 var4.putStack(ItemStack.EMPTY);
-            }
-            else
-            {
+            } else {
                 var4.onSlotChanged();
             }
         }

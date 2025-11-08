@@ -77,7 +77,7 @@ public class TEPressPacket implements IMessage {
 		
 		@Override
 		public IMessage onMessage(TEPressPacket m, MessageContext ctx) {
-			
+            if(m == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				TileEntity te = Minecraft.getMinecraft().world.getTileEntity(new BlockPos(m.x, m.y, m.z));
 

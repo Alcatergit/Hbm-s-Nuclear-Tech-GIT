@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import net.minecraft.entity.EntityLivingBase;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.main.MainRegistry;
@@ -112,7 +113,7 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 		if(this == ModItems.attachment_mask_mono) {
 			return new ArrayList<HazardClass>(Arrays.asList(new HazardClass[] {HazardClass.GAS_CHLORINE, HazardClass.GAS_CORROSIVE, HazardClass.NERVE_AGENT, HazardClass.BACTERIA}));
 		} else {
-			return new ArrayList<HazardClass>(Arrays.asList(new HazardClass[] {HazardClass.GAS_CORROSIVE, HazardClass.NERVE_AGENT}));
+			return new ArrayList<HazardClass>(Arrays.asList(new HazardClass[] {HazardClass.GAS_CORROSIVE, HazardClass.GAS_MONOXIDE}));
 		}
 	}
 
@@ -126,10 +127,10 @@ public class ItemModGasmask extends ItemArmorMod implements IGasMask {
 		ArmorUtil.installGasMaskFilter(stack, filter);
 	}
 
-	@Override
-	public void damageFilter(ItemStack stack, int damage) {
-		ArmorUtil.damageGasMaskFilter(stack, damage);
-	}
+    @Override
+    public void damageFilter(EntityLivingBase entity, ItemStack stack, int damage) {
+        ArmorUtil.damageGasMaskFilter(entity, stack, damage);
+    }
 
 	@Override
 	public boolean isFilterApplicable(ItemStack stack, ItemStack filter) {

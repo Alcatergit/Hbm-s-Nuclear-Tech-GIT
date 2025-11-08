@@ -429,7 +429,7 @@ public class LaunchPad extends BlockContainer implements IBomb {
 					missile.posY = y + 1.5F;
 					missile.posZ = z + 0.5F;
 
-					if (entity.inventory.getStackInSlot(1) != null)
+					if (!entity.inventory.getStackInSlot(1).isEmpty())
 						missile.setPayload(entity.inventory.getStackInSlot(1));
 
 					entity.inventory.setStackInSlot(1, ItemStack.EMPTY);

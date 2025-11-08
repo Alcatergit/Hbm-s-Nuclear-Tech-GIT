@@ -60,8 +60,6 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		if(pos.getY() < WeaponConfig.radarAltitude)
 			return;
 		
-		
-		
 		if(!world.isRemote) {
 
 			this.updateConnectionsExcept(world, pos, ForgeDirection.UP);
@@ -126,6 +124,10 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		boolean zAxisApproaching = (pos.getZ() < e.posZ && e.motionZ < 0) || (pos.getZ() > e.posZ && e.motionZ > 0);
 		return xAxisApproaching && zAxisApproaching;
 	}
+
+    public int getV(Entity e){
+        return (int) (Math.sqrt(e.motionX * e.motionX + e.motionY * e.motionY + e.motionZ * e.motionZ) * 20D);
+    }
 	
 	private void allocateMissiles() {
 		
@@ -148,12 +150,12 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 			}
 
 			if(e instanceof EntityPlayer && this.scanPlayers) {
-				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, RadarTargetType.PLAYER.ordinal(), (int)e.posY });
+				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posY, (int)e.posZ, getV(e), RadarTargetType.PLAYER.ordinal() });
 				entList.add(e);
 			}
 			
 			if(e instanceof IRadarDetectable && this.scanMissiles) {
-				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posZ, ((IRadarDetectable)e).getTargetType().ordinal(), (int)e.posY });
+				nearbyMissiles.add(new int[] { (int)e.posX, (int)e.posY, (int)e.posZ, getV(e), ((IRadarDetectable)e).getTargetType().ordinal() });
 				
 				if(this.smartMode){
 					if(e.motionY <= 0 && isEntityApproaching(e)){
@@ -173,20 +175,19 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 			
 			/// PROXIMITY ///
 			if(redMode) {
-				
+
 				double maxRange = WeaponConfig.radarRange * Math.sqrt(2D);
-				
+
 				int power = 0;
-				
-				for(int i = 0; i < entList.size(); i++) {
-					
-					Entity e = entList.get(i);
-					double dist = Math.sqrt(Math.pow(e.posX - pos.getX(), 2) + Math.pow(e.posZ - pos.getZ(), 2));
-					int p = 15 - (int)Math.floor(dist / maxRange * 15);
-					
-					if(p > power)
-						power = p;
-				}
+
+                for (Entity e : entList) {
+
+                    double dist = Math.sqrt(Math.pow(e.posX - pos.getX(), 2) + Math.pow(e.posZ - pos.getZ(), 2));
+                    int p = 15 - (int) Math.floor(dist / maxRange * 15);
+
+                    if (p > power)
+                        power = p;
+                }
 				
 				return power;
 				
@@ -194,13 +195,13 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 			} else {
 				
 				int power = 0;
-				
-				for(int i = 0; i < nearbyMissiles.size(); i++) {
-					
-					if(nearbyMissiles.get(i)[3] + 1 > power) {
-						power = nearbyMissiles.get(i)[3] + 1;
-					}
-				}
+
+                for (int[] nearbyMissile : nearbyMissiles) {
+
+                    if (nearbyMissile[5] + 1 > power) {
+                        power = nearbyMissile[5] + 1;
+                    }
+                }
 				
 				return power;
 			}
@@ -222,9 +223,10 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 
 		for(int i = 0; i < this.nearbyMissiles.size(); i++) {
 			data.setInteger("x" + i, this.nearbyMissiles.get(i)[0]);
-			data.setInteger("z" + i, this.nearbyMissiles.get(i)[1]);
-			data.setInteger("type" + i, this.nearbyMissiles.get(i)[2]);
-			data.setInteger("y" + i, this.nearbyMissiles.get(i)[3]);
+			data.setInteger("y" + i, this.nearbyMissiles.get(i)[1]);
+            data.setInteger("z" + i, this.nearbyMissiles.get(i)[2]);
+            data.setInteger("v" + i, this.nearbyMissiles.get(i)[3]);
+            data.setInteger("type" + i, this.nearbyMissiles.get(i)[4]);
 		}
 
 		this.networkPack(data, 15);
@@ -245,11 +247,12 @@ public class TileEntityMachineRadar extends TileEntityTickingBase implements ITi
 		for(int i = 0; i < count; i++) {
 
 			int x = data.getInteger("x" + i);
-			int z = data.getInteger("z" + i);
-			int type = data.getInteger("type" + i);
-			int y = data.getInteger("y" + i);
+            int y = data.getInteger("y" + i);
+            int z = data.getInteger("z" + i);
+            int v = data.getInteger("v" + i);
+            int type = data.getInteger("type" + i);
 
-			this.nearbyMissiles.add(new int[] {x, z, type, y});
+			this.nearbyMissiles.add(new int[] {x, y, z, v, type});
 		}
 	}
 

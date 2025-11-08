@@ -27,7 +27,7 @@ public class GasCentrifugeRecipes {
 
         addRecipe(ModForgeFluids.PUF6,
                 100, new Object[]{4, new ItemStack(ModItems.nugget_plutonium_fuel), 3, new ItemStack(ModItems.nugget_pu240), 3, new ItemStack(ModItems.fluorite)},
-                100, new Object[]{3, new ItemStack(ModItems.nugget_pu238), 2, new ItemStack(ModItems.nugget_pu239), 4, new ItemStack(ModItems.nugget_pu240), 2, new ItemStack(ModItems.fluorite)}
+                100, new Object[]{3, new ItemStack(ModItems.nugget_pu238), 2, new ItemStack(ModItems.nugget_pu239), 4, new ItemStack(ModItems.nugget_pu240), 3, new ItemStack(ModItems.fluorite)}
         );
         addRecipe(ModForgeFluids.SAS3, 100, new Object[]{4, new ItemStack(ModItems.nugget_schrabidium), 4, new ItemStack(ModItems.nugget_schrabidium), 1, new ItemStack(ModItems.nugget_solinium), 2, new ItemStack(ModItems.sulfur)});
         addRecipe(ModForgeFluids.MUD_FLUID,

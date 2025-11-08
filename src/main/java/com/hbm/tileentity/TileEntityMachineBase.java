@@ -73,11 +73,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
 		return new int[] {};
 	}
-	
-	public int getGaugeScaled(int i, FluidTank tank) {
-		return tank.getFluidAmount() * i / tank.getCapacity();
-	}
-	
+
 	public void networkPack(NBTTagCompound nbt, int range) {
 
 		if(!world.isRemote)
@@ -114,9 +110,7 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 	}
 	
 	public int countMufflers() {
-
 		int count = 0;
-
 		for(EnumFacing dir : EnumFacing.VALUES) {
             if (world.getBlockState(pos.offset(dir)).getBlock() == ModBlocks.muffler) {
                 count++;

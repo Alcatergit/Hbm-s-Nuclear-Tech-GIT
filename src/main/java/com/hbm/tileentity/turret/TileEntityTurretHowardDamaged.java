@@ -2,6 +2,7 @@ package com.hbm.tileentity.turret;
 
 import com.hbm.config.WeaponConfig;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
@@ -55,7 +56,7 @@ public class TileEntityTurretHowardDamaged extends TileEntityTurretHoward {
 	@Override
 	public boolean entityAcceptableTarget(Entity e) { //will fire at any living entity
 		
-		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+		if(Library.isCreative(e))
 			return false;
 		
 		return e instanceof EntityLivingBase;

@@ -54,6 +54,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public double heat = 1;
 	public double lastSpawnY = -1;
 	public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
+    public long startTime = 0;
 	public int maxAge = 1000;
 	public float humidity = -1;
 
@@ -72,16 +73,18 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		if (nbt.hasKey("scale"))
+		if(nbt.hasKey("scale"))
 			setScale(nbt.getFloat("scale"));
-		if (nbt.hasKey("type"))
+		if(nbt.hasKey("type"))
 			this.dataManager.set(TYPE, nbt.getByte("type"));
+        if(nbt.hasKey("time")) startTime = nbt.getLong("time");
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("scale", this.dataManager.get(SCALE));
 		nbt.setByte("type", this.dataManager.get(TYPE));
+        nbt.setLong("time", startTime);
 	}
 
 	@Override
@@ -92,8 +95,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	public void onUpdate() {
-		if(world.isRemote) {
-			
+        if(!world.isRemote){
+            long time = this.world.getTotalWorldTime();
+            if(time < startTime || time - startTime > maxAge) this.setDead();
+        } else {
+
 			double s = this.getScale();
 			double cs = 1.5;
 			if(this.ticksExisted == 1) this.setScale((float) s);
@@ -177,10 +183,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			
 			int maxHeat = (int) (50 * s * s);
 			heat = maxHeat - Math.pow((double) (maxHeat * this.ticksExisted) / maxAge, 0.6);
-		}
-		
-		if(!world.isRemote && this.ticksExisted > maxAge) {
-			this.setDead();
 		}
 	}
 
@@ -566,6 +568,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static void statFac(World world, double x, double y, double z, float scale) {
 		EntityNukeTorex torex = new EntityNukeTorex(world).setScale(MathHelper.clamp(scale * 0.01F, 0.25F, 5F));
 		torex.setPosition(x, y, z);
+        torex.startTime = world.getTotalWorldTime();
 		world.spawnEntity(torex);
 	}
 	

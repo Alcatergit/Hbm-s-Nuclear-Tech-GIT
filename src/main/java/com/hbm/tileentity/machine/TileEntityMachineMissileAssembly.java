@@ -99,11 +99,9 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 	
 	public int fuselageState() {
 		
-		if(inventory.getStackInSlot(2).getItem() instanceof ItemMissile) {
-			
-			ItemMissile part = (ItemMissile)inventory.getStackInSlot(2).getItem();
-			
-			if(part.type == PartType.FUSELAGE)
+		if(inventory.getStackInSlot(2).getItem() instanceof ItemMissile part) {
+
+            if(part.type == PartType.FUSELAGE)
 				return 1;
 		}
 		
@@ -112,11 +110,9 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 
 	public int chipState() {
 		
-		if(inventory.getStackInSlot(0).getItem() instanceof ItemMissile) {
-			
-			ItemMissile part = (ItemMissile)inventory.getStackInSlot(0).getItem();
-			
-			if(part.type == PartType.CHIP)
+		if(inventory.getStackInSlot(0).getItem() instanceof ItemMissile part) {
+
+            if(part.type == PartType.CHIP)
 				return 1;
 		}
 		
@@ -125,14 +121,11 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 
 	public int warheadState() {
 		
-		if(inventory.getStackInSlot(1).getItem() instanceof ItemMissile &&
-				inventory.getStackInSlot(2).getItem() instanceof ItemMissile &&
-				inventory.getStackInSlot(4).getItem() instanceof ItemMissile) {
+		if(inventory.getStackInSlot(1).getItem() instanceof ItemMissile part &&
+                inventory.getStackInSlot(2).getItem() instanceof ItemMissile fuselage &&
+                inventory.getStackInSlot(4).getItem() instanceof ItemMissile thruster) {
 
-			ItemMissile part = (ItemMissile)inventory.getStackInSlot(1).getItem();
-			ItemMissile fuselage = (ItemMissile)inventory.getStackInSlot(2).getItem();
-			ItemMissile thruster = (ItemMissile)inventory.getStackInSlot(4).getItem();
-			if(!(part.attributes.length > 2 && thruster.attributes.length > 2))
+            if(!(part.attributes.length > 2 && thruster.attributes.length > 2))
 				return 0;
 
 			float weight = (Float)part.attributes[2];
@@ -150,12 +143,9 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 		if(inventory.getStackInSlot(3).isEmpty())
 			return -1;
 		
-		if(inventory.getStackInSlot(3).getItem() instanceof ItemMissile && inventory.getStackInSlot(2).getItem() instanceof ItemMissile) {
+		if(inventory.getStackInSlot(3).getItem() instanceof ItemMissile part && inventory.getStackInSlot(2).getItem() instanceof ItemMissile fuselage) {
 
-			ItemMissile part = (ItemMissile)inventory.getStackInSlot(3).getItem();
-			ItemMissile fuselage = (ItemMissile)inventory.getStackInSlot(2).getItem();
-			
-			if(part.type == PartType.FINS && fuselage.type == PartType.FUSELAGE &&
+            if(part.type == PartType.FINS && fuselage.type == PartType.FUSELAGE &&
 					part.top == fuselage.bottom)
 				return 1;
 		}
@@ -165,12 +155,9 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 
 	public int thrusterState() {
 		
-		if(inventory.getStackInSlot(4).getItem() instanceof ItemMissile && inventory.getStackInSlot(2).getItem() instanceof ItemMissile) {
+		if(inventory.getStackInSlot(4).getItem() instanceof ItemMissile part && inventory.getStackInSlot(2).getItem() instanceof ItemMissile fuselage) {
 
-			ItemMissile part = (ItemMissile)inventory.getStackInSlot(4).getItem();
-			ItemMissile fuselage = (ItemMissile)inventory.getStackInSlot(2).getItem();
-			
-			if(part.type == PartType.THRUSTER && fuselage.type == PartType.FUSELAGE &&
+            if(part.type == PartType.THRUSTER && fuselage.type == PartType.FUSELAGE &&
 					part.top == fuselage.bottom && (FuelType)part.attributes[0] == (FuelType)fuselage.attributes[0]) {
 				return 1;
 			}
@@ -219,9 +206,8 @@ public class TileEntityMachineMissileAssembly extends TileEntity implements ITic
 	}
 
 	public boolean isItemValidForSlot(int slot, ItemStack stack) {
-		if(stack.getItem() instanceof ItemMissile){
-			ItemMissile missilePart = (ItemMissile) stack.getItem();
-			if(slot == 0){
+		if(stack.getItem() instanceof ItemMissile missilePart){
+            if(slot == 0){
 				return missilePart.type == PartType.CHIP;
 			}
 			if(slot == 1){

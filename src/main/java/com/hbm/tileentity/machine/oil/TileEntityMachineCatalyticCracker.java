@@ -15,6 +15,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
+import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
@@ -108,7 +109,7 @@ public class TileEntityMachineCatalyticCracker extends TileEntity implements INB
 		FluidStack[] fluids = CrackRecipes.getOutputsFromFluid(types[0]);
 		
 		if(fluids != null) {
-			setTankType(1, ModForgeFluids.STEAM);
+            setTankType(1, ModForgeFluids.STEAM);
 			setTankType(2, fluids[0].getFluid());
 			if(fluids.length == 2){
 				setTankType(3, fluids[1].getFluid());

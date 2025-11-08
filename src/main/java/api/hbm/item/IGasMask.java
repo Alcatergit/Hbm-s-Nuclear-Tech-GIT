@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.hbm.util.ArmorRegistry.HazardClass;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.ItemStack;
 
 public interface IGasMask {
@@ -46,5 +47,5 @@ public interface IGasMask {
 	 * @param entity
 	 * @param damage
 	 */
-    void damageFilter(ItemStack stack, int damage);
+    void damageFilter(EntityLivingBase entity, ItemStack stack, int damage);
 }

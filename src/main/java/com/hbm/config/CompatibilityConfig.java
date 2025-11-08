@@ -108,9 +108,10 @@ public class CompatibilityConfig {
 	public static boolean peaceDimensionsIsWhitelist = true;
 	public static HashSet peaceDimensions;
 
+    public static boolean overWriteVanillaLeafForBugFix = true;
 
-	
-	public static void loadFromConfig(Configuration config) {
+
+    public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_DIMRAD = "01_dimension_radiation";
 		final String CATEGORY_DIMORE = "02_dimension_ores";
 		final String CATEGORY_DIMSTRUC = "03_dimension_structures";
@@ -264,8 +265,9 @@ public class CompatibilityConfig {
 		geyserChlorine = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.20_geyserChlorineSpawn", "Spawn poison geyser on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:3000" }, ":");
 		geyserVapor = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.21_geyserVaporSpawn", "Spawn vapor geyser on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");
 		geyserNether = CommonConfig.createConfigHashMap(config, CATEGORY_DIMSTRUC, "03.22_geyserNetherSpawn", "Spawn nether geyser on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "-1:2" }, ":");
-		
-		meteorStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.23_meteorStructureSpawn", "Spawn meteor dungeon on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:15000" }, ":");
+        overWriteVanillaLeafForBugFix =  CommonConfig.createConfigBool(config, CATEGORY_DIMSTRUC, "03.221_overWriteVanillaLeafForBugFix", "If true then the vanilla leaf blocks get overwritten with a fixed version. Disable if leafs are invisible", true);
+
+        meteorStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.23_meteorStructureSpawn", "Spawn meteor dungeon on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:15000" }, ":");
 		capsuleStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.24_capsuleSpawn", "Spawn landing capsule on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:100" }, ":");
 		arcticStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.25_arcticVaultSpawn", "Spawn artic code vault on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:500" }, ":");
 		jungleStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.26_jungleDungeonSpawn", "Spawn jungle dungeon on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:2000" }, ":");
@@ -451,7 +453,9 @@ public class CompatibilityConfig {
 			"oreSteel",
             "oreNetherQuartz"
 		});
-	}
+
+
+    }
 
 	public static boolean isWarDim(World world){
 		return isWarDim(world.provider.getDimension());

@@ -6,6 +6,8 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.items.ModItems;
 
 import net.minecraft.block.BlockLeaves;
+import net.minecraft.block.BlockNewLeaf;
+import net.minecraft.block.BlockOldLeaf;
 import net.minecraft.block.BlockPlanks;
 import net.minecraft.block.properties.PropertyEnum;
 import net.minecraft.block.state.IBlockState;
@@ -112,6 +114,14 @@ public class WasteLeaves extends BlockLeaves {
         return state.getValue(VARIANT).getMetadata();
     }
 
+    public IBlockState getBaseLeafState(IBlockState b){
+        int meta = getMetaFromState(b);
+        if(meta < 4) {
+            return Blocks.LEAVES.getDefaultState().withProperty(BlockOldLeaf.VARIANT, getWoodType(meta));
+        } else {
+            return Blocks.LEAVES.getDefaultState().withProperty(BlockNewLeaf.VARIANT, getWoodType(meta));
+        }
+    }
 
     @Override
 	@SideOnly(Side.CLIENT)

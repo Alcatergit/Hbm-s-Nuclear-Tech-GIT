@@ -97,7 +97,6 @@ public class TEMissilePacket implements IMessage {
 		y = buf.readInt();
 		z = buf.readInt();
 		type = buf.readInt();
-		
 	}
 
 	@Override
@@ -106,7 +105,6 @@ public class TEMissilePacket implements IMessage {
 		buf.writeInt(y);
 		buf.writeInt(z);
 		buf.writeInt(type);
-		
 	}
 	
 	public static class Handler implements IMessageHandler<TEMissilePacket, IMessage>{
@@ -114,6 +112,7 @@ public class TEMissilePacket implements IMessage {
 		@Override
 		@SideOnly(Side.CLIENT)
 		public IMessage onMessage(TEMissilePacket message, MessageContext ctx) {
+            if(message == null) return null;
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				World world = Minecraft.getMinecraft().world;
 				BlockPos pos = new BlockPos(message.x, message.y, message.z);

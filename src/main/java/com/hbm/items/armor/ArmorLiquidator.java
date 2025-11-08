@@ -117,8 +117,8 @@ public class ArmorLiquidator extends ArmorFSB implements IGasMask {
 	}
 
 	@Override
-	public void damageFilter(ItemStack stack, int damage) {
-		ArmorUtil.damageGasMaskFilter(stack, damage);
+	public void damageFilter(EntityLivingBase entity, ItemStack stack, int damage) {
+		ArmorUtil.damageGasMaskFilter(entity, stack, damage);
 	}
 
 	@Override

@@ -189,8 +189,8 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void enteringChunk(EnteringChunk evt) {
-		if(evt.getEntity() instanceof IChunkLoader) {
-			((IChunkLoader) evt.getEntity()).loadNeighboringChunks(evt.getNewChunkX(), evt.getNewChunkZ());
+		if(evt.getEntity() instanceof IChunkLoader ech) {
+            ech.loadNeighboringChunks(evt.getNewChunkX(), evt.getNewChunkZ(), evt.getOldChunkX(), evt.getOldChunkZ());
 		}
 	}
 	

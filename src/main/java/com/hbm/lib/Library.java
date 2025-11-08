@@ -21,6 +21,7 @@ import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
+import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
@@ -152,6 +153,11 @@ public class Library {
 		superuser.add(Alcater);
 	}
 
+    public static boolean isCreative(Entity e){
+        if(e instanceof EntityPlayer player) return player.capabilities.isCreativeMode;
+        return false;
+    }
+
     public static void setFinalStatic(Class c, String variable, String variableObf, Object newValue){
         setFinal(c, variable, variableObf, newValue, false);
     }
@@ -173,6 +179,10 @@ public class Library {
         } catch(Throwable ignored){
             ignored.printStackTrace();
         }
+    }
+
+    public static int getStatisticalInt(Random rand, float v){
+        return (int)v + (rand.nextFloat() < (v - (int)v) ? 1 : 0);
     }
 
 	public static String getColor(long a, long b){
@@ -321,6 +331,23 @@ public class Library {
 	public static int getRGBfromARGB(int pixel){
 		return pixel & 0x00ffffff;
 	}
+
+    public static int getGroundHeight(World world, int x, int z){
+        BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos(x, 255, z);
+        for(int y = 255; y > 1; y--){
+            pos.setY(y);
+            IBlockState state = world.getBlockState(pos);
+            Block b = state.getBlock();
+            if(!b.isReplaceable(world, pos)){
+                if(b.isOpaqueCube(state)){
+                    if(b.getMaterial(state) != Material.WOOD){
+                        return y;
+                    }
+                }
+            }
+        }
+        return 1;
+    }
 
 	// Drillgon200: Just realized I copied the wrong method. God dang it.
 	// It works though. Not sure why, but it works.
@@ -1062,8 +1089,7 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 			return true;
 		} else if (tester == null && container != null) {
 			return true;
-		} else if (tester != null && container == null) {
-		} else {
+		} else if (!(tester != null && container == null)) {
 			for(String s : tester.getKeySet()){
 				if(!container.hasKey(s)){
 					return false;

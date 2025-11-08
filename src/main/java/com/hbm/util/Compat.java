@@ -31,7 +31,7 @@ public class Compat {
 	@Untested
 	//FIXME: didnt do much with it yet
 	public static List<ItemStack> scrapeItemFromME(final ItemStack meDrive) {
-		final List<ItemStack> stacks = new ArrayList();
+		final List<ItemStack> stacks = new ArrayList<>();
 
 		try {
 			if(meDrive != null && meDrive.hasTagCompound()) {
