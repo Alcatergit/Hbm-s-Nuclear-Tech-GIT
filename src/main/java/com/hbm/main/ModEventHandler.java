@@ -391,17 +391,13 @@ public class ModEventHandler {
 	}
 
 	@SubscribeEvent
-	public void onClickSign(PlayerInteractEvent event) {
-
-		BlockPos pos = event.getPos();
+	public void onClickSign(PlayerInteractEvent.RightClickBlock event) {
 		World world = event.getWorld();
-
-		if(!world.isRemote && world.getBlockState(pos).getBlock() == Blocks.STANDING_SIGN) {
-
-			TileEntitySign sign = (TileEntitySign) world.getTileEntity(pos);
-
-			String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
-			//System.out.println(result);
+        if(world.isRemote) return;
+        BlockPos pos = event.getPos();
+		if(world.getTileEntity(pos) instanceof TileEntitySign sign) {
+            String result = smoosh(sign.signText[0].getUnformattedText(), sign.signText[1].getUnformattedText(), sign.signText[2].getUnformattedText(), sign.signText[3].getUnformattedText());
+			//System.out.println("("+sign.signText[0].getUnformattedText()+")("+sign.signText[1].getUnformattedText()+")("+sign.signText[2].getUnformattedText()+")("+sign.signText[3].getUnformattedText()+") "+result);
 
 			if(hashes.contains(result)){
 				world.destroyBlock(pos, false);
@@ -410,7 +406,6 @@ public class ModEventHandler {
 				world.spawnEntity(entityitem);
 			}
 		}
-
 	}
 
 	private String smoosh(String s1, String s2, String s3, String s4) {
@@ -455,14 +450,14 @@ public class ModEventHandler {
 		try {
 			MessageDigest sha256 = MessageDigest.getInstance("SHA-256");
 			byte[] bytes = sha256.digest(inp.getBytes());
-			String str = "";
+			StringBuilder str = new StringBuilder();
 
 			for(int b : bytes)
-				str = str + Integer.toString((b & 0xFF) + 256, 16).substring(1);
+				str.append(Integer.toString((b & 0xFF) + 256, 16).substring(1));
 
-			return str;
+			return str.toString();
 
-		} catch(NoSuchAlgorithmException e) {
+		} catch(NoSuchAlgorithmException ignored) {
 		}
 
 		return "";
