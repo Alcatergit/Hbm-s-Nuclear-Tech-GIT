@@ -7,14 +7,12 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
-import com.hbm.interfaces.IBomb;
-import com.hbm.lib.InventoryHelper;
+import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeGadget;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -24,7 +22,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -36,10 +37,10 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class NukeGadget extends BlockContainer implements IBomb {
+public class NukeGadget extends BlockNukeBase {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
-	
+
 	public NukeGadget(Material materialIn, String s) {
 		super(materialIn);
 		this.setTranslationKey(s);
@@ -54,9 +55,18 @@ public class NukeGadget extends BlockContainer implements IBomb {
 	}
 	
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
-		super.breakBlock(worldIn, pos, state);
+	protected Item getBlockItem() {
+		return Item.getItemFromBlock(ModBlocks.nuke_gadget);
+	}
+
+	@Override
+	protected Class<? extends TileEntity> getTileEntityClass() {
+		return TileEntityNukeGadget.class;
+	}
+
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 	
 	@Override
@@ -79,10 +89,13 @@ public class NukeGadget extends BlockContainer implements IBomb {
 		TileEntityNukeGadget entity = (TileEntityNukeGadget) worldIn.getTileEntity(pos);
 		if (worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			if (entity.isReady()) {
-				this.onPlayerDestroy(worldIn, pos, state);
+				// ========== Modified: Set detonation flag, then clear the block ==========
+				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
+
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ());
+				this.isExploding = false;
 			}
 		}
 	}
@@ -100,11 +113,6 @@ public class NukeGadget extends BlockContainer implements IBomb {
 
 		return false;
 	}
-	
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
-	}
 
 	@Override
 	public void explode(World world, BlockPos pos) {
@@ -112,10 +120,13 @@ public class NukeGadget extends BlockContainer implements IBomb {
 		// if (p_149695_1_.getStrongPower(x, y, z))
 		{
 			if (entity.isReady()) {
-				this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+				// ========== Modified: Set detonation flag, then clear the block ==========
+				this.isExploding = true;
 				entity.clearSlots();
 				world.setBlockToAir(pos);
+
 				igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
+				this.isExploding = false;
 			}
 		}
 	}
@@ -191,7 +202,65 @@ public class NukeGadget extends BlockContainer implements IBomb {
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.gadgetRadius)+"§r");
 		if(!BombConfig.disableNuclear){
 			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.gadgetRadius*(1+BombConfig.falloutRange/100))+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(BombConfig.gadgetRadius*(1+BombConfig.falloutRange/100.0)))+"§r");
+		}
+
+		// ========== Modified: Check using the condition matching entity.isReady ==========
+		if (isItemReady(stack)) {
+			tooltip.add("§2[Is ready]§r");
 		}
 	}
+
+	// ========== Modified: Correctly parse the NBT format of ItemStackHandler ==========
+	private boolean isItemReady(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+			
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Check if it contains the Items tag (the serialization format of ItemStackHandler)
+				if (inventoryTag.hasKey("Items")) {
+					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
+
+					// Check if the required items are present
+					boolean hasWiring = false;
+					boolean hasCore = false;
+					boolean hasExplosive1 = false;
+					boolean hasExplosive2 = false;
+					boolean hasExplosive3 = false;
+					boolean hasExplosive4 = false;
+					
+					for (int i = 0; i < itemsList.tagCount(); i++) {
+						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
+						int slot = itemTag.getByte("Slot");
+
+						// Check item ID (using registry name instead of string ID)
+						String itemId = itemTag.getString("id");
+
+						// Check corresponding items based on slot
+						if (slot == 0 && itemId.equals(ModItems.gadget_wireing.getRegistryName().toString())) {
+							hasWiring = true;
+						} else if (slot == 5 && itemId.equals(ModItems.gadget_core.getRegistryName().toString())) {
+							hasCore = true;
+						} else if (slot == 1 && itemId.equals(ModItems.gadget_explosive8.getRegistryName().toString())) {
+							hasExplosive1 = true;
+						} else if (slot == 2 && itemId.equals(ModItems.gadget_explosive8.getRegistryName().toString())) {
+							hasExplosive2 = true;
+						} else if (slot == 3 && itemId.equals(ModItems.gadget_explosive8.getRegistryName().toString())) {
+							hasExplosive3 = true;
+						} else if (slot == 4 && itemId.equals(ModItems.gadget_explosive8.getRegistryName().toString())) {
+							hasExplosive4 = true;
+						}
+					}
+
+					// Return whether the isReady condition is met
+					return hasWiring && hasCore && hasExplosive1 && hasExplosive2 && hasExplosive3 && hasExplosive4;
+				}
+			}
+		}
+		
+		return false;
+	}
+	// ========== End of modification ==========
 }

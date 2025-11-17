@@ -340,6 +340,15 @@ public class FFUtils {
 		}
 		TileEntity te = world.getTileEntity(toFill);
 
+		if(te instanceof IFluidPipeMk2 pipe) {
+			FFPipeNetworkMk2 net = pipe.getNetwork();
+			if(net != null && (net.getType() == null || net.getType() == tank.getFluid().getFluid())) {
+				net.addProvider(tileEntity);
+				net.forceUpdate(world);
+				return true;
+			}
+		}
+
 		if(te != null && safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
 			if(te instanceof TileEntityDummy ted) {
                 if(world.getTileEntity(ted.target) == tileEntity) {

@@ -66,6 +66,15 @@ public class Face {
         }
     }
 
+    @SideOnly(Side.CLIENT)
+    public void addFaceForRenderAbove(Tessellator tessellator, float yThreshold) {
+        for (Vertex v : vertices) {
+            if (v.y < yThreshold)
+                return;
+        }
+        addFaceForRender(tessellator);
+    }
+
         @SideOnly(Side.CLIENT)
     public void addFaceForRenderSplit(Tessellator tessellator, float textureOffset, float splitHeight, float scale) {
         if (faceNormal == null)

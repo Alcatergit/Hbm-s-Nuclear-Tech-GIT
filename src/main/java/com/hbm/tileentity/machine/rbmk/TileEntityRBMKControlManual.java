@@ -83,6 +83,19 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 				this.color = newCol;
 			}
 		}
+
+		if(data.hasKey("cycleColor")) {
+			if(this.color == null) {
+				this.color = RBMKColor.RED;
+			} else {
+				int next = (this.color.ordinal() + 1) % RBMKColor.values().length;
+				this.color = RBMKColor.values()[next];
+			}
+		}
+
+		if(data.hasKey("cancelColor")) {
+			this.color = null;
+		}
 		
 		this.markDirty();
 	}

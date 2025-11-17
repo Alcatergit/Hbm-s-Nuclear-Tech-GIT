@@ -16,7 +16,6 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -81,7 +80,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 						world.setBlockState(des, Blocks.AIR.getDefaultState());
 					}
 					
-					if(state.getBlock() != Blocks.AIR && state.getBlock().getExplosionResistance(null) < 3_600_000) {
+					if(state.getBlock() != Blocks.AIR) {
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x0 + 0.5F;
 						rubble.posY = y0;
@@ -89,7 +88,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 						rubble.setMetaBasedOnBlock(state.getBlock(), state.getBlock().getMetaFromState(state));
 						
 						world.spawnEntity(rubble);
-					
+						world.removeTileEntity(des);
 						world.setBlockState(des, Blocks.AIR.getDefaultState());
 						break;
 					}
@@ -205,5 +204,4 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
     {
         return 1.0F;
     }
-
 }

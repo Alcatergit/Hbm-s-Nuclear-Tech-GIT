@@ -37,6 +37,7 @@ public class SliderVertical extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_slider_vertical_tex);

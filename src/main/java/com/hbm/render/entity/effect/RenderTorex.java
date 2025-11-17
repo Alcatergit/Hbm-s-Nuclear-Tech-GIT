@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
+import com.hbm.main.ModEventHandlerClient;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityNukeTorex;
@@ -12,8 +13,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -28,9 +27,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
-
 
 public class RenderTorex extends Render<EntityNukeTorex> {
 
@@ -52,8 +48,6 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		float flashDuration = scale * flashBaseDuration;
 		float flareDuration = scale * flareBaseDuration;
 
-		doScreenShake(cloud, x, y, z, scale * 100);
-		
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 
@@ -65,9 +59,20 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		if(cloud.ticksExisted < flareDuration+1)
 			flareWrapper(cloud, partialTicks, flareDuration);
-		
+
 		if(cloud.ticksExisted < flashDuration+1)
 			flashWrapper(cloud, partialTicks, flashDuration);
+		if(cloud.ticksExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
+		if(cloud.didPlaySound && !cloud.didShake && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
+			EntityPlayer player = MainRegistry.proxy.me();
+			float dist = player.getDistance(cloud);
+			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
+			ModEventHandlerClient.shakeMultiplier = Math.max(((scale * 200D) - (double) dist) / (scale * 200D), 0D);
+			player.hurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 150F), 0);
+			player.maxHurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 100F), 0);
+			player.attackedAtYaw = 0F;
+			cloud.didShake = true;
+		}
 
 		if(fog)
 			GL11.glEnable(GL11.GL_FOG);
@@ -75,28 +80,6 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glPopMatrix();
 	}
 
-	private void doScreenShake(EntityNukeTorex cloud, double x, double y, double z, float amplitude){
-		if(cloud.ticksExisted > 300) return;
-		EntityPlayer player = MainRegistry.proxy.me();
-
-		double dist = player.getDistance(cloud);
-		double shockwaveDistance = dist - cloud.ticksExisted * shockSpeed;
-		if(shockwaveDistance > shockSpeed * 2 || shockwaveDistance < 0) return;
-		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude, 0.8F + cloud.world.rand.nextFloat() * 0.2F);
-		int duration = (int)(40 * Math.min(1.5, (amplitude * amplitude)/(dist * dist)));
-		if(duration < 15) return;
-		int swingTimer = duration<<1;
-
-		if(player.getDisplayName().toString().equals("Vic4Games")) {
-			player.hurtTime = swingTimer<<1;
-			player.maxHurtTime = duration<<1;
-		} else {
-			player.hurtTime = swingTimer;
-			player.maxHurtTime = duration;
-		}
-		player.attackedAtYaw = 0F;
-	}
-	
 	private final Comparator cloudSorter = (arg0, arg1) -> {
         Cloudlet first = (Cloudlet) arg0;
         Cloudlet second = (Cloudlet) arg1;
@@ -117,16 +100,16 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-		
+
 		bindTexture(cloudlet);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		ArrayList<Cloudlet> cloudlets = new ArrayList<>(cloud.cloudlets);
 		cloudlets.sort(cloudSorter);
-		
+
 		for(Cloudlet cloudlet : cloudlets) {
 			Vec3 vec = cloudlet.getInterpPos(partialTicks);
 			tessellateCloudlet(buf, vec.xCoord - cloud.posX, vec.yCoord - cloud.posY, vec.zCoord - cloud.posZ, cloudlet, partialTicks);
@@ -141,9 +124,10 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 	}
-	
+
 	private void flareWrapper(EntityNukeTorex cloud, float partialTicks, float flareDuration) {
 
+		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
@@ -151,18 +135,18 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-			
+
 		bindTexture(flare);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
-		
+
 		Random rand = new Random(cloud.getEntityId());
-		
+
 		for(int i = 0; i < 3; i++) {
 			float x = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
 			float y = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
@@ -178,6 +162,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
+		GL11.glPopAttrib();
 	}
 
 	private void tessellateCloudlet(BufferBuilder buf, double posX, double posY, double posZ, Cloudlet cloud, float partialTicks) {
@@ -263,7 +248,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
         GlStateManager.enableCull();
         GlStateManager.depthMask(false);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		
+
         GL11.glPushMatrix();
 
         for(int i = 0; i < 300; i++) {

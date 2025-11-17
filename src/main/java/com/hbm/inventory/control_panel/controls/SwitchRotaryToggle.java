@@ -39,6 +39,7 @@ public class SwitchRotaryToggle extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         boolean isFlipped = getVar("isOn").getBoolean();
 

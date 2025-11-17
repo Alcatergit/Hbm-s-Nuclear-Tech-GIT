@@ -217,8 +217,8 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 					
 					for(Entity e : entities) {
 						if(this.canAttackClass(e.getClass())) {
-							e.attackEntityFrom(ModDamageSource.causeCombineDamage(this, e), 1000F);
 							e.setFire(5);
+							e.attackEntityFrom(ModDamageSource.causeCombineDamage(this, e), 1000F);
 							
 							if(e instanceof EntityLivingBase)
 								ContaminationUtil.contaminate((EntityLivingBase)e, HazardType.RADIATION, ContaminationType.CREATIVE, 5F);
@@ -316,12 +316,12 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 		
 		if(this.deathTime == 19 && !world.isRemote) {
 			EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, 25);
-			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 25, posX + 0.5, posY + 0.5, posZ + 0.5));
+			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 25, posX, posY, posZ));
             
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(200, 200, 200));
-			for(EntityPlayer player : players) {
-				AdvancementManager.grantAchievement(player, AdvancementManager.bossUFO);
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_ufo));
+			EntityLivingBase attacker = this.getAttackingEntity();
+			if(attacker instanceof EntityPlayerMP) {
+				AdvancementManager.grantAchievement((EntityPlayerMP)attacker, AdvancementManager.bossUFO);
+				((EntityPlayerMP)attacker).inventory.addItemStackToInventory(new ItemStack(ModItems.coin_ufo));
 			}
 		}
 		

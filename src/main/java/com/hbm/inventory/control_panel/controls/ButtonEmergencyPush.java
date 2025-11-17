@@ -5,6 +5,7 @@ import com.hbm.inventory.control_panel.nodes.*;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Tessellator;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
@@ -34,6 +35,7 @@ public class ButtonEmergencyPush extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         boolean isPushed = getVar("isPushed").getBoolean();
 

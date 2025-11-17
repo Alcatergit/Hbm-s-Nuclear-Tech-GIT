@@ -525,6 +525,9 @@ public class HazardRegistry {
 		HazardSystem.register(ash_digamma, makeData(DIGAMMA, 0.001F));
         HazardSystem.register(digamma_matter, makeData(DIGAMMA, 0.2F));
         HazardSystem.register(particle_digamma, makeData(RADIATION, 100F).addEntry(DIGAMMA, 0.3333F));
+		HazardSystem.register(pribris_digamma, makeData(DIGAMMA, 133.33F));
+		HazardSystem.register(pribris_burning, makeData(HOT, 0.45F));
+		HazardSystem.register(pribris_radiating, makeData(RADIATION, 66666.7F).addEntry(HOT, 26666.7F));
 		
 		HazardSystem.register(frozen_grass, makeData(CRYOGENIC, 3));
 		HazardSystem.register(frozen_log, makeData(CRYOGENIC, 2));

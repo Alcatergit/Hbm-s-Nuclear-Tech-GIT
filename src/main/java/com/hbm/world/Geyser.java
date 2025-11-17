@@ -3,6 +3,7 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.lib.Library;
 
 import net.minecraft.init.Blocks;
 import net.minecraft.util.math.BlockPos;
@@ -20,6 +21,7 @@ public class Geyser extends WorldGenerator {
 	public boolean generate_r0(World world, Random rand, int x, int y, int z) {
 
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		y = Library.getBedrockAdjustedY(world, x, y, z, -2, -2, 2, 2, -6);
 		x -= 2;
 		y -= 11;
 		z -= 2;

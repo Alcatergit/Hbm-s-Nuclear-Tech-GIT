@@ -16,10 +16,7 @@ import java.util.Set;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
-import com.hbm.entity.mob.EntityDuck;
-import com.hbm.entity.mob.EntityNuclearCreeper;
-import com.hbm.entity.mob.EntityQuackos;
-import com.hbm.entity.mob.EntityRADBeast;
+import com.hbm.entity.mob.*;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
@@ -36,14 +33,18 @@ import com.hbm.util.ContaminationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityZombieVillager;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -53,6 +54,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -321,11 +323,47 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
-						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper) {
+						if((eRad >= 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityDuck))) {
+							if(!(entity instanceof EntitySheep) && !animal.getEntityData().hasKey("isPermanent")) {
+								animal.getEntityData().setBoolean("isPermanent", true);
+							}
 
+							// Simulated hematopoietic stem cell death: Vital value cannot be restored
+							if(animal.getHealth() < animal.getMaxHealth()) {
+								animal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(animal.getHealth());
+							}
+
+							if(animal.isChild()) {
+								if(!animal.getEntityData().hasKey("lockedAge")) {
+									animal.getEntityData().setInteger("lockedAge", animal.getGrowingAge());
+								}
+
+								animal.setGrowingAge(animal.getEntityData().getInteger("lockedAge"));
+							} else {
+								animal.resetInLove();
+								animal.setGrowingAge(2147483647);
+							}
+						} else if((eRad > 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && (!(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityPlayerMP) && !(entity instanceof EntityDuck)))) {
+							if(!entity.getEntityData().hasKey("isPermanent")) {
+								entity.getEntityData().setBoolean("isPermanent", true);
+							}
+
+							// Simulated hematopoietic stem cell death: Vital value cannot be restored
+							if(entity.getHealth() < entity.getMaxHealth()) {
+								entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(entity.getHealth());
+							}
+						}
+
+						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper creeper) {
 							if(world.rand.nextInt(3) == 0) {
 								EntityNuclearCreeper creep = new EntityNuclearCreeper(world);
+								creep.setCreeperState(creeper.getCreeperState());
+								creep.setPowered(creeper.getPowered());
+								if (creeper.hasIgnited()) creep.ignite();
 								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								creep.setRotationYawHead(entity.rotationYaw);
+								creep.setRenderYawOffset(entity.rotationYaw);
+                                if (creeper.hasCustomName()) creep.setCustomNameTag(creeper.getCustomNameTag());
 
 								if(!entity.isDead)
                                     world.spawnEntity(creep);
@@ -335,55 +373,278 @@ public class RadiationSystemNT {
 							}
 							continue;
 
-						} else if(eRad >= 500 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
+						} else if(eRad >= 500 && entity instanceof EntityCow cow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
+							creep.setGrowingAge(cow.getGrowingAge());
+                            if (cow.hasCustomName()) creep.setCustomNameTag(cow.getCustomNameTag());
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
+							if(!cow.isDead && cow.getLeashed()) creep.setLeashHolder(cow.getLeashHolder(), true);
 							entity.setDead();
 							continue;
 
+						} else if(entity instanceof EntitySheep sheep && (eRad >= 250 || sheep.getEntityData().getBoolean("isBalding") || sheep.getEntityData().getBoolean("isPermanent"))) {
+							if(!sheep.getSheared() && sheep.getEntityData().getBoolean("isPermanent")) {
+								sheep.setSheared(true);
+							}
+
+							if(eRad < 250) {
+								if(sheep.getEntityData().getBoolean("isBalding") && !sheep.getEntityData().getBoolean("isPermanent")) {
+									sheep.getEntityData().removeTag("isBalding");
+								}
+							} else if(eRad < 500) {
+								if(!sheep.getEntityData().getBoolean("isBalding")) {
+									if(!sheep.getSheared()) {
+										sheep.setSheared(true);
+										int i = 1 + world.rand.nextInt(3);
+
+										for (int j = 0; j < i; ++j) {
+											EntityItem entityitem = new EntityItem(world, sheep.posX, sheep.posY, sheep.posZ,
+													new ItemStack(Blocks.WOOL, 1, sheep.getFleeceColor().getMetadata()));
+
+											entityitem.motionY += (double)(world.rand.nextFloat() * 0.05F);
+											entityitem.motionX += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+											entityitem.motionZ += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+
+											world.spawnEntity(entityitem);
+										}
+									}
+
+									sheep.getEntityData().setBoolean("isBalding", true);
+								}
+							} else if(eRad < 1000) {
+								if(!sheep.getEntityData().getBoolean("isPermanent")) {
+									if (!sheep.getSheared()){
+										sheep.setSheared(true);
+										int i = 1 + world.rand.nextInt(3);
+
+										for (int j = 0; j < i; ++j) {
+											EntityItem entityitem = new EntityItem(world, sheep.posX, sheep.posY, sheep.posZ,
+													new ItemStack(Blocks.WOOL, 1, sheep.getFleeceColor().getMetadata()));
+
+											entityitem.motionY += (double)(world.rand.nextFloat() * 0.05F);
+											entityitem.motionX += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+											entityitem.motionZ += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+
+											world.spawnEntity(entityitem);
+										}
+									}
+
+									sheep.getEntityData().setBoolean("isPermanent", true);
+								}
+							} else {
+								sheep.attackEntityFrom(ModDamageSource.radiation, 1000F);
+								HbmLivingProps.setRadiation(sheep, 0);
+
+								if(sheep.getHealth() > 0) {
+									sheep.setHealth(0);
+								}
+							}
+
+							continue;
+						} else if(eRad >= 500 && entity instanceof EntityPig pig) {
+							EntityPigZombie creep = new EntityPigZombie(world);
+
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
+
+							if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+							if (entity.isChild()) creep.setChild(true);
+							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (pig.hasCustomName()) creep.setCustomNameTag(pig.getCustomNameTag());
+
+							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.HEAD, entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+							creep.setItemStackToSlot(EntityEquipmentSlot.CHEST, entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+							creep.setItemStackToSlot(EntityEquipmentSlot.LEGS, entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+							creep.setItemStackToSlot(EntityEquipmentSlot.FEET, entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
+
+							if(!entity.isDead)
+								world.spawnEntity(creep);
+							if(!pig.isDead && pig.getLeashed()) creep.setLeashHolder(pig.getLeashHolder(), true);
+							if(!pig.isDead && pig.getSaddled()) pig.dropItem(Items.SADDLE, 1);
+							entity.setDead();
+							continue;
 						} else if(eRad >= 600 && entity instanceof EntityVillager vil) {
 							EntityZombieVillager creep = new EntityZombieVillager(world);
+
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
+
+							if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (vil.hasCustomName()) creep.setCustomNameTag(vil.getCustomNameTag());
+
+							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.HEAD, vil.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+							creep.setItemStackToSlot(EntityEquipmentSlot.CHEST, vil.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+							creep.setItemStackToSlot(EntityEquipmentSlot.LEGS, vil.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+							creep.setItemStackToSlot(EntityEquipmentSlot.FEET, vil.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 
 							if(!entity.isDead)
-                                world.spawnEntity(creep);
+								world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(eRad >= 700 && entity instanceof EntityBlaze) {
+						} else if(eRad >= 700 && entity instanceof EntityBlaze blaze) {
 							EntityRADBeast creep = new EntityRADBeast(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (blaze.hasCustomName()) creep.setCustomNameTag(blaze.getCustomNameTag());
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
-							EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
-							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-							zomhorsie.setGrowingAge(horsie.getGrowingAge());
-							zomhorsie.setTemper(horsie.getTemper());
-							zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
-							zomhorsie.setHorseTamed(horsie.isTame());
-							zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
-							zomhorsie.makeMad();
-							if(!entity.isDead)
-                                world.spawnEntity(zomhorsie);
-							entity.setDead();
-							continue;
-						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
+							boolean isSkeletonHorse = false;
+							boolean isTrap = false;
+							if(!horsie.isDead) {
+								double r = world.rand.nextDouble();
+								DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
+								double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
+								isSkeletonHorse = r < f * 0.04D;
+							}
 
+							if(isSkeletonHorse) {
+                                if(!horsie.isDead) {
+                                    double r = world.rand.nextDouble();
+                                    DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
+                                    double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
+                                    isTrap = r < f * 0.02D;
+                                }
+
+								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
+								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								skehorse.setRotationYawHead(entity.rotationYaw);
+								skehorse.setRenderYawOffset(entity.rotationYaw);
+
+								if(!horsie.isDead) {
+									ContainerHorseChest chest = horsie.horseChest;
+
+									ItemStack armorStack = chest.getStackInSlot(1);
+									if(!armorStack.isEmpty()) {
+										horsie.entityDropItem(armorStack.copy(), 0.0F);
+										chest.setInventorySlotContents(1, ItemStack.EMPTY);
+									}
+									if(isTrap) {
+										ItemStack saddleStack = chest.getStackInSlot(0);
+										if(!saddleStack.isEmpty()) {
+											horsie.entityDropItem(saddleStack.copy(), 0.0F);
+											chest.setInventorySlotContents(0, ItemStack.EMPTY);
+										}
+									}
+								}
+
+								NBTTagCompound horseNBT = new NBTTagCompound();
+								horsie.writeEntityToNBT(horseNBT);
+								skehorse.readEntityFromNBT(horseNBT);
+								skehorse.setHealth(skehorse.getMaxHealth());
+								HbmLivingProps.setRadiation(skehorse, 0);
+								skehorse.clearActivePotions();
+
+								skehorse.setGrowingAge(horsie.getGrowingAge());
+								skehorse.resetInLove();
+								if(isTrap) {
+									skehorse.setTrap(true);
+									skehorse.setTemper(0);
+									skehorse.setHorseSaddled(false);
+									skehorse.setHorseTamed(false);
+									skehorse.setOwnerUniqueId(null);
+								}else {
+									skehorse.setTemper(horsie.getTemper());
+									skehorse.setHorseSaddled(horsie.isHorseSaddled());
+									skehorse.setHorseTamed(horsie.isTame());
+									skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
+								}
+								skehorse.makeMad();
+                                if (horsie.hasCustomName()) skehorse.setCustomNameTag(horsie.getCustomNameTag());
+
+								if(!entity.isDead)
+									world.spawnEntity(skehorse);
+								if(!horsie.isDead && horsie.getLeashed()) skehorse.setLeashHolder(horsie.getLeashHolder(), true);
+								if(!horsie.isDead && !isTrap && horsie.isBeingRidden() && horsie.getControllingPassenger() instanceof EntityPlayer) {
+									EntityPlayer passenger;
+									passenger = (EntityPlayer) horsie.getControllingPassenger();
+
+									if(passenger != null) {
+										passenger.dismountRidingEntity();
+										passenger.startRiding(skehorse);
+									}
+								}
+								entity.setDead();
+								continue;
+							}else {
+								EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
+								zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								zomhorsie.setRotationYawHead(entity.rotationYaw);
+								zomhorsie.setRenderYawOffset(entity.rotationYaw);
+
+								if(!horsie.isDead) {
+									ContainerHorseChest chest = horsie.horseChest;
+
+									ItemStack armorStack = chest.getStackInSlot(1);
+									if(!armorStack.isEmpty()) {
+										horsie.entityDropItem(armorStack.copy(), 0.0F);
+										chest.setInventorySlotContents(1, ItemStack.EMPTY);
+									}
+								}
+
+								NBTTagCompound horseNBT = new NBTTagCompound();
+								horsie.writeEntityToNBT(horseNBT);
+								zomhorsie.readEntityFromNBT(horseNBT);
+								zomhorsie.setHealth(zomhorsie.getMaxHealth());
+								HbmLivingProps.setRadiation(zomhorsie, 0);
+								zomhorsie.clearActivePotions();
+
+								zomhorsie.setGrowingAge(horsie.getGrowingAge());
+								zomhorsie.resetInLove();
+								zomhorsie.setTemper(horsie.getTemper());
+								zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+								zomhorsie.setHorseTamed(horsie.isTame());
+								zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+								zomhorsie.makeMad();
+                                if (horsie.hasCustomName()) zomhorsie.setCustomNameTag(horsie.getCustomNameTag());
+
+								if(!entity.isDead)
+									world.spawnEntity(zomhorsie);
+								if(!horsie.isDead && horsie.getLeashed()) zomhorsie.setLeashHolder(horsie.getLeashHolder(), true);
+								if(!horsie.isDead && horsie.isBeingRidden() && horsie.getControllingPassenger() instanceof EntityPlayer) {
+									EntityPlayer passenger;
+									passenger = (EntityPlayer) horsie.getControllingPassenger();
+
+									if(passenger != null) {
+										passenger.dismountRidingEntity();
+										passenger.startRiding(zomhorsie);
+									}
+								}
+								entity.setDead();
+								continue;
+							}
+						} else if(eRad >= 900 && entity instanceof EntityDuck duck && !(entity instanceof EntityQuackos)) {
 							EntityQuackos quacc = new EntityQuackos(world);
 							quacc.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							quacc.setRotationYawHead(entity.rotationYaw);
+							quacc.setRenderYawOffset(entity.rotationYaw);
+							quacc.setGrowingAge(duck.getGrowingAge());
+                            if (duck.hasCustomName()) quacc.setCustomNameTag(duck.getCustomNameTag());
 
 							if(!entity.isDead)
 								world.spawnEntity(quacc);
-
+                            if(!duck.isDead && duck.getLeashed()) quacc.setLeashHolder(duck.getLeashHolder(), true);
 							entity.setDead();
 							continue;
 						}
@@ -397,7 +658,6 @@ public class RadiationSystemNT {
 
 							if(entity.getHealth() > 0) {
 								entity.setHealth(0);
-								entity.onDeath(ModDamageSource.radiation);
 							}
 
 							if(entity instanceof EntityPlayerMP)
@@ -546,10 +806,9 @@ public class RadiationSystemNT {
 		if (allowUpdate) {
 			// Make the world stinky
 			RadiationWorldHandler.handleWorldDestruction(e.world);
+			// Make entities stinky (only at START to avoid double processing)
+			updateEntityContamination(e.world, allowUpdate);
 		}
-
-		// Make entities stinky
-		updateEntityContamination(e.world, allowUpdate);
 	}
 
 	@SubscribeEvent
@@ -577,7 +836,7 @@ public class RadiationSystemNT {
 		//Make sure any chunks marked as dirty by radiation resistant blocks are rebuilt instantly
 		rebuildDirty();
 	}
-	
+
 	@SubscribeEvent
 	public static void onChunkUnload(ChunkEvent.Unload e){
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
@@ -591,7 +850,7 @@ public class RadiationSystemNT {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onChunkLoad(ChunkDataEvent.Load e){
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
@@ -606,7 +865,7 @@ public class RadiationSystemNT {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onChunkSave(ChunkDataEvent.Save e){
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
@@ -621,7 +880,7 @@ public class RadiationSystemNT {
 			}
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldLoad(WorldEvent.Load e){
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
@@ -631,7 +890,7 @@ public class RadiationSystemNT {
 			worldMap.put(e.getWorld(), new WorldRadiationData(e.getWorld()));
 		}
 	}
-	
+
 	@SubscribeEvent
 	public static void onWorldUnload(WorldEvent.Unload e){
 		if(!GeneralConfig.enableRads || !GeneralConfig.advancedRadiation)
@@ -641,7 +900,7 @@ public class RadiationSystemNT {
 			worldMap.remove(e.getWorld());
 		}
 	}
-	
+
 	/**
 	 * Updates the whole radiation system. This loops through every world's radiation data, and updates the value in each pocket.
 	 * Pockets transfer some of their radiation to pockets they're connected to.
@@ -781,13 +1040,13 @@ public class RadiationSystemNT {
 		}
 
 		//System.out.println(System.nanoTime()-lTime);
-		//Should ideally never happen because of the 20 ms limit, 
+		//Should ideally never happen because of the 20 ms limit,
 		//but who knows, maybe it will, and it's nice to have debug output if it does
 		if(System.currentTimeMillis()-time > 50){
 			System.out.println("Rads took too long: " + (System.currentTimeMillis()-time));
 		}
 	}
-	
+
 	//Reduces array reallocations
 	private static RadPocket[] pocketsByBlock = null;
 
@@ -796,7 +1055,7 @@ public class RadiationSystemNT {
             return radBlock.isRadResistant(world, pos);
         return block.getExplosionResistance(null) >=  2_160_000;
     }
-	
+
 	/**
 	 * Divides a 16x16x16 sub chunk into pockets that are separated by radiation resistant blocks.
 	 * These pockets are also linked to other pockets in neighboring chunks
@@ -824,7 +1083,7 @@ public class RadiationSystemNT {
 		}
 		ChunkRadiationStorage st = getChunkStorage(chunk.getWorld(), subChunkPos);
 		SubChunkRadiationStorage subChunk = new SubChunkRadiationStorage(st, subChunkPos.getY(), null, null);
-		
+
 		if (blocks != null) {
 			//Loop over every block in the sub chunk
 			for(int x = 0; x < 16; x ++){
@@ -918,7 +1177,7 @@ public class RadiationSystemNT {
 		//System.out.println(System.currentTimeMillis()-ms);
 		//System.out.println("b " + (System.nanoTime()-ns));
 	}
-	
+
 	private static void doEmptyChunk(Chunk chunk, BlockPos subChunkPos, BlockPos pos, RadPocket pocket, EnumFacing facing){
 		//long l = System.nanoTime();
 		BlockPos newPos = pos.offset(facing);
@@ -935,7 +1194,7 @@ public class RadiationSystemNT {
 			} else {
 				//If it is loaded, see if the pocket at that position is already connected to us. If not, add it as a connection.
 				//Setting outPocket's connection will be handled in setForYLevel
-				
+
 				RadPocket outPocket = getPocket(chunk.getWorld(), outPos);
 				if(!pocket.connectionIndices[facing.ordinal()].contains(Integer.valueOf(outPocket.index)))
 					pocket.connectionIndices[facing.ordinal()].add(outPocket.index);
@@ -943,10 +1202,10 @@ public class RadiationSystemNT {
 		}
 		//System.out.println(System.nanoTime()-l);
 	}
-	
+
 	//To reduce a lot of reallocations
 	private static Queue<BlockPos> stack = new ArrayDeque<>(1024);
-	
+
 	/**
 	 * Builds a pocket using a flood fill.
 	 * @param subChunk - sub chunk to build a pocket in
@@ -1021,7 +1280,7 @@ public class RadiationSystemNT {
 
 		return pocket;
 	}
-	
+
 	/*
 	 * And finally, the data structure part.
 	 * The hierarchy goes like this:
@@ -1030,7 +1289,7 @@ public class RadiationSystemNT {
 	 * 			SubChunkRadiationStorage - Stores and array of RadPockets as well as a larger array representing the RadPocket in each position in the sub chunk
 	 * 				RadPocket - Stores the actual radiation value as well as connections to neighboring RadPockets by indices
 	 */
-	
+
 	//A list of pockets completely closed off by radiation resistant blocks
 	public static class RadPocket {
 		public SubChunkRadiationStorage parent;
@@ -1041,7 +1300,7 @@ public class RadiationSystemNT {
 		//If an array contains -1, that means the chunk on that side hasn't been initialized, so it's an implicit connection
 		@SuppressWarnings("unchecked")
 		public List<Integer>[] connectionIndices = new List[EnumFacing.VALUES.length];
-		
+
 		public RadPocket(SubChunkRadiationStorage parent, int index) {
 			this.parent = parent;
 			this.index = index;
@@ -1050,7 +1309,7 @@ public class RadiationSystemNT {
 				connectionIndices[i] = new ArrayList<>(1);
 			}
 		}
-		
+
 		/**
 		 * Mainly just removes itself from the active pockets list
 		 * @param world - the world to remove from (unused)
@@ -1084,7 +1343,7 @@ public class RadiationSystemNT {
 			return (count == 0);
 		}
 	}
-	
+
 	//the smaller 16*16*16 chunk
 	public static class SubChunkRadiationStorage {
 		public ChunkRadiationStorage parent;
@@ -1092,14 +1351,14 @@ public class RadiationSystemNT {
 		//If it's null, that means there's only 1 pocket, which will be most chunks, so this saves memory.
 		public RadPocket[] pocketsByBlock;
 		public RadPocket[] pockets;
-		
+
 		public SubChunkRadiationStorage(ChunkRadiationStorage parent, int yLevel, RadPocket[] pocketsByBlock, RadPocket[] pockets) {
 			this.parent = parent;
 			this.yLevel = yLevel;
 			this.pocketsByBlock = pocketsByBlock;
 			this.pockets = pockets;
 		}
-				
+
 		/**
 		 * Gets the pocket at the position
 		 * @param pos - the position to get the pocket at
@@ -1133,7 +1392,7 @@ public class RadiationSystemNT {
                 }
             }
         }
-		
+
 		/**
 		 * Attempts to distribute radiation from another sub chunk into this one's pockets.
 		 * @param other - the sub chunk to set from
@@ -1157,7 +1416,7 @@ public class RadiationSystemNT {
 				}
 			}
 		}
-		
+
 		/**
 		 * Remove from the world
 		 * @param world - the world to remove from
@@ -1180,7 +1439,7 @@ public class RadiationSystemNT {
 				}
 			}
 		}
-		
+
 		/**
 		 * Adds to the world
 		 * @param world - the world to add to
@@ -1207,22 +1466,22 @@ public class RadiationSystemNT {
 			}
 		}
 	}
-	
+
 	//for a whole 16*256*16 chunk
 	public static class ChunkRadiationStorage {
 		//Half a megabyte is good enough isn't it? Right?
 		//This is going to come back to bite me later, isn't it.
 		private static ByteBuffer buf = ByteBuffer.allocate(524288);
-		
+
 		public WorldRadiationData parent;
 		private Chunk chunk;
 		private SubChunkRadiationStorage[] chunks = new SubChunkRadiationStorage[16];
-		
+
 		public ChunkRadiationStorage(WorldRadiationData parent, Chunk chunk) {
 			this.parent = parent;
 			this.chunk = chunk;
 		}
-		
+
 		/**
 		 * Gets the sub chunk for the specified y coordinate
 		 * @param y - the y coordinate of the sub chunk
@@ -1237,7 +1496,7 @@ public class RadiationSystemNT {
 			}
 			return chunks[y >> 4];
 		}
-		
+
 		/**
 		 * Gets the world position of this chunk, using the specified y coordinate
 		 * @param y - the y coordinate for the returned position
@@ -1246,7 +1505,7 @@ public class RadiationSystemNT {
 		public BlockPos getWorldPos(int y){
 			return new BlockPos(chunk.getPos().x << 4, y, chunk.getPos().z << 4);
 		}
-		
+
 		/**
 		 * Sets the sub chunk at the y level to the new sub chunk
 		 * @param y - the y level to set
@@ -1266,7 +1525,7 @@ public class RadiationSystemNT {
 			}
 			chunks[y >> 4] = sc;
 		}
-		
+
 		/**
 		 * Removes all active pockets on unload
 		 */
@@ -1280,7 +1539,7 @@ public class RadiationSystemNT {
 				chunks[y] = null;
 			}
 		}
-		
+
 		/**
 		 * Serializes the chunk data to an NBT tag
 		 * @param tag - the tag to write to
@@ -1319,7 +1578,7 @@ public class RadiationSystemNT {
 			buf.clear();
 			return tag;
 		}
-		
+
 		/**
 		 * Gets the index of the rad pocket in the array of pockets
 		 * There's probably a helper method for this in the Arrays class or something, but this works fine too
@@ -1334,7 +1593,7 @@ public class RadiationSystemNT {
 			}
 			return -1;
 		}
-		
+
 		/**
 		 * Writes a single pocket to a ByteBuffer
 		 * @param buf - the buffer to write to
@@ -1353,7 +1612,7 @@ public class RadiationSystemNT {
 				}
 			}
 		}
-		
+
 		/**
 		 * Deserializes from NBT
 		 * @param tag - the tag to deserialize from
@@ -1394,7 +1653,7 @@ public class RadiationSystemNT {
 				}
 			}
 		}
-		
+
 		/**
 		 * Reads a single pocket from a byte buffer
 		 * @param buf - the buffer to read from
@@ -1417,7 +1676,7 @@ public class RadiationSystemNT {
 			return p;
 		}
 	}
-	
+
 	//For a world's radiation data, contains a bunch of chunk data blocks
 	public static class WorldRadiationData {
 		public World world;
@@ -1426,11 +1685,11 @@ public class RadiationSystemNT {
 		private Set<BlockPos> dirtyChunks = new HashSet<>();
 		private Set<BlockPos> dirtyChunks2 = new HashSet<>();
 		private boolean iteratingDirty = false;
-		
+
 		//Active pockets are the pockets that have radiation in them and so then need to be updated
 		private Set<RadPocket> activePockets = new HashSet<>();
 		public Map<ChunkPos, ChunkRadiationStorage> data = new HashMap<>();
-		
+
 		public WorldRadiationData(World world) {
 			this.world = world;
 		}

@@ -38,7 +38,11 @@ public class ServerProxy
 	public void registerMissileItems(IRegistry<ModelResourceLocation, IBakedModel> reg) { }
 
 	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float pitch) { return null; }
-	
+
+	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch) { return null; }
+
+	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) { return null; }
+
 	public AudioWrapper getLoopedSoundStartStop(World world, SoundEvent sound, SoundEvent start, SoundEvent stop, SoundCategory cat, float x, float y, float z, float volume, float pitch){return null;}
 	
 	public void preInit(FMLPreInitializationEvent evt) {}
@@ -76,4 +80,6 @@ public class ServerProxy
     public boolean isVanished(Entity e) {
 		return false;
 	}
+	
+	public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) { }
 }

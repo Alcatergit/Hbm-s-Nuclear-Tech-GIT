@@ -6,6 +6,7 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
+import com.hbm.lib.Library;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFurnace;
@@ -91,6 +92,7 @@ public class Factory extends WorldGenerator
 		{
 			return false;
 		}
+		y = Library.getBedrockAdjustedY(world, x, y, z, 0, 0, 14, 28, -6);
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 		for(int i = 0; i < 15; i++)

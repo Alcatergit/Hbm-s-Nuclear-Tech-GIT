@@ -1,7 +1,6 @@
 package com.hbm.capability;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
@@ -98,19 +97,15 @@ public class HbmLivingProps {
 		}
 
 		attributeinstance.applyModifier(new AttributeModifier(digamma_UUID, "digamma", healthMod, 2));
-		int s = (int)(digamma * 6);
-		if(s > 1){
-			NBTTagCompound shake = new NBTTagCompound();
-			shake.setString("type", "justTilt");
-			shake.setInteger("time", s);
-			PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(shake, 0, 0, 0), new TargetPoint(entity.dimension, entity.posX, entity.posY, entity.posZ, 50));
-		}
+
+        if (entity.getHealth() > entity.getMaxHealth()) {
+            entity.setHealth(entity.getMaxHealth());
+        }
 
 		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {
 			entity.setAbsorptionAmount(0);
 			entity.attackEntityFrom(ModDamageSource.digamma, 5000000F);
 			entity.setHealth(0);
-			entity.onDeath(ModDamageSource.digamma);
 
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "sweat");

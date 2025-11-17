@@ -1421,6 +1421,9 @@ public class ResourceManager {
     public static ResourceLocation cmb_shield_blank_tex = new ResourceLocation(RefStrings.MODID, "textures/items/cmb_shield_blank.png");
     public static ResourceLocation schrabidium_shield_blank_tex = new ResourceLocation(RefStrings.MODID, "textures/items/schrabidium_shield_blank.png");
 
+    public static final ResourceLocation nuclear_creeper_charge = new ResourceLocation(RefStrings.MODID, "textures/entity/creeper_armor.png");
+    public static final ResourceLocation tainted_creeper_charge = new ResourceLocation(RefStrings.MODID, "textures/entity/creeper_armor_taint.png");
+
 
 
     //ANIMATIONS

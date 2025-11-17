@@ -116,6 +116,7 @@ public class ExplosionBalefire {
 					return;
 				}
 				
+				worldObj.removeTileEntity(new BlockPos(pX, y, pZ));
 				worldObj.setBlockToAir(new BlockPos(pX, y, pZ));
 				
 				y--;

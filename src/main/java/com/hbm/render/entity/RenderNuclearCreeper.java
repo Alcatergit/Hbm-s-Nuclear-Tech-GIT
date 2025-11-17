@@ -1,5 +1,6 @@
 package com.hbm.render.entity;
 
+import com.hbm.render.entity.layers.LayerNuclearCreeperCharge;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.mob.EntityNuclearCreeper;
@@ -16,6 +17,7 @@ public class RenderNuclearCreeper extends RenderLiving<EntityNuclearCreeper> {
     /** The creeper model. */
 	public RenderNuclearCreeper(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCreeper(), 0.5F);
+        this.addLayer(new LayerNuclearCreeperCharge(this));
 	}
 	
 	@Override

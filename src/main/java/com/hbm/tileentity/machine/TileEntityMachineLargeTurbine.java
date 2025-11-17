@@ -9,10 +9,13 @@ import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyGenerator;
@@ -21,6 +24,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -37,6 +41,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public class TileEntityMachineLargeTurbine extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
@@ -48,7 +54,10 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 	private boolean shouldTurn;
 	public float rotor;
 	public float lastRotor;
-	
+	public float fanAcceleration = 0F;
+	private AudioWrapper audio;
+	private final float audioDesync;
+
 	public TileEntityMachineLargeTurbine() {
 		super(7);
 		tanks = new FluidTank[2];
@@ -56,6 +65,9 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		tanks[1] = new FluidTank(10240000);
 		types[0] = ModForgeFluids.STEAM;
 		types[1] = ModForgeFluids.SPENTSTEAM;
+
+		Random rand = new Random();
+		audioDesync = rand.nextFloat() * 0.05F;
 	}
 
 	@Untested
@@ -129,19 +141,65 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 		} else {
 
 			this.lastRotor = this.rotor;
+			this.rotor += this.fanAcceleration;
+
+			if(this.rotor >= 360) {
+				this.rotor -= 360;
+				this.lastRotor -= 360;
+			}
 
 			if(shouldTurn) {
 
-				this.rotor += 15F;
+				this.fanAcceleration = Math.max(0F, Math.min(15F, this.fanAcceleration + 0.075F + audioDesync));
 
-				if(this.rotor >= 360) {
-					this.rotor -= 360;
-					this.lastRotor -= 360;
+				float turbineSpeed = this.fanAcceleration / 15F;
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.turbofanOperate, SoundCategory.BLOCKS, (float) pos.getX(), (float) pos.getY(), (float) pos.getZ(), 0.4F * turbineSpeed, 10F, 0.25F + 0.75F * turbineSpeed);
+					audio.startSound();
+				}
+
+				audio.updateVolume(0.4F * turbineSpeed);
+				audio.updatePitch(0.25F + 0.75F * turbineSpeed);
+				audio.keepAlive();
+			} else {
+				this.fanAcceleration = Math.max(0F, Math.min(15F, this.fanAcceleration - 0.1F));
+
+				if(audio != null) {
+					if(this.fanAcceleration > 0) {
+						float turbineSpeed = this.fanAcceleration / 15F;
+						audio.updateVolume(0.4F * turbineSpeed);
+						audio.updatePitch(0.25F + 0.75F * turbineSpeed);
+						audio.keepAlive();
+					} else {
+						audio.stopSound();
+						audio = null;
+					}
 				}
 			}
 		}
 	}
-	
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
 	protected boolean inputValidForTank(int tank, int slot) {
 		if(inventory.getStackInSlot(slot) != ItemStack.EMPTY && tanks[tank] != null) {
 			FluidStack f = FluidUtil.getFluidContained(inventory.getStackInSlot(slot));

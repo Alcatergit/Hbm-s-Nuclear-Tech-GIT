@@ -10,10 +10,12 @@ import com.hbm.inventory.FluidCombustionRecipes;
 import com.hbm.inventory.FluidCombustionRecipes.FuelGrade;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyGenerator;
-import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
@@ -33,7 +35,8 @@ import org.jetbrains.annotations.NotNull;
 public class TileEntityMachineDiesel extends TileEntityMachineBase implements ITickable, IEnergyGenerator, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
-	public int soundCycle = 0;
+	public boolean isOn = false;
+	private AudioWrapper audio;
 	public static final long maxPower = 50000;
 	public long powerCap = 50000;
 	public int age = 0;
@@ -113,14 +116,39 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 			// Battery Item
 			power = Library.chargeItemsFromTE(inventory, 2, power, powerCap);
 
+			this.isOn = false;
 			generate();
 
 			NBTTagCompound data = new NBTTagCompound();
 			data.setInteger("power", (int) power);
 			data.setInteger("powerCap", (int) powerCap);
+			data.setBoolean("isOn", isOn);
 			this.networkPack(data, 50);
 			
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] {tank}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		} else {
+
+			if(isOn) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.engine, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 10F, 1.0F, 10);
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio.stopSound();
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.engine, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1.0F, 10F, 1.0F, 10);
+					audio.startSound();
+				}
+
+				audio.keepAlive();
+				audio.updateVolume(1F);
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
 	}
 	
@@ -128,6 +156,7 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	public void networkUnpack(NBTTagCompound data) {
 		power = data.getInteger("power");
 		powerCap = data.getInteger("powerCap");
+		this.isOn = data.getBoolean("isOn");
 	}
 	
 	public boolean hasAcceptableFuel() {
@@ -152,13 +181,7 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	public void generate() {
 		if (hasAcceptableFuel()) {
 			if (tank.getFluidAmount() > 0) {
-				if (soundCycle == 0) {
-					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_FIREWORK_BLAST, SoundCategory.BLOCKS, 0.5F, -100.0F);
-				}
-				soundCycle++;
-
-				if (soundCycle >= 5)
-					soundCycle = 0;
+				this.isOn = true;
 
 				tank.drain(1, true);
 				needsUpdate = true;
@@ -250,5 +273,23 @@ public class TileEntityMachineDiesel extends TileEntityMachineBase implements IT
 	@Override
 	public long getMaxPower() {
 		return maxPower;
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
 	}
 }

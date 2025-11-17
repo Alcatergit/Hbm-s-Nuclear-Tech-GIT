@@ -137,12 +137,14 @@ public class ExplosionTom
 									pos.setPos(pX + i, y + j, pZ + k);
 									m = world.getBlockState(pos).getMaterial();
 									if(m == Material.WATER || m == Material.ICE || m == Material.SNOW || m.getCanBurn()) {
+										world.removeTileEntity(pos);
 										world.setBlockToAir(pos);
 										world.setBlockToAir(pos.setPos(pX, y, pZ));
 									}
 								}
 							}
 						}
+						world.removeTileEntity(pos.setPos(pX, y, pZ));
 						world.setBlockToAir(pos.setPos(pX, y, pZ));
 					} else {
 						for(int i = -2; i < 3; i++) {

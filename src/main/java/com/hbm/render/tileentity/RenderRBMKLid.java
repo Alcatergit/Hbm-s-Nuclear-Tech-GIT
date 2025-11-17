@@ -12,6 +12,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKHeater;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -81,14 +82,14 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		bindTexture(block.columnTexture);
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
-		boolean doJump = control.jumpheight > 0;
+		boolean doJump = control.jumpHeight > 0;
 		
-		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight+TileEntityRBMKBase.rbmkHeight);
+		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpHeight +RBMKDials.getColumnHeight(control.getWorld()));
 			
 		tes.draw();
 		
 		
-		int offset = TileEntityRBMKBase.rbmkHeight;
+		int offset = RBMKDials.getColumnHeight(control.getWorld());
 		
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
@@ -112,7 +113,7 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 			}
 
 			if(doJump){
-				GL11.glTranslated(0, control.jumpheight, 0);
+				GL11.glTranslated(0, control.jumpHeight, 0);
 			}
 			
 			if((control instanceof TileEntityRBMKBoiler || control instanceof TileEntityRBMKHeater) && meta != RBMKBase.DIR_GLASS_LID.ordinal())

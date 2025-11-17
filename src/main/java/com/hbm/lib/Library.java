@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.material.Material;
@@ -170,9 +169,13 @@ public class Library {
             Field f = ReflectionHelper.findField(c, variable, variableObf);
             if(isHidden) f.setAccessible(true);
 
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            } catch(Throwable ignored) {
+                // AT may have already removed final, continue anyway
+            }
 
             f.set(null, newValue);
         } catch(Throwable ignored){
@@ -1183,5 +1186,24 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 	
 	public static Explosion explosionDummy(World w, double x, double y, double z){
 		return new Explosion(w, null, x, y, z, 1000, false, false);
+	}
+
+	public static int getBedrockAdjustedY(World world, int x, int y, int z, int minX, int minZ, int maxX, int maxZ, int minOffset) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int maxBedrockTop = 0;
+		for (int cx = x + minX; cx <= x + maxX; cx++) {
+			for (int cz = z + minZ; cz <= z + maxZ; cz++) {
+				for (int cy = 0; cy <= 5; cy++) {
+					pos.setPos(cx, cy, cz);
+					if (world.getBlockState(pos).getBlock() != Blocks.BEDROCK) {
+						if (cy > maxBedrockTop) {
+							maxBedrockTop = cy;
+						}
+						break;
+					}
+				}
+			}
+		}
+		return Math.max(y, maxBedrockTop - minOffset);
 	}
 }

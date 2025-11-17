@@ -14,6 +14,7 @@ import com.hbm.lib.Library;
 import com.hbm.render.model.ModelArmorDNT;
 import com.hbm.util.I18nUtil;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
@@ -80,19 +81,17 @@ public class ArmorDNT extends ArmorFSBPowered {
 			
 			ArmorUtil.resetFlightTime(player);
 
-			if(props.isJetpackActive()) {
-
-				if(player.motionY < 0.6D)
-					player.motionY += 0.2D;
+			if(Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && !Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown() && props.isJetpackActive()) {
+				player.motionY += 0.2D;
 
 				player.fallDistance = 0;
 
 				if(world.getTotalWorldTime() % 4 == 0)
 					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 
-			} else if(!player.isSneaking() && !player.onGround && props.getEnableBackpack()) {
+			} else if((!Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown() && !player.onGround && props.getEnableBackpack()) || (Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown() && Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && !player.onGround)) {
 				player.fallDistance = 0;
-				
+
 				if(player.motionY < -1)
 					player.motionY += 0.4D;
 				else if(player.motionY < -0.1)
@@ -111,7 +110,7 @@ public class ArmorDNT extends ArmorFSBPowered {
 					world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.immolatorShoot, SoundCategory.PLAYERS, 0.125F, 1.5F);
 			}
 			
-			if(player.isSneaking() && !player.onGround) {
+			if(Minecraft.getMinecraft().gameSettings.keyBindSneak.isKeyDown() && !Minecraft.getMinecraft().gameSettings.keyBindJump.isKeyDown() && !player.onGround) {
 				player.motionY -= 0.1D;
 			}
 		}

@@ -61,6 +61,11 @@ public class BlockGasFlammable extends BlockGasBase {
 	@Untested
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos){
+		// To prevent infinite recursion: If the source block is fire, skip the processing.
+		if(fromPos != null && isFireSource(world.getBlockState(fromPos))) {
+			return;
+		}
+		
 		MutableBlockPos posN = new BlockPos.MutableBlockPos();
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 			posN.setPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ);

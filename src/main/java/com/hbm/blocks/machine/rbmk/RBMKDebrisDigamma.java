@@ -21,7 +21,7 @@ public class RBMKDebrisDigamma extends RBMKDebris {
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
 		if(!world.isRemote) {
 			
-			ContaminationUtil.radiate(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 0, 200F, 0, 0, 0);
+			ContaminationUtil.radiate(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, 0, 200F, 0, 0, 0, 1.0D, null);
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 				Block b = world.getBlockState(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + dir.offsetY, pos.getZ() + dir.offsetZ)).getBlock();
 				if((b instanceof RBMKDebris  && b != this) || b == ModBlocks.corium_block || b == ModBlocks.block_corium)

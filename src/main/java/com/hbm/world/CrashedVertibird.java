@@ -7,6 +7,7 @@ import com.hbm.blocks.machine.MachineBattery;
 import com.hbm.config.GeneralConfig;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.lib.HbmChestContents;
+import com.hbm.lib.Library;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockChest;
@@ -85,6 +86,7 @@ public class CrashedVertibird extends WorldGenerator
 		{
 			return false;
 		}
+		y = Library.getBedrockAdjustedY(world, x, y, z, 0, 0, 9, 9, -yOffset);
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 
 		world.setBlockState(pos.setPos(x + 4, y + 0 - yOffset, z + 1), Block1.getDefaultState(), 3);

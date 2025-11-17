@@ -1,6 +1,5 @@
 package com.hbm.blocks.bomb;
 
-import java.util.Random;
 import java.util.List;
 
 import com.hbm.util.I18nUtil;
@@ -8,14 +7,12 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleija;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
-import com.hbm.interfaces.IBomb;
-import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeFleija;
+import com.hbm.items.ModItems;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -26,6 +23,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +35,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class NukeFleija extends BlockContainer implements IBomb {
+public class NukeFleija extends BlockNukeBase {
 
 	public static final PropertyInteger FACING = PropertyInteger.create("facing", 2, 5);
 	
@@ -56,22 +55,22 @@ public class NukeFleija extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+	protected Item getBlockItem() {
 		return Item.getItemFromBlock(ModBlocks.nuke_fleija);
 	}
 
 	@Override
-	public void breakBlock(World world, BlockPos pos, IBlockState state) {
+	protected Class<? extends TileEntity> getTileEntityClass() {
+		return TileEntityNukeFleija.class;
+	}
 
-		TileEntity tileentity = world.getTileEntity(pos);
-
-		if (tileentity instanceof TileEntityNukeFleija) {
-			InventoryHelper.dropInventoryItems(world, pos, tileentity);
-
-			world.updateComparatorOutputLevel(pos, this);
-		}
-
-		super.breakBlock(world, pos, state);
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		int i = MathHelper.floor(placer.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
+		if(i == 0) return this.getDefaultState().withProperty(FACING, 5);
+		if(i == 1) return this.getDefaultState().withProperty(FACING, 3);
+		if(i == 2) return this.getDefaultState().withProperty(FACING, 4);
+		return this.getDefaultState().withProperty(FACING, 2);
 	}
 	
 	@Override
@@ -100,10 +99,12 @@ public class NukeFleija extends BlockContainer implements IBomb {
         {
         	if(entity.isReady())
         	{
-        		this.onPlayerDestroy(worldIn, pos, state);
-            	entity.clearSlots();
+				// ========== Modified: Set detonation flag, then clear the block ==========
+        		this.isExploding = true;
+        		entity.clearSlots();
             	worldIn.setBlockToAir(pos);
             	igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.fleijaRadius);
+            	this.isExploding = false;
         	}
         }
 	}
@@ -167,28 +168,6 @@ public class NukeFleija extends BlockContainer implements IBomb {
 	public boolean isFullCube(IBlockState state) {
 		return false;
 	}
-	
-	@Override
-	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase player, ItemStack stack) {
-		int i = MathHelper.floor(player.rotationYaw * 4.0F / 360.0F + 0.5D) & 3;
-		
-		if(i == 0)
-		{
-			world.setBlockState(pos, this.getDefaultState().withProperty(FACING, 5), 2);
-		}
-		if(i == 1)
-		{
-			world.setBlockState(pos, this.getDefaultState().withProperty(FACING, 3), 2);
-		}
-		if(i == 2)
-		{
-			world.setBlockState(pos, this.getDefaultState().withProperty(FACING, 4), 2);
-		}
-		if(i == 3)
-		{
-			world.setBlockState(pos, this.getDefaultState().withProperty(FACING, 2), 2);
-		}
-	}
 
 	@Override
 	public void explode(World world, BlockPos pos) {
@@ -197,10 +176,12 @@ public class NukeFleija extends BlockContainer implements IBomb {
         {
         	if(entity.isReady())
         	{
-        		this.onPlayerDestroy(world, pos, world.getBlockState(pos));
-            	entity.clearSlots();
+				// ========== Modified: Set detonation flag, then clear the block ==========
+        		this.isExploding = true;
+        		entity.clearSlots();
             	world.setBlockToAir(pos);
             	igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.fleijaRadius);
+            	this.isExploding = false;
         	}
         }
 	}
@@ -223,8 +204,81 @@ public class NukeFleija extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§b["+ I18nUtil.resolveKey("trait.schrabbomb")+"]§r");
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.fleijaRadius)+"§r");
+
+		// ========== Added: Check if the item's NBT data meets detonation conditions ==========
+		if (isItemReady(stack)) {
+			tooltip.add("§2[Is ready]§r");
+		}
+	}
+
+	// ========== Added: Helper method based on TileEntityNukeFleija's isReady condition ==========
+	private boolean isItemReady(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+			
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Check if it contains the Items tag (the serialization format of ItemStackHandler)
+				if (inventoryTag.hasKey("Items")) {
+					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
+
+					// Check if all items required by TileEntityNukeFleija's isReady method are present
+					boolean hasIgniter1 = false;
+					boolean hasIgniter2 = false;
+					boolean hasPropellant1 = false;
+					boolean hasPropellant2 = false;
+					boolean hasPropellant3 = false;
+					boolean hasCore1 = false;
+					boolean hasCore2 = false;
+					boolean hasCore3 = false;
+					boolean hasCore4 = false;
+					boolean hasCore5 = false;
+					boolean hasCore6 = false;
+					
+					for (int i = 0; i < itemsList.tagCount(); i++) {
+						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
+						int slot = itemTag.getByte("Slot");
+
+						// Check item ID (using registry name instead of string ID)
+						String itemId = itemTag.getString("id");
+
+						// Check corresponding item based on slot (following TileEntityNukeFleija's isReady method)
+						if (slot == 0 && itemId.equals(ModItems.fleija_igniter.getRegistryName().toString())) {
+							hasIgniter1 = true;
+						} else if (slot == 1 && itemId.equals(ModItems.fleija_igniter.getRegistryName().toString())) {
+							hasIgniter2 = true;
+						} else if (slot == 2 && itemId.equals(ModItems.fleija_propellant.getRegistryName().toString())) {
+							hasPropellant1 = true;
+						} else if (slot == 3 && itemId.equals(ModItems.fleija_propellant.getRegistryName().toString())) {
+							hasPropellant2 = true;
+						} else if (slot == 4 && itemId.equals(ModItems.fleija_propellant.getRegistryName().toString())) {
+							hasPropellant3 = true;
+						} else if (slot == 5 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore1 = true;
+						} else if (slot == 6 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore2 = true;
+						} else if (slot == 7 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore3 = true;
+						} else if (slot == 8 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore4 = true;
+						} else if (slot == 9 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore5 = true;
+						} else if (slot == 10 && itemId.equals(ModItems.fleija_core.getRegistryName().toString())) {
+							hasCore6 = true;
+						}
+					}
+
+					// Return whether TileEntityNukeFleija's isReady condition is met
+					return hasIgniter1 && hasIgniter2 && hasPropellant1 && hasPropellant2 && hasPropellant3 && 
+						   hasCore1 && hasCore2 && hasCore3 && hasCore4 && hasCore5 && hasCore6;
+				}
+			}
+		}
+		
+		return false;
 	}
 }

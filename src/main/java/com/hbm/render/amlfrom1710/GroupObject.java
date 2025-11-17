@@ -75,4 +75,16 @@ public class GroupObject
             }
         }
     }
+
+    @SideOnly(Side.CLIENT)
+    public void renderAbove(Tessellator tessellator, float yThreshold)
+    {
+        if (!faces.isEmpty())
+        {
+            for (Face face : faces)
+            {
+                face.addFaceForRenderAbove(tessellator, yThreshold);
+            }
+        }
+    }
 }

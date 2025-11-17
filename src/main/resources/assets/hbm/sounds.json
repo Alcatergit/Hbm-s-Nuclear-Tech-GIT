@@ -7,6 +7,12 @@
 
 	"block.crateBreak": {"category": "block", "sounds": ["hbm:block/cratebreak1", "hbm:block/cratebreak2", "hbm:block/cratebreak3", "hbm:block/cratebreak4", "hbm:block/cratebreak5"]},
 	"block.shutdown": {"category": "block", "sounds": [{"name": "hbm:block/shutdown", "stream": false}]},
+	"block.iterReactorRunning": {"category": "block", "sounds": [{"name": "hbm:block/iterreactorspin", "stream": false}]},
+	"block.chemicalPlant": {"category": "block", "sounds": [{"name": "hbm:block/chemicalplant", "stream": false}]},
+	"block.boiler": {"category": "block", "sounds": [{"name": "hbm:block/boiler", "stream": false}]},
+	"block.steamEngineOperate": {"category": "block", "sounds": [{"name": "hbm:block/steamengineoperate", "stream": false}]},
+	"block.electricHum": {"category": "block", "sounds": [{"name": "hbm:block/electrichum", "stream": false}]},
+	"block.engine": {"category": "block", "sounds": [{"name": "hbm:block/engine", "stream": false}]},
     "block.assembleroperate": {"category": "block", "sounds": [{"name": "hbm:block/assemblerOperate", "stream": false}]},
     "block.fel": {"category": "block", "sounds": [{"name": "hbm:block/fel", "stream": false}]},
     "block.chemplantOperate": {"category": "block", "sounds": [{"name": "hbm:block/chemplantOperate", "stream": false}]},
@@ -169,6 +175,20 @@
     "weapon.reloadTurret": {"category": "player", "sounds": [{"name": "hbm:weapon/reloadTurret", "stream": false}]},
     "weapon.switchmode1": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode1", "stream": false}]},
     "weapon.switchmode2": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode2", "stream": false}]},
+    "weapon.nuclearExplosion": {"category": "player", "sounds": [{"name": "hbm:weapon/nuclear_explosion", "stream": true}]},
+
+    "weapon.explosion_large_near": {
+      "category": "player",
+      "sounds": [
+        "hbm:weapon/explosion_large_near"
+      ]
+    },
+    "weapon.explosion_large_far": {
+      "category": "player",
+      "sounds": [
+        "hbm:weapon/explosion_large_far"
+      ]
+    },
 
 	"turret.chekhov_fire": {"category": "block", "sounds": [{"name": "hbm:turret/chekhov_fire", "stream": false}]},
     "turret.jeremy_fire": {"category": "block", "sounds": ["hbm:turret/jeremy_fire1", "hbm:turret/jeremy_fire2", "hbm:turret/jeremy_fire3", "hbm:turret/jeremy_fire4", "hbm:turret/jeremy_fire5"]},
@@ -269,6 +289,8 @@
 	"block.rbmk_explosion": {"category": "block", "sounds": [{"name": "hbm:block/rbmk_explosion", "stream": false}]},
     "block.rbmk_az5_cover": {"category": "block", "sounds": [{"name": "hbm:block/rbmk_az5_cover", "stream": false}]},
     "block.chungusLever": {"category": "block", "sounds": [{"name": "hbm:block/chungusLever", "stream": false}]},
+    "block.chungusTurbineRunning": {"category": "block", "sounds": [{"name": "hbm:block/chungusturbine", "stream": false}]},
 	"item.upgradePlug": {"category": "player", "sounds": [{"name": "hbm:tool/upgradePlug", "stream": false}]},
-	"item.battery": {"category": "player", "sounds": [{"name": "hbm:tool/battery", "stream": false}]}
+	"item.battery": {"category": "player", "sounds": [{"name": "hbm:tool/battery", "stream": false}]},
+	"item.discord_teleport": {"category": "player", "sounds": [{"name": "hbm:tool/item_8", "stream": false}]}
 }

@@ -3,6 +3,7 @@ package com.hbm.inventory.control_panel.controls;
 import com.hbm.inventory.control_panel.*;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.amlfrom1710.IModelCustom;
+
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -13,6 +14,8 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.EnumDyeColor;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -69,6 +72,7 @@ public class DisplayText extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
@@ -134,11 +138,13 @@ public class DisplayText extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IModelCustom getModel() {
         return ResourceManager.ctrl_display_seven_seg;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public ResourceLocation getGuiTexture() {
         return ResourceManager.ctrl_display_seven_seg_gui_tex;
     }
@@ -157,5 +163,4 @@ public class DisplayText extends Control {
     public void populateDefaultNodes(List<ControlEvent> receiveEvents) {
 
     }
-
 }

@@ -35,16 +35,32 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class ExplosionNukeGeneric {
 
+	public static final String SOLINIUM_CONFIG_HEADER =
+			"# Format: modid:blockName|modid:blockName\n" +
+					"# Left blocks are transformed to right, one per line\n";
+
 	private final static Random random = new Random();
+
+	private static boolean isOreDictMatch(Block block, String oreDictName) {
+		for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+			if (!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(block)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
 		if(!CompatibilityConfig.isWarDim(world)){
@@ -153,6 +169,7 @@ public class ExplosionNukeGeneric {
 				}
 				return protection;
 			}else{//otherwise, kill the block!
+				world.removeTileEntity(pos);
 				world.setBlockToAir(pos);
 			}
 		}
@@ -249,7 +266,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || isOreDictMatch(b, "oreCoal")) {
 				rand = random.nextInt(10);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
@@ -311,7 +328,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (b == ModBlocks.ore_uranium) {
+			else if (b == ModBlocks.ore_uranium || isOreDictMatch(b, "oreUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
@@ -320,7 +337,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if (b == ModBlocks.ore_nether_uranium) {
+			else if (b == ModBlocks.ore_nether_uranium || isOreDictMatch(b, "oreNetherUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
@@ -329,7 +346,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 			
-			else if (b == ModBlocks.ore_gneiss_uranium) {
+			else if (b == ModBlocks.ore_gneiss_uranium || isOreDictMatch(b, "oreNetherUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
@@ -338,6 +355,11 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
+			else if (b == Blocks.SPONGE) {
+				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
+				}
+			}
 		}
 	}
 
@@ -438,7 +460,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || isOreDictMatch(b, "oreCoal")) {
 				rand = random.nextInt(30);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
@@ -469,6 +491,12 @@ public class ExplosionNukeGeneric {
 					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
 					world.setBlockToAir(pos);
+				}
+			}
+
+			else if (b == Blocks.SPONGE) {
+				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 			}
 		}
@@ -513,15 +541,14 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 		}
 	}
-	
+
 	public static void loadSoliniumFromFile(){
 		File config = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/solinium.cfg");
 		if (!config.exists())
 			try {
 				config.getParentFile().mkdirs();
 				FileWriter write = new FileWriter(config);
-				write.write("# Format: modid:blockName|modid:blockName\n" + 
-							"# Left blocks are transformed to right, one per line\n");
+				write.write(SOLINIUM_CONFIG_HEADER);
 				write.close();
 				
 			} catch (IOException e) {
@@ -535,16 +562,19 @@ public class ExplosionNukeGeneric {
 			try {
 				read = new BufferedReader(new FileReader(config));
 				String currentLine = null;
+				soliniumConfig.clear();
 				
 				while((currentLine = read.readLine()) != null){
 					lineCount ++;
 					if(currentLine.startsWith("#") || currentLine.isEmpty())
 						continue;
-					String[] blocks = currentLine.trim().split("|");
+					String[] blocks = currentLine.trim().split("\\|");
 					if(blocks.length != 2)
 						continue;
 					String[] modidBlock1 = blocks[0].split(":");
 					String[] modidBlock2 = blocks[1].split(":");
+					if(modidBlock1.length != 2 || modidBlock2.length != 2)
+						continue;
 					Block b1 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock1[0], modidBlock1[1]));
 					Block b2 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock2[0], modidBlock2[1]));
 					if(b1 == null || b2 == null){

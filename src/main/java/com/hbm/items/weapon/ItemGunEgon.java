@@ -153,7 +153,6 @@ public class ItemGunEgon extends ItemGunBase {
 				if(ent.getHealth() <= 0){
 					PacketDispatcher.wrapper.sendToAllTracking(new PacketSpecialDeath(ent, 0), ent);
 					ent.setDead();
-					ent.onDeath(ModDamageSource.gluon);
 					//For ender dragon so it spawns a portal and all that
 					ent.onKillCommand();
 					

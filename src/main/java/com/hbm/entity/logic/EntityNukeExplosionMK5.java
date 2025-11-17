@@ -1,11 +1,17 @@
-
 package com.hbm.entity.logic;
 
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.entity.mob.EntityThermonuclearCat;
+import com.hbm.items.ModItems;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 
+import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumHand;
 import net.minecraft.world.biome.*;
 
 import org.apache.logging.log4j.Level;
@@ -25,13 +31,20 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+
+import java.util.List;
+
+import static com.hbm.entity.mob.EntityGlowingOne.convertToGlow;
+import static com.hbm.entity.mob.EntityThermonuclearCat.convertToThermo;
 
 public class EntityNukeExplosionMK5 extends EntityChunky {
 	//Strength of the blast
 	public int strength;
 	//Radius
 	public int radius;
-	
+
 	public boolean mute = false;
 	public boolean spawnFire = false;
 
@@ -43,43 +56,29 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 	ExplosionNukeRayBatched explosion;
 	EntityFalloutRain falloutRain;
 
-	public static final double shockSpeed = 2; //in blocks/t
-
-
 	public EntityNukeExplosionMK5(World world) {
 		super(world);
 	}
 
 	@Override
 	public void onUpdate() {
+		super.onUpdate();
 		if(world.isRemote) return;
 
 		if(strength == 0 || !CompatibilityConfig.isWarDim(world)) {
 			this.setDead();
 			return;
 		}
-		
-		float rads, fire, blast;
-		rads = 0;
-		//radiate until there is fallout rain
-		if(fallout && falloutRain == null) {
-			rads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double) 2 * this.ticksExisted / radius) + strength);
-			if(ticksExisted == 1){
-				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
-                if(radius > 120) EntityThermonuclearCat.convertInRadiusToThermo(world, this.posX, this.posY, this.posZ, radius);
-                if(radius > 60){
-                    for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).grow(radius * 2, radius * 2, radius * 2))) {
-                        AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
-                    }
-                }
-            }
+
+		if(ticksExisted == 1 && fallout && radius > 60){
+			for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).grow(radius * 2, radius * 2, radius * 2))) {
+				AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
+			}
 		}
-		
-		if(ticksExisted < 2400){
-			fire = (float)(fallout ? 10F: 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius));
-			blast = (float)Math.pow(radius + 10, 3) * 0.1F;
-			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, Math.min(1000, radius * 2), rads, 0F, fire, blast, this.ticksExisted * shockSpeed);
-		}
+
+		double weatherFactor = ContaminationUtil.getWeatherAttenuationFactor(world, this.posX, this.posY, this.posZ);
+		dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F, weatherFactor);
+
 		//make some noise
 		if(!mute) {
 			if(this.radius > 30){
@@ -101,7 +100,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		//Excecuting destruction
 		} else if(!explosion.perChunk.isEmpty()) {
 			explosion.processChunk(BombConfig.mk5);
-		
+
 		} else {
 			if(!fallingStarted) {
 				if (fallout) {
@@ -127,8 +126,93 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					this.world.spawnEntity(falloutRain);
 				}
 				fallingStarted = true;
-			} else if (this.ticksExisted * shockSpeed > 160){ //wait for shockwave to complete
+			} else if (this.ticksExisted > this.radius * 3){ // wait for thermal radiation (fire damage) to complete before removing the entity
 				this.setDead();
+			}
+		}
+	}
+
+	public void dealDamage(World world, double x, double y, double z, double radius, double weatherFactor) {
+		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
+
+		for(Entity e : entities) {
+			AxisAlignedBB box = e.getEntityBoundingBox();
+			double closestX = Math.max(box.minX, Math.min(x, box.maxX));
+			double closestY = Math.max(box.minY, Math.min(y, box.maxY));
+			double closestZ = Math.max(box.minZ, Math.min(z, box.maxZ));
+			Vec3 vec = Vec3.createVectorHelper(closestX - x, closestY - y, closestZ - z);
+			double len = vec.length();
+
+			if(len <= radius) {
+				if(ContaminationUtil.isExplosionExempt(e)) continue;
+
+				vec = vec.normalize();
+				double dmgLen = Math.max(len, radius * 0.05D);
+
+				float res = 0;
+
+				for(int i = 1; i < len; i++) {
+					int ix = (int)Math.floor(x + vec.xCoord * i);
+					int iy = (int)Math.floor(y + vec.yCoord * i);
+					int iz = (int)Math.floor(z + vec.zCoord * i);
+					res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
+				}
+				boolean isLiving = e instanceof EntityLivingBase;
+
+				if(res < 1)
+					res = 1;
+
+				if(isLiving && fallout && this.ticksExisted <= Math.max((int)Math.ceil(this.radius * 0.02), 1)){
+					float eRads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double)2 * this.ticksExisted / radius) + strength);
+					eRads *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
+					eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
+
+					ContaminationUtil.contaminate((EntityLivingBase)e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, eRads);
+					if (eRads >= 100 && ContaminationUtil.getEntityConversionType(e) == 1) {
+						if(e instanceof EntityGlowingOne) continue;
+						convertToGlow(world, (EntityZombie) e);
+					}
+					if (eRads >= 100 && ContaminationUtil.getEntityConversionType(e) == 0 && this.radius > 120) {
+						if(e instanceof EntityThermonuclearCat) continue;
+						convertToThermo(world, (EntityOcelot) e);
+					}
+				}
+
+				int thermalDuration = this.radius * 3;
+				double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
+
+				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.radius > 25 && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
+					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius) * Math.exp(-dmgLen * weatherFactor / 80.0D)) / (float) (dmgLen * dmgLen * res));
+					if (fireDamage > 0.025) {
+						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+								p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
+							}
+							if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+								p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
+							}
+						}
+						if (!e.isImmuneToFire()) {
+							e.setFire(5);
+							e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
+						}
+					}
+				}
+
+				int blastDuration = (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0));
+				double shockSpeed = 2D * this.radius / (double)blastDuration;
+				double currentBlastRadius = this.ticksExisted * Math.max(2D, shockSpeed);
+
+				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
+					float blastDamage = (float)(Math.pow(radius + 10, 3) * (this.radius > 25 ? 0.5F : 0.85F)) / (float)(dmgLen * dmgLen * dmgLen * res);
+					if(blastDamage > 0.025){
+						if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
+						else e.attackEntityFrom(ModDamageSource.blast, blastDamage);
+					}
+					e.motionX += vec.xCoord * 0.075D * blastDamage;
+					e.motionY += vec.yCoord * 0.075D * blastDamage;
+					e.motionZ += vec.zCoord * 0.075D * blastDamage;
+				}
 			}
 		}
 	}
@@ -147,6 +231,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		floodPlease = nbt.getBoolean("floodPlease");
 		spawnFire = nbt.getBoolean("spawnFire");
 		mute = nbt.getBoolean("mute");
+		ticksExisted = nbt.getInteger("ticksExisted");
 		if(nbt.hasKey("fs")) fallingStarted = nbt.getBoolean("fs");
 		if(explosion == null) {
 			explosion = new ExplosionNukeRayBatched(world, this.posX, this.posY, this.posZ, this.strength, this.radius, this.floodPlease);
@@ -164,6 +249,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		nbt.setBoolean("spawnFire", spawnFire);
 		nbt.setBoolean("mute", mute);
 		nbt.setBoolean("fs", fallingStarted);
+		nbt.setInteger("ticksExisted", ticksExisted);
 		if(explosion != null) {
 			explosion.writeEntityToNBT(nbt);
 		}
@@ -182,32 +268,31 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		mk5.radius = r;
 
 		mk5.setPosition(x, y, z);
-		mk5.floodPlease = isWet(world, new BlockPos(x, y, z));
-		if(BombConfig.disableNuclear)
-			mk5.fallout = false;
+		if(CompatibilityConfig.doFillCraterWithWater) mk5.floodPlease = isWet(world, new BlockPos(x, y, z));
+		if(BombConfig.disableNuclear) mk5.fallout = false;
 		return mk5;
 	}
 
 	public static EntityNukeExplosionMK5 statFacNoRad(World world, int r, double x, double y, double z) {
-		
+
 		EntityNukeExplosionMK5 mk5 = statFac(world, r, x, y ,z);
 		mk5.fallout = false;
 		return mk5;
 	}
 
 	public static EntityNukeExplosionMK5 statFacNoRadFire(World world, int r, double x, double y, double z) {
-		
+
 		EntityNukeExplosionMK5 mk5 = statFac(world, r, x, y ,z);
 		mk5.fallout = false;
 		mk5.spawnFire = true;
 		return mk5;
 	}
-	
+
 	public EntityNukeExplosionMK5 moreFallout(int fallout) {
 		falloutAdd = fallout;
 		return this;
 	}
-	
+
 	public EntityNukeExplosionMK5 mute() {
 		this.mute = true;
 		return this;

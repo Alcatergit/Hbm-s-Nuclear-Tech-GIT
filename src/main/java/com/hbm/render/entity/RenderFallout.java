@@ -64,42 +64,64 @@ public class RenderFallout extends Render<EntityFalloutRain> {
     public void doRender(EntityFalloutRain entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GL11.glPushMatrix();
         GlStateManager.disableCull();
-        //Drillgon200: It doesn't work when I use GLStateManager...
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         RenderHelper.resetColor();
-        
         GlStateManager.disableLighting();
+
         Entity ent = this.mc.getRenderViewEntity();
         Vec3 vector = Vec3.createVectorHelper(ent.posX - entity.posX,
                 ent.posY - entity.posY, ent.posZ - entity.posZ);
-       
-        double d = vector.length();
-       
-        if (d <= entity.getScale()) {
+        double distance = vector.length();
+        float scale = entity.getScale();
+
+        float alphaRadius = 1.0F;
+        if (distance > scale) {
+            alphaRadius = 0.0F;
+        } else if (distance > scale * 0.75F) {
+            float t = (float)((distance - scale * 0.75F) / (scale * 0.3F));
+            alphaRadius = 1.0F - (t * t * (3.0F - 2.0F * t)); // smoothstep
+        }
+
+        int renderDistChunks = this.mc.gameSettings.renderDistanceChunks;
+        float maxVisibleDist = renderDistChunks * 16.0F;
+        float alphaRenderDist = 1.0F;
+        if (distance > maxVisibleDist) {
+            alphaRenderDist = 0.0F;
+        } else if (distance > maxVisibleDist * 0.75F) {
+            float t = (float)((distance - maxVisibleDist * 0.75F) / (maxVisibleDist * 0.3F));
+            alphaRenderDist = 1.0F - (t * t * (3.0F - 2.0F * t));
+        }
+
+        float boundaryAlpha = Math.min(alphaRadius, alphaRenderDist);
+        float lifeAlpha = entity.getCurrentAlpha();
+        float finalAlpha = boundaryAlpha * lifeAlpha;
+
+        if (finalAlpha > 0.01F) {
             rendererUpdateCount++;
             long time = System.nanoTime();
-            float t = (time - lastTime) / 50000000;
+            float t = (time - lastTime) / 50000000F;
             if (t <= 1.0F)
-                renderRainSnow(t);
+                renderRainSnow(t, finalAlpha);
             else
-                renderRainSnow(1.0F);
- 
+                renderRainSnow(1.0F, finalAlpha);
             lastTime = time;
         }
+
+        GlStateManager.enableLighting();
         GlStateManager.enableCull();
         GL11.glPopMatrix();
     }
-   
-    protected void renderRainSnow(float partialTick) {
+
+    protected void renderRainSnow(float partialTick, float globalAlpha) {
         MutableBlockPos pos = new BlockPos.MutableBlockPos();
         float f1 = 1;
- 
+
         if (f1 > 0.0F) {
- 
+
             if (this.rainXCoords == null) {
                 this.rainXCoords = new float[1024];
                 this.rainYCoords = new float[1024];
- 
+
                 for (int i = 0; i < 32; ++i) {
                     for (int j = 0; j < 32; ++j) {
                         float f2 = j - 16;
@@ -110,7 +132,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                     }
                 }
             }
- 
+
             Entity entitylivingbase = this.mc.getRenderViewEntity();
             WorldClient worldclient = this.mc.world;
             int k2 = MathHelper.floor(entitylivingbase.posX);
@@ -122,26 +144,23 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             GlStateManager.enableBlend();
             GlStateManager.tryBlendFuncSeparate(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA, SourceFactor.ONE, DestFactor.ZERO);
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-            double d0 = entitylivingbase.lastTickPosX
-                    + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * partialTick;
-            double d1 = entitylivingbase.lastTickPosY
-                    + (entitylivingbase.posY - entitylivingbase.lastTickPosY) * partialTick;
-            double d2 = entitylivingbase.lastTickPosZ
-                    + (entitylivingbase.posZ - entitylivingbase.lastTickPosZ) * partialTick;
+            double d0 = entitylivingbase.lastTickPosX + (entitylivingbase.posX - entitylivingbase.lastTickPosX) * partialTick;
+            double d1 = entitylivingbase.lastTickPosY + (entitylivingbase.posY - entitylivingbase.lastTickPosY) * partialTick;
+            double d2 = entitylivingbase.lastTickPosZ + (entitylivingbase.posZ - entitylivingbase.lastTickPosZ) * partialTick;
             int k = MathHelper.floor(d1);
             byte b0 = 5;
- 
+
             if (this.mc.gameSettings.fancyGraphics) {
                 b0 = 10;
             }
- 
+
             byte b1 = -1;
             float f5 = this.rendererUpdateCount + partialTick;
- 
+
             if (this.mc.gameSettings.fancyGraphics) {
                 b0 = 10;
             }
- 
+
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             RenderHelper.resetColor();
             for (int l = i3 - b0; l <= i3 + b0; ++l) {
@@ -151,34 +170,34 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                     float f7 = this.rainYCoords[j1] * 0.5F;
                     pos.setPos(i1, 50, l);
                     Biome biomegenbase = worldclient.getBiomeForCoordsBody(pos);
- 
+
                     if (true) {
                         int k1 = worldclient.getPrecipitationHeight(pos).getY();
                         int l1 = l2 - b0;
                         int i2 = l2 + b0;
- 
+
                         if (l1 < k1) {
                             l1 = k1;
                         }
- 
+
                         if (i2 < k1) {
                             i2 = k1;
                         }
- 
+
                         float f8 = 1.0F;
                         int j2 = k1;
- 
+
                         if (k1 < k) {
                             j2 = k;
                         }
- 
+
                         if (l1 != i2) {
                             pos.setY(l1);
                             this.random.setSeed(i1 * i1 * 3121 + i1 * 45238971 ^ l * l * 418711 + l * 13761);
                             biomegenbase.getTemperature(pos);
                             float f10;
                             double d4;
- 
+
                             {
                                 if (b1 != 1) {
                                     if (b1 >= 0) {
@@ -188,39 +207,53 @@ public class RenderFallout extends Render<EntityFalloutRain> {
                                     this.mc.getTextureManager().bindTexture(RenderFallout.falloutTexture);
                                     tessellator.getBuffer().begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
                                 }
- 
+
                                 f10 = ((this.rendererUpdateCount & 511) + partialTick) / 512.0F;
                                 float f16 = this.random.nextFloat() + f5 * 0.01F * (float) this.random.nextGaussian();
                                 float f11 = this.random.nextFloat() + f5 * (float) this.random.nextGaussian() * 0.001F;
                                 d4 = i1 + 0.5F - entitylivingbase.posX;
                                 double d5 = l + 0.5F - entitylivingbase.posZ;
-                                float f14 = MathHelper.sqrt(d4 * d4 + d5 * d5) / b0;
+                                float f14 = MathHelper.sqrt((float)(d4 * d4 + d5 * d5)) / b0;
                                 float f15 = 1.0F;
                                 BufferBuilder buf = tessellator.getBuffer();
                                 worldclient.getLightBrightness(pos.setPos(i1, j2, l));
-                            //  buf.putBrightness4(bright, bright, bright, bright);
+
+                                float spaceAlpha = ((1.0F - f14 * f14) * 0.3F + 0.5F) * f1;
+                                float finalAlpha = spaceAlpha * globalAlpha;
+
                                 buf.setTranslation(-d0 * 1.0D, -d1 * 1.0D, -d2 * 1.0D);
-                               
-                                buf.pos(i1 - f6 + 0.5D, l1, l - f7 + 0.5D).tex(0.0F * f8 + f16, l1 * f8 / 4.0F + f10 * f8 + f11).color(f15, f15, f15, ((1.0F - f14 * f14) * 0.3F + 0.5F) * f1).endVertex();
-                                buf.pos(i1 + f6 + 0.5D, l1, l + f7 + 0.5D).tex(1.0F * f8 + f16, l1 * f8 / 4.0F + f10 * f8 + f11).color(f15, f15, f15, ((1.0F - f14 * f14) * 0.3F + 0.5F) * f1).endVertex();
-                                buf.pos(i1 + f6 + 0.5D, i2, l + f7 + 0.5D).tex(1.0F * f8 + f16, i2 * f8 / 4.0F + f10 * f8 + f11).color(f15, f15, f15, ((1.0F - f14 * f14) * 0.3F + 0.5F) * f1).endVertex();
-                                buf.pos(i1 - f6 + 0.5D, i2, l - f7 + 0.5D).tex(0.0F * f8 + f16, i2 * f8 / 4.0F + f10 * f8 + f11).color(f15, f15, f15, ((1.0F - f14 * f14) * 0.3F + 0.5F) * f1).endVertex();
+
+                                buf.pos(i1 - f6 + 0.5D, l1, l - f7 + 0.5D)
+                                        .tex(0.0F * f8 + f16, l1 * f8 / 4.0F + f10 * f8 + f11)
+                                        .color(f15, f15, f15, finalAlpha)
+                                        .endVertex();
+                                buf.pos(i1 + f6 + 0.5D, l1, l + f7 + 0.5D)
+                                        .tex(1.0F * f8 + f16, l1 * f8 / 4.0F + f10 * f8 + f11)
+                                        .color(f15, f15, f15, finalAlpha)
+                                        .endVertex();
+                                buf.pos(i1 + f6 + 0.5D, i2, l + f7 + 0.5D)
+                                        .tex(1.0F * f8 + f16, i2 * f8 / 4.0F + f10 * f8 + f11)
+                                        .color(f15, f15, f15, finalAlpha)
+                                        .endVertex();
+                                buf.pos(i1 - f6 + 0.5D, i2, l - f7 + 0.5D)
+                                        .tex(0.0F * f8 + f16, i2 * f8 / 4.0F + f10 * f8 + f11)
+                                        .color(f15, f15, f15, finalAlpha)
+                                        .endVertex();
+
                                 buf.setTranslation(0.0D, 0.0D, 0.0D);
                             }
                         }
                     }
                 }
             }
- 
+
             if (b1 >= 0) {
                 tessellator.draw();
-                // System.out.println("Fired!");
             }
- 
+
             GlStateManager.enableCull();
             GlStateManager.disableBlend();
             GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-            // this.disableLightmap((double)partialTick);
         }
     }
  

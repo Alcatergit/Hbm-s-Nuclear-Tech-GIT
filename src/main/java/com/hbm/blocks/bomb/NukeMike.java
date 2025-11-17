@@ -2,19 +2,17 @@ package com.hbm.blocks.bomb;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
-import com.hbm.interfaces.IBomb;
-import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeMike;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -24,7 +22,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +37,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class NukeMike extends BlockContainer implements IBomb {
+public class NukeMike extends BlockNukeBase {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
@@ -44,6 +45,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 		super(materialIn);
 		this.setTranslationKey(s);
 		this.setRegistryName(s);
+		this.setCreativeTab(MainRegistry.nukeTab);
 
 		ModBlocks.ALL_BLOCKS.add(this);
 	}
@@ -54,14 +56,18 @@ public class NukeMike extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
-		super.breakBlock(worldIn, pos, state);
+	protected Item getBlockItem() {
+		return Item.getItemFromBlock(ModBlocks.nuke_mike);
 	}
 
 	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
+	protected Class<? extends TileEntity> getTileEntityClass() {
+		return TileEntityNukeMike.class;
+	}
+
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
@@ -84,17 +90,21 @@ public class NukeMike extends BlockContainer implements IBomb {
 		TileEntityNukeMike entity = (TileEntityNukeMike) worldIn.getTileEntity(pos);
 		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			if(entity.isReady() && !entity.isFilled()) {
-				this.onPlayerDestroy(worldIn, pos, state);
+				// ========== Modified: Set detonation flag, then clear the block ==========
+				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
+				this.isExploding = false;
 			}
 
 			if(entity.isFilled()) {
-				this.onPlayerDestroy(worldIn, pos, state);
+				// ========== Modified: Set detonation flag, then clear the block ==========
+				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), BombConfig.mikeRadius);
+				this.isExploding = false;
 			}
 		}
 	}
@@ -116,17 +126,21 @@ public class NukeMike extends BlockContainer implements IBomb {
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeMike entity = (TileEntityNukeMike) world.getTileEntity(pos);
 		if(entity.isReady() && !entity.isFilled()) {
-			this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+			// ========== Modified: Set detonation flag, then clear the block ==========
+			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
 			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.manRadius);
+			this.isExploding = false;
 		}
 
 		if(entity.isFilled()) {
-			this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+			// ========== Modified: Set detonation flag, then clear the block ==========
+			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
 			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), BombConfig.mikeRadius);
+			this.isExploding = false;
 		}
 	}
 	
@@ -182,8 +196,6 @@ public class NukeMike extends BlockContainer implements IBomb {
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 	
-	
-	
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
@@ -201,7 +213,78 @@ public class NukeMike extends BlockContainer implements IBomb {
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.mikeRadius)+"§r");
 		if(!BombConfig.disableNuclear){
 			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.mikeRadius*(1+BombConfig.falloutRange/100))+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(BombConfig.mikeRadius*(1+BombConfig.falloutRange/100.0)))+"§r");
 		}
+
+		// ========== Modified: Adjusted tooltip display logic as required ==========
+		// Display in priority order: isItemReady < isItemFilled
+		if (isItemFilled(stack)) {
+			tooltip.add("§c[Is ready]§r"); // Red when isItemFilled condition is true
+		} else if (isItemReady(stack)) {
+			tooltip.add("§2[Is ready]§r"); // Dark green when isItemReady condition is true
+		}
+	}
+
+	// ========== Modified: Correctly parse the NBT format of ItemStackHandler ==========
+	private boolean isItemReady(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+			
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Use the condition matching isReady directly
+				return checkSlotItem(inventoryTag, 0, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 3, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 4, ModItems.man_core);
+			}
+		}
+		
+		return false;
+	}
+
+	// ========== Modified: Correctly parse the NBT format of ItemStackHandler ==========
+	private boolean isItemFilled(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+			
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Use the condition matching isFilled directly
+				return checkSlotItem(inventoryTag, 0, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 3, ModItems.man_explosive8) &&
+					   checkSlotItem(inventoryTag, 4, ModItems.man_core) &&
+					   checkSlotItem(inventoryTag, 5, ModItems.mike_core) &&
+					   checkSlotItem(inventoryTag, 6, ModItems.mike_deut) &&
+					   checkSlotItem(inventoryTag, 7, ModItems.mike_cooling_unit);
+			}
+		}
+		
+		return false;
+	}
+
+	// ========== Modified: Improved NBT parsing method ==========
+	private boolean checkSlotItem(NBTTagCompound inventoryTag, int slot, Item expectedItem) {
+		if (inventoryTag.hasKey("Items")) {
+			NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
+			
+			for (int i = 0; i < itemsList.tagCount(); i++) {
+				NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
+				if (itemTag.getByte("Slot") == slot) {
+					// Use string registry name instead of numeric ID
+					String itemId = itemTag.getString("id");
+
+					// Check if items match
+					return itemId.equals(expectedItem.getRegistryName().toString());
+				}
+			}
+		}
+		
+		return false;
 	}
 }

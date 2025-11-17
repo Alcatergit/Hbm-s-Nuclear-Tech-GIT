@@ -21,6 +21,7 @@ import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
 import com.hbm.tileentity.network.energy.*;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -159,6 +160,7 @@ import com.hbm.entity.particle.ParticleContrailKerosene;
 import com.hbm.entity.particle.ParticleContrailSolid;
 import com.hbm.entity.particle.ParticleContrailHydrogen;
 import com.hbm.entity.particle.ParticleContrailBalefire;
+import com.hbm.particle.ParticleRBMKSteam;
 import com.hbm.entity.particle.ParticleContrailDark;
 import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
@@ -2068,13 +2070,18 @@ public class ClientProxy extends ServerProxy {
 		
 		if("sound".equals(type)){
 			String mode = data.getString("mode");
-			if("crucible_loop".equals(mode)){
-				int id = data.getInteger("playerId");
-				Entity e = world.getEntityByID(id);
-				if(e instanceof EntityPlayer){
-					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
+            if("crucible_loop".equals(mode)){
+                int id = data.getInteger("playerId");
+                Entity e = world.getEntityByID(id);
+                if(e instanceof EntityPlayer){
+                    Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
 				}
 			}
+			return;
+		}
+
+		if("rbmkSteam".equals(type)) {
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleRBMKSteam(world, x, y, z));
 			return;
 		}
 		
@@ -2339,7 +2346,27 @@ public class ClientProxy extends ServerProxy {
 		audio.updatePosition(x, y, z);
 		return audio;
 	}
-	
+
+	@Override
+	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch) {
+		AudioWrapperClient audio = new AudioWrapperClient(sound, cat, true, volume, range, volume);
+		audio.updatePosition(x, y, z);
+		audio.updateVolume(volume);
+		audio.updateRange(range);
+		audio.updatePitch(pitch);
+		return audio;
+	}
+
+    @Override
+    public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) {
+        AudioWrapperClient audio = new AudioWrapperClient(sound, cat, true, volume, range, volume);
+        audio.updatePosition(x, y, z);
+        audio.updateVolume(volume);
+        audio.updateRange(range);
+        audio.setKeepAlive(keepAlive);
+        return audio;
+    }
+
 	@Override
 	public AudioWrapper getLoopedSoundStartStop(World world, SoundEvent sound, SoundEvent start, SoundEvent stop, SoundCategory cat, float x, float y, float z, float volume, float pitch) {
 		AudioWrapperClientStartStop audio = new AudioWrapperClientStartStop(world, sound, start, stop, volume, cat);
@@ -2388,5 +2415,9 @@ public class ClientProxy extends ServerProxy {
 		}
 		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
-	
+
+    @Override
+    public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+        Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(sound, category, volume, pitch, (float) x, (float) y, (float) z));
+    }
 }
