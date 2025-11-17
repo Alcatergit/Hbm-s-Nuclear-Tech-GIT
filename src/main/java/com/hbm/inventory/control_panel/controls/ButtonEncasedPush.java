@@ -44,6 +44,7 @@ public class ButtonEncasedPush extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_button_encased_push_tex);

@@ -3,7 +3,7 @@ package com.hbm.entity.mob;
 import java.util.List;
 import java.util.Random;
 
-import com.google.common.base.Predicate;
+import com.hbm.config.CompatibilityConfig;
 import com.hbm.items.ModItems;
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.util.ContaminationUtil;
@@ -17,6 +17,7 @@ import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.SharedMonsterAttributes;
+import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
@@ -24,6 +25,7 @@ import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
+import org.jetbrains.annotations.NotNull;
 
 public class EntityThermonuclearCat extends EntityOcelot implements IRadiationImmune {
 
@@ -45,7 +47,7 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
 		this.getEntityAttribute(SharedMonsterAttributes.ARMOR_TOUGHNESS).setBaseValue(5.0D);
 	}
 
-    public Item getTemptItem(){
+    public @NotNull Item getTemptItem(){
         return ModItems.billet_nuclear_waste;
     }
 
@@ -111,7 +113,6 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
     @Override
     public boolean processInteract(EntityPlayer player, EnumHand hand) {
         ItemStack itemstack = player.getHeldItem(hand);
-
         if (this.isTamed()) {
             if (!this.world.isRemote && this.isOwner(player) && !this.isBreedingItem(itemstack)) {
                 this.aiSit.setSitting(!this.isSitting());
@@ -120,7 +121,6 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
             if (!player.capabilities.isCreativeMode) {
                 itemstack.shrink(1);
             }
-
             if (!this.world.isRemote) {
                 if (this.rand.nextInt(3) == 0 && !net.minecraftforge.event.ForgeEventFactory.onAnimalTame(this, player)) {
                     this.setTamedBy(player);
@@ -136,6 +136,7 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
 
             return true;
         }
+        if(itemstack.getItem() == Items.FISH) return false;
 
         return super.processInteract(player, hand);
     }
@@ -180,7 +181,7 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
 
 	@Override
     public void onLivingUpdate() {
-    	ContaminationUtil.radiate(world, posX, posY, posZ, effectRadius, getCatRad(isChild(), isLegendary()));
+        if(CompatibilityConfig.isWarDim(world)) ContaminationUtil.radiate(world, posX, posY, posZ, effectRadius, getCatRad(isChild(), isLegendary()));
         super.onLivingUpdate();
     }
 

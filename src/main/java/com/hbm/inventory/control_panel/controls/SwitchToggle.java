@@ -41,6 +41,7 @@ public class SwitchToggle extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         boolean isOn = getVar("isOn").getBoolean();
 

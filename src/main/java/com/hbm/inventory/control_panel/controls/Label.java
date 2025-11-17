@@ -9,6 +9,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.opengl.GL11;
 
 import java.util.List;
@@ -79,6 +81,7 @@ public class Label extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         FontRenderer font = Minecraft.getMinecraft().fontRenderer;
 
@@ -121,11 +124,13 @@ public class Label extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public IModelCustom getModel() {
         return ResourceManager.ctrl_display_seven_seg;
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public ResourceLocation getGuiTexture() {
         return ResourceManager.ctrl_display_seven_seg_gui_tex;
     }

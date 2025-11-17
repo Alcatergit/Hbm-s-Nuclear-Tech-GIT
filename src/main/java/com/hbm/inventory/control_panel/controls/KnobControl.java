@@ -57,6 +57,7 @@ public class KnobControl extends Control {
     }
 
     @Override
+    @SideOnly(Side.CLIENT)
     public void render() {
         GlStateManager.shadeModel(GL11.GL_SMOOTH);
         Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.ctrl_knob_control_tex);
