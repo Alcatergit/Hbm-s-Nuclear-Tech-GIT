@@ -58,6 +58,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 		float size = this.dataManager.get(SIZE);
 		
 		if(!world.isRemote) {
+            if(this.posY < 0) this.setDead();
 			for(int k = 0; k < size * 2; k++) {
 				double phi = rand.nextDouble() * (Math.PI * 2);
 				double costheta = rand.nextDouble() * 2 - 1;
@@ -75,18 +76,17 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 					int z0 = (int)(this.posZ + (vec.zCoord * i));
 					
 					BlockPos des = new BlockPos(x0, y0, z0);
-					
-					if(world.getBlockState(des).getMaterial().isLiquid()) {
+					IBlockState state = world.getBlockState(des);
+					if(state.getMaterial().isLiquid()) {
 						world.setBlockState(des, Blocks.AIR.getDefaultState());
 					}
 					
-					if(world.getBlockState(des).getBlock() != Blocks.AIR) {
+					if(state.getBlock() != Blocks.AIR && state.getBlock().getExplosionResistance(null) < 3_600_000) {
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x0 + 0.5F;
 						rubble.posY = y0;
 						rubble.posZ = z0 + 0.5F;
-						IBlockState st = world.getBlockState(new BlockPos(x0, y0, z0));
-						rubble.setMetaBasedOnBlock(st.getBlock(), st.getBlock().getMetaFromState(st));
+						rubble.setMetaBasedOnBlock(state.getBlock(), state.getBlock().getMetaFromState(state));
 						
 						world.spawnEntity(rubble);
 					
@@ -97,23 +97,23 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 			}
 		}
 		
-		double range = size * 15;
-		
-		List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(
-				posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
-		
+		double range = size * 30;
+        double strength = size * 8;
+
+        List<Entity> entities = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB(posX - range, posY - range, posZ - range, posX + range, posY + range, posZ + range));
+
 		for(Entity e : entities) {
 			
 			if(Library.isCreative(e))
 				continue;
 			
-			if(e instanceof EntityFallingBlock && !world.isRemote && e.ticksExisted > 1) {
+			if(e instanceof EntityFallingBlock fall && !world.isRemote && e.ticksExisted > 1) {
 				
 				double x = e.posX;
 				double y = e.posY;
 				double z = e.posZ;
-				Block b = ((EntityFallingBlock)e).getBlock().getBlock();
-				int meta = b.getMetaFromState(((EntityFallingBlock)e).getBlock());
+				Block b = fall.getBlock().getBlock();
+				int meta = b.getMetaFromState(fall.getBlock());
 				
 				e.setDead();
 				
@@ -138,10 +138,10 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 			if(!(e instanceof EntityItem))
 				vec.rotateAroundY((float)Math.toRadians(15));
 			
-			double speed = 0.1D;
-			e.motionX += vec.xCoord * speed;
-			e.motionY += vec.yCoord * speed * 2;
-			e.motionZ += vec.zCoord * speed;
+			double r2 = Math.max(dist * dist, 1);
+            e.motionX += vec.xCoord * strength / r2;
+			e.motionY += vec.yCoord * strength * 2 / r2;
+			e.motionZ += vec.zCoord * strength / r2;
 			
 			if(e instanceof EntityBlackHole)
 				continue;
@@ -152,9 +152,8 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 				if(!(e instanceof EntityLivingBase))
 					e.setDead();
 				
-				if(!world.isRemote && e instanceof EntityItem) {
-					EntityItem item = (EntityItem) e;
-					ItemStack stack = item.getItem();
+				if(!world.isRemote && e instanceof EntityItem item) {
+                    ItemStack stack = item.getItem();
 					
 					if(stack.getItem() == ModItems.pellet_antimatter || stack.getItem() == ModItems.flame_pony) {
 						this.setDead();

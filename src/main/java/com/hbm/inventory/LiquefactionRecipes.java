@@ -34,10 +34,11 @@ public class LiquefactionRecipes {
         addRecipe(KNO.dust(),										ModForgeFluids.NITRIC_ACID, 250);
         //general utility recipes because why not
         addRecipe(new ComparableStack(Blocks.NETHERRACK),			FluidRegistry.LAVA, 250);
-        addRecipe(new ComparableStack(Blocks.COBBLESTONE),		    FluidRegistry.LAVA, 250);
         addRecipe(new ComparableStack(Blocks.STONE),				FluidRegistry.LAVA, 250);
+        addRecipe(new ComparableStack(Blocks.COBBLESTONE),		    FluidRegistry.LAVA, 250);
+        addRecipe(new ComparableStack(Blocks.GRAVEL),				FluidRegistry.LAVA, 250);
         addRecipe(new ComparableStack(Blocks.MAGMA),			    FluidRegistry.LAVA, 500);
-        addRecipe(new ComparableStack(Blocks.OBSIDIAN),			    FluidRegistry.LAVA, 500);
+        addRecipe(new ComparableStack(Blocks.OBSIDIAN),			    FluidRegistry.LAVA, 1000);
         addRecipe(new ComparableStack(Items.SNOWBALL),			    FluidRegistry.WATER, 125);
         addRecipe(new ComparableStack(Blocks.SNOW),				    FluidRegistry.WATER, 500);
         addRecipe(new ComparableStack(Blocks.ICE),				    FluidRegistry.WATER, 1000);
@@ -72,6 +73,7 @@ public class LiquefactionRecipes {
 //        addRecipe(new ComparableStack(Blocks.TALLGRASS, 1, 2),	100, Fluids.SEEDSLURRY);
 //        addRecipe(new ComparableStack(Blocks.VINE),				100, Fluids.SEEDSLURRY);
         addRecipe(MUD.ingot(),	    ModForgeFluids.MUD_FLUID, 16_000);
+        addRecipe(new ComparableStack(ModBlocks.sellafield_core), ModForgeFluids.TOXIC_FLUID, 500);
     }
 
     public static void addRecipe(Object input, Fluid fluid, int amount){

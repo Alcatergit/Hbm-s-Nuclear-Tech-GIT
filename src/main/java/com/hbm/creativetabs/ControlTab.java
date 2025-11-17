@@ -19,8 +19,8 @@ public class ControlTab extends CreativeTabs {
 
 	@Override
 	public ItemStack createIcon() {
-		if(ModItems.pellet_rtg != null){
-			return new ItemStack(ModItems.pellet_rtg);
+		if(ModItems.rod_quad_balefire != null){
+			return new ItemStack(ModItems.rod_quad_balefire);
 		}
 		return new ItemStack(Items.IRON_PICKAXE, 1);
 	}
@@ -30,13 +30,11 @@ public class ControlTab extends CreativeTabs {
 		super.displayAllRelevantItems(list);
 		List<ItemStack> batteries = new ArrayList<>();
 
-		for(Object o : list) {
+		for(ItemStack stack : list) {
 
-			if(o instanceof ItemStack) {
+			if(stack instanceof ItemStack) {
 
-				ItemStack stack = (ItemStack) o;
-
-				if(stack.getItem() instanceof IBatteryItem) {
+                if(stack.getItem() instanceof IBatteryItem) {
 					batteries.add(stack);
 				}
 			}
@@ -44,12 +42,10 @@ public class ControlTab extends CreativeTabs {
 
 		for(ItemStack stack : batteries) {
 
-			if(!(stack.getItem() instanceof IBatteryItem)) //shouldn't happen but just to make sure
+			if(!(stack.getItem() instanceof IBatteryItem battery)) //shouldn't happen but just to make sure
 				continue;
 
-			IBatteryItem battery = (IBatteryItem) stack.getItem();
-
-			ItemStack empty = stack.copy();
+            ItemStack empty = stack.copy();
 			ItemStack full = stack.copy();
 
 			battery.setCharge(empty, 0);

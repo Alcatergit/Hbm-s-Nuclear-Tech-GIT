@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.CheckForNull;
 
 import com.hbm.items.ItemBase;
+import com.hbm.main.MainRegistry;
 import com.hbm.util.BobMathUtil;
 import com.hbm.util.I18nUtil;
 
@@ -27,8 +28,9 @@ public class ItemRTGPellet extends ItemBase {
 	private Item decayItem = null;
 	private long halflife = 0;
 	private long lifespan = 0;
-	
-	public ItemRTGPellet(int heatIn, String s) {
+    private long halflifes = 1;
+
+    public ItemRTGPellet(int heatIn, String s) {
 		super(s);
 		this.heat = (short)heatIn;
 		this.setMaxStackSize(1);
@@ -57,6 +59,7 @@ public class ItemRTGPellet extends ItemBase {
 		this.doesDecay = true;
 		this.decayItem = depleted;
 		this.halflife = halflife;
+        this.halflifes = halflifes;
 		this.lifespan = halflife * halflifes;
 		return this;
 	}
@@ -85,44 +88,66 @@ public class ItemRTGPellet extends ItemBase {
 		if (instance.getDoesDecay()) {
 			if (instance.getLifespan(stack) <= 0)
 				return new ItemStack(instance.getDecayItem());
-			else
-				instance.decay(stack);
 		}
 		
 		return stack;
 	}
+
+    @Override
+    public void onCreated(ItemStack stack, World worldIn, EntityPlayer playerIn) {
+        startDecay(stack);
+    }
 	
-	public void decay(ItemStack stack) {
-		if (stack != null && stack.getItem() instanceof ItemRTGPellet) {
-			if (!((ItemRTGPellet) stack.getItem()).getDoesDecay())
+	public static void startDecay(ItemStack stack) {
+		if (stack != null && stack.getItem() instanceof ItemRTGPellet pellet) {
+			if (!pellet.getDoesDecay())
 				return;
-			if (stack.hasTagCompound())
-				stack.getTagCompound().setLong("PELLET_DEPLETION", getLifespan(stack) - 1);
-			else {
-				stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setLong("PELLET_DEPLETION", getMaxLifespan());
-			}
+            NBTTagCompound nbt;
+            if(stack.hasTagCompound()) {
+                nbt = stack.getTagCompound();
+                if(nbt.hasKey("deplStart")) return;
+            } else {
+                nbt = new NBTTagCompound();
+            }
+
+            nbt.setLong("deplStart", getTime());
+            stack.setTagCompound(nbt);
 		}
-	}
-	
-	public long getLifespan(ItemStack stack)
-	{	
-		if (stack != null && stack.getItem() instanceof ItemRTGPellet)
-		{
-			if (stack.hasTagCompound())
-				return stack.getTagCompound().getLong("PELLET_DEPLETION");
-			else
-			{
-				stack.setTagCompound(new NBTTagCompound());
-				stack.getTagCompound().setLong("PELLET_DEPLETION", getMaxLifespan());
-				return getMaxLifespan();
-			}
-		}
-		return 0;
 	}
 
+    public long getAge(ItemStack stack) {
+        if (stack != null && stack.getItem() instanceof ItemRTGPellet) {
+            long startTime;
+            NBTTagCompound nbt;
+            if(stack.hasTagCompound()){
+                nbt = stack.getTagCompound();
+                if(nbt.hasKey("deplStart")) {
+                    startTime = nbt.getLong("deplStart");
+                } else {
+                    nbt.setLong("deplStart", getTime());
+                    return 0;
+                }
+            } else {
+                nbt = new NBTTagCompound();
+                nbt.setLong("deplStart", getTime());
+                stack.setTagCompound(nbt);
+                return 0;
+            }
+            return Math.min(getTime() - startTime, getMaxLifespan());
+        }
+        return 0;
+    }
+	
+	public long getLifespan(ItemStack stack) {
+		return getMaxLifespan() - getAge(stack);
+	}
+
+    public static double getDecay(ItemRTGPellet fuel, long age) {
+        return Math.pow(0.5, (age / (double)fuel.getHalfLife()));
+    }
+
 	public static double getDecay(ItemRTGPellet fuel, ItemStack stack) {
-		return (double) Math.pow(0.5, ((double)(fuel.getMaxLifespan()-fuel.getLifespan(stack)) / (double)fuel.getHalfLife()));
+		return getDecay(fuel, fuel.getAge(stack));
 	}
 	
 	public static short getScaledPower(ItemRTGPellet fuel, ItemStack stack) {
@@ -145,7 +170,7 @@ public class ItemRTGPellet extends ItemBase {
 	@Override
 	public double getDurabilityForDisplay(ItemStack stack) {
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
-		return 1D-(double)getDecay(instance, stack);
+		return 1D-getDecay(instance, stack);
 	}
 	
 	@Override
@@ -153,20 +178,25 @@ public class ItemRTGPellet extends ItemBase {
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
 		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {
-			list.add("§aFuel left: "+((int)(getDecay(instance, stack) * 100000000D))/1000000D + "%§r");
+            long age = instance.getAge(stack);
+            long life = instance.getMaxLifespan()-age;
+			list.add("§aFuel left: "+((int)(getDecay(instance, age) * 100000000D))/1000000D + "%§r");
 			list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
 			list.add("");
-			list.add(String.format("%s / %s ticks", instance.getLifespan(stack), instance.getMaxLifespan()));
+			list.add(String.format("%s / %s ticks", life, instance.getMaxLifespan()));
 			final String[] halfLife = BobMathUtil.ticksToDate(instance.getHalfLife());
-			final String[] timeLeft = BobMathUtil.ticksToDate(instance.getLifespan(stack));
-			final String[] maxLife = BobMathUtil.ticksToDate(instance.getMaxLifespan());
-			list.add(String.format("§aHalf life:      %sy %sd %sh %sm %ss§r", (Object[]) halfLife));
-			list.add(String.format("Time remaining: %sy %sd %sh %sm %ss", (Object[]) timeLeft));
-			list.add(String.format("Decay Time:     %sy %sd %sh %sm %ss", (Object[]) maxLife));
+			final String[] timeLeft = BobMathUtil.ticksToDate(life);
+			list.add(String.format("§aHalf-Life:      %sy %sd %sh %sm %ss§r", (Object[]) halfLife));
+			list.add(String.format("§eTime remaining: %sy %sd %sh %sm %ss", (Object[]) timeLeft));
+			list.add(String.format("§2Decay Time:     %s / %s Halflives", age / instance.getHalfLife(), instance.halflifes));
 		}
 	}
 
 	public String getData() {
 		return String.format("%s (%s HE/t) %s", I18nUtil.resolveKey(getTranslationKey().concat(".name")), getHeat()*5, (getDoesDecay() ? " (decays)" : ""));
 	}
+
+    public static long getTime(){ //UTC Time in Ticks
+        return System.currentTimeMillis() / 50L;
+    }
 }

@@ -340,7 +340,7 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 	protected boolean processInteract(EntityPlayer player, EnumHand hand){
 		ItemStack itemstack = player.inventory.getCurrentItem();
 
-		if(itemstack!= null && itemstack.getItem() == Items.FLINT_AND_STEEL) {
+		if(!itemstack.isEmpty() && itemstack.getItem() == Items.FLINT_AND_STEEL) {
 			this.world.playSound(null, this.posX + 0.5D, this.posY + 0.5D, this.posZ + 0.5D, SoundEvents.ITEM_FLINTANDSTEEL_USE, this.getSoundCategory(), 1.0F, this.rand.nextFloat() * 0.4F + 0.8F);
 			player.swingArm(hand);
 
@@ -364,12 +364,12 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 				if(flag) {
 					world.spawnEntity(EntityNukeExplosionMK5.statFac(world, 70, posX, posY, posZ));
 				} else {
-					ContaminationUtil.radiate(world, posX, posY + 0.5, posZ, 70, 1000, 0, 100, 500);
+					ContaminationUtil.radiate(world, posX, posY + 0.5, posZ, 70, 2000, 0, 200, 800);
 				}
 			} else {
 				EntityNukeTorex.statFac(world, posX, posY, posZ, 20);
 				if(flag) {
-					world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 20, posX, posY, posZ));
+					world.spawnEntity(EntityNukeExplosionMK5.statFac(world, 20, posX, posY, posZ));
 				} else {
 					ContaminationUtil.radiate(world, posX, posY + 0.5, posZ, 20, 1000, 0, 100, 500);
 				}

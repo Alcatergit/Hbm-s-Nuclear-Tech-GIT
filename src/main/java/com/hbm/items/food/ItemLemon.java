@@ -270,7 +270,7 @@ public class ItemLemon extends ItemFood {
 
     	
         if (this == ModItems.canned_bhole && !worldIn.isRemote) {
-    		EntityVortex vortex = new EntityVortex(worldIn, 0.5F);
+    		EntityVortex vortex = new EntityVortex(worldIn, 0.5F, 3);
     		vortex.posX = entityLiving.posX;
     		vortex.posY = entityLiving.posY;
     		vortex.posZ = entityLiving.posZ;

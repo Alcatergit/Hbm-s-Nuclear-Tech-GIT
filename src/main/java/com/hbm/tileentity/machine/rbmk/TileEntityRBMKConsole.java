@@ -85,11 +85,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				TileEntity te = world.getTileEntity(new BlockPos(targetX + i, targetY, targetZ + j));
 				int index = (i + 7) + (j + 7) * 15;
 				
-				if(te instanceof TileEntityRBMKBase) {
-					
-					TileEntityRBMKBase rbmk = (TileEntityRBMKBase)te;
-					
-					columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
+				if(te instanceof TileEntityRBMKBase rbmk) {
+
+                    columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
 					columns[index].data.setDouble("heat", rbmk.heat);
 					columns[index].data.setDouble("maxHeat", rbmk.maxHeat());
 					columns[index].data.setDouble("realSimWater", rbmk.water);
@@ -112,8 +110,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	}
 
 	public void setupScreensAndGraph(){
-		List<Integer> fuelRods = new ArrayList(); 
-		List<Integer> controlRods = new ArrayList();
+		List<Integer> fuelRods = new ArrayList<>();
+		List<Integer> controlRods = new ArrayList<>();
 		for(int i = 0; i < columns.length; i++){
 			if(columns[i] != null){
 				switch(columns[i].type){
@@ -253,23 +251,21 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 					break;
 				}
 			}
-			
-			double result = value / (double) count;
-			String text = ((int)(result * 10)) / 10D + "";
-			
-			switch(screen.type) {
-			case COL_TEMP: text = "rbmk.screen.temp=" + text + "°C"; break;
-			case FUEL_DEPLETION: text = "rbmk.screen.depletion=" + text + "%"; break;
-			case FUEL_POISON: text = "rbmk.screen.xenon=" + text + "%"; break;
-			case FUEL_TEMP: text = "rbmk.screen.core=" + text + "°C"; break;
-			case FLUX: text = "rbmk.screen.flux=" + text ; break;
-			case ROD_EXTRACTION: text = "rbmk.screen.rod=" + text + "%"; break;
-			}
-			
-			screen.display = text;
+
+			String text = ((int)(value / (double) count * 10)) / 10D + "";
+
+            screen.display = switch (screen.type) {
+                case COL_TEMP -> "rbmk.screen.temp=" + text + "°C";
+                case FUEL_DEPLETION -> "rbmk.screen.depletion=" + text + "%";
+                case FUEL_POISON -> "rbmk.screen.xenon=" + text + "%";
+                case FUEL_TEMP -> "rbmk.screen.core=" + text + "°C";
+                case FLUX -> "rbmk.screen.flux=" + text;
+                case ROD_EXTRACTION -> "rbmk.screen.rod=" + text + "%";
+                default -> text;
+            };
 		}
 	}
-	
+
 	private void prepareNetworkPack() {
 		
 		NBTTagCompound data = new NBTTagCompound();
@@ -503,7 +499,8 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				stats.add(TextFormatting.DARK_RED + I18nUtil.resolveKey("trait.rbmk.meltdown", ((int)(((this.data.getDouble("meltdown")) * 1000D)) / 1000D) + "%"));
 				break;
 			case BOILER:
-				stats.add(TextFormatting.BLUE + I18nUtil.resolveKey("rbmk.boiler.water", this.data.getInteger("water"), this.data.getInteger("maxWater")));
+                stats.add(TextFormatting.GOLD + I18nUtil.resolveKey("rbmk.boiler.fluxop", ((int)(((TileEntityRBMKBoiler.getMultRaw(this.data.getInteger("steam"), this.data.getInteger("maxSteam"), this.data.getInteger("water"), this.data.getInteger("maxWater"))) * 10000D)) / 100D)));
+                stats.add(TextFormatting.BLUE + I18nUtil.resolveKey("rbmk.boiler.water", this.data.getInteger("water"), this.data.getInteger("maxWater")));
 				stats.add(TextFormatting.WHITE + I18nUtil.resolveKey("rbmk.boiler.steam", this.data.getInteger("steam"), this.data.getInteger("maxSteam")));
 				stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.boiler.type", I18nUtil.resolveKey(FluidRegistry.getFluid(this.data.getString("type")).getUnlocalizedName())));
 				break;
@@ -537,7 +534,7 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			}
 			
 			if(data.getBoolean("moderated"))
-				stats.add(TextFormatting.YELLOW + I18nUtil.resolveKey("rbmk.moderated"));
+				stats.add(TextFormatting.GREEN + I18nUtil.resolveKey("rbmk.moderated"));
 			
 			return stats;
 		}

@@ -66,8 +66,11 @@ public class MatDistribution {
 		registerOre(ASBESTOS.dust(),	MAT_SILICON, INGOT.q(1, 2));
 		registerOre(ASBESTOS.block(),	MAT_SILICON, INGOT.q(9, 2));
 
+        registerEntry(ModItems.solid_fuel, MAT_CARBON, INGOT.q(1, 3));
+        registerEntry(ModBlocks.block_solid_fuel, MAT_CARBON, INGOT.q(1, 3));
+        registerEntry(ModItems.briquette_lignite, MAT_CARBON, NUGGET.q(5));
 
-		registerEntry(Blocks.MOSSY_COBBLESTONE, MAT_STONE, BLOCK.q(1), MAT_CARBON, QUANTUM.q(4));
+        registerEntry(Blocks.MOSSY_COBBLESTONE, MAT_STONE, BLOCK.q(1), MAT_CARBON, QUANTUM.q(4));
 		registerOre("oreDiamond", MAT_STONE, BLOCK.q(1), MAT_CARBON, INGOT.q(1));
 
 		registerEntry(Items.IRON_DOOR, MAT_IRON, INGOT.q(2));
@@ -176,7 +179,6 @@ public class MatDistribution {
 		registerEntry(ModItems.particle_empty, 				MAT_STEEL, INGOT.q(2), MAT_TUNGSTEN, INGOT.q(1));
 
 		registerEntry(ModItems.mold_base,					MAT_IRON,			INGOT.q(1));
-		for(int i = 0; i < 22; i++) registerEntry(new ItemStack(ModItems.mold,1, i),						MAT_IRON,			INGOT.q(1));
 
 		registerOre(OreDictManager.IRON.ore(), MAT_IRON, INGOT.q(2), MAT_TITANIUM, NUGGET.q(3), MAT_STONE, QUART.q(1));
 		registerOre(OreDictManager.TI.ore(), MAT_TITANIUM, INGOT.q(2), MAT_IRON, NUGGET.q(3), MAT_STONE, QUART.q(1));
@@ -259,12 +261,14 @@ public class MatDistribution {
 		registerEntry(ModItems.pin, MAT_COPPER, WIRE.q(3));
 
 		registerEntry(ModItems.motor, MAT_IRON, INGOT.q(5, 2), MAT_MINGRADE, QUANTUM.q(225, 2));
+        registerEntry(ModItems.centrifuge_element, MAT_STEEL, INGOT.q(4), MAT_TITANIUM, INGOT.q(4), MAT_IRON, INGOT.q(5, 2), MAT_MINGRADE, QUANTUM.q(225, 2));
 
 		registerEntry(ModItems.man_core, MAT_PU239, NUGGET.q(8), MAT_BERYLLIUM, NUGGET.q(2));
 		registerEntry(ModItems.gadget_core, MAT_PU239, NUGGET.q(7), MAT_U238, NUGGET.q(3));
 		registerEntry(ModItems.boy_target, MAT_U238, NUGGET.q(7));
 		registerEntry(ModItems.boy_bullet, MAT_U238, NUGGET.q(3));
 		registerEntry(ModItems.mike_core, MAT_LEAD, INGOT.q(6), MAT_U238, NUGGET.q(24));
+        registerEntry(ModItems.mike_cooling_unit, MAT_IRON, INGOT.q(23), MAT_MINGRADE, INGOT.q(8)+NUGGET.q(1), MAT_TUNGSTEN, INGOT.q(5));
 
 		registerEntry(ModBlocks.steel_beam, MAT_STEEL, INGOT.q(3, 8));
 		registerEntry(ModBlocks.steel_grate, MAT_STEEL, INGOT.q(3, 8));
@@ -479,7 +483,17 @@ public class MatDistribution {
         registerEntry(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 1), MAT_SILICON, NUGGET.q(12));
         registerEntry(new ItemStack(Blocks.QUARTZ_BLOCK, 1, 2), MAT_SILICON, NUGGET.q(12));
 
+        registerEntry(ModItems.fuse, MAT_STEEL, INGOT.q(1), MAT_TUNGSTEN, WIRE.q(1));
 
+        registerEntry(ModBlocks.factory_titanium_hull, MAT_TITANIUM, INGOT.q(8));
+        registerEntry(ModBlocks.factory_titanium_furnace, MAT_TITANIUM, INGOT.q(32), MAT_STONE, INGOT.q(8), MAT_IRON, QUANTUM.q(1440), MAT_MINGRADE, QUANTUM.q(896));
+        registerEntry(ModBlocks.factory_titanium_core, MAT_TITANIUM, INGOT.q(32), MAT_STONE, INGOT.q(16), MAT_IRON, INGOT.q(4), MAT_REDSTONE, DUST.q(4), MAT_CARBON, QUANTUM.q(84));
+        registerEntry(ModBlocks.factory_titanium_conductor, MAT_TITANIUM, INGOT.q(4), MAT_STEEL, INGOT.q(3), MAT_TUNGSTEN, WIRE.q(3));
+
+        registerEntry(ModBlocks.factory_advanced_hull, MAT_ALLOY, INGOT.q(8)+WIRE.q(6));
+        registerEntry(ModBlocks.factory_advanced_furnace, MAT_ALLOY, INGOT.q(10), MAT_STEEL, INGOT.q(8), MAT_IRON, INGOT.q(2));
+        registerEntry(ModBlocks.factory_advanced_core, MAT_IRON, INGOT.q(48), MAT_MINGRADE, QUANTUM.q(3584), MAT_STONE, INGOT.q(24), MAT_ALLOY, INGOT.q(14), MAT_STEEL, INGOT.q(8), MAT_REDSTONE, INGOT.q(6), MAT_CARBON, QUANTUM.q(252));
+        registerEntry(ModBlocks.factory_advanced_conductor, MAT_ALLOY, INGOT.q(4), MAT_STEEL, INGOT.q(3), MAT_TUNGSTEN, WIRE.q(3));
 
 //        registerAutoMats();
 	}

@@ -2,6 +2,7 @@
 package com.hbm.entity.logic;
 
 import com.hbm.entity.mob.EntityGlowingOne;
+import com.hbm.entity.mob.EntityThermonuclearCat;
 import com.hbm.main.AdvancementManager;
 
 import net.minecraft.entity.player.EntityPlayer;
@@ -65,6 +66,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			rads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double) 2 * this.ticksExisted / radius) + strength);
 			if(ticksExisted == 1){
 				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
+                if(radius > 120) EntityThermonuclearCat.convertInRadiusToThermo(world, this.posX, this.posY, this.posZ, radius);
                 if(radius > 60){
                     for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).grow(radius * 2, radius * 2, radius * 2))) {
                         AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);

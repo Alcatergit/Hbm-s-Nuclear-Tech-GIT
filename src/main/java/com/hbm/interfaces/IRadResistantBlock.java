@@ -27,7 +27,7 @@ public interface IRadResistantBlock {
         Block b = Block.getBlockFromItem(stack.getItem());
         if(b == Blocks.AIR) return;
         float hardness = b.getExplosionResistance(null);
-        if(hardness >= 3_600_000 || (b instanceof IRadResistantBlock bRad && bRad.isRadResistant())) {
+        if(hardness == 3_600_000 || (b instanceof IRadResistantBlock bRad && bRad.isRadResistant())) {
             tooltip.add("§2[" + I18nUtil.resolveKey("trait.radshield") + "]");
         }
         if(hardness > 50 || advanced.isAdvanced()){

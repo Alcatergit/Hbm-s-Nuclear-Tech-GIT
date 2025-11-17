@@ -22,31 +22,6 @@ public class RenderQuasar extends RenderBlackHole {
 	public RenderQuasar(RenderManager renderManager){
 		super(renderManager);
 	}
-
-	@Override
-	public void doRender(EntityBlackHole entity, double x, double y, double z, float entityYaw, float partialTicks){
-		if(!ClientProxy.renderingConstant)
-			return;
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float) x, (float) y, (float) z);
-		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
-
-		float size = entity.getDataManager().get(EntityBlackHole.SIZE);
-
-		GL11.glScalef(size, size, size);
-
-		bindTexture(hole);
-		blastModel.renderAll();
-		
-		renderDisc(entity, partialTicks);
-		renderJets(entity, partialTicks);
-
-		GlStateManager.enableCull();
-		GlStateManager.enableLighting();
-
-		GL11.glPopMatrix();
-	}
 	
 	@Override
 	protected ResourceLocation discTex() {

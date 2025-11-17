@@ -64,7 +64,6 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 		if(GeneralConfig.registerTanks){
 			if (tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH) {
 				ItemStack empty = new ItemStack(this, 1, 0);
-				empty.setTagCompound(new NBTTagCompound());
 				items.add(empty);
 				for (Entry<String, Fluid> entry : FluidRegistry.getRegisteredFluids().entrySet()) {
 					if(FluidTypeHandler.noContainer(entry.getValue())) continue;
@@ -104,8 +103,6 @@ public class ItemFluidTank extends Item implements IHasCustomModel {
 
 	@Override
 	public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt) {
-		if(stack.getTagCompound() == null)
-			stack.setTagCompound(new NBTTagCompound());
 		return new HbmFluidHandlerItemStack(stack, cap);
 	}
 

@@ -64,11 +64,10 @@ public class EntityNukeExplosionMK3 extends EntityChunky {
 		
 		long time = nbt.getLong("milliTime");
 		
-		if(BombConfig.limitExplosionLifespan > 0 && System.currentTimeMillis() - time > BombConfig.limitExplosionLifespan * 1000)
+		if(BombConfig.limitExplosionLifespan > 0 && System.currentTimeMillis() - time > BombConfig.limitExplosionLifespan * 1000L)
 			this.setDead();
 		
-    	if(this.waste)
-    	{
+    	if(this.waste) {
         	exp = new ExplosionNukeAdvanced((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange, this.coefficient, 0);
 			exp.readFromNbt(nbt, "exp_");
     		wst = new ExplosionNukeAdvanced((int)this.posX, (int)this.posY, (int)this.posZ, this.world, (int)(this.destructionRange * 1.8), this.coefficient, 2);
@@ -185,9 +184,9 @@ public class EntityNukeExplosionMK3 extends EntityChunky {
         {
         	this.world.playSound(this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F, true);
         	if(waste || extType != 1) {
-        		ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 1D, 0F, 0F, 0F, this.destructionRange * 2F, this.destructionRange);
+        		ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange, 25000F, 0F, 0F, this.destructionRange * 20000F, age);
         	} else {
-        		ContaminationUtil.radiate(world, posX, posY, posZ, this.destructionRange, 250000F);
+        		ContaminationUtil.radiate(world, posX, posY, posZ, this.destructionRange, 2500000F);
         	}
         } else {
 			if (!did2 && waste) {
@@ -198,15 +197,13 @@ public class EntityNukeExplosionMK3 extends EntityChunky {
 				fallout.setScale((int)(this.destructionRange * 1.8), this.destructionRange+16);
 
 				this.world.spawnEntity(fallout);
-				//this.world.getWorldInfo().setRaining(true);
-				
 				did2 = true;
         	}
         }
         age++;
     }
 
-	public static HashMap<ATEntry, Long> at = new HashMap();
+	public static HashMap<ATEntry, Long> at = new HashMap<>();
 
 	private static void createParticle(World world, int dim, double x, double y, double z, float r, float g, float b) {
 		world.playSound(null, x+0.5D, y+0.5D, z+0.5D, HBMSoundHandler.ufoBlast, SoundCategory.HOSTILE, 15.0F, 1.0F);

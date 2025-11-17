@@ -98,8 +98,8 @@ public class ArmorRegistry {
 	}
 	
 	public enum HazardClass {
-		GAS_CHLORINE("hazard.gasChlorine"),				//also attacks eyes -> no half mask (chlorine seal)
-		GAS_MONOXIDE("hazard.gasMonoxide"),				//only affects lungs (nether coal gas)
+		GAS_CHLORINE("hazard.gasChlorine"),			//also attacks eyes -> no half mask (chlorine seal)
+		GAS_MONOXIDE("hazard.gasMonoxide"),			//only affects lungs (nether coal gas)
 		GAS_INERT("hazard.gasInert"),					//SA
 		PARTICLE_COARSE("hazard.particleCoarse"),		//only affects lungs (coal dust)
 		PARTICLE_FINE("hazard.particleFine"),			//only affects lungs (asbestos dust)

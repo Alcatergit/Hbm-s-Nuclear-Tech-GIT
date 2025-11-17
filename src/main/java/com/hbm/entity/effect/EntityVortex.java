@@ -1,18 +1,26 @@
 package com.hbm.entity.effect;
 
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.world.World;
 
 public class EntityVortex extends EntityBlackHole {
 
-	public EntityVortex(World p_i1582_1_) {
-		super(p_i1582_1_);
+    public static final DataParameter<Integer> TYPE = EntityDataManager.createKey(EntityVortex.class, DataSerializers.VARINT);
+
+    public EntityVortex(World world) {
+		super(world);
 		this.ignoreFrustumCheck = true;
 		this.isImmuneToFire = true;
+        this.getDataManager().set(TYPE, 1);
 	}
 
-	public EntityVortex(World world, float size) {
-		super(world);
+	public EntityVortex(World world, float size, int type) {
+		this(world);
 		this.getDataManager().set(SIZE, size);
+        this.getDataManager().set(TYPE, type);
 	}
 	
 	@Override
@@ -26,4 +34,26 @@ public class EntityVortex extends EntityBlackHole {
 		
 		super.onUpdate();
 	}
+
+    public int getType(){
+        return this.getDataManager().get(TYPE);
+    }
+
+    @Override
+    protected void entityInit() {
+        this.getDataManager().register(TYPE, 0);
+        super.entityInit();
+    }
+
+    @Override
+    protected void readEntityFromNBT(NBTTagCompound compound) {
+        super.readEntityFromNBT(compound);
+        this.getDataManager().set(TYPE, compound.getInteger("t"));
+    }
+
+    @Override
+    protected void writeEntityToNBT(NBTTagCompound compound) {
+        super.writeEntityToNBT(compound);
+        compound.setFloat("t", this.getDataManager().get(TYPE));
+    }
 }

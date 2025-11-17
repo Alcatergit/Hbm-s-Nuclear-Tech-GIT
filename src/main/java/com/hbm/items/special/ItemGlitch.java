@@ -152,7 +152,7 @@ public class ItemGlitch extends Item {
 				player.sendMessage(new TextComponentTranslation("chat.glitch.26"));
 				break;
 			case 27:
-				EntityVortex vortex = new EntityVortex(world, 2.5F);
+				EntityVortex vortex = new EntityVortex(world, 2.5F, 2);
 				vortex.posX = player.posX;
 				vortex.posY = player.posY - 15;
 				vortex.posZ = player.posZ;

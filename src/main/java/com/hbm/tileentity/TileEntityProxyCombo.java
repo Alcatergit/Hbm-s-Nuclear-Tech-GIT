@@ -1,24 +1,30 @@
 package com.hbm.tileentity;
 
+import api.hbm.block.ICrucibleAcceptor;
 import api.hbm.energy.IEnergyUser;
-
 import api.hbm.tile.IHeatSource;
+
+import com.hbm.lib.ForgeDirection;
+import com.hbm.inventory.material.Mats.MaterialStack;
+
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.fluids.capability.CapabilityFluidHandler;
 import net.minecraftforge.items.CapabilityItemHandler;
 
-public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser, IHeatSource {
+public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergyUser, IHeatSource, ICrucibleAcceptor {
 
 	TileEntity tile;
 	boolean inventory;
 	boolean power;
 	boolean fluid;
-
+    public boolean molten;
 	boolean heat;
 
 	public TileEntityProxyCombo() {
@@ -29,6 +35,7 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		this.power = power;
 		this.fluid = fluid;
 		this.heat = false;
+        this.molten = false;
 	}
 
 	public TileEntityProxyCombo(boolean inventory, boolean power, boolean fluid, boolean heat) {
@@ -36,7 +43,16 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		this.power = power;
 		this.fluid = fluid;
 		this.heat = heat;
+        this.molten = false;
 	}
+
+    public TileEntityProxyCombo(boolean inventory, boolean power, boolean fluid, boolean heat, boolean molten) {
+        this.inventory = inventory;
+        this.power = power;
+        this.fluid = fluid;
+        this.heat = heat;
+        this.molten = molten;
+    }
 
 	// fewer messy recursive operations
 	public TileEntity getTile() {
@@ -94,8 +110,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		if(!power)
 			return;
 
-		if(getTile() instanceof IEnergyUser) {
-			((IEnergyUser)getTile()).setPower(i);
+		if(getTile() instanceof IEnergyUser user) {
+			user.setPower(i);
 		}
 	}
 
@@ -105,8 +121,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		if(!power)
 			return 0;
 
-		if(getTile() instanceof IEnergyUser) {
-			return ((IEnergyUser)getTile()).getPower();
+		if(getTile() instanceof IEnergyUser user) {
+			return user.getPower();
 		}
 
 		return 0;
@@ -118,8 +134,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		if(!power)
 			return 0;
 
-		if(getTile() instanceof IEnergyUser) {
-			return ((IEnergyUser)getTile()).getMaxPower();
+		if(getTile() instanceof IEnergyUser user) {
+			return user.getMaxPower();
 		}
 
 		return 0;
@@ -131,7 +147,7 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		fluid = compound.getBoolean("flu");
 		power = compound.getBoolean("pow");
 		heat = compound.getBoolean("hea");
-
+        molten = compound.getBoolean("mol");
 		super.readFromNBT(compound);
 	}
 
@@ -141,7 +157,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 		compound.setBoolean("flu", fluid);
 		compound.setBoolean("pow", power);
 		compound.setBoolean("hea", heat);
-		return super.writeToNBT(compound);
+        compound.setBoolean("mol", molten);
+        return super.writeToNBT(compound);
 	}
 
 	@Override
@@ -165,8 +182,8 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 			return 0;
 		}
 
-		if (getTile() instanceof IHeatSource) {
-			return ((IHeatSource) getTile()).getHeatStored();
+		if (getTile() instanceof IHeatSource source) {
+			return source.getHeatStored();
 		}
 		return 0;
 	}
@@ -177,8 +194,40 @@ public class TileEntityProxyCombo extends TileEntityProxyBase implements IEnergy
 			return;
 		}
 
-		if (getTile() instanceof IHeatSource) {
-			((IHeatSource) getTile()).useUpHeat(heat);
+		if (getTile() instanceof IHeatSource source) {
+            source.useUpHeat(heat);
 		}
 	}
+
+    @Override
+    public boolean canAcceptPartialPour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {
+        if(this.molten && getTile() instanceof ICrucibleAcceptor acc){
+            return acc.canAcceptPartialPour(world, pos, dX, dY, dZ, side, stack);
+        }
+        return false;
+    }
+
+    @Override
+    public MaterialStack pour(World world, BlockPos pos, double dX, double dY, double dZ, ForgeDirection side, MaterialStack stack) {
+        if(this.molten && getTile() instanceof ICrucibleAcceptor acc){
+            return acc.pour(world, pos, dX, dY, dZ, side, stack);
+        }
+        return null;
+    }
+
+    @Override
+    public boolean canAcceptPartialFlow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack) {
+        if(this.molten && getTile() instanceof ICrucibleAcceptor acc){
+            return acc.canAcceptPartialFlow(world, pos, side, stack);
+        }
+        return false;
+    }
+
+    @Override
+    public MaterialStack flow(World world, BlockPos pos, ForgeDirection side, MaterialStack stack) {
+        if(this.molten && getTile() instanceof ICrucibleAcceptor acc){
+            return acc.flow(world, pos, side, stack);
+        }
+        return null;
+    }
 }

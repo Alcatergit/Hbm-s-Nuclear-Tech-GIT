@@ -3,7 +3,7 @@ package com.hbm.lib;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 
-public class DirPos extends Object {
+public class DirPos {
     
     protected ForgeDirection dir;
     protected BlockPos pos;

@@ -193,8 +193,7 @@ public class GUIMachineReactorSmall extends GuiInfoContainer {
     {
         super.keyTyped(p_73869_1_, p_73869_2_);
         
-        if (p_73869_2_ == 56)
-        {
+        if (p_73869_2_ == 56) {
             this.toggleOverlay = !this.toggleOverlay;
         }
         

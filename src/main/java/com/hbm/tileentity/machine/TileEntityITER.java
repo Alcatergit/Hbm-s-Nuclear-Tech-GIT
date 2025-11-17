@@ -426,8 +426,20 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
     @Override
 	public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-		return new int[] { 2, 4 };
+		return new int[] { 1, 2, 3, 4 };
 	}
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack stack) {
+        if(stack.isEmpty()) return false;
+        if(i == 1 && BreederRecipes.getOutput(stack) != null) return true;
+        return i == 3 && stack.getItem() instanceof ItemFusionShield;
+    }
+
+    @Override
+    public boolean canExtractItem(int slot, ItemStack itemStack, int amount) {
+        return slot == 2 || slot == 4;
+    }
 
 	AxisAlignedBB bb = null;
 

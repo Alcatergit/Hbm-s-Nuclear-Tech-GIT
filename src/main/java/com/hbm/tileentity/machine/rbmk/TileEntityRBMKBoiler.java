@@ -39,11 +39,12 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public double gameruleBoilerHeatConsumption = 0.1D;
 	public byte timer = 0;
 	public static final byte gamerulePollTime = 100;
-	
-	public TileEntityRBMKBoiler() {
+    public static final int waterCapacity = 100000;
+
+    public TileEntityRBMKBoiler() {
 		super(0);
-		feed = new FluidTank(10000*20);
-		steam = new FluidTank(1000000*20);
+		feed = new FluidTank(waterCapacity);
+		steam = new FluidTank(100 * waterCapacity);
 		steamType = ModForgeFluids.STEAM;
 	}
 
@@ -52,6 +53,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		nbt.removeTag("jumpheight");
 		nbt.setInteger("water", feed.getFluidAmount());
 		nbt.setInteger("steam", steam.getFluidAmount());
+        nbt.setDouble("fluxperm", getMult());
 	}
 
 	@Override
@@ -71,7 +73,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
 			}
 
-			if(feed.getFluidAmount() < 10000*20 || steam.getFluidAmount() > 0)
+			if(feed.getFluidAmount() < waterCapacity || steam.getFluidAmount() > 0)
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("steamType2", steamType.getName());
@@ -97,6 +99,20 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		
 		super.update();
 	}
+
+    @Override
+    public double getMult(){
+        return getMultRaw(steam.getFluidAmount(), steam.getCapacity(), feed.getFluidAmount(), feed.getCapacity());
+    }
+
+    public static double getMultRaw(int a, int b, int c, int d){
+        return Math.min(1, 2*(a / (double)b) + 0.5 * (c / (double)d));
+    }
+
+    @Override
+    public boolean isModerated() {
+        return 0.5 < feed.getFluidAmount() / (double)feed.getCapacity();
+    }
 
 	public int makeLossless(int water, Fluid type){ //rounds down to the lower base 10 so it stays int
 		if(type == ModForgeFluids.ULTRAHOTSTEAM)
@@ -170,6 +186,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		if (this.steamType == null) {
 			this.steamType = ModForgeFluids.STEAM;
 		}
+        updateCapacity();
 	}
 	
 	@Override
@@ -187,6 +204,14 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 		return Vec3.createVectorHelper(pos.getX() - player.posX, pos.getY() - player.posY, pos.getZ() - player.posZ).length() < 20;
 	}
 
+    public void updateCapacity(){
+        int correctCapacity = (int) (100*waterCapacity/getFactorFromSteam(steamType));
+        if(steam.getCapacity() != correctCapacity) {
+            steam.setCapacity(correctCapacity);
+            this.markDirty();
+        }
+    }
+
 	@Override
 	public void receiveControl(NBTTagCompound data) {
 		
@@ -198,17 +223,21 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			if(steamType == ModForgeFluids.STEAM){
 				steamType = ModForgeFluids.HOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
+
 			} else if(steamType == ModForgeFluids.HOTSTEAM){
 				steamType = ModForgeFluids.SUPERHOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
+
 			} else if(steamType == ModForgeFluids.SUPERHOTSTEAM){
 				steamType = ModForgeFluids.ULTRAHOTSTEAM;
 				newAmount = steam.getFluidAmount()/10;
+
 			} else if(steamType == ModForgeFluids.ULTRAHOTSTEAM){
 				steamType = ModForgeFluids.STEAM;
 				newAmount = steam.getFluidAmount()*1000;
 			}
 			if(newAmount > 0){
+                updateCapacity();
 				steam.setFluid(new FluidStack(steamType, Math.min(newAmount, steam.getCapacity())));
 			} else {
 				steam.setFluid(null);

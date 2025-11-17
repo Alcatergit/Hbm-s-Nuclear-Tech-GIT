@@ -4,25 +4,39 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyGenerator;
+import net.minecraft.block.Block;
 import net.minecraft.util.ITickable;
 
 public class TileEntityMachineMiniRTG extends TileEntityLoadedBase implements ITickable, IEnergyGenerator {
 
 	public long power;
-	
-	@Override
+    public long powerProduction = -1;
+    public long powerMax = -1;
+
+    @Override
 	public void update() {
 		if(!world.isRemote) {
+            if(powerMax < 0)
+                setPowerProduction(this.getBlockType());
 			this.sendPower(world, pos);
-			if(this.getBlockType() == ModBlocks.machine_powerrtg)
-				power += 2500;
-			else
-				power += 70;
-
-			if(power > getMaxPower())
-				power = getMaxPower();
+            power += powerProduction;
+			if(power > powerMax)
+				power = powerMax;
 		}
 	}
+
+    public void setPowerProduction(Block b){
+        if(b == ModBlocks.machine_powerrtg){
+            powerProduction = 2500;
+            powerMax = 50000;
+        } else if(b == ModBlocks.machine_rtg){
+            powerProduction = 500;
+            powerMax = 10000;
+        } else {
+            powerProduction = 100;
+            powerMax = 5000;
+        }
+    }
 
 	@Override
 	public long getPower() {
@@ -36,9 +50,9 @@ public class TileEntityMachineMiniRTG extends TileEntityLoadedBase implements IT
 
 	@Override
 	public long getMaxPower() {
-		if(this.getBlockType() == ModBlocks.machine_powerrtg)
-			return 50000;
+		if(powerMax < 0)
+            setPowerProduction(this.getBlockType());
 
-		return 10000;
+		return powerMax;
 	}
 }

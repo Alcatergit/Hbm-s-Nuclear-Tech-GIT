@@ -212,7 +212,12 @@ public class TileEntityMachineCoker extends TileEntityMachineBase implements ITi
 
     @Override
     public int[] getAccessibleSlotsFromSide(EnumFacing e) {
-        return new int[] { 1 };
+        return new int[] { 0 };
+    }
+
+    @Override
+    public boolean isItemValidForSlot(int i, ItemStack stack) {
+        return false;
     }
 
     @Override

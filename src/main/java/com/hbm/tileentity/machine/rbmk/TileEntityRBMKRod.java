@@ -142,15 +142,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 	 */
 	
 	private double fluxFromType(NType type) {
-		
-		switch(type) {
-		case SLOW: return this.fluxFast * 0.5D + this.fluxSlow;
-		case FAST: return this.fluxFast + this.fluxSlow * 0.3D;
-		case ANY: return this.fluxFast + this.fluxSlow;
-		}
-		
-		return 0.0D;
-	}
+
+        return switch (type) {
+            case SLOW -> this.fluxFast * 0.5D + this.fluxSlow;
+            case FAST -> this.fluxFast + this.fluxSlow * 0.3D;
+            case ANY -> this.fluxFast + this.fluxSlow;
+        };
+
+    }
 	
 	public static final ForgeDirection[] fluxDirs = new ForgeDirection[] {
 			ForgeDirection.NORTH,
@@ -192,6 +191,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 			if(base.isModerated()) {
 				TileEntityRBMKRod.stream = NType.SLOW;
 			}
+            double mul = base.getMult();
+            if(mul == 0)
+                return 0;
+            else if(mul < 1) {
+                flux *= mul;
+            }
 		}
 
 		//burn baby burn
@@ -205,23 +210,6 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		if(te instanceof IRBMKFluxReceiver rod) {
             rod.receiveFlux(stream, flux);
 			return 0;
-		}
-		
-		//set neutrons to slow
-		if(te instanceof TileEntityRBMKControl control) {
-
-            if(control.getMult() == 0.0D)
-				return 0;
-			
-			flux *= control.getMult();
-			
-			return flux;
-		}
-		
-		//set neutrons to slow
-		if(te instanceof TileEntityRBMKModerator) {
-			stream = NType.SLOW;
-			return flux;
 		}
 		
 		//return the neutrons back to this with no further action required
@@ -242,7 +230,6 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		int limit = RBMKDials.getColumnHeight(world);
 		int hits = 0;
 		for(int h = 0; h <= limit; h++) {
-			
 			if(!world.getBlockState(new BlockPos(x, y, z)).isOpaqueCube())
 				hits++;
 		}

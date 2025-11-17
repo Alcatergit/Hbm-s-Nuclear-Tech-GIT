@@ -911,7 +911,6 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 
 	@Override
 	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
-
 		readFromNBT(pkt.getNbtCompound());
 	}
 
@@ -923,7 +922,6 @@ public class TileEntityMachineChemplant extends TileEntityMachineBase implements
 			tanks[2].readFromNBT(tags[2]);
 			tanks[3].readFromNBT(tags[3]);
 		}
-
 	}
 
 	public void haveNeedProess() {

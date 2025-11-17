@@ -3,6 +3,7 @@ package com.hbm.hazard.type;
 import java.util.List;
 
 import com.hbm.hazard.modifier.HazardModifier;
+import com.hbm.lib.Library;
 import com.hbm.util.I18nUtil;
 
 import net.minecraft.entity.EntityLivingBase;
@@ -30,6 +31,6 @@ public class HazardTypeExplosive extends HazardTypeBase {
 
 	@Override
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {
-		list.add("§c[" + I18nUtil.resolveKey("trait.explosive") + "]");
+		list.add("§c[" + I18nUtil.resolveKey("trait.explosive") + "] "+ Library.roundFloat(level, 3));
 	}
 }

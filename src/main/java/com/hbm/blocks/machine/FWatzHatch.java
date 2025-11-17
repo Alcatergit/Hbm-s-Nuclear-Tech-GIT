@@ -59,65 +59,30 @@ public class FWatzHatch extends BlockContainer implements IEnergyConnectorBlock 
 		if(world.isRemote)
 		{
 			return true;
-		} else if(!player.isSneaking())
-		{
-			EnumFacing e = state.getValue(FACING);
-			if(e == EnumFacing.NORTH)
-			{
-				if(world.getTileEntity(pos.add(0, 1, 6)) instanceof TileEntityFWatzCore)
-				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 1, 6))).isStructureValid(world))
-					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() + 6);
-					} else {
-						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-					}
-				} else {
-					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
-				}
-			}
-			if(e == EnumFacing.SOUTH)
-			{
-				if(world.getTileEntity(pos.add(0, 1, -6)) instanceof TileEntityFWatzCore)
-				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(0, 1, -6))).isStructureValid(world))
-					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX(), pos.getY() + 1, pos.getZ() - 6);
-					} else {
-						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-					}
-				} else {
-					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
-				}
-			}
-			if(e == EnumFacing.WEST)
-			{
-				if(world.getTileEntity(pos.add(6, 1, 0)) instanceof TileEntityFWatzCore)
-				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(6, 1, 0))).isStructureValid(world))
-					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() + 6, pos.getY() + 1, pos.getZ());
-					} else {
-						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-					}
-				} else {
-					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
-				}
-			}
-			if(e == EnumFacing.EAST)
-			{
-				if(world.getTileEntity(pos.add(-6, 1, 0)) instanceof TileEntityFWatzCore)
-				{
-					if(((TileEntityFWatzCore)world.getTileEntity(pos.add(-6, 1, 0))).isStructureValid(world))
-					{
-						player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, pos.getX() - 6, pos.getY() + 1, pos.getZ());
-					} else {
-						player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
-					}
-				} else {
-					player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
-				}
-			}
+		} else if(!player.isSneaking()) {
+            EnumFacing e = world.getBlockState(pos).getValue(BlockHorizontal.FACING);
+            BlockPos corePos = pos.add(e.getXOffset()*-6, -1, e.getZOffset()*-6);
+            TileEntity te = world.getTileEntity(corePos);
+            if(te instanceof TileEntityFWatzCore core) {
+                if(core.isOk) {
+                    player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, corePos.getX(), corePos.getY(), corePos.getZ());
+                } else {
+                    player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
+                }
+            } else {
+                corePos = pos.add(e.getXOffset()*-6, 3, e.getZOffset()*-6);
+                te = world.getTileEntity(corePos);
+                if(te instanceof TileEntityFWatzCore core) {
+                    if(core.isOk) {
+                        player.openGui(MainRegistry.instance, ModBlocks.guiID_fwatz_multiblock, world, corePos.getX(), corePos.getY(), corePos.getZ());
+                    } else {
+                        player.sendMessage(new TextComponentTranslation("chat.fwatz.structurebad"));
+                    }
+                } else {
+                    player.sendMessage(new TextComponentTranslation("chat.fwatz.corebad"));
+                }
+            }
+
 			return true;
 		} else {
 			return false;

@@ -10,6 +10,7 @@ import com.hbm.forgefluid.ModForgeFluids;
 
 import com.hbm.interfaces.*;
 import com.hbm.render.item.*;
+import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
 import com.hbm.items.IModelRegister;
@@ -1820,9 +1821,14 @@ public class ModEventHandlerClient {
 		ItemStack stack = event.getItemStack();
 		List<String> list = event.getToolTip();
 
+        /// BREEDING ///
+        BreederRecipes.addBreedingTips(stack, event.getEntityPlayer(), list, event.getFlags());
+
+        /// Reactor Interactions ///
+        TileEntityMachineReactorSmall.addReactorInteractionTooltip(stack, list);
+
         /// RAD SHIELDING ///
         IRadResistantBlock.addShieldInfo(stack, list, event.getFlags());
-
 
         /// HAZMAT INFO ///
 		List<HazardClass> hazInfo = ArmorRegistry.hazardClasses.get(stack.getItem());
@@ -1883,10 +1889,6 @@ public class ModEventHandlerClient {
 
 		/// HAZARDS ///
 		HazardSystem.addHazardInfo(stack, event.getEntityPlayer(), list, event.getFlags());
-		
-		/// BREEDING ///
-		BreederRecipes.addBreedingTips(stack, event.getEntityPlayer(), list, event.getFlags());
-
 
         //MKU
 		if(stack.hasTagCompound()){

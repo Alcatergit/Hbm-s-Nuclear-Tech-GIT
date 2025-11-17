@@ -1,7 +1,6 @@
 package com.hbm.render.entity;
 
-import java.util.Random;
-
+import com.hbm.entity.effect.EntityQuasar;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityBlackHole;
@@ -17,7 +16,6 @@ import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
-import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -27,9 +25,7 @@ import net.minecraftforge.fml.client.registry.IRenderFactory;
 
 public class RenderBlackHole extends Render<EntityBlackHole> {
 
-	public static final IRenderFactory<EntityBlackHole> FACTORY = (RenderManager man) -> {
-		return new RenderBlackHole(man);
-	};
+	public static final IRenderFactory<EntityBlackHole> FACTORY = RenderBlackHole::new;
 
 	protected static final ResourceLocation objTesterModelRL = new ResourceLocation(RefStrings.MODID, "models/Sphere.obj");
 	protected IModelCustom blastModel;
@@ -44,51 +40,64 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	@Override
 	public void doRender(EntityBlackHole entity, double x, double y, double z, float entityYaw, float partialTicks){
-		if(!ClientProxy.renderingConstant)
-			return;
-		GL11.glPushMatrix();
-		GL11.glTranslatef((float)x, (float)y, (float)z);
-		GlStateManager.disableLighting();
-		GlStateManager.disableCull();
+        int type;
 
-		float size = entity.getDataManager().get(EntityBlackHole.SIZE);
-
-		GL11.glScalef(size, size, size);
-
-		bindTexture(hole);
-		blastModel.renderAll();
-
-		if(entity instanceof EntityVortex) {
-			renderSwirl(entity, partialTicks);
-
+		if(entity instanceof EntityVortex vor) {
+            type = vor.getType();
 		} else if(entity instanceof EntityRagingVortex) {
-			renderSwirl(entity, partialTicks);
-			renderJets(entity, partialTicks);
-
+            type = 5;
+        } else if(entity instanceof EntityQuasar) {
+            type = 6;
 		} else {
-			renderDisc(entity, partialTicks);
-			renderJets(entity, partialTicks);
+            type = 4;
 		}
+        doRender(type, entity.getEntityId(), entity.ticksExisted, entity.getDataManager().get(EntityBlackHole.SIZE), x, y, z, partialTicks);
+    }
 
-		GlStateManager.enableCull();
-		GlStateManager.enableLighting();
+    public void doRender(int type, int rand, int age, float size, double x, double y, double z, float partialTicks){
+        if(!ClientProxy.renderingConstant)
+            return;
+        GL11.glPushMatrix();
+        GL11.glTranslatef((float)x, (float)y, (float)z);
+        GlStateManager.disableLighting();
+        GlStateManager.disableCull();
 
-		GL11.glPopMatrix();
-	}
+        GL11.glScalef(size, size, size);
+
+        bindTexture(hole);
+        blastModel.renderAll();
+
+        if(type == 4 || type == 6) {
+            renderDisc(rand, age, partialTicks);
+            renderJets(rand);
+
+        } else if(type == 5) {
+            renderSwirl(5, rand, age, partialTicks);
+            renderJets(rand);
+
+        } else {
+            renderSwirl(type, rand, age, partialTicks);
+        }
+
+        GlStateManager.enableCull();
+        GlStateManager.enableLighting();
+
+        GL11.glPopMatrix();
+    }
 
 	protected ResourceLocation discTex(){
 		return this.disc;
 	}
 
-	protected void renderDisc(EntityBlackHole entity, float interp){
+	protected void renderDisc(int rand, int age, float interp){
 
 		float glow = 0.75F;
 
 		bindTexture(discTex());
 
 		GL11.glPushMatrix();
-		GL11.glRotatef(entity.getEntityId() % 90 - 45, 1, 0, 0);
-		GL11.glRotatef(entity.getEntityId() % 360, 0, 1, 0);
+		GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+		GL11.glRotatef(rand % 360, 0, 1, 0);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
@@ -107,7 +116,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		for(int k = 0; k < steps(); k++) {
 
 			GL11.glPushMatrix();
-			GL11.glRotatef((entity.ticksExisted + interp % 360) * -((float)Math.pow(k + 1, 1.25)), 0, 1, 0);
+			GL11.glRotatef((age + interp % 360) * -((float)Math.pow(k + 1, 1.25)), 0, 1, 0);
 			GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE_MINUS_SRC_ALPHA);
 			double s = 3 - k * 0.175D;
 
@@ -181,31 +190,29 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 			return;
 		}
 
-		if(iteration > 5) {
-			int i = iteration - 6;
-			float r = 1.0F - i * (1F / 9F);
-			float g = 1F - i * (1F / 9F);
-			float b = i * (1F / 5F);
-			col[0] = r;
-			col[1] = g;
-			col[2] = b;
-			col[3] = alpha;
-		}
-	}
+        int i = iteration - 6;
+        float r = 1.0F - i * (1F / 9F);
+        float g = 1F - i * (1F / 9F);
+        float b = i * (1F / 5F);
+        col[0] = r;
+        col[1] = g;
+        col[2] = b;
+        col[3] = alpha;
+    }
 
-	protected void renderSwirl(EntityBlackHole entity, float interp){
+	protected void renderSwirl(int type, int rand, int age, float interp){
 
 		float glow = 0.75F;
 
-		if(entity instanceof EntityRagingVortex)
+		if(type == 6)
 			glow = 0.25F;
 
 		bindTexture(swirl);
 
 		GL11.glPushMatrix();
-		GL11.glRotatef(entity.getEntityId() % 90 - 45, 1, 0, 0);
-		GL11.glRotatef(entity.getEntityId() % 360, 0, 1, 0);
-		GL11.glRotatef((entity.ticksExisted + interp % 360) * -5, 0, 1, 0);
+		GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+		GL11.glRotatef(rand % 360, 0, 1, 0);
+		GL11.glRotatef((age + interp % 360) * -5, 0, 1, 0);
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		GlStateManager.enableBlend();
 		GlStateManager.disableAlpha();
@@ -233,7 +240,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 				buf.pos(vec.xCoord * 0.9, 0, vec.zCoord * 0.9).tex(0.5 + vec.xCoord * 0.25 / s * 0.9, 0.5 + vec.zCoord * 0.25 / s * 0.9).color(color[0], color[1], color[2], color[3]).endVertex();
 
 				if(j == 0){
-					this.setColorFull(entity, color);
+					this.setColorFull(type, color);
 				} else {
 					color[0] = 1;
 					color[1] = 1;
@@ -246,7 +253,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 				vec.rotateAroundY((float)(Math.PI * 2 / count));
 
 				if(j == 0){
-					this.setColorFull(entity, color);
+					this.setColorFull(type, color);
 				} else {
 					color[0] = 1;
 					color[1] = 1;
@@ -276,7 +283,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 			for(int i = 0; i < count; i++) {
 
 				if(j == 0){
-					this.setColorFull(entity, color);
+					this.setColorFull(type, color);
 				}else {
 					color[0] = 1;
 					color[1] = 1;
@@ -284,15 +291,15 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 					color[3] = glow;
 				}
 				buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
-				this.setColorNone(entity, color);
+				this.setColorNone(type, color);
 				buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
 				vec.rotateAroundY((float)(Math.PI * 2 / count));
-				this.setColorNone(entity, color);
+				this.setColorNone(type, color);
 				buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
 				if(j == 0)
-					this.setColorFull(entity, color);
+					this.setColorFull(type, color);
 				else {
 					color[0] = 1;
 					color[1] = 1;
@@ -315,14 +322,14 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPopMatrix();
 	}
 
-	protected void renderJets(EntityBlackHole entity, float interp){
+	protected void renderJets(int rand){
 
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = tes.getBuffer();
 
 		GL11.glPushMatrix();
-		GL11.glRotatef(entity.getEntityId() % 90 - 45, 1, 0, 0);
-		GL11.glRotatef(entity.getEntityId() % 360, 0, 1, 0);
+		GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+		GL11.glRotatef(rand % 360, 0, 1, 0);
 
 		GlStateManager.disableAlpha();
 		GlStateManager.depthMask(false);
@@ -355,85 +362,33 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPopMatrix();
 	}
 
-	protected void renderFlare(EntityBlackHole entity){
-
-		GL11.glPushMatrix();
-		GL11.glScalef(0.2F, 0.2F, 0.2F);
-
-		Tessellator tes = Tessellator.getInstance();
-		BufferBuilder buf = tes.getBuffer();
-		RenderHelper.disableStandardItemLighting();
-		int j = 75;
-		float f1 = (j + 2.0F) / 200.0F;
-		float f2 = 0.0F;
-		int count = 250;
-
-		count = j;
-
-		if(f1 > 0.8F) {
-			f2 = (f1 - 0.8F) / 0.2F;
-		}
-
-		Random random = new Random(432L);
-		GlStateManager.disableTexture2D();
-		GlStateManager.shadeModel(GL11.GL_SMOOTH);
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-		GlStateManager.disableAlpha();
-		GlStateManager.enableCull();
-		GlStateManager.depthMask(false);
-
-		float[] color = {0, 0, 0, 0};
-		for(int i = 0; i < count; i++) {
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-			GL11.glRotatef(random.nextFloat() * 360.0F + f1 * 90.0F, 0.0F, 0.0F, 1.0F);
-			buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-			float f3 = random.nextFloat() * 20.0F + 5.0F + f2 * 10.0F;
-			float f4 = random.nextFloat() * 2.0F + 1.0F + f2 * 2.0F;
-			setColorFull(entity, color);
-			buf.pos(0.0D, 0.0D, 0.0D).color(color[0], color[1], color[2], color[3]).endVertex();
-			setColorNone(entity, color);
-			buf.pos(-0.866D * f4, f3, -0.5F * f4).color(color[0], color[1], color[2], color[3]).endVertex();
-			buf.pos(0.866D * f4, f3, -0.5F * f4).color(color[0], color[1], color[2], color[3]).endVertex();
-			buf.pos(0.0D, f3, 1.0F * f4).color(color[0], color[1], color[2], color[3]).endVertex();
-			buf.pos(-0.866D * f4, f3, -0.5F * f4).color(color[0], color[1], color[2], color[3]).endVertex();
-			tes.draw();
-		}
-
-		GlStateManager.depthMask(true);
-		GlStateManager.disableCull();
-		GlStateManager.disableBlend();
-		GlStateManager.shadeModel(GL11.GL_FLAT);
-		GlStateManager.color(1, 1, 1, 1);
-		GlStateManager.enableTexture2D();
-		GlStateManager.enableAlpha();
-		RenderHelper.enableStandardItemLighting();
-		GL11.glPopMatrix();
-	}
-
-	protected void setColorFull(EntityBlackHole e, float[] color){
-		if(e instanceof EntityVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0x3898b3, color);
-		} else if(e instanceof EntityRagingVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0xe8390d, color);
-		} else {
-			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);
-		}
+	protected void setColorFull(int type, float[] color){
+        if(type == 4) {
+            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+        } else if(type == 5) {
+            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+        } else if(type == 3) {
+            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+        } else if(type == 1) {
+            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+        } else {
+            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+        }
 		color[3] = 1;
 	}
 
-	protected void setColorNone(EntityBlackHole e, float[] color){
-		if(e instanceof EntityVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0x3898b3, color);
-		} else if(e instanceof EntityRagingVortex) {
-			com.hbm.render.RenderHelper.unpackColor(0xe8390d, color);
-		} else {
-			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);
-		}
+	protected void setColorNone(int type, float[] color){
+        if(type == 4) {
+            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+        } else if(type == 5) {
+            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+        } else if(type == 3) {
+            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+        } else if(type == 1) {
+            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+        } else {
+            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+        }
 		color[3] = 0;
 	}
 
@@ -441,5 +396,4 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 	protected ResourceLocation getEntityTexture(EntityBlackHole entity){
 		return hole;
 	}
-
 }

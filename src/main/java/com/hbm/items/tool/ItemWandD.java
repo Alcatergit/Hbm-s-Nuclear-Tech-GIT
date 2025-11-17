@@ -108,8 +108,6 @@ public class ItemWandD extends Item {
 		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).setMod(1);
 		((TileEntitySafe) world.getTileEntity(new BlockPos(x, y, z))).lock();*/
 		
-		MainRegistry.time = System.currentTimeMillis();
-		
 		return EnumActionResult.SUCCESS;
 	}
 	

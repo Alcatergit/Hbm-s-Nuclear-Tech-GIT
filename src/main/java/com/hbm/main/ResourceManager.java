@@ -125,6 +125,9 @@ public class ResourceManager {
 	public static final IModelCustom sat_foeq_burning = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/sat_foeq_burning.obj")).asVBO();
 	public static final IModelCustom sat_foeq_fire = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/sat_foeq_fire.obj")).asVBO();
 
+    //Strand Caster
+    public static final IModelCustom strand_caster = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/strand_caster.obj")).asVBO();
+
 	//Bomber
 	public static final IModelCustom dornier = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/dornier.obj")).asVBO();
 	public static final IModelCustom b29 = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/b29.obj")).asVBO();
@@ -251,7 +254,6 @@ public class ResourceManager {
 	public static final IModelCustom cyclotron = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/cyclotron.obj")).asVBO();
 
 	//RTG
-	public static final IModelCustom rtg = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/rtg.obj")).asVBO();
 	public static final IModelCustom rtg_connector = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/machines/rtg_connector.obj")).asVBO();
 
 	//Waste Drum
@@ -553,23 +555,23 @@ public class ResourceManager {
 
 
 	// Control panel
-	public static final IModelCustom control_panel_custom = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/control_panel_custom.obj")).asVBO();
-	public static final IModelCustom control_panel_front = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/control_panel_front.obj")).asVBO();
+	public static final IModelCustom control_panel_custom = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/control_panel_custom.obj"));
+	public static final IModelCustom control_panel_front = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/control_panel_front.obj"));
 
 	public static final ResourceLocation control_panel_custom_tex = new ResourceLocation(RefStrings.MODID, "textures/models/misc/control_panel.png");
 
 	// Controls
-	public static final IModelCustom ctrl_button_push = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_push.obj")).asVBO();
-	public static final IModelCustom ctrl_button_emergency_push = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_emergency_push.obj")).asVBO();
-	public static final IModelCustom ctrl_button_encased_push = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_encased_push.obj")).asVBO();
-	public static final IModelCustom ctrl_switch_toggle = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/switch_toggle.obj")).asVBO();
-	public static final IModelCustom ctrl_switch_rotary_toggle = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/switch_rotary_toggle.obj")).asVBO();
-	public static final IModelCustom ctrl_display_seven_seg = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/display_seven_seg.obj")).asVBO();
-	public static final IModelCustom ctrl_indicator_lamp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/indicator_lamp.obj")).asVBO();
-	public static final IModelCustom ctrl_slider_vertical = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/slider_vertical.obj")).asVBO();
-	public static final IModelCustom ctrl_knob_control = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/knob_control.obj")).asVBO();
-	public static final IModelCustom ctrl_dial_square = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/dial_square.obj")).asVBO();
-	public static final IModelCustom ctrl_dial_large = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/control_panel/dial_large.obj")).asVBO();
+	public static final WavefrontObject ctrl_button_push = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_push.obj"));
+	public static final WavefrontObject ctrl_button_emergency_push = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_emergency_push.obj"));
+	public static final WavefrontObject ctrl_button_encased_push = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/button_encased_push.obj"));
+	public static final WavefrontObject ctrl_switch_toggle = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/switch_toggle.obj"));
+	public static final WavefrontObject ctrl_switch_rotary_toggle = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/switch_rotary_toggle.obj"));
+	public static final WavefrontObject ctrl_display_seven_seg = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/display_seven_seg.obj"));
+	public static final WavefrontObject ctrl_indicator_lamp = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/indicator_lamp.obj"));
+	public static final WavefrontObject ctrl_slider_vertical = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/slider_vertical.obj"));
+	public static final WavefrontObject ctrl_knob_control = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/knob_control.obj"));
+	public static final WavefrontObject ctrl_dial_square = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/dial_square.obj"));
+	public static final WavefrontObject ctrl_dial_large = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/control_panel/dial_large.obj"));
 
 	public static final ResourceLocation ctrl_button_push_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_push.png");
 	public static final ResourceLocation ctrl_button_emergency_push_tex = new ResourceLocation(RefStrings.MODID, "textures/models/control_panel/button_emergency_push.png");
@@ -799,9 +801,7 @@ public class ResourceManager {
 	public static final ResourceLocation waste_drum_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/drum_gray.png");
 	
 	//RTG
-	public static final ResourceLocation rtg_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/rtg.png");
-	public static final ResourceLocation rtg_cell_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/rtg_cell.png");
-	public static final ResourceLocation rtg_polonium_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/rtg_polonium.png");
+	public static final ResourceLocation rtg_connector_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/rtg_connector.png");
 
 	//Anti Mass Spectrometer
 	public static final ResourceLocation ams_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/ams_base.png");
@@ -828,7 +828,10 @@ public class ResourceManager {
 	//Radar
 	public static final ResourceLocation radar_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/radar_base.png");
 	public static final ResourceLocation radar_dish_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/radar_dish.png");
-	
+
+    //Strand Caster
+    public static final ResourceLocation strand_caster_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/strand_caster.png");
+
 	//Forcefield
 	public static final ResourceLocation forcefield_base_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/forcefield_base.png");
 	public static final ResourceLocation forcefield_top_tex = new ResourceLocation(RefStrings.MODID, "textures/models/missile_parts/forcefield_top.png");

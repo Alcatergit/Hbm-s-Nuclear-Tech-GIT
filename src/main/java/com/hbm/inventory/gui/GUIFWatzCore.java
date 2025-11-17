@@ -71,7 +71,7 @@ public class GUIFWatzCore extends GuiInfoContainer {
 		int k = (int)fwatz.getPowerScaled(116);
 		drawTexturedModalRect(guiLeft + 30, guiTop + 108, 0, 222, k, 16);
 		
-		if(fwatz.isRunning())
+		if(fwatz.isDoingSomething)
 			drawTexturedModalRect(guiLeft + 64, guiTop + 29, 176, 24, 48, 48);
 
 		if(fwatz.isOn)

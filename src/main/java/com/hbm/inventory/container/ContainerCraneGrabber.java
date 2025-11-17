@@ -39,6 +39,11 @@ public class ContainerCraneGrabber extends Container {
     }
 
     @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+        return slotIn.slotNumber > 8;
+    }
+
+    @Override
     public ItemStack slotClick(int slotId, int dragType, ClickType clickTypeIn, EntityPlayer player) {
         if (slotId < 0 || slotId >= 9) {
             return super.slotClick(slotId, dragType, clickTypeIn, player);

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import net.minecraft.client.renderer.GlStateManager;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
@@ -57,7 +58,7 @@ public class GUICrucible extends GuiInfoContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float p_146976_1_, int p_146976_2_, int p_146976_3_) {
 		super.drawDefaultBackground();
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(texture);
 		drawTexturedModalRect(guiLeft, guiTop, 0, 0, xSize, ySize);
 		
@@ -68,7 +69,7 @@ public class GUICrucible extends GuiInfoContainer {
 
 		if(!crucible.recipeStack.isEmpty()) drawStack(crucible.recipeStack, TileEntityCrucible.recipeZCapacity, 62, 97);
 		if(!crucible.wasteStack.isEmpty()) drawStack(crucible.wasteStack, TileEntityCrucible.wasteZCapacity, 17, 97);
-		GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);		
+        GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 	}
 	
 	protected void drawStackInfo(List<MaterialStack> stack, int mouseX, int mouseY, int x, int y, String side) {
@@ -104,13 +105,13 @@ public class GUICrucible extends GuiInfoContainer {
 			
 			int hex = sta.material.moltenColor;
 			Color color = new Color(hex);
-			GL11.glColor3f(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
+            GlStateManager.color(color.getRed() / 255F, color.getGreen() / 255F, color.getBlue() / 255F);
 			drawTexturedModalRect(guiLeft + x, guiTop + y - targetHeight, 176 + offset, 89 - targetHeight, 34, targetHeight - lastHeight);
 			
 			lastQuant += sta.amount;
 			lastHeight = targetHeight;
 		}
 
-		GL11.glColor3f(255, 255, 255);
+        GlStateManager.color(1.0F, 1.0F, 1.0F);
 	}
 }

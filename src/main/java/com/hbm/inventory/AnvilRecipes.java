@@ -105,18 +105,19 @@ public class AnvilRecipes {
 				}));
 		smithingRecipes.add(new AnvilSmithingMold(10, new OreDictStack(STEEL.shell()), new OreDictStack(OreNames.SHELL)));
 		smithingRecipes.add(new AnvilSmithingMold(11, new OreDictStack(STEEL.pipe()), new OreDictStack(OreNames.PIPE)));
-		smithingRecipes.add(new AnvilSmithingMold(12, new OreDictStack(IRON.ingot(), 9), new OreDictStack("ingot", 9)));
-		smithingRecipes.add(new AnvilSmithingMold(13, new OreDictStack(IRON.plate(), 9), new OreDictStack("plate", 9)));
-		smithingRecipes.add(new AnvilSmithingMold(14, new OreDictStack(ALLOY.wire(), 16),  new OreDictStack("wire", 16)));
-        smithingRecipes.add(new AnvilSmithingMold(15, new OreDictStack(ALLOY.wireDense(), 9),  new OreDictStack("wireDense", 9)));
-        smithingRecipes.add(new AnvilSmithingMold(16, new OreDictStack(IRON.block()), new OreDictStack("block")));
+        smithingRecipes.add(new AnvilSmithingMold(12, new OreDictStack(STEEL.bolt()), new OreDictStack(OreNames.BOLT)));
+        smithingRecipes.add(new AnvilSmithingMold(13, new OreDictStack(IRON.ingot(), 9), new OreDictStack("ingot", 9)));
+		smithingRecipes.add(new AnvilSmithingMold(14, new OreDictStack(IRON.plate(), 9), new OreDictStack("plate", 9)));
+		smithingRecipes.add(new AnvilSmithingMold(15, new OreDictStack(ALLOY.wire(), 16),  new OreDictStack("wire", 16)));
+        smithingRecipes.add(new AnvilSmithingMold(16, new OreDictStack(ALLOY.wireDense(), 9),  new OreDictStack("wireDense", 9)));
+        smithingRecipes.add(new AnvilSmithingMold(17, new OreDictStack(IRON.block()), new OreDictStack("block")));
 		
-		smithingRecipes.add(new AnvilSmithingMold(17, new ComparableStack(ModItems.pipes_steel), new ItemStack[] {new ItemStack(ModItems.pipes_steel)}));
-		smithingRecipes.add(new AnvilSmithingMold(18, new ComparableStack(ModItems.casing_357), new ItemStack[] {new ItemStack(ModItems.casing_357)}));
-		smithingRecipes.add(new AnvilSmithingMold(19, new ComparableStack(ModItems.casing_44), new ItemStack[] {new ItemStack(ModItems.casing_44)}));
-		smithingRecipes.add(new AnvilSmithingMold(20, new ComparableStack(ModItems.casing_9), new ItemStack[] {new ItemStack(ModItems.casing_9)}));
-		smithingRecipes.add(new AnvilSmithingMold(21, new ComparableStack(ModItems.casing_50), new ItemStack[] {new ItemStack(ModItems.casing_50)}));
-		smithingRecipes.add(new AnvilSmithingMold(22, new ComparableStack(ModItems.casing_buckshot), new ItemStack[] {new ItemStack(ModItems.casing_buckshot)}));
+		smithingRecipes.add(new AnvilSmithingMold(18, new ComparableStack(ModItems.pipes_steel), new ItemStack[] {new ItemStack(ModItems.pipes_steel)}));
+		smithingRecipes.add(new AnvilSmithingMold(19, new ComparableStack(ModItems.casing_357), new ItemStack[] {new ItemStack(ModItems.casing_357)}));
+		smithingRecipes.add(new AnvilSmithingMold(20, new ComparableStack(ModItems.casing_44), new ItemStack[] {new ItemStack(ModItems.casing_44)}));
+		smithingRecipes.add(new AnvilSmithingMold(21, new ComparableStack(ModItems.casing_9), new ItemStack[] {new ItemStack(ModItems.casing_9)}));
+		smithingRecipes.add(new AnvilSmithingMold(22, new ComparableStack(ModItems.casing_50), new ItemStack[] {new ItemStack(ModItems.casing_50)}));
+		smithingRecipes.add(new AnvilSmithingMold(23, new ComparableStack(ModItems.casing_buckshot), new ItemStack[] {new ItemStack(ModItems.casing_buckshot)}));
 		
 		
 		smithingRecipes.add(new AnvilSmithingCyanideRecipe());
@@ -221,9 +222,9 @@ public class AnvilRecipes {
 		
 		constructionRecipes.add(new AnvilConstructionRecipe(
 				new AStack[] {
-						new ComparableStack(Blocks.STONEBRICK, 4),
+						new ComparableStack(Blocks.STONEBRICK, 8),
 						new ComparableStack(ModItems.ingot_firebrick, 4),
-						new OreDictStack(CU.plate(), 6)
+						new OreDictStack(CU.ingot(), 12)
 				},
 				new AnvilOutput(new ItemStack(ModBlocks.machine_difurnace_off))).setTier(1));
 		

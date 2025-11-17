@@ -40,19 +40,19 @@ public class FWatz {
 			"SSS             SSS",
 			"STS             STS",
 			"SSS             SSS",
-			"        XXX        ",
+			"        XHX        ",
 			"        XXX        ",
 			"       MMMMM       ",
 			"      MMMMMMM      ",
 			"     MMMMMMMMM     ",
 			"   XXMMMMMMMMMXX   ",
-			"   XXMMMMCMMMMXX   ",
+			"   HXMMMMCMMMMXH   ",
 			"   XXMMMMMMMMMXX   ",
 			"     MMMMMMMMM     ",
 			"      MMMMMMM      ",
 			"       MMMMM       ",
 			"        XXX        ",
-			"        XXX        ",
+			"        XHX        ",
 			"SSS             SSS",
 			"STS             STS",
 			"SSS             SSS"
@@ -65,11 +65,11 @@ public class FWatz {
 			"       MMMMM       ",
 			"      MMMMMMM      ",
 			"     MMMMMMMMM     ",
-			"    MMMMPPPMMMM    ",
-			"   XMMMPPPPPMMMX   ",
-			"   XMMMPPCPPMMMX   ",
-			"   XMMMPPPPPMMMX   ",
-			"    MMMMPPPMMMM    ",
+			"    MMMM   MMMM    ",
+			"   XMMM     MMMX   ",
+			"   XMMM  C  MMMX   ",
+			"   XMMM     MMMX   ",
+			"    MMMM   MMMM    ",
 			"     MMMMMMMMM     ",
 			"      MMMMMMM      ",
 			"       MMMMM       ",
@@ -85,13 +85,13 @@ public class FWatz {
 			"XXXX    XXX    XXXX",
 			"      MMMMMMM      ",
 			"     MMMMMMMMM     ",
-			"    MMMMPPPMMMM    ",
-			"    MMMPPPPPMMM    ",
-			"  XXMMPPPPPPPMMXX  ",
-			"  XXMMPPPCPPPMMXX  ",
-			"  XXMMPPPPPPPMMXX  ",
-			"    MMMPPPPPMMM    ",
-			"    MMMMPPPMMMM    ",
+			"    MMMM   MMMM    ",
+			"    MMM     MMM    ",
+			"  XXMM       MMXX  ",
+			"  XXMM   C   MMXX  ",
+			"  XXMM       MMXX  ",
+			"    MMM     MMM    ",
+			"    MMMM   MMMM    ",
 			"     MMMMMMMMM     ",
 			"      MMMMMMM      ",
 			"XXXX    XXX    XXXX",
@@ -100,106 +100,106 @@ public class FWatz {
 			"SSSX           XSSS"
 		},
 		{
-			"SSSXXXXXXXXXXXXXSSS",
-			"STSXXXXXXXXXXXXXSTS",
-			"SSSXXXXXXXXXXXXXSSS",
+			"XXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXX",
 			"XXXXXXXMMMMMXXXXXXX",
 			"XXXXXMMMMMMMMMXXXXX",
-			"XXXXMMMMPPPMMMMXXXX",
-			"XXXXMMMPPPPPMMMXXXX",
-			"XXXMMMPPPPPPPMMMXXX",
-			"XXXMMPPPPPPPPPMMXXX",
-			"XXXMMPPPPCPPPPMMXXX",
-			"XXXMMPPPPPPPPPMMXXX",
-			"XXXMMMPPPPPPPMMMXXX",
-			"XXXXMMMPPPPPMMMXXXX",
-			"XXXXMMMMPPPMMMMXXXX",
+			"XXXXMMMM   MMMMXXXX",
+			"XXXXMMM     MMMXXXX",
+			"XXXMMM       MMMXXX",
+			"XXXMM         MMXXX",
+			"XXXMM    #    MMXXX",
+			"XXXMM         MMXXX",
+			"XXXMMM       MMMXXX",
+			"XXXXMMM     MMMXXXX",
+			"XXXXMMMM   MMMMXXXX",
 			"XXXXXMMMMMMMMMXXXXX",
 			"XXXXXXXMMMMMXXXXXXX",
-			"SSSXXXXXXXXXXXXXSSS",
-			"STSXXXXXXXXXXXXXSTS",
-			"SSSXXXXXXXXXXXXXSSS"
+			"XXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXX",
+			"XXXXXXXXXXXXXXXXXXX"
 		},
 		{
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS",
-			"       MMHMM       ",
-			"     MMMMMMMMM     ",
-			"    MMMPPPPPMMM    ",
-			"    MMPPPPPPPMM    ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"   HMPPPPCPPPPMH   ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"    MMPPPPPPPMM    ",
-			"    MMMPPPPPMMM    ",
-			"     MMMMMMMMM     ",
-			"       MMHMM       ",
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS"
+			"                   ",
+			"                   ",
+			"                   ",
+			"       MTHTM       ",
+			"     MMMTMTMMM     ",
+			"    MMM     MMM    ",
+			"    MM       MM    ",
+			"   MM         MM   ",
+			"   TT         TT   ",
+			"   HM         MH   ",
+			"   TT         TT   ",
+			"   MM         MM   ",
+			"    MM       MM    ",
+			"    MMM     MMM    ",
+			"     MMMTMTMMM     ",
+			"       MTHTM       ",
+			"                   ",
+			"                   ",
+			"                   "
 		},
 		{
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS",
+			"                   ",
+			"                   ",
+			"                   ",
 			"       MTTTM       ",
 			"     MMMTTTMMM     ",
-			"    MMMPPPPPMMM    ",
-			"    MMPPPPPPPMM    ",
-			"   MMPPPPPPPPPMM   ",
-			"   TTPPPPPPPPPTT   ",
-			"   TTPPPP#PPPPTT   ",
-			"   TTPPPPPPPPPTT   ",
-			"   MMPPPPPPPPPMM   ",
-			"    MMPPPPPPPMM    ",
-			"    MMMPPPPPMMM    ",
+			"    MMM     MMM    ",
+			"    MM       MM    ",
+			"   MM         MM   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   MM         MM   ",
+			"    MM       MM    ",
+			"    MMM     MMM    ",
 			"     MMMTTTMMM     ",
 			"       MTTTM       ",
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS"
-		},
-		{
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS",
-			"       MMMMM       ",
-			"     MMMMMMMMM     ",
-			"    MMMPPPPPMMM    ",
-			"    MMPPPPPPPMM    ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPCPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"    MMPPPPPPPMM    ",
-			"    MMMPPPPPMMM    ",
-			"     MMMMMMMMM     ",
-			"       MMMMM       ",
-			"SSS             SSS",
-			"STS             STS",
-			"SSS             SSS"
+			"                   ",
+			"                   ",
+			"                   "
 		},
 		{
 			"                   ",
 			"                   ",
 			"                   ",
-			"       MMMMM       ",
-			"     MMMMMMMMM     ",
-			"    MMMMPPPMMMM    ",
-			"    MMMPPPPPMMM    ",
-			"   MMMPPPPPPPMMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMPPPPCPPPPMM   ",
-			"   MMPPPPPPPPPMM   ",
-			"   MMMPPPPPPPMMM   ",
-			"    MMMPPPPPMMM    ",
-			"    MMMMPPPMMMM    ",
-			"     MMMMMMMMM     ",
-			"       MMMMM       ",
+			"       MTTTM       ",
+			"     MMMTTTMMM     ",
+			"    MMM     MMM    ",
+			"    MM       MM    ",
+			"   MM         MM   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   MM         MM   ",
+			"    MM       MM    ",
+			"    MMM     MMM    ",
+			"     MMMTTTMMM     ",
+			"       MTTTM       ",
+			"                   ",
+			"                   ",
+			"                   "
+		},
+		{
+			"                   ",
+			"                   ",
+			"                   ",
+			"       MTTTM       ",
+			"     MMMTTTMMM     ",
+			"    MMMM   MMMM    ",
+			"    MMM     MMM    ",
+			"   MMM       MMM   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   TT         TT   ",
+			"   MMM       MMM   ",
+			"    MMM     MMM    ",
+			"    MMMM   MMMM    ",
+			"     MMMTTTMMM     ",
+			"       MTTTM       ",
 			"                   ",
 			"                   ",
 			"                   "
@@ -209,38 +209,17 @@ public class FWatz {
 			"                   ",
 			"                   ",
 			"                   ",
-			"      MMMMMMM      ",
-			"     MMMMMMMMM     ",
-			"    MMMMPPPMMMM    ",
-			"    MMMPPPPPMMM    ",
-			"    MMPPPPPPPMM    ",
-			"    MMPPPCPPPMM    ",
-			"    MMPPPPPPPMM    ",
-			"    MMMPPPPPMMM    ",
-			"    MMMMPPPMMMM    ",
-			"     MMMMMMMMM     ",
-			"      MMMMMMM      ",
-			"                   ",
-			"                   ",
-			"                   ",
-			"                   "
-		},
-		{
-			"                   ",
-			"                   ",
-			"                   ",
-			"                   ",
-			"       MMMMM       ",
-			"      MMMMMMM      ",
-			"     MMMMMMMMM     ",
-			"    MMMMPPPMMMM    ",
-			"    MMMPPPPPMMM    ",
-			"    MMMPPCPPMMM    ",
-			"    MMMPPPPPMMM    ",
-			"    MMMMPPPMMMM    ",
-			"     MMMMMMMMM     ",
-			"      MMMMMMM      ",
-			"       MMMMM       ",
+			"      MMTTTMM      ",
+			"     MMMTTTMMM     ",
+			"    MMMM   MMMM    ",
+			"    MMM     MMM    ",
+			"    TT       TT    ",
+			"    TT       TT    ",
+			"    TT       TT    ",
+			"    MMM     MMM    ",
+			"    MMMM   MMMM    ",
+			"     MMMTTTMMM     ",
+			"      MMTTTMM      ",
 			"                   ",
 			"                   ",
 			"                   ",
@@ -251,17 +230,17 @@ public class FWatz {
 			"                   ",
 			"                   ",
 			"                   ",
-			"                   ",
-			"       MMMMM       ",
-			"      MMMMMMM      ",
-			"     MMMMMMMMM     ",
-			"     MMMMMMMMM     ",
-			"     MMMMCMMMM     ",
-			"     MMMMMMMMM     ",
-			"     MMMMMMMMM     ",
-			"      MMMMMMM      ",
-			"       MMMMM       ",
-			"                   ",
+			"       MTTTM       ",
+			"      MMTTTMM      ",
+			"     MMMTTTMMM     ",
+			"    MMMM   MMMM    ",
+			"    TTT     TTT    ",
+			"    TTT     TTT    ",
+			"    TTT     TTT    ",
+			"    MMMM   MMMM    ",
+			"     MMMTTTMMM     ",
+			"      MMTTTMM      ",
+			"       MTTTM       ",
 			"                   ",
 			"                   ",
 			"                   ",
@@ -273,13 +252,34 @@ public class FWatz {
 			"                   ",
 			"                   ",
 			"                   ",
+			"       MTTTM       ",
+			"      MMTTTMM      ",
+			"     MMMTTTMMM     ",
+			"     TTTTTTTTT     ",
+			"     TTTTTTTTT     ",
+			"     TTTTTTTTT     ",
+			"     MMMTTTMMM     ",
+			"      MMTTTMM      ",
+			"       MTTTM       ",
 			"                   ",
 			"                   ",
-			"       MMMMM       ",
-			"       MMMMM       ",
-			"       MMMMM       ",
-			"       MMMMM       ",
-			"       MMMMM       ",
+			"                   ",
+			"                   ",
+			"                   "
+		},
+		{
+			"                   ",
+			"                   ",
+			"                   ",
+			"                   ",
+			"                   ",
+			"                   ",
+			"                   ",
+			"       MTTTM       ",
+			"       TTTTT       ",
+			"       TTTTT       ",
+			"       TTTTT       ",
+			"       MTTTM       ",
 			"                   ",
 			"                   ",
 			"                   ",
@@ -324,13 +324,16 @@ public class FWatz {
 		world.setBlockState(mPos.setPos(x + 15, y + 5, z + 9), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.EAST), 3);
 		world.setBlockState(mPos.setPos(x + 9, y + 5, z + 15), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);		
 		world.setBlockState(mPos.setPos(x + 9, y + 5, z + 3), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 3);
-
+        world.setBlockState(mPos.setPos(x + 3, y + 1, z + 9), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.WEST), 3);
+        world.setBlockState(mPos.setPos(x + 15, y + 1, z + 9), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.EAST), 3);
+        world.setBlockState(mPos.setPos(x + 9, y + 1, z + 15), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.SOUTH), 3);
+        world.setBlockState(mPos.setPos(x + 9, y + 1, z + 3), ModBlocks.fwatz_hatch.getDefaultState().withProperty(BlockHorizontal.FACING, EnumFacing.NORTH), 3);
 	}
 
 	public static boolean checkHull(World world, BlockPos pos) {
 		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
 		int x = pos.getX() - 9;
-		int y = pos.getY() - 6;
+		int y = pos.getY() - 4;
 		int z = pos.getZ() - 9;
 		
 		boolean flag = true;
@@ -381,64 +384,4 @@ public class FWatz {
 
 		return flag;
 	}
-	
-	public static void fillPlasma(World world, BlockPos pos) {
-		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
-		int x = pos.getX() - 9;
-		int y = pos.getY() - 6;
-		int z = pos.getZ() - 9;
-		
-		for(int i = 0; i < 19; i++) {
-			for(int j = 0; j < 13; j++) {
-				for(int k = 0; k < 19; k++) {
-					String c = fwatz[j][i].substring(k, k + 1);
-
-					if(c.equals("P"))
-						world.setBlockState(mPos.setPos(x + i, y + j, z + k), ModBlocks.fwatz_plasma.getDefaultState());
-				}
-			}
-		}
-	}
-	
-	public static void emptyPlasma(World world, BlockPos pos) {
-		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
-		int x = pos.getX() - 9;
-		int y = pos.getY() - 6;
-		int z = pos.getZ() - 9;
-		
-		for(int i = 0; i < 19; i++) {
-			for(int j = 0; j < 13; j++) {
-				for(int k = 0; k < 19; k++) {
-					String c = fwatz[j][i].substring(k, k + 1);
-
-					if(c.equals("P"))
-						if(world.getBlockState(mPos.setPos(x + i, y + j, z + k)).getBlock() == ModBlocks.fwatz_plasma)
-							world.setBlockState(mPos.setPos(x + i, y + j, z + k), Blocks.AIR.getDefaultState());
-				}
-			}
-		}
-	}
-	
-	public static boolean getPlasma(World world, BlockPos pos) {
-		MutableBlockPos mPos = new BlockPos.MutableBlockPos();
-		int x = pos.getX() - 9;
-		int y = pos.getY() - 6;
-		int z = pos.getZ() - 9;
-		
-		boolean flag = false;
-		
-		for(int i = 0; i < 19; i++) {
-			for(int j = 0; j < 13; j++) {
-				for(int k = 0; k < 19; k++) {
-					String c = fwatz[j][i].substring(k, k + 1);
-					
-					if(c.equals("P") && world.getBlockState(mPos.setPos(x + i, y + j, z + k)).getBlock() == ModBlocks.fwatz_plasma)
-						return true;
-				}
-			}
-		}
-
-		return flag;
-	}
-
 }

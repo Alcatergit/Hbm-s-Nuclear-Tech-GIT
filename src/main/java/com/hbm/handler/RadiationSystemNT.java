@@ -295,13 +295,11 @@ public class RadiationSystemNT {
                 List<Object> oList = new ArrayList<Object>(world.loadedEntityList);
 
 				for(Object e : oList) {
-					if(e instanceof EntityLivingBase) {
+					if(e instanceof EntityLivingBase entity) {
 
 						// effect for radiation
-						EntityLivingBase entity = (EntityLivingBase) e;
 
-						if(entity instanceof EntityPlayer){
-							EntityPlayer player = (EntityPlayer) entity;
+						if(entity instanceof EntityPlayer player){
 							if(RadiationConfig.neutronActivation){
 								double recievedRadiation = ContaminationUtil.getNoNeutronPlayerRads(player)*0.00004D-(0.00004D * RadiationConfig.neutronActivationThreshold); //20Rad/s threshold
 								float neutronRads = ContaminationUtil.getPlayerNeutronRads(player);
@@ -321,7 +319,7 @@ public class RadiationSystemNT {
 							}
 						}
 
-						float eRad = (float)HbmLivingProps.getRadiation(entity);
+						float eRad = HbmLivingProps.getRadiation(entity);
 
 						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper) {
 
@@ -330,8 +328,7 @@ public class RadiationSystemNT {
 								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
 								if(!entity.isDead)
-									if(!world.isRemote)
-										world.spawnEntity(creep);
+                                    world.spawnEntity(creep);
 								entity.setDead();
 							} else {
 								entity.attackEntityFrom(ModDamageSource.radiation, 100F);
@@ -343,13 +340,11 @@ public class RadiationSystemNT {
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
 							if(!entity.isDead)
-								if(!world.isRemote)
-									world.spawnEntity(creep);
+                                world.spawnEntity(creep);
 							entity.setDead();
 							continue;
 
-						} else if(eRad >= 600 && entity instanceof EntityVillager) {
-							EntityVillager vil = (EntityVillager)entity;
+						} else if(eRad >= 600 && entity instanceof EntityVillager vil) {
 							EntityZombieVillager creep = new EntityZombieVillager(world);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
@@ -357,8 +352,7 @@ public class RadiationSystemNT {
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
 							if(!entity.isDead)
-								if(!world.isRemote)
-									world.spawnEntity(creep);
+                                world.spawnEntity(creep);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 700 && entity instanceof EntityBlaze) {
@@ -366,12 +360,10 @@ public class RadiationSystemNT {
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
 							if(!entity.isDead)
-								if(!world.isRemote)
-									world.spawnEntity(creep);
+                                world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(eRad >= 800 && entity instanceof EntityHorse) {
-							EntityHorse horsie = (EntityHorse)entity;
+						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
 							EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
 							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							zomhorsie.setGrowingAge(horsie.getGrowingAge());
@@ -381,8 +373,7 @@ public class RadiationSystemNT {
 							zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
 							zomhorsie.makeMad();
 							if(!entity.isDead)
-								if(!world.isRemote)
-									world.spawnEntity(zomhorsie);
+                                world.spawnEntity(zomhorsie);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
@@ -390,7 +381,7 @@ public class RadiationSystemNT {
 							EntityQuackos quacc = new EntityQuackos(world);
 							quacc.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
-							if(!entity.isDead && !world.isRemote)
+							if(!entity.isDead)
 								world.spawnEntity(quacc);
 
 							entity.setDead();

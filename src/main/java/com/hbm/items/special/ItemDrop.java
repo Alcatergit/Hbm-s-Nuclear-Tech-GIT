@@ -52,122 +52,124 @@ public class ItemDrop extends Item {
 			ItemStack stack = entityItem.getItem();
 
 			if(entityItem.onGround || entityItem.isBurning()) {
+                if(!stack.isEmpty()) {
 
-				if(stack.getItem() != null && stack.getItem() == ModItems.pellet_antimatter && WeaponConfig.dropCell) {
-					if(!entityItem.world.isRemote) {
-						ExplosionLarge.explodeFire(entityItem.world, entityItem.posX, entityItem.posY, entityItem.posZ, 100, true, true, true);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.tiny_singularity && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                    if (stack.getItem() == ModItems.pellet_antimatter && WeaponConfig.dropCell) {
+                        if (!entityItem.world.isRemote) {
+                            ExplosionLarge.explodeFire(entityItem.world, entityItem.posX, entityItem.posY, entityItem.posZ, 100, true, true, true);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.tiny_singularity && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 0.15F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.singularity && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 0.15F, 2);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.singularity && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 1.5F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.tiny_singularity_counter_resonant && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 1.5F, 2);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.tiny_singularity_counter_resonant && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 0.25F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_counter_resonant && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 0.25F, 1);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.singularity_counter_resonant && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 2.5F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.tiny_singularity_super_heated && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 2.5F, 1);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.tiny_singularity_super_heated && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 0.25F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.singularity_super_heated && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 0.25F, 3);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.singularity_super_heated && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityVortex bl = new EntityVortex(entityItem.world, 2.5F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.tiny_black_hole && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityVortex bl = new EntityVortex(entityItem.world, 2.5F, 3);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.tiny_black_hole && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityBlackHole bl = new EntityBlackHole(entityItem.world, 0.15F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if(stack.getItem() != null && stack.getItem() == ModItems.black_hole && WeaponConfig.dropSing) {
-					if(!entityItem.world.isRemote) {
+                            EntityBlackHole bl = new EntityBlackHole(entityItem.world, 0.15F);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.black_hole && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
 
-						EntityBlackHole bl = new EntityBlackHole(entityItem.world, 1.5F);
-						bl.posX = entityItem.posX;
-						bl.posY = entityItem.posY;
-						bl.posZ = entityItem.posZ;
-						entityItem.world.spawnEntity(bl);
-					}
-				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.tiny_singularity_spark && WeaponConfig.dropSing) {
-					if (!entityItem.world.isRemote) {
-					EntityRagingVortex bl = new EntityRagingVortex(entityItem.world, 0.35F);
-					bl.posX = entityItem.posX ;
-					bl.posY = entityItem.posY ;
-					bl.posZ = entityItem.posZ ;
-					entityItem.world.spawnEntity(bl);
-					}
-				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.singularity_spark && WeaponConfig.dropSing) {
-					if (!entityItem.world.isRemote) {
-					EntityRagingVortex bl = new EntityRagingVortex(entityItem.world, 3.5F);
-					bl.posX = entityItem.posX ;
-					bl.posY = entityItem.posY ;
-					bl.posZ = entityItem.posZ ;
-					entityItem.world.spawnEntity(bl);
-					}
-				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.capsule_xen && WeaponConfig.dropCrys) {
-					if (!entityItem.world.isRemote) {
-						ExplosionChaos.floater(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 3, 8);
-						ExplosionChaos.move(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 3, 0, 8, 0);
-					}
-				}
-				if (stack.getItem() != null && stack.getItem() == ModItems.crystal_xen && WeaponConfig.dropCrys) {
-					if (!entityItem.world.isRemote) {
-						ExplosionChaos.floater(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 25, 75);
-						ExplosionChaos.move(entityItem.world, (int)entityItem.posX, (int)entityItem.posY, (int)entityItem.posZ, 25, 0, 75, 0);
-					}
-				}
+                            EntityBlackHole bl = new EntityBlackHole(entityItem.world, 1.5F);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.tiny_singularity_spark && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
+                            EntityRagingVortex bl = new EntityRagingVortex(entityItem.world, 0.35F);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.singularity_spark && WeaponConfig.dropSing) {
+                        if (!entityItem.world.isRemote) {
+                            EntityRagingVortex bl = new EntityRagingVortex(entityItem.world, 3.5F);
+                            bl.posX = entityItem.posX;
+                            bl.posY = entityItem.posY;
+                            bl.posZ = entityItem.posZ;
+                            entityItem.world.spawnEntity(bl);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.capsule_xen && WeaponConfig.dropCrys) {
+                        if (!entityItem.world.isRemote) {
+                            ExplosionChaos.floater(entityItem.world, (int) entityItem.posX, (int) entityItem.posY, (int) entityItem.posZ, 3, 8);
+                            ExplosionChaos.move(entityItem.world, (int) entityItem.posX, (int) entityItem.posY, (int) entityItem.posZ, 3, 0, 8, 0);
+                        }
+                    }
+                    if (stack.getItem() == ModItems.crystal_xen && WeaponConfig.dropCrys) {
+                        if (!entityItem.world.isRemote) {
+                            ExplosionChaos.floater(entityItem.world, (int) entityItem.posX, (int) entityItem.posY, (int) entityItem.posZ, 25, 75);
+                            ExplosionChaos.move(entityItem.world, (int) entityItem.posX, (int) entityItem.posY, (int) entityItem.posZ, 25, 0, 75, 0);
+                        }
+                    }
+                }
 
 				entityItem.setDead();
 				return true;

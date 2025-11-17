@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.hbm.handler.ArmorModHandler;
 
+import com.hbm.main.MainRegistry;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.text.TextFormatting;
@@ -19,7 +20,8 @@ public class ItemModV1 extends ItemArmorMod {
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn){
 		list.add(TextFormatting.RED + "BLOOD IS FUEL");
 		list.add("");
-		super.addInformation(stack, worldIn, list, flagIn);
+        if(MainRegistry.polaroidID == 11) list.add("Heals 50% of Damage dealt to Entities within 5m");
+        super.addInformation(stack, worldIn, list, flagIn);
 	}
 	
 	@Override

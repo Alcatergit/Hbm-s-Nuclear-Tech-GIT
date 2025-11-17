@@ -83,9 +83,9 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 
 	private String customName;
 
-	private int height;
-	private int depth;
-	public int size;
+	private int height = 0;
+	private int depth = 0;
+	public int size = 1;
 	
 	public TileEntityMachineReactorLarge() {
 		inventory = new ItemStackHandler(8){
@@ -114,7 +114,7 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		tankTypes[0] = FluidRegistry.WATER;
 		tanks[1] = new FluidTank(64000);
 		tankTypes[1] = ModForgeFluids.COOLANT;
-		tanks[2] = new FluidTank(256000);
+		tanks[2] = new FluidTank(512000);
 		tankTypes[2] = ModForgeFluids.STEAM;
 		type = ReactorFuelType.URANIUM;
 		compression = 0;
@@ -403,21 +403,20 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			if(checkBody()) {
+            PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks[0], tanks[1], tanks[2]), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
+            if(checkBody()) {
 
 				age++;
 				if (age >= 20) {
 					age = 0;
 				}
 
-				caluclateSize();
-				
-				if (age == 9 || age == 19)
-					fillFluidInit(tanks[2]);
+				if (age == 1)
+                    caluclateSize();
+                fillFluidInit(tanks[2]);
 			}
 
 			PacketDispatcher.wrapper.sendToAllAround(new AuxGaugePacket(pos, size, 0), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
-			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[]{tanks[0], tanks[1], tanks[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTypePacketTest(pos.getX(), pos.getY(), pos.getZ(), new Fluid[]{tankTypes[2]}), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 15));
 		
 			maxWaste = maxFuel = fuelBase * getSize();

@@ -211,8 +211,7 @@ public class BlockHazard extends BlockBase {
 		
     	if(entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic) {
     		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
-    		return;
-    	}
+        }
 	}
 
 	@Override

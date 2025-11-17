@@ -24,6 +24,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.client.renderer.block.model.ModelResourceLocation;
 import net.minecraftforge.oredict.OreDictionary;
+import org.lwjgl.input.Keyboard;
 
 public class ItemMold extends Item implements IHasCustomMetaModels {
 	
@@ -102,10 +103,9 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 	@Override
 	public void getSubItems(CreativeTabs tab, NonNullList<ItemStack> list) {
 		if(tab == this.getCreativeTab() || tab == CreativeTabs.SEARCH){
-			for(int i = 0; i < molds.size(); i++) {
-				Mold mold = molds.get(i);
-				list.add(new ItemStack(this, 1, mold.id));
-			}
+            for (Mold mold : molds) {
+                list.add(new ItemStack(this, 1, mold.id));
+            }
 		}
 	}
 
@@ -123,7 +123,7 @@ public class ItemMold extends Item implements IHasCustomMetaModels {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> list, ITooltipFlag flagIn) {
 		Mold mold = getMold(stack);
-		list.add("§e" + mold.getTitle());
+		list.add("§e" + mold.getTitle() + " §6(" + Mats.formatAmount(mold.getCost(), Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) + ")");
 		
 		if(mold.size == 0) list.add("§6" + I18nUtil.resolveKey(ModBlocks.foundry_mold.getTranslationKey() + ".name"));
 		else if(mold.size == 1) list.add("§c" + I18nUtil.resolveKey(ModBlocks.foundry_basin.getTranslationKey() + ".name"));

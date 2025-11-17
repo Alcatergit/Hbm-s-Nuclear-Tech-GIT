@@ -1,0 +1,372 @@
+package com.hbm.render.tileentity;
+
+import com.hbm.lib.RefStrings;
+import com.hbm.render.amlfrom1710.AdvancedModelLoader;
+import com.hbm.render.amlfrom1710.IModelCustom;
+import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.tileentity.machine.TileEntityFWatzCore;
+import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
+import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraft.util.ResourceLocation;
+
+import org.lwjgl.opengl.GL11;
+
+public class RenderSAFECore extends TileEntitySpecialRenderer<TileEntityFWatzCore> {
+
+    protected static final ResourceLocation objTesterModelRL = new ResourceLocation(RefStrings.MODID, "models/Sphere.obj");
+    protected IModelCustom blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
+    protected ResourceLocation hole = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlackHole.png");
+    protected ResourceLocation swirl = new ResourceLocation(RefStrings.MODID, "textures/entity/bhole.png");
+    protected ResourceLocation disc = new ResourceLocation(RefStrings.MODID, "textures/entity/bholeDisc.png");
+
+
+	@Override
+	public void render(TileEntityFWatzCore te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+        int type = te.getType();
+        if(type == 0) return;
+        float size = (float) (Math.abs(type)/5D + 1D) * (type < 0 ? 0.1F : 0.5F);
+        float speed = te.isDoingSomething ? 2F : 1F;
+        doRender(Math.abs(type), 45, (int) (te.getWorld().getTotalWorldTime() * speed), size, x+0.5, y+2.5, z+0.5, partialTicks * speed);
+	}
+
+    public void doRender(int type, int rand, int age, float size, double x, double y, double z, float partialTicks){
+        GL11.glPushMatrix();
+        GL11.glTranslated(x, y, z);
+        GlStateManager.enableLighting();
+        GlStateManager.disableCull();
+
+        GL11.glScalef(size, size, size);
+
+        bindTexture(hole);
+        blastModel.renderAll();
+
+        OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+        if(type == 4 || type == 6) {
+            renderDisc(rand, age, partialTicks);
+            renderJets(rand);
+
+        } else if(type == 5) {
+            renderSwirl(5, rand, age, partialTicks);
+            renderJets(rand);
+
+        } else {
+            renderSwirl(type, rand, age, partialTicks);
+        }
+
+        GlStateManager.enableCull();
+        GlStateManager.enableLighting();
+
+        GL11.glPopMatrix();
+    }
+
+    protected ResourceLocation discTex(){
+        return this.disc;
+    }
+
+    protected void renderDisc(int rand, int age, float interp){
+
+        float glow = 0.75F;
+
+        bindTexture(discTex());
+
+        GL11.glPushMatrix();
+        GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+        GL11.glRotatef(rand % 360, 0, 1, 0);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.depthMask(false);
+        GlStateManager.alphaFunc(GL11.GL_GEQUAL, 0.0F);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder buf = tes.getBuffer();
+
+        int count = 16;
+
+        Vec3 vec = Vec3.createVectorHelper(1, 0, 0);
+
+        float[] color = {0, 0, 0, 0};
+        for(int k = 0; k < steps(); k++) {
+
+            GL11.glPushMatrix();
+            GL11.glRotatef((age + interp % 360) * -((float)Math.pow(k + 1, 1.25)), 0, 1, 0);
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+            double s = 3 - k * 0.175D;
+
+            for(int j = 0; j < 2; j++) {
+
+                buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+                for(int i = 0; i < count; i++) {
+
+                    if(j == 0){
+                        this.setColorFromIteration(k, 1F, color);
+                    } else {
+                        color[0] = 1;
+                        color[1] = 1;
+                        color[2] = 1;
+                        color[3] = glow;
+                    }
+                    buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+                    this.setColorFromIteration(k, 0F, color);
+                    buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                    vec.rotateAroundY((float)(Math.PI * 2 / count));
+                    this.setColorFromIteration(k, 0F, color);
+                    buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                    if(j == 0){
+                        this.setColorFromIteration(k, 1F, color);
+                    } else {
+                        color[0] = 1;
+                        color[1] = 1;
+                        color[2] = 1;
+                        color[3] = glow;
+                    }
+                    buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+                }
+                tes.draw();
+
+                GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+            }
+
+            GL11.glPopMatrix();
+        }
+
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableAlpha();
+        GL11.glPopMatrix();
+    }
+
+    protected int steps(){
+        return 15;
+    }
+
+    protected void setColorFromIteration(int iteration, float alpha, float[] col){
+
+        if(iteration < 5) {
+            float g = 0.125F + iteration * (1F / 10F);
+            col[0] = 1;
+            col[1] = g;
+            col[2] = 0;
+            col[3] = alpha;
+            return;
+        }
+
+        if(iteration == 5) {
+            col[0] = 1.0F;
+            col[1] = 1.0F;
+            col[2] = 1.0F;
+            col[3] = alpha;
+            return;
+        }
+
+        int i = iteration - 6;
+        float r = 1.0F - i * (1F / 9F);
+        float g = 1F - i * (1F / 9F);
+        float b = i * (1F / 5F);
+        col[0] = r;
+        col[1] = g;
+        col[2] = b;
+        col[3] = alpha;
+    }
+
+    protected void renderSwirl(int type, int rand, int age, float interp){
+
+        float glow = 0.75F;
+
+        if(type == 6)
+            glow = 0.25F;
+
+        bindTexture(swirl);
+
+        GL11.glPushMatrix();
+        GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+        GL11.glRotatef(rand % 360, 0, 1, 0);
+        GL11.glRotatef((age + interp % 360) * -5, 0, 1, 0);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.enableBlend();
+        GlStateManager.disableAlpha();
+        GlStateManager.depthMask(false);
+        GlStateManager.alphaFunc(GL11.GL_GEQUAL, 0.0F);
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+        Vec3 vec = Vec3.createVectorHelper(1, 0, 0);
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder buf = tes.getBuffer();
+
+        double s = 3;
+        int count = 16;
+
+        float[] color = {0, 0, 0, 0};
+
+        //swirl, inner part (solid)
+        for(int j = 0; j < 2; j++) {
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            for(int i = 0; i < count; i++) {
+                color[0] = 0;
+                color[1] = 0;
+                color[2] = 0;
+                color[3] = 1;
+                buf.pos(vec.xCoord * 0.9, 0, vec.zCoord * 0.9).tex(0.5 + vec.xCoord * 0.25 / s * 0.9, 0.5 + vec.zCoord * 0.25 / s * 0.9).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                if(j == 0){
+                    this.setColorFull(type, color);
+                } else {
+                    color[0] = 1;
+                    color[1] = 1;
+                    color[2] = 1;
+                    color[3] = glow;
+                }
+
+                buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                vec.rotateAroundY((float)(Math.PI * 2 / count));
+
+                if(j == 0){
+                    this.setColorFull(type, color);
+                } else {
+                    color[0] = 1;
+                    color[1] = 1;
+                    color[2] = 1;
+                    color[3] = glow;
+                }
+
+                buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+                color[0] = 0;
+                color[1] = 0;
+                color[2] = 0;
+                color[3] = 1;
+                buf.pos(vec.xCoord * 0.9, 0, vec.zCoord * 0.9).tex(0.5 + vec.xCoord * 0.25 / s * 0.9, 0.5 + vec.zCoord * 0.25 / s * 0.9).color(color[0], color[1], color[2], color[3]).endVertex();
+            }
+
+            tes.draw();
+
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        }
+
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
+
+        //swirl, outer part (fade)
+        for(int j = 0; j < 2; j++) {
+
+            buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
+            for(int i = 0; i < count; i++) {
+
+                if(j == 0){
+                    this.setColorFull(type, color);
+                }else {
+                    color[0] = 1;
+                    color[1] = 1;
+                    color[2] = 1;
+                    color[3] = glow;
+                }
+                buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+                this.setColorNone(type, color);
+                buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                vec.rotateAroundY((float)(Math.PI * 2 / count));
+                this.setColorNone(type, color);
+                buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
+
+                if(j == 0)
+                    this.setColorFull(type, color);
+                else {
+                    color[0] = 1;
+                    color[1] = 1;
+                    color[2] = 1;
+                    color[3] = glow;
+                }
+                buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
+            }
+            tes.draw();
+
+            GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        }
+
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableAlpha();
+
+        GL11.glPopMatrix();
+    }
+
+    protected void renderJets(int rand){
+
+        Tessellator tes = Tessellator.getInstance();
+        BufferBuilder buf = tes.getBuffer();
+
+        GL11.glPushMatrix();
+        GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
+        GL11.glRotatef(rand % 360, 0, 1, 0);
+
+        GlStateManager.disableAlpha();
+        GlStateManager.depthMask(false);
+        GlStateManager.alphaFunc(GL11.GL_GEQUAL, 0.0F);
+        GlStateManager.enableBlend();
+        GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+        GlStateManager.shadeModel(GL11.GL_SMOOTH);
+        GlStateManager.disableTexture2D();
+
+        for(int j = -1; j <= 1; j += 2) {
+            buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
+
+            buf.pos(0, 0, 0).color(1, 1, 1, 0.35F).endVertex();
+
+            Vec3 jet = Vec3.createVectorHelper(0.5, 0, 0);
+
+            for(int i = 0; i <= 12; i++) {
+                buf.pos(jet.xCoord, 10 * j, jet.zCoord).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
+                jet.rotateAroundY((float)(Math.PI / 6 * -j));
+            }
+
+            tes.draw();
+        }
+        GlStateManager.enableTexture2D();
+        GlStateManager.shadeModel(GL11.GL_FLAT);
+        GlStateManager.disableBlend();
+        GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+        GlStateManager.depthMask(true);
+        GlStateManager.enableAlpha();
+        GL11.glPopMatrix();
+    }
+
+    protected void setColorFull(int type, float[] color){
+        if(type == 4) {
+            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+        } else if(type == 5) {
+            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+        } else if(type == 3) {
+            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+        } else if(type == 1) {
+            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+        } else {
+            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+        }
+        color[3] = 1;
+    }
+
+    protected void setColorNone(int type, float[] color){
+        if(type == 4) {
+            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+        } else if(type == 5) {
+            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+        } else if(type == 3) {
+            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+        } else if(type == 1) {
+            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+        } else {
+            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+        }
+        color[3] = 0;
+    }
+}

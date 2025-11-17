@@ -51,13 +51,12 @@ public class EntityDamageUtil {
 	public static boolean wasAttackedByV1(DamageSource source) {
 
 		if(source instanceof EntityDamageSource) {
-			Entity attacker = ((EntityDamageSource) source).getImmediateSource();
+			Entity attacker = source.getImmediateSource();
 			
-			if(attacker instanceof EntityPlayer) {
-				EntityPlayer player = (EntityPlayer) attacker;
-				ItemStack chestplate = player.inventory.armorInventory.get(2);
+			if(attacker instanceof EntityPlayer player) {
+                ItemStack chestplate = player.inventory.armorInventory.get(2);
 				
-				if(chestplate != null && ArmorModHandler.hasMods(chestplate)) {
+				if(!chestplate.isEmpty() && ArmorModHandler.hasMods(chestplate)) {
 					ItemStack[] mods = ArmorModHandler.pryMods(chestplate);
 
                     return mods[ArmorModHandler.extra] != null && mods[ArmorModHandler.extra].getItem() == ModItems.v1;

@@ -118,7 +118,6 @@ public class ItemGeigerCounter extends Item implements IBauble {
 	public ActionResult<ItemStack> onItemRightClick(World world, EntityPlayer player, EnumHand handIn) {
 		if(!world.isRemote) {
 	    	world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.techBoop, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
 	    	ContaminationUtil.printGeigerData(player);
 		}
 		

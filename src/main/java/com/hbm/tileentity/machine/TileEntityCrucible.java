@@ -51,8 +51,8 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 	public int heat;
 	public int progress;
 	
-	public List<MaterialStack> recipeStack = new ArrayList();
-	public List<MaterialStack> wasteStack = new ArrayList();
+	public List<MaterialStack> recipeStack = new ArrayList<>();
+	public List<MaterialStack> wasteStack = new ArrayList<>();
 
 	/* CONFIGURABLE CONSTANTS */
 	//because eclipse's auto complete is dumb as a fucking rock, it's now called "ZCapacity" so it's listed AFTER the actual stacks in the auto complete list.
@@ -157,7 +157,7 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 			if(!this.recipeStack.isEmpty()) {
 				
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
-				List<MaterialStack> toCast = new ArrayList();
+				List<MaterialStack> toCast = new ArrayList<>();
 				
 				CrucibleRecipe recipe = this.getLoadedRecipe();
 				//if no recipe is loaded, everything from the recipe stack will be drainable
@@ -267,9 +267,8 @@ public class TileEntityCrucible extends TileEntityMachineBase implements ITickab
 		
 		TileEntity con = world.getTileEntity(pos.down());
 		
-		if(con instanceof IHeatSource) {
-			IHeatSource source = (IHeatSource) con;
-			int diff = source.getHeatStored() - this.heat;
+		if(con instanceof IHeatSource source) {
+            int diff = source.getHeatStored() - this.heat;
 			
 			if(diff == 0) {
 				return;

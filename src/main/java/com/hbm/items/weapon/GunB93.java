@@ -87,7 +87,6 @@ public class GunB93 extends Item {
 				setAnim(stack, 1);
 				setPower(stack, 0);
 			}
-		} else {
 		}
 	}
 
@@ -187,6 +186,7 @@ public class GunB93 extends Item {
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
 		tooltip.add(I18nUtil.resolveKey("trait.legendaryweap"));
+        tooltip.add("§2"+I18nUtil.resolveKey("desc.surveyscanner.3", getPower(stack)));
 	}
 
 	private static int getAnim(ItemStack stack) {
@@ -210,7 +210,6 @@ public class GunB93 extends Item {
 
 	private static int getPower(ItemStack stack) {
 		if (stack.getTagCompound() == null) {
-			stack.setTagCompound(new NBTTagCompound());
 			return 0;
 		}
 

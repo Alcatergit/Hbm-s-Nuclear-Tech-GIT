@@ -415,11 +415,10 @@ public class ContaminationUtil {
 		
 		return 	e instanceof EntityZombie ||
 				e instanceof EntitySkeleton ||
-				e instanceof EntityQuackos ||
-				e instanceof EntityOcelot ||
 				e instanceof EntityMooshroom ||
 				e instanceof EntityZombieHorse ||
-				e instanceof EntitySkeletonHorse ||
+                e instanceof EntityOcelot ||
+                e instanceof EntitySkeletonHorse ||
 				e instanceof EntityArmorStand ||
 				e instanceof EntityItemFrame ||
 				e instanceof EntityIronGolem ||

@@ -335,15 +335,9 @@ public class GUIRBMKConsole extends GuiScreen {
 			drawTexturedModalRect(guiLeft + x, guiTop + y + size - h, 0, 192 - h, 10, h);
 			
 			switch(col.type) {
-			case ABSORBER: break;
-			case BLANK: break;
-			case MODERATOR: break;
-			case REFLECTOR: break;
-			case OUTGASSER: break;
-			case BREEDER: break;
-			
-			case COOLER:
-				int cryo = (int)Math.ceil(col.data.getShort("cryo") * 8 / 16000);
+			case ABSORBER, BLANK, MODERATOR, REFLECTOR, OUTGASSER, BREEDER: break;
+            case COOLER:
+				int cryo = (int) (double) (col.data.getShort("cryo") * 8 / 16000);
 				if(cryo > 0)
 					drawTexturedModalRect(guiLeft + x + 3, guiTop + y + size - cryo - 1, 123, 191 - cryo, 4, cryo);
 				break;

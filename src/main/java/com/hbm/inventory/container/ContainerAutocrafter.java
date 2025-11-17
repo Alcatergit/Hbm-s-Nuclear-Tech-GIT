@@ -92,6 +92,11 @@ public class ContainerAutocrafter extends Container {
     }
 
     @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn) {
+        return slotIn.slotNumber > 9;
+    }
+
+    @Override
     public @NotNull ItemStack transferStackInSlot(@NotNull EntityPlayer player, int index) {
         ItemStack rStack = ItemStack.EMPTY;
         Slot slot = this.inventorySlots.get(index);

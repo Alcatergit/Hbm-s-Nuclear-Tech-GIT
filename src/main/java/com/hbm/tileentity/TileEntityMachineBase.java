@@ -17,6 +17,8 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
+
 @Spaghetti("Not spaghetti in itself, but for the love of god please use this base class for all machines")
 public abstract class TileEntityMachineBase extends TileEntityLoadedBase implements INBTPacketReceiver {
 
@@ -133,14 +135,14 @@ public abstract class TileEntityMachineBase extends TileEntityLoadedBase impleme
 				return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory);
 			return CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(new ItemStackHandlerWrapper(inventory, getAccessibleSlotsFromSide(facing)){
 				@Override
-				public ItemStack extractItem(int slot, int amount, boolean simulate) {
+				public @NotNull ItemStack extractItem(int slot, int amount, boolean simulate) {
 					if(canExtractItem(slot, inventory.getStackInSlot(slot), amount))
 						return super.extractItem(slot, amount, simulate);
 					return ItemStack.EMPTY;
 				}
 				
 				@Override
-				public ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
+				public @NotNull ItemStack insertItem(int slot, ItemStack stack, boolean simulate) {
 					if(canInsertItem(slot, stack, stack.getCount()))
 						return super.insertItem(slot, stack, simulate);
 					return stack;

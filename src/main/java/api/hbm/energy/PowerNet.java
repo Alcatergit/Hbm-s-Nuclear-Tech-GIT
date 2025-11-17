@@ -131,12 +131,12 @@ public class PowerNet implements IPowerNet {
 	@Override
 	public long transferPower(long power) {
 		
-		List<PowerNet> cache = new ArrayList();
+		List<PowerNet> cache = new ArrayList<>();
 		if(trackingInstances != null && !trackingInstances.isEmpty()) {
 			cache.addAll(trackingInstances);
 		}
 
-		trackingInstances = new ArrayList();
+		trackingInstances = new ArrayList<>();
 		trackingInstances.add(this);
 		long result = fairTransfer(this.subscribers, power);
 		trackingInstances.addAll(cache);
@@ -145,9 +145,7 @@ public class PowerNet implements IPowerNet {
 	
 	public static void cleanup(List<IEnergyConnector> subscribers) {
 
-		subscribers.removeIf(x -> 
-			x == null || !(x instanceof TileEntity) || ((TileEntity)x).isInvalid() || !x.isLoaded()
-		);
+		subscribers.removeIf(x -> x == null || !(x instanceof TileEntity) || ((TileEntity)x).isInvalid() || !x.isLoaded());
 	}
 
 	public static boolean shouldSend(ConnectionPriority senderPrio, ConnectionPriority p, IEnergyConnector x){
@@ -169,7 +167,7 @@ public class PowerNet implements IPowerNet {
 		
 		for(ConnectionPriority p : priorities) {
 			
-			List<IEnergyConnector> subList = new ArrayList();
+			List<IEnergyConnector> subList = new ArrayList<>();
 			subscribers.forEach(x -> {
 				if(shouldSend(senderPrio, p, x)) {
 					subList.add(x);
@@ -179,7 +177,7 @@ public class PowerNet implements IPowerNet {
 			if(subList.isEmpty())
 				continue;
 			
-			List<Long> weight = new ArrayList();
+			List<Long> weight = new ArrayList<>();
 			long totalReq = 0;
 			
 			for(IEnergyConnector con : subList) {
@@ -202,9 +200,8 @@ public class PowerNet implements IPowerNet {
 				
 				totalGiven += (given - con.transferPower(given));
 
-				if(con instanceof TileEntity) {
-					TileEntity tile = (TileEntity) con;
-					tile.getWorld().markChunkDirty(tile.getPos(), tile);
+				if(con instanceof TileEntity tile) {
+                    tile.getWorld().markChunkDirty(tile.getPos(), tile);
 				}
 			}
 			

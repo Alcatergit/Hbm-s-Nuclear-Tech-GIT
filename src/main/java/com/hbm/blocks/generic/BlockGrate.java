@@ -88,7 +88,7 @@ public class BlockGrate extends Block {
 		} else if(facing == EnumFacing.DOWN){
 			return this.getDefaultState().withProperty(HEIGHT, 7);
 		} else {
-			return this.getDefaultState().withProperty(HEIGHT, (int)Math.floor(hitY*8));
+			return this.getDefaultState().withProperty(HEIGHT, (int)Math.min(7, Math.max(0, Math.floor(hitY*8))));
 		}
 	}
 	

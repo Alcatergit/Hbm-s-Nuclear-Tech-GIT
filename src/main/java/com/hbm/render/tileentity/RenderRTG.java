@@ -1,5 +1,6 @@
 package com.hbm.render.tileentity;
 
+import com.hbm.tileentity.machine.TileEntityMachineMiniRTG;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.ModBlocks;
@@ -10,23 +11,17 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.tileentity.TileEntity;
 
-public class RenderRTG extends TileEntitySpecialRenderer<TileEntity> {
+public class RenderRTG extends TileEntitySpecialRenderer<TileEntityMachineMiniRTG> {
 
 	@Override
-	public void render(TileEntity te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
+	public void render(TileEntityMachineMiniRTG te, double x, double y, double z, float partialTicks, int destroyStage, float alpha) {
 		GL11.glPushMatrix();
         GL11.glTranslated(x + 0.5D, y, z + 0.5D);
         GlStateManager.enableLighting();
         GlStateManager.disableCull();
 		GL11.glRotatef(180, 0F, 1F, 0F);
 
-        if(te.getBlockType() == ModBlocks.machine_rtg_grey){
-            bindTexture(ResourceManager.rtg_tex);
-        }  else if(te.getBlockType() == ModBlocks.machine_powerrtg){
-            bindTexture(ResourceManager.rtg_polonium_tex);
-		} else {
-            bindTexture(ResourceManager.rtg_cell_tex);
-        }
+        bindTexture(ResourceManager.rtg_connector_tex);
         //Drillgon200: This is handled by the forge model
         //ResourceManager.rtg.renderPart("Gen");
 

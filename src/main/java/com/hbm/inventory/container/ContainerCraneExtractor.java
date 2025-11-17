@@ -63,9 +63,8 @@ public class ContainerCraneExtractor extends Container  {
             ret = slot.getStack().copy();
         }
 
-        if (clickTypeIn == ClickType.PICKUP && dragType == 1 && slot.getHasStack()) {
+        if(clickTypeIn == ClickType.PICKUP && dragType == 1 && slot.getHasStack()) {
             extractor.nextMode(slotId);
-            return ret;
         } else {
             slot.putStack(held.isEmpty() ? ItemStack.EMPTY : held.copy());
 
@@ -76,8 +75,8 @@ public class ContainerCraneExtractor extends Container  {
             slot.onSlotChanged();
             extractor.initPattern(slot.getStack(), slotId);
 
-            return ret;
         }
+        return ret;
     }
 
     @Override
@@ -102,16 +101,20 @@ public class ContainerCraneExtractor extends Container  {
                 return ItemStack.EMPTY;
             }
 
-            if (var5.isEmpty())
-            {
+            if (var5.isEmpty()) {
                 var4.putStack(ItemStack.EMPTY);
-            }
-            else {
+            } else {
                 var4.onSlotChanged();
             }
         }
 
         return var3;
+    }
+
+    @Override
+    public boolean canMergeSlot(ItemStack stack, Slot slotIn)
+    {
+        return slotIn.slotNumber > 8;
     }
 
     @Override

@@ -12,10 +12,10 @@ public class RTGUtil {
 	
 	public static boolean hasHeat(ItemStackHandler inventory) {
 		for(int i = 0; i < inventory.getSlots(); i++){
-			
-			if(inventory.getStackInSlot(i) == ItemStack.EMPTY)
+
+			if(inventory.getStackInSlot(i).isEmpty())
 				continue;
-			
+
 			if(inventory.getStackInSlot(i).getItem() instanceof ItemRTGPellet)
 				return true;
 		}
@@ -27,14 +27,13 @@ public class RTGUtil {
 		int newHeat = 0;
 		for(int i: slots){
 			
-			if(inventory.getStackInSlot(i) == ItemStack.EMPTY)
+			if(inventory.getStackInSlot(i).isEmpty())
 				continue;
 			
-			if(!(inventory.getStackInSlot(i).getItem() instanceof ItemRTGPellet))
+			if(!(inventory.getStackInSlot(i).getItem() instanceof ItemRTGPellet pellet))
 				continue;
-			
-			final ItemRTGPellet pellet = (ItemRTGPellet) inventory.getStackInSlot(i).getItem();
-			newHeat += getPower(pellet, inventory.getStackInSlot(i));
+
+            newHeat += getPower(pellet, inventory.getStackInSlot(i));
 			inventory.setStackInSlot(i, ItemRTGPellet.handleDecay(inventory.getStackInSlot(i), pellet));
 		}
 		

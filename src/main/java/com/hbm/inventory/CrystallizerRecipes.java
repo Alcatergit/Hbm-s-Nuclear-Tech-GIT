@@ -100,7 +100,7 @@ public class CrystallizerRecipes {
 		addRecipe(new ComparableStack(Items.DYE, 1, 15), new FluidStack(ModForgeFluids.SULFURIC_ACID, 250), new ItemStack(Items.SLIME_BALL, 4));
 		addRecipe(new ComparableStack(ModItems.powder_lithium), new FluidStack(ModForgeFluids.HEATINGOIL, 4000), new ItemStack(ModItems.crystal_redstone, 1));
 		addRecipe(new ComparableStack(ModItems.coal_infernal), new FluidStack(ModForgeFluids.SULFURIC_ACID, 500), new ItemStack(ModItems.solid_fuel));
-		addRecipe(new ComparableStack(ModBlocks.block_fallout), new FluidStack(ModForgeFluids.CORIUM_FLUID, 8000), new ItemStack(ModItems.powder_balefire));
+		addRecipe(new ComparableStack(ModBlocks.block_fallout), new FluidStack(ModForgeFluids.CORIUM_FLUID, 16000), new ItemStack(ModItems.powder_balefire));
 		
 		addRecipe(new ComparableStack(Blocks.DIRT), new FluidStack(ModForgeFluids.COLLOID, 1000), new ItemStack(Blocks.CLAY));
 		addRecipe(new ComparableStack(ModBlocks.sand_quartz), new FluidStack(ModForgeFluids.NITROGLYCERIN, 1000), new ItemStack(ModItems.ball_dynamite, 16));

@@ -32,7 +32,7 @@ public class GUIMachineRTG extends GuiInfoContainer {
 		this.drawElectricityInfo(this, mouseX, mouseY, guiLeft + 152, guiTop + 69 - 52, 16, 52, rtg.power, rtg.maxPower);
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 134, guiTop + 69 - 52, 16, 52, mouseX+8, mouseY-8, new String[] {"RTG Heat " + rtg.heat + "/" + rtg.heatMax, "RTG Power " + Library.getShortNumber(rtg.heat*100)+"HE/s"});
 		
-		String[] text = new String[] { "Heat to Power Conversion 1:5" };
+		String[] text = new String[] { "Heat to Power Conversion 1:"+TileEntityMachineRTG.powerPerTU };
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft - 16, guiTop + 36, 16, 16, guiLeft - 8, guiTop + 36 + 16, text);
 		this.renderHoveredToolTip(mouseX, mouseY);
 	}

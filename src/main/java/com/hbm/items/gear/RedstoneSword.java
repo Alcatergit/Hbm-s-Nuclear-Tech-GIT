@@ -61,33 +61,27 @@ public class RedstoneSword extends ItemSword implements IHasCustomModel {
 		int y = pos.getY();
 		int z = pos.getZ();
 		
-		if (facing.ordinal() == 0)
-        {
+		if (facing.ordinal() == 0) {
             --y;
         }
 
-        if (facing.ordinal() == 1)
-        {
+        if (facing.ordinal() == 1) {
             ++y;
         }
 
-        if (facing.ordinal() == 2)
-        {
+        if (facing.ordinal() == 2) {
             --z;
         }
 
-        if (facing.ordinal() == 3)
-        {
+        if (facing.ordinal() == 3) {
             ++z;
         }
 
-        if (facing.ordinal() == 4)
-        {
+        if (facing.ordinal() == 4) {
             --x;
         }
 
-        if (facing.ordinal() == 5)
-        {
+        if (facing.ordinal() == 5) {
             ++x;
         }
         BlockPos editpos = new BlockPos(x, y, z);
@@ -102,7 +96,6 @@ public class RedstoneSword extends ItemSword implements IHasCustomModel {
              		player.getHeldItem(hand).shrink(1);
              	}
         	}
-        	
         }
 		return super.onItemUse(player, worldIn, pos, hand, facing, hitX, hitY, hitZ);
 	}

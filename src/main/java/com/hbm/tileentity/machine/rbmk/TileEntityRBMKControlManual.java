@@ -55,7 +55,6 @@ public class TileEntityRBMKControlManual extends TileEntityRBMKControl implement
 		
 		if(this.targetLevel < this.startingLevel && Math.abs(this.level - this.targetLevel) > 0.01D) {
 			surge = Math.sin(Math.pow((1D - this.level), 15) * Math.PI) * (this.startingLevel - this.targetLevel) * RBMKDials.getSurgeMod(world);
-			
 		}
 		
 		return this.level + surge;

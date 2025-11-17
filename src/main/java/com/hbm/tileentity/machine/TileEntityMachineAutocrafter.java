@@ -25,6 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -164,7 +165,6 @@ public class TileEntityMachineAutocrafter extends TileEntityMachineBase implemen
         List<IRecipe> recipes = new ArrayList<>();
 
         for(IRecipe recipe : ForgeRegistries.RECIPES.getValues()) {
-
             if(recipe.matches(grid, world)) {
                 recipes.add(recipe);
             }
@@ -189,7 +189,7 @@ public class TileEntityMachineAutocrafter extends TileEntityMachineBase implemen
             ItemStack filter = this.inventory.getStackInSlot(i-10);
             String mode = matcher.modes[i - 10];
 
-            if(filter == null || mode == null || mode.isEmpty()) return true;
+            if(filter.isEmpty() || mode == null || mode.isEmpty()) return true;
 
             return !matcher.isValidForFilter(filter, i - 10, stack);
         }

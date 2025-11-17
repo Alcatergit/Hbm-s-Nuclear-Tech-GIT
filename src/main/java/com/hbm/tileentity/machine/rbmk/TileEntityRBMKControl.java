@@ -68,8 +68,9 @@ public abstract class TileEntityRBMKControl extends TileEntityRBMKSlottedBase {
 	public void setTarget(double target) {
 		this.targetLevel = target;
 	}
-	
-	public double getMult() {
+
+    @Override
+    public double getMult() {
 		return this.level;
 	}
 

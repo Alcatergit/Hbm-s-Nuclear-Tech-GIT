@@ -27,8 +27,7 @@ public class RenderBreeder extends TileEntitySpecialRenderer<TileEntityMachineRe
 
         GL11.glRotatef(90, 0F, 1F, 0F);
 
-		switch(breeder.getBlockMetadata() - BlockDummyable.offset)
-		{
+		switch(breeder.getBlockMetadata() - BlockDummyable.offset) {
 		case 2: GL11.glRotatef(0, 0F, 1F, 0F); break;
 		case 4: GL11.glRotatef(90, 0F, 1F, 0F); break;
 		case 3: GL11.glRotatef(180, 0F, 1F, 0F); break;

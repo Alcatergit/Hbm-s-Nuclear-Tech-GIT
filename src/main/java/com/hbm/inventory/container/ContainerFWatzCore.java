@@ -15,8 +15,6 @@ public class ContainerFWatzCore extends Container {
 	
 	private TileEntityFWatzCore diFurnace;
 	
-	private boolean isRunning;
-	
 	public ContainerFWatzCore(InventoryPlayer invPlayer, TileEntityFWatzCore tedf) {
 		
 		diFurnace = tedf;
@@ -44,12 +42,6 @@ public class ContainerFWatzCore extends Container {
 		{
 			this.addSlotToContainer(new Slot(invPlayer, i, 8 + i * 18, 142 + 56));
 		}
-	}
-	
-	@Override
-	public void addListener(IContainerListener crafting) {
-		super.addListener(crafting);
-		crafting.sendWindowProperty(this, 1, isRunning ? 1 : 0);
 	}
 	
 	@Override
@@ -88,35 +80,5 @@ public class ContainerFWatzCore extends Container {
 	@Override
 	public boolean canInteractWith(EntityPlayer player) {
 		return diFurnace.isUseableByPlayer(player);
-	}
-	
-	@Override
-	public void detectAndSendChanges() {
-		super.detectAndSendChanges();
-		
-		for(int i = 0; i < this.listeners.size(); i++)
-		{
-			IContainerListener par1 = (IContainerListener)this.listeners.get(i);
-			
-			if(this.isRunning != this.diFurnace.isRunning())
-			{
-				par1.sendWindowProperty(this, 1, this.diFurnace.isRunning() ? 1 : 0);
-			}
-		}
-		
-		this.isRunning = this.diFurnace.isRunning();
-	}
-	
-	@Override
-	public void updateProgressBar(int i, int j) {
-		if(i == 1)
-		{
-			if(j == 0)
-			{
-				diFurnace.emptyPlasma();
-			} else {
-				diFurnace.fillPlasma();
-			}
-		}
 	}
 }

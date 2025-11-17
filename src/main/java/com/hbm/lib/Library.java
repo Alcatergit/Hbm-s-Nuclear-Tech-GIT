@@ -21,8 +21,11 @@ import baubles.api.BaublesApi;
 import baubles.api.IBauble;
 import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
+import com.hbm.util.I18nUtil;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
+import net.minecraft.util.*;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import org.apache.logging.log4j.Level;
 import org.apache.commons.lang3.tuple.Pair;
@@ -59,9 +62,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EntitySelectors;
-import net.minecraft.util.EnumFacing;
-import net.minecraft.util.WeightedRandom;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -72,7 +72,6 @@ import net.minecraft.util.math.Vec3i;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
@@ -181,8 +180,20 @@ public class Library {
         }
     }
 
+
+    public static void warnEntity(EntityLivingBase entity, SoundEvent s, String color, String text, float vol, float pitch){
+        if (entity instanceof EntityPlayer player)
+            player.sendStatusMessage(new TextComponentString(color+ I18nUtil.resolveKey(text)),true);
+        entity.world.playSound(null, entity.posX, entity.posY, entity.posZ, s, SoundCategory.PLAYERS, vol, pitch);
+    }
+
     public static int getStatisticalInt(Random rand, float v){
         return (int)v + (rand.nextFloat() < (v - (int)v) ? 1 : 0);
+    }
+
+    public static String getColor(double val){
+        if(val > 1) return "§a+";
+        return "§c";
     }
 
 	public static String getColor(long a, long b){
@@ -294,11 +305,11 @@ public class Library {
 	}
 
 	public static float roundFloat(float number, int decimal){
-		return (float) (Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal]);  
+		return Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal];
 	}
 
 	public static float roundFloat(double number, int decimal){
-		return (float) (Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal]);  
+		return Math.round(number * powersOfTen[decimal]) / (float)powersOfTen[decimal];
 	}
 
 	public static int getColorFromItemStack(ItemStack stack){
@@ -934,6 +945,23 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 			}
 		}
 	}
+
+    public static void consumeInventoryOreDict(InventoryPlayer inventory, String name) {
+        int oreId = OreDictionary.getOreID(name);
+        for(int i = 0; i < inventory.getSizeInventory(); i++) {
+            ItemStack stack = inventory.getStackInSlot(i);
+            if(stack.isEmpty())
+                continue;
+            int[] ids = OreDictionary.getOreIDs(stack);
+            for(int id : ids){
+                if(id == oreId) {
+                    stack.shrink(1);
+                    inventory.setInventorySlotContents(i, stack.copy());
+                    return;
+                }
+            }
+        }
+    }
 
 	//////  //////  //////  //////  //////  ////        //////  //////  //////
 	//      //  //  //        //    //      //  //      //      //      //    

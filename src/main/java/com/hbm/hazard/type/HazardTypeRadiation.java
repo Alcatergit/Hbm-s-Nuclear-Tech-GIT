@@ -22,7 +22,7 @@ public class HazardTypeRadiation extends HazardTypeBase {
 
 	@Override
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
-		
+		if(ContaminationUtil.isRadImmune(target)) return;
 		boolean reacher = false;
 
         if(target instanceof EntityPlayer player && !GeneralConfig.enable528)

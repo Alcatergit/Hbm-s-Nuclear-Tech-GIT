@@ -1,5 +1,6 @@
 package com.hbm.entity.grenade;
 
+import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.items.ModItems;
 import com.hbm.items.weapon.ItemGrenade;
@@ -31,8 +32,8 @@ public class EntityGrenadeIFHopwire extends EntityGrenadeBouncyBase {
         if (!this.world.isRemote)
         {
             this.setDead();
-    		
-    		EntityVortex vortex = new EntityVortex(world, 0.75F);
+
+            EntityRagingVortex vortex = new EntityRagingVortex(world, 0.75F);
     		vortex.posX = posX;
     		vortex.posY = posY;
     		vortex.posZ = posZ;

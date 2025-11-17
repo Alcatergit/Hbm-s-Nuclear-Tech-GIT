@@ -286,10 +286,9 @@ public class EntityModBeam extends Entity implements IProjectile {
                 movingobjectposition = new RayTraceResult(entity);
             }
 
-            if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer)
+            if (movingobjectposition != null && movingobjectposition.entityHit != null && movingobjectposition.entityHit instanceof EntityPlayer entityplayer)
             {
-                EntityPlayer entityplayer = (EntityPlayer)movingobjectposition.entityHit;
-                
+
                 if (entityplayer.capabilities.disableDamage || this.shootingEntity instanceof EntityPlayer && !((EntityPlayer)this.shootingEntity).canAttackPlayer(entityplayer))
                 {
                     movingobjectposition = null;
@@ -497,7 +496,7 @@ public class EntityModBeam extends Entity implements IProjectile {
     		} else if(mode == 4) {
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	    		
-	    		EntityVortex vortex = new EntityVortex(this.world, 1F);
+	    		EntityVortex vortex = new EntityVortex(this.world, 1F, 1);
 	    		vortex.posX = this.posX;
 	    		vortex.posY = this.posY;
 	    		vortex.posZ = this.posZ;
@@ -505,15 +504,15 @@ public class EntityModBeam extends Entity implements IProjectile {
     		} else if(mode == 5) {
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
 	    		
-	    		EntityVortex vortex = new EntityVortex(this.world, 2.5F);
+	    		EntityVortex vortex = new EntityVortex(this.world, 1.75F, 2);
 	    		vortex.posX = this.posX;
 	    		vortex.posY = this.posY;
 	    		vortex.posZ = this.posZ;
 	    		this.world.spawnEntity(vortex);
     		} else if(mode == 6) {
     			this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 100.0f, this.world.rand.nextFloat() * 0.1F + 0.9F);
-	    		
-	    		EntityRagingVortex vortex = new EntityRagingVortex(this.world, 2.5F);
+
+                EntityVortex vortex = new EntityVortex(this.world, 2.5F, 3);
 	    		vortex.posX = this.posX;
 	    		vortex.posY = this.posY;
 	    		vortex.posZ = this.posZ;

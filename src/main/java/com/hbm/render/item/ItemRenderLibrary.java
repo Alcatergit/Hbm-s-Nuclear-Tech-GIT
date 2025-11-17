@@ -631,6 +631,17 @@ public class ItemRenderLibrary {
 				ResourceManager.crucible_heat.renderAll();
 				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
+        renderers.put(Item.getItemFromBlock(ModBlocks.machine_strand_caster), new ItemRenderBase() {
+            public void renderInventory() {
+                GlStateManager.translate(2, 0, 2);
+                GlStateManager.scale(2, 2, 2);
+            }
+            public void renderCommon() {
+                GlStateManager.shadeModel(GL11.GL_SMOOTH);
+                bindTexture(ResourceManager.strand_caster_tex);
+                ResourceManager.strand_caster.renderAll();
+                GlStateManager.shadeModel(GL11.GL_FLAT);
+            }});
 		renderers.put(Item.getItemFromBlock(ModBlocks.heater_oilburner), new ItemRenderBase() {
 			public void renderInventory() {
 				GL11.glTranslated(0, -1, 0);

@@ -105,7 +105,8 @@ public class ShredderRecipes {
 		ShredderRecipes.setRecipe(ModBlocks.brick_concrete, new ItemStack(Blocks.GRAVEL, 1));
 		ShredderRecipes.setRecipe(ModBlocks.brick_obsidian, new ItemStack(ModBlocks.gravel_obsidian, 1));
 		ShredderRecipes.setRecipe(Blocks.OBSIDIAN, new ItemStack(ModBlocks.gravel_obsidian, 1));
-		ShredderRecipes.setRecipe(Blocks.STONE, new ItemStack(Blocks.GRAVEL, 1));
+        ShredderRecipes.setRecipe(ModBlocks.gravel_obsidian, new ItemStack(Blocks.GRAVEL, 4));
+        ShredderRecipes.setRecipe(Blocks.STONE, new ItemStack(Blocks.GRAVEL, 1));
 		ShredderRecipes.setRecipe(Blocks.COBBLESTONE, new ItemStack(Blocks.GRAVEL, 1));
 		ShredderRecipes.setRecipe(Blocks.STONEBRICK, new ItemStack(Blocks.GRAVEL, 1));
 		ShredderRecipes.setRecipe(Blocks.GRAVEL, new ItemStack(Blocks.SAND, 1));

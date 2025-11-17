@@ -29,18 +29,15 @@ public class HbmFluidHandlerItemStack implements IFluidHandlerItem, ICapabilityP
 	}
 
 	private FluidStack getFluid(){
-		if(!container.hasTagCompound()){
-			container.setTagCompound(new NBTTagCompound());
-		}
 		NBTTagCompound tag = container.getTagCompound();
-		if(!tag.hasKey(FLUID_NBT_KEY)){
-			return null;
+		if(tag != null && tag.hasKey(FLUID_NBT_KEY)){
+            return FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
 		}
-		return FluidStack.loadFluidStackFromNBT(tag.getCompoundTag(FLUID_NBT_KEY));
+		return null;
 	}
 	
 	private void setFluid(FluidStack fluid){
-		if(!container.hasTagCompound()){
+		if(!container.hasTagCompound() && fluid != null){
 			container.setTagCompound(new NBTTagCompound());
 		}
 		NBTTagCompound tag = container.getTagCompound();

@@ -39,6 +39,15 @@ public class ItemFuelRod extends ItemBase {
 			stack.setTagCompound(new NBTTagCompound());
 		stack.getTagCompound().setInteger("life", time);
 	}
+
+    public static void incrementTime(ItemStack stack, int time){
+        int l = time;
+        if(!stack.hasTagCompound())
+            stack.setTagCompound(new NBTTagCompound());
+        else
+            l += stack.getTagCompound().getInteger("life");
+        stack.getTagCompound().setInteger("life", l);
+    }
 	
 	public static int getLifeTime(ItemStack stack){
 		if(!stack.hasTagCompound()){

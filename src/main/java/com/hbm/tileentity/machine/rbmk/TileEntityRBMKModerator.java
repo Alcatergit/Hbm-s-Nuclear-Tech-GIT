@@ -21,4 +21,9 @@ public class TileEntityRBMKModerator extends TileEntityRBMKBase {
 	public ColumnType getConsoleType() {
 		return ColumnType.MODERATOR;
 	}
+
+    @Override
+    public boolean isModerated() {
+        return true;
+    }
 }

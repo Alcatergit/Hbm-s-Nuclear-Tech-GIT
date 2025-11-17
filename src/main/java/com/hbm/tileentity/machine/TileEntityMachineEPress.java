@@ -171,7 +171,6 @@ public class TileEntityMachineEPress extends TileEntityMachineBase implements IT
 	private int detectProgress;
 	private long detectPower;
 	private boolean detectIsRetracting;
-	private String detectCustomName;
 	private ItemStack detectItem;
 	
 	protected void detectAndSendChanges(){

@@ -1,5 +1,6 @@
 package com.hbm.handler.jei;
 
+import com.hbm.lib.Library;
 import com.hbm.util.I18nUtil;
 import org.lwjgl.opengl.GL11;
 
@@ -25,7 +26,7 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 	private AnvilRecipe currentDrawHack = null;
 	
 	public AnvilRecipeHandler(IGuiHelper help){
-		background = help.createDrawable(gui_rl, 0, 0, 200, 144);
+		background = help.createDrawable(gui_rl, 0, 0, 164, 54);
 	}
 	
 	@Override
@@ -52,25 +53,25 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 	public void drawExtras(Minecraft minecraft){
 		if(currentDrawHack != null){
 			if(currentDrawHack.tierUpper == -1){
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier", currentDrawHack.tierLower), 84, 40, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.tier", currentDrawHack.tierLower), 68, 5, 0x40404040);
 			} else {
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.mintier", currentDrawHack.tierLower), 74, 40, 0x40404040);
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.maxtier", currentDrawHack.tierUpper), 73, 50, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.mintier", currentDrawHack.tierLower), 56, 5, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("desc.maxtier", currentDrawHack.tierUpper), 55, 15, 0x40404040);
 			}
 			GL11.glPushMatrix();
 			GL11.glScaled(0.5, 0.5, 1);
 			switch(currentDrawHack.overlay){
 			case CONSTRUCTION:
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.construction"), 83*2, 82*2, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.construction"), 130, 84, 0x40404040);
 				break;
 			case SMITHING:
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.smithing"), 89*2, 82*2, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.smithing"), 142, 84, 0x40404040);
 				break;
 			case RECYCLING:
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.recycling"), 87*2, 82*2, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.recycling"), 138, 84, 0x40404040);
 				break;
 			case NONE:
-				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.conversion"), 85*2, 82*2, 0x40404040);
+				minecraft.fontRenderer.drawString(I18nUtil.resolveKey("jei.conversion"), 134, 84, 0x40404040);
 				break;
 			}
 			GL11.glPopMatrix();
@@ -82,10 +83,10 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 		currentDrawHack = recipe;
 		IGuiItemStackGroup guiItemStacks = recipeLayout.getItemStacks();
 		for(int i = 0; i < recipe.outputs.size(); i ++){
-			guiItemStacks.init(i, false, 18*(i%4) + 128, 18*(i/4));
+			guiItemStacks.init(i, false, 18*(i%3) + 110, 18*(i/3));
 		}
 		for(int i = 0; i < recipe.inputs.size(); i ++){
-			guiItemStacks.init(i + recipe.outputs.size(), true, 18*(i%4), 18*(i/4));
+			guiItemStacks.init(i + recipe.outputs.size(), true, 18*(i%3), 18*(i/3));
 		}
 		guiItemStacks.set(ingredients);
 		recipeLayout.getIngredientsGroup(VanillaTypes.ITEM).addTooltipCallback((slot, input, ingredient, tooltip) -> {
@@ -93,7 +94,7 @@ public class AnvilRecipeHandler implements IRecipeCategory<AnvilRecipe> {
 				return;
 			float chance = recipe.chances.get(slot);
 			if(chance != 1)
-				tooltip.add(chance*100 + "%");
+				tooltip.add(Library.getPercentage(chance) + "%");
 		});
 	}
 }

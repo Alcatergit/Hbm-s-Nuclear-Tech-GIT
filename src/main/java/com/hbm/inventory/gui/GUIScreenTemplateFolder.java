@@ -122,7 +122,7 @@ public class GUIScreenTemplateFolder extends GuiScreen {
     }
     
     int getPageCount() {
-    	return (int)Math.ceil((stacks.size() - 1) / (5 * 7));
+    	return (int) (double) ((stacks.size() - 1) / (5 * 7));
     }
     
     public void updateScreen() {

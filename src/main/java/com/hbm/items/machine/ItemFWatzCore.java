@@ -2,6 +2,7 @@ package com.hbm.items.machine;
 
 import java.util.List;
 
+import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 import com.hbm.items.special.ItemDrop;
 
@@ -12,7 +13,7 @@ import net.minecraft.world.World;
 public class ItemFWatzCore extends ItemDrop {
 
 	public int type;
-
+    public boolean isBaby;
 	public int coolantDrain;
 	public int amatDrain;
 	public int aschrabDrain;
@@ -22,7 +23,7 @@ public class ItemFWatzCore extends ItemDrop {
 	public long powerOutput;
 
 
-	public ItemFWatzCore(String s, long powerOutputL, int amatDrainL, int aschrabDrainL, int coolantDrainL, int coolantRefillL, int typeL) {
+	public ItemFWatzCore(String s, long powerOutputL, int amatDrainL, int aschrabDrainL, int coolantDrainL, int coolantRefillL, int typeL, boolean isBaby) {
 		super(s);
 		this.type = typeL;
 		this.powerOutput = powerOutputL;
@@ -30,7 +31,14 @@ public class ItemFWatzCore extends ItemDrop {
 		this.aschrabDrain = aschrabDrainL;
 		this.coolantDrain = coolantDrainL;
 		this.coolantRefill = coolantRefillL;
+        this.isBaby = isBaby;
+        this.setMaxStackSize(1);
+        this.setContainerItem(ModItems.capsule_empty);
 	}
+
+    public ItemFWatzCore(String s, long powerOutputL, int amatDrainL, int aschrabDrainL, int coolantDrainL, int coolantRefillL, int typeL) {
+        this(s, powerOutputL, amatDrainL, aschrabDrainL, coolantDrainL, coolantRefillL, typeL, false);
+    }
 
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {

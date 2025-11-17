@@ -3,6 +3,7 @@ package com.hbm.inventory;
 
 import java.util.HashMap;
 
+import com.hbm.blocks.ModBlocks;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.items.ItemEnums;
 import com.hbm.items.ModItems;
@@ -99,7 +100,8 @@ public class SolidificationRecipes {
         registerSFAuto(ModForgeFluids.REFORMATE);
         registerSFAuto(ModForgeFluids.XYLENE);
         registerSF(ModForgeFluids.BALEFIRE, 24_000L, ModItems.solid_fuel_bf); //holy shit this is energy dense*/
-        registerRecipe(ModForgeFluids.MUD_FLUID,16_000,	ModItems.ingot_mud);
+        registerRecipe(ModForgeFluids.MUD_FLUID, 16_000, ModItems.ingot_mud);
+        registerRecipe(ModForgeFluids.TOXIC_FLUID, 500, ModBlocks.sellafield_core);
 
     }
 
