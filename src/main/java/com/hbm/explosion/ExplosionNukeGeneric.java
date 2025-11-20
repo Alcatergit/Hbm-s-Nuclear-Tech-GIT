@@ -46,26 +46,17 @@ public class ExplosionNukeGeneric {
 
 	private final static Random random = new Random();
 	
-	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
+public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
 		if(!CompatibilityConfig.isWarDim(world)){
 			return;
 		}
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
-		int r22 = r2 / 2;
-		for (int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for (int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for (int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if (ZZ < r22) {
-						pos.setPos(X, Y, Z);
-						emp(world, pos);
-					}
+
+		int radiusSq = bombStartStrength * bombStartStrength;
+
+		for (TileEntity te : new java.util.ArrayList<>(world.loadedTileEntityList)) {
+			if (te != null && !te.isInvalid()) {
+				if (te.getPos().distanceSq(x, y, z) < radiusSq) {
+					emp(world, te.getPos());
 				}
 			}
 		}
