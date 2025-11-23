@@ -158,9 +158,7 @@ public class LensVisibilityHandler {
 		public void cleanup(){
 			GLCompat.deleteQueries(totalFragmentsQuery);
 			GLCompat.deleteQueries(fragmentsPassedQuery);
-			//That modelViewMatrix not being deleted might cause a memory leak, but if it does, I don't know what to do about it in java!
+			modelviewMatrix = null;	
 		}
-	}
-	
-	
+	}	
 }
