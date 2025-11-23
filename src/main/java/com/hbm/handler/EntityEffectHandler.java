@@ -109,10 +109,6 @@ public class EntityEffectHandler {
 			RadiationSystemNT.RadPocket pocket = RadiationSystemNT.getPocket(world, new BlockPos(ix, iy, iz));
 			boolean isInSealedPocket = pocket != null && pocket.isSealed();
 
-			if(entity instanceof EntityPlayer && entity.ticksExisted % 20 == 0) {
-				System.out.println("DEBUG Rad: pocket=" + pocket + ", sealed=" + (pocket != null && pocket.isSealed()) + ", rad=" + rad);
-			}
-			
 			if(isInSealedPocket) {
 				// Sealed pocket protects from ALL radiation
 				rad = 0;
