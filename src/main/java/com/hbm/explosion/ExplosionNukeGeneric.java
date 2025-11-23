@@ -13,6 +13,7 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 import com.hbm.lib.Library;
+import com.hbm.handler.RadiationSystemNT;
 import net.minecraft.block.*;
 import org.apache.logging.log4j.Level;
 
@@ -181,7 +182,20 @@ public static void empBlast(World world, int x, int y, int z, int bombStartStren
 		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
+		
+		RadiationSystemNT.RadPocket centerPocket = RadiationSystemNT.getPocket(world, new BlockPos(x, y, z));
+		boolean centerSealed = centerPocket != null && centerPocket.isSealed();
+		
 		forEachBlockInSphere(world, x, y, z, radius, pos -> {
+			
+			RadiationSystemNT.RadPocket targetPocket = RadiationSystemNT.getPocket(world, pos);
+			
+			if(centerSealed) {
+				if(targetPocket != centerPocket) return;
+			} else {
+				if(targetPocket != null && targetPocket.isSealed()) return;
+			}
+			
 			if (world.getBlockState(pos).getBlock() != Blocks.AIR) {
 				wasteDest(world, pos);
 			}
@@ -323,7 +337,20 @@ public static void empBlast(World world, int x, int y, int z, int bombStartStren
 		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
+		
+		RadiationSystemNT.RadPocket centerPocket = RadiationSystemNT.getPocket(world, pos);
+		boolean centerSealed = centerPocket != null && centerPocket.isSealed();
+		
 		forEachBlockInSphere(world, pos.getX(), pos.getY(), pos.getZ(), radius, mpos -> {
+			
+			RadiationSystemNT.RadPocket targetPocket = RadiationSystemNT.getPocket(world, mpos);
+
+			if(centerSealed) {
+				if(targetPocket != centerPocket) return;
+			} else {
+				if(targetPocket != null && targetPocket.isSealed()) return;
+			}
+			
 			if (world.getBlockState(mpos).getBlock() != Blocks.AIR) {
 				wasteDestNoSchrab(world, mpos);
 			}
