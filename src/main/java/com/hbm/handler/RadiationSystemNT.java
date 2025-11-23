@@ -722,8 +722,7 @@ public class RadiationSystemNT {
 					}
 				}
 
-				// TODO: This might also cause leaks from sealed pockets to unsealed
-				if (p.radiation > 0 && amountPer > 0) {
+				if (p.radiation > 0 && amountPer > 0 && !p.isSealed()) {
 					//Only update other values if this one has radiation to update with
 					for (EnumFacing e : EnumFacing.VALUES) {
 						//For every direction, get the block pos for the next sub chunk in that direction.
