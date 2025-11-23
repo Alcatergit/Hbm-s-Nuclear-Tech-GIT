@@ -69,6 +69,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public int steam;
 	public static final int maxSteam = 16000*20;
 	
+	private double detectHeat;
+	private int detectWater;
+	private int detectSteam;
+	private double detectJumpheight;
 
 	public boolean hasLid() {
 		
@@ -118,10 +122,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			coolPassively();
 			jump();
 			
-			NBTTagCompound data = new NBTTagCompound();
-			this.writeToNBT(data);
-			this.networkPack(data, trackingRange());
-			
+			detectAndSendChanges();
 		}
 	}
 
@@ -277,6 +278,11 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		this.jumpheight = nbt.getDouble("jumpheight");
 		this.water = nbt.getInteger("realSimWater");
 		this.steam = nbt.getInteger("realSimSteam");
+		
+		this.detectHeat = heat - 1.0D;
+		this.detectWater = water - 1;
+		this.detectSteam = steam - 1;
+		this.detectJumpheight = jumpheight - 1.0D;
 	}
 	
 	@Override
@@ -604,5 +610,41 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	@Override
 	public World getControlWorld() {
 		return getWorld();
+	}
+
+	private void detectAndSendChanges() {
+		if (heat <= 20 && water == 0 && steam == 0 && jumpheight == 0) {
+			detectHeat = 0;
+			detectWater = -1;
+			detectSteam = -1;
+			detectJumpheight = -1;
+			return;
+		}
+
+		boolean changed = false;
+
+		if (detectHeat != heat) {
+			detectHeat = heat;
+			changed = true;
+		}
+
+		if (detectWater != water) {
+			detectWater = water;
+			changed = true;
+		}
+		if (detectSteam != steam) {
+			detectSteam = steam;
+			changed = true;
+		}
+		if (detectJumpheight != jumpheight) {
+			detectJumpheight = jumpheight;
+			changed = true;
+		}
+
+		if (changed) {
+			NBTTagCompound data = new NBTTagCompound();
+			this.writeToNBT(data);
+			this.networkPack(data, trackingRange());
+		}
 	}
 }
