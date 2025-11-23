@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import com.hbm.lib.Library;
 import net.minecraft.block.*;
@@ -177,28 +178,14 @@ public static void empBlast(World world, int x, int y, int z, int bombStartStren
 	}
 
 	public static void waste(World world, int x, int y, int z, int radius) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = radius * radius;
-		int r22 = r2 / 2;
-		for (int xx = -radius; xx < radius; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for (int yy = -radius; yy < radius; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for (int zz = -radius; zz < radius; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
-						if (world.getBlockState(pos.setPos(X, Y, Z)).getBlock() != Blocks.AIR)
-							wasteDest(world, pos);
-					}
-				}
+		forEachBlockInSphere(world, x, y, z, radius, pos -> {
+			if (world.getBlockState(pos).getBlock() != Blocks.AIR) {
+				wasteDest(world, pos);
 			}
-		}
+		});
 	}
 
 	public static void wasteDest(World world, BlockPos pos) {
@@ -333,32 +320,14 @@ public static void empBlast(World world, int x, int y, int z, int bombStartStren
 	}
 
 	public static void wasteNoSchrab(World world, BlockPos pos, int radius) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		int x = pos.getX();
-		int y = pos.getY();
-		int z = pos.getZ();
-		MutableBlockPos mpos = new BlockPos.MutableBlockPos(pos);
-        int r2 = radius * radius;
-		int r22 = r2 / 2;
-		for (int xx = -radius; xx < radius; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for (int yy = -radius; yy < radius; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for (int zz = -radius; zz < radius; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if (ZZ < r22 + world.rand.nextInt(r22 / 5)) {
-						mpos.setPos(X, Y, Z);
-						if (world.getBlockState(mpos).getBlock() != Blocks.AIR)
-							wasteDestNoSchrab(world, mpos);
-					}
-				}
+		forEachBlockInSphere(world, pos.getX(), pos.getY(), pos.getZ(), radius, mpos -> {
+			if (world.getBlockState(mpos).getBlock() != Blocks.AIR) {
+				wasteDestNoSchrab(world, mpos);
 			}
-		}
+		});
 	}
 
 	public static void wasteDestNoSchrab(World world, BlockPos pos) {
@@ -652,6 +621,49 @@ public static void empBlast(World world, int x, int y, int z, int bombStartStren
 			
 			if(m == Material.CACTUS || m == Material.CORAL || m == Material.LEAVES || m == Material.PLANTS || m == Material.SPONGE || m == Material.VINE || m == Material.GOURD || m == Material.WOOD) {
 				world.setBlockToAir(pos);
+			}
+		}
+	}
+	
+	/**
+	 * Performs an action for each block within a spherical region, using an optimized iteration algorithm.
+	 *
+	 * @param world World object
+	 * @param x central X coordinate
+	 * @param y central Y coordinate
+	 * @param z central Z coordinate
+	 * @param radius "power" of the explosion, used to calculate the radius
+	 * @param action the action to perform for each BlockPos within the sphere
+	 */
+	private static void forEachBlockInSphere(World world, int x, int y, int z, int radius, Consumer<BlockPos.MutableBlockPos> action) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int radiusSqHalf = (radius * radius) / 2;
+
+		for (int yy = -radius; yy < radius; yy++) {
+			int currentY = y + yy;
+			if (currentY < 0 || currentY > 255) {
+				continue;
+			}
+
+			int YY = yy * yy;
+			if (YY >= radiusSqHalf) {
+				continue;
+			}
+
+			int xzRadius = (int)Math.sqrt(radiusSqHalf - YY);
+
+			for (int xx = -xzRadius; xx <= xzRadius; xx++) {
+				int XX = xx * xx;
+				int YY_XX = YY + XX;
+				if (YY_XX >= radiusSqHalf) {
+					continue;
+				}
+				
+				int zRadius = (int)Math.sqrt(radiusSqHalf - YY_XX);
+
+				for (int zz = -zRadius; zz <= zRadius; zz++) {
+					action.accept(pos.setPos(x + xx, currentY, z + zz));
+				}
 			}
 		}
 	}
