@@ -2,6 +2,7 @@ package com.hbm.explosion;
 
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.WasteLeaves;
@@ -54,27 +55,10 @@ public class ExplosionChaos {
 	private static Random rand = new Random();
 
 	public static void explode(World world, int x, int y, int z, int bombStartStrength) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
-		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22) {
-						destruction(world, pos.setPos(X, Y, Z));
-					}
-				}
-			}
-		}
+		forEachBlockInSphere(world, x, y, z, bombStartStrength, pos -> destruction(world, pos));
 	}
 
 	public static void destruction(World world, BlockPos pos) {
@@ -239,34 +223,16 @@ public class ExplosionChaos {
 	 * @param bound
 	 */
 	public static void flameDeath(World world, BlockPos pos, int bound) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		MutableBlockPos mPos = new BlockPos.MutableBlockPos(pos);
-		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos(pos.up());
-
-        int r2 = bound * bound;
-		int r22 = r2 / 2;
-		for(int xx = -bound; xx < bound; xx++) {
-			int X = xx + pos.getX();
-			int XX = xx * xx;
-			for(int yy = -bound; yy < bound; yy++) {
-				int Y = yy + pos.getY();
-				int YY = XX + yy * yy;
-				for(int zz = -bound; zz < bound; zz++) {
-					int Z = zz + pos.getZ();
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22) {
-						mPos.setPos(X, Y, Z);
-						mPosUp.setPos(X, Y + 1, Z);
-						if(world.getBlockState(mPos).getBlock().isFlammable(world, mPos, EnumFacing.UP) && world.getBlockState(mPosUp).getBlock() == Blocks.AIR) {
-							world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
-						}
-					}
-				}
+		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos();
+		forEachBlockInSphere(world, pos.getX(), pos.getY(), pos.getZ(), bound, mPos -> {
+			mPosUp.setPos(mPos.getX(), mPos.getY() + 1, mPos.getZ());
+			if (world.getBlockState(mPos).getBlock().isFlammable(world, mPos, EnumFacing.UP) && world.getBlockState(mPosUp).getBlock() == Blocks.AIR) {
+				world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
 			}
-		}
-
+		});
 	}
 
 	/**
@@ -279,34 +245,16 @@ public class ExplosionChaos {
 	 * @param bound
 	 */
 	public static void burn(World world, BlockPos pos, int bound) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		MutableBlockPos mPos = new BlockPos.MutableBlockPos(pos);
-		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos(pos.up());
-
-        int r2 = bound * bound;
-		int r22 = r2 / 2;
-		for(int xx = -bound; xx < bound; xx++) {
-			int X = xx + pos.getX();
-			int XX = xx * xx;
-			for(int yy = -bound; yy < bound; yy++) {
-				int Y = yy + pos.getY();
-				int YY = XX + yy * yy;
-				for(int zz = -bound; zz < bound; zz++) {
-					int Z = zz + pos.getZ();
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22) {
-						mPos.setPos(X, Y, Z);
-						mPosUp.setPos(X, Y + 1, Z);
-						if((world.getBlockState(mPosUp).getBlock() == Blocks.AIR || world.getBlockState(mPosUp).getBlock() == Blocks.SNOW_LAYER) && world.getBlockState(mPos).getBlock() != Blocks.AIR) {
-							world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
-						}
-					}
-				}
+		MutableBlockPos mPosUp = new BlockPos.MutableBlockPos();
+		forEachBlockInSphere(world, pos.getX(), pos.getY(), pos.getZ(), bound, mPos -> {
+			mPosUp.setPos(mPos.getX(), mPos.getY() + 1, mPos.getZ());
+			if ((world.getBlockState(mPosUp).getBlock() == Blocks.AIR || world.getBlockState(mPosUp).getBlock() == Blocks.SNOW_LAYER) && world.getBlockState(mPos).getBlock() != Blocks.AIR) {
+				world.setBlockState(mPosUp, Blocks.FIRE.getDefaultState());
 			}
-		}
-
+		});
 	}
 
 	public static void spawnChlorine(World world, double x, double y, double z, int count, double speed, int type) {
@@ -551,29 +499,13 @@ public class ExplosionChaos {
 	}
 
 	public static void explodeZOMG(World world, int x, int y, int z, int bombStartStrength) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = bombStartStrength * bombStartStrength;
-		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22) {
-						pos.setPos(X, Y, Z);
-						if(!(world.getBlockState(pos).getBlock() == Blocks.BEDROCK && Y <= 0))
-							world.setBlockToAir(pos);
-					}
-				}
-			}
-		}
+		forEachBlockInSphere(world, x, y, z, bombStartStrength, pos -> {
+			if (!(world.getBlockState(pos).getBlock() == Blocks.BEDROCK && pos.getY() <= 0))
+				world.setBlockToAir(pos);
+		});
 	}
 
 	public static void frag(World world, int x, int y, int z, int count, boolean flame, Entity shooter) {
@@ -642,27 +574,13 @@ public class ExplosionChaos {
 
 	@SuppressWarnings("deprecation")
 	public static void pulse(World world, int x, int y, int z, int bombStartStrength) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-        int r2 = bombStartStrength * bombStartStrength;
-		int r22 = r2 / 2;
-		for(int xx = -bombStartStrength; xx < bombStartStrength; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for(int yy = -bombStartStrength; yy < bombStartStrength; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for(int zz = -bombStartStrength; zz < bombStartStrength; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22) {
-						if(world.getBlockState(new BlockPos(X, Y, Z)).getBlock().getExplosionResistance(null) <= 70)
-							pDestruction(world, X, Y, Z);
-					}
-				}
-			}
-		}
+		forEachBlockInSphere(world, x, y, z, bombStartStrength, pos -> {
+			if (world.getBlockState(pos).getBlock().getExplosionResistance(null) <= 70)
+				pDestruction(world, pos.getX(), pos.getY(), pos.getZ());
+		});
 	}
 
 	public static void pDestruction(World world, int x, int y, int z) {
@@ -673,34 +591,19 @@ public class ExplosionChaos {
 	}
 
 	public static void plasma(World world, int x, int y, int z, int radius) {
-		if(!CompatibilityConfig.isWarDim(world)){
+		if (!CompatibilityConfig.isWarDim(world)) {
 			return;
 		}
-		MutableBlockPos pos = new BlockPos.MutableBlockPos();
-        int r2 = radius * radius;
-		int r22 = r2 / 2;
-		for(int xx = -radius; xx < radius; xx++) {
-			int X = xx + x;
-			int XX = xx * xx;
-			for(int yy = -radius; yy < radius; yy++) {
-				int Y = yy + y;
-				int YY = XX + yy * yy;
-				for(int zz = -radius; zz < radius; zz++) {
-					int Z = zz + z;
-					int ZZ = YY + zz * zz;
-					if(ZZ < r22 + world.rand.nextInt(r22 / 2)) {
-						pos.setPos(X, Y, Z);						
-						Block block =world.getBlockState(pos).getBlock();
-						if(block.getExplosionResistance(null) > 0.1F) continue;
-						if(block != Blocks.BEDROCK && world.getBlockState(pos).getBlock() != ModBlocks.statue_elb
-													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_g
-													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_w
-													&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_f)
-							world.setBlockState(pos, ModBlocks.plasma.getDefaultState());
-					}
-				}
-			}
-		}
+		// NOTE: The original random sphere shape was removed in favorof significant performance gain.
+		forEachBlockInSphere(world, x, y, z, radius, pos -> {
+			Block block = world.getBlockState(pos).getBlock();
+			if (block.getExplosionResistance(null) > 0.1F) return;
+			if (block != Blocks.BEDROCK && world.getBlockState(pos).getBlock() != ModBlocks.statue_elb
+					&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_g
+					&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_w
+					&& world.getBlockState(pos).getBlock() != ModBlocks.statue_elb_f)
+				world.setBlockState(pos, ModBlocks.plasma.getDefaultState());
+		});
 	}
 
 	// Drillgon200: This method name irks me.
@@ -1072,6 +975,50 @@ public class ExplosionChaos {
 						if (rand.nextInt(15) == 0 && world.getBlockState(pos.setPos(X, Y, Z)).getBlock() != Blocks.AIR)
 							world.setBlockState(pos.setPos(X, Y, Z), ModBlocks.cheater_virus_seed.getDefaultState());
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Executes an action for each block within a spherical region, using an optimized iteration algorithm.
+	 * This method preserves the original HBM logic (checking against radius squared divided by 2).
+	 *
+	 * @param world The World object
+	 * @param x The central X coordinate
+	 * @param y The central Y coordinate
+	 * @param z The central Z coordinate
+	 * @param radius The explosion "power," used to calculate the radius
+	 * @param action The action to execute for each BlockPos inside the sphere
+	 */
+	private static void forEachBlockInSphere(World world, int x, int y, int z, int radius, Consumer<BlockPos.MutableBlockPos> action) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int radiusSqHalf = (radius * radius) / 2;
+
+		for (int yy = -radius; yy < radius; yy++) {
+			int currentY = y + yy;
+			if (currentY < 0 || currentY > 255) {
+				continue;
+			}
+
+			int YY = yy * yy;
+			if (YY >= radiusSqHalf) {
+				continue;
+			}
+
+			int xzRadius = (int)Math.sqrt(radiusSqHalf - YY);
+
+			for (int xx = -xzRadius; xx <= xzRadius; xx++) {
+				int XX = xx * xx;
+				int YY_XX = YY + XX;
+				if (YY_XX >= radiusSqHalf) {
+					continue;
+				}
+
+				int zRadius = (int)Math.sqrt(radiusSqHalf - YY_XX);
+
+				for (int zz = -zRadius; zz <= zRadius; zz++) {
+					action.accept(pos.setPos(x + xx, currentY, z + zz));
 				}
 			}
 		}
