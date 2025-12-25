@@ -115,7 +115,7 @@ public class ItemRTGPellet extends ItemBase {
 		}
 	}
 
-    public long getAge(ItemStack stack) {
+	public long getAge(ItemStack stack) {
         if (stack != null && stack.getItem() instanceof ItemRTGPellet) {
             long startTime;
             NBTTagCompound nbt;
@@ -123,19 +123,22 @@ public class ItemRTGPellet extends ItemBase {
                 nbt = stack.getTagCompound();
                 if(nbt.hasKey("deplStart")) {
                     startTime = nbt.getLong("deplStart");
+                    return Math.min(getTime() - startTime, getMaxLifespan());
                 } else {
-                    nbt.setLong("deplStart", getTime());
                     return 0;
                 }
             } else {
-                nbt = new NBTTagCompound();
-                nbt.setLong("deplStart", getTime());
-                stack.setTagCompound(nbt);
                 return 0;
             }
-            return Math.min(getTime() - startTime, getMaxLifespan());
         }
         return 0;
+    }
+
+	@Override
+    public void onUpdate(ItemStack stack, World worldIn, net.minecraft.entity.Entity entityIn, int itemSlot, boolean isSelected) {
+        if (!worldIn.isRemote) {
+             startDecay(stack);
+        }
     }
 	
 	public long getLifespan(ItemStack stack) {
@@ -178,17 +181,24 @@ public class ItemRTGPellet extends ItemBase {
 		final ItemRTGPellet instance = (ItemRTGPellet) stack.getItem();
 		list.add("§c" + I18nUtil.resolveKey("desc.item.rtgHeat", getScaledPower(instance, stack)) + "§r");
 		if (instance.getDoesDecay()) {
+			// Only show decay info if the item has been initialized (has NBT data)
+			// This prevents creative tab items from showing constantly changing values
+			if (!stack.hasTagCompound() || !stack.getTagCompound().hasKey("deplStart")) {
+				list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
+				return;
+			}
+			
             long age = instance.getAge(stack);
             long life = instance.getMaxLifespan()-age;
-			list.add("§aFuel left: "+((int)(getDecay(instance, age) * 100000000D))/1000000D + "%§r");
+			list.add("§a" + I18nUtil.resolveKey("desc.item.rtgFuelLeft", ((int)(getDecay(instance, age) * 100000000D))/1000000D) + "§r");
 			list.add(I18nUtil.resolveKey("desc.item.rtgDecay", new ItemStack(instance.getDecayItem()).getDisplayName()));
 			list.add("");
-			list.add(String.format("%s / %s ticks", life, instance.getMaxLifespan()));
+			list.add(I18nUtil.resolveKey("desc.item.rtgTicks", life, instance.getMaxLifespan()));
 			final String[] halfLife = BobMathUtil.ticksToDate(instance.getHalfLife());
 			final String[] timeLeft = BobMathUtil.ticksToDate(life);
-			list.add(String.format("§aHalf-Life:      %sy %sd %sh %sm %ss§r", (Object[]) halfLife));
-			list.add(String.format("§eTime remaining: %sy %sd %sh %sm %ss", (Object[]) timeLeft));
-			list.add(String.format("§2Decay Time:     %s / %s Halflives", age / instance.getHalfLife(), instance.halflifes));
+			list.add(String.format("§a" + I18nUtil.resolveKey("desc.item.rtgHalfLife") + ": %sy %sd %sh %sm %ss§r", (Object[]) halfLife));
+			list.add(String.format("§e" + I18nUtil.resolveKey("desc.item.rtgTimeRemaining") + ": %sy %sd %sh %sm %ss", (Object[]) timeLeft));
+			list.add("§2" + I18nUtil.resolveKey("desc.item.rtgDecayTime", age / instance.getHalfLife(), instance.halflifes));
 		}
 	}
 

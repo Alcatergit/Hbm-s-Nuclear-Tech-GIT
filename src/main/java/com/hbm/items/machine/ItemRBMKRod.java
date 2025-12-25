@@ -491,7 +491,14 @@ public class ItemRBMKRod extends Item {
 
 	@Override
 	public boolean showDurabilityBar(ItemStack stack) {
-		return getDurabilityForDisplay(stack) > 0D;
+		// Don't show durability bar for fresh fuel (creative tabs, newly crafted items)
+		// Only show when the item has been actually used (yield is less than maximum)
+		if(!stack.hasTagCompound()) {
+			return false;
+		}
+		double currentYield = getYield(stack);
+		// Show bar only if yield has been depleted from the maximum
+		return currentYield < this.yield && getDurabilityForDisplay(stack) > 0D;
 	}
 
 	@Override
