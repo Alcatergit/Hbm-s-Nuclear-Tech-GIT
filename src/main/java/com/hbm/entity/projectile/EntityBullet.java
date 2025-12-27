@@ -397,7 +397,6 @@ public class EntityBullet extends Entity implements IProjectile {
 
 			if (movingobjectposition != null && CompatibilityConfig.isWarDim(world)) {
 				if (movingobjectposition.entityHit != null) {
-					// TODO: Remove test feature in release version
 					if (!(movingobjectposition.entityHit instanceof EntityItemFrame)) {
 						f2 = MathHelper.sqrt(this.motionX * this.motionX + this.motionY * this.motionY + this.motionZ * this.motionZ);
 						int k = MathHelper.ceil(f2 * this.damage);
