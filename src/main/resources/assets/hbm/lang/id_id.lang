@@ -996,6 +996,7 @@ desc.upgradesp33=Penundaan -75%%/ Konsumsi +800%%
 desc.upgradesp34=Penundaan -30%%/ Konsumsi +3000
 desc.upgradesp35=Kecepatan x4
 desc.upgradestack=Tumpukan ke 16
+desc.item.smeltsInto=§6Meleleh menjadi:
 desc.usedin=Digunakan dalam:
 desc.usesdpc=Menggunakan Kapsul Deuterium Plasma
 desc.varkey=Varian : Keypad

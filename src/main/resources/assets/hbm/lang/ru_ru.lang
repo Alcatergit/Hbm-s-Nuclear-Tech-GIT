@@ -998,6 +998,7 @@ desc.upgradesp33=Задержка -75%% / Потребление +800%%
 desc.upgradesp34=Задержка -30%% / Потребление +3000
 desc.upgradesp35=Скорость x4
 desc.upgradestack=Складывается до 16 шт.
+desc.item.smeltsInto=§6Переплавляется в:
 desc.usedin=Используется в:
 desc.usesdpc=Использует капсулы с дейтериевой плазмой
 desc.varkey=Вариант: кодовый замок

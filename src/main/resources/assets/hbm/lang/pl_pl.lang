@@ -996,6 +996,7 @@ desc.upgradesp33=Opóźnienie -75%%/ Zużycie +800%%
 desc.upgradesp34=Opóźnienie -30%%/ Zużycie +3000
 desc.upgradesp35=Prędkość x4
 desc.upgradestack=Stosy do 16
+desc.item.smeltsInto=§6Przetapia się w:
 desc.usedin=Stosuje się w:
 desc.usesdpc=Używa kapsułek plazmy deuterowej
 desc.varkey=Wariant: klawiatura

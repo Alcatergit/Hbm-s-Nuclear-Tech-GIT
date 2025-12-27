@@ -996,6 +996,7 @@ desc.upgradesp33=遅延 -75%%/ 消費 +800%%
 desc.upgradesp34=遅延 -30%%/ 消費 +3000%%
 desc.upgradesp35=スピード x4
 desc.upgradestack=16まで効果乗る
+desc.item.smeltsInto=§6精錬後：
 desc.usedin=で使われる：
 desc.usesdpc=Uses Deuterium Plasma Capsules
 desc.varkey=バリエーション コードドア

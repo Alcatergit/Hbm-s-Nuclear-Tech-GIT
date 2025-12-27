@@ -996,6 +996,7 @@ desc.upgradesp33=Vertraging -75%%/ Verbruik +800%%
 desc.upgradesp34=Vertraging -30%%/ Verbruik +3000
 desc.upgradesp35=Snelheid x4
 desc.upgradestack=Stapelt tot 16
+desc.item.smeltsInto=§6Smelt om naar:
 desc.usedin=Gebruikt in:
 desc.usesdpc=Maakt gebruik van deuteriumplasmacapsules
 desc.varkey=Variant: toetsenbord

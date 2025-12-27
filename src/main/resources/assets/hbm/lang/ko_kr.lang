@@ -996,6 +996,7 @@ desc.upgradesp33=지연 -75%%/ 소비 +800%%
 desc.upgradesp34=지연 -30%%/ 소비 +3000
 desc.upgradesp35=속도 x4
 desc.upgradestack=16으로 스택 증가
+desc.item.smeltsInto=§6제련 결과:
 desc.usedin=사용 대상:
 desc.usesdpc=중수소 플라즈마 캡슐 사용
 desc.varkey=변종: 키패드

@@ -996,6 +996,7 @@ desc.upgradesp33=Gecikme -%75/ Tüketim +%800
 desc.upgradesp34=Gecikme -%30/ Tüketim +3000
 desc.upgradesp35=Hız x4
 desc.upgradestack=16'ya kadar yığınlar
+desc.item.smeltsInto=§6Erime sonucu:
 desc.usedin=Kullanılan:
 desc.usesdpc=Döteryum Plazma Kapsüllerini Kullanır
 desc.varkey=Çeşit: Tuş takımı

@@ -996,6 +996,7 @@ desc.upgradesp33=تأخير -75%%/ استهلاك +800%%
 desc.upgradesp34=تأخير -30%%/ الاستهلاك +3000
 desc.upgradesp35=السرعة ×4
 desc.upgradestack=أكوام إلى 16
+desc.item.smeltsInto=§6Smelts into:
 desc.usedin=مستعمل في:
 desc.usesdpc=يستخدم كبسولات بلازما الديوتيريوم
 desc.varkey=البديل: لوحة المفاتيح

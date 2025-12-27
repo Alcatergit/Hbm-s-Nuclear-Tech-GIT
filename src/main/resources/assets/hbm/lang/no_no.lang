@@ -996,6 +996,7 @@ desc.upgradesp33=Forsinkelse -75%%/ Forbruk +800%%
 desc.upgradesp34=Forsinkelse -30%%/ Forbruk +3000
 desc.upgradesp35=Hastighet x4
 desc.upgradestack=Stabler til 16
+desc.item.smeltsInto=§6Smelter til:
 desc.usedin=Brukt i:
 desc.usesdpc=Bruker Deuterium Plasma Kapsler
 desc.varkey=Variant: Tastatur

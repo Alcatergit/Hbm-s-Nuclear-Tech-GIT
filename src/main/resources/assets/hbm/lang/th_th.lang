@@ -996,6 +996,7 @@ desc.upgradesp33=ดีเลย์ -75%%/ ปริมาณการใช้ 
 desc.upgradesp34=ดีเลย์ -30%%/ ปริมาณการใช้ +3000
 desc.upgradesp35=ความเร็วx4
 desc.upgradestack=สแต็คเป็น 16
+desc.item.smeltsInto=§6หลอมเป็น:
 desc.usedin=ใช้ใน:
 desc.usesdpc=ใช้แคปซูลดิวทีเรียมพลาสมา
 desc.varkey=ตัวเลือกสินค้า: ปุ่มกด

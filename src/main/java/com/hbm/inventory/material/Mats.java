@@ -302,7 +302,7 @@ public class Mats {
 	public static void drawFoundryTips(ItemStack stack, List<String> list, boolean shift){
 		List<MaterialStack> mats = getSmeltingMaterialsFromItem(stack);
 		if(mats.isEmpty()) return;
-		list.add("§6Smelts into:");
+		list.add(I18nUtil.resolveKey("desc.item.smeltsInto"));
 		int count = stack.getCount();
 		for(MaterialStack mat : mats) list.add(" §e"+I18nUtil.resolveKey(mat.material.getTranslationKey()) + ": " + Mats.formatAmount(mat.amount * count, shift)); 
 	}

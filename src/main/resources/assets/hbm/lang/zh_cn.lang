@@ -996,6 +996,7 @@ desc.upgradesp33=延迟 -75%%/ 耗能 +800%%
 desc.upgradesp34=延迟 -30%%/ 耗能 +3000
 desc.upgradesp35=速度 x4
 desc.upgradestack=堆叠至 16
+desc.item.smeltsInto=§6熔炼结果：
 desc.usedin=被用于:
 desc.usesdpc=使用氘等离子胶囊
 desc.varkey=类型: 小键盘

@@ -996,6 +996,7 @@ desc.upgradesp33=Затримка -75%%/ Споживання +800%%
 desc.upgradesp34=Затримка -30%%/ Витрата +3000
 desc.upgradesp35=Швидкість х4
 desc.upgradestack=Складається до 16
+desc.item.smeltsInto=§6Переплавляється в:
 desc.usedin=Використовується в:
 desc.usesdpc=Використовує дейтерієві плазмові капсули
 desc.varkey=Варіант: Клавіатура

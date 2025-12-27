@@ -996,6 +996,7 @@ desc.upgradesp33=Ritardo -75%%/ Consumo +800%%
 desc.upgradesp34=Ritardo -30%%/Consumo +3000
 desc.upgradesp35=Velocità x4
 desc.upgradestack=Si accumula a 16
+desc.item.smeltsInto=§6Si fonde in:
 desc.usedin=Usato in:
 desc.usesdpc=Utilizza capsule di plasma di deuterio
 desc.varkey=Variante: tastiera

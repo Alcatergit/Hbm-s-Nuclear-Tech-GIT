@@ -996,6 +996,7 @@ desc.upgradesp33=Viive -75%%/ Kulutus +800%%
 desc.upgradesp34=Viive -30%%/ Kulutus +3000
 desc.upgradesp35=Nopeus x4
 desc.upgradestack=Pinotaan 16:een
+desc.item.smeltsInto=§6Sulaa:
 desc.usedin=Käytetty:
 desc.usesdpc=Käyttää Deuterium Plasma Kapseleita
 desc.varkey=Vaihtoehto: Näppäimistö

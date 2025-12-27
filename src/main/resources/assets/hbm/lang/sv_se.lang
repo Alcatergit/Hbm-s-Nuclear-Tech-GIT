@@ -996,6 +996,7 @@ desc.upgradesp33=Fördröjning -75%%/ Konsum +800%%
 desc.upgradesp34=Fördröjning -30%%/ Förbrukning +3000
 desc.upgradesp35=Hastighet x4
 desc.upgradestack=Staplar till 16
+desc.item.smeltsInto=§6Smälter till:
 desc.usedin=Använd i:
 desc.usesdpc=Använder Deuterium Plasma Kapslar
 desc.varkey=Variant: Knappsats

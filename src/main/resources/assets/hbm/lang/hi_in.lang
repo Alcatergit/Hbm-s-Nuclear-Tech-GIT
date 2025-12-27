@@ -996,6 +996,7 @@ desc.upgradesp33=विलंब -75%%/ खपत +800%%
 desc.upgradesp34=विलंब -30%%/ खपत +3000
 desc.upgradesp35=स्पीड x4
 desc.upgradestack=16 तक ढेर
+desc.item.smeltsInto=§6Smelts into:
 desc.usedin=में इस्तेमाल किया:
 desc.usesdpc=ड्यूटेरियम प्लाज्मा कैप्सूल का उपयोग करता है
 desc.varkey=वेरिएंट: कीपैड

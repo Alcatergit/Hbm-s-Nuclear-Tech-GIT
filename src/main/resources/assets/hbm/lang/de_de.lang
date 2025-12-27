@@ -996,6 +996,7 @@ desc.upgradesp33=Verzögerung -75 %%/ Verbrauch +800 %%
 desc.upgradesp34=Verzögerung -30 %%/ Verbrauch +3000
 desc.upgradesp35=Geschwindigkeit x4
 desc.upgradestack=Bis zu 16 stapelbar
+desc.item.smeltsInto=§6Schmilzt zu:
 desc.usedin=Benutzt in:
 desc.usesdpc=Verwendet Deuterium-Plasmakapseln
 desc.varkey=Variante: Tastatur

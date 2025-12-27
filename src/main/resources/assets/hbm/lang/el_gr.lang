@@ -996,6 +996,7 @@ desc.upgradesp33=Καθυστέρηση -75%%/ Κατανάλωση +800%%
 desc.upgradesp34=Καθυστέρηση -30%%/ Κατανάλωση +3000
 desc.upgradesp35=Ταχύτητα x4
 desc.upgradestack=Στοίβες έως 16
+desc.item.smeltsInto=§6Λιώνει σε:
 desc.usedin=Χρησιμοποιείται σε:
 desc.usesdpc=Χρησιμοποιεί κάψουλες πλάσματος δευτέριου
 desc.varkey=Παραλλαγή: Πληκτρολόγιο
