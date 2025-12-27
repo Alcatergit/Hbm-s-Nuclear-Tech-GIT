@@ -438,19 +438,34 @@ public class Library {
 	}
 	
 	public static EntityPlayer getClosestPlayerForSound(World world, double x, double y, double z, double radius) {
+		if(world == null) return null;
+		
 		double d4 = -1.0D;
 		EntityPlayer entity = null;
-		if(world == null) return null;
-		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
-				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
 
-				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityPlayer) {
-					double d5 = entityplayer1.getDistanceSq(x, y, z);
-
-					if ((radius < 0.0D || d5 < radius * radius) && (d4 == -1.0D || d5 < d4)) {
+		if (radius >= 0) {
+			AxisAlignedBB aabb = new AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
+			List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, aabb);
+			
+			for (EntityPlayer player : list) {
+				if (player.isEntityAlive()) {
+					double d5 = player.getDistanceSq(x, y, z);
+					if (d5 < radius * radius && (d4 == -1.0D || d5 < d4)) {
 						d4 = d5;
-						entity = (EntityPlayer)entityplayer1;
+						entity = player;
 					}
+				}
+			}
+		} else {
+			// use playerEntities instead of loadedEntityList for global player search
+			for (EntityPlayer player : world.playerEntities) {
+				if (player.isEntityAlive()) {
+					double d5 = player.getDistanceSq(x, y, z);
+					if (d4 == -1.0D || d5 < d4) {
+						d4 = d5;
+						entity = player;
+					}
+				}
 			}
 		}
 
@@ -458,19 +473,34 @@ public class Library {
 	}
 
 	public static EntityHunterChopper getClosestChopperForSound(World world, double x, double y, double z, double radius) {
+		if(world == null) return null;
+
 		double d4 = -1.0D;
 		EntityHunterChopper entity = null;
 
-		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
-				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
+		if (radius >= 0) {
+			AxisAlignedBB aabb = new AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
+			List<EntityHunterChopper> list = world.getEntitiesWithinAABB(EntityHunterChopper.class, aabb);
 
-				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityHunterChopper) {
-					double d5 = entityplayer1.getDistanceSq(x, y, z);
-
-                    if ((radius < 0.0D || d5 < radius * radius) && (d4 == -1.0D || d5 < d4)) {
+			for (EntityHunterChopper chopper : list) {
+				if (chopper.isEntityAlive()) {
+					double d5 = chopper.getDistanceSq(x, y, z);
+					if (d5 < radius * radius && (d4 == -1.0D || d5 < d4)) {
 						d4 = d5;
-						entity = (EntityHunterChopper)entityplayer1;
+						entity = chopper;
 					}
+				}
+			}
+		} else {
+			for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+				Entity e = (Entity)world.loadedEntityList.get(i);
+				if (e.isEntityAlive() && e instanceof EntityHunterChopper) {
+					double d5 = e.getDistanceSq(x, y, z);
+					if (d4 == -1.0D || d5 < d4) {
+						d4 = d5;
+						entity = (EntityHunterChopper)e;
+					}
+				}
 			}
 		}
 
@@ -478,19 +508,34 @@ public class Library {
 	}
 
 	public static EntityChopperMine getClosestMineForSound(World world, double x, double y, double z, double radius) {
+		if(world == null) return null;
+
 		double d4 = -1.0D;
 		EntityChopperMine entity = null;
 
-		for (int i = 0; i < world.loadedEntityList.size(); ++i) {
-				Entity entityplayer1 = (Entity)world.loadedEntityList.get(i);
+		if (radius >= 0) {
+			AxisAlignedBB aabb = new AxisAlignedBB(x - radius, y - radius, z - radius, x + radius, y + radius, z + radius);
+			List<EntityChopperMine> list = world.getEntitiesWithinAABB(EntityChopperMine.class, aabb);
 
-				if (entityplayer1.isEntityAlive() && entityplayer1 instanceof EntityChopperMine) {
-					double d5 = entityplayer1.getDistanceSq(x, y, z);
-
-                    if ((radius < 0.0D || d5 < radius * radius) && (d4 == -1.0D || d5 < d4)) {
+			for (EntityChopperMine mine : list) {
+				if (mine.isEntityAlive()) {
+					double d5 = mine.getDistanceSq(x, y, z);
+					if (d5 < radius * radius && (d4 == -1.0D || d5 < d4)) {
 						d4 = d5;
-						entity = (EntityChopperMine)entityplayer1;
+						entity = mine;
 					}
+				}
+			}
+		} else {
+			for (int i = 0; i < world.loadedEntityList.size(); ++i) {
+				Entity e = (Entity)world.loadedEntityList.get(i);
+				if (e.isEntityAlive() && e instanceof EntityChopperMine) {
+					double d5 = e.getDistanceSq(x, y, z);
+					if (d4 == -1.0D || d5 < d4) {
+						d4 = d5;
+						entity = (EntityChopperMine)e;
+					}
+				}
 			}
 		}
 

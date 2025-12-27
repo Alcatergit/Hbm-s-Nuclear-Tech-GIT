@@ -1,5 +1,6 @@
 package com.hbm.inventory.gui;
 
+import com.hbm.entity.missile.EntityMissileBaseAdvanced;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.inventory.BedrockOreRegistry;
 import com.hbm.items.ISatChip;
@@ -212,10 +213,9 @@ public class GUIScreenSatInterface extends GuiScreen {
 					
 					int t = 5;
 					
-					//TODO: fix radar screen implementation
-					/*if(e instanceof EntityMissileBaseAdvanced) {
-						t = ((EntityMissileBaseAdvanced)e).getMissileType().ordinal();
-					}*/
+					if(e instanceof EntityMissileBaseAdvanced) {
+						t = ((EntityMissileBaseAdvanced)e).getTargetType().ordinal();
+					}
 					
 					if(e instanceof EntityMob) {
 						t = 6;

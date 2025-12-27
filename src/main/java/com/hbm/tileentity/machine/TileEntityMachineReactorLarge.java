@@ -3,6 +3,9 @@ package com.hbm.tileentity.machine;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.EnumMap;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.MobConfig;
@@ -871,36 +874,35 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 	}
 	
 	public enum ReactorFuelType {
-
-		URANIUM(250000),
-		THORIUM(200000),
-		PLUTONIUM(312500),
-		MOX(250000),
-		SCHRABIDIUM(2085000),
-		UNKNOWN(1);
-		
-		ReactorFuelType(int i) {
-			heat = i;
-		}
-		
-		//Heat per nugget burned
-		private final int heat;
-		
-		public int getHeat() {
-			return heat;
-		}
-		
-		public int getID() {
-			return Arrays.asList(ReactorFuelType.values()).indexOf(this);
-		}
-		
-		public static ReactorFuelType getEnum(int i) {
-			if(i < ReactorFuelType.values().length)
-				return ReactorFuelType.values()[i];
-			else
-				return ReactorFuelType.URANIUM;
-		}
-	}
+        URANIUM(250000),
+        THORIUM(200000),
+        PLUTONIUM(312500),
+        MOX(250000),
+        SCHRABIDIUM(2085000),
+        UNKNOWN(1);
+        
+        ReactorFuelType(int i) {
+            heat = i;
+        }
+        
+        //Heat per nugget burned
+        private final int heat;
+        
+        public int getHeat() {
+            return heat;
+        }
+        
+        public int getID() {
+            return Arrays.asList(ReactorFuelType.values()).indexOf(this);
+        }
+        
+        public static ReactorFuelType getEnum(int i) {
+            if(i < ReactorFuelType.values().length)
+                return ReactorFuelType.values()[i];
+            else
+                return ReactorFuelType.URANIUM;
+        }
+    }
 	
 	static class ReactorFuelEntry {
 		
@@ -930,73 +932,66 @@ public class TileEntityMachineReactorLarge extends TileEntity implements ITickab
 		}
 	}
 	
-	//TODO: turn this steaming hot garbage into hashmaps
 	//Alcater: seems to be done now
-	static List<ReactorFuelEntry> fuels = new ArrayList<ReactorFuelEntry>();
-	static List<ReactorWasteEntry> wastes = new ArrayList<ReactorWasteEntry>();
+	//MinecAnton209: Alcater is lying
+	//MinecAnton209: really done now
+	static Map<Item, ReactorFuelEntry> fuelMap = new HashMap<>();
+	static Map<Item, ReactorFuelType> fuelTypeMap = new HashMap<>();
+	static Map<Item, Map<ReactorFuelType, ReactorWasteEntry>> wasteMap = new HashMap<>();
 	
 	public static void registerFuelEntry(int nuggets, ReactorFuelType type, Item fuel) {
-		
-		fuels.add(new ReactorFuelEntry(nuggets, type, fuel));
-	}
+        fuelMap.put(fuel, new ReactorFuelEntry(nuggets, type, fuel));
+        fuelTypeMap.put(fuel, type);
+    }
 	
-	public static void registerWasteEntry(int nuggets, ReactorFuelType type, Item in, Item out) {
-		
-		wastes.add(new ReactorWasteEntry(nuggets, type, in, out));
-	}
+public static void registerWasteEntry(int nuggets, ReactorFuelType type, Item in, Item out) {
+        wasteMap.computeIfAbsent(in, k -> new EnumMap<>(ReactorFuelType.class))
+                .put(type, new ReactorWasteEntry(nuggets, type, in, out));
+    }
 	
-	public static int getFuelContent(ItemStack item, ReactorFuelType type) {
-		
-		if(item == null || item.isEmpty())
-			return 0;
-		
-		for(ReactorFuelEntry ent : fuels) {
-			if(ent.item == item.getItem() && type.toString().equals(ent.type.toString())) {
+	public static int getFuelContent(ItemStack itemStack, ReactorFuelType type) {
+        
+        if(itemStack == null || itemStack.isEmpty())
+            return 0;
+        
+        Item item = itemStack.getItem();
+        ReactorFuelEntry ent = fuelMap.get(item);
+        
+        if(ent != null && ent.type == type) {
+            
+            int value = ent.value;
 
-				int value = ent.value;
+            // if it's a fuel rod that has been used up, multiply by damage and floor it
+            if(item instanceof ItemFuelRod) {
+                double mult = 1D - ((double)ItemFuelRod.getLifeTime(itemStack) / (double)((ItemFuelRod)item).getMaxLifeTime());
+                return (int)Math.floor(mult * value);
+            }
 
-				//if it's a fuel rod that has been used up, multiply by damage and floor it
-				if(item.getItem() instanceof ItemFuelRod) {
-
-					double mult = 1D - ((double)ItemFuelRod.getLifeTime(item) / (double)((ItemFuelRod)item.getItem()).getMaxLifeTime());
-					return (int)Math.floor(mult * value);
-				}
-
-				return value;
-			}
-		}
-			
-		return 0;
-	}
+            return value;
+        }
+            
+        return 0;
+    }
 	
 	public static ReactorFuelType getFuelType(Item item) {
-		
-		for(ReactorFuelEntry ent : fuels) {
-			if(ent.item == item)
-				return ent.type;
-		}
-			
-		return ReactorFuelType.UNKNOWN;
-	}
+        return fuelTypeMap.getOrDefault(item, ReactorFuelType.UNKNOWN);
+    }
 	
 	public static Item getWaste(Item item, ReactorFuelType type) {
-		
-		for(ReactorWasteEntry ent : wastes) {
-			if(ent.in == item && type.toString().equals(ent.type.toString()))
-				return ent.out;
-		}
-			
-		return null;
-	}
+        ReactorWasteEntry ent = getWasteEntry(item, type);
+        return ent != null ? ent.out : null;
+    }
 	
 	public static int getWasteAbsorbed(Item item, ReactorFuelType type) {
-		
-		for(ReactorWasteEntry ent : wastes) {
-			if(ent.in == item && type.toString().equals(ent.type.toString()))
-				return ent.value;
-		}
-			
-		return 0;
-	}
+        ReactorWasteEntry ent = getWasteEntry(item, type);
+        return ent != null ? ent.value : 0;
+    }
 
+	private static ReactorWasteEntry getWasteEntry(Item item, ReactorFuelType type) {
+        Map<ReactorFuelType, ReactorWasteEntry> subMap = wasteMap.get(item);
+        if(subMap != null) {
+            return subMap.get(type);
+        }
+        return null;
+    }
 }

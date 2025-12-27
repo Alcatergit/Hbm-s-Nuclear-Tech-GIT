@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+import java.util.LinkedList;
+import java.util.Queue;
 
 import org.lwjgl.opengl.GL11;
 
@@ -68,7 +70,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public static final int maxWater = 16000*20;
 	public int steam;
 	public static final int maxSteam = 16000*20;
+	// cache for heat flow to avoid calling RBMKDials every tick for every block
+	private static double cachedHeatFlow = -1;
+	private static long lastCacheUpdate = 0;
 	
+	private double detectHeat;
+	private int detectWater;
+	private int detectSteam;
+	private double detectJumpheight;
 
 	public boolean hasLid() {
 		
@@ -118,10 +127,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			coolPassively();
 			jump();
 			
-			NBTTagCompound data = new NBTTagCompound();
-			this.writeToNBT(data);
-			this.networkPack(data, trackingRange());
-			
+			detectAndSendChanges();
 		}
 	}
 
@@ -193,11 +199,12 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	 */
 	private void moveHeat() {
 		
-		List<TileEntityRBMKBase> rec = new ArrayList<>();
-		rec.add(this);
-		double heatTot = this.heat;
-		int waterTot = this.water;
-		int steamTot = this.steam;
+		// update the heat flow cache once every 100 ticks or if uninitialized
+		long currentTime = world.getTotalWorldTime();
+		if (cachedHeatFlow == -1 || Math.abs(currentTime - lastCacheUpdate) > 100) {
+			cachedHeatFlow = RBMKDials.getColumnHeatFlow(world);
+			lastCacheUpdate = currentTime;
+		}
 		
 		int index = 0;
 		for(ForgeDirection dir : heatDirs) {
@@ -206,29 +213,38 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 				heatCache[index] = null;
 			
 			if(heatCache[index] == null) {
-				TileEntity te = world.getTileEntity(new BlockPos(pos.getX() + dir.offsetX, pos.getY(), pos.getZ() + dir.offsetZ));
+				BlockPos target = new BlockPos(pos.getX() + dir.offsetX, pos.getY(), pos.getZ() + dir.offsetZ);
 				
-				if(te instanceof TileEntityRBMKBase) {
-					TileEntityRBMKBase base = (TileEntityRBMKBase) te;
-					heatCache[index] = base;
+				// prevent loading unloaded chunks
+				if(world.isBlockLoaded(target)) {
+					TileEntity te = world.getTileEntity(target);
+					
+					if(te instanceof TileEntityRBMKBase) {
+						heatCache[index] = (TileEntityRBMKBase) te;
+					}
 				}
 			}
 			
 			index++;
 		}
 		
+		// calculate totals without creating new lists
+		double heatTot = this.heat;
+		int waterTot = this.water;
+		int steamTot = this.steam;
+		int members = 1; // 1 includes this tile
+		
 		for(TileEntityRBMKBase base : heatCache) {
 			
 			if(base != null) {
-				rec.add(base);
+				members++;
 				heatTot += base.heat;
 				waterTot += base.water;
 				steamTot += base.steam;
 			}
 		}
 		
-		int members = rec.size();
-		double stepSize = RBMKDials.getColumnHeatFlow(world);
+		double stepSize = cachedHeatFlow;
 		
 		if(members > 1) {
 			
@@ -239,20 +255,34 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			int tSteam = steamTot / members;
 			int rSteam = steamTot % members;
 			
-			for(TileEntityRBMKBase rbmk : rec) {
-				double delta = targetHeat - rbmk.heat;
-				rbmk.heat += delta * stepSize;
-				
-				//set to the averages, rounded down
-				rbmk.water = tWater;
-				rbmk.steam = tSteam;
-			}
+			// apply changes to self
+			double delta = targetHeat - this.heat;
+			this.heat += delta * stepSize;
 			
-			//add the modulo to make up for the losses coming from rounding
-			this.water += rWater;
-			this.steam += rSteam;
+			this.water = tWater;
+			this.steam = tSteam;
+			
+			if(rWater > 0) { this.water++; rWater--; }
+			if(rSteam > 0) { this.steam++; rSteam--; }
 			
 			this.markDirty();
+			
+			// apply changes to neighbors
+			for(TileEntityRBMKBase rbmk : heatCache) {
+				
+				if(rbmk != null) {
+					delta = targetHeat - rbmk.heat;
+					rbmk.heat += delta * stepSize;
+					
+					rbmk.water = tWater;
+					rbmk.steam = tSteam;
+					
+					if(rWater > 0) { rbmk.water++; rWater--; }
+					if(rSteam > 0) { rbmk.steam++; rSteam--; }
+					
+					rbmk.markDirty();
+				}
+			}
 		}
 	}
 	
@@ -277,6 +307,11 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		this.jumpheight = nbt.getDouble("jumpheight");
 		this.water = nbt.getInteger("realSimWater");
 		this.steam = nbt.getInteger("realSimSteam");
+		
+		this.detectHeat = heat - 1.0D;
+		this.detectWater = water - 1;
+		this.detectSteam = steam - 1;
+		this.detectJumpheight = jumpheight - 1.0D;
 	}
 	
 	@Override
@@ -526,19 +561,30 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		RBMKBase.digamma = false;
 	}
 	
-	//Family and Friends
-	private void getFF(int x, int y, int z) {
+	// Family and Friends (iterative version to prevent stack overflow)
+	private void getFF(int startX, int startY, int startZ) {
 		
-		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
+		Queue<BlockPos> queue = new LinkedList<>();
+		queue.add(new BlockPos(startX, startY, startZ));
 		
-		if(te instanceof TileEntityRBMKBase rbmk) {
-
-            if(!columns.contains(rbmk)) {
-				columns.add(rbmk);
-				getFF(x + 1, y, z);
-				getFF(x - 1, y, z);
-				getFF(x, y, z + 1);
-				getFF(x, y, z - 1);
+		int safetyLimit = 100000; 
+		
+		while(!queue.isEmpty() && safetyLimit > 0) {
+			safetyLimit--;
+			BlockPos current = queue.poll();
+			TileEntity te = world.getTileEntity(current);
+			
+			if(te instanceof TileEntityRBMKBase) {
+				TileEntityRBMKBase rbmk = (TileEntityRBMKBase) te;
+				
+				if(!columns.contains(rbmk)) {
+					columns.add(rbmk);
+					
+					queue.add(current.north());
+					queue.add(current.south());
+					queue.add(current.east());
+					queue.add(current.west());
+				}
 			}
 		}
 	}
@@ -604,5 +650,52 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	@Override
 	public World getControlWorld() {
 		return getWorld();
+	}
+
+	private void detectAndSendChanges() {
+		
+		// determine the update interval based on reactor activity
+		int interval = (heat > 20) ? 20 : 50;
+		
+		// use position hash to offset updates and spread network load
+		boolean forceUpdate = (world.getTotalWorldTime() + this.pos.hashCode()) % interval == 0;
+
+		boolean changed = false;
+
+		if (detectHeat != heat) {
+			detectHeat = heat;
+			changed = true;
+		}
+
+		if (detectWater != water) {
+			detectWater = water;
+			changed = true;
+		}
+		
+		if (detectSteam != steam) {
+			detectSteam = steam;
+			changed = true;
+		}
+		
+		if (detectJumpheight != jumpheight) {
+			detectJumpheight = jumpheight;
+			changed = true;
+		}
+
+		// send packet if values changed or if it's time for a forced sync
+		if (changed || forceUpdate) {
+			
+			// update detect variables to prevent immediate re-triggering
+			if (forceUpdate) {
+				detectHeat = heat;
+				detectWater = water;
+				detectSteam = steam;
+				detectJumpheight = jumpheight;
+			}
+			
+			NBTTagCompound data = new NBTTagCompound();
+			this.writeToNBT(data);
+			this.networkPack(data, trackingRange());
+		}
 	}
 }

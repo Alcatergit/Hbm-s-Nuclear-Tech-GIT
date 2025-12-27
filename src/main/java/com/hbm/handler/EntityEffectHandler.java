@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import com.hbm.handler.RadiationSystemNT;
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
 import com.hbm.capability.HbmLivingCapability.IEntityHbmProps;
 import com.hbm.capability.HbmLivingProps;
@@ -104,18 +105,26 @@ public class EntityEffectHandler {
 
 			float rad = data.getRadNumFromCoord(new BlockPos(ix, iy, iz));
 			
-			Object dimRad = CompatibilityConfig.dimensionRad.get(world.provider.getDimension());
-			if(dimRad != null) {
-				if(rad < (float)dimRad) {
-					// TODO: Can we use sealed rad pockets to protect against dim rads?
-					rad = (float)dimRad;
+			// Check if entity is in a sealed pocket (bunker)
+			RadiationSystemNT.RadPocket pocket = RadiationSystemNT.getPocket(world, new BlockPos(ix, iy, iz));
+			boolean isInSealedPocket = pocket != null && pocket.isSealed();
+
+			if(isInSealedPocket) {
+				// Sealed pocket protects from ALL radiation
+				rad = 0;
+			} else {
+				// Not in sealed pocket - apply dimension radiation if higher
+				Object dimRad = CompatibilityConfig.dimensionRad.get(world.provider.getDimension());
+				if(dimRad != null) {
+					if(rad < (float)dimRad) {
+						rad = (float)dimRad;
+					}
 				}
 			}
 
 			if(rad > 0) {
 				ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, rad / 20F);
 			}
-	
 			if(entity.world.isRaining() && RadiationConfig.cont > 0 && AuxSavedData.getThunder(entity.world) > 0 && entity.world.canBlockSeeSky(new BlockPos(ix, iy, iz))) {
 				
 				ContaminationUtil.contaminate(entity, HazardType.RADIATION, ContaminationType.CREATIVE, RadiationConfig.cont * 0.0005F);

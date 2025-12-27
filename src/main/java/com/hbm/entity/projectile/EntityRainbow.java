@@ -358,12 +358,10 @@ public class EntityRainbow extends Entity implements IProjectile {
 							}
 						}
 
-						if (!(movingobjectposition.entityHit instanceof EntityEnderman)) {
-							if (!this.world.isRemote && movingobjectposition.entityHit instanceof EntityLivingBase) {
-								movingobjectposition.entityHit.attackEntityFrom(damagesource, 100000F);
-								if (!world.isRemote)
-									ExplosionChaos.explodeZOMG(this.world, (int) this.posX, (int) this.posY, (int) this.posZ, 5);
-							}
+						if (!this.world.isRemote && movingobjectposition.entityHit instanceof EntityLivingBase) {
+							movingobjectposition.entityHit.attackEntityFrom(damagesource, 100000F);
+							if (!world.isRemote)
+								ExplosionChaos.explodeZOMG(this.world, (int) this.posX, (int) this.posY, (int) this.posZ, 5);
 						}
 					}
 				} else {
