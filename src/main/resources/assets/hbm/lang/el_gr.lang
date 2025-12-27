@@ -4034,7 +4034,7 @@ lung_scanner.pos=§4Θετικό
 lung_scanner.title=Διαγνωστικό Πνεύμονα
 matshape.block=%s μπλοκ
 matshape.blocks=%s μπλοκ
-matshape.ingot=%smatshape.ingots=%sων πλινθώων
+matshape.ingot=%s Πλίνθος
 matshape.ingots=%s Πλίνθοι
 matshape.nugget=%s Nugget
 matshape.nuggets=%s Nuggets
