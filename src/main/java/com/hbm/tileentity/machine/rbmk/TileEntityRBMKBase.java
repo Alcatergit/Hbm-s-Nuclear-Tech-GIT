@@ -240,20 +240,29 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			int tSteam = steamTot / members;
 			int rSteam = steamTot % members;
 			
+			// balance heat and set base fluid levels for all columns
 			for(TileEntityRBMKBase rbmk : rec) {
 				double delta = targetHeat - rbmk.heat;
 				rbmk.heat += delta * stepSize;
 				
-				//set to the averages, rounded down
 				rbmk.water = tWater;
 				rbmk.steam = tSteam;
 			}
-			
-			//add the modulo to make up for the losses coming from rounding
-			this.water += rWater;
-			this.steam += rSteam;
-			
-			this.markDirty();
+
+			// distribute remaining fluid modulo to prevent fluids from getting "stuck" in one block
+			for(TileEntityRBMKBase rbmk : rec) {
+				if(rWater > 0) {
+					rbmk.water++;
+					rWater--;
+				}
+				if(rSteam > 0) {
+					rbmk.steam++;
+					rSteam--;
+				}
+				
+				// mark every column as dirty to ensure changes are saved correctly
+				rbmk.markDirty();
+			}
 		}
 	}
 	
@@ -613,13 +622,12 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 
 	private void detectAndSendChanges() {
-		if (heat <= 20 && water == 0 && steam == 0 && jumpheight == 0) {
-			detectHeat = 0;
-			detectWater = -1;
-			detectSteam = -1;
-			detectJumpheight = -1;
-			return;
-		}
+		
+		// determine the update interval based on reactor activity
+		int interval = (heat > 20) ? 20 : 50;
+		
+		// use position hash to offset updates and spread network load
+		boolean forceUpdate = (world.getTotalWorldTime() + this.pos.hashCode()) % interval == 0;
 
 		boolean changed = false;
 
@@ -632,16 +640,28 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			detectWater = water;
 			changed = true;
 		}
+		
 		if (detectSteam != steam) {
 			detectSteam = steam;
 			changed = true;
 		}
+		
 		if (detectJumpheight != jumpheight) {
 			detectJumpheight = jumpheight;
 			changed = true;
 		}
 
-		if (changed) {
+		// send packet if values changed or if it's time for a forced sync
+		if (changed || forceUpdate) {
+			
+			// update detect variables to prevent immediate re-triggering
+			if (forceUpdate) {
+				detectHeat = heat;
+				detectWater = water;
+				detectSteam = steam;
+				detectJumpheight = jumpheight;
+			}
+			
 			NBTTagCompound data = new NBTTagCompound();
 			this.writeToNBT(data);
 			this.networkPack(data, trackingRange());
