@@ -118,7 +118,7 @@ public class MudBlock extends BlockFluidClassic {
 			IBlockState block = world.getBlockState(pos);
 			
 			if(block.getMaterial().isLiquid()) {
-				world.setBlockToAir(pos);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 		}
 	}
