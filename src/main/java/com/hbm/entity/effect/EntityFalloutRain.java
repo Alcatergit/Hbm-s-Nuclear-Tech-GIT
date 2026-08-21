@@ -13,23 +13,24 @@ import com.hbm.entity.logic.EntityChunky;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
-
 import com.hbm.blocks.generic.WasteLog;
+
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.ChunkPos;
-
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -504,17 +505,17 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 			}
 
-			else if(bblock == Blocks.COAL_ORE) {
-				if(dist < s5){
-					int ra = rand.nextInt(150);
-					if(ra < 7) {
-						world.setBlockState(pos,Blocks.DIAMOND_ORE.getDefaultState(), 2);
-					} else if(ra < 10) {
-						world.setBlockState(pos,Blocks.EMERALD_ORE.getDefaultState(), 2);
-					}
+			else if(bblock == Blocks.COAL_ORE || isOreDictMatch(bblock, "oreCoal")) {
+			if(dist < s5){
+				int ra = rand.nextInt(150);
+				if(ra < 7) {
+					world.setBlockState(pos,Blocks.DIAMOND_ORE.getDefaultState(), 2);
+				} else if(ra < 10) {
+					world.setBlockState(pos,Blocks.EMERALD_ORE.getDefaultState(), 2);
 				}
-				continue;
 			}
+			continue;
+		}
 
 			else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
 				if(dist < s0){
@@ -567,37 +568,37 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				continue;
 			}
-			else if(bblock == ModBlocks.ore_uranium) {
-				if(dist <= s5){
-					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s7)
-						world.setBlockState(pos,ModBlocks.ore_schrabidium.getDefaultState(), 2);
-					else
-						world.setBlockState(pos,ModBlocks.ore_uranium_scorched.getDefaultState(), 2);
-				}
-				break;
+			else if(bblock == ModBlocks.ore_uranium || isOreDictMatch(bblock, "oreUranium")) {
+			if(dist <= s5){
+				if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s7)
+					world.setBlockState(pos,ModBlocks.ore_schrabidium.getDefaultState(), 2);
+				else
+					world.setBlockState(pos,ModBlocks.ore_uranium_scorched.getDefaultState(), 2);
 			}
+			break;
+		}
 
-			else if(bblock == ModBlocks.ore_nether_uranium) {
-				if(dist <= s5){
-					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos,ModBlocks.ore_nether_schrabidium.getDefaultState(), 2);
-					else
-						world.setBlockState(pos,ModBlocks.ore_nether_uranium_scorched.getDefaultState(), 2);
-				}
-				break;
-
+		else if(bblock == ModBlocks.ore_nether_uranium || isOreDictMatch(bblock, "oreUranium")) {
+			if(dist <= s5){
+				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+					world.setBlockState(pos,ModBlocks.ore_nether_schrabidium.getDefaultState(), 2);
+				else
+					world.setBlockState(pos,ModBlocks.ore_nether_uranium_scorched.getDefaultState(), 2);
 			}
+			break;
 
-			else if(bblock == ModBlocks.ore_gneiss_uranium) {
-				if(dist <= s4){
-					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos,ModBlocks.ore_gneiss_schrabidium.getDefaultState(), 2);
-					else
-						world.setBlockState(pos,ModBlocks.ore_gneiss_uranium_scorched.getDefaultState(), 2);
-				}
-				break;
-				// this piece stops the "stomp" from reaching below ground
+		}
+
+		else if(bblock == ModBlocks.ore_gneiss_uranium || isOreDictMatch(bblock, "oreUranium")) {
+			if(dist <= s4){
+				if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+					world.setBlockState(pos,ModBlocks.ore_gneiss_schrabidium.getDefaultState(), 2);
+				else
+					world.setBlockState(pos,ModBlocks.ore_gneiss_uranium_scorched.getDefaultState(), 2);
 			}
+			break;
+			// this piece stops the "stomp" from reaching below ground
+		}
 			else if(bblock == ModBlocks.brick_concrete) {
 				if(rand.nextInt(80) == 0)
 					world.setBlockState(pos,ModBlocks.brick_concrete_broken.getDefaultState(), 2);
@@ -720,6 +721,15 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			world.getChunk(cp.x, cp.z).enqueueRelightChecks();
 			lightUpdatedChunks.add(cp);
 		}
+	}
+
+	private static boolean isOreDictMatch(Block block, String oreDictName) {
+		for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+			if (!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(block)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	public float getCurrentAlpha() {
