@@ -364,6 +364,7 @@ public class RadiationSystemNT {
 								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 								creep.setRotationYawHead(entity.rotationYaw);
 								creep.setRenderYawOffset(entity.rotationYaw);
+                                if (creeper.hasCustomName()) creep.setCustomNameTag(creeper.getCustomNameTag());
 
 								if(!entity.isDead)
                                     world.spawnEntity(creep);
@@ -379,6 +380,7 @@ public class RadiationSystemNT {
 							creep.setRotationYawHead(entity.rotationYaw);
 							creep.setRenderYawOffset(entity.rotationYaw);
 							creep.setGrowingAge(cow.getGrowingAge());
+                            if (cow.hasCustomName()) creep.setCustomNameTag(cow.getCustomNameTag());
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
@@ -457,6 +459,7 @@ public class RadiationSystemNT {
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							creep.setRotationYawHead(entity.rotationYaw);
 							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (pig.hasCustomName()) creep.setCustomNameTag(pig.getCustomNameTag());
 
 							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
 							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
@@ -484,6 +487,7 @@ public class RadiationSystemNT {
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							creep.setRotationYawHead(entity.rotationYaw);
 							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (vil.hasCustomName()) creep.setCustomNameTag(vil.getCustomNameTag());
 
 							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
 							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
@@ -496,11 +500,12 @@ public class RadiationSystemNT {
 								world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-						} else if(eRad >= 700 && entity instanceof EntityBlaze) {
+						} else if(eRad >= 700 && entity instanceof EntityBlaze blaze) {
 							EntityRADBeast creep = new EntityRADBeast(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							creep.setRotationYawHead(entity.rotationYaw);
 							creep.setRenderYawOffset(entity.rotationYaw);
+                            if (blaze.hasCustomName()) creep.setCustomNameTag(blaze.getCustomNameTag());
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
@@ -584,6 +589,7 @@ public class RadiationSystemNT {
 									skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
 								}
 								skehorse.makeMad();
+                                if (horsie.hasCustomName()) skehorse.setCustomNameTag(horsie.getCustomNameTag());
 
 								if(!entity.isDead)
 									world.spawnEntity(skehorse);
@@ -645,6 +651,7 @@ public class RadiationSystemNT {
 								zomhorsie.setHorseTamed(horsie.isTame());
 								zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
 								zomhorsie.makeMad();
+                                if (horsie.hasCustomName()) zomhorsie.setCustomNameTag(horsie.getCustomNameTag());
 
 								if(!entity.isDead)
 									world.spawnEntity(zomhorsie);
@@ -667,6 +674,7 @@ public class RadiationSystemNT {
 							quacc.setRotationYawHead(entity.rotationYaw);
 							quacc.setRenderYawOffset(entity.rotationYaw);
 							quacc.setGrowingAge(duck.getGrowingAge());
+                            if (duck.hasCustomName()) quacc.setCustomNameTag(duck.getCustomNameTag());
 
 							if(!entity.isDead)
 								world.spawnEntity(quacc);
