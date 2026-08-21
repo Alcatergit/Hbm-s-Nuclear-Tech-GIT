@@ -169,13 +169,13 @@ public class DimensionArrayEntry extends GuiEditArrayEntries.BaseEntry {
 			}
 			List<IConfigElement> subElements = HbmConfigGui.buildDimensionSubElements(dimID,
 					owningEntryList.currentValues, index);
-			String newTitleLine2 = configElement.getLanguageKey() + " > Dimension: " + dimID;
+			String newTitleLine2 = configElement.getLanguageKey() + " > §odimension: " + dimID + "§r";
 			Minecraft.getMinecraft().displayGuiScreen(new GuiConfig(
 					owningScreen, subElements,
 					RefStrings.MODID,
 					HbmConfigGui.instance.allRequireWorldRestart,
 					HbmConfigGui.instance.allRequireMcRestart,
-					"§e" + RefStrings.NAME + "§r",
+					HbmConfigGui.getTitle(),
 					newTitleLine2));
 			return true;
 		}
