@@ -71,7 +71,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public int ticksExistedSaved2 = 0;
     public boolean dataReady = false;
     public boolean isReloaded = false;
-    public boolean isReloaded2 = false;
     public boolean isScaled = false;
     public boolean isInitialized = false;
 
@@ -110,13 +109,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.maxAge = this.dataManager.get(MAX_AGE);
                 this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
                 this.isReloaded = this.dataManager.get(IS_RELOADED);
-                this.isReloaded2 = this.isReloaded;
                 this.isInitialized = this.dataManager.get(IS_INITIALIZED);
                 this.dataReady = true;
-            } else {
-                if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
-                    this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
-                }
+            }
+            if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
+                this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
             }
         }
     }
@@ -143,7 +140,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         }
         this.isReloaded = true;
         this.dataManager.set(IS_RELOADED, true);
-        this.isReloaded2 = this.isReloaded;
         this.isInitialized = true;
         this.dataManager.set(IS_INITIALIZED, true);
     }
