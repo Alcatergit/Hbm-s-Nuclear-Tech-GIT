@@ -198,9 +198,9 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 				if (!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
 
-					float fireDamage = (float)(fallout ? 10F * radius * Math.pow(0.1, dist * this.ticksExisted / radius): 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.1, dist * this.ticksExisted / radius));
-					if(fireDamage > 0.025) {
-						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+					float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dist * dist + 1)) * (this.ticksExisted < 10 ? 1.0F : 0.0F));
+					if(this.ticksExisted < 10) {
+						if (e instanceof EntityPlayer p) {
 
 							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
 								p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
@@ -211,7 +211,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 							}
 						}
 						e.setFire(5);
-						e.attackEntityFrom(ModDamageSource.IN_FIRE, (float)fireDamage);
+						e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
 					}
 				}
 			}
