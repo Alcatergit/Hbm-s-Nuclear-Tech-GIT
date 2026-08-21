@@ -12,6 +12,10 @@ import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.bomb.TileEntityNukeBalefire;
 import com.hbm.blocks.ModBlocks;
 
+import net.minecraft.block.BlockHorizontal;
+import net.minecraft.block.properties.IProperty;
+import net.minecraft.block.properties.PropertyDirection;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityLivingBase;
@@ -24,15 +28,18 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 public class NukeBalefire extends BlockMachineBase implements IBomb {
 
-    // ========== Added: Mark whether the destruction was caused by an explosion ==========
-    private EntityPlayer lastBreaker = null;
+    public static final PropertyDirection FACING = BlockHorizontal.FACING;
+
     // ========== Added: Field for storing information about players who have been vandalized ==========
+    private EntityPlayer lastBreaker = null;
+    // ========== Added: Mark whether the destruction was caused by an explosion ==========
     private boolean isExploding = false;
 
     public NukeBalefire(Material materialIn, int guiID, String s) {
@@ -77,6 +84,28 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
     @Override
     public boolean isFullCube(IBlockState state) {
         return false;
+    }
+
+    @Override
+    protected BlockStateContainer createBlockState() {
+        return new BlockStateContainer(this, new IProperty[]{FACING});
+    }
+
+    @Override
+    public int getMetaFromState(IBlockState state) {
+        return ((EnumFacing)state.getValue(FACING)).getIndex();
+    }
+
+    @Override
+    public IBlockState getStateFromMeta(int meta) {
+        EnumFacing enumfacing = EnumFacing.byIndex(meta);
+
+        if (enumfacing.getAxis() == EnumFacing.Axis.Y)
+        {
+            enumfacing = EnumFacing.NORTH;
+        }
+
+        return this.getDefaultState().withProperty(FACING, enumfacing);
     }
 
     @Override
@@ -135,6 +164,8 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
     // ========== Added: Initialize block entity state when a block is placed ==========
     @Override
     public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
+        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
+
         // ========== Recovery from Simplified NBT Data ==========
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
             TileEntity tileentity = world.getTileEntity(pos);
@@ -171,21 +202,6 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
                     tileentity.markDirty();
                 }
             }
-        } else {
-            // ========== Newly placed block: Ensure `started` is false and `timer` is 18000 ==========
-            TileEntity tileentity = world.getTileEntity(pos);
-            if (tileentity instanceof TileEntityNukeBalefire) {
-                TileEntityNukeBalefire nukeBalefire = (TileEntityNukeBalefire) tileentity;
-
-                // Ensure the started tag is false.
-                nukeBalefire.started = false;
-
-                // Ensure the timer label value is 18000
-                nukeBalefire.timer = 18000;
-
-                // Mark block entities as dirty data to ensure data preservation.
-                nukeBalefire.markDirty();
-            }
         }
     }
     // ========== Modification complete ==========
@@ -209,7 +225,6 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
             // Configure NBT saving is disabled; use the original logic.
             InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
         } else {
-            // ========== New Logic: Using player information recorded by removedByPlayer ==========
             if (tileentity instanceof TileEntityNukeBalefire) {
                 TileEntityNukeBalefire nukeBalefire = (TileEntityNukeBalefire)tileentity;
 
