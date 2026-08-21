@@ -9,6 +9,7 @@ import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PipeUpdatePacket;
 import com.hbm.tileentity.machine.TileEntityBarrel;
+import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -84,7 +85,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		oldNet.removePipe(pos);
 		network = null;
 		if(!oldNet.getPipePositions().isEmpty()) {
-			oldNet.splitIfDisconnected();
+			oldNet.splitIfDisconnected(world);
 		} else {
 			oldNet.destroy();
 		}
@@ -212,17 +213,10 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		if(te instanceof IFluidPipeMk2 pipe) {
 			FFPipeNetworkMk2 net = pipe.getNetwork();
 			if(net != null) {
-				for(EnumFacing e : EnumFacing.VALUES) {
-					TileEntity neighbor = world.getTileEntity(pos.offset(e));
-					if(neighbor != null && !(neighbor instanceof IFluidPipeMk2)) {
-						net.removeProvider(neighbor);
-						net.removeReceiver(neighbor);
-					}
-				}
 				net.removePipe(pos);
 				pipe.setNetwork(null);
 				if(!net.getPipePositions().isEmpty()) {
-					net.splitIfDisconnected();
+					net.splitIfDisconnected(world);
 				} else {
 					net.destroy();
 				}
@@ -243,6 +237,10 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			} else if(te instanceof TileEntityBarrel barrel) {
 				if(barrel.network != null && barrel.network.getType() == this.getType() && !otherNetworks.contains(barrel.network)) {
 					otherNetworks.add(barrel.network);
+				}
+			} else if(te instanceof TileEntityMachineFluidTank tank) {
+				if(tank.network != null && tank.network.getType() == this.getType() && !otherNetworks.contains(tank.network)) {
+					otherNetworks.add(tank.network);
 				}
 			}
 		}
@@ -272,6 +270,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
 						barrel.network = network;
 					}
+					if(te instanceof TileEntityMachineFluidTank tank && tank.network != null && network != null
+							&& tank.network != network && tank.network.getType() == network.getType()) {
+						network = FFPipeNetworkMk2.mergeNetworks(network, tank.network);
+						tank.network = network;
+					}
 				}
 			} else {
 				if(te == null) {
@@ -288,6 +291,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 							&& barrel.network != network && barrel.network.getType() == network.getType()) {
 						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
 						barrel.network = network;
+					}
+					if(te instanceof TileEntityMachineFluidTank tank && tank.network != null && network != null
+							&& tank.network != network && tank.network.getType() == network.getType()) {
+						network = FFPipeNetworkMk2.mergeNetworks(network, tank.network);
+						tank.network = network;
 					}
 				}
 			}
