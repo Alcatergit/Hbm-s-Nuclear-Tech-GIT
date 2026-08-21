@@ -346,7 +346,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     Vec3 vec = Vec3.createVectorHelper(0, range, 0);
                     vec.rotateAroundZ((float)Math.acos((height-posY)/(range))+(float)Math.toRadians(humidity*humidity*90*j*(0.1*rand.nextDouble()-0.05)));
                     vec.rotateAroundY(angle);
-                    Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + (0.25 * height), posZ + vec.zCoord, angle, 0, (int) ((20 + range / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+                    Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + (0.375 * height), posZ + vec.zCoord, angle, 0, (int) ((20 + range / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
                     cloud.setScale(3F * (float) (cs * s), 4F * (float) (cs * s));
                     cloudlets.add(cloud);
                 }
