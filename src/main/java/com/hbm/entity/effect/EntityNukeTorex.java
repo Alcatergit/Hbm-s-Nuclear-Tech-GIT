@@ -31,6 +31,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	public static final DataParameter<Integer> MAX_AGE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
+	public static final DataParameter<Boolean> IS_SCALED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 	public static final DataParameter<Integer> TIME_EXISTED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Integer> TIME_EXISTED_SAVED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 
@@ -66,9 +67,10 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public float scale = 1.0F;
 	public boolean didPlaySound = false;
 	public boolean didShake = false;
-	public boolean hasInitialized = false;
-	public boolean isReloaded = false;
 	public boolean isInitialized = false;
+	public boolean isNotifyDataManagerChanged = false;
+	public boolean isReloaded = false;
+	public boolean isScaled = false;
 	public int timeExisted = 0;
 	public int timeExisted2 = 0;
 	public int timeExistedSaved = 0;
@@ -88,6 +90,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.dataManager.register(TYPE, (byte) 0);
 		this.dataManager.register(MAX_AGE, 1000);
 		this.dataManager.register(IS_RELOADED, false);
+		this.dataManager.register(IS_SCALED, false);
 		this.dataManager.register(TIME_EXISTED, 0);
 		this.dataManager.register(TIME_EXISTED_SAVED, 0);
 	}
@@ -99,12 +102,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		if (key == TIME_EXISTED && this.world.isRemote) {
 			this.timeExisted = this.dataManager.get(TIME_EXISTED);
 			// Some client instance variables can only be updated once after the entity is initialized.
-			if (!hasInitialized) {
-				this.isReloaded = this.dataManager.get(IS_RELOADED);
+			if (!isNotifyDataManagerChanged) {
 				this.scale = this.dataManager.get(SCALE);
 				this.maxAge = this.dataManager.get(MAX_AGE);
+				this.isReloaded = this.dataManager.get(IS_RELOADED);
+				this.isScaled = this.dataManager.get(IS_SCALED);
 				this.timeExistedSaved = this.dataManager.get(TIME_EXISTED_SAVED);
-				this.hasInitialized = true;
+				this.isNotifyDataManagerChanged = true;
 			}
 		}
 	}
@@ -113,6 +117,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		this.isReloaded = true;
 		this.dataManager.set(IS_RELOADED, true);
+		this.isScaled = true;
+		this.dataManager.set(IS_SCALED, true);
 		if(nbt.hasKey("scale")){
 			float scaleTemp = nbt.getFloat("scale");
 			this.scale = scaleTemp;
@@ -151,7 +157,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	@Override
 	public void onUpdate() {
 		this.timeExisted++;
-		this.dataManager.set(TIME_EXISTED, timeExisted);
+		this.dataManager.set(TIME_EXISTED, this.timeExisted);
 
 		if(world.isRemote){
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExisted: " + this.dataManager.get(TIME_EXISTED));
@@ -159,11 +165,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			double s = this.getScale();
 			double cs = 1.5;
-			if(this.timeExisted == 1){
+			if((this.timeExisted == 1) || (!this.isScaled && !this.isInitialized)){
 				this.setScale((float) s);
+				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is set scale");
 			}else if(!this.isInitialized){
 				this.coreHeight = this.coreHeight * this.scale;
 				this.torusWidth = this.torusWidth * this.scale;
+				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is reloaded");
 			}
 
 			boolean hasReloaded = cloudlets.isEmpty() && (this.coreHeight == 3 * this.scale && this.convectionHeight == 3 && this.torusWidth == 3 * this.scale && this.rollerSize == 1);
@@ -326,6 +334,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 		if(!world.isRemote && this.timeExisted > maxAge) {
 			this.setDead();
+		}else if(!world.isRemote && this.timeExisted == 1) {
+			this.isScaled = true;
+			this.dataManager.set(IS_SCALED, this.isScaled);
 		}
 	}
 
@@ -358,7 +369,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.torusWidth = this.torusWidth * scale;
 		this.rollerSize = this.rollerSize * scale;
 		this.maxAge = (int) (45 * 20 * scale);
-		this.dataManager.set(MAX_AGE, maxAge);
+		this.dataManager.set(MAX_AGE, this.maxAge);
 		return this;
 	}
 
