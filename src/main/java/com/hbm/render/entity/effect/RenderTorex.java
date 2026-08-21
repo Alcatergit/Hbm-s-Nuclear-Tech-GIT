@@ -69,8 +69,8 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = player.getDistance(cloud);
 			ModEventHandlerClient.shakeMultiplier = Math.max(((scale * 200D) - (double) dist) / (scale * 200D), 0D);
-			player.hurtTime = ((scale * 200F) - dist) > 0 ? (int) (((scale * 200F) - dist) * 1.5F) : 0;
-			player.maxHurtTime = Math.max((int) ((scale * 200F) - dist), 0);
+			player.hurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 150F), 0);
+			player.maxHurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 100F), 0);
 			player.attackedAtYaw = 0F;
 		}
 
