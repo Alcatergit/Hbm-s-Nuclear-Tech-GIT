@@ -51,6 +51,10 @@ public class GUIRBMKConsole extends GuiScreen {
 	
 	private GuiTextField field;
 
+	private byte mode = 0;
+	private byte steamSelect = 0;
+	private byte colorSelect = 0;
+
 	public GUIRBMKConsole(InventoryPlayer invPlayer, TileEntityRBMKConsole tedf) {
 		super();
 		this.console = tedf;
@@ -67,11 +71,22 @@ public class GUIRBMKConsole extends GuiScreen {
 		
 		Keyboard.enableRepeatEvents(true);
 		
-		this.field = new GuiTextField(0, this.fontRenderer, guiLeft + 9, guiTop + 84, 35, 9);
+		this.field = new GuiTextField(0, this.fontRenderer, guiLeft + 9, guiTop + 84, 57, 9);
 		this.field.setTextColor(0x00ff00);
 		this.field.setDisabledTextColour(0x008000);
 		this.field.setEnableBackgroundDrawing(false);
 		this.field.setMaxStringLength(3);
+		this.mode = console.mode;
+		this.steamSelect = console.steamSelect;
+		this.colorSelect = console.colorSelect;
+		if(console.fieldText != null && !console.fieldText.isEmpty()) {
+			this.field.setText(console.fieldText);
+		}
+		if(console.selection != null && console.selection.length == 15 * 15) {
+			for(int i = 0; i < selection.length; i++) {
+				this.selection[i] = console.selection[i] == 1 && console.columns[i] != null;
+			}
+		}
 	}
 	
 	@Override
@@ -98,7 +113,7 @@ public class GUIRBMKConsole extends GuiScreen {
 			}
 		}
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 61, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select all control rods" } );
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 61, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Select all control rods" : "Select all boilers" } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 72, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Deselect all" } );
 
 		for(int i = 0; i < 3; i++) {
@@ -109,8 +124,8 @@ public class GUIRBMKConsole extends GuiScreen {
 			}
 		}
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 83, 10, 10, mouseX, mouseY, new String[]{ "§e" + I18nUtil.resolveKey("rbmk.console." + console.graph.type.name().toLowerCase()) } );
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 72, guiTop + 83, 10, 10, mouseX, mouseY, new String[]{ I18nUtil.resolveKey("rbmk.console.assignG") } );
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 6, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ "§e" + I18nUtil.resolveKey("rbmk.console." + console.graph.type.name().toLowerCase()) } );
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 16, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ I18nUtil.resolveKey("rbmk.console.assignG") } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 6, guiTop + 96, 76, 38, mouseX, mouseY, new String[]{ I18nUtil.resolveKey("rbmk.graph." + console.graph.type.name().toLowerCase(), console.graph.dataBuffer[console.graph.dataBuffer.length-1]) } );
 			
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 6, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select red group" } );
@@ -118,6 +133,9 @@ public class GUIRBMKConsole extends GuiScreen {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 28, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select green group" } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 39, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select blue group" } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 50, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select purple group" } );
+
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 72, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Mode: Control Rod" : "Mode: Steam Pipe" } );
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Color Group: " + getColorGroupName() : "Steam Type: " + getSteamTypeName() } );
 	}
 	
 	public void drawCustomInfoStat(int mouseX, int mouseY, int x, int y, int width, int height, int tPosX, int tPosY, String[] text) {
@@ -155,13 +173,14 @@ public class GUIRBMKConsole extends GuiScreen {
 			return;
 		}
 
-		//select all control rods
+		//select all (mode-dependent)
 		if(guiLeft + 61 <= mouseX && guiLeft + 61 + 10 > mouseX && guiTop + 70 < mouseY && guiTop + 70 + 10 >= mouseY) {
 			this.selection = new boolean[15 * 15];
 
+			ColumnType targetType = (mode == 0) ? ColumnType.CONTROL : ColumnType.BOILER;
 			for(int j = 0; j < console.columns.length; j++) {
 				
-				if(console.columns[j] != null && console.columns[j].type == ColumnType.CONTROL) {
+				if(console.columns[j] != null && console.columns[j].type == targetType) {
 					this.selection[j] = true;
 				}
 			}
@@ -212,7 +231,7 @@ public class GUIRBMKConsole extends GuiScreen {
 		}
 
 		//save control rod setting
-		if(guiLeft + 48 <= mouseX && guiLeft + 48 + 12 > mouseX && guiTop + 82 < mouseY && guiTop + 82 + 12 >= mouseY) {
+		if(guiLeft + 70 <= mouseX && guiLeft + 70 + 12 > mouseX && guiTop + 82 < mouseY && guiTop + 82 + 12 >= mouseY) {
 			
 			double level;
 			
@@ -269,7 +288,7 @@ public class GUIRBMKConsole extends GuiScreen {
 		}
 
 		//Graph Selections
-		if(guiLeft + 62 <= mouseX && guiLeft + 72 > mouseX && guiTop + 83 < mouseY && guiTop + 93 >= mouseY) {
+		if(guiLeft + 6 <= mouseX && guiLeft + 16 > mouseX && guiTop + 136 < mouseY && guiTop + 146 >= mouseY) {
 			NBTTagCompound control = new NBTTagCompound();
 			control.setByte("toggle", (byte) 99);
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
@@ -277,7 +296,7 @@ public class GUIRBMKConsole extends GuiScreen {
 			return;
 		}
 		
-		if(guiLeft + 72 <= mouseX && guiLeft + 82 > mouseX && guiTop + 83 < mouseY && guiTop + 93 >= mouseY) {
+		if(guiLeft + 16 <= mouseX && guiLeft + 26 > mouseX && guiTop + 136 < mouseY && guiTop + 146 >= mouseY) {
 
 			NBTTagCompound control = new NBTTagCompound();
 			control.setByte("id", (byte) 99);
@@ -291,6 +310,62 @@ public class GUIRBMKConsole extends GuiScreen {
 			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
 			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
 			return;
+		}
+
+		//mode toggle
+		if(guiLeft + 72 <= mouseX && guiLeft + 72 + 10 > mouseX && guiTop + 136 < mouseY && guiTop + 136 + 10 >= mouseY) {
+			mode = (byte)(mode == 0 ? 1 : 0);
+			NBTTagCompound control = new NBTTagCompound();
+			control.setByte("setMode", mode);
+			PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+			mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
+			return;
+		}
+
+		//color group / steam type button
+		if(guiLeft + 62 <= mouseX && guiLeft + 62 + 10 > mouseX && guiTop + 136 < mouseY && guiTop + 136 + 10 >= mouseY) {
+			if(i == 0) {
+				if(mode == 0) {
+					colorSelect = (byte)((colorSelect + 1) % 5);
+					NBTTagCompound control = new NBTTagCompound();
+					control.setByte("setColorSelect", colorSelect);
+					PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+				} else {
+					steamSelect = (byte)((steamSelect + 1) % 4);
+					NBTTagCompound control = new NBTTagCompound();
+					control.setByte("setSteamSelect", steamSelect);
+					PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+				}
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 0.8F));
+				return;
+			} else if(i == 1) {
+				if(mode == 0) {
+					NBTTagCompound control = new NBTTagCompound();
+					control.setByte("setColor", colorSelect);
+					for(int j = 0; j < selection.length; j++) {
+						if(selection[j] && console.columns[j] != null && console.columns[j].type == ColumnType.CONTROL) {
+							control.setBoolean("sc_" + j, true);
+						}
+					}
+					PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+				} else {
+					NBTTagCompound control = new NBTTagCompound();
+					control.setBoolean("compressor", true);
+					control.setByte("steamType", steamSelect);
+					List<Integer> ints = new ArrayList<>();
+					for(int j = 0; j < console.columns.length; j++) {
+						if(console.columns[j] != null && console.columns[j].type == ColumnType.BOILER && this.selection[j]) {
+							ints.add(j);
+						}
+					}
+					int[] cols = new int[ints.size()];
+					for(int k = 0; k < cols.length; k++) cols[k] = ints.get(k);
+					control.setIntArray("cols", cols);
+					PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
+				}
+				mc.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1F));
+				return;
+			}
 		}
 	}
 
@@ -311,7 +386,21 @@ public class GUIRBMKConsole extends GuiScreen {
 				drawTexturedModalRect(guiLeft + 6 + 40 * k, guiTop + 8 + 21 * j, this.console.screens[id].type.offset, 238, 18, 18);
 			}
 		}
-		drawTexturedModalRect(guiLeft + 62, guiTop + 83, (int)(this.console.graph.type.offset*10D/18D), 228, 10, 10);
+		drawTexturedModalRect(guiLeft + 6, guiTop + 136, (int)(this.console.graph.type.offset*10D/18D), 228, 10, 10);
+
+		int modeU = (mode == 0) ? 20 : 40;
+		drawTexturedModalRect(guiLeft + 72, guiTop + 136, modeU, 172, 10, 10);
+
+		int leftBtnU, leftBtnV;
+		if(mode == 0) {
+			leftBtnU = 150 + colorSelect * 10;
+			leftBtnV = 172;
+		} else {
+			leftBtnU = 150 + steamSelect * 10;
+			leftBtnV = 182;
+		}
+		drawTexturedModalRect(guiLeft + 62, guiTop + 136, leftBtnU, leftBtnV, 10, 10);
+
 		int bX = 86;
 		int bY = 11;
 		int size = 10;
@@ -417,6 +506,14 @@ public class GUIRBMKConsole extends GuiScreen {
 	@Override
 	public void onGuiClosed() {
 		Keyboard.enableRepeatEvents(false);
+		NBTTagCompound control = new NBTTagCompound();
+		byte[] selBytes = new byte[15 * 15];
+		for(int i = 0; i < selection.length; i++) {
+			selBytes[i] = (byte)(selection[i] ? 1 : 0);
+		}
+		control.setByteArray("saveSel", selBytes);
+		control.setString("saveFieldText", field.getText());
+		PacketDispatcher.wrapper.sendToServer(new NBTControlPacket(control, console.getPos()));
 	}
 
 	private double[] scaleData(int[] arrayData){
@@ -439,6 +536,27 @@ public class GUIRBMKConsole extends GuiScreen {
 			}
 		}
 		return scaledData;
+	}
+
+	private String getSteamTypeName() {
+		return switch(steamSelect) {
+			case 0 -> "Steam";
+			case 1 -> "Hot Steam";
+			case 2 -> "Super Hot Steam";
+			case 3 -> "Ultra Hot Steam";
+			default -> "Steam";
+		};
+	}
+
+	private String getColorGroupName() {
+		return switch(colorSelect) {
+			case 0 -> "Red";
+			case 1 -> "Yellow";
+			case 2 -> "Green";
+			case 3 -> "Blue";
+			case 4 -> "Purple";
+			default -> "Red";
+		};
 	}
 
 	private void drawGraph(int x, int y, int width, int height, double[] data, int color, float thickness) {
