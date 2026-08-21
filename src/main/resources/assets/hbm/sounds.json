@@ -7,6 +7,11 @@
 
 	"block.crateBreak": {"category": "block", "sounds": ["hbm:block/cratebreak1", "hbm:block/cratebreak2", "hbm:block/cratebreak3", "hbm:block/cratebreak4", "hbm:block/cratebreak5"]},
 	"block.shutdown": {"category": "block", "sounds": [{"name": "hbm:block/shutdown", "stream": false}]},
+	"block.iterReactorRunning": {"category": "block", "sounds": [{"name": "hbm:block/iterreactorspin", "stream": false}]},
+	"block.chemicalPlant": {"category": "block", "sounds": [{"name": "hbm:block/chemicalplant", "stream": false}]},
+	"block.boiler": {"category": "block", "sounds": [{"name": "hbm:block/boiler", "stream": false}]},
+	"block.electricHum": {"category": "block", "sounds": [{"name": "hbm:block/electrichum", "stream": false}]},
+	"block.engine": {"category": "block", "sounds": [{"name": "hbm:block/engine", "stream": false}]},
     "block.assembleroperate": {"category": "block", "sounds": [{"name": "hbm:block/assemblerOperate", "stream": false}]},
     "block.fel": {"category": "block", "sounds": [{"name": "hbm:block/fel", "stream": false}]},
     "block.chemplantOperate": {"category": "block", "sounds": [{"name": "hbm:block/chemplantOperate", "stream": false}]},
@@ -283,9 +288,8 @@
 	"block.rbmk_explosion": {"category": "block", "sounds": [{"name": "hbm:block/rbmk_explosion", "stream": false}]},
     "block.rbmk_az5_cover": {"category": "block", "sounds": [{"name": "hbm:block/rbmk_az5_cover", "stream": false}]},
     "block.chungusLever": {"category": "block", "sounds": [{"name": "hbm:block/chungusLever", "stream": false}]},
+    "block.chungusTurbineRunning": {"category": "block", "sounds": [{"name": "hbm:block/chungusturbine", "stream": false}]},
 	"item.upgradePlug": {"category": "player", "sounds": [{"name": "hbm:tool/upgradePlug", "stream": false}]},
 	"item.battery": {"category": "player", "sounds": [{"name": "hbm:tool/battery", "stream": false}]},
 	"item.discord_teleport": {"category": "player", "sounds": [{"name": "hbm:tool/item_8", "stream": false}]}
 }
-
-
