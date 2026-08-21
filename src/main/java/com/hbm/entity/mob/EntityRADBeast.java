@@ -14,6 +14,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
@@ -25,6 +26,8 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundEvent;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -32,6 +35,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 
 	public static final DataParameter<Integer> TARGET_ID = EntityDataManager.createKey(EntityRADBeast.class, DataSerializers.VARINT);
+	
+	private final BossInfoServer bossInfo = new BossInfoServer(this.getDisplayName(), BossInfo.Color.GREEN, BossInfo.Overlay.PROGRESS);
 	
 	private float heightOffset = 0.5F;
     private int heightOffsetUpdateTime;
@@ -139,6 +144,8 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
             }
         }
 
+        if(this.getMaxHealth() > 150) this.bossInfo.setPercent(this.getHealth() / this.getMaxHealth());
+
         if (!this.onGround && this.motionY < 0.0D) {
             this.motionY *= 0.6D;
         }
@@ -168,6 +175,22 @@ public class EntityRADBeast extends EntityMob implements IRadiationImmune {
 
         ContaminationUtil.radiate(world, posX, posY, posZ, 32, 500);
         super.onLivingUpdate();
+    }
+    
+    @Override
+    public void addTrackingPlayer(EntityPlayerMP player) {
+    	super.addTrackingPlayer(player);
+    	if(this.getMaxHealth() > 150) {
+    		this.bossInfo.addPlayer(player);
+    	}
+    }
+    
+    @Override
+    public void removeTrackingPlayer(EntityPlayerMP player) {
+    	super.removeTrackingPlayer(player);
+    	if(this.getMaxHealth() > 150) {
+    		this.bossInfo.removePlayer(player);
+    	}
     }
     
     @Override
