@@ -1,5 +1,6 @@
 package com.hbm.items.tool;
 
+import com.hbm.lib.HBMSoundHandler;
 import java.util.List;
 
 import com.hbm.items.ModItems;
@@ -15,6 +16,7 @@ import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.text.TextFormatting;
@@ -35,6 +37,11 @@ public class ItemDiscord extends Item {
 
 		if(pos.typeOfHit == Type.BLOCK) {
 
+			// ========== Add animation call ==========
+			// Call the original Minecraft attack animation before teleporting (client-side execution)
+			player.swingArm(hand); // Play arm swing animation
+			// ====================================
+
 			if(!world.isRemote) {
 
 	            if(player.isRiding())
@@ -42,11 +49,13 @@ public class ItemDiscord extends Item {
 
 	            ForgeDirection dir = ForgeDirection.getOrientation(pos.sideHit.ordinal());
 
-	            world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
-
+	            // Play pre-teleport sound - change to custom sound
+	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discordTeleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
+	            
 	            player.setPositionAndUpdate(pos.hitVec.x + dir.offsetX, pos.hitVec.y + dir.offsetY - 1, pos.hitVec.z + dir.offsetZ);
 
-	            world.playSound(null, player.posX, player.posY, player.posZ, SoundEvents.ENTITY_ENDERMEN_TELEPORT, SoundCategory.PLAYERS, 1.0F, 1.0F);
+	            // Play post-teleport sound effect - change to custom sound effect
+	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discordTeleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	            player.fallDistance = 0.0F;
 			}
 
