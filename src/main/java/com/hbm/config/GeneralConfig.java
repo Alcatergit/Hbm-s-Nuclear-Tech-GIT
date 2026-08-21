@@ -77,6 +77,7 @@ public class GeneralConfig {
 	public static boolean enableReflectorCompat = false;
 	public static int coltanRate = 2;
 	public static int bedrockRate = 50;
+    public static boolean enableBlockItemNBTSaving = true;
 	
 	public static void loadFromConfig(Configuration config){
 		final String CATEGORY_GENERAL = "01_general";
@@ -103,6 +104,7 @@ public class GeneralConfig {
 		enableGuns = config.get(CATEGORY_GENERAL, "1.20_enableGuns", true).getBoolean(true);
 		enableVirus = config.get(CATEGORY_GENERAL, "1.21_enableVirus", false).getBoolean(false);
         enableCrosshairs = config.get(CATEGORY_GENERAL, "1.22_enableCrosshairs", true).getBoolean(true);
+        enableBlockItemNBTSaving = config.get(CATEGORY_GENERAL, "1.22_enableBlockItemNBTSaving", true).getBoolean(true);
 		Property shaders = config.get(CATEGORY_GENERAL, "1.23_enableShaders", false);
 		shaders.setComment("Experimental, don't use");
 		useShaders = shaders.getBoolean(false);
