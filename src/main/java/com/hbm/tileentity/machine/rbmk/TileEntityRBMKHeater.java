@@ -153,7 +153,8 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
-		nbt.removeTag("jumpheight");
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
 	}
 	
 	@Override
