@@ -281,8 +281,10 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				return;
 
 			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
-				if(l < s0)
+				if(l < s0) {
+					world.removeTileEntity(pos);
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				}
 				return;
 			} else if(b.getBlock() == Blocks.VINE) {
 				world.setBlockToAir(pos);
