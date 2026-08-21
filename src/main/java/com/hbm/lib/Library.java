@@ -1186,19 +1186,6 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 		return new Explosion(w, null, x, y, z, 1000, false, false);
 	}
 
-	/**
-	 * Using Unsafe to set final fields bypasses Java 17+ restrictions.
-	 */
-	private static sun.misc.Unsafe getUnsafe() {
-		try {
-			Field theUnsafe = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
-			theUnsafe.setAccessible(true);
-			return (sun.misc.Unsafe) theUnsafe.get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
     /**
      * Use Unsafe to set final fields, bypassing the restrictions in Java 17+
      */
