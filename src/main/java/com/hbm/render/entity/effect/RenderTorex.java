@@ -64,14 +64,14 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 			flashWrapper(cloud, partialTicks, flashDuration);
 		if(cloud.ticksExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
 		if(cloud.didPlaySound && !cloud.didShake && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
-			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
-			cloud.didShake = true;
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = player.getDistance(cloud);
+			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
 			ModEventHandlerClient.shakeMultiplier = Math.max(((scale * 200D) - (double) dist) / (scale * 200D), 0D);
 			player.hurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 150F), 0);
 			player.maxHurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 100F), 0);
 			player.attackedAtYaw = 0F;
+			cloud.didShake = true;
 		}
 
 		if(fog)
