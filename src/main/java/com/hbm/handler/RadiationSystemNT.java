@@ -493,13 +493,13 @@ public class RadiationSystemNT {
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
                             DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
-                            float f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() ? 2F : 1F);
+                            double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
 
-                            if(world.rand.nextDouble() < (double)f * 0.04D) {
+                            if(world.rand.nextDouble() < f * 0.04D) {
                                 EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
                                 skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
                                 skehorse.setGrowingAge(horsie.getGrowingAge());
-                                if(world.rand.nextDouble() < (double)f * 0.02D) {
+                                if(world.rand.nextDouble() < f * 0.02D) {
                                     skehorse.setTrap(true);
                                 }else {
                                     skehorse.setTemper(horsie.getTemper());
