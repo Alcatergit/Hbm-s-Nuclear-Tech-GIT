@@ -386,7 +386,6 @@ public class BombMulti extends BlockContainer implements IBomb {
 
         // Check if assembly is complete
         if (tempEntity.isLoaded()) {
-            // Get the effect types and determine the color
             int type2 = tempEntity.return2type();
             int type5 = tempEntity.return5type();
 
