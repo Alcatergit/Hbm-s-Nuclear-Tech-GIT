@@ -1,5 +1,6 @@
 package com.hbm.handler;
 
+import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -40,7 +41,10 @@ import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -352,13 +356,14 @@ public class RadiationSystemNT {
 						}
 
 						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper creeper) {
-
 							if(world.rand.nextInt(3) == 0) {
 								EntityNuclearCreeper creep = new EntityNuclearCreeper(world);
-                                creep.setCreeperState(creeper.getCreeperState());
+								creep.setCreeperState(creeper.getCreeperState());
 								creep.setPowered(creeper.getPowered());
 								if (creeper.hasIgnited()) creep.ignite();
 								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								creep.setRotationYawHead(entity.rotationYaw);
+								creep.setRenderYawOffset(entity.rotationYaw);
 
 								if(!entity.isDead)
                                     world.spawnEntity(creep);
@@ -371,10 +376,13 @@ public class RadiationSystemNT {
 						} else if(eRad >= 500 && entity instanceof EntityCow cow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
 							creep.setGrowingAge(cow.getGrowingAge());
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
+							if(!cow.isDead && cow.getLeashed()) creep.setLeashHolder(cow.getLeashHolder(), true);
 							entity.setDead();
 							continue;
 
@@ -438,102 +446,219 @@ public class RadiationSystemNT {
 							}
 
 							continue;
-						} else if(eRad >= 500 && entity instanceof EntityPig) {
+						} else if(eRad >= 500 && entity instanceof EntityPig pig) {
 							EntityPigZombie creep = new EntityPigZombie(world);
 
-                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
-                            float f = difficulty.getClampedAdditionalDifficulty();
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
 
-                            creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							if (entity.isChild()) creep.setChild(true);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
 
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
+							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.HEAD, entity.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+							creep.setItemStackToSlot(EntityEquipmentSlot.CHEST, entity.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+							creep.setItemStackToSlot(EntityEquipmentSlot.LEGS, entity.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+							creep.setItemStackToSlot(EntityEquipmentSlot.FEET, entity.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 
 							if(!entity.isDead)
-                                world.spawnEntity(creep);
+								world.spawnEntity(creep);
+							if(!pig.isDead && pig.getLeashed()) creep.setLeashHolder(pig.getLeashHolder(), true);
+							if(!pig.isDead && pig.getSaddled()) pig.dropItem(Items.SADDLE, 1);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 600 && entity instanceof EntityVillager vil) {
 							EntityZombieVillager creep = new EntityZombieVillager(world);
 
-                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
-                            float f = difficulty.getClampedAdditionalDifficulty();
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
 
-                            creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
 
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
-                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
+							creep.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, vil.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+							creep.setItemStackToSlot(EntityEquipmentSlot.HEAD, vil.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+							creep.setItemStackToSlot(EntityEquipmentSlot.CHEST, vil.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+							creep.setItemStackToSlot(EntityEquipmentSlot.LEGS, vil.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+							creep.setItemStackToSlot(EntityEquipmentSlot.FEET, vil.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 
 							if(!entity.isDead)
-                                world.spawnEntity(creep);
+								world.spawnEntity(creep);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 700 && entity instanceof EntityBlaze) {
 							EntityRADBeast creep = new EntityRADBeast(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setRotationYawHead(entity.rotationYaw);
+							creep.setRenderYawOffset(entity.rotationYaw);
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
 							entity.setDead();
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
-                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
-                            double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
+							boolean isSkeletonHorse = false;
+							boolean isTrap = false;
+							if(!horsie.isDead) {
+								DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
+								double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
+								isSkeletonHorse = world.rand.nextDouble() < f * 0.04D;
+								isTrap = world.rand.nextDouble() < f * 0.02D;
+							}
 
-                            if(world.rand.nextDouble() < f * 0.04D) {
-                                EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
-                                skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-                                skehorse.setGrowingAge(horsie.getGrowingAge());
-                                if(world.rand.nextDouble() < f * 0.02D) {
-                                    skehorse.setTrap(true);
-                                }else {
-                                    skehorse.setTemper(horsie.getTemper());
-                                    skehorse.setHorseSaddled(horsie.isHorseSaddled());
-                                    skehorse.setHorseTamed(horsie.isTame());
-                                    skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
-                                }
+							if(isSkeletonHorse) {
+								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
+								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								skehorse.setRotationYawHead(entity.rotationYaw);
+								skehorse.setRenderYawOffset(entity.rotationYaw);
 
-                                if(!entity.isDead)
-                                    world.spawnEntity(skehorse);
-                                entity.setDead();
-                                continue;
-                            }else {
-                                EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
-                                zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-                                zomhorsie.setGrowingAge(horsie.getGrowingAge());
-                                zomhorsie.setTemper(horsie.getTemper());
-                                zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
-                                zomhorsie.setHorseTamed(horsie.isTame());
-                                zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
-                                zomhorsie.makeMad();
+								if(!horsie.isDead) {
+									try {
+										Field[] fields = AbstractHorse.class.getDeclaredFields();
+										Field horseChestField = null;
 
-                                if(!entity.isDead)
-                                    world.spawnEntity(zomhorsie);
-                                entity.setDead();
-                                continue;
-                            }
-						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
+										for(Field field : fields) {
+											if(field.getType() == ContainerHorseChest.class) {
+												horseChestField = field;
+												break;
+											}
+										}
 
+										if(horseChestField != null) {
+											horseChestField.setAccessible(true);
+											ContainerHorseChest chest = (ContainerHorseChest) horseChestField.get(horsie);
+
+											ItemStack armorStack = chest.getStackInSlot(1);
+											if(!armorStack.isEmpty()) {
+												horsie.entityDropItem(armorStack.copy(), 0.0F);
+												chest.setInventorySlotContents(1, ItemStack.EMPTY);
+											}
+											if(isTrap) {
+												ItemStack saddleStack = chest.getStackInSlot(0);
+												if(!saddleStack.isEmpty()) {
+													horsie.entityDropItem(saddleStack.copy(), 0.0F);
+													chest.setInventorySlotContents(0, ItemStack.EMPTY);
+												}
+											}
+										}
+									} catch (Exception ignored) {
+									}
+								}
+
+								NBTTagCompound horseNBT = new NBTTagCompound();
+								horsie.writeEntityToNBT(horseNBT);
+								skehorse.readEntityFromNBT(horseNBT);
+								HbmLivingProps.setRadiation(skehorse, 0);
+								skehorse.clearActivePotions();
+
+								skehorse.setGrowingAge(horsie.getGrowingAge());
+								if(isTrap) {
+									skehorse.setTrap(true);
+									skehorse.setTemper(0);
+									skehorse.setHorseSaddled(false);
+									skehorse.setHorseTamed(false);
+									skehorse.setOwnerUniqueId(null);
+								}else {
+									skehorse.setTemper(horsie.getTemper());
+									skehorse.setHorseSaddled(horsie.isHorseSaddled());
+									skehorse.setHorseTamed(horsie.isTame());
+									skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
+								}
+
+								if(!entity.isDead)
+									world.spawnEntity(skehorse);
+								if(!horsie.isDead && horsie.getLeashed()) skehorse.setLeashHolder(horsie.getLeashHolder(), true);
+								if(!horsie.isDead && !isTrap && horsie.isBeingRidden() && horsie.getControllingPassenger() instanceof EntityPlayer) {
+									EntityPlayer passenger;
+									passenger = (EntityPlayer) horsie.getControllingPassenger();
+
+									if(passenger != null) {
+										passenger.dismountRidingEntity();
+										passenger.startRiding(skehorse);
+									}
+								}
+								entity.setDead();
+								continue;
+							}else {
+								EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
+								zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								zomhorsie.setRotationYawHead(entity.rotationYaw);
+								zomhorsie.setRenderYawOffset(entity.rotationYaw);
+
+								if(!horsie.isDead) {
+									try {
+										Field[] fields = AbstractHorse.class.getDeclaredFields();
+										Field horseChestField = null;
+
+										for(Field field : fields) {
+											if(field.getType() == ContainerHorseChest.class) {
+												horseChestField = field;
+												break;
+											}
+										}
+
+										if(horseChestField != null) {
+											horseChestField.setAccessible(true);
+											ContainerHorseChest chest = (ContainerHorseChest) horseChestField.get(horsie);
+
+											ItemStack armorStack = chest.getStackInSlot(1);
+											if(!armorStack.isEmpty()) {
+												horsie.entityDropItem(armorStack.copy(), 0.0F);
+												chest.setInventorySlotContents(1, ItemStack.EMPTY);
+											}
+										}
+									} catch (Exception ignored) {
+									}
+								}
+
+								NBTTagCompound horseNBT = new NBTTagCompound();
+								horsie.writeEntityToNBT(horseNBT);
+								zomhorsie.readEntityFromNBT(horseNBT);
+								HbmLivingProps.setRadiation(zomhorsie, 0);
+								zomhorsie.clearActivePotions();
+
+								zomhorsie.setGrowingAge(horsie.getGrowingAge());
+								zomhorsie.setTemper(horsie.getTemper());
+								zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+								zomhorsie.setHorseTamed(horsie.isTame());
+								zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+								zomhorsie.makeMad();
+
+								if(!entity.isDead)
+									world.spawnEntity(zomhorsie);
+								if(!horsie.isDead && horsie.getLeashed()) zomhorsie.setLeashHolder(horsie.getLeashHolder(), true);
+								if(!horsie.isDead && horsie.isBeingRidden() && horsie.getControllingPassenger() instanceof EntityPlayer) {
+									EntityPlayer passenger;
+									passenger = (EntityPlayer) horsie.getControllingPassenger();
+
+									if(passenger != null) {
+										passenger.dismountRidingEntity();
+										passenger.startRiding(zomhorsie);
+									}
+								}
+								entity.setDead();
+								continue;
+							}
+						} else if(eRad >= 900 && entity instanceof EntityDuck duck && !(entity instanceof EntityQuackos)) {
 							EntityQuackos quacc = new EntityQuackos(world);
 							quacc.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							quacc.setRotationYawHead(entity.rotationYaw);
+							quacc.setRenderYawOffset(entity.rotationYaw);
+							quacc.setGrowingAge(duck.getGrowingAge());
 
 							if(!entity.isDead)
 								world.spawnEntity(quacc);
-
+                            if(!duck.isDead && duck.getLeashed()) quacc.setLeashHolder(duck.getLeashHolder(), true);
 							entity.setDead();
 							continue;
 						}
