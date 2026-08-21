@@ -696,7 +696,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			alpha = (float)(FADE_DURATION - fadeIn) / FADE_DURATION;
 		}
 		if (fadeOut > 0) {
-			alpha = (float)(fadeOut - 1) / (FADE_DURATION - 1);
+			alpha = (float)(fadeOut - 1) / FADE_DURATION;
 		}
 		return MathHelper.clamp(alpha, 0.0F, 1.0F);
 	}
