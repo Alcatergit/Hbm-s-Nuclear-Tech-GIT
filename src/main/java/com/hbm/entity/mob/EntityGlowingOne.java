@@ -11,6 +11,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.BlockPos;
@@ -67,24 +68,26 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
     }
 
     public static void convertToGlow(World world, EntityZombie zombie){
-    	if(zombie instanceof EntityGlowingOne)
-    		return;
-    	EntityGlowingOne glowing = new EntityGlowingOne(world);
+		if(zombie instanceof EntityGlowingOne)
+			return;
+		EntityGlowingOne glowing = new EntityGlowingOne(world);
 
-        DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(zombie.posX, zombie.posY, zombie.posZ));
-        float f = difficulty.getClampedAdditionalDifficulty();
+		DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(zombie.posX, zombie.posY, zombie.posZ));
+		float f = difficulty.getClampedAdditionalDifficulty();
 
-        glowing.setCanPickUpLoot(zombie.canPickUpLoot() ? zombie.canPickUpLoot() : world.rand.nextFloat() < 1.1F * f);
-    	glowing.setChild(zombie.isChild());
+		glowing.setCanPickUpLoot(zombie.canPickUpLoot() ? zombie.canPickUpLoot() : world.rand.nextFloat() < 1.1F * f);
+		glowing.setChild(zombie.isChild());
 		glowing.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
+		glowing.setRotationYawHead(zombie.rotationYaw);
+		glowing.setRenderYawOffset(zombie.rotationYaw);
 
 		// Inherit the original zombie's equipment and items
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
-		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, zombie.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.OFFHAND, zombie.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.HEAD, zombie.getItemStackFromSlot(EntityEquipmentSlot.HEAD));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.CHEST, zombie.getItemStackFromSlot(EntityEquipmentSlot.CHEST));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.LEGS, zombie.getItemStackFromSlot(EntityEquipmentSlot.LEGS));
+		glowing.setItemStackToSlot(EntityEquipmentSlot.FEET, zombie.getItemStackFromSlot(EntityEquipmentSlot.FEET));
 
 		if(!zombie.isDead)
 			if(!world.isRemote)
