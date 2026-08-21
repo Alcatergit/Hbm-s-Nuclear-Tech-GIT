@@ -32,6 +32,7 @@ import net.minecraftforge.fml.client.config.IConfigElement;
 public class HbmConfigGui extends GuiConfig {
 
 	private static final List<Configuration> configs = new ArrayList<>();
+	private static final List<TextFileConfigElement> textFileConfigs = new ArrayList<>();
 	static GuiConfig instance;
 
 	static String getTitle() {
@@ -49,6 +50,9 @@ public class HbmConfigGui extends GuiConfig {
 			if (config != null) {
 				config.save();
 			}
+		}
+		for (TextFileConfigElement elem : textFileConfigs) {
+			elem.saveToFile();
 		}
 		BedrockOreJsonConfig.writeToJson();
 		if (!instance.allRequireWorldRestart || !instance.isWorldRunning) {
@@ -102,8 +106,10 @@ public class HbmConfigGui extends GuiConfig {
 			String displayName = transformRootName(name);
 			if (name.endsWith(".cfg")) {
 				if (TEXT_FILE_FALLBACK_HEADERS.containsKey(name)) {
-					list.add(new TextFileConfigElement(file, displayName, name,
-							TEXT_FILE_FALLBACK_HEADERS.get(name)));
+					TextFileConfigElement elem = new TextFileConfigElement(file, displayName, name,
+							TEXT_FILE_FALLBACK_HEADERS.get(name));
+					textFileConfigs.add(elem);
+					list.add(elem);
 				} else {
 					Configuration config = new Configuration(file);
 					config.load();
@@ -119,6 +125,7 @@ public class HbmConfigGui extends GuiConfig {
 					}
 				}
 			} else if (name.endsWith(".json")) {
+				BedrockOreJsonConfig.loadFromJson();
 				list.add(buildJsonRootCategory(displayName, name));
 			}
 		}
