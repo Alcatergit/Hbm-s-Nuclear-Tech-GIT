@@ -17,6 +17,8 @@ import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.ExtPropPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.hazard.HazardSystem;
+import com.hbm.hazard.HazardRegistry;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ArmorRegistry;
@@ -66,6 +68,7 @@ public class EntityEffectHandler {
 		handleRadiation(entity);
 		handleDigamma(entity);
 		handleLungDisease(entity);
+		handleMobileHazardSource(entity);
 	}
 	
 	private static void handleContamination(EntityLivingBase entity) {
@@ -400,4 +403,61 @@ public class EntityEffectHandler {
 	private static boolean canVomit(Entity e) {
         return !e.isCreatureType(EnumCreatureType.WATER_CREATURE, false);
     }
+
+	private static void handleMobileHazardSource(EntityLivingBase entity) {
+		if(!RadiationConfig.enableItemRadiation || entity.world.isRemote)
+			return;
+
+		float totalRad = 0;
+		float totalDig = 0;
+		float armorRes = 0;
+		for(ItemStack armor : entity.getArmorInventoryList()) {
+			if(!armor.isEmpty()) armorRes += HazmatRegistry.getResistance(armor);
+		}
+		float radAttenuation = (float)Math.pow(10, -armorRes);
+		boolean digammaImmune = ArmorUtil.checkForDigamma(entity);
+
+		if(entity instanceof EntityPlayer) {
+			EntityPlayer player = (EntityPlayer) entity;
+			for(int i = 0; i < player.inventory.getSizeInventory(); i++) {
+				ItemStack stack = player.inventory.getStackInSlot(i);
+				if(stack.isEmpty()) continue;
+				float rad = HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.RADIATION) * stack.getCount();
+				float dig = HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.DIGAMMA) * stack.getCount();
+				boolean isHandSlot = (i == player.inventory.currentItem) || (i == 40);
+				if(isHandSlot) {
+					totalRad += rad;
+					totalDig += dig;
+				} else {
+					totalRad += rad * radAttenuation;
+					totalDig += digammaImmune ? 0 : dig;
+				}
+			}
+		} else {
+			for(EntityEquipmentSlot slot : EntityEquipmentSlot.values()) {
+				ItemStack stack = entity.getItemStackFromSlot(slot);
+				if(stack.isEmpty()) continue;
+				float rad = HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.RADIATION) * stack.getCount();
+				float dig = HazardSystem.getHazardLevelFromStack(stack, HazardRegistry.DIGAMMA) * stack.getCount();
+				if(slot == EntityEquipmentSlot.MAINHAND || slot == EntityEquipmentSlot.OFFHAND) {
+					totalRad += rad;
+					totalDig += dig;
+				} else {
+					totalRad += rad * radAttenuation;
+					totalDig += digammaImmune ? 0 : dig;
+				}
+			}
+		}
+
+		if(totalRad <= 0 && totalDig <= 0)
+			return;
+
+		float radPerTick = totalRad / 20F;
+		float digPerTick = totalDig / 20F;
+		double radRange = Math.min(128, Math.sqrt(totalRad));
+		double digRange = Math.min(128, Math.sqrt(totalDig));
+
+		ContaminationUtil.radiate(entity.world, entity.posX, entity.posY + entity.height / 2, entity.posZ, radRange, radPerTick, 0, 1.0D, entity);
+		ContaminationUtil.radiate(entity.world, entity.posX, entity.posY + entity.height / 2, entity.posZ, digRange, 0, digPerTick, 1.0D, entity);
+	}
 }
