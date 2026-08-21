@@ -4,20 +4,20 @@ import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.interfaces.IDummy;
+import com.hbm.interfaces.IMultiBlock;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.machine.TileEntityDummy;
 import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
 import com.hbm.tileentity.machine.TileEntityMachineFluidTank;
 
+import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
@@ -51,13 +51,27 @@ public class DummyBlockFluidTank extends BlockContainer implements IDummy {
 		if(!safeBreak) {
     		TileEntity te = world.getTileEntity(pos);
     		if(te != null && te instanceof TileEntityDummy) {
-    			if(!world.isRemote)
-    				world.destroyBlock(((TileEntityDummy)te).target, true);
+    			if(!world.isRemote && ((TileEntityDummy)te).target != null)
+    				world.setBlockToAir(((TileEntityDummy)te).target);
     		}
     	}
     	world.removeTileEntity(pos);
 	}
-	
+
+	@Override
+	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+		if(world.isRemote || safeBreak)
+			return;
+
+		TileEntity te = world.getTileEntity(pos);
+		if(te instanceof TileEntityDummy) {
+			BlockPos target = ((TileEntityDummy)te).target;
+			if(target != null && !(world.getBlockState(target).getBlock() instanceof IMultiBlock)) {
+				world.setBlockToAir(pos);
+			}
+		}
+	}
+
 	@Override
 	public boolean isOpaqueCube(IBlockState state) {
 		return false;
@@ -83,7 +97,7 @@ public class DummyBlockFluidTank extends BlockContainer implements IDummy {
 	}
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		return Items.AIR;
+		return Item.getItemFromBlock(ModBlocks.machine_fluidtank);
 	}
 	
 	@Override
