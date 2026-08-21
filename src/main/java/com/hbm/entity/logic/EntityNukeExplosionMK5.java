@@ -220,7 +220,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
                             p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
                         }
                     }
-                    if (!e.isImmuneToFire) {
+                    if (!e.isImmuneToFire()) {
                         e.setFire(5);
                         e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
                     }
