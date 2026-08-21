@@ -77,6 +77,7 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
+import sun.misc.Unsafe;
 
 @Spaghetti("this whole class")
 public class Library {
@@ -1188,7 +1189,7 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
     /**
      * Use Unsafe to set final fields, bypassing the restrictions in Java 17+
      */
-    private static sun.misc.Unsafe getUnsafe() {
+    private static Unsafe getUnsafe() {
         try {
             Field theUnsafe = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
