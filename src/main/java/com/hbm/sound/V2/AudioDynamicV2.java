@@ -13,7 +13,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class AudioDynamicV2 extends MovingSound {
 
-	public float maxVolume = 1;
+	public float maxVolume;
 	public float range;
 	public float intendedVolume;
 	public int keepAlive;
@@ -24,12 +24,13 @@ public class AudioDynamicV2 extends MovingSound {
 	// position updates happen automatically and if the parent is the client player, volume is always on max
 	public Entity parentEntity = null;
 
-	protected AudioDynamicV2(SoundEvent loc, SoundCategory cat, boolean useNewSystem) {
+	protected AudioDynamicV2(SoundEvent loc, SoundCategory cat, boolean useNewSystem,float maxVolume, float range, float intendedVolume) {
 		super(loc, cat);
 		this.repeat = true;
 		this.attenuationType = ISound.AttenuationType.NONE;
-		this.intendedVolume = 10;
-        this.range = 10;
+		this.maxVolume = maxVolume;
+        this.range = range;
+		this.intendedVolume = intendedVolume;
 		this.nonLegacy = useNewSystem;
 	}
 	
@@ -53,7 +54,7 @@ public class AudioDynamicV2 extends MovingSound {
 				f = (float) Math.sqrt(Math.pow(xPosF - player.posX, 2)
 						+ Math.pow(yPosF - player.posY, 2)
 						+ Math.pow(zPosF - player.posZ, 2));
-				volume = func(f);
+				volume = func(f, intendedVolume);
 			} else {
 				// shitty hack that prevents stereo weirdness when using 0 0 0
 				if (player == parentEntity) {
@@ -74,11 +75,7 @@ public class AudioDynamicV2 extends MovingSound {
 						+ Math.pow(yPosF - player.posY, 2)
 						+ Math.pow(zPosF - player.posZ, 2));
 
-				if (attenuationType == ISound.AttenuationType.LINEAR) {
-					volume = func(f);
-				} else {
-					volume = func(f, intendedVolume);
-				}
+				volume = func(f, intendedVolume);
 			} else {
 				if (player == parentEntity) {
 					this.setPosition((float) parentEntity.posX, (float) parentEntity.posY + 10, (float) parentEntity.posZ);
@@ -116,13 +113,9 @@ public class AudioDynamicV2 extends MovingSound {
 	public void keepAlive() {
 		this.timeSinceKA = 0;
 	}
-	
+
 	public float func(float f, float v) {
 		return (f / v) * -2 + 2;
-	}
-
-	public float func(float dist) {
-		return (dist / range) * -maxVolume + maxVolume;
 	}
 
 	public boolean isPlaying() {
