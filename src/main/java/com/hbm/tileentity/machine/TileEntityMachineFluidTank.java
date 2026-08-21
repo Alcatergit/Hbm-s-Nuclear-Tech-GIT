@@ -133,7 +133,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		Fluid tankFluid = tank.getFluid() != null ? tank.getFluid().getFluid() : null;
 
 		if(mode == 1) {
-			if(network != null && network.getType() != tankFluid && tankFluid != null) {
+			if(network != null && (network.getType() == null || network.getType() != tankFluid) && tankFluid != null) {
 				network.removeProvider(this);
 				network.removeReceiver(this);
 				network = null;
@@ -165,7 +165,9 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 						}
 					}
 				}
-				network = new FFPipeNetworkMk2(fluid);
+				if(fluid != null) {
+					network = new FFPipeNetworkMk2(fluid);
+				}
 			}
 
 			BlockPos[] conPositions = getConnectionPositions();
@@ -311,9 +313,11 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
 						fluid = pipe.getType();
 					}
-					this.network = new FFPipeNetworkMk2(fluid);
-					this.network.addReceiver(this);
-					found = true;
+					if(fluid != null) {
+						this.network = new FFPipeNetworkMk2(fluid);
+						this.network.addReceiver(this);
+						found = true;
+					}
 				}
 			}
 			if(!found && this.network != null) {
@@ -376,9 +380,11 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
 						fluid = pipe.getType();
 					}
-					this.network = new FFPipeNetworkMk2(fluid);
-					this.network.addProvider(this);
-					found = true;
+					if(fluid != null) {
+						this.network = new FFPipeNetworkMk2(fluid);
+						this.network.addProvider(this);
+						found = true;
+					}
 				}
 			}
 			if(!found && this.network != null) {
@@ -463,6 +469,8 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
+		if(mode == 0 || mode == 3)
+			return null;
 		return tank.drain(maxDrain, doDrain);
 	}
 	
