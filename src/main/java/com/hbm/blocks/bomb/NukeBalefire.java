@@ -287,13 +287,13 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
         tooltip.add("§a["+ I18nUtil.resolveKey("trait.balefirebomb")+"]"+"§r");
         tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", 250)+"§r");
 
-        // ========== Modification begins: Use the isItemReady method for judgment ==========
+        // ========== Modification: Use the isItemReady method for judgment ==========
         if (isItemReady(stack)) {
             tooltip.add("§2[Is ready]§r");
         }
     }
 
-    // ========== Modification begins: Correctly parsing the NBT format of ItemStackHandler ==========
+    // ========== Modification: Correctly parsing the NBT format of ItemStackHandler ==========
     private boolean isItemReady(ItemStack stack) {
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
             NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
