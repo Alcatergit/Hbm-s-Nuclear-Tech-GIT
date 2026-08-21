@@ -78,7 +78,6 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
 import sun.misc.Unsafe;
-import static sun.misc.Unsafe.getUnsafe;
 
 @Spaghetti("this whole class")
 public class Library {
@@ -1185,6 +1184,19 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 	
 	public static Explosion explosionDummy(World w, double x, double y, double z){
 		return new Explosion(w, null, x, y, z, 1000, false, false);
+	}
+
+	/**
+	 * Using Unsafe to set final fields bypasses Java 17+ restrictions.
+	 */
+	private static sun.misc.Unsafe getUnsafe() {
+		try {
+			Field theUnsafe = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+			theUnsafe.setAccessible(true);
+			return (sun.misc.Unsafe) theUnsafe.get(null);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
     /**
