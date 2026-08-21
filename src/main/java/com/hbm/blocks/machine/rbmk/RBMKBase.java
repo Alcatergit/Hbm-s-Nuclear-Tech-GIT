@@ -141,6 +141,21 @@ public abstract class RBMKBase extends BlockDummyable implements IToolable, IToo
 	public int[] getDimensions(World world) {
 		return new int[] {RBMKDials.getColumnHeight(world), 0, 0, 0, 0, 0};
 	}
+
+	public void rebuildColumn(World world, BlockPos corePos, int oldHeight) {
+		safeRem = true;
+
+		for(int i = 1; i <= oldHeight; i++) {
+			BlockPos pos = corePos.up(i);
+			if(world.getBlockState(pos).getBlock() == this) {
+				world.setBlockToAir(pos);
+			}
+		}
+
+		safeRem = false;
+
+		this.fillSpace(world, corePos.getX(), corePos.getY(), corePos.getZ(), DIR_NO_LID, 0);
+	}
 	
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state){
