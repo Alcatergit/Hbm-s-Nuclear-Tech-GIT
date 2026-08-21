@@ -152,7 +152,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         this.dataManager.set(TICKS_EXISTED, this.ticksExisted);
 
         if(world.isRemote){
-            MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExisted: " + this.ticksExisted);
+            //MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExisted: " + this.ticksExisted);
             double s = this.getScale();
             double cs = 1.5;
 
