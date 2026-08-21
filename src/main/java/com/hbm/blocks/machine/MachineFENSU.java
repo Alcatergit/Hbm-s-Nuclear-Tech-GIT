@@ -219,10 +219,16 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 	@Override
 	public void printHook(Pre event, World world, int x, int y, int z) {
 			
+		// Attempt to get the TileEntity of the current block
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
-		
-		if(!(te instanceof TileEntityMachineFENSU))
-			return;
+
+		// If the current block is not the core block, try to locate the core block.
+		if(!(te instanceof TileEntityMachineFENSU)) {
+			int[] core = this.findCore(world, x, y, z);
+			if(core != null) {
+				te = world.getTileEntity(new BlockPos(core[0], core[1], core[2]));
+			}
+		}
 
 		TileEntityMachineFENSU battery = (TileEntityMachineFENSU) te;
 		List<String> text = new ArrayList();
