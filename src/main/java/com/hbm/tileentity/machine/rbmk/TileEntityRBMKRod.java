@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine.rbmk;
 import java.util.List;
 import java.util.Map;
 
+import com.hbm.config.MachineConfig;
 import com.hbm.config.MobConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
@@ -107,7 +108,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
                         this.fluxFast = 0;
                         this.fluxSlow = 0;
 
-                        if (!RBMKDials.getMeltdownsDisabled(world) && damage >= 1200) {
+                        if (!RBMKDials.getMeltdownsDisabled(world) && damage >= MachineConfig.rbmkMeltdownDamage) {
                             this.meltdown();
                         }
                         return;
@@ -143,7 +144,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
                     this.fluxFast = 0;
                     this.fluxSlow = 0;
 
-                    if (!RBMKDials.getMeltdownsDisabled(world) && damage >= 1200) {
+                    if (!RBMKDials.getMeltdownsDisabled(world) && damage >= MachineConfig.rbmkMeltdownDamage) {
                         this.meltdown();
                     }
                     return;
