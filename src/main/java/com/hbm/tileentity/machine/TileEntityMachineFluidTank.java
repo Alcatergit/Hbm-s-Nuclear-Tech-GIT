@@ -9,7 +9,7 @@ import com.hbm.inventory.control_panel.*;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
-import com.hbm.tileentity.TileEntityProxyBase;
+import com.hbm.tileentity.TileEntityProxyCombo;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -113,13 +113,17 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	}
 
 	private BlockPos[] getConnectionPositions() {
-		BlockPos[] ports = { pos.add(1, 0, 1), pos.add(1, 0, -1), pos.add(-1, 0, 1), pos.add(-1, 0, -1) };
-		return new BlockPos[] {
-				ports[0].east(), ports[0].south(),
-				ports[1].east(), ports[1].north(),
-				ports[2].west(), ports[2].south(),
-				ports[3].west(), ports[3].north(),
-		};
+		List<BlockPos> positions = new ArrayList<>();
+		BlockPos[] corners = { pos.add(1, 0, 1), pos.add(1, 0, -1), pos.add(-1, 0, 1), pos.add(-1, 0, -1) };
+		for(BlockPos corner : corners) {
+			if(world.getTileEntity(corner) instanceof TileEntityDummyFluidPort) {
+				int dx = corner.getX() - pos.getX();
+				int dz = corner.getZ() - pos.getZ();
+				positions.add(corner.add(dx, 0, 0));
+				positions.add(corner.add(0, 0, dz));
+			}
+		}
+		return positions.toArray(new BlockPos[0]);
 	}
 
 	protected void updateFluidNetwork() {
@@ -135,16 +139,45 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 				network = null;
 			}
 
-			if(network == null && tankFluid != null) {
-				network = new FFPipeNetworkMk2(tankFluid);
+			if(network == null) {
+				Fluid fluid = tankFluid;
+				if(fluid == null) {
+					BlockPos[] conPositions = getConnectionPositions();
+					for(BlockPos conPos : conPositions) {
+						if(!world.isBlockLoaded(conPos)) continue;
+						TileEntity te = world.getTileEntity(conPos);
+						if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+							te = world.getTileEntity(dummy.target);
+						}
+						if(te instanceof TileEntityProxyCombo proxy) {
+							TileEntity resolved = proxy.getTE();
+							if(resolved != null) te = resolved;
+						}
+						if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+							fluid = tank.tank.getFluid().getFluid();
+							break;
+						} else if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+							fluid = barrel.tank.getFluid().getFluid();
+							break;
+						} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+							fluid = pipe.getType();
+							break;
+						}
+					}
+				}
+				network = new FFPipeNetworkMk2(fluid);
 			}
 
 			BlockPos[] conPositions = getConnectionPositions();
 			for(BlockPos conPos : conPositions) {
 				if(!world.isBlockLoaded(conPos)) continue;
 				TileEntity te = world.getTileEntity(conPos);
-				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
 					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyCombo proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
 				}
 				if(te instanceof TileEntityMachineFluidTank tank) {
 					if(tank.mode == 1) {
@@ -160,6 +193,13 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 							this.network.addProvider(tank);
 							this.network.addReceiver(tank);
 						}
+					} else if(tank.network != null && tank.network != this.network && tank.mode != 3) {
+						if(this.network == null) {
+							this.network = tank.network;
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, tank.network);
+						}
+						tank.network = this.network;
 					} else if(tank.network == null && this.network != null && tank.mode != 3) {
 						tank.network = this.network;
 						if(tank.mode == 0) {
@@ -182,6 +222,13 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 							this.network.addProvider(barrel);
 							this.network.addReceiver(barrel);
 						}
+					} else if(barrel.network != null && barrel.network != this.network && barrel.mode != 3) {
+						if(this.network == null) {
+							this.network = barrel.network;
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, barrel.network);
+						}
+						barrel.network = this.network;
 					} else if(barrel.network == null && this.network != null && barrel.mode != 3) {
 						barrel.network = this.network;
 						if(barrel.mode == 0) {
@@ -199,6 +246,8 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, pipe.getNetwork());
 						}
 					}
+				} else if(this.network != null) {
+					this.network.tryAdd(te);
 				}
 			}
 
@@ -209,8 +258,12 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 				for(BlockPos conPos : conPositions) {
 					if(!world.isBlockLoaded(conPos)) continue;
 					TileEntity te = world.getTileEntity(conPos);
-					if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
 						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
 					}
 					if(te instanceof TileEntityMachineFluidTank tank) {
 						tank.updateFluidNetwork();
@@ -227,17 +280,17 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 			for(BlockPos conPos : conPositions) {
 				if(!world.isBlockLoaded(conPos)) continue;
 				TileEntity te = world.getTileEntity(conPos);
-				FFPipeNetworkMk2 foundNet = null;
-				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
 					te = world.getTileEntity(dummy.target);
 				}
-				if(te instanceof TileEntityProxyBase proxy) {
+				if(te instanceof TileEntityProxyCombo proxy) {
 					TileEntity resolved = proxy.getTE();
 					if(resolved != null) te = resolved;
 				}
-				if(te instanceof TileEntityMachineFluidTank tank && tank.mode == 1) {
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityMachineFluidTank tank) {
 					foundNet = tank.network;
-				} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+				} else if(te instanceof TileEntityBarrel barrel) {
 					foundNet = barrel.network;
 				} else if(te instanceof IFluidPipeMk2 pipe) {
 					foundNet = pipe.getNetwork();
@@ -249,11 +302,42 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 						this.network = foundNet;
 					}
 					found = true;
+				} else if(!found && this.network == null) {
+					Fluid fluid = null;
+					if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+						fluid = tank.tank.getFluid().getFluid();
+					} else if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+						fluid = barrel.tank.getFluid().getFluid();
+					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+						fluid = pipe.getType();
+					}
+					this.network = new FFPipeNetworkMk2(fluid);
+					this.network.addReceiver(this);
+					found = true;
 				}
 			}
 			if(!found && this.network != null) {
 				this.network.removeReceiver(this);
 				this.network = null;
+			}
+			if(this.network != null) {
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					} else if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					}
+				}
+				this.network.update(world);
 			}
 		} else if(mode == 2) {
 			BlockPos[] conPositions = getConnectionPositions();
@@ -261,17 +345,17 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 			for(BlockPos conPos : conPositions) {
 				if(!world.isBlockLoaded(conPos)) continue;
 				TileEntity te = world.getTileEntity(conPos);
-				FFPipeNetworkMk2 foundNet = null;
-				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
 					te = world.getTileEntity(dummy.target);
 				}
-				if(te instanceof TileEntityProxyBase proxy) {
+				if(te instanceof TileEntityProxyCombo proxy) {
 					TileEntity resolved = proxy.getTE();
 					if(resolved != null) te = resolved;
 				}
-				if(te instanceof TileEntityMachineFluidTank tank && tank.mode == 1) {
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityMachineFluidTank tank) {
 					foundNet = tank.network;
-				} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+				} else if(te instanceof TileEntityBarrel barrel) {
 					foundNet = barrel.network;
 				} else if(te instanceof IFluidPipeMk2 pipe) {
 					foundNet = pipe.getNetwork();
@@ -283,11 +367,42 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 						this.network = foundNet;
 					}
 					found = true;
+				} else if(!found && this.network == null) {
+					Fluid fluid = null;
+					if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+						fluid = tank.tank.getFluid().getFluid();
+					} else if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+						fluid = barrel.tank.getFluid().getFluid();
+					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+						fluid = pipe.getType();
+					}
+					this.network = new FFPipeNetworkMk2(fluid);
+					this.network.addProvider(this);
+					found = true;
 				}
 			}
 			if(!found && this.network != null) {
 				this.network.removeProvider(this);
 				this.network = null;
+			}
+			if(this.network != null) {
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					} else if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					}
+				}
+				this.network.update(world);
 			}
 		} else {
 			if(this.network != null) {
@@ -348,8 +463,6 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if(mode == 0 || mode == 3)
-			return null;
 		return tank.drain(maxDrain, doDrain);
 	}
 	
