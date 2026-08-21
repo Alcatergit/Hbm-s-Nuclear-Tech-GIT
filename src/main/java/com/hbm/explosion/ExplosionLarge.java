@@ -229,6 +229,19 @@ public class ExplosionLarge {
 			spawnRubble(world, x, y+2, z, rubbleFunction((int) strength));
 		if (shrapnel)
 			spawnShrapnels(world, x, y+2, z, shrapnelFunction((int) strength));
+		float scale = strength * 0.01F;
+		if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 5 * strength) {
+			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+			EntityPlayer player = MainRegistry.proxy.me();
+			float dist = (float) player.getDistance(x, y, z);
+			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
+			ModEventHandlerClient.shakeMultiplier = Math.max(((scale * 200D) - (double) dist) / (scale * 200D), 0D);
+			player.hurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 150F), 0);
+			player.maxHurtTime = Math.max((int) (((((scale * 200F) - dist)) / (scale * 200F)) * 100F), 0);
+			player.attackedAtYaw = 0F;
+		} else if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 15 * strength) {
+			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+		}
 	}
 
     public static void explodeArea(World world, double x, double y, double z, float radius, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
