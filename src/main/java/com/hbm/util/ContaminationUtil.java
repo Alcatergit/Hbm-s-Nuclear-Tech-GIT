@@ -529,6 +529,7 @@ public class ContaminationUtil {
 
 	public static void radiate(World world, double x, double y, double z, double range, float rad3d, float dig3d, float fire3d, float blast3d, double blastRange) {
 		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-range, y-range, z-range, x+range, y+range, z+range));
+		double weatherFactor = getWeatherAttenuationFactor(world, x, y, z);
 
 		for(Entity e : entities) {
 			if(isExplosionExempt(e)) continue;
@@ -555,12 +556,14 @@ public class ContaminationUtil {
 				res = 1;
 			if(isLiving && rad3d > 0){
 				float eRads = rad3d;
+				eRads *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
 				eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
 
 				contaminate((EntityLivingBase)e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 			}
 			if(isLiving && dig3d > 0){
 				float eDig = dig3d;
+				eDig *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
 				eDig /= (float)(dmgLen * dmgLen * dmgLen);
 
 				contaminate((EntityLivingBase)e, HazardType.DIGAMMA, ContaminationType.DIGAMMA, eDig);
@@ -568,6 +571,7 @@ public class ContaminationUtil {
 
 			if(fire3d > 0.025 && res < 2000) {
 				float fireDmg = fire3d;
+				fireDmg *= (float)Math.exp(-dmgLen * weatherFactor / 80.0D);
 				fireDmg /= (float)(dmgLen * dmgLen * res);
 				if(fireDmg > 0.025){
 					if(fireDmg > 0.1 && e instanceof EntityPlayer p) {
@@ -598,6 +602,21 @@ public class ContaminationUtil {
 				e.motionZ += vec.zCoord * 0.075D * blastDmg;
 			}
 		}
+	}
+
+	private static double getWeatherAttenuationFactor(World world, double x, double y, double z) {
+		BlockPos pos = new BlockPos(x, y, z);
+		float rainfall = world.getBiome(pos).getRainfall();
+		double factor = 0.6D + 0.9D * (double)rainfall;
+
+		if(world.isRaining()) {
+			if(world.isThundering())
+				factor *= 1.8D;
+			else
+				factor *= 1.4D;
+		}
+
+		return Math.max(0.3D, Math.min(factor, 3.0D));
 	}
 
 	private static boolean isExplosionExempt(Entity e) {
