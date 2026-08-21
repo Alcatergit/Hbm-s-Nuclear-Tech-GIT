@@ -37,6 +37,7 @@ import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
 import java.util.List;
+import java.util.Random;
 
 public class BombMulti extends BlockContainer implements IBomb {
 
@@ -50,9 +51,9 @@ public class BombMulti extends BlockContainer implements IBomb {
     public int poisonRadius = 0;
     public int gasCloud = 0;
 
-    // ========== Added: Field for storing information about players who have been vandalized ==========
+    // ========== Added: Field for storing information about the player who last broke the block ==========
     private EntityPlayer lastBreaker = null;
-    // ========== Added: Mark whether the destruction was caused by an explosion ==========
+    // ========== Added: Flag to mark if the destruction was caused by an explosion ==========
     private boolean isExploding = false;
 
     public BombMulti(Material materialIn, String s) {
@@ -87,13 +88,30 @@ public class BombMulti extends BlockContainer implements IBomb {
     }
 
     @Override
+    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+        // ========== Modified: Added drop control logic for detonation ==========
+        // If the block is destroyed by an explosion, drop nothing.
+        if (isExploding) {
+            return null;
+        }
+
+        // When NBT saving is enabled, drops are handled entirely by breakBlock.
+        if (GeneralConfig.enableBlockItemNBTSaving) {
+            return null; // Return null, drops are handled by breakBlock.
+        }
+        // ========== End of modification ==========
+
+        return Item.getItemFromBlock(ModBlocks.bomb_multi);
+    }
+
+    @Override
     public void neighborChanged(IBlockState state, World worldIn, BlockPos pos, Block blockIn, BlockPos fromPos) {
         TileEntityBombMulti entity = (TileEntityBombMulti) worldIn.getTileEntity(pos);
         if (worldIn.getRedstonePowerFromNeighbors(pos) > 0)
         {
             if(entity.isLoaded())
             {
-                // ========== Modification: Set a detonation flag, then clear the blocks ==========
+                // ========== Modified: Set detonation flag, then clear the block ==========
                 this.isExploding = true;
                 this.onPlayerDestroy(worldIn, pos, state);
                 igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ());
@@ -102,25 +120,25 @@ public class BombMulti extends BlockContainer implements IBomb {
         }
     }
 
-    // ========== Added: Override the removedByPlayer method to get the destroyed player ==========
+    // ========== Added: Override removedByPlayer to capture the player who broke the block ==========
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        // Recording and destroying player information
+        // Store the player who is breaking the block
         this.lastBreaker = player;
 
-        // Calling the parent class method to continue executing the disruptive logic
+        // Call the super method to continue with the breaking logic
         boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
 
-        // Clean up player information
+        // Clear the stored player information
         this.lastBreaker = null;
 
         return result;
     }
 
-    // ========== Modification: Using player information recorded by removedByPlayer ==========
+    // ========== Modified: Use player information captured by removedByPlayer ==========
     @Override
     public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-        // ========== If the destruction is caused by an explosion, the entire block will be cleared, and no items will be dropped. ==========
+        // ========== If destroyed by an explosion, clear the tile entity and drop nothing ==========
         if (isExploding) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity != null) {
@@ -131,34 +149,34 @@ public class BombMulti extends BlockContainer implements IBomb {
 
         TileEntity tileentity = worldIn.getTileEntity(pos);
 
-        // ========== New: Configuration File Controls NBT Saving ==========
+        // ========== New: NBT saving controlled by configuration file ==========
         if (!GeneralConfig.enableBlockItemNBTSaving) {
-            // Configure NBT saving is disabled; use the original logic.
+            // NBT saving is disabled, use original logic.
             InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
         } else {
             if (tileentity instanceof TileEntityBombMulti) {
                 TileEntityBombMulti bombMulti = (TileEntityBombMulti)tileentity;
 
-                // Create NBT tags to store block entity data
+                // Create NBT tag to store tile entity data
                 NBTTagCompound tileData = new NBTTagCompound();
                 bombMulti.writeToNBT(tileData);
 
-                // ========== Check for any items inside ==========
+                // ========== Check if there are any items inside ==========
                 boolean hasItems = false;
                 if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
                     NBTTagList itemsList = tileData.getCompoundTag("inventory").getTagList("Items", 10);
                     hasItems = itemsList.tagCount() > 0;
                 }
 
-                // ========== Player information recorded using removedByPlayer ==========
+                // ========== Use player information captured by removedByPlayer ==========
                 boolean isCreativeMode = (lastBreaker != null && lastBreaker.capabilities.isCreativeMode);
 
                 if (hasItems) {
-                    // ========== Internal Items Found: Drops a bomb containing NBT ==========
+                    // ========== Has items inside: Drop a nuke block with NBT data ==========
                     ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
                     NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-                    // ========== Simplify NBT data: Only keep BlockEntityTag->inventory->Items ==========
+                    // ========== Simplify NBT data: Only keep BlockEntityTag -> inventory -> Items ==========
                     NBTTagCompound blockEntityTag = new NBTTagCompound();
                     NBTTagCompound inventoryTag = new NBTTagCompound();
 
@@ -170,33 +188,33 @@ public class BombMulti extends BlockContainer implements IBomb {
 
                     blockEntityTag.setTag("inventory", inventoryTag);
 
-                    // Write the BlockEntityTag to the item NBT
+                    // Write the BlockEntityTag to the item's NBT
                     nbttagcompound.setTag("BlockEntityTag", blockEntityTag);
                     itemstack.setTagCompound(nbttagcompound);
 
-                    // Generate drops
+                    // Spawn the item drop
                     spawnAsEntity(worldIn, pos, itemstack);
 
-                    // Empty the contents
+                    // Clear the inventory contents
                     bombMulti.clearSlots();
                 } else if (!isCreativeMode) {
-                    // ========== Survival Mode Empty bomb: Drops a regular bomb ==========
+                    // ========== Survival mode, empty nuke: Drop a regular nuke block =========
                     spawnAsEntity(worldIn, pos, new ItemStack(Item.getItemFromBlock(this), 1));
                 }
-                // Creative Mode Empty Bomb: Nothing drops
+                // Creative mode, empty nuke: Drop nothing
             }
         }
-        // Call the parent class's breakBlock but don't let it handle the falling object.
+        // Call super.breakBlock but prevent it from handling drops
         super.breakBlock(worldIn, pos, state);
     }
-    // ========== Modification complete ==========
+    // ========== End of modification ==========
 
-    // ========== Modification: onBlockPlacedBy method - Support for data recovery from simplified NBT ==========
+    // ========== Modified: onBlockPlacedBy method - Support data recovery from simplified NBT ==========
     @Override
     public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
         worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 
-        // ========== Modification: Recovering from Simplified NBT Data ==========
+        // ========== Modified: Recover data from simplified NBT ==========
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
             TileEntity tileentity = worldIn.getTileEntity(pos);
             if (tileentity instanceof TileEntityBombMulti) {
@@ -205,13 +223,13 @@ public class BombMulti extends BlockContainer implements IBomb {
                 if (blockEntityTag.hasKey("inventory")) {
                     NBTTagCompound savedInventory = blockEntityTag.getCompoundTag("inventory");
 
-                    // Create complete TileEntity NBT data
+                    // Create complete tile entity NBT data
                     NBTTagCompound tileData = new NBTTagCompound();
                     tileData.setInteger("x", pos.getX());
                     tileData.setInteger("y", pos.getY());
                     tileData.setInteger("z", pos.getZ());
 
-                    // ========== Restore only Items data in inventory ==========
+                    // ========== Restore only the Items data in inventory ==========
                     NBTTagCompound newInventory = new NBTTagCompound();
                     if (savedInventory.hasKey("Items")) {
                         newInventory.setTag("Items", savedInventory.getTagList("Items", 10).copy());
@@ -219,19 +237,19 @@ public class BombMulti extends BlockContainer implements IBomb {
 
                     tileData.setTag("inventory", newInventory);
 
-                    // Loading data from NBT to block entities
+                    // Load data from NBT into the tile entity
                     ((TileEntityBombMulti) tileentity).readFromNBT(tileData);
 
-                    // The marker blocks need to be updated.
+                    // Mark the block for update
                     worldIn.notifyBlockUpdate(pos, state, state, 3);
 
-                    // Important: Mark block entities as dirty data to ensure data preservation.
+                    // Mark tile entity as dirty to ensure data is saved
                     tileentity.markDirty();
                 }
             }
         }
     }
-    // ========== Modification complete ==========
+    // ========== End of modification ==========
 
     public boolean igniteTestBomb(World world, int x, int y, int z)
     {
@@ -330,7 +348,7 @@ public class BombMulti extends BlockContainer implements IBomb {
         TileEntityBombMulti entity = (TileEntityBombMulti) world.getTileEntity(pos);
         if(entity.isLoaded())
         {
-            // ========== Modification: Set a detonation flag, then clear the blocks ==========
+            // ========== Modified: Set detonation flag, then clear the block ==========
             this.isExploding = true;
             this.onPlayerDestroy(world, pos, world.getBlockState(pos));
             igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ());
@@ -343,14 +361,14 @@ public class BombMulti extends BlockContainer implements IBomb {
     public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
         // Create a temporary TileEntityBombMulti instance to check the assembly status.
         TileEntityBombMulti tempEntity = new TileEntityBombMulti();
-        
+
         // Restore the item to a temporary entity from the item NBT.
         if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
             NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
             
             if (blockEntityTag.hasKey("inventory")) {
                 NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
-                
+
                 // Create complete TileEntity NBT data
                 NBTTagCompound tileData = new NBTTagCompound();
                 NBTTagCompound newInventory = new NBTTagCompound();
@@ -360,29 +378,29 @@ public class BombMulti extends BlockContainer implements IBomb {
                 }
                 
                 tileData.setTag("inventory", newInventory);
-                
-                // Loading data from NBT to a temporary entity
+
+                // Load data from NBT into the temporary entity
                 tempEntity.readFromNBT(tileData);
             }
         }
-        
-        // Check if assembly is complete.
+
+        // Check if assembly is complete
         if (tempEntity.isLoaded()) {
-            // Get the effect type and determine the color
+            // Get the effect types and determine the color
             int type2 = tempEntity.return2type();
             int type5 = tempEntity.return5type();
             
             String colorCode = "§2"; // Default dark green
 
-            // Determine the effect type based on priority.
+            // Determine the effect type based on priority
             if (type2 == 3 || type5 == 3) {
                 // Cluster bomb effect - yellow
                 colorCode = "§e";
             } else if (type2 == 4 || type5 == 4) {
-                // Flame effect - Crimson
+                // Fire effect - dark red
                 colorCode = "§4";
             } else if (type2 == 5 || type5 == 5) {
-                // Poison Effect - Green
+                // Poison effect - green
                 colorCode = "§a";
             } else if (type2 == 6 || type5 == 6) {
                 // Gas cloud effect - purple
@@ -391,14 +409,14 @@ public class BombMulti extends BlockContainer implements IBomb {
                 // Gunpowder effect - dark green
                 colorCode = "§2";
             } else if (type2 == 2 || type5 == 2) {
-                // TNT Effect - Red
+                // TNT effect - red
                 colorCode = "§c";
             }
-            
-            // Display prompt text
+
+            // Add tooltip text
             tooltip.add(colorCode + "[Is ready]§r");
         }
-        // Remove partially assembled and unassembled cases
+        // Skip cases where assembly is partial or not assembled
     }
 
     @Override
