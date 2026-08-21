@@ -2,11 +2,9 @@ package com.hbm.tileentity.machine;
 
 import api.hbm.tile.IHeatSource;
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
-import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.inventory.container.ContainerHeaterHeatex;
@@ -15,6 +13,7 @@ import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemForgeFluidIdentifier;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.packet.FluidTankPacket;
+import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.IGUIProvider;
 import com.hbm.tileentity.INBTPacketReceiver;
@@ -25,11 +24,9 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -79,23 +76,6 @@ public class TileEntityHeaterHeatex extends TileEntityMachineBase implements IHe
     public void update() {
 
         if (!world.isRemote) {
-
-            int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
-            if(feedSpace > 0 && tankTypes[0] != null) {
-                for(EnumFacing dir : EnumFacing.VALUES) {
-                    BlockPos neighborPos = pos.offset(dir);
-                    TileEntity te = world.getTileEntity(neighborPos);
-                    if(te instanceof IFluidPipeMk2) {
-                        FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-                        if(network != null && network.getType() == tankTypes[0]) {
-                            FluidStack pulled = network.drain(new FluidStack(tankTypes[0], feedSpace), true);
-                            if(pulled != null)
-                                tanks[0].fill(pulled, true);
-                            break;
-                        }
-                    }
-                }
-            }
 
             // first, update current tank settings
             setFluidType();
