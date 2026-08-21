@@ -71,7 +71,7 @@ public class SoundLoopBroadcaster extends SoundLoopMachine {
         // Ensure volume stays between 0 and 1
         return Math.max(0.0F, Math.min(1.0F, smoothRatio));
     }
-    // ===================
+	// ===================================================
 
     // Keep original function for potential future use
 /*    public float func(float f, float v) {
