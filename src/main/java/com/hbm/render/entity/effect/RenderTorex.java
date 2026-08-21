@@ -99,16 +99,16 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-		
+
 		bindTexture(cloudlet);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		ArrayList<Cloudlet> cloudlets = new ArrayList<>(cloud.cloudlets);
 		cloudlets.sort(cloudSorter);
-		
+
 		for(Cloudlet cloudlet : cloudlets) {
 			Vec3 vec = cloudlet.getInterpPos(partialTicks);
 			tessellateCloudlet(buf, vec.xCoord - cloud.posX, vec.yCoord - cloud.posY, vec.zCoord - cloud.posZ, cloudlet, partialTicks);
@@ -128,7 +128,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
 		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
