@@ -241,7 +241,7 @@ public class ExplosionLarge {
 			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
 					HBMSoundHandler.explosionLargeNear,
 					SoundCategory.PLAYERS,
-					(float) (dist < 2F * strength ? 10_000F : Math.cbrt(10_000F * ((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F))), 0.9F + rand.nextFloat() * 0.2F,
+					10_000F, 0.9F + rand.nextFloat() * 0.2F,
 					(float) x, (float) y, (float) z);
 			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
 			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
@@ -255,7 +255,7 @@ public class ExplosionLarge {
 			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
 					HBMSoundHandler.explosionLargeFar,
 					SoundCategory.PLAYERS,
-					(float) Math.cbrt(10_000F * Math.max(((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F,
+					10_000F, 0.9F + rand.nextFloat() * 0.2F,
 					(float) x, (float) y, (float) z);
 			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
 		}
