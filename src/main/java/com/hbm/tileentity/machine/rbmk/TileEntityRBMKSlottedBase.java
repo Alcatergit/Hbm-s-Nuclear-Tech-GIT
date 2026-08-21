@@ -78,7 +78,7 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		if(!diag) {
+		if(nbt.hasKey("inventory")) {
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		}
 	}
@@ -86,7 +86,6 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
 		if(!diag) {
 			nbt.setTag("inventory", inventory.serializeNBT());
 		}
