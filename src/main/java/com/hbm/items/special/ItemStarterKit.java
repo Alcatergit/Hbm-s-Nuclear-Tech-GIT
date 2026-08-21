@@ -39,13 +39,12 @@ public class ItemStarterKit extends Item {
 	}
 	
 	private void giveHaz(World world, EntityPlayer p, int tier) {
-		float res = 0.0F;
+		float currentResistance = 0.0F;
 		for(ItemStack stack : p.getArmorInventoryList()) {
 			if(!stack.isEmpty()) {
-				res += getResistance(stack);
+				currentResistance += getResistance(stack);
 			}
 		}
-		float currentResistance = res;
 		double kitResistance = switch (tier) {
 			case 0 -> getResistance(new ItemStack(ModItems.hazmat_helmet)) +
 					getResistance(new ItemStack(ModItems.hazmat_plate)) +
