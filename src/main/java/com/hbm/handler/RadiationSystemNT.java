@@ -341,8 +341,8 @@ public class RadiationSystemNT {
 
 								animal.setGrowingAge(animal.getEntityData().getInteger("lockedAge"));
 							} else {
+								animal.resetInLove();
 								animal.setGrowingAge(2147483647);
-								animal.getEntityData().setInteger("InLove", 0);
 							}
 						} else if(e instanceof AbstractIllager illager && (eRad > 500 || illager.getEntityData().getBoolean("isPermanent"))) {
 							if(!illager.getEntityData().hasKey("isPermanent")) {
