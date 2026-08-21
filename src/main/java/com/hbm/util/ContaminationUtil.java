@@ -585,7 +585,7 @@ public class ContaminationUtil {
 
 			if(blast3d > 0 && res < 10000 && len < blastRange) {
 				float blastDmg = blast3d / (float)(dmgLen * dmgLen * res);
-				if(blastDmg > 0.025 && blastRange - shockSpeed * 2 < len){
+				if(blastDmg > 0.025){
 					if(rad3d > 0) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
 					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
 				}
