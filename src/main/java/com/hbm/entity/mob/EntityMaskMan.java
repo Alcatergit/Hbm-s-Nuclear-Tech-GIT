@@ -1,7 +1,5 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
 import com.hbm.entity.mob.ai.EntityAIMaskmanCasualApproach;
 import com.hbm.entity.mob.ai.EntityAIMaskmanLasergun;
 import com.hbm.entity.mob.ai.EntityAIMaskmanMinigun;
@@ -10,6 +8,7 @@ import com.hbm.items.ModItems;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.main.AdvancementManager;
 
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -101,13 +100,12 @@ public class EntityMaskMan extends EntityMob implements IRadiationImmune {
 	
 	@Override
 	public void onDeath(DamageSource cause) {
-		super.onDeath(cause);
-		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(50, 50, 50));
-			
-		for(EntityPlayer player : players) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bossMaskman);
-            player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_maskman));
+		EntityLivingBase attacker = this.getAttackingEntity();
+		if(attacker instanceof EntityPlayerMP) {
+			AdvancementManager.grantAchievement((EntityPlayerMP)attacker, AdvancementManager.bossMaskman);
+			((EntityPlayerMP)attacker).inventory.addItemStackToInventory(new ItemStack(ModItems.coin_maskman));
 		}
+		super.onDeath(cause);
 	}
 	
 	//ool in the shed
