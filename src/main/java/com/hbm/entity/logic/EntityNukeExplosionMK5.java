@@ -181,7 +181,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
 	}
 
-	public void dealDamage(World world, double x, double y, double z, float radius) {
+	public void dealDamage(World world, double x, double y, double z, double radius) {
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
         for(Entity e : entities) {
