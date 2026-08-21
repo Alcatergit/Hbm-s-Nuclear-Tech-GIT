@@ -76,7 +76,6 @@ import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
-import sun.misc.Unsafe;
 
 @Spaghetti("this whole class")
 public class Library {
@@ -170,9 +169,13 @@ public class Library {
             Field f = ReflectionHelper.findField(c, variable, variableObf);
             if(isHidden) f.setAccessible(true);
 
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            } catch(Throwable ignored) {
+                // AT may have already removed final, continue anyway
+            }
 
             f.set(null, newValue);
         } catch(Throwable ignored){
@@ -1203,84 +1206,4 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 		}
 		return Math.max(y, maxBedrockTop - minOffset);
 	}
-
-    /**
-     * Use Unsafe to set final fields, bypassing the restrictions in Java 17+
-     */
-    private static Unsafe getUnsafe() {
-        try {
-            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
-            theUnsafe.setAccessible(true);
-            return (Unsafe) theUnsafe.get(null);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    /**
-     * Safely set the value of a final field (including static final)
-     */
-    public static void safeSetFinalField(Class<?> clazz, Object instance, Object newValue, String... possibleFieldNames) {
-        Unsafe unsafe = getUnsafe();
-
-        for (String fieldName : possibleFieldNames) {
-            try {
-                Field field = null;
-                Class<?> currentClass = clazz;
-
-                // Try to find the field in the current class and its superclasses
-                while (currentClass != null && field == null) {
-                    try {
-                        field = currentClass.getDeclaredField(fieldName);
-                    } catch (NoSuchFieldException e) {
-                        currentClass = currentClass.getSuperclass();
-                    }
-                }
-
-                if (field != null) {
-                    field.setAccessible(true);
-
-                    // For static fields, instance is null
-                    long offset = instance == null ?
-                            unsafe.staticFieldOffset(field) :
-                            unsafe.objectFieldOffset(field);
-
-                    Object fieldBase = instance == null ?
-                            unsafe.staticFieldBase(field) :
-                            instance;
-
-                    // Set the value based on the field type
-                    Class<?> fieldType = field.getType();
-                    if (fieldType == int.class) {
-                        unsafe.putInt(fieldBase, offset, (int) newValue);
-                    } else if (fieldType == long.class) {
-                        unsafe.putLong(fieldBase, offset, (long) newValue);
-                    } else if (fieldType == float.class) {
-                        unsafe.putFloat(fieldBase, offset, (float) newValue);
-                    } else if (fieldType == double.class) {
-                        unsafe.putDouble(fieldBase, offset, (double) newValue);
-                    } else if (fieldType == boolean.class) {
-                        unsafe.putBoolean(fieldBase, offset, (boolean) newValue);
-                    } else if (fieldType == char.class) {
-                        unsafe.putChar(fieldBase, offset, (char) newValue);
-                    } else if (fieldType == short.class) {
-                        unsafe.putShort(fieldBase, offset, (short) newValue);
-                    } else if (fieldType == byte.class) {
-                        unsafe.putByte(fieldBase, offset, (byte) newValue);
-                    } else {
-                        // For object types
-                        unsafe.putObject(fieldBase, offset, newValue);
-                    }
-
-                    MainRegistry.logger.info("[NTM] Successfully set field: " + fieldName + " in " + clazz.getName());
-                    return;
-                }
-            } catch (Exception e) {
-                // Continue trying the next field name
-                MainRegistry.logger.debug("[NTM] Failed to set field " + fieldName + " in " + clazz.getName() + ": " + e.getMessage());
-            }
-        }
-
-        MainRegistry.logger.error("[NTM] Failed to set any field from: " + Arrays.toString(possibleFieldNames) + " in " + clazz.getName());
-    }
 }
