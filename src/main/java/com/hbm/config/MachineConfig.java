@@ -105,8 +105,8 @@ public class MachineConfig {
 		
 		crateByteSize = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(27, "crateMaxByteSize"), "Controls how big the maximum storage size of mined crates can be. Warning going beond 32kb can cause freezing/crashes. - <kb> (int)", 8);
 		rbmkJumpTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(28, "rbmkJumpTemp"), "Controls at which rbmk column temperature the lid jumping begins. Can not be < 20°C. Set to a value above the rbmkMeltdownTemp to turn off. Default is 1250°C - <temp> (int)", 1250);
-		rbmkMeltdownTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(29, "rbmkMeltdownTemp"), "Controls the temperature at which RBMK columns begin to melt. Default is 1500°C - <temp> (int)", 1500);
-		rbmkMeltdownDamage = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(30, "rbmkMeltdownDamage"), "Controls the damage threshold at which RBMK fuel rods melt down. Default is 1200 - <damage> (int)", 1200);
+		rbmkMeltdownTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(29, "rbmkMeltdownTemp"), "Controls the temperature above which RBMK columns begin to accumulate damage. Default is 1500°C - <temp> (int)", 1500);
+		rbmkMeltdownDamage = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(30, "rbmkMeltdownDamage"), "Controls the maximum damage RBMK columns can accumulate and the threshold at which they melt down. Default is 1200 - <damage> (int)", 1200);
 
 		chemplantKeepOilProcessing = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(31, "chemplantKeepOilProcessing"), "If false then the chemplant recipes processing Heavyoil, Industrial Oil, Naphtha, Light Oil will be removed. Otherwise not", false);
 	}
