@@ -1,20 +1,18 @@
 package com.hbm.render.entity.layers;
 
+import com.hbm.main.ResourceManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import com.hbm.lib.RefStrings;
 import com.hbm.render.entity.RenderTaintedCreeper;
 import com.hbm.entity.mob.EntityTaintedCreeper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 @SideOnly(Side.CLIENT)
 public class LayerTaintedCreeperCharge implements LayerRenderer<EntityTaintedCreeper>
 {
-    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper_armor_taint.png");
     private final RenderTaintedCreeper creeperRenderer;
     private final ModelCreeper creeperModel = new ModelCreeper(2.0F);
 
@@ -29,7 +27,7 @@ public class LayerTaintedCreeperCharge implements LayerRenderer<EntityTaintedCre
         {
             boolean flag = entitylivingbaseIn.isInvisible();
             GlStateManager.depthMask(!flag);
-            this.creeperRenderer.bindTexture(LIGHTNING_TEXTURE);
+            this.creeperRenderer.bindTexture(ResourceManager.tainted_creeper_charge);
             GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();
             float f = (float)entitylivingbaseIn.ticksExisted + partialTicks;
