@@ -158,6 +158,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 								e instanceof EntityGrenadeNuclear ||
 								e instanceof EntityExplosiveBeam ||
 								e instanceof EntityBulletBase;
+				boolean isOcelot = e instanceof EntityOcelot;
+				boolean isPlayerImmune = e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
 
 				vec = vec.normalize();
 				double dmgLen = Math.max(len, radius * 0.05D);
@@ -193,7 +195,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				int thermalDuration = this.radius * 3;
 				double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
-				if ((!isExplosionExempt && !(e instanceof EntityOcelot) && !(e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))) && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
+				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
 					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (float) (dmgLen * dmgLen * res));
 					if (fireDamage > 0.025) {
 						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
@@ -215,7 +217,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				double shockSpeed = 2D * this.radius / (double)blastDuration;
 				double currentBlastRadius = this.ticksExisted * Math.max(2D, shockSpeed);
 
-				if ((!isExplosionExempt && !(e instanceof EntityOcelot) && !(e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots)))) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
+				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
 					float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.5F) / (float)(dmgLen * dmgLen * dmgLen * res);
 					if(blastDamage > 0.025){
 						if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
