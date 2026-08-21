@@ -204,8 +204,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			int thermalDuration = this.radius * 3;
 			double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
-			if (this.ticksExisted <= thermalDuration && len <= currentThermalRadius && res < 2) {
-				float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
+			if (this.ticksExisted <= thermalDuration && res < 500 && len <= currentThermalRadius) {
+				float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (float) (dmgLen * dmgLen * res));
 				if (fireDamage > 0.025) {
 					if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
 						if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
@@ -223,11 +223,11 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			}
 
             int blastDuration = (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0));
-            double shockSpeed = Math.max(2D, 2D * this.radius / (double)blastDuration);
+			double shockSpeed = Math.max(2D, 2D * this.radius / (double)blastDuration);
             double currentBlastRadius = this.ticksExisted * shockSpeed;
 
 			if(this.ticksExisted <= (2D * this.radius / (double)blastDuration < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
-				float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
+				float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * dmgLen * res);
 				if(blastDamage > 0.025){
 					if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
 					else e.attackEntityFrom(ModDamageSource.blast, blastDamage);
