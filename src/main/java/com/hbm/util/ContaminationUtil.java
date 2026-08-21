@@ -8,7 +8,6 @@ import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
 import com.hbm.entity.mob.EntityQuackos;
-import com.hbm.entity.mob.botprime.EntityBurrowingNT;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
 import com.hbm.entity.projectile.EntityMiniMIRV;
