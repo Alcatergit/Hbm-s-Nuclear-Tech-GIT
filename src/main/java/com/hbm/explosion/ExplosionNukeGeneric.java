@@ -47,6 +47,10 @@ import net.minecraftforge.energy.IEnergyStorage;
 
 public class ExplosionNukeGeneric {
 
+	public static final String SOLINIUM_CONFIG_HEADER =
+			"# Format: modid:blockName|modid:blockName\n" +
+					"# Left blocks are transformed to right, one per line\n";
+
 	private final static Random random = new Random();
 
 	private static boolean isOreDictMatch(Block block, String oreDictName) {
@@ -536,10 +540,6 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 		}
 	}
-	
-	public static final String SOLINIUM_CONFIG_HEADER =
-			"# Format: modid:blockName|modid:blockName\n" + 
-			"# Left blocks are transformed to right, one per line\n";
 
 	public static void loadSoliniumFromFile(){
 		File config = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/solinium.cfg");
