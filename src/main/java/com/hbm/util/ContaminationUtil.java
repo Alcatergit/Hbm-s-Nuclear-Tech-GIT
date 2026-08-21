@@ -422,7 +422,6 @@ public class ContaminationUtil {
 				e instanceof EntityItemFrame ||
 				e instanceof EntityIronGolem ||
 				e instanceof EntityWither ||
-				e instanceof EntityBurrowingNT ||
 				e instanceof IRadiationImmune || checkConfigEntityImmunity(e);
 	}
 
