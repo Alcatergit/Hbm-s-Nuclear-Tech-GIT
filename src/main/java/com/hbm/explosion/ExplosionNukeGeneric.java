@@ -35,16 +35,28 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class ExplosionNukeGeneric {
 
 	private final static Random random = new Random();
+
+	private static boolean isOreDictMatch(Block block, String oreDictName) {
+		for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+			if (!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(block)) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
 		if(!CompatibilityConfig.isWarDim(world)){
@@ -249,7 +261,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || isOreDictMatch(b, "oreCoal")) {
 				rand = random.nextInt(10);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
@@ -311,7 +323,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (b == ModBlocks.ore_uranium) {
+			else if (b == ModBlocks.ore_uranium || isOreDictMatch(b, "oreUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
@@ -320,7 +332,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if (b == ModBlocks.ore_nether_uranium) {
+			else if (b == ModBlocks.ore_nether_uranium || isOreDictMatch(b, "oreUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
@@ -329,7 +341,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 			
-			else if (b == ModBlocks.ore_gneiss_uranium) {
+			else if (b == ModBlocks.ore_gneiss_uranium || isOreDictMatch(b, "oreUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
@@ -438,7 +450,7 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || isOreDictMatch(b, "oreCoal")) {
 				rand = random.nextInt(30);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
