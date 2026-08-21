@@ -7,6 +7,8 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class RBMKDials {
+	public static int clientColumnHeight = 3;
+
 	public static final String KEY_PASSIVE_COOLING = "dialPassiveCooling";
 	public static final String KEY_COLUMN_HEAT_FLOW = "dialColumnHeatFlow";
 	public static final String KEY_FUEL_DIFFUSION_MOD = "dialDiffusionMod";
@@ -109,6 +111,8 @@ public class RBMKDials {
 	 * @return [0;250]
 	 */
 	public static int getColumnHeight(World world) {
+		if(world.isRemote)
+			return clientColumnHeight;
 		return MathHelper.clamp(shittyWorkaroundParseInt(world.getGameRules().getString(KEY_COLUMN_HEIGHT), 4), 1, 250) - 1;
 	}
 	
