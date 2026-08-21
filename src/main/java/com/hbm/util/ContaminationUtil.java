@@ -381,6 +381,9 @@ public class ContaminationUtil {
 		float totalResistanceValue = 0.0F;
 		if(!(e instanceof EntityPlayer)){
 			ResourceLocation entity_path = EntityList.getKey(e);
+			if(entity_path == null) {
+				return totalResistanceValue;
+			}
 			Object resistanceMod = CompatibilityConfig.mobModRadresistance.get(entity_path.getNamespace());
 			Object resistanceMob = CompatibilityConfig.mobRadresistance.get(entity_path.toString());
 			if(resistanceMod != null){
