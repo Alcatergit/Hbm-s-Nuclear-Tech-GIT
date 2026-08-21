@@ -89,7 +89,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
 		List<Entity> list = getEntitiesInRadius(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
-		if (fallout && explosion != null && this.ticksExisted < Math.ceil(Math.log(radius + 1) * 3) && strength >= 75) {
+		if (fallout && explosion != null && this.ticksExisted < (int)Math.ceil(Math.log(radius + 1) * 3) && strength >= 75) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
 			radiate(livingList, (2_500_000F * radius * 0.05F) / (this.ticksExisted * 5 + 1));
@@ -155,7 +155,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					this.world.spawnEntity(falloutRain);
 				}
 				fallingStarted = true;
-			} else if (this.ticksExisted * shockSpeed > 160){ //wait for shockwave to complete
+			} else if ((int)(radius * 3.0) > 160 ? this.ticksExisted > (int)(radius * 3.0) : this.ticksExisted * shockSpeed > 160){ //wait for fire damage or shockwave to complete
 				this.setDead();
 			}
 		}
@@ -184,6 +184,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 	public void dealDamage(World world, double x, double y, double z, double radius) {
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
+        int thermalDuration = (int)(radius * 3.0);
+
         for(Entity e : entities) {
             if(isExplosionExempt(e)) continue;
 
@@ -207,27 +209,28 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
             if(res < 1)
                 res = 1;
 
-            if(this.ticksExisted < (int)(radius * 3.0) && res < 2) {
-                float fireDamage = (float)((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (float)(dmgLen * dmgLen * dmgLen));
-                if(fireDamage > 0.025){
-                    if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
-
-                        if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-                            p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
+            if (this.ticksExisted <= thermalDuration && res < 2) {
+                double currentFireRadius = radius * (1.0 - (double) this.ticksExisted / thermalDuration);
+                if (len <= currentFireRadius) {
+                    float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
+                    if (fireDamage > 0.025) {
+                        if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+                            if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                                p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
+                            }
+                            if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                                p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
+                            }
                         }
-
-                        if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-                            p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
+                        if (!e.isImmuneToFire()) {
+                            e.setFire(5);
+                            e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
                         }
-                    }
-                    if (!e.isImmuneToFire()) {
-                        e.setFire(5);
-                        e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
                     }
                 }
             }
 
-            if(res < 10000 && len < this.ticksExisted * shockSpeed) {
+            if(this.ticksExisted * shockSpeed <= 160 && res < 10000 && len < this.ticksExisted * shockSpeed) {
                 float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
                 if(blastDamage > 0.025){
                     if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
