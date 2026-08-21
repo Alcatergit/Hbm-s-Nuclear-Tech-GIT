@@ -510,10 +510,11 @@ public class RadiationSystemNT {
 							boolean isSkeletonHorse = false;
 							boolean isTrap = false;
 							if(!horsie.isDead) {
+								double r = world.rand.nextDouble();
 								DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
 								double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
-								isSkeletonHorse = world.rand.nextDouble() < f * 0.04D;
-								isTrap = world.rand.nextDouble() < f * 0.02D;
+								isSkeletonHorse = r < f * 0.04D;
+								isTrap = r < f * 0.02D;
 							}
 
 							if(isSkeletonHorse) {
