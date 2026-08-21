@@ -120,10 +120,10 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if(!explosion.isAusf3Complete) {
 			explosion.collectTip(BombConfig.mk5);
 
-			//Excecuting destruction
+		//Excecuting destruction
 		} else if(!explosion.perChunk.isEmpty()) {
 			explosion.processChunk(BombConfig.mk5);
-
+		
 		} else {
 			if(!fallingStarted) {
 				if (fallout) {
