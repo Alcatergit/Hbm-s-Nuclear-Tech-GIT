@@ -169,6 +169,7 @@ public class ExplosionNukeGeneric {
 				}
 				return protection;
 			}else{//otherwise, kill the block!
+				world.removeTileEntity(pos);
 				world.setBlockToAir(pos);
 			}
 		}
