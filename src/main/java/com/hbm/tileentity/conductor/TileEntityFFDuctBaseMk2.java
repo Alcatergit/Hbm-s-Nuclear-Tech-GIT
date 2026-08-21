@@ -18,6 +18,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -31,7 +32,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2, IFluidHandler {
+public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2, IFluidHandler, ITickable {
 
 	public EnumFacing[] connections = new EnumFacing[6];
 	protected Fluid type;
@@ -50,9 +51,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			world.neighborChanged(pos, getBlockType(), pos);
 			IBlockState state = world.getBlockState(pos);
 			world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
-			if(oldType != null && !world.isRemote) {
+			if(!world.isRemote) {
 				removeFromNetwork();
 				joinOrMakeNetwork();
+				tileentityCache = new TileEntity[6];
+				rebuildCache();
 			}
 			if(world instanceof WorldServer) {
 				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(MathHelper.floor(pos.getX()) >> 4, MathHelper.floor(pos.getZ()) >> 4);
@@ -65,6 +68,13 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			}
 			if(oldType != null && !world.isRemote)
 				PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		}
+	}
+
+	@Override
+	public void update() {
+		if(!world.isRemote && network != null) {
+			network.update(world);
 		}
 	}
 
@@ -131,10 +141,12 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	@Override
 	public void onLoad() {
 		if(!world.isRemote){
-			world.getMinecraftServer().addScheduledTask(() -> {
-				joinOrMakeNetwork();
-				onNeighborChange();
-			});
+			if(type != null) {
+				world.getMinecraftServer().addScheduledTask(() -> {
+					joinOrMakeNetwork();
+					onNeighborChange();
+				});
+			}
 		} else {
 			joinOrMakeNetwork();
 			onNeighborChange();
@@ -200,6 +212,13 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		if(te instanceof IFluidPipeMk2 pipe) {
 			FFPipeNetworkMk2 net = pipe.getNetwork();
 			if(net != null) {
+				for(EnumFacing e : EnumFacing.VALUES) {
+					TileEntity neighbor = world.getTileEntity(pos.offset(e));
+					if(neighbor != null && !(neighbor instanceof IFluidPipeMk2)) {
+						net.removeProvider(neighbor);
+						net.removeReceiver(neighbor);
+					}
+				}
 				net.removePipe(pos);
 				pipe.setNetwork(null);
 				if(!net.getPipePositions().isEmpty()) {
@@ -221,7 +240,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
                 if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
 					otherNetworks.add(pipe.getNetwork());
 				}
-			} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+			} else if(te instanceof TileEntityBarrel barrel) {
 				if(barrel.network != null && barrel.network.getType() == this.getType() && !otherNetworks.contains(barrel.network)) {
 					otherNetworks.add(barrel.network);
 				}
@@ -244,10 +263,11 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			TileEntity te = world.getTileEntity(pos.offset(e));
 			if(tileentityCache[e.getIndex()] == null) {
 				if(te != null) {
-					if(network != null)
+					if(network != null) {
 						network.tryAdd(te);
+					}
 					tileentityCache[e.getIndex()] = te;
-					if(te instanceof TileEntityBarrel barrel && barrel.mode == 1 && barrel.network != null && network != null
+					if(te instanceof TileEntityBarrel barrel && barrel.network != null && network != null
 							&& barrel.network != network && barrel.network.getType() == network.getType()) {
 						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
 						barrel.network = network;
@@ -264,7 +284,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 						network.tryAdd(te);
 					}
 					tileentityCache[e.getIndex()] = te;
-					if(te instanceof TileEntityBarrel barrel && barrel.mode == 1 && barrel.network != null && network != null
+					if(te instanceof TileEntityBarrel barrel && barrel.network != null && network != null
 							&& barrel.network != network && barrel.network.getType() == network.getType()) {
 						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
 						barrel.network = network;
