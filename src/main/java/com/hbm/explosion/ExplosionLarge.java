@@ -165,7 +165,7 @@ public class ExplosionLarge {
 						rubble.motionZ = vec4.z * vel;
 						
 						world.spawnEntity(rubble);
-					
+						world.removeTileEntity(pos);
 						world.setBlockToAir(pos);
 						break;
 					}
