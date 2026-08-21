@@ -8,6 +8,7 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.packet.PipeUpdatePacket;
+import com.hbm.tileentity.machine.TileEntityBarrel;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -43,12 +44,16 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 
 	public void setType(Fluid f) {
 		if(f != type) {
+			Fluid oldType = type;
 			type = f;
 			world.notifyNeighborsOfStateChange(pos, getBlockType(), true);
 			world.neighborChanged(pos, getBlockType(), pos);
 			IBlockState state = world.getBlockState(pos);
 			world.markAndNotifyBlock(pos, world.getChunk(pos), state, state, 2);
-			rebuildNetworks(world, pos);
+			if(oldType != null && !world.isRemote) {
+				removeFromNetwork();
+				joinOrMakeNetwork();
+			}
 			if(world instanceof WorldServer) {
 				PlayerChunkMapEntry entry = ((WorldServer) world).getPlayerChunkMap().getEntry(MathHelper.floor(pos.getX()) >> 4, MathHelper.floor(pos.getZ()) >> 4);
 
@@ -58,8 +63,20 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 					}
 				}
 			}
-			if(!world.isRemote)
+			if(oldType != null && !world.isRemote)
 				PacketDispatcher.wrapper.sendToAllTracking(new PipeUpdatePacket(pos, 1), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
+		}
+	}
+
+	private void removeFromNetwork() {
+		if(network == null) return;
+		FFPipeNetworkMk2 oldNet = network;
+		oldNet.removePipe(pos);
+		network = null;
+		if(!oldNet.getPipePositions().isEmpty()) {
+			oldNet.splitIfDisconnected();
+		} else {
+			oldNet.destroy();
 		}
 	}
 
@@ -180,24 +197,18 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		if(te instanceof TileEntityFFDuctBaseMk2 duct) {
             duct.isBeingDestroyed = true;
 		}
-		rebuildNetworks(world, pos);
-	}
-
-	public static void rebuildNetworks(World world, BlockPos pos) {
-		TileEntity center = world.getTileEntity(pos);
-		for(EnumFacing e : EnumFacing.VALUES) {
-			TileEntity te = world.getTileEntity(pos.offset(e));
-			if(te instanceof IFluidPipeMk2 pipe) {
-                if(pipe.getNetwork() != null)
-					pipe.getNetwork().destroy();
+		if(te instanceof IFluidPipeMk2 pipe) {
+			FFPipeNetworkMk2 net = pipe.getNetwork();
+			if(net != null) {
+				net.removePipe(pos);
+				pipe.setNetwork(null);
+				if(!net.getPipePositions().isEmpty()) {
+					net.splitIfDisconnected();
+				} else {
+					net.destroy();
+				}
 			}
 		}
-		if(center instanceof IFluidPipeMk2 duct && duct.getNetwork() != null)
-			duct.getNetwork().destroy();
-
-		for(EnumFacing e : EnumFacing.VALUES)
-			FFPipeNetworkMk2.buildNetwork(world.getTileEntity(pos.offset(e)));
-		FFPipeNetworkMk2.buildNetwork(center);
 	}
 
 	@Override
@@ -209,6 +220,10 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 			if(te instanceof IFluidPipeMk2 pipe) {
                 if(pipe.getNetwork() != null && pipe.getNetwork().getType() == this.getType() && !otherNetworks.contains(pipe.getNetwork())) {
 					otherNetworks.add(pipe.getNetwork());
+				}
+			} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+				if(barrel.network != null && barrel.network.getType() == this.getType() && !otherNetworks.contains(barrel.network)) {
+					otherNetworks.add(barrel.network);
 				}
 			}
 		}
@@ -224,8 +239,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		}
 	}
 
-	protected boolean rebuildCache() {
-		boolean changed = false;
+	protected void rebuildCache() {
 		for(EnumFacing e : EnumFacing.VALUES) {
 			TileEntity te = world.getTileEntity(pos.offset(e));
 			if(tileentityCache[e.getIndex()] == null) {
@@ -233,27 +247,31 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 					if(network != null)
 						network.tryAdd(te);
 					tileentityCache[e.getIndex()] = te;
-					changed = true;
+					if(te instanceof TileEntityBarrel barrel && barrel.mode == 1 && barrel.network != null && network != null
+							&& barrel.network != network && barrel.network.getType() == network.getType()) {
+						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
+						barrel.network = network;
+					}
 				}
 			} else {
 				if(te == null) {
 					if(network != null)
 						network.checkForRemoval(tileentityCache[e.getIndex()]);
 					tileentityCache[e.getIndex()] = null;
-					changed = true;
 				} else if(te != tileentityCache[e.getIndex()]) {
 					if(network != null) {
 						network.checkForRemoval(tileentityCache[e.getIndex()]);
 						network.tryAdd(te);
 					}
 					tileentityCache[e.getIndex()] = te;
-					changed = true;
+					if(te instanceof TileEntityBarrel barrel && barrel.mode == 1 && barrel.network != null && network != null
+							&& barrel.network != network && barrel.network.getType() == network.getType()) {
+						network = FFPipeNetworkMk2.mergeNetworks(network, barrel.network);
+						barrel.network = network;
+					}
 				}
 			}
 		}
-        //System.out.println(this + " " + this.getPos() + " " + changed);
-        //new Exception().printStackTrace();
-        return changed;
 	}
 
 	public void updateConnections() {
