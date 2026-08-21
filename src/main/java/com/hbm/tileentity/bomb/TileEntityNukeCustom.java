@@ -429,6 +429,7 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 			this.entry = entry;
 		}
 	}
+	
 	@Override
 	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
 		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
