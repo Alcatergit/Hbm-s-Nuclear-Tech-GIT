@@ -59,8 +59,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.world.World;
 
-import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
-
 public class ContaminationUtil {
 
 	public static final String NTM_NEUTRON_NBT_KEY = "ntmNeutron";
