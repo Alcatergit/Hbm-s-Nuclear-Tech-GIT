@@ -240,7 +240,7 @@ public class TileEntityMachineTurbofan extends TileEntityLoadedBase implements I
 				
 				for(Entity e : listExhaust) {
 					
-					if(this.afterburner > 0) {
+					if(this.afterburner > 0 && !e.isImmuneToFire) {
 						e.setFire(5);
 						e.attackEntityFrom(DamageSource.IN_FIRE, 3F*afterburner);
 					}
