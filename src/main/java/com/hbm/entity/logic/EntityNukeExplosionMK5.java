@@ -337,7 +337,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if(BombConfig.disableNuclear) {
 			mk5.fallout = false;
 		}else {
-			if(r > 60){
+			if(r > 60 && mk5.fallout){
 				for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class,
 						new AxisAlignedBB(x, y, z, x, y, z)
 								.grow(r * 2, r * 2, r * 2))) {
