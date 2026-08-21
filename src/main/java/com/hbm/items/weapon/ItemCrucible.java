@@ -74,9 +74,12 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	
 	@Override
 	public boolean onEntitySwing(EntityLivingBase entityLiving, ItemStack stack) {
+		// First, the parent class's onEntitySwing method is called to ensure that the original animation system is triggered.
+		// This is crucial for third-person animation.
+		boolean result = super.onEntitySwing(entityLiving, stack);
+		
 		if(!(entityLiving instanceof EntityPlayerMP)){
-			super.onEntitySwing(entityLiving, stack);
-			return true;
+			return result;
 		}
 		if(!doSpecialClick){
 			EnumHand hand = stack == entityLiving.getHeldItemMainhand() ? EnumHand.MAIN_HAND : EnumHand.OFF_HAND;
