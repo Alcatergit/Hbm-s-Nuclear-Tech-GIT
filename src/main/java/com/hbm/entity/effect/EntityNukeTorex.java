@@ -96,10 +96,10 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             this.isReloaded = this.dataManager.get(IS_RELOADED);
             if (!hasInitialized) {
                 this.scale = this.dataManager.get(SCALE);
-                double timeExistedTemp = this.dataManager.get(TIME_EXISTED);
+                double timeExistedSavedTemp = this.dataManager.get(TIME_EXISTED_SAVED);
                 this.maxAge = (int) (45 * 20 * this.scale);
-                this.coreHeight = (this.coreHeight * this.scale) + (timeExistedTemp * 0.15D);
-                this.torusWidth = (this.torusWidth * this.scale) + (timeExistedTemp * 0.05D);
+                this.coreHeight = (this.coreHeight * this.scale) + (timeExistedSavedTemp * 0.15D);
+                this.torusWidth = (this.torusWidth * this.scale) + (timeExistedSavedTemp * 0.05D);
                 this.rollerSize = this.torusWidth * 0.35D;
                 this.convectionHeight = coreHeight + rollerSize;
                 this.hasInitialized = true;
@@ -107,11 +107,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         }
 		if (key == TIME_EXISTED && this.world.isRemote) {
 			this.timeExisted = this.dataManager.get(TIME_EXISTED);
-            this.timeExistedSaved = this.dataManager.get(TIME_EXISTED);
-		}
-        if (key == TIME_EXISTED_SAVED && this.world.isRemote) {
             this.timeExistedSaved = this.dataManager.get(TIME_EXISTED_SAVED);
-        }
+		}
 	}
 
 	@Override
