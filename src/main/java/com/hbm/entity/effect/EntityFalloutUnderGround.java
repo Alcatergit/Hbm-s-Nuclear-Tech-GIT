@@ -274,6 +274,12 @@ public class EntityFalloutUnderGround extends EntityChunky {
 					world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(b));
 				return;
 
+			} else if(bblock instanceof BlockSponge) {
+				if (b.getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState());
+				}
+				return;
+
 			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
 				if(l < s0)
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
