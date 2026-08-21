@@ -34,9 +34,13 @@ public class HbmConfigGui extends GuiConfig {
 	private static final List<Configuration> configs = new ArrayList<>();
 	static GuiConfig instance;
 
+	static String getTitle() {
+		return "§e§l" + RefStrings.NAME + "§r§r";
+	}
+
 	public HbmConfigGui(GuiScreen parent) {
 		super(parent, getConfigElements(), RefStrings.MODID, true, false,
-				"§e" + RefStrings.NAME + "§r", null);
+				getTitle(), null);
 		instance = this;
 	}
 
