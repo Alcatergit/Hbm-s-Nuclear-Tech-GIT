@@ -18,8 +18,6 @@ import com.hbm.items.machine.*;
 import com.hbm.render.tileentity.RenderWatzMultiblock;
 import net.minecraft.block.*;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemLeaves;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -105,6 +103,7 @@ import com.hbm.render.misc.SoyuzPronter;
 import com.hbm.render.modelrenderer.EgonBackpackRenderer;
 import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
+import com.hbm.render.entity.effect.RenderTorex;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.world.RenderNTMSkybox;
@@ -209,7 +208,7 @@ public class ModEventHandlerClient {
 	public static float deltaMouseY;
 	
 	public static float currentFOV = 70;
-	public static final int flashDuration = 5_000;
+	public static final int flashDuration = 3_750;
 	public static final int shakeDuration = 1_500;
 	public static long flashTimestamp;
 	public static long shakeTimestamp;
@@ -1423,6 +1422,7 @@ public class ModEventHandlerClient {
 		}*/
 		//HbmShaderManager2.doPostProcess();
 		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)){
+			RenderTorex.renderWarp(evt.getPartialTicks());
 			HbmShaderManager2.postProcess();
 		}
 	}
