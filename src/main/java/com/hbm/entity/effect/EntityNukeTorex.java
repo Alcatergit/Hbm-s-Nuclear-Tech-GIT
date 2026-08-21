@@ -171,7 +171,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.rollerSize = this.rollerSize * this.scale;
                 this.isReloaded = true;
                 this.isScaled = true;
-                if (MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < Math.min(explosionRadius, this.ticksExisted * shockSpeed + shockSpeed)) {
+                if (MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < Math.min(2 * explosionRadius, this.ticksExisted * shockSpeed + shockSpeed)) {
                     this.didPlaySound = true;
                     this.didShake = true;
                 }
