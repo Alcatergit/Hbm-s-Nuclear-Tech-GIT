@@ -318,10 +318,10 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 			EntityNukeTorex.statFac(world, this.posX, this.posY, this.posZ, 25);
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, 25, posX + 0.5, posY + 0.5, posZ + 0.5));
             
-			List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(200, 200, 200));
-			for(EntityPlayer player : players) {
-				AdvancementManager.grantAchievement(player, AdvancementManager.bossUFO);
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_ufo));
+			EntityLivingBase attacker = this.getAttackingEntity();
+			if(attacker instanceof EntityPlayerMP) {
+				AdvancementManager.grantAchievement((EntityPlayerMP)attacker, AdvancementManager.bossUFO);
+				((EntityPlayerMP)attacker).inventory.addItemStackToInventory(new ItemStack(ModItems.coin_ufo));
 			}
 		}
 		
