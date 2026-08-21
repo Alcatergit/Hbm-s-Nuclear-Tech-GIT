@@ -90,7 +90,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if (fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
-			radiate(livingList, 2_500_000F / (this.ticksExisted * 5 + 1));
+			radiate(livingList, (2_500_000F * Math.min(1000, radius * 2)) / (this.ticksExisted * 5 + 1));
 		}
 
 		fireDamage(world, list, this.posX, this.posY, this.posZ, this.radius * 2.0D);
@@ -99,8 +99,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		float blast = (float)Math.pow(radius + 10, 3) * 0.1F;
 
 		// The continuous application of shockwave damage is no longer limited by 2400 ticks.
-		ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ,
-				Math.min(1000, radius * 2), 0F, 0F, 0F, blast, this.ticksExisted * shockSpeed);
+		blastDamage(world, this.posX, this.posY, this.posZ,
+				Math.min(1000, radius * 2), blast, this.ticksExisted * shockSpeed);
 
 		// Community Edition Biological Conversion Timing
 		if(fallout && ticksExisted == 42){
@@ -219,6 +219,45 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 						e.attackEntityFrom(ModDamageSource.IN_FIRE, (float)fireDamage);
 					}
 				}
+			}
+		}
+	}
+
+	public void blastDamage(World world, double x, double y, double z, double range, float blast3d, double blastRange) {
+		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-range, y-range, z-range, x+range, y+range, z+range));
+
+		for(Entity e : entities) {
+			if(isExplosionExempt(e)) continue;
+
+			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
+			double len = vec.length();
+
+			if(len > range) continue;
+			vec = vec.normalize();
+			double dmgLen = Math.max(len, range * 0.05D);
+
+			float res = 0;
+
+			for(int i = 1; i < len; i++) {
+
+				int ix = (int)Math.floor(x + vec.xCoord * i);
+				int iy = (int)Math.floor(y + vec.yCoord * i);
+				int iz = (int)Math.floor(z + vec.zCoord * i);
+				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
+			}
+
+			if(res < 1)
+				res = 1;
+
+			if(blast3d > 0 && res < 10000 && len < blastRange) {
+				float blastDmg = blast3d / (float)(dmgLen * dmgLen * res);
+				if(blastDmg > 0.025){
+					if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
+					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
+				}
+				e.motionX += vec.xCoord * 0.0075D * blastDmg;
+				e.motionY += vec.yCoord * 0.0075D * blastDmg;
+				e.motionZ += vec.zCoord * 0.0075D * blastDmg;
 			}
 		}
 	}
