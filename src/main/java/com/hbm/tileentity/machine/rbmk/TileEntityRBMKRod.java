@@ -16,7 +16,6 @@ import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.DataValueString;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
-import com.hbm.tileentity.machine.rbmk.IRBMKLoadable;
 
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,6 +23,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
@@ -74,6 +74,14 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 
 		if(!world.isRemote) {
 			
+			boolean allNeighborsLoaded = true;
+			for(EnumFacing dir : EnumFacing.VALUES) {
+				if(!world.isBlockLoaded(pos.offset(dir))) {
+					allNeighborsLoaded = false;
+					break;
+				}
+			}
+			
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemRBMKRod rod) {
                 this.fuelR = rod.fuelR;
 				this.fuelG = rod.fuelG;
@@ -81,13 +89,32 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.cherenkovR = rod.cherenkovR;
 				this.cherenkovG = rod.cherenkovG;
 				this.cherenkovB = rod.cherenkovB;
+				hasRod = true;
+				
+				if(!allNeighborsLoaded) {
+					super.update();
+					this.fluxFast = 0;
+					this.fluxSlow = 0;
+					
+					if(this.heat > this.maxHeat()) {
+						if (RBMKDials.getMeltdownsDisabled(world)) {
+							world.spawnEntity(new com.hbm.entity.particle.EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
+							this.fluxFast = 0;
+							this.fluxSlow = 0;
+							return;
+						}
+						this.meltdown();
+						return;
+					}
+					return;
+				}
 				
 				double fluxIn = fluxFromType(rod.nType);
 				fluxOut = rod.burn(world, inventory.getStackInSlot(0), fluxIn);
 				NType rType = rod.rType;
 				
 				rod.updateHeat(world, inventory.getStackInSlot(0), 1.0D);
-				this.heat += rod.provideHeat(world, inventory.getStackInSlot(0), heat, 1.0D);
+			this.heat += rod.provideHeat(world, inventory.getStackInSlot(0), heat, 1.0D);
 				
 				
 				if(!this.hasLid()) {
@@ -105,6 +132,12 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				this.fluxSlow = 0;
 
 				if(this.heat > this.maxHeat()) {
+					if (RBMKDials.getMeltdownsDisabled(world)) {
+						world.spawnEntity(new com.hbm.entity.particle.EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
+						this.fluxFast = 0;
+						this.fluxSlow = 0;
+						return;
+					}
 					this.meltdown();
 					return;
 				}
@@ -112,8 +145,6 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				if(fluxOut > 0){
 					spreadFlux(this.isModerated() ? NType.SLOW : rType, fluxOut);
 				}
-				
-				hasRod = true;
 			} else {
 
 				this.fluxFast = 0;
@@ -189,7 +220,9 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 				RadiationSavedData.incrementRad(world, pos, (float) (flux * 0.05F), Float.MAX_VALUE);
 			
 			if(base.isModerated()) {
-				TileEntityRBMKRod.stream = NType.SLOW;
+				if(world.rand.nextDouble() < RBMKDials.getModeratorEfficiency(world)) {
+					TileEntityRBMKRod.stream = NType.SLOW;
+				}
 			}
             double mul = base.getMult();
             if(mul == 0)
@@ -214,13 +247,19 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 		
 		//return the neutrons back to this with no further action required
 		if(te instanceof TileEntityRBMKReflector) {
-			this.receiveFlux(this.isModerated() ? NType.SLOW : stream, flux);
-			return 0;
+			double reflectEff = RBMKDials.getReflectorEfficiency(world);
+			this.receiveFlux(this.isModerated() ? NType.SLOW : stream, flux * reflectEff);
+			if(reflectEff >= 1.0D) return 0;
+			return flux * (1.0D - reflectEff);
 		}
 		
 		//break the neutron flow and nothign else
-		if(te instanceof TileEntityRBMKAbsorber) {
-			return 0;
+		if(te instanceof TileEntityRBMKAbsorber abs) {
+			double absorbEff = RBMKDials.getAbsorberEfficiency(world);
+			double absorbed = flux * absorbEff;
+			abs.heat += absorbed * RBMKDials.getAbsorberHeatConversion(world);
+			if(absorbEff >= 1.0D) return 0;
+			return flux * (1.0D - absorbEff);
 		}
 		
 		if(te instanceof TileEntityRBMKBase) {
