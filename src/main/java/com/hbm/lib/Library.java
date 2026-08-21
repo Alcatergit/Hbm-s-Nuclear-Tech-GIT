@@ -1184,4 +1184,84 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 	public static Explosion explosionDummy(World w, double x, double y, double z){
 		return new Explosion(w, null, x, y, z, 1000, false, false);
 	}
+
+    /**
+     * Use Unsafe to set final fields, bypassing the restrictions in Java 17+
+     */
+    private static sun.misc.Unsafe getUnsafe() {
+        try {
+            Field theUnsafe = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+            theUnsafe.setAccessible(true);
+            return (sun.misc.Unsafe) theUnsafe.get(null);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
+     * Safely set the value of a final field (including static final)
+     */
+    public static void safeSetFinalField(Class<?> clazz, Object instance, Object newValue, String... possibleFieldNames) {
+        sun.misc.Unsafe unsafe = getUnsafe();
+
+        for (String fieldName : possibleFieldNames) {
+            try {
+                Field field = null;
+                Class<?> currentClass = clazz;
+
+                // Try to find the field in the current class and its superclasses
+                while (currentClass != null && field == null) {
+                    try {
+                        field = currentClass.getDeclaredField(fieldName);
+                    } catch (NoSuchFieldException e) {
+                        currentClass = currentClass.getSuperclass();
+                    }
+                }
+
+                if (field != null) {
+                    field.setAccessible(true);
+
+                    // For static fields, instance is null
+                    long offset = instance == null ?
+                            unsafe.staticFieldOffset(field) :
+                            unsafe.objectFieldOffset(field);
+
+                    Object fieldBase = instance == null ?
+                            unsafe.staticFieldBase(field) :
+                            instance;
+
+                    // Set the value based on the field type
+                    Class<?> fieldType = field.getType();
+                    if (fieldType == int.class) {
+                        unsafe.putInt(fieldBase, offset, (int) newValue);
+                    } else if (fieldType == long.class) {
+                        unsafe.putLong(fieldBase, offset, (long) newValue);
+                    } else if (fieldType == float.class) {
+                        unsafe.putFloat(fieldBase, offset, (float) newValue);
+                    } else if (fieldType == double.class) {
+                        unsafe.putDouble(fieldBase, offset, (double) newValue);
+                    } else if (fieldType == boolean.class) {
+                        unsafe.putBoolean(fieldBase, offset, (boolean) newValue);
+                    } else if (fieldType == char.class) {
+                        unsafe.putChar(fieldBase, offset, (char) newValue);
+                    } else if (fieldType == short.class) {
+                        unsafe.putShort(fieldBase, offset, (short) newValue);
+                    } else if (fieldType == byte.class) {
+                        unsafe.putByte(fieldBase, offset, (byte) newValue);
+                    } else {
+                        // For object types
+                        unsafe.putObject(fieldBase, offset, newValue);
+                    }
+
+                    MainRegistry.logger.info("[NTM] Successfully set field: " + fieldName + " in " + clazz.getName());
+                    return;
+                }
+            } catch (Exception e) {
+                // Continue trying the next field name
+                MainRegistry.logger.debug("[NTM] Failed to set field " + fieldName + " in " + clazz.getName() + ": " + e.getMessage());
+            }
+        }
+
+        MainRegistry.logger.error("[NTM] Failed to set any field from: " + Arrays.toString(possibleFieldNames) + " in " + clazz.getName());
+    }
 }
