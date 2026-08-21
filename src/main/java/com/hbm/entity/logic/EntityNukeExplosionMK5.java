@@ -268,8 +268,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			double eRads = rads;
 			eRads /= res;  // Obstacle attenuation
 			eRads /= len * len;  // Distance squared decay
-			ContaminationUtil.contaminate(e, ContaminationUtil.HazardType.RADIATION, 
-				ContaminationUtil.ContaminationType.RAD_BYPASS, (float)eRads);
+			ContaminationUtil.contaminate(e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, (float)eRads);
 		}
 	}
 
