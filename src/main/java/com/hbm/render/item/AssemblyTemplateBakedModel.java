@@ -21,7 +21,11 @@ public class AssemblyTemplateBakedModel implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
-		return type == TransformType.GUI ? Collections.emptyList() : AssemblyTemplateRender.INSTANCE.itemModel.getQuads(state, side, rand);
+		// Fixed: No longer returns an empty list in GUI mode, preventing items from appearing transparent.
+		if (AssemblyTemplateRender.INSTANCE.itemModel != null) {
+			return AssemblyTemplateRender.INSTANCE.itemModel.getQuads(state, side, rand);
+		}
+		return Collections.emptyList();
 	}
 
 	@Override
