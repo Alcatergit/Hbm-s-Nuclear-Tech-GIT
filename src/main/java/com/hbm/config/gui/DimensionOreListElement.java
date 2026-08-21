@@ -40,12 +40,12 @@ public class DimensionOreListElement extends AbstractConfigElement {
 
 	@Override
 	public String getQualifiedName() {
-		return "bedrockOres_" + dimRef[0];
+		return getLanguageKey();
 	}
 
 	@Override
 	public String getLanguageKey() {
-		return "bedrockOres_" + dimRef[0];
+		return "§o" + dimRef[0] + "_bedrockOres§r";
 	}
 
 	@Override
