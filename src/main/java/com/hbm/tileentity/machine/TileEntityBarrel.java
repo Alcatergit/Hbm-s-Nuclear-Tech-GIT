@@ -61,7 +61,8 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 			if(age >= 20)
 				age = 0;
 			
-			if((mode == 2) && (age == 9 || age == 19)) fillFluidInit(tank);
+			if((mode == 1 || mode == 2) && (age == 9 || age == 19))
+				fillFluidInit(tank);
 			
 			if(tank.getFluid() != null && tank.getFluidAmount() > 0) {
 				checkFluidInteraction();
