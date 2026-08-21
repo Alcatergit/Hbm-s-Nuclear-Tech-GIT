@@ -407,13 +407,20 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			Arrays.sort(ents);
 
 			try {
+				int maxWidth = resolution.getScaledWidth() - pX - 10;
 				for(String key : ents) {
-
 					if(exceptions.contains(key))
 						continue;
 
-					mc.fontRenderer.drawString(key + ": " + flush.getTag(key), pX, pZ, 0xFFFFFF);
-					pZ += 10;
+					String label = key + ": ";
+					mc.fontRenderer.drawString(label, pX, pZ, 0xFFFFFF);
+					int labelWidth = mc.fontRenderer.getStringWidth(label);
+					String value = String.valueOf(flush.getTag(key));
+					List<String> lines = mc.fontRenderer.listFormattedStringToWidth(value, maxWidth - labelWidth);
+					for(String line : lines) {
+						mc.fontRenderer.drawString(line, pX + labelWidth, pZ, 0xFFFFFF);
+						pZ += 10;
+					}
 				}
 			} catch(ConcurrentModificationException e) {
 				mc.fontRenderer.drawString("§cData busy, retrying...", pX, pZ, 0xFFFFFF);
