@@ -13,8 +13,6 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
@@ -29,9 +27,6 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
-
-import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
-
 
 public class RenderTorex extends Render<EntityNukeTorex> {
 
@@ -52,7 +47,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		float scale = (float)cloud.getScale();
 		float flashDuration = scale * flashBaseDuration;
 		float flareDuration = scale * flareBaseDuration;
-		
+
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 
@@ -64,7 +59,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		if(cloud.ticksExisted < flareDuration+1)
 			flareWrapper(cloud, partialTicks, flareDuration);
-		
+
 		if(cloud.ticksExisted < flashDuration+1)
 			flashWrapper(cloud, partialTicks, flashDuration);
 		if(cloud.ticksExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
@@ -83,7 +78,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		GL11.glPopMatrix();
 	}
-	
+
 	private final Comparator cloudSorter = (arg0, arg1) -> {
         Cloudlet first = (Cloudlet) arg0;
         Cloudlet second = (Cloudlet) arg1;
@@ -131,25 +126,25 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 	
 	private void flareWrapper(EntityNukeTorex cloud, float partialTicks, float flareDuration) {
 
-		GlStateManager.pushMatrix();
-		GlStateManager.enableBlend();
-		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
-		GlStateManager.disableAlpha();
+		GL11.glPushMatrix();
+		GL11.glEnable(GL11.GL_BLEND);
+		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
+		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-
+			
 		bindTexture(flare);
 
 		Tessellator tess = Tessellator.getInstance();
-		BufferBuilder buf = tess.getBuffer();
+        BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-
+		
 		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
-
+		
 		Random rand = new Random(cloud.getEntityId());
-
+		
 		for(int i = 0; i < 3; i++) {
 			float x = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
 			float y = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
@@ -160,11 +155,11 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		tess.draw();
 
 		GL11.glDepthMask(true);
-		GlStateManager.enableAlpha();
+		GL11.glEnable(GL11.GL_ALPHA_TEST);
 		RenderHelper.enableStandardItemLighting();
-		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
-		GlStateManager.disableBlend();
-		GlStateManager.popMatrix();
+		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
+		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glPopMatrix();
 	}
 
 	private void tessellateCloudlet(BufferBuilder buf, double posX, double posY, double posZ, Cloudlet cloud, float partialTicks) {
