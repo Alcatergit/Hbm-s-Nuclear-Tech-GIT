@@ -93,14 +93,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			radiate(livingList, (2_500_000F * Math.min(1000, radius * 2)) / (this.ticksExisted * 5 + 1));
 		}
 
-		fireDamage(world, list, this.posX, this.posY, this.posZ, this.radius * 2.0D);
-
-		// Removes the ticksExisted restriction that reduces shockwave damage.
-		float blast = (float)Math.pow(radius + 10, 3) * 0.1F;
-
-		// The continuous application of shockwave damage is no longer limited by 2400 ticks.
-		blastDamage(world, this.posX, this.posY, this.posZ,
-				Math.min(1000, radius * 2), blast, this.ticksExisted * shockSpeed);
+		dealDamage(world, list, this.posX, this.posY, this.posZ, Math.min(1000, this.radius * 2.0D));
 
 		// Community Edition Biological Conversion Timing
 		if(fallout && ticksExisted == 42){
@@ -188,8 +181,10 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
 	}
 
-	public void fireDamage(World world, List<Entity> list, double x, double y, double z, double radius) {
-		for (Entity e : list) {
+	public void dealDamage(World world, List<Entity> list, double x, double y, double z, double radius) {
+        List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
+
+        for (Entity e : list) {
 			double dist = e.getDistance(x, y, z);
 
 			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
@@ -203,7 +198,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 				if (!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
 
-					double fireDamage = (float)(fallout ? 10F: 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, dist * this.ticksExisted / radius));
+					float fireDamage = (float)(fallout ? 10F * radius * Math.pow(0.1, dist * this.ticksExisted / radius): 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.1, dist * this.ticksExisted / radius));
 					if(fireDamage > 0.025) {
 						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
 
@@ -221,45 +216,41 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				}
 			}
 		}
-	}
 
-	public void blastDamage(World world, double x, double y, double z, double range, float blast3d, double blastRange) {
-		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-range, y-range, z-range, x+range, y+range, z+range));
+        for(Entity e : entities) {
+            if(isExplosionExempt(e)) continue;
 
-		for(Entity e : entities) {
-			if(isExplosionExempt(e)) continue;
+            Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
+            double len = vec.length();
 
-			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
-			double len = vec.length();
+            if(len > radius) continue;
+            vec = vec.normalize();
+            double dmgLen = Math.max(len, radius * 0.05D);
 
-			if(len > range) continue;
-			vec = vec.normalize();
-			double dmgLen = Math.max(len, range * 0.05D);
+            float res = 0;
 
-			float res = 0;
+            for(int i = 1; i < len; i++) {
 
-			for(int i = 1; i < len; i++) {
+                int ix = (int)Math.floor(x + vec.xCoord * i);
+                int iy = (int)Math.floor(y + vec.yCoord * i);
+                int iz = (int)Math.floor(z + vec.zCoord * i);
+                res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
+            }
 
-				int ix = (int)Math.floor(x + vec.xCoord * i);
-				int iy = (int)Math.floor(y + vec.yCoord * i);
-				int iz = (int)Math.floor(z + vec.zCoord * i);
-				res += world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
-			}
+            if(res < 1)
+                res = 1;
 
-			if(res < 1)
-				res = 1;
-
-			if(blast3d > 0 && res < 10000 && len < blastRange) {
-				float blastDmg = blast3d / (float)(dmgLen * dmgLen * res);
-				if(blastDmg > 0.025){
-					if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
-					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
-				}
-				e.motionX += vec.xCoord * 0.0075D * blastDmg;
-				e.motionY += vec.yCoord * 0.0075D * blastDmg;
-				e.motionZ += vec.zCoord * 0.0075D * blastDmg;
-			}
-		}
+            if(res < 10000 && len < this.ticksExisted * shockSpeed) {
+                float blastDmg = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
+                if(blastDmg > 0.025){
+                    if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
+                    else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
+                }
+                e.motionX += vec.xCoord * 0.0075D * blastDmg;
+                e.motionY += vec.yCoord * 0.0075D * blastDmg;
+                e.motionZ += vec.zCoord * 0.0075D * blastDmg;
+            }
+        }
 	}
 
 	// Community-based method for calculating radiation damage from ray tracing
