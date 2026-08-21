@@ -136,7 +136,6 @@ public class BombMulti extends BlockContainer implements IBomb {
             // Configure NBT saving is disabled; use the original logic.
             InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
         } else {
-            // ========== New Logic: Using player information recorded by removedByPlayer ==========
             if (tileentity instanceof TileEntityBombMulti) {
                 TileEntityBombMulti bombMulti = (TileEntityBombMulti)tileentity;
 
