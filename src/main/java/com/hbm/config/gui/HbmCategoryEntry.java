@@ -31,7 +31,7 @@ public class HbmCategoryEntry extends GuiConfigEntries.CategoryEntry {
     @Override
     protected GuiScreen buildChildScreen() {
         final String title = ((this.owningScreen.titleLine2 == null ? "" : this.owningScreen.titleLine2)
-                + " > " + this.configElement.getLanguageKey());
+                + " > §o" + this.configElement.getLanguageKey() + "§r");
         childScreen = new GuiConfig(this.owningScreen, this.configElement.getChildElements(),
                 this.owningScreen.modID,
                 owningScreen.allRequireWorldRestart || this.configElement.requiresWorldRestart(),
