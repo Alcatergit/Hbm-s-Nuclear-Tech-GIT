@@ -7,6 +7,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import com.hbm.config.GeneralConfig;
 import com.hbm.interfaces.IPostRender;
+import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.ModEventHandlerClient;
 import com.hbm.packet.AuxButtonPacket;
@@ -51,7 +52,7 @@ public class ItemCrucible extends ItemSwordCutter implements IPostRender {
 	@Override
 	public void onEquip(EntityPlayer player, EnumHand hand) {
 		super.onEquip(player, hand);
-		if(getCharges(player.getHeldItem(hand)) == 0)
+		if(getCharges(player.getHeldItem(hand)) == 0 || (player.getHeldItemOffhand().getItem() == ModItems.crucible))
 			return;
 		if(!(player instanceof EntityPlayerMP))
 			return;
