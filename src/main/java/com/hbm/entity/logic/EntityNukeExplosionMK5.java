@@ -155,7 +155,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					this.world.spawnEntity(falloutRain);
 				}
 				fallingStarted = true;
-			} else if (this.ticksExisted > (int)(this.radius * 3.0)){ // wait for thermal radiation (fire damage) to complete before removing the entity
+			} else if (this.ticksExisted > this.radius * 3){ // wait for thermal radiation (fire damage) to complete before removing the entity
 				this.setDead();
 			}
 		}
@@ -228,7 +228,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
                 }
             }
 
-            if(this.ticksExisted <= (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0)) && res < 10000 && len < this.ticksExisted * shockSpeed) {
+            int blastDuration = (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0));
+            if(this.ticksExisted <= blastDuration && res < 10000 && len < this.ticksExisted * shockSpeed) {
                 float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
                 if(blastDamage > 0.025){
                     if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
