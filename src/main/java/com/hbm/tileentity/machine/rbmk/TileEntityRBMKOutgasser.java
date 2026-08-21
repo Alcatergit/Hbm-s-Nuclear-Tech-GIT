@@ -49,6 +49,15 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	public String getName() {
 		return "container.rbmkOutgasser";
 	}
+
+	public void getDiagData(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
+		nbt.setInteger("gas", gas.getFluidAmount());
+		nbt.setString("gasType", gasType.getName());
+		nbt.setDouble("progress", progress);
+	}
 	
 	@Override
 	public void update() {
