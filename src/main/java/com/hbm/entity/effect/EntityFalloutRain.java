@@ -361,7 +361,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(),ModBlocks.toxic_block.getDefaultState(), 2);
+				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(),ModBlocks.toxic_block.getDefaultState(), 3);
 				break;
 			}
 
@@ -403,7 +403,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			// }
 
 			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s1){
-				world.setBlockState(pos,ModBlocks.toxic_block.getDefaultState(), 2);
+				world.setBlockState(pos,ModBlocks.toxic_block.getDefaultState(), 3);
 				continue;
 			}
 
@@ -468,7 +468,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos, 3);
 				} else if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM){
 					placeBlockFromDist(dist, ModBlocks.waste_mycelium, pos.down());
-					world.setBlockState(pos,ModBlocks.mush.getDefaultState(), 2);
+					world.setBlockState(pos,ModBlocks.mush.getDefaultState(), 3);
 				}
 				continue;
 
