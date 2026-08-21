@@ -10,6 +10,7 @@
 	"block.iterReactorRunning": {"category": "block", "sounds": [{"name": "hbm:block/iterreactorspin", "stream": false}]},
 	"block.chemicalPlant": {"category": "block", "sounds": [{"name": "hbm:block/chemicalplant", "stream": false}]},
 	"block.boiler": {"category": "block", "sounds": [{"name": "hbm:block/boiler", "stream": false}]},
+	"block.steamEngineOperate": {"category": "block", "sounds": [{"name": "hbm:block/steamengineoperate", "stream": false}]},
 	"block.electricHum": {"category": "block", "sounds": [{"name": "hbm:block/electrichum", "stream": false}]},
 	"block.engine": {"category": "block", "sounds": [{"name": "hbm:block/engine", "stream": false}]},
     "block.assembleroperate": {"category": "block", "sounds": [{"name": "hbm:block/assemblerOperate", "stream": false}]},
