@@ -7,6 +7,7 @@ import com.hbm.config.MobConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.blocks.machine.rbmk.RBMKRod;
+import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
 import com.hbm.items.ModItems;
 import com.hbm.items.machine.ItemRBMKRod;
@@ -98,7 +99,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 					
 					if(this.heat > this.maxHeat()) {
 						if (RBMKDials.getMeltdownsDisabled(world)) {
-							world.spawnEntity(new com.hbm.entity.particle.EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
+							if(RBMKDials.getMeltdownFlameEffect(world)) world.spawnEntity(new EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
 							this.fluxFast = 0;
 							this.fluxSlow = 0;
 							return;
@@ -133,7 +134,7 @@ public class TileEntityRBMKRod extends TileEntityRBMKSlottedBase implements IRBM
 
 				if(this.heat > this.maxHeat()) {
 					if (RBMKDials.getMeltdownsDisabled(world)) {
-						world.spawnEntity(new com.hbm.entity.particle.EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
+						if(RBMKDials.getMeltdownFlameEffect(world)) world.spawnEntity(new EntityGasFlameFX(world, pos.getX() + 0.5, pos.getY() + rbmkHeight + this.jumpheight + 0.5, pos.getZ() + 0.5, 0, 0.2, 0));
 						this.fluxFast = 0;
 						this.fluxSlow = 0;
 						return;
