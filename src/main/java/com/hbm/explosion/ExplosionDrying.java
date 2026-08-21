@@ -102,6 +102,45 @@ public class ExplosionDrying
 					}
 				}
 			}
+			
+			// Add entity damage handling
+			damageEntitiesInColumn(x, z, dist);
+		}
+	}
+	
+	private void damageEntitiesInColumn(int x, int z, int dist) {
+		if(this.worldObj.isRemote) return;
+		
+		double centerX = this.posX + x;
+		double centerY = this.posY;
+		double centerZ = this.posZ + z;
+		
+		// Calculate the damage range
+		double damageRadius = Math.max(1, dist * 0.5);
+		double damageStrength = this.radius * 6.0F; // Drying has low explosion damage
+		
+		// Get entities within range
+		AxisAlignedBB aabb = new AxisAlignedBB(
+			centerX - damageRadius, centerY - damageRadius, centerZ - damageRadius,
+			centerX + damageRadius, centerY + damageRadius, centerZ + damageRadius
+		);
+		
+		java.util.List<Entity> entities = this.worldObj.getEntitiesWithinAABB(Entity.class, aabb);
+		
+		for(Entity entity : entities) {
+			// Calculate the distance from the entity to the explosion center
+			double dx = entity.posX - centerX;
+			double dy = entity.posY - centerY;
+			double dz = entity.posZ - centerZ;
+			double distance = Math.sqrt(dx * dx + dy * dy + dz * dz);
+			
+			if(distance <= damageRadius) {
+				// Damage is calculated based on distance
+				float damage = (float) (damageStrength * (1.0 - distance / damageRadius));
+				if(damage > 0) {
+					entity.attackEntityFrom(ModDamageSource.blast, damage);
+				}
+			}
 		}
 	}
 }
