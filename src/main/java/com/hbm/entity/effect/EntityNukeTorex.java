@@ -208,8 +208,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
 			int ticksExisted2 = this.ticksExisted - this.ticksExistedSaved;
-			boolean isLateStage = this.ticksExistedSaved > this.maxAge * 2 / 3;
-			boolean isAccelReload = this.isReloaded && ticksExisted2 < (isLateStage ?  90 : 95);
+			boolean isMiddleStage = this.ticksExistedSaved > this.maxAge / 2;
+			boolean isAccelReload = this.isReloaded && ticksExisted2 < (isMiddleStage ?  90 : 95);
 
 			if (this.isReloaded && !isAccelReload) {
 				this.isReloaded = false;
@@ -222,14 +222,14 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			double simSpeed = getSimulationSpeed();
 			int lifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
 
-			if(this.isReloaded && ticksExisted2 <= (isLateStage ? 50 : 75)){
-				speedMultiplier = isLateStage ? 4.0D : 2.0D;
+			if(this.isReloaded && ticksExisted2 <= (isMiddleStage ? 50 : 75)){
+				speedMultiplier = isMiddleStage ? 4.0D : 2.0D;
 				simSpeed = 1.0D;
 				lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
 			} else if(this.isReloaded){
-				speedMultiplier = Math.max(1.0D, isLateStage ? (160 - (3 * (ticksExisted2 - 50))) / 40.0D : (40 - (ticksExisted2 - 75)) / 20.0D);
+				speedMultiplier = Math.max(1.0D, isMiddleStage ? (160 - (3 * (ticksExisted2 - 50))) / 40.0D : (40 - (ticksExisted2 - 75)) / 20.0D);
 				// Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
-				double progress = Math.min(1.0D, isLateStage ? (ticksExisted2 - 50) / 40.0D : (ticksExisted2 - 75) / 20.0D);
+				double progress = Math.min(1.0D, isMiddleStage ? (ticksExisted2 - 50) / 40.0D : (ticksExisted2 - 75) / 20.0D);
 				if (this.ticksExisted > maxAge / 4) {
 					double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
 					double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
