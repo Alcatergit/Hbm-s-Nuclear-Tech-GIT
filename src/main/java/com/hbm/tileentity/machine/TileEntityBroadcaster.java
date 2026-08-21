@@ -4,7 +4,7 @@ import com.hbm.interfaces.AutoRegister;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.MainRegistry;
-import com.hbm.sound.V2.AudioWrapperV2;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityLoadedBase;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,7 +25,7 @@ import java.util.Random;
 @AutoRegister
 public class TileEntityBroadcaster extends TileEntityLoadedBase implements ITickable {
 
-	private AudioWrapperV2 audio;
+	private AudioWrapper audio;
 
 	@Override
 	public void update() {
@@ -53,7 +53,7 @@ public class TileEntityBroadcaster extends TileEntityLoadedBase implements ITick
 		}
 		if (world.isRemote) {
 			if(audio == null) {
-				audio = createAudioLoopV2();
+				audio = createAudioLoop();
 				audio.startSound();
 			} else if(!audio.isPlaying()) {
 				audio = rebootAudio(audio);
@@ -82,7 +82,7 @@ public class TileEntityBroadcaster extends TileEntityLoadedBase implements ITick
 	}
 
 	@Override
-	public AudioWrapperV2 createAudioLoopV2() {
+	public AudioWrapper createAudioLoop() {
 		int xCoord = pos.getX(), yCoord = pos.getY(), zCoord = pos.getZ();
 		Random rand = new Random(xCoord + yCoord + zCoord);
 		SoundEvent event = switch (rand.nextInt(3)){
