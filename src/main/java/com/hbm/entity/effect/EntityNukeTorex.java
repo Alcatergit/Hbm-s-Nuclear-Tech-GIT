@@ -68,6 +68,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public int timeExisted = 0;
 	public int timeExistedTemp = 0;
 	public boolean isReloaded = false;
+    // Calculate speed ratio
+    public double speedMultiplier = 1.0;
 
 	public EntityNukeTorex(World p_i1582_1_) {
 		super(p_i1582_1_);
@@ -150,10 +152,12 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	public void onUpdate() {
-		this.timeExisted++;
-		this.dataManager.set(TIME_EXISTED, timeExisted);
+        if(this.addedToChunk){
+            this.timeExisted++;
+            this.dataManager.set(TIME_EXISTED, timeExisted);
+        }
+
         if(world.isRemote){
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate scale: " + this.dataManager.get(SCALE));
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExisted: " + this.dataManager.get(TIME_EXISTED));
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate maxAge: " + this.dataManager.get(MAX_AGE));
 
@@ -177,18 +181,17 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
-			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted <= (this.maxAge / 4)) && (this.timeExisted <= (this.timeExistedTemp + 100));
+			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted < (this.timeExistedTemp + 119));
             //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
             //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExistedTemp: " + this.timeExistedTemp);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
 
-			// Calculate speed ratio
-            double speedMultiplier = 1.0;
-
-            if(isReloadedAccelerated){
-                speedMultiplier = 2.0;
+            if((this.isReloaded) && (this.timeExisted < (this.timeExistedTemp + 100))){
+                this.speedMultiplier = 2.0;
+            } else if(this.isReloaded){
+                this.speedMultiplier -= 0.05D;
             }
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + speedMultiplier);
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
 
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
@@ -197,7 +200,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			int toSpawn;
 			if (isReloadedAccelerated) {
-				toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime) * speedMultiplier)));
+				toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime) * this.speedMultiplier)));
 			} else {
 				toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime))));
 			}
@@ -209,8 +212,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				Cloudlet cloud = new Cloudlet(x, lastSpawnY, z, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime);
 				cloud.setScale((float) (Math.sqrt(s) * 3 + this.timeExisted * 0.0025 * s), (float) (Math.sqrt(s) * 3 + this.timeExisted * 0.0025 * 6 * cs * s));
 				if (isReloadedAccelerated) {
-					cloud.setMotion(cloud.motionMult * speedMultiplier);
-				}
+					cloud.setMotion(cloud.motionMult * this.speedMultiplier);
+                }
 				cloudlets.add(cloud);
 			}
 
@@ -231,7 +234,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 					Cloudlet shockClouds = new Cloudlet(vec.xCoord + posX, world.getHeight((int) (vec.xCoord + posX) + 1, (int) (vec.zCoord + posZ)), vec.zCoord + posZ, rot, 0, shockLife, TorexType.SHOCK)
 							.setScale((float)s * 5F, (float)s * 2F).setMotion(MathHelper.clamp(0.25 * this.timeExisted - 5, 0, 1));
 					if (isReloadedAccelerated) {
-						shockClouds.setMotion(shockClouds.motionMult * speedMultiplier);
+						shockClouds.setMotion(shockClouds.motionMult * this.speedMultiplier);
 					}
 					this.cloudlets.add(shockClouds);
 				}
@@ -246,7 +249,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// spawn ring clouds
 			boolean shouldSpawnRingClouds = false;
-			if (this.isReloaded && this.getScale() > 0) {
+			if (this.isReloaded && this.timeExisted < 100 && (int)(this.getScale()) > 0) {
 				shouldSpawnRingClouds = true;
 			} else if (this.timeExisted < 200) {
 				shouldSpawnRingClouds = true;
@@ -258,26 +261,27 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
 					cloud.setScale((float) (Math.sqrt(s) * cs + this.timeExisted * 0.0015 * s), (float) (Math.sqrt(s) * cs + this.timeExisted * 0.0015 * 6 * cs * s));
 					if (isReloadedAccelerated) {
-						cloud.setMotion(cloud.motionMult * speedMultiplier);
+						cloud.setMotion(cloud.motionMult * this.speedMultiplier);
 					}
 					cloudlets.add(cloud);
 				}
 			}
+            //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate int scale: " + (int)(this.getScale()));
 
 			if(this.humidity > 0 && this.timeExisted * shockSpeed < 180){
 				// spawn lower condensation clouds
-				spawnCondensationClouds(this.timeExisted * shockSpeed-8, this.humidity, firstCondenseHeight, 80, 4, s, cs, isReloadedAccelerated, speedMultiplier);
+				spawnCondensationClouds(this.timeExisted * shockSpeed-8, this.humidity, firstCondenseHeight, 80, 4, s, cs, isReloadedAccelerated, this.speedMultiplier);
 
 				// spawn upper condensation clouds
-				spawnCondensationClouds(this.timeExisted * shockSpeed-8, this.humidity, secondCondenseHeight, 80, 2, s, cs, isReloadedAccelerated, speedMultiplier);
+				spawnCondensationClouds(this.timeExisted * shockSpeed-8, this.humidity, secondCondenseHeight, 80, 2, s, cs, isReloadedAccelerated, this.speedMultiplier);
 			}
 
 			cloudlets.removeIf(x -> x.isDead);
 			for(Cloudlet cloud : cloudlets) {
 				// Modification: Adjust update logic based on whether acceleration is required.
 				if (isReloadedAccelerated) {
-					// Accelerated Updates: Application Speed ​​Multiplier
-					cloud.updateWithMultiplier(speedMultiplier);
+					// Accelerated Updates: Application Speed Multiplier
+					cloud.updateWithMultiplier(this.speedMultiplier);
 				} else {
 					cloud.update();
 				}
@@ -287,8 +291,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			double coreHeightIncrement = 0.15;
 			double torusWidthIncrement = 0.05;
 			if (isReloadedAccelerated) {
-				coreHeightIncrement *= speedMultiplier;
-				torusWidthIncrement *= speedMultiplier;
+				coreHeightIncrement *= this.speedMultiplier;
+				torusWidthIncrement *= this.speedMultiplier;
 			}
 
 			coreHeight += coreHeightIncrement;
@@ -299,7 +303,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			int maxHeat = (int) (50 * s * s);
 			heat = maxHeat - Math.pow((double) (maxHeat * this.timeExisted) / maxAge, 0.6);
 
-			if ((this.isReloaded) && (this.timeExisted >= (this.timeExistedTemp + 200))) {
+			if ((this.isReloaded) && !(isReloadedAccelerated)) {
 				this.isReloaded = false;
 			}
 		}
