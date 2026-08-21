@@ -91,8 +91,14 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
+			// ========== NEW: Detonation condition check ==========
 		if (world.getRedstonePowerFromNeighbors(pos) > 0 && !world.isRemote) {
-			this.explode(world, pos);
+			// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
+			if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 || 
+				entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
+				this.explode(world, pos);
+			}
+			// ========== END: If the detonation conditions are not met, no action will be taken. ==========
 		}
 	}
 	
@@ -199,22 +205,28 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	@Override
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeCustom entity = (TileEntityNukeCustom) world.getTileEntity(pos);
-		
-		if(!entity.isFalling()) {
+
+		// ========== NEW: Detonation condition check ==========
+		// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
+		if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 || 
+			entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
+			if(!entity.isFalling()) {
 			
-			entity.clearSlots();
-			world.destroyBlock(pos, false);
-			NukeCustom.explodeCustom(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
+				entity.clearSlots();
+				world.destroyBlock(pos, false);
+				NukeCustom.explodeCustom(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
 			
-		} else {
+			} else {
 			
-			EntityFallingNuke bomb = new EntityFallingNuke(world, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
-			bomb.getDataManager().set(EntityFallingNuke.FACING, world.getBlockState(pos).getValue(FACING));
-			bomb.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
-			entity.clearSlots();
-			world.setBlockToAir(pos);
-			world.spawnEntity(bomb);
+				EntityFallingNuke bomb = new EntityFallingNuke(world, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
+				bomb.getDataManager().set(EntityFallingNuke.FACING, world.getBlockState(pos).getValue(FACING));
+				bomb.setPositionAndRotation(pos.getX() + 0.5, pos.getY(), pos.getZ() + 0.5, 0, 0);
+				entity.clearSlots();
+				world.setBlockToAir(pos);
+				world.spawnEntity(bomb);
+			}
 		}
+		// ========== END: If the detonation conditions are not met, no action will be taken. ==========
 	}
 	
 	@Override
