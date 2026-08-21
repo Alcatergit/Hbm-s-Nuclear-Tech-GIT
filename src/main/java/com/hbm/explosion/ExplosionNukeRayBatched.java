@@ -248,6 +248,7 @@ public class ExplosionNukeRayBatched {
 			pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
 			Block blockBelow = world.getBlockState(pos).getBlock();
 
+			world.removeTileEntity(pos);
 			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 
 			for (EnumFacing facing : EnumFacing.values()) {
