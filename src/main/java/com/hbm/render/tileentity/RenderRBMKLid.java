@@ -12,6 +12,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBoiler;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKHeater;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKRod;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
@@ -83,12 +84,12 @@ public class RenderRBMKLid extends TileEntitySpecialRenderer<TileEntityRBMKBase>
 		tes.startDrawing(GL11.GL_TRIANGLES);
 		boolean doJump = control.jumpheight > 0;
 		
-		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight+TileEntityRBMKBase.rbmkHeight);
+		columnModel.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight+RBMKDials.getColumnHeight(control.getWorld()));
 			
 		tes.draw();
 		
 		
-		int offset = TileEntityRBMKBase.rbmkHeight;
+		int offset = RBMKDials.getColumnHeight(control.getWorld());
 		
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
