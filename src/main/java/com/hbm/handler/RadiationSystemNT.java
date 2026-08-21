@@ -324,7 +324,7 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
-						if((eRad >= 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse))) {
+						if((eRad >= 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityDuck))) {
 							if(!(entity instanceof EntitySheep) && !animal.getEntityData().hasKey("isPermanent")) {
 								animal.getEntityData().setBoolean("isPermanent", true);
 							}
@@ -344,7 +344,7 @@ public class RadiationSystemNT {
 								animal.resetInLove();
 								animal.setGrowingAge(2147483647);
 							}
-						} else if((eRad > 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && (!(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityPlayerMP)))) {
+						} else if((eRad > 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && (!(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityPlayerMP) && !(entity instanceof EntityDuck)))) {
 							if(!entity.getEntityData().hasKey("isPermanent")) {
 								entity.getEntityData().setBoolean("isPermanent", true);
 							}
