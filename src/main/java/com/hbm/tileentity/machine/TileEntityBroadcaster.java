@@ -90,7 +90,7 @@ public class TileEntityBroadcaster extends TileEntityLoadedBase implements ITick
 			case 2 -> HBMSoundHandler.broadcast3;
 			default -> HBMSoundHandler.broadcast1;
 		};
-		return MainRegistry.proxy.getLoopedSound(event, SoundCategory.BLOCKS, xCoord, yCoord, zCoord, 25F, 25F, 1.0F, 20);
+		return MainRegistry.proxy.getLoopedSound(event, SoundCategory.BLOCKS, xCoord, yCoord, zCoord, 2F, 25F, 1.0F, 20);
 	}
 
 	AxisAlignedBB bb = null;
