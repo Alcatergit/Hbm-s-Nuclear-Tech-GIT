@@ -8,6 +8,7 @@ import java.util.Map.Entry;
 
 import com.hbm.crafting.handlers.MKUCraftingHandler;
 import com.hbm.items.gear.ModShield;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import net.minecraft.entity.item.EntityArmorStand;
 import net.minecraft.util.*;
 import net.minecraft.util.math.RayTraceResult;
@@ -67,7 +68,6 @@ import com.hbm.packet.PlayerInformPacket;
 import com.hbm.packet.SurveyPacket;
 import com.hbm.particle.bullet_hit.EntityHitDataHandler;
 import com.hbm.render.amlfrom1710.Vec3;
-import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.network.RTTYSystem;
 import com.hbm.util.EnchantmentUtil;
 import com.hbm.util.EntityDamageUtil;
@@ -377,7 +377,7 @@ public class ModEventHandler {
 	}
 
 	private static final Set<String> hashes = new HashSet();
-	
+
 	static {
 		hashes.add("41de5c372b0589bbdb80571e87efa95ea9e34b0d74c6005b8eab495b7afd9994");
 		hashes.add("31da6223a100ed348ceb3254ceab67c9cc102cb2a04ac24de0df3ef3479b1036");
@@ -532,8 +532,7 @@ public class ModEventHandler {
 
 	@SubscribeEvent
 	public void worldTick(WorldTickEvent event) {
-		
-		if(event.world != null && !event.world.isRemote && event.world.getTotalWorldTime() % 100 == 97){
+		if(event.world != null && !event.world.isRemote){
 			//Drillgon200: Retarded hack because I'm not convinced game rules are client sync'd
 			PacketDispatcher.wrapper.sendToAll(new SurveyPacket(RBMKDials.getColumnHeight(event.world)));
 		}
