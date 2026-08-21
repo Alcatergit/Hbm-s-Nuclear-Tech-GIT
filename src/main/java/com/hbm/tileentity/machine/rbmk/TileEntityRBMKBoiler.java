@@ -261,6 +261,41 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			
 			this.markDirty();
 		}
+
+		if(data.hasKey("steamType")) {
+			if (this.steamType == null) {
+				this.steamType = ModForgeFluids.STEAM;
+			}
+			byte type = data.getByte("steamType");
+			Fluid newType = switch(type) {
+				case 0 -> ModForgeFluids.STEAM;
+				case 1 -> ModForgeFluids.HOTSTEAM;
+				case 2 -> ModForgeFluids.SUPERHOTSTEAM;
+				case 3 -> ModForgeFluids.ULTRAHOTSTEAM;
+				default -> ModForgeFluids.STEAM;
+			};
+			if(this.steamType != newType) {
+				int newAmount = 0;
+				int oldIdx = this.steamType == ModForgeFluids.STEAM ? 0 : this.steamType == ModForgeFluids.HOTSTEAM ? 1 : this.steamType == ModForgeFluids.SUPERHOTSTEAM ? 2 : 3;
+				if(type > oldIdx) {
+					int factor = (int)Math.pow(10, type - oldIdx);
+					newAmount = steam.getFluidAmount() / factor;
+				} else if(type < oldIdx) {
+					int factor = (int)Math.pow(10, oldIdx - type);
+					newAmount = steam.getFluidAmount() * factor;
+				} else {
+					newAmount = steam.getFluidAmount();
+				}
+				this.steamType = newType;
+				updateCapacity();
+				if(newAmount > 0) {
+					steam.setFluid(new FluidStack(steamType, Math.min(newAmount, steam.getCapacity())));
+				} else {
+					steam.setFluid(null);
+				}
+				this.markDirty();
+			}
+		}
 	}
 	
 	@Override
