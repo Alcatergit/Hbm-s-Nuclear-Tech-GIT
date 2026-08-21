@@ -155,7 +155,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					this.world.spawnEntity(falloutRain);
 				}
 				fallingStarted = true;
-			} else if ((int)(this.radius * 3.0) > 160 ? this.ticksExisted > (int)(this.radius * 3.0) : this.ticksExisted * shockSpeed > 160){ //wait for fire damage or shockwave to complete
+			} else if (this.ticksExisted > (int)(this.radius * 3.0)){ // wait for thermal radiation (fire damage) to complete before removing the entity
 				this.setDead();
 			}
 		}
@@ -208,7 +208,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
                 res = 1;
 
             int thermalDuration = (int)(this.radius * 3.0);
-            double currentFireRadius = radius * (1.0 - (double) (this.ticksExisted - 1) / thermalDuration);
+            double currentFireRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
             if (this.ticksExisted <= thermalDuration && len <= currentFireRadius && res < 2) {
                 float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
@@ -228,7 +228,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
                 }
             }
 
-            if(this.ticksExisted * shockSpeed <= 160 && res < 10000 && len < this.ticksExisted * shockSpeed) {
+            if(this.ticksExisted <= (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0)) && res < 10000 && len < this.ticksExisted * shockSpeed) {
                 float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
                 if(blastDamage > 0.025){
                     if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
