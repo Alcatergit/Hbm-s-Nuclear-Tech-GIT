@@ -389,32 +389,77 @@ public class BombMulti extends BlockContainer implements IBomb {
             // Get the effect types and determine the color
             int type2 = tempEntity.return2type();
             int type5 = tempEntity.return5type();
-            
-            String colorCode = "§2"; // Default dark green
 
-            // Determine the effect type based on priority
-            if (type2 == 3 || type5 == 3) {
-                // Cluster bomb effect - yellow
-                colorCode = "§e";
-            } else if (type2 == 4 || type5 == 4) {
-                // Fire effect - dark red
-                colorCode = "§4";
-            } else if (type2 == 5 || type5 == 5) {
-                // Poison effect - green
-                colorCode = "§a";
-            } else if (type2 == 6 || type5 == 6) {
-                // Gas cloud effect - purple
-                colorCode = "§5";
-            } else if (type2 == 1 || type5 == 1) {
-                // Gunpowder effect - dark green
-                colorCode = "§2";
-            } else if (type2 == 2 || type5 == 2) {
-                // TNT effect - red
-                colorCode = "§c";
+            String toolTip = "";
+
+            if (type2 == type5) {
+                if (type2 == 1) {
+                    // Gunpowder effect - dark green
+                    toolTip = "§2[Gunpowder]§r";
+                } else if (type2 == 2) {
+                    // TNT effect - red
+                    toolTip = "§c[TNT]§r";
+                } else if (type2 == 3) {
+                    // Cluster bomb effect - yellow
+                    toolTip = "§e[Cluster]§r";
+                } else if (type2 == 4) {
+                    // Fire effect - dark red
+                    toolTip = "§4[Fire]§r";
+                } else if (type2 == 5) {
+                    // Poison effect - green
+                    toolTip = "§a[Poison]§r";
+                } else if (type2 == 6) {
+                    // Gas cloud effect - purple
+                    toolTip = "§5[Gas]§r";
+                }
+            } else {
+                String type2ToolTip = "";
+                String type5ToolTip = "";
+
+                if (type2 == 3) {
+                    // Cluster bomb effect - yellow
+                    type2ToolTip = "§e[Cluster &§r";
+                } else if (type2 == 4) {
+                    // Fire effect - dark red
+                    type2ToolTip = "§4[Fire &§r";
+                } else if (type2 == 5) {
+                    // Poison effect - green
+                    type2ToolTip = "§a[Poison &§r";
+                } else if (type2 == 6) {
+                    // Gas cloud effect - purple
+                    type2ToolTip = "§5[Gas &§r";
+                } else if (type2 == 1) {
+                    // Gunpowder effect - dark green
+                    type2ToolTip = "§2[Gunpowder &§r";
+                } else if (type2 == 2) {
+                    // TNT effect - red
+                    type2ToolTip = "§c[TNT &§r";
+                }
+
+                if (type5 == 3) {
+                    // Cluster bomb effect - yellow
+                    type5ToolTip = "§e& Cluster]§r";
+                } else if (type5 == 4) {
+                    // Fire effect - dark red
+                    type5ToolTip = "§4& Fire]§r";
+                } else if (type5 == 5) {
+                    // Poison effect - green
+                    type5ToolTip = "§a& Poison]§r";
+                } else if (type5 == 6) {
+                    // Gas cloud effect - purple
+                    type5ToolTip = "§5& Gas]§r";
+                } else if (type5 == 1) {
+                    // Gunpowder effect - dark green
+                    type5ToolTip = "§2& Gunpowder]§r";
+                } else if (type5 == 2) {
+                    // TNT effect - red
+                    type5ToolTip = "§c& TNT]§r";
+                }
+                toolTip = type2ToolTip + type5ToolTip;
             }
 
             // Add tooltip text
-            tooltip.add(colorCode + "[Is ready]§r");
+            tooltip.add(toolTip);
         }
         // Skip cases where assembly is partial or not assembled
     }
