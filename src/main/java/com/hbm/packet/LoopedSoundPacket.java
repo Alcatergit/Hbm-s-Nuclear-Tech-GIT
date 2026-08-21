@@ -19,6 +19,7 @@ import com.hbm.tileentity.machine.TileEntityFEL;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
@@ -151,8 +152,24 @@ public class LoopedSoundPacket implements IMessage {
                         default -> HBMSoundHandler.broadcast1;
                     };
 
-                    if(flag && te.getWorld().isRemote)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
+                    // ===== Fix begins: Add distance check =====
+                    if(flag && te.getWorld().isRemote) {
+                        EntityPlayerSP player = Minecraft.getMinecraft().player;
+                        if(player != null) {
+                            // Calculate the actual distance between the player and the broadcaster
+                            double distance = Math.sqrt(
+                                    Math.pow(te.getPos().getX() + 0.5 - player.posX, 2) +
+                                    Math.pow(te.getPos().getY() + 0.5 - player.posY, 2) +
+                                    Math.pow(te.getPos().getZ() + 0.5 - player.posZ, 2)
+                            );
+
+                            // Sound effects are only played within a 25-tile range, resolving sound effect anomalies when exploring the map and re-adding save files.
+                            if(distance <= 25) {
+                                Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
+                            }
+                        }
+                    }
+                    // ===== Fix complete =====
 				} else
 				
 				if (te instanceof TileEntityMachineCentrifuge || te instanceof TileEntityMachineGasCent) {
