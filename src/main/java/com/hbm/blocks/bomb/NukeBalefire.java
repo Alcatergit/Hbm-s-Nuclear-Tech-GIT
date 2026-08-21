@@ -1,16 +1,12 @@
 package com.hbm.blocks.bomb;
 
 import java.util.List;
-import java.util.Random;
 
-import com.hbm.config.GeneralConfig;
 import com.hbm.items.ModItems;
-import com.hbm.lib.InventoryHelper;
 import com.hbm.util.I18nUtil;
-import com.hbm.blocks.machine.BlockMachineBase;
-import com.hbm.interfaces.IBomb;
 import com.hbm.tileentity.bomb.TileEntityNukeBalefire;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.main.MainRegistry;
 
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.properties.IProperty;
@@ -29,31 +25,51 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class NukeBalefire extends BlockMachineBase implements IBomb {
+public class NukeBalefire extends BlockNukeBase {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-    // ========== Added: Field for storing information about the player who last broke the block ==========
-    private EntityPlayer lastBreaker = null;
-    // ========== Added: Flag to mark if the destruction was caused by an explosion ==========
-    private boolean isExploding = false;
-
-    public NukeBalefire(Material materialIn, int guiID, String s) {
-        super(materialIn, guiID, s);
-    }
-
-    @Override
-    protected boolean rotatable() {
-        return true;
+    public NukeBalefire(Material materialIn, String s) {
+        super(materialIn);
+        this.setTranslationKey(s);
+        this.setRegistryName(s);
+        ModBlocks.ALL_BLOCKS.add(this);
     }
 
     @Override
     public TileEntity createNewTileEntity(World worldIn, int meta) {
         return new TileEntityNukeBalefire();
+    }
+
+    @Override
+    protected Item getBlockItem() {
+        return Item.getItemFromBlock(ModBlocks.nuke_fstbmb);
+    }
+
+    @Override
+    protected Class<? extends TileEntity> getTileEntityClass() {
+        return TileEntityNukeBalefire.class;
+    }
+
+    @Override
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
+        if(world.isRemote) {
+            return true;
+        } else if(!player.isSneaking()) {
+            TileEntityNukeBalefire entity = (TileEntityNukeBalefire) world.getTileEntity(pos);
+            if(entity != null)
+            {
+                player.openGui(MainRegistry.instance, ModBlocks.guiID_nuke_fstbmb, world, pos.getX(), pos.getY(), pos.getZ());
+            }
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -130,156 +146,9 @@ public class NukeBalefire extends BlockMachineBase implements IBomb {
     }
 
     @Override
-    public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-        // ========== Modified: Added drop control logic for detonation ==========
-        // If the block is destroyed by an explosion, drop nothing.
-        if (isExploding) {
-            return null;
-        }
-
-        // When NBT saving is enabled, drops are handled entirely by breakBlock.
-        if (GeneralConfig.enableBlockItemNBTSaving) {
-            return null; // Return null, drops are handled by breakBlock.
-        }
-        // ========== End of modification ==========
-
-        return Item.getItemFromBlock(ModBlocks.nuke_fstbmb);
+    public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+        return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
     }
-
-    // ========== Added: Override removedByPlayer to capture the player who broke the block ==========
-    @Override
-    public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-        // Store the player who is breaking the block
-        this.lastBreaker = player;
-
-        // Call the super method to continue with the breaking logic
-        boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
-
-        // Clear the stored player information
-        this.lastBreaker = null;
-
-        return result;
-    }
-
-    // ========== Modified: onBlockPlacedBy method - Support data recovery from simplified NBT ==========
-    @Override
-    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-        world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
-
-        // ========== Modified: Recover data from simplified NBT ==========
-        if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
-            TileEntity tileentity = world.getTileEntity(pos);
-            if (tileentity instanceof TileEntityNukeBalefire) {
-                NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
-
-                if (blockEntityTag.hasKey("inventory")) {
-                    NBTTagCompound savedInventory = blockEntityTag.getCompoundTag("inventory");
-
-                    // Create complete tile entity NBT data
-                    NBTTagCompound tileData = new NBTTagCompound();
-                    tileData.setInteger("x", pos.getX());
-                    tileData.setInteger("y", pos.getY());
-                    tileData.setInteger("z", pos.getZ());
-                    tileData.setBoolean("started", false);  // Ensure started is false
-                    tileData.setInteger("timer", 18000);    // Ensure timer is set to 18000
-
-                    // ========== Restore only the Items data in inventory ==========
-                    NBTTagCompound newInventory = new NBTTagCompound();
-                    if (savedInventory.hasKey("Items")) {
-                        newInventory.setTag("Items", savedInventory.getTagList("Items", 10).copy());
-                    }
-
-                    tileData.setTag("inventory", newInventory);
-
-                    // Load data from NBT into the tile entity
-                    ((TileEntityNukeBalefire) tileentity).readFromNBT(tileData);
-
-                    // Mark the block for update
-                    world.notifyBlockUpdate(pos, state, state, 3);
-
-                    // Mark tile entity as dirty to ensure data is saved
-                    tileentity.markDirty();
-                }
-            }
-        }
-    }
-    // ========== End of modification ==========
-
-    // ========== Modified: Use player information captured by removedByPlayer ==========
-    @Override
-    public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        // ========== If destroyed by an explosion, clear the tile entity and drop nothing ==========
-        if (isExploding) {
-            TileEntity tileentity = world.getTileEntity(pos);
-            if (tileentity != null) {
-                world.removeTileEntity(pos);
-            }
-            return;
-        }
-
-        TileEntity tileentity = world.getTileEntity(pos);
-
-        // ========== New: NBT saving controlled by configuration file ==========
-        if (!GeneralConfig.enableBlockItemNBTSaving) {
-            // NBT saving is disabled, use original logic.
-            InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
-        } else {
-            if (tileentity instanceof TileEntityNukeBalefire) {
-                TileEntityNukeBalefire nukeBalefire = (TileEntityNukeBalefire)tileentity;
-
-                // Create NBT tag to store tile entity data
-                NBTTagCompound tileData = new NBTTagCompound();
-                nukeBalefire.writeToNBT(tileData);
-
-                // ========== Check if there are any items inside ==========
-                boolean hasItems = false;
-                if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
-                    NBTTagList itemsList = tileData.getCompoundTag("inventory").getTagList("Items", 10);
-                    hasItems = itemsList.tagCount() > 0;
-                }
-
-                // ========== Use player information captured by removedByPlayer ==========
-                boolean isCreativeMode = (lastBreaker != null && lastBreaker.capabilities.isCreativeMode);
-
-                if (hasItems) {
-                    // ========== Has items inside: Drop a nuke block with NBT data ==========
-                    ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
-                    NBTTagCompound nbttagcompound = new NBTTagCompound();
-
-                    // ========== Simplify NBT data: Only keep BlockEntityTag -> inventory -> Items ==========
-                    NBTTagCompound blockEntityTag = new NBTTagCompound();
-                    NBTTagCompound inventoryTag = new NBTTagCompound();
-
-                    if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
-                        // Copy only the Items tag and all its child tags.
-                        NBTTagList items = tileData.getCompoundTag("inventory").getTagList("Items", 10).copy();
-                        inventoryTag.setTag("Items", items);
-                    }
-
-                    blockEntityTag.setTag("inventory", inventoryTag);
-
-                    // Write the BlockEntityTag to the item's NBT
-                    nbttagcompound.setTag("BlockEntityTag", blockEntityTag);
-                    itemstack.setTagCompound(nbttagcompound);
-
-                    // Spawn the item drop
-                    spawnAsEntity(world, pos, itemstack);
-
-                    // ========== Modified: Directly empty item slots instead of using clearSlots method ==========
-                    for(int i = 0; i < nukeBalefire.inventory.getSlots(); i++) {
-                        nukeBalefire.inventory.setStackInSlot(i, ItemStack.EMPTY);
-                    }
-                } else if (!isCreativeMode) {
-                    // ========== Survival mode, empty nuke: Drop a regular nuke block =========
-                    spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(this), 1));
-                }
-                // Creative mode, empty nuke: Drop nothing
-            }
-        }
-        // Call super.breakBlock but prevent it from handling drops
-        super.breakBlock(world, pos, state);
-    }
-    // ========== End of modification ==========
 
     @Override
     public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
