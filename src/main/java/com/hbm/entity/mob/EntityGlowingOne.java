@@ -13,6 +13,8 @@ import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.monster.EntityZombie;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 
 public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
@@ -70,6 +72,10 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
     	EntityGlowingOne glowing = new EntityGlowingOne(world);
     	glowing.setChild(zombie.isChild());
 		glowing.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
+
+		DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(zombie.posX, zombie.posY, zombie.posZ));
+		float f = difficulty.getClampedAdditionalDifficulty();
+		glowing.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 
 		if(!zombie.isDead)
 			if(!world.isRemote)
