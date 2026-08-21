@@ -14,7 +14,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 @SideOnly(Side.CLIENT)
 public class LayerNuclearCreeperCharge implements LayerRenderer<EntityNuclearCreeper>
 {
-    private static final ResourceLocation LIGHTNING_TEXTURE = new ResourceLocation(RefStrings.MODID + ":" + "textures/entity/creeper_armor.png");
     private final RenderNuclearCreeper creeperRenderer;
     private final ModelCreeper creeperModel = new ModelCreeper(2.0F);
 
@@ -29,7 +28,7 @@ public class LayerNuclearCreeperCharge implements LayerRenderer<EntityNuclearCre
         {
             boolean flag = entitylivingbaseIn.isInvisible();
             GlStateManager.depthMask(!flag);
-            this.creeperRenderer.bindTexture(LIGHTNING_TEXTURE);
+            this.creeperRenderer.bindTexture(ResourceManager.nuclear_creeper_charge);
             GlStateManager.matrixMode(5890);
             GlStateManager.loadIdentity();
             float f = (float)entitylivingbaseIn.ticksExisted + partialTicks;
