@@ -386,3 +386,4 @@ public class EntityFalloutUnderGround extends EntityChunky {
 
 		return scale == 0 ? 1 : scale;
 	}
+}
