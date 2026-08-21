@@ -416,10 +416,13 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 					mc.fontRenderer.drawString(label, pX, pZ, 0xFFFFFF);
 					int labelWidth = mc.fontRenderer.getStringWidth(label);
 					String value = String.valueOf(flush.getTag(key));
-					List<String> lines = mc.fontRenderer.listFormattedStringToWidth(value, maxWidth - labelWidth);
-					for(String line : lines) {
+					int valueMaxWidth = maxWidth - labelWidth;
+					while(!value.isEmpty()) {
+						String line = mc.fontRenderer.trimStringToWidth(value, valueMaxWidth);
+						if(line.isEmpty()) break;
 						mc.fontRenderer.drawString(line, pX + labelWidth, pZ, 0xFFFFFF);
 						pZ += 10;
+						value = value.substring(line.length());
 					}
 				}
 			} catch(ConcurrentModificationException e) {
