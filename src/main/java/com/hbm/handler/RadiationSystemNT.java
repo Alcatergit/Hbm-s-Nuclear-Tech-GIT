@@ -36,14 +36,16 @@ import com.hbm.util.ContaminationUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.entity.monster.EntityBlaze;
-import net.minecraft.entity.monster.EntityCreeper;
-import net.minecraft.entity.monster.EntityZombieVillager;
+import net.minecraft.entity.monster.*;
 import net.minecraft.entity.passive.*;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.management.PlayerChunkMapEntry;
@@ -53,6 +55,7 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.util.math.RayTraceResult.Type;
 import net.minecraft.util.math.Vec3d;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
 import net.minecraft.world.chunk.Chunk;
@@ -321,6 +324,37 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
+						if(e instanceof EntityAnimal animal && (eRad >= 500 || animal.getEntityData().getBoolean("isPermanent")) && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse)) {
+							if(!animal.getEntityData().hasKey("isPermanent")) {
+								animal.getEntityData().setBoolean("isPermanent", true);
+							}
+
+							// Simulated hematopoietic stem cell death: Vital value cannot be restored
+							if(animal.getHealth() < animal.getMaxHealth()) {
+								animal.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(animal.getHealth());
+							}
+
+							if(animal.isChild()) {
+								if(!animal.getEntityData().hasKey("lockedAge")) {
+									animal.getEntityData().setInteger("lockedAge", animal.getGrowingAge());
+								}
+
+								animal.setGrowingAge(animal.getEntityData().getInteger("lockedAge"));
+							} else {
+								animal.setGrowingAge(2147483647);
+								animal.getEntityData().setInteger("InLove", 0);
+							}
+						} else if(e instanceof AbstractIllager illager && (eRad >= 500 || illager.getEntityData().getBoolean("isPermanent"))) {
+							if(!illager.getEntityData().hasKey("isPermanent")) {
+								illager.getEntityData().setBoolean("isPermanent", true);
+							}
+
+							// Simulated hematopoietic stem cell death: Vital value cannot be restored
+							if(illager.getHealth() < illager.getMaxHealth()) {
+								illager.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(illager.getHealth());
+							}
+						}
+
 						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper) {
 
 							if(world.rand.nextInt(3) == 0) {
@@ -335,9 +369,83 @@ public class RadiationSystemNT {
 							}
 							continue;
 
-						} else if(eRad >= 500 && entity instanceof EntityCow && !(entity instanceof EntityMooshroom)) {
+						} else if(eRad >= 500 && entity instanceof EntityCow cow && !(entity instanceof EntityMooshroom)) {
 							EntityMooshroom creep = new EntityMooshroom(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+							creep.setGrowingAge(cow.getGrowingAge());
+
+							if(!entity.isDead)
+                                world.spawnEntity(creep);
+							entity.setDead();
+							continue;
+
+						} else if(entity instanceof EntitySheep sheep && (eRad >= 250 || sheep.getEntityData().getBoolean("isPermanent"))) {
+							if(!sheep.getSheared() && sheep.getEntityData().getBoolean("isPermanent")) {
+								sheep.setSheared(true);
+							}
+
+							if(eRad < 500) {
+								if(!sheep.getEntityData().getBoolean("isBalding")) {
+									if(!sheep.getSheared()) {
+										sheep.setSheared(true);
+										int i = 1 + world.rand.nextInt(3);
+
+										for (int j = 0; j < i; ++j) {
+											EntityItem entityitem = new EntityItem(world, sheep.posX, sheep.posY, sheep.posZ,
+													new ItemStack(Blocks.WOOL, 1, sheep.getFleeceColor().getMetadata()));
+
+											entityitem.motionY += (double)(world.rand.nextFloat() * 0.05F);
+											entityitem.motionX += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+											entityitem.motionZ += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+
+											world.spawnEntity(entityitem);
+										}
+									}
+
+									sheep.getEntityData().setBoolean("isBalding", true);
+								}
+							} else if(eRad < 1000) {
+								if(!sheep.getEntityData().getBoolean("isPermanent")) {
+									if (!sheep.getSheared()){
+										sheep.setSheared(true);
+										int h = 1 + world.rand.nextInt(3);
+
+										for (int j = 0; j < h; ++j) {
+											EntityItem entityitem = new EntityItem(world, sheep.posX, sheep.posY, sheep.posZ,
+													new ItemStack(Blocks.WOOL, 1, sheep.getFleeceColor().getMetadata()));
+
+											entityitem.motionY += (double)(world.rand.nextFloat() * 0.05F);
+											entityitem.motionX += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+											entityitem.motionZ += (double)((world.rand.nextFloat() - world.rand.nextFloat()) * 0.1F);
+
+											world.spawnEntity(entityitem);
+										}
+									}
+								}
+
+								sheep.getEntityData().setBoolean("isPermanent", true);
+							} else {
+								sheep.attackEntityFrom(ModDamageSource.radiation, 1000F);
+								HbmLivingProps.setRadiation(sheep, 0);
+
+								if(sheep.getHealth() > 0) {
+									sheep.setHealth(0);
+									sheep.onDeath(ModDamageSource.radiation);
+								}
+							}
+
+							continue;
+						} else if(eRad >= 500 && entity instanceof EntityPig) {
+							EntityPigZombie creep = new EntityPigZombie(world);
+							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+
+							if(entity.isChild()) {
+								creep.setChild(true);
+							}
+
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
+							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
@@ -350,6 +458,10 @@ public class RadiationSystemNT {
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+
+							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+							float f = difficulty.getClampedAdditionalDifficulty();
+							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
@@ -364,18 +476,45 @@ public class RadiationSystemNT {
 							entity.setDead();
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
-							EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
-							zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-							zomhorsie.setGrowingAge(horsie.getGrowingAge());
-							zomhorsie.setTemper(horsie.getTemper());
-							zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
-							zomhorsie.setHorseTamed(horsie.isTame());
-							zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
-							zomhorsie.makeMad();
-							if(!entity.isDead)
-                                world.spawnEntity(zomhorsie);
-							entity.setDead();
-							continue;
+							// Horses transformed into immortal horses: 75% zombie horses, 25% skeleton horses
+							// There is a 1/4 chance that a Skeleton Horse trap will spawn on the Skeleton Horse.
+
+							if(world.rand.nextFloat() < 0.25F) {
+								// 25% chance of spawning a skeleton horses
+								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
+								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								skehorse.setGrowingAge(horsie.getGrowingAge());
+								skehorse.setTemper(horsie.getTemper());
+								skehorse.setHorseSaddled(horsie.isHorseSaddled());
+								skehorse.setHorseTamed(horsie.isTame());
+								skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
+
+								// There is a 1/4 chance of generating a skeleton horse trap.
+								if(world.rand.nextFloat() < 0.25F) {
+									skehorse.setTrap(true);
+									skehorse.setHorseTamed(false);
+								}
+
+								if(!entity.isDead)
+									world.spawnEntity(skehorse);
+								entity.setDead();
+								continue;
+							} else {
+								// 75% chance of generating a zombie horse
+								EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
+								zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+								zomhorsie.setGrowingAge(horsie.getGrowingAge());
+								zomhorsie.setTemper(horsie.getTemper());
+								zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+								zomhorsie.setHorseTamed(horsie.isTame());
+								zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+								zomhorsie.makeMad();
+
+								if(!entity.isDead)
+									world.spawnEntity(zomhorsie);
+								entity.setDead();
+								continue;
+							}
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
 
 							EntityQuackos quacc = new EntityQuackos(world);
