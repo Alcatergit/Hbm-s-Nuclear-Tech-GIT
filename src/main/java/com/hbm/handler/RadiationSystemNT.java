@@ -576,6 +576,7 @@ public class RadiationSystemNT {
 									skehorse.setHorseTamed(horsie.isTame());
 									skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
 								}
+								skehorse.makeMad();
 
 								if(!entity.isDead)
 									world.spawnEntity(skehorse);
