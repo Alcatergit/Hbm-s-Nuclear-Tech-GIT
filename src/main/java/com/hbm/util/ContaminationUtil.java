@@ -540,7 +540,7 @@ public class ContaminationUtil {
 		double weatherFactor = getWeatherAttenuationFactor(world, x, y, z);
 
 		for(Entity e : entities) {
-			if(e == exclude || isExplosionExempt(e)) continue;
+			if(isExplosionExempt(e) || e == exclude) continue;
 
 			AxisAlignedBB box = e.getEntityBoundingBox();
 			double closestX = Math.max(box.minX, Math.min(x, box.maxX));
@@ -621,7 +621,7 @@ public class ContaminationUtil {
 		float rainfall = world.getBiome(pos).getRainfall();
 		double factor = 0.6D + 0.9D * (double)rainfall;
 
-		if(world.isRaining()) {
+		if(world.isRaining() && world.isRainingAt(pos)) {
 			if(world.isThundering())
 				factor *= 1.8D;
 			else
