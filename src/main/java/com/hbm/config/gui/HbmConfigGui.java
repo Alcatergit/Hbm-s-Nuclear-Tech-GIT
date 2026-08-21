@@ -53,6 +53,7 @@ public class HbmConfigGui extends GuiConfig {
 		BedrockOreJsonConfig.writeToJson();
 		if (!instance.allRequireWorldRestart || !instance.isWorldRunning) {
 			MainRegistry.reloadConfig();
+			AssemblerRecipes.loadRecipes();
 		}
 	}
 
