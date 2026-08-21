@@ -1,7 +1,6 @@
 package com.hbm.capability;
 
 import java.util.List;
-import java.util.Random;
 import java.util.UUID;
 
 import com.hbm.capability.HbmLivingCapability.EntityHbmProps;
@@ -107,7 +106,6 @@ public class HbmLivingProps {
 			entity.setAbsorptionAmount(0);
 			entity.attackEntityFrom(ModDamageSource.digamma, 5000000F);
 			entity.setHealth(0);
-			entity.onDeath(ModDamageSource.digamma);
 
 			NBTTagCompound data = new NBTTagCompound();
 			data.setString("type", "sweat");
