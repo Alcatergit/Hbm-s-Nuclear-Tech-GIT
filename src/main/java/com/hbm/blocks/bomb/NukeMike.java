@@ -355,7 +355,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.mikeRadius)+"§r");
 		if(!BombConfig.disableNuclear){
 			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.mikeRadius*(1+BombConfig.falloutRange/100))+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(BombConfig.mikeRadius*(1+BombConfig.falloutRange/100.0)))+"§r");
 		}
 
 		// ========== Modification: Adjusted the display logic of the prompt text as required ==========
