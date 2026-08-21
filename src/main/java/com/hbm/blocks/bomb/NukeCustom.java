@@ -579,10 +579,11 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			float moreFallout = tempEntity.dirty;
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)hydroAdj)+"§r");
 			if(!BombConfig.disableNuclear){
-				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
 				if (tempEntity.dirty > 0) {
-					tooltip.add(" §e"+"Salted Radius: "+(int)(hydroAdj*(1+BombConfig.falloutRange/100)+(moreFallout*0.25F))+" m"+"§r");
+                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"(+Salted)"+"]"+"§r");
+					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(hydroAdj*(1+BombConfig.falloutRange/100)+(moreFallout*0.25F)))+"§r");
 				} else {
+                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
 					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(hydroAdj*(1+BombConfig.falloutRange/100)))+"§r");
 				}
 			}
@@ -594,10 +595,11 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			float moreFallout = tempEntity.dirty;
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)nukeAdj)+"§r");
 			if(!BombConfig.disableNuclear){
-				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
 				if (tempEntity.dirty > 0) {
-					tooltip.add(" §e"+"Salted Radius: "+(int)(nukeAdj*(1+BombConfig.falloutRange/100)+moreFallout)+" m"+"§r");
+                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"(+Salted)"+"]"+"§r");
+                    tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(nukeAdj*(1+BombConfig.falloutRange/100)+moreFallout))+"§r");
 				} else {
+                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
 					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(nukeAdj*(1+BombConfig.falloutRange/100)))+"§r");
 				}
 			}
