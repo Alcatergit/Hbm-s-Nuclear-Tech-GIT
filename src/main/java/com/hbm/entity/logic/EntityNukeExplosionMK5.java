@@ -95,7 +95,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 		//make some noise
 		if(!mute) {
-			if(this.radius > 30){
+			if(this.radius >= 25){
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, Math.min(1, ticksExisted/200F) * this.radius * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
 			}else{
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, Math.min(1, ticksExisted/100F) * Math.max(2F, this.radius * 0.1F), 0.8F + this.rand.nextFloat() * 0.2F);
