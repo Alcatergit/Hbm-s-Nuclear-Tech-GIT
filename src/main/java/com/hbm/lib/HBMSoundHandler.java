@@ -104,6 +104,11 @@ public final class HBMSoundHandler {
 	public static SoundEvent railgunOrientation;
 	public static SoundEvent railgunCharge;
 	public static SoundEvent shutdown;
+	public static SoundEvent iterReactorRunning;
+	public static SoundEvent chemicalPlant;
+	public static SoundEvent boiler;
+	public static SoundEvent electricHum;
+	public static SoundEvent engine;
 	public static SoundEvent broadcast1;
 	public static SoundEvent broadcast2;
 	public static SoundEvent broadcast3;
@@ -203,7 +208,6 @@ public final class HBMSoundHandler {
 	public static SoundEvent hit_metal;
 	public static SoundEvent hit_flesh;
 	public static SoundEvent vomit;
-	// Register custom sound effects for Rod of Discord
 	public static SoundEvent discord_teleport;
 	public static SoundEvent chekhov_fire;
 	public static SoundEvent jeremy_fire;
@@ -214,6 +218,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent rbmk_explosion;
 	public static SoundEvent rbmk_az5_cover;
 	public static SoundEvent chungus_lever;
+	public static SoundEvent chungusOperate;
 	public static SoundEvent dflash;
 	public static SoundEvent cough;
 	public static SoundEvent ufoBeam;
@@ -370,6 +375,11 @@ public final class HBMSoundHandler {
 		railgunOrientation = register("block.railgunOrientation");
 		railgunCharge = register("block.railgunCharge");
 		shutdown = register("block.shutdown");
+		iterReactorRunning = register("block.iterReactorRunning");
+		chemicalPlant = register("block.chemicalPlant");
+		boiler = register("block.boiler");
+		electricHum = register("block.electricHum");
+		engine = register("block.engine");
 		broadcast1 = register("block.broadcast1");
 		broadcast2 = register("block.broadcast2");
 		broadcast3 = register("block.broadcast3");
@@ -468,7 +478,6 @@ public final class HBMSoundHandler {
 		hit_metal = register("weapon.hit_metal");
 		hit_flesh = register("weapon.hit_flesh");
 		vomit = register("entity.vomit");
-		// Register custom sound effects for Rod of Discord
 		discord_teleport = register("item.discord_teleport");
 		chekhov_fire = register("turret.chekhov_fire");
 		jeremy_fire = register("turret.jeremy_fire");
@@ -479,6 +488,7 @@ public final class HBMSoundHandler {
 		rbmk_explosion = register("block.rbmk_explosion");
 		rbmk_az5_cover = register("block.rbmk_az5_cover");
 		chungus_lever = register("block.chungusLever");
+		chungusOperate = register("block.chungusTurbineRunning");
 		dflash = register("weapon.dFlash");
 		cough = register("player.cough");
 		ufoBeam = register("entity.ufoBeam");
