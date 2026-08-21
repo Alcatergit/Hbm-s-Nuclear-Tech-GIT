@@ -20,6 +20,8 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -236,7 +238,12 @@ public class ExplosionLarge {
 		if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 5 * strength) {
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = (float) player.getDistance(x, y, z);
-			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeNear, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * (dist < 2F * strength ? 1F : ((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F))), 0.9F + rand.nextFloat() * 0.2F);
+			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
+					HBMSoundHandler.explosionLargeNear,
+					SoundCategory.PLAYERS,
+					(float) (dist < 2F * strength ? 10_000F : Math.cbrt(10_000F * ((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F))), 0.9F + rand.nextFloat() * 0.2F,
+					(float) x, (float) y, (float) z);
+			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
 			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
 			ModEventHandlerClient.shakeMultiplier = Math.max(((strength * 2D) - (double) dist) / (strength * 2D), 0D);
 			player.hurtTime = Math.max((int) (((((strength * 2F) - dist)) / (strength * 2F)) * 150F), 0);
@@ -245,7 +252,12 @@ public class ExplosionLarge {
 		} else if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 15 * strength) {
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = (float) player.getDistance(x, y, z);
-			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeFar, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * Math.max(((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
+			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
+					HBMSoundHandler.explosionLargeFar,
+					SoundCategory.PLAYERS,
+					(float) Math.cbrt(10_000F * Math.max(((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F,
+					(float) x, (float) y, (float) z);
+			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
 		}
 	}
 
