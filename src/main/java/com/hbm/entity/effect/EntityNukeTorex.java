@@ -72,7 +72,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public int ticksExistedSaved2 = 0;
 	public boolean dataReady = false;
     public boolean needScale = false;
-    public boolean isFirstEqual = true;
 	public boolean isReloaded = false;
     public boolean isReloaded2 = false;
     public boolean isScaled = false;
@@ -111,6 +110,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         }
 		if (key == TICKS_EXISTED && this.world.isRemote) {
 			// Some client instance variables can only be updated once after the entity is initialized.
+            if (!this.dataReady && !this.dataManager.get(IS_INITIALIZED)) this.dataReady = true;
 			if (!this.dataReady) {
 				this.scale = this.dataManager.get(SCALE);
 				this.maxAge = this.dataManager.get(MAX_AGE);
@@ -129,9 +129,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			} else if (this.isReloaded2) {
                 if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
                     this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
-                } else if (this.isFirstEqual) {
-                    this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED);
-                    this.isFirstEqual = false;
                 }
             }
 		}
@@ -191,6 +188,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			double cs = 1.5;
 			if(this.ticksExisted == 1 || (!this.isInitialized && !this.isScaled)){
 				this.setScale((float) s);
+                this.isInitialized = true;
 			}else if(!this.isScaled){
 				this.coreHeight = this.coreHeight * this.scale;
 				this.torusWidth = this.torusWidth * this.scale;
