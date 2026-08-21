@@ -1,6 +1,5 @@
 package com.hbm.main;
 
-
 import java.lang.reflect.Field;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -10,8 +9,15 @@ import java.util.Map.Entry;
 import com.hbm.crafting.handlers.MKUCraftingHandler;
 import com.hbm.items.gear.ModShield;
 import net.minecraft.entity.item.EntityArmorStand;
+import net.minecraft.util.*;
+import net.minecraft.util.math.RayTraceResult;
+import net.minecraft.util.math.Vec3d;
+import net.minecraftforge.event.*;
+import net.minecraftforge.fluids.FluidActionResult;
+import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.fluids.FluidUtil;
+import net.minecraftforge.fluids.UniversalBucket;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.apache.logging.log4j.Level;
 
 import com.google.common.collect.Multimap;
 import com.hbm.blocks.ModBlocks;
@@ -36,7 +42,6 @@ import com.hbm.handler.MissileStruct;
 import com.hbm.handler.WeightedRandomChestContentFrom1710;
 import com.hbm.handler.HbmKeybinds.EnumKeybind;
 import com.hbm.hazard.HazardSystem;
-import com.hbm.interfaces.IBomb;
 import com.hbm.inventory.AssemblerRecipes;
 import com.hbm.items.IEquipReceiver;
 import com.hbm.items.ModItems;
@@ -99,13 +104,6 @@ import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.tileentity.TileEntitySign;
-import net.minecraft.util.EntityDamageSource;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.NonNullList;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
@@ -120,11 +118,6 @@ import net.minecraft.world.storage.loot.conditions.LootCondition;
 import net.minecraft.world.storage.loot.conditions.RandomChanceWithLooting;
 import net.minecraft.world.storage.loot.functions.LootFunction;
 import net.minecraftforge.common.util.FakePlayer;
-import net.minecraftforge.event.AnvilUpdateEvent;
-import net.minecraftforge.event.AttachCapabilitiesEvent;
-import net.minecraftforge.event.LootTableLoadEvent;
-import net.minecraftforge.event.RegistryEvent;
-import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
 import net.minecraftforge.event.entity.item.ItemTossEvent;
 import net.minecraftforge.event.entity.living.LivingAttackEvent;
@@ -1101,6 +1094,51 @@ public class ModEventHandler {
 				}
 			}
 		}
+	}
+
+	@SubscribeEvent(priority = EventPriority.HIGH)
+	public void onCreativeBucketUse(PlayerInteractEvent.RightClickItem event) {
+		EntityPlayer player = event.getEntityPlayer();
+		if (!player.capabilities.isCreativeMode) return;
+
+		ItemStack stack = event.getItemStack();
+		if (stack.isEmpty() || !(stack.getItem() instanceof UniversalBucket)) return;
+
+		UniversalBucket bucket = (UniversalBucket) stack.getItem();
+		FluidStack fluidStack = bucket.getFluid(stack);
+		if (fluidStack == null) return;
+
+		World world = event.getWorld();
+		RayTraceResult mop = rayTraceBlocks(world, player, false);
+
+		ActionResult<ItemStack> ret = ForgeEventFactory.onBucketUse(player, world, stack, mop);
+		if (ret != null) {
+			event.setCanceled(true);
+			event.setCancellationResult(ret.getType());
+			return;
+		}
+
+		if (mop == null || mop.typeOfHit != RayTraceResult.Type.BLOCK) return;
+		if (!world.isBlockModifiable(player, mop.getBlockPos())) return;
+
+		BlockPos targetPos = mop.getBlockPos().offset(mop.sideHit);
+
+		if ((player.getDistanceSq(targetPos) > 36.0D) || (!player.canPlayerEdit(targetPos, mop.sideHit, stack))) return;
+
+		FluidActionResult result = FluidUtil.tryPlaceFluid(player, world, targetPos, stack, fluidStack);
+		if (result.isSuccess()) {
+			event.setCanceled(true);
+			event.setCancellationResult(EnumActionResult.SUCCESS);
+		}
+	}
+
+	private static RayTraceResult rayTraceBlocks(World world, EntityPlayer player, boolean useLiquids) {
+		Vec3d start = player.getPositionEyes(1.0F);
+		Vec3d look = player.getLook(1.0F);
+		double attrib = player.getEntityAttribute(EntityPlayer.REACH_DISTANCE).getAttributeValue();
+		double reach = player.capabilities.isCreativeMode ? attrib : attrib - 0.5D;
+		Vec3d end = start.add(look.x * reach, look.y * reach, look.z * reach);
+		return world.rayTraceBlocks(start, end, useLiquids, !useLiquids, false);
 	}
 	
 	@SubscribeEvent
