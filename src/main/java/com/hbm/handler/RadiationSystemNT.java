@@ -441,9 +441,7 @@ public class RadiationSystemNT {
 							EntityPigZombie creep = new EntityPigZombie(world);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
-							if(entity.isChild()) {
-								creep.setChild(true);
-							}
+							if (entity.isChild()) creep.setChild(true);
 
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
