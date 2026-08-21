@@ -204,6 +204,8 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
     		return;
         EntityThermonuclearCat cat = new EntityThermonuclearCat(world);
         cat.setLocationAndAngles(ocel.posX, ocel.posY, ocel.posZ, ocel.rotationYaw, ocel.rotationPitch);
+        cat.setRotationYawHead(ocel.rotationYaw);
+        cat.setRenderYawOffset(ocel.rotationYaw);
         cat.setCustomNameTag(ocel.getCustomNameTag());
         cat.setGrowingAge(ocel.getGrowingAge());
         cat.setScaleForAge(ocel.isChild());
@@ -218,6 +220,7 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
         cat.aiSit.setSitting(ocel.isSitting());
         if(!world.isRemote)
             world.spawnEntity(cat);
+        if(!ocel.isDead && ocel.getLeashed()) cat.setLeashHolder(ocel.getLeashHolder(), true);
         ocel.setDead();
     }
 
