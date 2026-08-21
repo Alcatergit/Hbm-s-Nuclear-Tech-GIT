@@ -324,7 +324,7 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
-						if((eRad >= 500 || entity.getEntityData().getBoolean("isPermanent")) && (entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse))) {
+						if((eRad >= 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse))) {
 							if(!(entity instanceof EntitySheep) && !animal.getEntityData().hasKey("isPermanent")) {
 								animal.getEntityData().setBoolean("isPermanent", true);
 							}
