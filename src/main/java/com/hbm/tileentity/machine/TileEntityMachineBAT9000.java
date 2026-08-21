@@ -2,11 +2,15 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
+import com.hbm.tileentity.TileEntityProxyCombo;
 
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityMachineBAT9000 extends TileEntityBarrel {
 
@@ -29,13 +33,22 @@ public class TileEntityMachineBAT9000 extends TileEntityBarrel {
 
 	@Override
 	public BlockPos[] getConnectionPositions() {
-		BlockPos[] ports = { pos };
-		return new BlockPos[] {
-				ports[0].east(5), ports[0].east(3).south(1), ports[0].east(3).north(1),
-				ports[0].west(5), ports[0].west(3).south(1), ports[0].west(3).north(1),
-				ports[0].south(5), ports[0].east(1).south(3), ports[0].west(1).south(3),
-				ports[0].north(5), ports[0].east(1).north(3), ports[0].west(1).north(3),
-		};
+		List<BlockPos> positions = new ArrayList<>();
+		for(int x = -3; x <= 3; x++) {
+			for(int z = -3; z <= 3; z++) {
+				if(x == 0 && z == 0) continue;
+				if(Math.abs(x) + Math.abs(z) != 3) continue;
+				BlockPos checkPos = pos.add(x, 0, z);
+				if(world.getTileEntity(checkPos) instanceof TileEntityProxyCombo) {
+					if(Math.abs(x) > Math.abs(z)) {
+						positions.add(checkPos.add(Integer.compare(x, 0), 0, 0));
+					} else {
+						positions.add(checkPos.add(0, 0, Integer.compare(z, 0)));
+					}
+				}
+			}
+		}
+		return positions.toArray(new BlockPos[0]);
 	}
 	
 	AxisAlignedBB bb = null;
