@@ -1,7 +1,5 @@
 package com.hbm.entity.mob;
 
-import java.util.List;
-
 import com.hbm.interfaces.IRadiationImmune;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
@@ -12,6 +10,7 @@ import com.hbm.main.AdvancementManager;
 import com.hbm.util.ContaminationUtil;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
@@ -25,6 +24,7 @@ import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.monster.EntitySkeleton;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.projectile.EntityArrow;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
@@ -170,11 +170,6 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 	 */
 	@Override
 	public void onUpdate(){
-		if(this.isDead) {
-			this.isDead = false;
-			this.heal(10.0F);
-		}
-
 		if(this.isEntityAlive()) {
 			this.lastActiveTime = this.timeSinceIgnited;
 
@@ -229,14 +224,13 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 	 */
 	@Override
 	public void onDeath(DamageSource p_70645_1_){
-		super.onDeath(p_70645_1_);
-
-		List<EntityPlayer> players = world.getEntitiesWithinAABB(EntityPlayer.class, this.getEntityBoundingBox().grow(10, 10, 10));
-
-		for(EntityPlayer player : players) {
-			AdvancementManager.grantAchievement(player, AdvancementManager.bossCreeper);
-            player.inventory.addItemStackToInventory(new ItemStack(ModItems.coin_creeper));
+		EntityLivingBase attacker = this.getAttackingEntity();
+		if(attacker instanceof EntityPlayerMP) {
+			AdvancementManager.grantAchievement((EntityPlayerMP)attacker, AdvancementManager.bossCreeper);
+			((EntityPlayerMP)attacker).inventory.addItemStackToInventory(new ItemStack(ModItems.coin_creeper));
 		}
+
+		super.onDeath(p_70645_1_);
 
 		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow)(p_70645_1_.getImmediateSource())).shootingEntity == null)) {
 			int i = rand.nextInt(11);
