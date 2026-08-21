@@ -604,10 +604,40 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	}
 
 	private void drain(MutableBlockPos pos){
+		// Expand the water source block processing range to 18x18 chunks to prevent water flow from adjacent chunks
 		for(int y = 255; y > 1; y--) {
 			pos.setY(y);
 			if(!world.isAirBlock(pos) && (world.getBlockState(pos).getBlock() == Blocks.WATER || world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER)){
 				world.setBlockToAir(pos);
+
+				// Also process water source blocks at adjacent chunk boundaries
+				drainAdjacentWaterBlocks(pos, y);
+			}
+		}
+	}
+
+	//Process water source blocks at adjacent chunk boundaries to prevent water from flowing during chunk processing gaps
+	private void drainAdjacentWaterBlocks(MutableBlockPos centerPos, int y) {
+		MutableBlockPos adjacentPos = new MutableBlockPos();
+
+		// Check 8 directions around the current block (including diagonals)
+		for(int dx = -1; dx <= 1; dx++) {
+			for(int dz = -1; dz <= 1; dz++) {
+				
+				int checkX = centerPos.getX() + dx;
+				int checkZ = centerPos.getZ() + dz;
+
+				// Check if it crosses a chunk boundary
+				if((checkX >> 4) != (centerPos.getX() >> 4) || (checkZ >> 4) != (centerPos.getZ() >> 4)) {
+					adjacentPos.setPos(checkX, y, checkZ);
+
+					// If it's a water source block, clear it
+					if(!world.isAirBlock(adjacentPos) && 
+					   (world.getBlockState(adjacentPos).getBlock() == Blocks.WATER || 
+					    world.getBlockState(adjacentPos).getBlock() == Blocks.FLOWING_WATER)) {
+						world.setBlockToAir(adjacentPos);
+					}
+				}
 			}
 		}
 	}
