@@ -208,7 +208,7 @@ public class ModEventHandlerClient {
 	public static float deltaMouseY;
 	
 	public static float currentFOV = 70;
-	public static final int flashDuration = 3_750;
+	public static final int flashDuration = 5_000;
 	public static final int shakeDuration = 1_500;
 	public static long flashTimestamp;
 	public static long shakeTimestamp;
@@ -1422,7 +1422,7 @@ public class ModEventHandlerClient {
 		}*/
 		//HbmShaderManager2.doPostProcess();
 		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)){
-			RenderTorex.renderWarp(evt.getPartialTicks());
+			if(GeneralConfig.nukeWarpShockwave) RenderTorex.renderWarp(evt.getPartialTicks());
 			HbmShaderManager2.postProcess();
 		}
 	}
@@ -1494,25 +1494,22 @@ public class ModEventHandlerClient {
 		if (event.getType() == ElementType.CROSSHAIRS && (flashTimestamp + flashDuration - System.currentTimeMillis()) > 0) {
 			int width = event.getResolution().getScaledWidth();
 			int height = event.getResolution().getScaledHeight();
-			int buff = -200; // that's for the shake effect - so the flash won't look like offset
-			net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
-			BufferBuilder buffer = tess.getBuffer();
 			GlStateManager.disableTexture2D();
 			GlStateManager.enableBlend();
 			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
-			GlStateManager.alphaFunc(516, 0.0F);
 			GlStateManager.depthMask(false);
-			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
+			net.minecraft.client.renderer.BufferBuilder buffer = tess.getBuffer();
 			float brightness = (flashTimestamp + flashDuration - System.currentTimeMillis()) / (float) flashDuration;
-			buffer.pos(width - buff, buff, 0).color(1F, 1F, 1F, brightness * 1F).endVertex();
-			buffer.pos(buff, buff, 0).color(1F, 1F, 1F, brightness * 1F).endVertex();
-			buffer.pos(buff, height - buff, 0).color(1F, 1F, 1F, brightness * 1F).endVertex();
-			buffer.pos(width - buff, height - buff, 0).color(1F, 1F, 1F, brightness * 1F).endVertex();
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			buffer.pos(0, 0, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(0, height, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(width, height, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(width, 0, 0).color(1F, 1F, 1F, brightness).endVertex();
 			tess.draw();
-			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-			GlStateManager.enableTexture2D();
-			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
 			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableTexture2D();
 			return;
 		}
 		if (event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
