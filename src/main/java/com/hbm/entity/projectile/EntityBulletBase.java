@@ -595,10 +595,10 @@ public class EntityBulletBase extends Entity implements IProjectile {
 			
 			if(BombConfig.enableNukeClouds) {
 				if(MainRegistry.polaroidID == 11 || rand.nextInt(100) == 0){
-					EntityNukeTorex.statFacBale(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+					EntityNukeTorex.statFacBale(world, posX, posY, posZ, config.nuke);
 				}
 				else{
-					EntityNukeTorex.statFac(world, pos.getX() + 0.5, pos.getY() + 5, pos.getZ() + 0.5, config.nuke);
+					EntityNukeTorex.statFac(world, posX, posY, posZ, config.nuke);
 				}
 			}
 			world.playSound(null, posX, posY, posZ, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
