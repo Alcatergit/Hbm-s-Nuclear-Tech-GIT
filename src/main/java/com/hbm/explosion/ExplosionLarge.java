@@ -20,8 +20,6 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
@@ -35,6 +33,11 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraft.network.datasync.DataParameter;
+import net.minecraft.network.datasync.DataSerializers;
+import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class ExplosionLarge {
 
@@ -224,6 +227,7 @@ public class ExplosionLarge {
 	}
 
 	public static void explode(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
+		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
 		if(CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)strength, x, y, z));
 		
@@ -235,33 +239,10 @@ public class ExplosionLarge {
 			spawnRubble(world, x, y+2, z, rubbleFunction((int) strength));
 		if (shrapnel)
 			spawnShrapnels(world, x, y+2, z, shrapnelFunction((int) strength));
-		if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 5 * strength) {
-			EntityPlayer player = MainRegistry.proxy.me();
-			float dist = (float) player.getDistance(x, y, z);
-			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
-					HBMSoundHandler.explosionLargeNear,
-					SoundCategory.PLAYERS,
-					10_000F, 0.9F + rand.nextFloat() * 0.2F,
-					(float) x, (float) y, (float) z);
-			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
-			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
-			ModEventHandlerClient.shakeMultiplier = Math.max(((strength * 2D) - (double) dist) / (strength * 2D), 0D);
-			player.hurtTime = Math.max((int) (((((strength * 2F) - dist)) / (strength * 2F)) * 150F), 0);
-			player.maxHurtTime = Math.max((int) (((((strength * 2F) - dist)) / (strength * 2F)) * 100F), 0);
-			player.attackedAtYaw = 0F;
-		} else if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 15 * strength) {
-			EntityPlayer player = MainRegistry.proxy.me();
-			float dist = (float) player.getDistance(x, y, z);
-			PositionedSoundRecord soundEffect = new PositionedSoundRecord(
-					HBMSoundHandler.explosionLargeFar,
-					SoundCategory.PLAYERS,
-					10_000F, 0.9F + rand.nextFloat() * 0.2F,
-					(float) x, (float) y, (float) z);
-			Minecraft.getMinecraft().getSoundHandler().playDelayedSound(soundEffect, (int) (dist / 8.575D));
-		}
 	}
 
     public static void explodeArea(World world, double x, double y, double z, float radius, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
+		world.spawnEntity(createShockwave(world, (int) radius, x, y, z));
         if(CompatibilityConfig.isWarDim(world)){
             List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
@@ -295,6 +276,7 @@ public class ExplosionLarge {
 	}
 
 	public static void explodeFire(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
+		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
 		if(CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRadFire(world, (int)strength, x, y, z));
 
@@ -323,6 +305,7 @@ public class ExplosionLarge {
 	}
 	
 	public static void buster(World world, double x, double y, double z, Vec3 vector, float strength, float depth) {
+		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
 		
 		vector = vector.normalize();
 		if(CompatibilityConfig.isWarDim(world)){
@@ -335,5 +318,167 @@ public class ExplosionLarge {
 		spawnParticles(world, x, y+2, z, cloudFunction((int)strength));
 		spawnRubble(world, x, y+2, z, rubbleFunction((int)strength));
 		spawnShrapnels(world, x, y+2, z, shrapnelFunction((int)strength));
+	}
+
+	public static EntityShockwave createShockwave(World world, int radius, double x, double y, double z) {
+		EntityShockwave sw = new EntityShockwave(world, radius);
+		sw.setPosition(x, y, z);
+		return sw;
+	}
+
+	public static class EntityShockwave extends Entity {
+		public static final DataParameter<Integer> EXPLOSION_RADIUS = EntityDataManager.createKey(EntityShockwave.class, DataSerializers.VARINT);
+		public static final DataParameter<Integer> TICKS_EXISTED = EntityDataManager.createKey(EntityShockwave.class, DataSerializers.VARINT);
+		public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityShockwave.class, DataSerializers.BOOLEAN);
+		public static final DataParameter<Boolean> IS_INITIALIZED = EntityDataManager.createKey(EntityShockwave.class, DataSerializers.BOOLEAN);
+
+		public int explosionRadius;
+		public boolean didPlaySound = false;
+		public boolean didShake = false;
+		public int lastSyncedTick = 0;
+		private boolean isDataReady = false;
+		public boolean isReloaded = false;
+		public boolean isClientSynced = false;
+		public boolean isInitialized = false;
+
+		public EntityShockwave(World world) {
+			super(world);
+			this.setSize(1F, 1F);
+			this.ignoreFrustumCheck = true;
+		}
+
+		public EntityShockwave(World world, int radius) {
+			this(world);
+			this.explosionRadius = radius;
+			this.dataManager.set(EXPLOSION_RADIUS, radius);
+		}
+
+		@Override
+		protected void entityInit() {
+			this.dataManager.register(EXPLOSION_RADIUS, 0);
+			this.dataManager.register(TICKS_EXISTED, 0);
+			this.dataManager.register(IS_RELOADED, false);
+			this.dataManager.register(IS_INITIALIZED, false);
+		}
+
+		@Override
+		public void notifyDataManagerChange(DataParameter<?> key) {
+			super.notifyDataManagerChange(key);
+			if (key == TICKS_EXISTED && this.world.isRemote) {
+				if (!this.isDataReady) {
+					this.explosionRadius = this.dataManager.get(EXPLOSION_RADIUS);
+					this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
+					this.isReloaded = this.dataManager.get(IS_RELOADED);
+					this.isInitialized = this.dataManager.get(IS_INITIALIZED);
+					this.isDataReady = true;
+				}
+				if (this.isReloaded) {
+					if (this.ticksExisted < this.dataManager.get(TICKS_EXISTED)) {
+						this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
+					}
+				}
+			}
+		}
+
+		@Override
+		public void onUpdate() {
+			this.dataManager.set(TICKS_EXISTED, this.ticksExisted);
+			if (world.isRemote) {
+				int explosionRadius = this.dataManager.get(EXPLOSION_RADIUS);
+				int blastDuration = (int)Math.ceil(80 * Math.cbrt(explosionRadius / 100.0));
+				double shockSpeed = Math.max(2D, 2D * explosionRadius / (double)blastDuration);
+				EntityPlayer player = MainRegistry.proxy.me();
+
+				if (player != null) {
+					float dist = player.getDistance(this);
+					if(this.ticksExisted == 1 || (!this.isInitialized && !this.isClientSynced)) {
+						this.isClientSynced = true;
+					} else if (!this.isClientSynced) {
+						if (MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < Math.min(15 * explosionRadius, this.ticksExisted * shockSpeed + shockSpeed)) {
+							this.didPlaySound = true;
+							this.didShake = true;
+						}
+					}
+
+					int historyTick = 0;
+					int tickDelta = this.ticksExisted - this.lastSyncedTick;
+					boolean historyMode = this.isReloaded && !this.isClientSynced;
+					boolean jumpMode = this.isReloaded && tickDelta > 1;
+					if (jumpMode) this.ticksExisted -= tickDelta;
+
+					for (int h = 0; h < (historyMode ? this.ticksExisted : jumpMode ? tickDelta : 1); h++) {
+						if (historyMode) {
+							historyTick++;
+						} else if (jumpMode) {
+							this.ticksExisted ++;
+						}
+						int currentTick = historyMode ? historyTick : this.ticksExisted;
+
+						if (!didPlaySound) {
+							if(currentTick * shockSpeed < 5 * explosionRadius) {
+								if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
+									MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+									didPlaySound = true;
+									if(currentTick * shockSpeed >= 2 * explosionRadius) didShake = true;
+								}
+							} else if (currentTick * shockSpeed < 15 * explosionRadius) {
+								if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < currentTick * shockSpeed + shockSpeed) {
+									MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+									didPlaySound = true;
+									didShake = true;
+								}
+							}
+						}
+						if (didPlaySound && !didShake && dist < 5 * explosionRadius && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
+							ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
+							ModEventHandlerClient.shakeMultiplier = Math.max(((explosionRadius * 2D) - (double) dist) / (explosionRadius * 2D), 0D);
+							player.hurtTime = Math.max((int) (((((explosionRadius * 2F) - dist)) / (explosionRadius * 2F)) * 150F), 0);
+							player.maxHurtTime = Math.max((int) (((((explosionRadius * 2F) - dist)) / (explosionRadius * 2F)) * 100F), 0);
+							player.attackedAtYaw = 0F;
+							didShake = true;
+						}
+					}
+
+					this.lastSyncedTick = this.ticksExisted;
+					if (historyMode) this.isClientSynced = true;
+				}
+			} else if(this.ticksExisted == 1){
+				this.isInitialized = true;
+				this.dataManager.set(IS_INITIALIZED, true);
+			}
+			if (!world.isRemote && this.ticksExisted >= explosionRadius * 15) {
+				this.setDead();
+			}
+		}
+
+		@Override
+		protected void readEntityFromNBT(NBTTagCompound nbt) {
+			if (nbt.hasKey("explosionRadius")) {
+				int r = nbt.getInteger("explosionRadius");
+				this.explosionRadius = r;
+				this.dataManager.set(EXPLOSION_RADIUS, r);
+			}
+			if (nbt.hasKey("ticksExisted")) {
+				int t = nbt.getInteger("ticksExisted");
+				this.ticksExisted = t;
+				this.dataManager.set(TICKS_EXISTED, t);
+			}
+			this.isReloaded = true;
+			this.dataManager.set(IS_RELOADED, true);
+			this.isInitialized = true;
+			this.dataManager.set(IS_INITIALIZED, true);
+		}
+
+		@Override
+		protected void writeEntityToNBT(NBTTagCompound nbt) {
+			nbt.setInteger("explosionRadius", this.dataManager.get(EXPLOSION_RADIUS));
+			nbt.setInteger("ticksExisted", this.dataManager.get(TICKS_EXISTED));
+		}
+
+		@Override
+		@SideOnly(Side.CLIENT)
+		public boolean isInRangeToRenderDist(double distance) {
+			return true;
+		}
 	}
 }
