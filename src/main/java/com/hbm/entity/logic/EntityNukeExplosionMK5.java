@@ -90,7 +90,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if (fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
-			radiate(livingList, (2_500_000F * Math.min(1000, radius * 2)) / (this.ticksExisted * 5 + 1));
+			radiate(livingList, 2_500_000F * radius / (this.ticksExisted * 5 + 1));
 		}
 
 		dealDamage(world, list, this.posX, this.posY, this.posZ, Math.min(1000, this.radius * 2.0D));
@@ -198,8 +198,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 				if (!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
 
-					float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dist * dist + 1)) * (this.ticksExisted < 10 ? 1.0F : 0.0F));
 					if(this.ticksExisted < 10) {
+						float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dist * dist + 1)) * 1.0F);
 						if (e instanceof EntityPlayer p) {
 
 							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
