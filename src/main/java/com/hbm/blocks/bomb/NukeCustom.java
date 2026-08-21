@@ -573,8 +573,8 @@ public class NukeCustom extends BlockContainer implements IBomb {
             tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)baleAdj)+"§r");
 
         } else if (tempEntity.hydro > 0) {
-			// Blue text: Thermonuclear
-			tooltip.add("§9[Thermonuclear]§r");
+			// Yellow text: Thermonuclear
+			tooltip.add("§e[Thermonuclear]§r");
 			float hydroAdj = tempEntity.getHydroAdj();
 			boolean isSalted = tempEntity.dirty > 0;
 			float moreFallout = tempEntity.dirty;
@@ -585,8 +585,8 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			}
 
 		} else if (tempEntity.nuke > 0) {
-			// Yellow text: Nuclear
-			tooltip.add("§e[Nuclear]§r");
+			// Gold text: Nuclear
+			tooltip.add("§6[Nuclear]§r");
 			float nukeAdj = tempEntity.getNukeAdj();
 			boolean isSalted = tempEntity.dirty > 0;
 			float moreFallout = tempEntity.dirty;
