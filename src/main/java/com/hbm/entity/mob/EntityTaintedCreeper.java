@@ -285,8 +285,8 @@ public class EntityTaintedCreeper extends EntityMob implements IRadiationImmune 
             {
                 this.ignite();
                 itemstack.damageItem(1, player);
-                return true;
             }
+            return true;
         }
 
         return super.processInteract(player, hand);
