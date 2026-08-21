@@ -406,7 +406,7 @@ import com.hbm.render.util.HmfModelLoader;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.AudioWrapperClient;
 import com.hbm.sound.AudioWrapperClientStartStop;
-import com.hbm.sound.SoundLoopCrucible;
+import com.hbm.sound.SoundCrucible;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.TileEntityKeypadBase;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
@@ -2071,11 +2071,11 @@ public class ClientProxy extends ServerProxy {
 		
 		if("sound".equals(type)){
 			String mode = data.getString("mode");
-			if("crucible_loop".equals(mode)){
+			if("crucible_".equals(mode)){
 				int id = data.getInteger("playerId");
 				Entity e = world.getEntityByID(id);
 				if(e instanceof EntityPlayer){
-					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
+					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundCrucible((EntityPlayer) e));
 				}
 			}
 			return;
@@ -2345,7 +2345,7 @@ public class ClientProxy extends ServerProxy {
 
     @Override
     public AudioWrapperV2 getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) {
-        AudioWrapperClientV2 audio = new AudioWrapperClientV2(sound, cat, true);
+        AudioWrapperClientV2 audio = new AudioWrapperClientV2(sound, cat, true, volume, range, volume);
         audio.updatePosition(x, y, z);
         audio.updateVolume(volume);
         audio.updateRange(range);
