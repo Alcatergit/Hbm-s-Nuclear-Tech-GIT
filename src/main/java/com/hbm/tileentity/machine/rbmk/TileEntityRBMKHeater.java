@@ -125,7 +125,7 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 
 	public void fillFluidInit(FluidTank tank) {
 
-		fillFluid(this.pos.getX(), this.pos.getY() + rbmkHeight + 1, this.pos.getZ(), tank);
+		fillFluid(this.pos.getX(), this.pos.getY() + RBMKDials.getColumnHeight(world) + 1, this.pos.getZ(), tank);
 		
 		if(world.getBlockState(new BlockPos(pos.getX(), pos.getY() - 1, pos.getZ())).getBlock() == ModBlocks.rbmk_loader) {
 
