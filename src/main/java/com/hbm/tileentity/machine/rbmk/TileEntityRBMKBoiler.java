@@ -57,7 +57,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
-		nbt.removeTag("jumpheight");
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("inventory");
+		nbt.removeTag("lastColumnHeight");
 		nbt.setInteger("water", feed.getFluidAmount());
 		nbt.setInteger("steam", steam.getFluidAmount());
         nbt.setDouble("fluxperm", getMult());
@@ -106,7 +108,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				fillFluidInit(steam);
 
 			if(steam.getFluidAmount() >= steam.getCapacity() && this.ventDelay <= 0) {
-				double ventY = pos.getY() - 0.5 + RBMKDials.getColumnHeight(world) + this.jumpheight;
+				double ventY = pos.getY() - 0.5 + RBMKDials.getColumnHeight(world) + this.jumpHeight;
 				NBTTagCompound ventData = new NBTTagCompound();
 				ventData.setString("type", "rbmkSteam");
 				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(ventData, pos.getX() + 0.25 + world.rand.nextInt(2) * 0.5, ventY, pos.getZ() + 0.25 + world.rand.nextInt(2) * 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, ventY, pos.getZ() + 0.5, 100));
