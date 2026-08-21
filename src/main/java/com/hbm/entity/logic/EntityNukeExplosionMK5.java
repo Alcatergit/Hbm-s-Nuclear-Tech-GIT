@@ -17,6 +17,7 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 
 import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
@@ -92,7 +93,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if (fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
-			radiate(livingList, 2_500_000F * radius / (this.ticksExisted * 5 + 1));
+			radiate(livingList, (2_500_000F * radius) / (this.ticksExisted * 5 + 1));
 		}
 
 		// Community Edition Biological Conversion Timing
@@ -208,7 +209,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
                 res = 1;
 
             if(this.ticksExisted < 10 && res < 2) {
-                float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dmgLen * dmgLen + 1)) * 1.0F);
+                float fireDamage = (float)((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
                 if(fireDamage > 0.025){
                     if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
 
@@ -228,14 +229,14 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
             }
 
             if(res < 10000 && len < this.ticksExisted * shockSpeed) {
-                float blastDmg = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
-                if(blastDmg > 0.025){
-                    if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
-                    else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
+                float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
+                if(blastDamage > 0.025){
+                    if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
+                    else e.attackEntityFrom(ModDamageSource.blast, blastDamage);
                 }
-                e.motionX += vec.xCoord * 0.0075D * blastDmg;
-                e.motionY += vec.yCoord * 0.0075D * blastDmg;
-                e.motionZ += vec.zCoord * 0.0075D * blastDmg;
+                e.motionX += vec.xCoord * 0.0075D * blastDamage;
+                e.motionY += vec.yCoord * 0.0075D * blastDamage;
+                e.motionZ += vec.zCoord * 0.0075D * blastDamage;
             }
         }
 	}
