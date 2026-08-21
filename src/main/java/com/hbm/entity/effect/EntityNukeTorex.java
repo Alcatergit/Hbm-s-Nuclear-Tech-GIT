@@ -2,6 +2,7 @@ package com.hbm.entity.effect;
 
 import java.util.ArrayList;
 
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.main.MainRegistry;
@@ -737,14 +738,22 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	}
 
 	public static void statFac(World world, double x, double y, double z, float scale) {
-		EntityNukeTorex torex = new EntityNukeTorex(world).setScale(MathHelper.clamp(scale * 0.01F, 0.25F, 5F));
-		torex.setPosition(x, y, z);
-		world.spawnEntity(torex);
+        if (scale < 25) {
+            ExplosionLarge.explode(world, x + 0.5, y + 0.5, z + 0.5, scale, true, true, true);
+        } else {
+            EntityNukeTorex torex = new EntityNukeTorex(world).setScale(Math.min(5F,scale * 0.01F));
+            torex.setPosition(x, y, z);
+            world.spawnEntity(torex);
+        }
 	}
 
 	public static void statFacBale(World world, double x, double y, double z, float scale) {
-		EntityNukeTorex torex = new EntityNukeTorex(world).setScale(MathHelper.clamp(scale * 0.01F, 0.25F, 5F)).setType(1);
-		torex.setPosition(x, y, z);
-		world.spawnEntity(torex);
+        if (scale < 25) {
+            ExplosionLarge.explode(world, x + 0.5, y + 0.5, z + 0.5, scale, true, true, true);
+        } else {
+            EntityNukeTorex torex = new EntityNukeTorex(world).setScale(Math.min(5F,scale * 0.01F)).setType(1);
+            torex.setPosition(x, y, z);
+            world.spawnEntity(torex);
+        }
 	}
 }
