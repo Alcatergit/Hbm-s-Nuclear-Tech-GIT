@@ -385,7 +385,9 @@ public class RadiationSystemNT {
 							}
 
 							if (eRad < 250){
-								sheep.getEntityData().setBoolean("isBalding", false);
+								if(sheep.getEntityData().hasKey("isBalding")) {
+									sheep.getEntityData().removeTag("isBalding");
+								}
 							} else if(eRad < 500) {
 								if(!sheep.getEntityData().getBoolean("isBalding")) {
 									if(!sheep.getSheared()) {
