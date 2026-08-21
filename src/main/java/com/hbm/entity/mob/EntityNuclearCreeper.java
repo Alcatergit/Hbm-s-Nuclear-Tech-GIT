@@ -347,8 +347,8 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 			if(!this.world.isRemote) {
 				this.ignite();
 				itemstack.damageItem(1, player);
-				return true;
 			}
+			return true;
 		}
 
 		return super.processInteract(player, hand);
