@@ -46,9 +46,9 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	// ========== Added: Field for storing information about players who have been vandalized ==========
+	// ========== Added: Field for storing information about the player who last broke the block ==========
 	private EntityPlayer lastBreaker = null;
-	// ========== Added: Mark whether the destruction was caused by an explosion ==========
+	// ========== Added: Flag to mark if the destruction was caused by an explosion ==========
 	private boolean isExploding = false;
 
 	public NukeSolinium(Material materialIn, String s) {
@@ -67,40 +67,40 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		// ========== Modification: Adding drop control logic upon detonation ==========
-		// If the destruction is caused by an explosion, no items will be dropped.
+		// ========== Modified: Added drop control logic for detonation ==========
+		// If the block is destroyed by an explosion, drop nothing.
 		if (isExploding) {
 			return null;
 		}
 
-		// When NBT saving is enabled, the drop is completely controlled by breakBlock.
+		// When NBT saving is enabled, drops are handled entirely by breakBlock.
 		if (GeneralConfig.enableBlockItemNBTSaving) {
-			return null; // Returning null, the fall is controlled by breakBlock.
+			return null; // Return null, drops are handled by breakBlock.
 		}
-		// ========== Modification complete ==========
+		// ========== End of modification ==========
 
 		return Item.getItemFromBlock(ModBlocks.nuke_solinium);
 	}
 
-	// ========== Added: Override the removedByPlayer method to get the destroyed player ==========
+	// ========== Added: Override removedByPlayer to capture the player who broke the block ==========
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		// Recording and destroying player information
+		// Store the player who is breaking the block
 		this.lastBreaker = player;
 
-		// Calling the parent class method to continue executing the disruptive logic
+		// Call the super method to continue with the breaking logic
 		boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
 
-		// Clean up player information
+		// Clear the stored player information
 		this.lastBreaker = null;
 
 		return result;
 	}
 
-	// ========== Modification: Using player information recorded by removedByPlayer ==========
+	// ========== Modified: Use player information captured by removedByPlayer ==========
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		// ========== If the destruction is caused by an explosion, the entire block will be cleared, and no items will be dropped. ==========
+		// ========== If destroyed by an explosion, clear the tile entity and drop nothing ==========
 		if (isExploding) {
 			TileEntity tileentity = world.getTileEntity(pos);
 			if (tileentity != null) {
@@ -111,34 +111,34 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 		TileEntity tileentity = world.getTileEntity(pos);
 
-		// ========== New Logic: Configuration File Controls NBT Saving ==========
+		// ========== New: NBT saving controlled by configuration file ==========
 		if (!GeneralConfig.enableBlockItemNBTSaving) {
-			// Configure NBT saving is disabled; use the original logic.
+			// NBT saving is disabled, use original logic.
 			InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
 		} else {
 			if (tileentity instanceof TileEntityNukeSolinium) {
 				TileEntityNukeSolinium nukeSolinium = (TileEntityNukeSolinium)tileentity;
 
-				// Create NBT tags to store block entity data
+				// Create NBT tag to store tile entity data
 				NBTTagCompound tileData = new NBTTagCompound();
 				nukeSolinium.writeToNBT(tileData);
 
-				// ========== Check for any items inside ==========
+				// ========== Check if there are any items inside ==========
 				boolean hasItems = false;
 				if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
 					NBTTagList itemsList = tileData.getCompoundTag("inventory").getTagList("Items", 10);
 					hasItems = itemsList.tagCount() > 0;
 				}
 
-				// ========== Player information recorded using removedByPlayer ==========
+				// ========== Use player information captured by removedByPlayer ==========
 				boolean isCreativeMode = (lastBreaker != null && lastBreaker.capabilities.isCreativeMode);
 
 				if (hasItems) {
-					// ========== Internal Items Found: Drops a nuclear bomb containing NBT ==========
+					// ========== Has items inside: Drop a nuke block with NBT data ==========
 					ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
 					NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-					// ========== Simplify NBT data: Only keep BlockEntityTag->inventory->Items ==========
+					// ========== Simplify NBT data: Only keep BlockEntityTag -> inventory -> Items ==========
 					NBTTagCompound blockEntityTag = new NBTTagCompound();
 					NBTTagCompound inventoryTag = new NBTTagCompound();
 
@@ -150,26 +150,26 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 					blockEntityTag.setTag("inventory", inventoryTag);
 
-					// Write the BlockEntityTag to the item NBT
+					// Write the BlockEntityTag to the item's NBT
 					nbttagcompound.setTag("BlockEntityTag", blockEntityTag);
 					itemstack.setTagCompound(nbttagcompound);
 
-					// Generate drops
+					// Spawn the item drop
 					spawnAsEntity(world, pos, itemstack);
 
-					// Empty the contents
+					// Clear the inventory contents
 					nukeSolinium.clearSlots();
 				} else if (!isCreativeMode) {
-					// ========== Survival Mode Empty bomb: Drops a regular bomb =========
+					// ========== Survival mode, empty nuke: Drop a regular nuke block =========
 					spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(this), 1));
 				}
-				// Creative Mode Empty Bomb: Nothing drops
+				// Creative mode, empty nuke: Drop nothing
 			}
 		}
-		// Call the parent class's breakBlock but don't let it handle the falling object.
+		// Call super.breakBlock but prevent it from handling drops
 		super.breakBlock(world, pos, state);
 	}
-	// ========== Modification complete ==========
+	// ========== End of modification ==========
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -191,7 +191,7 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 		TileEntityNukeSolinium entity = (TileEntityNukeSolinium) worldIn.getTileEntity(pos);
 		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			if(entity.isReady()) {
-				// ========== Modification: Set a detonation flag, then clear the blocks ==========
+				// ========== Modified: Set detonation flag, then clear the block ==========
 				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
@@ -201,12 +201,12 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 		}
 	}
 
-	// ========== Modification: Restoring from simplified NBT data ==========
+	// ========== Modified: onBlockPlacedBy method - Support data recovery from simplified NBT ==========
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 
-		// ========== Edit: Recovering from Simplified NBT Data ==========
+		// ========== Modified: Recover data from simplified NBT ==========
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if (tileentity instanceof TileEntityNukeSolinium) {
@@ -215,13 +215,13 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 				if (blockEntityTag.hasKey("inventory")) {
 					NBTTagCompound savedInventory = blockEntityTag.getCompoundTag("inventory");
 
-					// Create complete TileEntity NBT data
+					// Create complete tile entity NBT data
 					NBTTagCompound tileData = new NBTTagCompound();
 					tileData.setInteger("x", pos.getX());
 					tileData.setInteger("y", pos.getY());
 					tileData.setInteger("z", pos.getZ());
 
-					// ========== Restore only Items data in inventory ==========
+					// ========== Restore only the Items data in inventory ==========
 					NBTTagCompound newInventory = new NBTTagCompound();
 					if (savedInventory.hasKey("Items")) {
 						newInventory.setTag("Items", savedInventory.getTagList("Items", 10).copy());
@@ -229,19 +229,19 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 
 					tileData.setTag("inventory", newInventory);
 
-					// Loading data from NBT to block entities
+					// Load data from NBT into the tile entity
 					((TileEntityNukeSolinium) tileentity).readFromNBT(tileData);
 
-					// The marker blocks need to be updated.
+					// Mark the block for update
 					worldIn.notifyBlockUpdate(pos, state, state, 3);
 
-					// Important: Mark block entities as dirty data to ensure data preservation.
+					// Mark tile entity as dirty to ensure data is saved
 					tileentity.markDirty();
 				}
 			}
 		}
 	}
-	// ========== Modification complete ==========
+	// ========== End of modification ==========
 
 	public boolean igniteTestBomb(World world, int x, int y, int z, int r) {
 		if(!world.isRemote) {
@@ -273,7 +273,7 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeSolinium entity = (TileEntityNukeSolinium) world.getTileEntity(pos);
 		if(entity.isReady()) {
-			// ========== Modification: Set a detonation flag, then clear the blocks ==========
+			// ========== Modified: Set detonation flag, then clear the block ==========
 			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
@@ -352,14 +352,14 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 		tooltip.add("");
 		tooltip.add("§d"+I18nUtil.resolveKey("desc.nukesolinium1")+"§r");
 		tooltip.add("§d"+I18nUtil.resolveKey("desc.nukesolinium2")+"§r");
-		
-		// ========== Added: Check if the item's NBT data meets the detonation conditions ==========
+
+		// ========== Added: Check if the item's NBT data meets detonation conditions ==========
 		if (isItemReady(stack)) {
 			tooltip.add("§2[Is ready]§r");
 		}
 	}
-	
-	// ========== Modified: Use the specific conditional judgment corresponding to entity.isReady ==========
+
+	// ========== Modified: Use specific condition checks matching entity.isReady ==========
 	private boolean isItemReady(ItemStack stack) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
@@ -369,8 +369,8 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 				
 				if (inventoryTag.hasKey("Items")) {
 					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
-					
-					// Create a mapping from slot to item
+
+					// Create slot to item mapping
 					ItemStack[] slots = new ItemStack[9];
 					for (int i = 0; i < itemsList.tagCount(); i++) {
 						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
@@ -380,22 +380,22 @@ public class NukeSolinium extends BlockContainer implements IBomb {
 						}
 					}
 
-					// Check if slots 0, 3, 5, 8 are solonium_igniter
+					// Check if slots 0, 3, 5, 8 contain solinium_igniter
 					boolean slot0 = slots[0] != null && slots[0].getItem() == ModItems.solinium_igniter;
 					boolean slot3 = slots[3] != null && slots[3].getItem() == ModItems.solinium_igniter;
 					boolean slot5 = slots[5] != null && slots[5].getItem() == ModItems.solinium_igniter;
 					boolean slot8 = slots[8] != null && slots[8].getItem() == ModItems.solinium_igniter;
-					
-					// Check if slots 1, 2, 6, and 7 are for solinium_propellant.
+
+					// Check if slots 1, 2, 6, 7 contain solinium_propellant
 					boolean slot1 = slots[1] != null && slots[1].getItem() == ModItems.solinium_propellant;
 					boolean slot2 = slots[2] != null && slots[2].getItem() == ModItems.solinium_propellant;
 					boolean slot6 = slots[6] != null && slots[6].getItem() == ModItems.solinium_propellant;
 					boolean slot7 = slots[7] != null && slots[7].getItem() == ModItems.solinium_propellant;
-					
-					// Check if slot 4 is a solinium_core
+
+					// Check if slot 4 contains solinium_core
 					boolean slot4 = slots[4] != null && slots[4].getItem() == ModItems.solinium_core;
-					
-					// Return whether all conditions are met.
+
+					// Return whether all conditions are met
 					return slot0 && slot1 && slot2 && slot3 && slot4 && slot5 && slot6 && slot7 && slot8;
 				}
 			}
