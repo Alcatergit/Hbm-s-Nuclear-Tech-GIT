@@ -8,7 +8,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 
 import com.hbm.interfaces.IFluidPipeMk2;
@@ -26,8 +25,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 
 public class FFPipeNetworkMk2 implements IFluidHandler {
-
-	protected static Random rand = new Random();
 
 	protected Fluid type;
 	protected Map<BlockPos, TileEntity> fillables = new LinkedHashMap<BlockPos, TileEntity>();
@@ -53,8 +50,11 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 	public int fill(FluidStack resource, boolean doFill) {
 		if(resource == null || resource.getFluid() != type)
 			return 0;
-		List<IFluidHandler> handlers = new ArrayList<IFluidHandler>();
-		
+
+		List<IFluidHandler> handlers = new ArrayList<>();
+		List<Long> demands = new ArrayList<>();
+		long totalDemand = 0;
+
 		Iterator<TileEntity> itr = fillables.values().iterator();
 		while(itr.hasNext()){
 			TileEntity te = itr.next();
@@ -64,32 +64,58 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 			if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)){
 				IFluidHandler h = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
-				if(h != null && h.fill(new FluidStack(resource.getFluid(), 1), false) > 0){
-					handlers.add(h);
+				if(h != null){
+					int canFill = h.fill(new FluidStack(resource.getFluid(), Integer.MAX_VALUE), false);
+					if(canFill > 0){
+						handlers.add(h);
+						demands.add((long)canFill);
+						totalDemand += canFill;
+					}
 				}
 			}
 		}
-		
+
 		if(handlers.isEmpty())
 			return 0;
-		
-		int part = resource.amount/handlers.size();
-		int totalDrained = 0;
-		int remaining = resource.amount;
-		//Drillgon200: Extra hacky compensation
-		int intRoundingCompensation = resource.amount-part*handlers.size();
-		rand.setSeed(((TileEntity)this.fillables.values().iterator().next()).getWorld().getTotalWorldTime());
-		int randomFillIndex = rand.nextInt(handlers.size());
-		for(int i = 0; i < handlers.size(); i++){
-			IFluidHandler consumer = handlers.get(i);
-			int vol = consumer.fill(new FluidStack(resource.getFluid(), randomFillIndex == i ? part + intRoundingCompensation : part), doFill);
-			totalDrained += vol;
-			remaining -= vol;
-			if(remaining <= 0)
-				return totalDrained;
+
+		long toTransfer = Math.min(resource.amount, totalDemand);
+		long transferred = 0;
+		long remainingDemand = totalDemand;
+		int recvCount = handlers.size();
+
+		int recvStart = recvCount > 0 ? recvCursor % recvCount : 0;
+		for(int step = 0; step < recvCount && transferred < toTransfer; step++) {
+			int i = (recvStart + step) % recvCount;
+			IFluidHandler handler = handlers.get(i);
+			long demand = demands.get(i);
+			long remainingBudget = toTransfer - transferred;
+			long maxForReceiver = Math.min(demand, remainingBudget);
+			if(maxForReceiver <= 0) {
+				remainingDemand -= demand;
+				continue;
+			}
+			long toSend = step == recvCount - 1 ? maxForReceiver : weightedShare(remainingBudget, demand, remainingDemand, maxForReceiver);
+			if(toSend <= 0) {
+				toSend = 1;
+			}
+			int filled = handler.fill(new FluidStack(resource.getFluid(), (int)toSend), doFill);
+			transferred += filled;
+			remainingDemand -= demand;
 		}
-		
-		return totalDrained;
+		if(recvCount > 0 && doFill) recvCursor = (recvStart + 1) % recvCount;
+
+		if(transferred < toTransfer && doFill) {
+			for(int i = 0; i < recvCount && transferred < toTransfer; i++) {
+				IFluidHandler handler = handlers.get(i);
+				long remaining = toTransfer - transferred;
+				int filled = handler.fill(new FluidStack(resource.getFluid(), (int)Math.min(remaining, Integer.MAX_VALUE)), true);
+				if(filled > 0) {
+					transferred += filled;
+				}
+			}
+		}
+
+		return (int)transferred;
 	}
 
 	@Override
@@ -338,7 +364,6 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 	}
 
 	private void doUpdate() {
-
 		if(providers.isEmpty() && fillables.isEmpty()) return;
 
 		Fluid fluidType = this.type;
