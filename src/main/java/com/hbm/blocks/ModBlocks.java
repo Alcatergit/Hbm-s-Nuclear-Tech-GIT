@@ -706,8 +706,8 @@ public class ModBlocks {
 	
 	public static final int guiID_nuke_n45 = 77; //unused
 	
+	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_fstbmb = 97;
-	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, guiID_nuke_fstbmb, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	
 	public static final Block nuke_custom = new NukeCustom(Material.IRON, "nuke_custom").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_custom = 37;
