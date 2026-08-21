@@ -107,6 +107,7 @@ public class RenderFallout extends Render<EntityFalloutRain> {
             lastTime = time;
         }
 
+        GlStateManager.enableLighting();
         GlStateManager.enableCull();
         GL11.glPopMatrix();
     }
