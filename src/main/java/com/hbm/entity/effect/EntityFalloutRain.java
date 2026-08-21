@@ -15,6 +15,7 @@ import com.hbm.saveddata.AuxSavedData;
 
 import com.hbm.blocks.generic.WasteLog;
 import net.minecraft.block.*;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.ChunkPos;
 
 
@@ -203,45 +204,67 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				return;
 		}
 
-		// Maintain bottom-to-top traversal direction, but fix fall logic
+		int bottomHeight = lastGapHeight;
+		MutableBlockPos gapPos = new MutableBlockPos(pos.getX(), 0, pos.getZ());
+
 		for(int i = lastGapHeight; i <= contactHeight; i++) {
 			pos.setY(i);
 			Block b = world.getBlockState(pos).getBlock();
-
-			// Only process non-air blocks that are not replaceable
-			if(!b.isReplaceable(world, pos) && b != Blocks.AIR){
+			if(!b.isReplaceable(world, pos)){
 				float hardness = b.getExplosionResistance(null);
 
-				// Only process blocks with low blast resistance
+				// ============== Full fix start ==============
 				if(hardness >= 0 && hardness < 50){
-					// Find a suitable fall position for each block
-					int fallToHeight = lastGapHeight;
+					// Low blast resistance block: move to current bottomHeight position
+					if(i != bottomHeight){
+						gapPos.setY(bottomHeight);
 
-					// Search downward from one block below the current position to find support
-					for(int y = i - 1; y >= lastGapHeight; y--) {
-						MutableBlockPos checkPos = new MutableBlockPos(pos.getX(), y, pos.getZ());
-						Block checkBlock = world.getBlockState(checkPos).getBlock();
+						// ============== Core fix: 1.12.2 compatible TileEntity movement ==============
+						// 1. Save all information from the original position
+						IBlockState originalState = world.getBlockState(pos);
+						TileEntity originalTE = world.getTileEntity(pos);
+						NBTTagCompound teNBT = null;
 
-						// If a solid block is encountered (whether high or low blast resistance)
-						if(!checkBlock.isReplaceable(world, checkPos) && checkBlock != Blocks.AIR){
-							// Regardless of blast resistance, as long as it is solid, it can support the block above
-							// Return the position above this supporting block
-							fallToHeight = y + 1;
-							break;
+						if(originalTE != null) {
+							// 2. Read NBT data from the original TileEntity
+							teNBT = new NBTTagCompound();
+							originalTE.writeToNBT(teNBT);
+							// Critical: update NBT coordinates to the new position
+							teNBT.setInteger("x", gapPos.getX());
+							teNBT.setInteger("y", gapPos.getY());
+							teNBT.setInteger("z", gapPos.getZ());
+							// 3. Remove the TileEntity from the original position
+							world.removeTileEntity(pos);
 						}
-					}
 
-					// If a suitable fall position is found and it's not the current position
-					if(fallToHeight != i && fallToHeight >= lastGapHeight){
-						MutableBlockPos fallPos = new MutableBlockPos(pos.getX(), fallToHeight, pos.getZ());
+						// 4. First remove the block at the original position
+						world.setBlockToAir(pos);
+						// 5. Place the block at the new position
+						world.setBlockState(gapPos, originalState, 3);
 
-						// Ensure the target position is air or replaceable
-						if(world.getBlockState(fallPos).getBlock().isReplaceable(world, fallPos)){
-							world.setBlockState(fallPos, world.getBlockState(pos));
-							world.setBlockToAir(pos);
+						// 6. If there is TileEntity data, restore it at the new position
+						if(teNBT != null) {
+							// Wait for the game to automatically create the TileEntity at the new position
+							TileEntity newTE = world.getTileEntity(gapPos);
+							if(newTE != null) {
+								// 7. Write NBT data to the new TileEntity
+								newTE.readFromNBT(teNBT);
+								newTE.validate();
+								// 8. Use methods that actually exist in 1.12.2 to trigger updates
+								world.markBlockRangeForRenderUpdate(gapPos, gapPos);
+								world.notifyBlockUpdate(gapPos, originalState, originalState, 3);
+							}
 						}
+						// ============== TileEntity movement fix end ==============
 					}
+					// Whether moved or not, bottomHeight increments
+					bottomHeight++;
+				} else {
+					// Fix 2: High blast resistance blocks (bedrock, obsidian, etc.)
+					// Do not move, just set bottomHeight to the top of the current block
+					bottomHeight = i + 1;
 				}
+				// ============== Full fix end ==============
 			}
 		}
 	}
@@ -628,42 +651,29 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	}
 
 	private void drain(MutableBlockPos pos){
-		// Expand the water source block processing range to 18x18 chunks to prevent water flow from adjacent chunks
-		for(int y = 255; y > 1; y--) {
-			pos.setY(y);
-			if(!world.isAirBlock(pos) && (world.getBlockState(pos).getBlock() == Blocks.WATER || world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER)){
-				world.setBlockToAir(pos);
+		if(waterLevel <= 0) return;
 
-				// Also process water source blocks at adjacent chunk boundaries
-				drainAdjacentWaterBlocks(pos, y);
-			}
-		}
-	}
+		// Save the original coordinates of the current column
+		int originalX = pos.getX();
+		int originalZ = pos.getZ();
 
-	//Process water source blocks at adjacent chunk boundaries to prevent water from flowing during chunk processing gaps
-	private void drainAdjacentWaterBlocks(MutableBlockPos centerPos, int y) {
-		MutableBlockPos adjacentPos = new MutableBlockPos();
-
-		// Check 8 directions around the current block (including diagonals)
-		for(int dx = -1; dx <= 1; dx++) {
-			for(int dz = -1; dz <= 1; dz++) {
-				
-				int checkX = centerPos.getX() + dx;
-				int checkZ = centerPos.getZ() + dz;
-
-				// Check if it crosses a chunk boundary
-				if((checkX >> 4) != (centerPos.getX() >> 4) || (checkZ >> 4) != (centerPos.getZ() >> 4)) {
-					adjacentPos.setPos(checkX, y, checkZ);
-
-					// If it's a water source block, clear it
-					if(!world.isAirBlock(adjacentPos) && 
-					   (world.getBlockState(adjacentPos).getBlock() == Blocks.WATER || 
-					    world.getBlockState(adjacentPos).getBlock() == Blocks.FLOWING_WATER)) {
-						world.setBlockToAir(adjacentPos);
+		// ========== Key modification: expand to 18x18 range only inside drain() ==========
+		// Expand one block in each direction (from -1 to 16, total 18 blocks)
+		for(int dx = -1; dx <= 16; dx++) {
+			for(int dz = -1; dz <= 16; dz++) {
+				// Process from bottom to top (your core fix remains unchanged)
+				for(int y = 2; y <= 255; y++) {
+					pos.setPos(originalX + dx, y, originalZ + dz);
+					Block block = world.getBlockState(pos).getBlock();
+					if(block == Blocks.WATER || block == Blocks.FLOWING_WATER){
+						world.setBlockToAir(pos);
 					}
 				}
 			}
 		}
+
+		// Restore the original coordinates of pos to avoid affecting subsequent logic
+		pos.setPos(originalX, 0, originalZ);
 	}
 
 	private void stomp(MutableBlockPos pos, double dist) {
