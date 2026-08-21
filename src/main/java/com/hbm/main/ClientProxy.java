@@ -17,8 +17,6 @@ import com.hbm.render.entity.item.RenderMovingPackage;
 import com.hbm.render.entity.mob.*;
 import com.hbm.render.item.*;
 import com.hbm.render.util.RenderOverhead;
-import com.hbm.sound.V2.AudioWrapperV2;
-import com.hbm.sound.V2.AudioWrapperClientV2;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
@@ -51,6 +49,7 @@ import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityQuasar;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.effect.EntityVortex;
@@ -308,6 +307,7 @@ import com.hbm.render.entity.TSmokeRenderer;
 import com.hbm.render.entity.effect.RenderCloudTom;
 import com.hbm.render.entity.effect.RenderQuasar;
 import com.hbm.render.entity.effect.RenderTorex;
+import com.hbm.render.entity.effect.RenderShockwave;
 import com.hbm.render.entity.effect.RenderSpear;
 import com.hbm.render.entity.item.RenderMovingItem;
 import com.hbm.render.entity.missile.RenderBoosterMissile;
@@ -776,6 +776,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityNuclearCreeper.class, new RenderNuclearCreeperFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalloutRain.class, new RenderFalloutRainFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeTorex.class, RenderTorex.FACTORY);
+		RenderingRegistry.registerEntityRenderingHandler(ExplosionLarge.EntityShockwave.class, RenderShockwave.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.smoke1, ModItems.smoke2, ModItems.smoke3, ModItems.smoke4, ModItems.smoke5, ModItems.smoke6, ModItems.smoke7, ModItems.smoke8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityShrapnel.class, new ShrapnelRendererFactory());
@@ -2344,8 +2345,8 @@ public class ClientProxy extends ServerProxy {
 	}
 
     @Override
-    public AudioWrapperV2 getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) {
-        AudioWrapperClientV2 audio = new AudioWrapperClientV2(sound, cat, true, volume, range, volume);
+    public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) {
+        AudioWrapperClient audio = new AudioWrapperClient(sound, cat, true, volume, range, volume);
         audio.updatePosition(x, y, z);
         audio.updateVolume(volume);
         audio.updateRange(range);
