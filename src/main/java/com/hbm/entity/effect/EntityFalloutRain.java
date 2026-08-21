@@ -16,8 +16,10 @@ import com.hbm.saveddata.AuxSavedData;
 
 import com.hbm.blocks.generic.WasteLog;
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.ChunkPos;
 
 
@@ -227,43 +229,75 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 
 	private void letFall(World world, MutableBlockPos pos, int lastGapHeight, int contactHeight){
 		int fallChance = RadiationConfig.blocksFallCh;
-		if(fallChance < 1)
-			return;
+		if(fallChance < 1) return;
 		if(fallChance < 100){
 			int chance = world.rand.nextInt(100);
-			if(chance < fallChance)
-				return;
+			if(chance < fallChance) return;
 		}
 
-		for(int i = lastGapHeight; i <= contactHeight; i++) {
-			pos.setY(i);
+		int bottomHeight = lastGapHeight;
+
+		for (int y = lastGapHeight; y <= contactHeight; y++) {
+			pos.setY(y);
 			IBlockState state = world.getBlockState(pos);
 			Block b = state.getBlock();
-			if(!b.isReplaceable(world, pos) && !(b.getCollisionBoundingBox(state, world, pos) == Block.NULL_AABB)){
-				float hardness = b.getExplosionResistance(null);
-				float stonebrickRes = Blocks.STONEBRICK.getExplosionResistance(null);
 
-				if(hardness >= 0 && hardness <= stonebrickRes){
+			if (b.isReplaceable(world, pos)) continue;
+
+			float hardness = b.getExplosionResistance(null);
+
+			if (hardness > 15) {
+				bottomHeight = y + 1;
+				continue;
+			}
+
+			if (hardness >= 0 && y != bottomHeight) {
+				BlockPos target = new BlockPos(pos.getX(), bottomHeight, pos.getZ());
+				IBlockState targetState = world.getBlockState(target);
+
+				if (targetState.getBlock().isReplaceable(world, target)) {
 					TileEntity te = world.getTileEntity(pos);
 					NBTTagCompound teNBT = null;
-
-					if(te != null){
+					if (te != null) {
 						teNBT = new NBTTagCompound();
 						te.writeToNBT(teNBT);
+						teNBT.setInteger("x", target.getX());
+						teNBT.setInteger("y", target.getY());
+						teNBT.setInteger("z", target.getZ());
+						world.removeTileEntity(pos);
 					}
 
-					EntityFallingBlock falling = new EntityFallingBlock(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, state);
-					if(teNBT != null) falling.tileEntityData = teNBT;
-					falling.setHurtEntities(true);
-					try {
-						if (field_fallHurtAmount != null) field_fallHurtAmount.setFloat(falling,  2.0F * (hardness / stonebrickRes));
-					} catch (Exception ignored) {
-					}
-					falling.shouldDropItem = false;
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+					world.setBlockState(target, state);
 
-					world.spawnEntity(falling);
+					if (teNBT != null) {
+						TileEntity newTE = world.getTileEntity(target);
+						if (newTE != null) {
+							newTE.readFromNBT(teNBT);
+							newTE.validate();
+							world.markBlockRangeForRenderUpdate(target, target);
+							world.notifyBlockUpdate(target, state, state, 3);
+						}
+					}
+
+					if (!(b.getCollisionBoundingBox(state, world, pos) == Block.NULL_AABB)) {
+						float distance = y - bottomHeight;
+						int i = MathHelper.ceil(distance - 1.0F);
+						if (i > 0) {
+							float fallHurtAmount = 2.0F * (hardness / 15F);
+							float damage = Math.min(MathHelper.floor((float) i * fallHurtAmount), 40.0F);
+							AxisAlignedBB blockBox = state.getCollisionBoundingBox(world, target);
+							if (blockBox != Block.NULL_AABB) {
+								List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, blockBox.offset(target));
+								for (Entity entity : entities) {
+									entity.attackEntityFrom(DamageSource.FALLING_BLOCK, damage);
+								}
+							}
+						}
+					}
 				}
 			}
+			bottomHeight++;
 		}
 	}
 
