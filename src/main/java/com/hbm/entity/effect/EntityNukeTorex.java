@@ -30,9 +30,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.FLOAT);
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	public static final DataParameter<Integer> MAX_AGE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
+	public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 	public static final DataParameter<Integer> TIME_EXISTED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Integer> TIME_EXISTED_SAVED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
-	public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 
 	public static final int firstCondenseHeight = 130;
 	public static final int secondCondenseHeight = 170;
@@ -66,12 +66,12 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public float scale = 1.0F;
 	public boolean didPlaySound = false;
 	public boolean didShake = false;
-	public int timeExisted = 0;
-	public int timeExisted2 = 0;
-	public int timeExistedSaved = 0;
 	public boolean hasInitialized = false;
 	public boolean isReloaded = false;
 	public boolean isInitialized = false;
+	public int timeExisted = 0;
+	public int timeExisted2 = 0;
+	public int timeExistedSaved = 0;
 	// Calculate speed ratio
 	public double speedMultiplier = 1.0D;
 
@@ -87,9 +87,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.dataManager.register(SCALE, 1.0F);
 		this.dataManager.register(TYPE, (byte) 0);
 		this.dataManager.register(MAX_AGE, 1000);
+		this.dataManager.register(IS_RELOADED, false);
 		this.dataManager.register(TIME_EXISTED, 0);
 		this.dataManager.register(TIME_EXISTED_SAVED, 0);
-		this.dataManager.register(IS_RELOADED, false);
 	}
 
 	@Override
@@ -170,7 +170,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			if (hasReloaded && !(this.isReloaded && this.timeExistedSaved > 0)) {
 				this.isReloaded = true;
 				this.timeExistedSaved = this.timeExisted;
-				this.isInitialized = false;
 				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client re-enters rendering distance");
 			}
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate scale: " + this.scale);
