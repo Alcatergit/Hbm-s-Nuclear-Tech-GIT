@@ -3,6 +3,7 @@ package com.hbm.sound;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
+import net.minecraft.client.audio.SoundHandler;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
@@ -28,6 +29,7 @@ public class AudioDynamic extends MovingSound {
 		this.attenuationType = ISound.AttenuationType.NONE;
 		this.intendedVolume = 10;
 		this.maxVolume = 10;
+		this.volume = intendedVolume;
 	}
 
 	protected AudioDynamic(SoundEvent loc, SoundCategory cat, boolean useNewSystem, float maxVolume, float range, float intendedVolume) {
@@ -38,6 +40,7 @@ public class AudioDynamic extends MovingSound {
 		this.range = range;
 		this.intendedVolume = intendedVolume;
 		this.nonLegacy = useNewSystem;
+		this.volume = intendedVolume;
 	}
 	
 	public void setPosition(float x, float y, float z) {
@@ -78,7 +81,7 @@ public class AudioDynamic extends MovingSound {
 						f = (float) Math.sqrt(Math.pow(xPosF - player.posX, 2)
 								+ Math.pow(yPosF - player.posY, 2)
 								+ Math.pow(zPosF - player.posZ, 2));
-						volume = func(f, intendedVolume);
+						volume = func(f);
 					} else {
 						if (player == parentEntity) {
 							this.setPosition((float) parentEntity.posX, (float) parentEntity.posY + 10, (float) parentEntity.posZ);
@@ -112,7 +115,9 @@ public class AudioDynamic extends MovingSound {
 	}
 	
 	public void start() {
-		Minecraft.getMinecraft().getSoundHandler().playSound(this);
+		SoundHandler handler = Minecraft.getMinecraft().getSoundHandler();
+		if(handler.sndManager.invPlayingSounds.containsKey(this)) return;
+		handler.playSound(this);
 	}
 	
 	public void stop() {
@@ -121,6 +126,7 @@ public class AudioDynamic extends MovingSound {
 	
 	public void setVolume(float volume) {
 		this.intendedVolume = volume;
+		this.maxVolume = volume;
 	}
 	
 	public void setPitch(float pitch) {
@@ -142,6 +148,10 @@ public class AudioDynamic extends MovingSound {
 	
 	public float func(float f, float v) {
 		return (f / v) * -2 + 2;
+	}
+
+	public float func(float dist) {
+		return (dist / range) * -maxVolume + maxVolume;
 	}
 
 	public boolean isPlaying() {
