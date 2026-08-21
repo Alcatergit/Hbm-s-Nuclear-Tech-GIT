@@ -213,6 +213,7 @@ public class ModEventHandlerClient {
 	public static final int shakeDuration = 1_500;
 	public static long flashTimestamp;
 	public static long shakeTimestamp;
+	public static double shakeMultiplier;
 	
 	public static void updateMouseDelta() {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -1613,8 +1614,8 @@ public class ModEventHandlerClient {
 		// NUKE GUI SHAKE //
 		if (event.getType() == ElementType.HOTBAR && (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) > 0) {
 			double mult = (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) / (double) ModEventHandlerClient.shakeDuration * 2;
-			double horizontal = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 15;
-			double vertical = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 3;
+			double horizontal = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 15 * ModEventHandlerClient.shakeMultiplier;
+			double vertical = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 3 * ModEventHandlerClient.shakeMultiplier;
 			GlStateManager.translate(horizontal * mult, vertical * mult, 0);
 		}
 	}
