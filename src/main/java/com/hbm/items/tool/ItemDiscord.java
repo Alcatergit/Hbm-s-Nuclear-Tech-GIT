@@ -50,12 +50,12 @@ public class ItemDiscord extends Item {
 	            ForgeDirection dir = ForgeDirection.getOrientation(pos.sideHit.ordinal());
 
 	            // Play pre-teleport sound - change to custom sound
-	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discordTeleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
+	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discord_teleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	            
 	            player.setPositionAndUpdate(pos.hitVec.x + dir.offsetX, pos.hitVec.y + dir.offsetY - 1, pos.hitVec.z + dir.offsetZ);
 
 	            // Play post-teleport sound effect - change to custom sound effect
-	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discordTeleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
+	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discord_teleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	            player.fallDistance = 0.0F;
 			}
 
