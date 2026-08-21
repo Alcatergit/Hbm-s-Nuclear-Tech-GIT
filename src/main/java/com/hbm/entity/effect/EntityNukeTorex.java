@@ -70,7 +70,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public boolean didShake = false;
 	public int ticksExistedSaved = 0;
     public int ticksExistedSaved2 = 0;
-	public boolean isInit = false;
+	public boolean dataReady = false;
     public boolean needScale = false;
     public boolean isFirstEqual = true;
 	public boolean isReloaded = false;
@@ -111,7 +111,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         }
 		if (key == TICKS_EXISTED && this.world.isRemote) {
 			// Some client instance variables can only be updated once after the entity is initialized.
-			if (!this.isInit) {
+			if (!this.dataReady) {
 				this.scale = this.dataManager.get(SCALE);
 				this.maxAge = this.dataManager.get(MAX_AGE);
 				this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
@@ -125,7 +125,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     this.rollerSize = this.rollerSize * this.scale;
                     this.needScale = false;
                 }
-				this.isInit = true;
+				this.dataReady = true;
 			} else if (this.isReloaded2) {
                 if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
                     this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
@@ -196,9 +196,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				this.torusWidth = this.torusWidth * this.scale;
 			}
 
-			boolean isRerendering = cloudlets.isEmpty() && (this.coreHeight == 3.0 * this.scale && this.convectionHeight == 3.0 && this.torusWidth == 3.0 * this.scale && this.rollerSize == 1.0) && this.isInitialized;
-            //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] cloudlets.isEmpty: {};\n[Client] this.coreHeight == 3.0 * this.scale: {};\n[Client] this.convectionHeight == 3.0: {};\n[Client] this.torusWidth == 3.0 * this.scale: {};\n[Client] this.rollerSize == 1.0: {};\n[Client] isInitialized: {}\n[Client] isRerendering: {}", this.posX, this.posY, this.posZ, cloudlets.isEmpty(), this.coreHeight == 3.0 * this.scale, this.convectionHeight == 3.0, this.torusWidth == 3.0 * this.scale, this.rollerSize == 1.0, this.isInitialized, isRerendering);
-			if (isRerendering) {
+			boolean needReload = cloudlets.isEmpty() && (this.coreHeight == 3.0 * this.scale && this.convectionHeight == 3.0 && this.torusWidth == 3.0 * this.scale && this.rollerSize == 1.0) && this.isInitialized;
+            //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] cloudlets.isEmpty: {};\n[Client] this.coreHeight == 3.0 * this.scale: {};\n[Client] this.convectionHeight == 3.0: {};\n[Client] this.torusWidth == 3.0 * this.scale: {};\n[Client] this.rollerSize == 1.0: {};\n[Client] isInitialized: {}\n[Client] needReload: {}", this.posX, this.posY, this.posZ, cloudlets.isEmpty(), this.coreHeight == 3.0 * this.scale, this.convectionHeight == 3.0, this.torusWidth == 3.0 * this.scale, this.rollerSize == 1.0, this.isInitialized, needReload);
+			if (needReload) {
                 this.ticksExistedSaved = this.ticksExisted;
                 this.convectionHeight = this.convectionHeight * this.scale;
                 this.rollerSize = this.rollerSize * this.scale;
