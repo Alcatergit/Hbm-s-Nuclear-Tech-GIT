@@ -90,7 +90,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
 		List<Entity> list = getEntitiesInRadius(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
-		if (fallout && explosion != null && this.ticksExisted < (int)Math.ceil(Math.log(this.radius + 1) * 3)) {
+		if (fallout && this.ticksExisted <= Math.max(1, (int)Math.ceil(this.radius / 50.0))) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
 			radiate(livingList, (2_500_000F * radius * 0.05F) / (this.ticksExisted * 5 + 1));
