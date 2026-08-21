@@ -14,6 +14,11 @@ public class AudioWrapperClient extends AudioWrapper {
 		if(source != null)
 			sound = new AudioDynamic(source, cat);
 	}
+
+	public AudioWrapperClient(SoundEvent source, SoundCategory cat, boolean useNewSystem, float maxVolume, float range, float intendedVolume) {
+		if(source != null)
+			sound = new AudioDynamic(source, cat, useNewSystem, maxVolume, range, intendedVolume);
+	}
 	
 	public void updatePosition(float x, float y, float z) {
 		if(sound != null)
@@ -24,10 +29,26 @@ public class AudioWrapperClient extends AudioWrapper {
 		if(sound != null)
 			sound.setVolume(volume);
 	}
+
+	public void updateRange(float range) {
+		if(sound != null)
+			sound.setRange(range);
+	}
 	
 	public void updatePitch(float pitch) {
 		if(sound != null)
 			sound.setPitch(pitch);
+	}
+
+	public void setKeepAlive(int keepAlive) {
+		if(sound != null)
+			sound.setKeepAlive(keepAlive);
+	}
+
+	@Override
+	public void keepAlive() {
+		if(sound != null)
+			sound.keepAlive();
 	}
 	
 	public float getVolume() {
@@ -43,6 +64,13 @@ public class AudioWrapperClient extends AudioWrapper {
 		else
 			return 1;
 	}
+
+	public float getRange() {
+		if(sound != null)
+			return sound.range;
+		else
+			return 0;
+	}
 	
 	public void startSound() {
 		if(sound != null)
@@ -50,7 +78,15 @@ public class AudioWrapperClient extends AudioWrapper {
 	}
 	
 	public void stopSound() {
-		if(sound != null)
+		if(sound != null) {
 			sound.stop();
+			sound.setKeepAlive(0);
+		}
+	}
+
+	public boolean isPlaying() {
+		if(sound != null)
+			return sound.isPlaying();
+		return false;
 	}
 }
