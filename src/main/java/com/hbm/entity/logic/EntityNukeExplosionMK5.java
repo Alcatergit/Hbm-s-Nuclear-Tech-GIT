@@ -86,7 +86,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			return;
 		}
 
-        dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
+        dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F);
 
 		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
 		List<Entity> list = getEntitiesInRadius(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
@@ -97,7 +97,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		}
 
 		// Community Edition Biological Conversion Timing
-		if(fallout && ticksExisted == 42){
+		if(fallout && ticksExisted == (radius / 4)){
 			EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
             if(radius > 120) EntityThermonuclearCat.convertInRadiusToThermo(world, this.posX, this.posY, this.posZ, radius);
             if(radius > 60){
@@ -182,7 +182,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
 	}
 
-	public void dealDamage(World world, double x, double y, double z, double radius) {
+	public void dealDamage(World world, double x, double y, double z, float radius) {
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
         for(Entity e : entities) {
