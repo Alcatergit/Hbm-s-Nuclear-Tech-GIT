@@ -33,7 +33,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> IS_INITIALIZED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 
-    public static final int maxCloudlets = 20_000;
+    public static final int maxCloudlets = 65_536;
 
     //Nuke colors
     public static final double nr1 = 2.5;
@@ -172,8 +172,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.coreHeight = this.coreHeight * this.scale;
                 this.torusWidth = this.torusWidth * this.scale;
                 for(int i = 0; i < this.ticksExistedSaved; i++) {
-                    coreHeight += 0.15;
-                    torusWidth += 0.05;
+                    this.coreHeight += 0.15;
+                    this.torusWidth += 0.05;
                 }
                 this.rollerSize = this.torusWidth * 0.35;
                 this.convectionHeight = this.coreHeight + this.rollerSize;
@@ -199,45 +199,35 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
             // Modified: Determine if the system is in the reloading acceleration phase.
             int ticksExisted2 = this.ticksExisted - this.ticksExistedSaved;
-            boolean isMiddleStage = this.ticksExistedSaved > this.maxAge / 2;
-            boolean isAccelReload = this.isReloaded && ticksExisted2 < (isMiddleStage ?  90 : 95);
+            int remaining = this.maxAge - this.ticksExistedSaved;
+            double speedMultiplier = 1.0;
+            boolean isAccelReload = this.isReloaded && ticksExisted2 < (Math.min(remaining, 100));
 
-            if (this.isReloaded && !isAccelReload) {
+            if (!isAccelReload) {
                 this.isReloaded = false;
             }
 
             // spawn mush clouds
             double range = (torusWidth - rollerSize) * 0.5;
-            // Calculate speed ratio
-            double speedMultiplier = 1.0D;
             double simSpeed = getSimulationSpeed();
             int lifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
 
-            if(this.isReloaded && ticksExisted2 <= (isMiddleStage ? 50 : 75)){
-                speedMultiplier = isMiddleStage ? 4.0D : 2.0D;
+            if(this.isReloaded && ticksExisted2 <= (Math.min(remaining * 0.5, 50))){
+                speedMultiplier = this.ticksExistedSaved > this.maxAge / 4 ? 2.0 / (1.0D - ((double)(this.ticksExistedSaved - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)))) : 2.0;
                 simSpeed = 1.0D;
-                lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
             } else if(this.isReloaded){
-                speedMultiplier = Math.max(1.0D, isMiddleStage ? (160 - (3 * (ticksExisted2 - 50))) / 40.0D : (40 - (ticksExisted2 - 75)) / 20.0D);
                 // Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
-                double progress = Math.min(1.0D, isMiddleStage ? (ticksExisted2 - 50) / 40.0D : (ticksExisted2 - 75) / 20.0D);
-                if (this.ticksExisted > this.maxAge / 4) {
-                    double accelSimSpeed = 1.0D;
+                double progress = Math.min(1.0D, (ticksExisted2 - (Math.min(remaining * 0.5, 50))) / (Math.min(remaining * 0.5D, 50.D)));
+                double accelSpeedMultiplier = this.ticksExistedSaved > this.maxAge / 4 ? 2.0 / (1.0D - ((double)(this.ticksExistedSaved - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)))) : 2.0;
+                speedMultiplier = accelSpeedMultiplier * (1 - progress) + progress;
+                if (this.ticksExisted > this.maxAge / 4){
                     double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
-                    simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
+                    simSpeed = (1 - progress) + normalSimSpeed * progress;
                 }
-                double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
-                double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
-                lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
-                //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] decay speedMultiplier: {}->{};\n[Client] decay simSpeed: {}->{};\n[Client] decay lifetime: {}->{}", this.posX, this.posY, this.posZ, speedMultiplier, 1.0D, simSpeed, getSimulationSpeed(), lifetime, Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200));
+                //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] decay simSpeed: {}->{};\n[Client] decay lifetime: {}->{}", this.posX, this.posY, this.posZ, simSpeed, getSimulationSpeed(), lifetime, Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200));
             }
 
-            int toSpawn;
-            if (isAccelReload) {
-                toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime) * speedMultiplier)));
-            } else {
-                toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime))));
-            }
+            int toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime) * (isAccelReload ? speedMultiplier : 1.0))));
 
             for(int i = 0; i < toSpawn; i++) {
                 double x = posX + rand.nextGaussian() * range;
@@ -245,7 +235,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 Cloudlet cloud = new Cloudlet(x, lastSpawnY, z, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime);
                 cloud.setScale((float) (Math.sqrt(s) * 3 + this.ticksExisted * 0.0025 * s), (float) (Math.sqrt(s) * 3 + this.ticksExisted * 0.0025 * 6 * cs * s));
                 if (isAccelReload) {
-                    cloud.setMotion(cloud.motionMult * speedMultiplier);
+                    cloud.setMotion((s < 1.0 ? 0.5 : 1.0) * speedMultiplier);
                 }
                 cloudlets.add(cloud);
             }
@@ -257,7 +247,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             // spawn shock clouds
             if(this.ticksExisted * shockSpeed < 2 * explosionRadius) {
 
-                int ticksExisted = Math.max(this.ticksExisted - 10, 0);
+                int ticksExisted = Math.max(this.ticksExisted - (int) (Math.min(s, 1.0) * 10), 0);
                 int cloudCount = (int) Math.min(ticksExisted * shockSpeed, 100);
                 int shockLife = (int) Math.max(s * 300 - ticksExisted * shockSpeed * 10, 60);
 
@@ -270,7 +260,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 }
 
                 if(!didPlaySound) {
-                    if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed) {
+                    if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
                         MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.nuclearExplosion, SoundCategory.HOSTILE, 10_000F, 1F);
                         didPlaySound = true;
                     }
@@ -278,24 +268,47 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             }
 
             // spawn ring clouds
-            if (ticksExisted2 < 200 && (int)(this.getScale()) > 0) {
+            if ((int) s > 0 && ticksExisted2 < 150 * s) {
                 lifetime *= (int) s;
                 for(int i = 0; i < 2; i++) {
                     Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
                     cloud.setScale((float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * s), (float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * 6 * cs * s));
                     if (isAccelReload) {
-                        cloud.setMotion(cloud.motionMult * speedMultiplier);
+                        cloud.setMotion((s < 1.0 ? 0.5 : 1.0) * speedMultiplier);
                     }
                     cloudlets.add(cloud);
                 }
             }
 
-            if(this.humidity > 0 && this.ticksExisted * shockSpeed < (int)(2.25 * explosionRadius)){
-                // spawn lower condensation clouds
-                spawnCondensationClouds(this.ticksExisted * shockSpeed-8, this.humidity, (int)(1.625 * explosionRadius), 80, 4, s, cs);
+            // spawn condensation clouds
+            if(ticksExisted > (int) (1.625 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
 
-                // spawn upper condensation clouds
-                spawnCondensationClouds(this.ticksExisted * shockSpeed-8, this.humidity, (int)(2.125 * explosionRadius), 80, 2, s, cs);
+                for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
+                    for(int j = 0; j < 4; j++) {
+                        float angle = (float) (Math.PI * 2 * rand.nextDouble());
+                        Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (5 + rand.nextDouble()), 0, 0);
+                        vec.rotateAroundZ((float) (Math.PI / 45 * j));
+                        vec.rotateAroundY(angle);
+                        Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight - 5 + j * s, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+                        cloud.setScale(0.125F * (float) (cs), 3F * (float) (cs));
+                        cloudlets.add(cloud);
+                    }
+                }
+            }
+
+            if(ticksExisted > (int) (2.125 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
+
+                for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
+                    for(int j = 0; j < 4; j++) {
+                        float angle = (float) (Math.PI * 2 * rand.nextDouble());
+                        Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (3 + rand.nextDouble() * 0.5), 0, 0);
+                        vec.rotateAroundZ((float) (Math.PI / 45 * j));
+                        vec.rotateAroundY(angle);
+                        Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight + 25 * Math.min(s, 1.0) + j * cs, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+                        cloud.setScale(0.125F * (float) (cs), 3F * (float) (cs));
+                        cloudlets.add(cloud);
+                    }
+                }
             }
 
             cloudlets.removeIf(x -> x.isDead);
@@ -309,18 +322,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 }
             }
 
-            // Edit: Adjust the growth rate based on whether it is accelerated.
             double coreHeightIncrement = 0.15;
             double torusWidthIncrement = 0.05;
-            if (isAccelReload) {
-                coreHeightIncrement *= speedMultiplier;
-                torusWidthIncrement *= speedMultiplier;
-                coreHeight += coreHeightIncrement;
-                torusWidth += torusWidthIncrement;
-            } else {
-                coreHeight += coreHeightIncrement;
-                torusWidth += torusWidthIncrement;
-            }
+
+            coreHeight += coreHeightIncrement;
+            torusWidth += torusWidthIncrement;
 
             rollerSize = torusWidth * 0.35;
             convectionHeight = coreHeight + rollerSize;
@@ -334,23 +340,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
         if(!world.isRemote && this.ticksExisted > maxAge){
             this.setDead();
-        }
-    }
-
-    public void spawnCondensationClouds(double range, float humidity, int height, int count, int spreadAngle, double s, double cs){
-        if(range > 0 && (posY + range) > height) {
-
-            for(int i = 0; i < (int)(5 * humidity * count/(double)spreadAngle); i++) {
-                for(int j = 1; j < spreadAngle; j++) {
-                    float angle = (float) (Math.PI * 2 * rand.nextDouble());
-                    Vec3 vec = Vec3.createVectorHelper(0, range, 0);
-                    vec.rotateAroundZ((float)Math.acos((height-posY)/(range))+(float)Math.toRadians(humidity*humidity*90*j*(0.1*rand.nextDouble()-0.05)));
-                    vec.rotateAroundY(angle);
-                    Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + (0.375 * height), posZ + vec.zCoord, angle, 0, (int) ((20 + range / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
-                    cloud.setScale(3F * (float) (cs * s), 4F * (float) (cs * s));
-                    cloudlets.add(cloud);
-                }
-            }
         }
     }
 
