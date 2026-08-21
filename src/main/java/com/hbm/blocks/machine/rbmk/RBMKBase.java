@@ -182,9 +182,11 @@ public abstract class RBMKBase extends BlockDummyable implements IToolable, IToo
 							world.spawnEntity(new EntityItem(world, pos[0] + 0.5, pos[1] + 0.5 + RBMKDials.getColumnHeight(world), pos[2] + 0.5, new ItemStack(ModItems.rbmk_lid_glass)));
 						}
 						
+						if(RBMKDials.getMeltdownOverpressure(world)) TileEntityRBMKBase.explodeOnBroken = false;
 						world.setBlockState(new BlockPos(pos[0], pos[1], pos[2]), this.getDefaultState().withProperty(META, DIR_NO_LID.ordinal() + BlockDummyable.offset), 3);
 						NBTTagCompound nbt = rbmk.writeToNBT(new NBTTagCompound());
 						world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2])).readFromNBT(nbt);
+						if(RBMKDials.getMeltdownOverpressure(world)) TileEntityRBMKBase.explodeOnBroken = true;
 					}
 					
 					return true;
