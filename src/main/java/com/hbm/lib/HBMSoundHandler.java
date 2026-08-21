@@ -107,6 +107,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent iterReactorRunning;
 	public static SoundEvent chemicalPlant;
 	public static SoundEvent boiler;
+	public static SoundEvent steamEngineOperate;
 	public static SoundEvent electricHum;
 	public static SoundEvent engine;
 	public static SoundEvent broadcast1;
@@ -378,6 +379,7 @@ public final class HBMSoundHandler {
 		iterReactorRunning = register("block.iterReactorRunning");
 		chemicalPlant = register("block.chemicalPlant");
 		boiler = register("block.boiler");
+		steamEngineOperate = register("block.steamEngineOperate");
 		electricHum = register("block.electricHum");
 		engine = register("block.engine");
 		broadcast1 = register("block.broadcast1");
