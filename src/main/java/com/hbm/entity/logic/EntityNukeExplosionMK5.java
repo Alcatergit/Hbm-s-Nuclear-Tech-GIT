@@ -93,7 +93,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			radiate(livingList, 2_500_000F * radius / (this.ticksExisted * 5 + 1));
 		}
 
-		dealDamage(world, list, this.posX, this.posY, this.posZ, Math.min(1000, this.radius * 2.0D));
+		dealDamage(world, list, this.posX, this.posY, this.posZ, this.radius * 2.0D);
 
 		// Community Edition Biological Conversion Timing
 		if(fallout && ticksExisted == 42){
