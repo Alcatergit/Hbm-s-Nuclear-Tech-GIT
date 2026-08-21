@@ -1,10 +1,8 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
-import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.interfaces.Untested;
 import com.hbm.inventory.MachineRecipes;
@@ -74,23 +72,6 @@ public class TileEntityMachineLargeTurbine extends TileEntityMachineBase impleme
 			fillFluidInit(tanks[1]);
 			ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 			this.sendPower(world, pos.add(dir.offsetX * -4, 0, dir.offsetZ * -4), dir.getOpposite());
-
-			int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
-			if(feedSpace > 0 && types[0] != null) {
-				for(EnumFacing facing : EnumFacing.VALUES) {
-					BlockPos neighborPos = pos.offset(facing);
-					TileEntity te = world.getTileEntity(neighborPos);
-					if(te instanceof IFluidPipeMk2) {
-						FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-						if(network != null && network.getType() == types[0]) {
-							FluidStack pulled = network.drain(new FluidStack(types[0], feedSpace), true);
-							if(pulled != null)
-								tanks[0].fill(pulled, true);
-							break;
-						}
-					}
-				}
-			}
 			
 			if(inventory.getStackInSlot(0).getItem() == ModItems.forge_fluid_identifier && inventory.getStackInSlot(1).isEmpty()){
 				Fluid f = ItemForgeFluidIdentifier.getType(inventory.getStackInSlot(0));
