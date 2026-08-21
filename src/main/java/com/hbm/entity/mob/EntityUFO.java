@@ -217,8 +217,8 @@ public class EntityUFO extends EntityFlying implements IMob, IRadiationImmune {
 					
 					for(Entity e : entities) {
 						if(this.canAttackClass(e.getClass())) {
-							e.attackEntityFrom(ModDamageSource.causeCombineDamage(this, e), 1000F);
 							e.setFire(5);
+							e.attackEntityFrom(ModDamageSource.causeCombineDamage(this, e), 1000F);
 							
 							if(e instanceof EntityLivingBase)
 								ContaminationUtil.contaminate((EntityLivingBase)e, HazardType.RADIATION, ContaminationType.CREATIVE, 5F);
