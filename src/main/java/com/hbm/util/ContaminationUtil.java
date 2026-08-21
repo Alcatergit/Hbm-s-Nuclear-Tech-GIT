@@ -566,9 +566,9 @@ public class ContaminationUtil {
 				contaminate((EntityLivingBase)e, HazardType.DIGAMMA, ContaminationType.DIGAMMA, eDig);
 			}
 
-			if(fire3d > 0.025 && res < 2) {
+			if(fire3d > 0.025 && res < 2000) {
 				float fireDmg = fire3d;
-				fireDmg /= (float)(dmgLen * dmgLen * dmgLen);
+				fireDmg /= (float)(dmgLen * dmgLen * res);
 				if(fireDmg > 0.025){
 					if(fireDmg > 0.1 && e instanceof EntityPlayer p) {
 
@@ -580,22 +580,22 @@ public class ContaminationUtil {
 							p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
 						}
 					}
-                    if (!e.isImmuneToFire()) {
-                        e.setFire(5);
-                        e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
-                    }
+					if (!e.isImmuneToFire()) {
+						e.setFire(5);
+						e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
+					}
 				}
 			}
 
 			if(blast3d > 0 && res < 10000 && len < blastRange) {
-				float blastDmg = blast3d / (float)(dmgLen * dmgLen * res);
+				float blastDmg = blast3d / (float)(dmgLen * dmgLen * dmgLen * res);
 				if(blastDmg > 0.025){
 					if(rad3d > 0) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
 					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
 				}
-				e.motionX += vec.xCoord * 0.0075D * blastDmg;
-				e.motionY += vec.yCoord * 0.0075D * blastDmg;
-				e.motionZ += vec.zCoord * 0.0075D * blastDmg;
+				e.motionX += vec.xCoord * 0.05D * blastDmg;
+				e.motionY += vec.yCoord * 0.05D * blastDmg;
+				e.motionZ += vec.zCoord * 0.05D * blastDmg;
 			}
 		}
 	}
