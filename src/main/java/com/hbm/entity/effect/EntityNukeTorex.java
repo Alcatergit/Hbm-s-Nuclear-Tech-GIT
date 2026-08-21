@@ -168,7 +168,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is reloaded");
 			}
 
-			boolean hasReloaded = cloudlets.isEmpty() && (this.coreHeight == 3 * this.scale && this.convectionHeight == 3 && this.torusWidth == 3 * this.scale && this.rollerSize == 1);
+			boolean hasReloaded = cloudlets.isEmpty() && (this.coreHeight == 3 * this.scale && this.convectionHeight == 3 && this.torusWidth == 3 * this.scale && this.rollerSize == 1) && this.isInitialized;
 			if (hasReloaded && !(this.isReloaded && this.ticksExistedSaved > 0)) {
 				this.isReloaded = true;
 				this.ticksExistedSaved = this.ticksExisted;
