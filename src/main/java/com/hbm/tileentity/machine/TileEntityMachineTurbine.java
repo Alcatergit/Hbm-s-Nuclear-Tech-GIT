@@ -1,9 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.items.ModItems;
@@ -20,10 +18,8 @@ import api.hbm.energy.IEnergyGenerator;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -112,23 +108,6 @@ public class TileEntityMachineTurbine extends TileEntityLoadedBase implements IT
 
 			fillFluidInit(tanks[1]);
 			this.sendPower(world, pos);
-
-			int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
-			if(feedSpace > 0 && tankTypes[0] != null) {
-				for(EnumFacing dir : EnumFacing.VALUES) {
-					BlockPos neighborPos = pos.offset(dir);
-					TileEntity te = world.getTileEntity(neighborPos);
-					if(te instanceof IFluidPipeMk2) {
-						FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-						if(network != null && network.getType() == tankTypes[0]) {
-							FluidStack pulled = network.drain(new FluidStack(tankTypes[0], feedSpace), true);
-							if(pulled != null)
-								tanks[0].fill(pulled, true);
-							break;
-						}
-					}
-				}
-			}
 
 			if(inputValidForTank(0, 2))
 				if(FFUtils.fillFromFluidContainer(inventory, tanks[0], 2, 3)) {
