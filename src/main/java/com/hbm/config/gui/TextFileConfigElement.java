@@ -91,7 +91,7 @@ public class TextFileConfigElement extends AbstractConfigElement {
 
 	@Override
 	public String getLanguageKey() {
-		return originalName;
+		return "§o" + originalName + "§r";
 	}
 
 	@Override
