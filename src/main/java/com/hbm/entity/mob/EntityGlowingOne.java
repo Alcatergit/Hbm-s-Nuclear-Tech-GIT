@@ -80,6 +80,7 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 		glowing.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
 		glowing.setRotationYawHead(zombie.rotationYaw);
 		glowing.setRenderYawOffset(zombie.rotationYaw);
+        if (zombie.hasCustomName()) glowing.setCustomNameTag(zombie.getCustomNameTag());
 
 		// Inherit the original zombie's equipment and items
 		glowing.setItemStackToSlot(EntityEquipmentSlot.MAINHAND, zombie.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND));
