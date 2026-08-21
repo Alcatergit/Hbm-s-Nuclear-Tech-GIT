@@ -52,6 +52,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hbm.entity.mob.EntityGlowingOne.convertToGlow;
+import static com.hbm.entity.mob.EntityThermonuclearCat.convertToThermo;
+
 public class EntityNukeExplosionMK5 extends EntityChunky {
 	//Strength of the blast
 	public int strength;
@@ -83,6 +86,12 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			return;
 		}
 
+		if(ticksExisted == 1 && fallout && radius > 60){
+			for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).grow(radius * 2, radius * 2, radius * 2))) {
+				AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
+			}
+		}
+
 		dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F);
 
 		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
@@ -95,7 +104,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 		//make some noise
 		if(!mute) {
-			if(this.radius >= 25){
+			if(this.radius > 30){
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, Math.min(1, ticksExisted/200F) * this.radius * 0.05F, 0.8F + this.rand.nextFloat() * 0.2F);
 			}else{
 				this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.AMBIENT, Math.min(1, ticksExisted/100F) * Math.max(2F, this.radius * 0.1F), 0.8F + this.rand.nextFloat() * 0.2F);
@@ -213,24 +222,6 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				}
 			}
 
-			if (this.ticksExisted <= thermalDuration && len <= currentThermalRadius && res < 2) {
-				float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
-				if (fireDamage > 0.025) {
-					if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
-						if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-							p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
-						}
-						if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-							p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
-						}
-					}
-					if (!e.isImmuneToFire()) {
-						e.setFire(5);
-						e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
-					}
-				}
-			}
-
             int blastDuration = (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0));
             double shockSpeed = 2 * this.radius / (double)blastDuration;
             double currentBlastRadius = this.ticksExisted * shockSpeed;
@@ -272,11 +263,13 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			double eRads = rads;
 			eRads /= res;  // Obstacle attenuation
 			eRads /= len * len;  // Distance squared decay
-			if (eRads >= 100 && (!(e instanceof EntityGlowingOne) && e instanceof EntityZombie)) {
-                EntityGlowingOne.convertToGlow(world, (EntityZombie) e);
+			if (eRads >= 100 && e instanceof EntityZombie) {
+				if(e instanceof EntityGlowingOne) continue;
+				convertToGlow(world, (EntityZombie) e);
 			}
-			if (eRads >= 100 && (!(e instanceof EntityThermonuclearCat) && e instanceof EntityOcelot) && this.radius > 120) {
-                EntityThermonuclearCat.convertToThermo(world, (EntityOcelot) e);
+			if (eRads >= 100 && e instanceof EntityOcelot && this.radius > 120) {
+				if(e instanceof EntityThermonuclearCat) continue;
+				convertToThermo(world, (EntityOcelot) e);
 			}
             ContaminationUtil.contaminate(e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, (float)eRads);
 		}
@@ -334,17 +327,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 		mk5.setPosition(x, y, z);
 		mk5.floodPlease = isWet(world, new BlockPos(x, y, z));
-		if(BombConfig.disableNuclear) {
-			mk5.fallout = false;
-		}else {
-			if(r > 60 && mk5.fallout){
-				for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class,
-						new AxisAlignedBB(x, y, z, x, y, z)
-								.grow(r * 2, r * 2, r * 2))) {
-					AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
-				}
-			}
-		}
+		if(BombConfig.disableNuclear) mk5.fallout = false;
 		return mk5;
 	}
 
