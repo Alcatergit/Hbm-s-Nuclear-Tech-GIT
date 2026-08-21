@@ -108,10 +108,10 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
 		this.isReloaded = true;
 		this.dataManager.set(IS_RELOADED, true);
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT isReloaded: " + this.dataManager.get(IS_RELOADED));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT isReloaded: " + this.dataManager.get(IS_RELOADED));
 		if(nbt.hasKey("scale"))
 			setScale(nbt.getFloat("scale"), isReloaded);
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT scale: " + setScale(nbt.getFloat("scale"), isReloaded));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT scale: " + setScale(nbt.getFloat("scale"), isReloaded));
 		if(nbt.hasKey("type"))
 			this.dataManager.set(TYPE, nbt.getByte("type"));
 		if(nbt.hasKey("timeExisted")){
@@ -121,25 +121,25 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			this.timeExistedTemp = timeExistedSaved;
 			this.dataManager.set(TIME_EXISTED_TEMP, timeExistedSaved);
 		}
+        //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExisted: " + this.dataManager.get(TIME_EXISTED));
+        //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExistedTemp: " + this.dataManager.get(TIME_EXISTED_TEMP));
 		if(nbt.hasKey("maxAge")){
 			int maxAgeSaved = nbt.getInteger("maxAge");
 			this.maxAge = maxAgeSaved;
 			this.dataManager.set(MAX_AGE, maxAgeSaved);
 		}
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExisted: " + this.dataManager.get(TIME_EXISTED));
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExistedTemp: " + this.dataManager.get(TIME_EXISTED_TEMP));
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT maxAge: " + this.dataManager.get(MAX_AGE));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT maxAge: " + this.dataManager.get(MAX_AGE));
 	}
 
 	@Override
 	protected void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setFloat("scale", this.dataManager.get(SCALE));
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT scale: " + this.dataManager.get(SCALE));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT scale: " + this.dataManager.get(SCALE));
 		nbt.setByte("type", this.dataManager.get(TYPE));
 		nbt.setInteger("timeExisted", this.dataManager.get(TIME_EXISTED));
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT timeExisted: " + this.dataManager.get(TIME_EXISTED));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT timeExisted: " + this.dataManager.get(TIME_EXISTED));
 		nbt.setInteger("maxAge", this.dataManager.get(MAX_AGE));
-//		MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT maxAge: " + this.dataManager.get(MAX_AGE));
+		//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" writeEntityToNBT maxAge: " + this.dataManager.get(MAX_AGE));
 	}
 
 	@Override
@@ -153,9 +153,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.timeExisted++;
 		this.dataManager.set(TIME_EXISTED, timeExisted);
         if(world.isRemote){
-//			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate scale: " + this.dataManager.get(SCALE));
-//			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExisted: " + this.dataManager.get(TIME_EXISTED));
-//			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate maxAge: " + this.dataManager.get(MAX_AGE));
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate scale: " + this.dataManager.get(SCALE));
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExisted: " + this.dataManager.get(TIME_EXISTED));
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate maxAge: " + this.dataManager.get(MAX_AGE));
 
 			double s = this.getScale();
 			double cs = 1.5;
@@ -177,17 +177,18 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
-			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted <= (this.timeExistedTemp + 20));
-//			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
+			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted <= (this.maxAge / 4)) && (this.timeExisted <= (this.timeExistedTemp + 80));
+            //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
+            //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExistedTemp: " + this.timeExistedTemp);
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
 
 			// Calculate speed ratio
-			double speedMultiplier = 1.0;
-			if (isReloadedAccelerated) {
-				// Based on the current timeExisted calculation speed multiplier, you can customize the calculation logic. This example uses a function based on the time difference.
-				int timeDiff = this.timeExisted - this.timeExistedTemp;
-				speedMultiplier = 1.0 + (timeDiff / 20.0); // The magnification increases linearly over time and can be adjusted.
-			}
-//			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + speedMultiplier);
+            double speedMultiplier = 1.0;
+
+            if(isReloadedAccelerated){
+                speedMultiplier = 2.0;
+            }
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + speedMultiplier);
 
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
