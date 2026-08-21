@@ -246,7 +246,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// spawn ring clouds
 			boolean shouldSpawnRingClouds = false;
-			if (((this.isReloaded) && (this.timeExisted <= (this.timeExistedTemp + 100))) && this.getScale() > 0) {
+			if (((this.isReloaded) && (this.timeExisted <= (this.timeExistedTemp + 80))) && this.getScale() > 0) {
 				shouldSpawnRingClouds = true;
 			} else if (this.timeExisted < 200) {
 				shouldSpawnRingClouds = true;
