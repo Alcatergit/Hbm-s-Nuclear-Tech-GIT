@@ -53,9 +53,9 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	// ========== Added: Field for storing information about players who have been vandalized ==========
+	// ========== Added: Field for storing information about the player who last broke the block ==========
 	private EntityPlayer lastBreaker = null;
-	// ========== Added: Mark whether the destruction was caused by an explosion ==========
+	// ========== Added: Flag to mark if the destruction was caused by an explosion ==========
 	private boolean isExploding = false;
 
 	public NukeCustom(Material materialIn, String s) {
@@ -73,40 +73,40 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		// ========== Modification: Adding drop control logic upon detonation ==========
-		// If the destruction is caused by an explosion, no items will be dropped.
+		// ========== Modified: Added drop control logic for detonation ==========
+		// If the block is destroyed by an explosion, drop nothing.
 		if (isExploding) {
 			return null;
 		}
 
-		// When NBT saving is enabled, the drop is completely controlled by breakBlock.
+		// When NBT saving is enabled, drops are handled entirely by breakBlock.
 		if (GeneralConfig.enableBlockItemNBTSaving) {
-			return null; // Returning null, the fall is controlled by breakBlock.
+			return null; // Return null, drops are handled by breakBlock.
 		}
-		// ========== Modification complete ==========
+		// ========== End of modification ==========
 
 		return Item.getItemFromBlock(ModBlocks.nuke_custom);
 	}
 
-	// ========== Added: Override the removedByPlayer method to get the destroyed player ==========
+	// ========== Added: Override removedByPlayer to capture the player who broke the block ==========
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		// Recording and destroying player information
+		// Store the player who is breaking the block
 		this.lastBreaker = player;
 
-		// Calling the parent class method to continue executing the disruptive logic
+		// Call the super method to continue with the breaking logic
 		boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
 
-		// Clean up player information
+		// Clear the stored player information
 		this.lastBreaker = null;
 
 		return result;
 	}
 
-	// ========== Modification: Using player information recorded by removedByPlayer ==========
+	// ========== Modified: Use player information captured by removedByPlayer ==========
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		// ========== If the destruction is caused by an explosion, the entire block will be cleared, and no items will be dropped. ==========
+		// ========== If destroyed by an explosion, clear the tile entity and drop nothing ==========
 		if (isExploding) {
 			TileEntity tileentity = world.getTileEntity(pos);
 			if (tileentity != null) {
@@ -117,9 +117,9 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 		TileEntity tileentity = world.getTileEntity(pos);
 
-		// ========== New Logic: Configuration File Controls NBT Saving ==========
+		// ========== New: NBT saving controlled by configuration file ==========
 		if (!GeneralConfig.enableBlockItemNBTSaving) {
-			// Configure NBT saving is disabled; use the original logic.
+			// NBT saving is disabled, use original logic.
 			if (tileentity instanceof TileEntityNukeCustom) {
 				InventoryHelper.dropInventoryItems(world, pos, (TileEntityNukeCustom)tileentity);
 			}
@@ -127,26 +127,26 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			if (tileentity instanceof TileEntityNukeCustom) {
 				TileEntityNukeCustom nukeCustom = (TileEntityNukeCustom)tileentity;
 
-				// Create NBT tags to store block entity data
+				// Create NBT tag to store tile entity data
 				NBTTagCompound tileData = new NBTTagCompound();
 				nukeCustom.writeToNBT(tileData);
 
-				// ========== Check for any items inside ==========
+				// ========== Check if there are any items inside ==========
 				boolean hasItems = false;
 				if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
 					NBTTagList itemsList = tileData.getCompoundTag("inventory").getTagList("Items", 10);
 					hasItems = itemsList.tagCount() > 0;
 				}
 
-				// ========== Player information recorded using removedByPlayer ==========
+				// ========== Use player information captured by removedByPlayer ==========
 				boolean isCreativeMode = (lastBreaker != null && lastBreaker.capabilities.isCreativeMode);
 
 				if (hasItems) {
-					// ========== Internal Items Found: Drops a nuclear bomb containing NBT ==========
+					// ========== Has items inside: Drop a nuke block with NBT data ==========
 					ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
 					NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-					// ========== Simplify NBT data: Only keep BlockEntityTag->inventory->Items ==========
+					// ========== Simplify NBT data: Only keep BlockEntityTag -> inventory -> Items ==========
 					NBTTagCompound blockEntityTag = new NBTTagCompound();
 					NBTTagCompound inventoryTag = new NBTTagCompound();
 
@@ -158,33 +158,33 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 					blockEntityTag.setTag("inventory", inventoryTag);
 
-					// Write the BlockEntityTag to the item NBT
+					// Write the BlockEntityTag to the item's NBT
 					nbttagcompound.setTag("BlockEntityTag", blockEntityTag);
 					itemstack.setTagCompound(nbttagcompound);
 
-					// Generate drops
+					// Spawn the item drop
 					spawnAsEntity(world, pos, itemstack);
 
-					// Empty the contents
+					// Clear the inventory contents
 					nukeCustom.clearSlots();
 				} else if (!isCreativeMode) {
-					// ========== Survival Mode Empty bomb: Drops a regular bomb =========
+					// ========== Survival mode, empty nuke: Drop a regular nuke block =========
 					spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(this), 1));
 				}
-				// Creative Mode Empty Bomb: Nothing drops
+				// Creative mode, empty nuke: Drop nothing
 			}
 		}
-		// Call the parent class's breakBlock but don't let it handle the falling object.
+		// Call super.breakBlock but prevent it from handling drops
 		super.breakBlock(world, pos, state);
 	}
-	// ========== Modification complete ==========
+	// ========== End of modification ==========
 
-	// ========== Added: Initialize block entity state when a block is placed ==========
+	// ========== Modified: onBlockPlacedBy method - Support data recovery from simplified NBT ==========
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 
-		// ========== Recovery from Simplified NBT Data ==========
+		// ========== Modified: Recover data from simplified NBT ==========
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 
@@ -194,13 +194,13 @@ public class NukeCustom extends BlockContainer implements IBomb {
 				if (blockEntityTag.hasKey("inventory")) {
 					NBTTagCompound savedInventory = blockEntityTag.getCompoundTag("inventory");
 
-					// Create complete TileEntity NBT data
+					// Create complete tile entity NBT data
 					NBTTagCompound tileData = new NBTTagCompound();
 					tileData.setInteger("x", pos.getX());
 					tileData.setInteger("y", pos.getY());
 					tileData.setInteger("z", pos.getZ());
 
-					// ========== Restore only Items data in inventory ==========
+					// ========== Restore only the Items data in inventory ==========
 					NBTTagCompound newInventory = new NBTTagCompound();
 					if (savedInventory.hasKey("Items")) {
 						newInventory.setTag("Items", savedInventory.getTagList("Items", 10).copy());
@@ -208,19 +208,19 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 					tileData.setTag("inventory", newInventory);
 
-					// Loading data from NBT to block entities
+					// Load data from NBT into the tile entity
 					((TileEntityNukeCustom) tileentity).readFromNBT(tileData);
 
-					// The marker blocks need to be updated.
+					// Mark the block for update
 					worldIn.notifyBlockUpdate(pos, state, state, 3);
 
-					// Important: Mark block entities as dirty data to ensure data preservation.
+					// Mark tile entity as dirty to ensure data is saved
 					tileentity.markDirty();
 				}
 			}
 		}
 	}
-	// ========== Modification complete ==========
+	// ========== End of modification ==========
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -244,14 +244,14 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
 		if (world.getRedstonePowerFromNeighbors(pos) > 0 && !world.isRemote) {
-			// ========== New: Detonation condition check ==========
+			// ========== New: Check detonation conditions ==========
 			TileEntityNukeCustom entity = (TileEntityNukeCustom) world.getTileEntity(pos);
-			// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
+			// Check if at least one explosive type has a value greater than zero (TNT, nuclear, hydrogen, etc.)
 			if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 ||
 				entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
 				this.explode(world, pos);
 			}
-			// ========== End: If the detonation conditions are not met, no action will be taken. ==========
+			// ========== End: Do nothing if detonation conditions are not met ==========
 		}
 	}
 
@@ -359,13 +359,13 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeCustom entity = (TileEntityNukeCustom) world.getTileEntity(pos);
 
-		// ========== New: Detonation condition check ==========
-		// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
+		// ========== New: Check detonation conditions ==========
+		// Check if at least one explosive type has a value greater than zero (TNT, nuclear, hydrogen, etc.)
 		if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 ||
 			entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
 
 			if(!entity.isFalling()) {
-				// ========== Modification: Set a detonation flag, then clear the blocks ==========
+				// ========== Modified: Set detonation flag, then clear the block ==========
 				this.isExploding = true;
 				entity.clearSlots();
 				world.setBlockToAir(pos);
@@ -374,7 +374,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 				this.isExploding = false;
 
 			} else {
-				// ========== Modification: Set a detonation flag, then clear the blocks ==========
+				// ========== Modified: Set detonation flag, then clear the block ==========
 				this.isExploding = true;
 				EntityFallingNuke bomb = new EntityFallingNuke(world, entity.tnt, entity.nuke, entity.hydro, entity.bale, entity.dirty, entity.schrab, entity.sol, entity.euph);
 				bomb.getDataManager().set(EntityFallingNuke.FACING, world.getBlockState(pos).getValue(FACING));
@@ -385,7 +385,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 				this.isExploding = false;
 			}
 		}
-		// ========== End: If the detonation conditions are not met, no action will be taken. ==========
+		// ========== End: Do nothing if detonation conditions are not met ==========
 	}
 
 	@Override
@@ -453,16 +453,16 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§d["+ I18nUtil.resolveKey("trait.modularbomb")+"]§r");
 
-		// ========== New: Temporarily call the conditional method of TileEntityNukeCustom ==========
-		// Create a temporary TileEntityNukeCustom instance to obtain the explosion parameters.
+		// ========== New: Temporarily call the condition method from TileEntityNukeCustom ==========
+		// Create a temporary TileEntityNukeCustom instance to obtain explosion parameters
 		TileEntityNukeCustom tempEntity = new TileEntityNukeCustom();
 
-		// If the item has NBT data, recover the explosion parameters from the NBT.
+		// If the item has NBT data, restore explosion parameters from NBT
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
 
 			if (blockEntityTag.hasKey("inventory")) {
-				// Calculate explosion parameters by simulating the process of placing the item.
+				// Calculate explosion parameters by simulating the item placement process
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 
 				if (inventoryTag.hasKey("Items")) {
@@ -515,7 +515,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 						}
 					}
 
-					// Apply multiplier and set upper limit
+					// Apply multipliers and set upper limits
 					tnt *= tntMod;
 					nuke *= nukeMod;
 					hydro *= hydroMod;
@@ -561,13 +561,13 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)solAdj)+"§r");
 
 		} else if (tempEntity.schrab > 0) {
-			// Cyan text: Schradibium
+			// Cyan text: Schrabidium
 			tooltip.add("§3[Schrabidium]§r");
 			float schrabAdj = tempEntity.getSchrabAdj();
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)schrabAdj)+"§r");
 
         } else if (tempEntity.bale > 0) {
-            // Green text: Balefire
+			// Green text: Balefire
             tooltip.add("§a[Balefire]§r");
             float baleAdj = tempEntity.getBaleAdj();
             tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)baleAdj)+"§r");
@@ -616,7 +616,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			if (blockEntityTag.hasKey("inventory")) {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 
-				// Check if it contains the Items tag (the serialization format of ItemStackHandler).
+				// Check if it contains the Items tag (the serialization format of ItemStackHandler)
 				if (inventoryTag.hasKey("Items")) {
 					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
 
@@ -626,7 +626,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
 						ItemStack itemStack = new ItemStack(itemTag);
 
-						// Check if it is a custom_fall item.
+						// Check if it is a custom_fall item
 						if(itemStack.getItem() == ModItems.custom_fall) {
 							hasCustomFall = true;
 						}
