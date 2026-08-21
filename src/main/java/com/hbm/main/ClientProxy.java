@@ -406,7 +406,7 @@ import com.hbm.render.util.HmfModelLoader;
 import com.hbm.sound.AudioWrapper;
 import com.hbm.sound.AudioWrapperClient;
 import com.hbm.sound.AudioWrapperClientStartStop;
-import com.hbm.sound.SoundCrucible;
+import com.hbm.sound.SoundLoopCrucible;
 import com.hbm.tileentity.TileEntityDoorGeneric;
 import com.hbm.tileentity.TileEntityKeypadBase;
 import com.hbm.tileentity.TileEntitySlidingBlastDoorKeypad;
@@ -2071,11 +2071,11 @@ public class ClientProxy extends ServerProxy {
 		
 		if("sound".equals(type)){
 			String mode = data.getString("mode");
-			if("crucible_".equals(mode)){
-				int id = data.getInteger("playerId");
-				Entity e = world.getEntityByID(id);
-				if(e instanceof EntityPlayer){
-					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundCrucible((EntityPlayer) e));
+            if("crucible_loop".equals(mode)){
+                int id = data.getInteger("playerId");
+                Entity e = world.getEntityByID(id);
+                if(e instanceof EntityPlayer){
+                    Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
 				}
 			}
 			return;
