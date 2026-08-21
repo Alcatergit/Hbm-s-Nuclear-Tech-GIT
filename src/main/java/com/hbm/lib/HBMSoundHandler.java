@@ -204,7 +204,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent hit_flesh;
 	public static SoundEvent vomit;
 	// Register custom sound effects for Rod of Discord
-	public static SoundEvent discordTeleport;
+	public static SoundEvent discord_teleport;
 	public static SoundEvent chekhov_fire;
 	public static SoundEvent jeremy_fire;
 	public static SoundEvent jeremy_reload;
@@ -466,7 +466,7 @@ public final class HBMSoundHandler {
 		hit_flesh = register("weapon.hit_flesh");
 		vomit = register("entity.vomit");
 		// Register custom sound effects for Rod of Discord
-		discordTeleport = register("item.discord_teleport");
+		discord_teleport = register("item.discord_teleport");
 		chekhov_fire = register("turret.chekhov_fire");
 		jeremy_fire = register("turret.jeremy_fire");
 		jeremy_reload = register("turret.jeremy_reload");
