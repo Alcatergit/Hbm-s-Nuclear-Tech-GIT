@@ -246,7 +246,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// spawn ring clouds
 			boolean shouldSpawnRingClouds = false;
-			if (((this.isReloaded) && (this.timeExisted < (this.timeExistedTemp + 200))) && this.getScale() > 0) {
+			if (this.isReloaded && this.getScale() > 0) {
 				shouldSpawnRingClouds = true;
 			} else if (this.timeExisted < 200) {
 				shouldSpawnRingClouds = true;
@@ -299,7 +299,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			int maxHeat = (int) (50 * s * s);
 			heat = maxHeat - Math.pow((double) (maxHeat * this.timeExisted) / maxAge, 0.6);
 
-			if ((this.isReloaded) && (this.timeExisted > (this.timeExistedTemp + 200))) {
+			if ((this.isReloaded) && (this.timeExisted >= (this.timeExistedTemp + 200))) {
 				this.isReloaded = false;
 			}
 		}
