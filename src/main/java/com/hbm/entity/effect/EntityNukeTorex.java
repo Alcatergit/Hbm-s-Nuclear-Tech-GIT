@@ -247,7 +247,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
 				double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
 				lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
-                MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] decay speedMultiplier: {};\n[Client] decay simSpeed: {};\n[Client] decay lifetime: {}", this.posX, this.posY, this.posZ, speedMultiplier, simSpeed, lifetime);
+                //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] decay speedMultiplier: {};\n[Client] decay simSpeed: {};\n[Client] decay lifetime: {}", this.posX, this.posY, this.posZ, speedMultiplier, simSpeed, lifetime);
 			}
 
 			int toSpawn;
