@@ -19,17 +19,29 @@ public class ChemTemplateRender extends TileEntityItemStackRenderer {
 	public TransformType type;
 	@Override
 	public void renderByItem(ItemStack stack) {
-		if (stack.getItem() instanceof ItemChemistryTemplate && type == TransformType.GUI) {
-			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-				GL11.glTranslated(0.5, 0.5, 0);
-				ItemStack renderStack = new ItemStack(ModItems.chemistry_icon, 1, stack.getItemDamage());
-				Minecraft.getMinecraft().getRenderItem().renderItem(renderStack, Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(renderStack, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player));
-			} else {
-				GL11.glTranslated(0.5, 0.5, 0);
-				Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
+		try{
+			if (stack.getItem() instanceof ItemChemistryTemplate && type == TransformType.GUI) {
+				if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
+					GL11.glTranslated(0.5, 0.5, 0);
+
+					// Safely create a rendering item stack
+					try {
+						ItemStack renderStack = new ItemStack(ModItems.chemistry_icon, 1, stack.getItemDamage());
+						if (!renderStack.isEmpty()) {
+							Minecraft.getMinecraft().getRenderItem().renderItem(renderStack, Minecraft.getMinecraft().getRenderItem().getItemModelWithOverrides(renderStack, Minecraft.getMinecraft().world, Minecraft.getMinecraft().player));
+							return;
+						}
+					} catch (Exception e) {
+						// Recipe error, keep icon status
+					}
+				}
 			}
-		} else {
+			
+			// The default rendering template icon (including cases where the shortcut key is not pressed and the recipe is incorrect).
+			GL11.glTranslated(0.5, 0.5, 0);
 			Minecraft.getMinecraft().getRenderItem().renderItem(stack, itemModel);
+		} catch(Exception e){
+			// Capture all exceptions to ensure the rendering process is not interrupted.
 		}
 		super.renderByItem(stack);
 	}
