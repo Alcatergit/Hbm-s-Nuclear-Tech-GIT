@@ -1006,7 +1006,9 @@ public class MainRegistry {
 		config.save();
 		reloadCompatConfig();
 		WorldConfig.loadFromCompatibilityConfig();
+		AssemblerRecipes.loadRecipesFromConfig();
 		BedrockOreJsonConfig.init();
+		ExplosionNukeGeneric.loadSoliniumFromFile();
 	}
 
 	public static void reloadCompatConfig() {
@@ -1478,5 +1480,4 @@ public class MainRegistry {
             }
         });
 	}
-
 }
