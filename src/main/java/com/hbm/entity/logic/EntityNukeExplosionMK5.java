@@ -13,7 +13,6 @@ import com.hbm.entity.projectile.EntityMiniMIRV;
 import com.hbm.entity.projectile.EntityMiniNuke;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
-import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 
@@ -78,12 +77,15 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 	@Override
 	public void onUpdate() {
+        super.onUpdate();
 		if(world.isRemote) return;
 
 		if(strength == 0 || !CompatibilityConfig.isWarDim(world)) {
 			this.setDead();
 			return;
 		}
+
+        dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
 
 		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
 		List<Entity> list = getEntitiesInRadius(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
@@ -92,8 +94,6 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
 			radiate(livingList, 2_500_000F * radius / (this.ticksExisted * 5 + 1));
 		}
-
-		dealDamage(world, list, this.posX, this.posY, this.posZ, this.radius * 2.0D);
 
 		// Community Edition Biological Conversion Timing
 		if(fallout && ticksExisted == 42){
@@ -181,41 +181,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
 	}
 
-	public void dealDamage(World world, List<Entity> list, double x, double y, double z, double radius) {
+	public void dealDamage(World world, double x, double y, double z, double radius) {
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
-
-        for (Entity e : list) {
-			double dist = e.getDistance(x, y, z);
-
-			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
-			double len = vec.length();
-
-			if (dist <= radius) {
-
-				double entX = e.posX;
-				double entY = e.posY + e.getEyeHeight();
-				double entZ = e.posZ;
-
-				if (!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
-
-					if(this.ticksExisted < 10) {
-						float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dist * dist + 1)) * 1.0F);
-						if (e instanceof EntityPlayer p) {
-
-							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-								p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
-							}
-
-							if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-								p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
-							}
-						}
-						e.setFire(5);
-						e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
-					}
-				}
-			}
-		}
 
         for(Entity e : entities) {
             if(isExplosionExempt(e)) continue;
@@ -239,6 +206,26 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
             if(res < 1)
                 res = 1;
+
+            if(this.ticksExisted < 10 && res < 2) {
+                float fireDamage = (float)(0.5F * Math.pow(radius + 10, 3) * (1.0 / (dmgLen * dmgLen + 1)) * 1.0F);
+                if(fireDamage > 0.025){
+                    if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+
+                        if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                            p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
+                        }
+
+                        if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                            p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
+                        }
+                    }
+                    if (!e.isImmuneToFire) {
+                        e.setFire(5);
+                        e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
+                    }
+                }
+            }
 
             if(res < 10000 && len < this.ticksExisted * shockSpeed) {
                 float blastDmg = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
@@ -296,6 +283,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		floodPlease = nbt.getBoolean("floodPlease");
 		spawnFire = nbt.getBoolean("spawnFire");
 		mute = nbt.getBoolean("mute");
+        ticksExisted = nbt.getInteger("ticksExisted");
 		if(nbt.hasKey("fs")) fallingStarted = nbt.getBoolean("fs");
 		if(explosion == null) {
 			explosion = new ExplosionNukeRayBatched(world, this.posX, this.posY, this.posZ, this.strength, this.radius, this.floodPlease);
@@ -313,6 +301,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		nbt.setBoolean("spawnFire", spawnFire);
 		nbt.setBoolean("mute", mute);
 		nbt.setBoolean("fs", fallingStarted);
+        nbt.setInteger("ticksExisted", ticksExisted);
 		if(explosion != null) {
 			explosion.writeEntityToNBT(nbt);
 		}
