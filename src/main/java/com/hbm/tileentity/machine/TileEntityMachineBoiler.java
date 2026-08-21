@@ -2,7 +2,9 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.machine.MachineBoiler;
+import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.packet.AuxGaugePacket;
@@ -14,9 +16,11 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidStack;
@@ -118,6 +122,24 @@ public class TileEntityMachineBoiler extends TileEntityMachineBase implements IT
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos.getX(), pos.getY(), pos.getZ(), new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
 			if (age == 9 || age == 19)
 				fillFluidInit(tanks[1]);
+
+			int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
+			if(feedSpace > 0 && tanks[0].getFluid() != null) {
+				Fluid inputType = tanks[0].getFluid().getFluid();
+				for(EnumFacing dir : EnumFacing.VALUES) {
+					BlockPos neighborPos = pos.offset(dir);
+					TileEntity te = world.getTileEntity(neighborPos);
+					if(te instanceof IFluidPipeMk2) {
+						FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
+						if(network != null && network.getType() == inputType) {
+							FluidStack pulled = network.drain(new FluidStack(inputType, feedSpace), true);
+							if(pulled != null)
+								tanks[0].fill(pulled, true);
+							break;
+						}
+					}
+				}
+			}
 
 			Object[] outs;
 			if (tanks[0].getFluid() != null) {
