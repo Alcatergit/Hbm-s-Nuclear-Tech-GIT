@@ -111,7 +111,6 @@ public class HbmPotion extends Potion {
 				entity.attackEntityFrom(ModDamageSource.bang, 10000*(level+1));
 
 				if (!(entity instanceof EntityPlayer)){
-					entity.onDeath(ModDamageSource.bang);
 					entity.setHealth(0);
 				}
 			}
