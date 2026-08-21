@@ -148,9 +148,7 @@ public class BlockHazard extends BlockBase {
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
 		float radLevel = HazardSystem.getRawRadsFromBlock(this);
-		if(radLevel > 0) {
-			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, radLevel, 0, 1.0D, null);
-		}
+		ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, radLevel, 0, 1.0D, null);
 
 		if(!worldIn.isRemote) {
 			List<EntityLivingBase> entities = worldIn.getEntitiesWithinAABB(EntityLivingBase.class,
