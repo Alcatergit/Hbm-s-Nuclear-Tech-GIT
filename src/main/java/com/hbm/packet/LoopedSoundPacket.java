@@ -2,12 +2,10 @@ package com.hbm.packet;
 
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.sound.SoundLoopAssembler;
-import com.hbm.sound.SoundLoopBroadcaster;
 import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
 import com.hbm.sound.SoundLoopTurbofan;
 import com.hbm.sound.SoundLoopFel;
-import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
@@ -19,9 +17,7 @@ import com.hbm.tileentity.machine.TileEntityFEL;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -133,47 +129,6 @@ public class LoopedSoundPacket implements IMessage {
 					if(flag && te.getWorld().isRemote && SoundLoopTurbofan.canPlay(te) && SoundLoopTurbofan.isProcessing(te))
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(HBMSoundHandler.turbofanOperate, te));
 				} else
-				
-				if (te instanceof TileEntityBroadcaster) {
-					
-					boolean flag = true;
-					for(int i = 0; i < SoundLoopBroadcaster.list.size(); i++)  {
-                        if (SoundLoopBroadcaster.list.get(i).te == te && !SoundLoopBroadcaster.list.get(i).isDonePlaying()) {
-                            flag = false;
-                            break;
-                        }
-					}
-					
-					int j = te.getPos().getX() + te.getPos().getY() + te.getPos().getZ();
-					int rand = Math.abs(j) % 3 + 1;
-					SoundEvent sound = switch (rand) {
-                        case 2 -> HBMSoundHandler.broadcast2;
-                        case 3 -> HBMSoundHandler.broadcast3;
-                        default -> HBMSoundHandler.broadcast1;
-                    };
-
-                    // ===== MODIFICATION: Add distance check =====
-					// Problem: The network packet transmission range is 500 squares, but the effective sound effect range is only 25 squares
-					// This causes the sound effect to play even when a player receives a network packet outside the 25-square range.
-                    if(flag && te.getWorld().isRemote) {
-                        EntityPlayerSP player = Minecraft.getMinecraft().player;
-                        if(player != null) {
-                            // Calculate the actual distance between the player and the broadcaster
-                            double distance = Math.sqrt(
-                                    Math.pow(te.getPos().getX() + 0.5 - player.posX, 2) +
-                                    Math.pow(te.getPos().getY() + 0.5 - player.posY, 2) +
-                                    Math.pow(te.getPos().getZ() + 0.5 - player.posZ, 2)
-                            );
-
-                            // Sound effects are only played within a 25-tile range, resolving sound effect anomalies when exploring the map and re-adding save files.
-                            if(distance <= 25) {
-                                Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
-                            }
-                        }
-                    }
-                    // ============================================
-				} else
-				
 				if (te instanceof TileEntityMachineCentrifuge || te instanceof TileEntityMachineGasCent) {
 					
 					boolean flag = true;
