@@ -72,7 +72,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public int ticksExistedSaved2 = 0;
 	public boolean dataReady = false;
     public boolean isFirstEqual = true;
-    public boolean needScale = false;
 	public boolean isReloaded = false;
     public boolean isReloaded2 = false;
     public boolean isScaled = false;
@@ -118,10 +117,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
 				this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED_SAVED);
 				this.isReloaded = this.dataManager.get(IS_RELOADED);
-                this.needScale = this.isReloaded;
                 this.isReloaded2 = this.isReloaded;
 				this.isInitialized = this.dataManager.get(IS_INITIALIZED);
-                if (this.needScale) {
+                if (this.isReloaded) {
                     this.convectionHeight = this.convectionHeight * this.scale;
                     this.rollerSize = this.rollerSize * this.scale;
                 }
@@ -191,7 +189,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			double cs = 1.5;
 			if(this.ticksExisted == 1 || (!this.isInitialized && !this.isScaled)){
 				this.setScale((float) s);
-                this.isInitialized = true;
 			}else if(!this.isScaled){
 				this.coreHeight = this.coreHeight * this.scale;
 				this.torusWidth = this.torusWidth * this.scale;
