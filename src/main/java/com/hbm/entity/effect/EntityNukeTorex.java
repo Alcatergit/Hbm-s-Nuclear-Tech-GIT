@@ -208,9 +208,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     }
 
                     // spawn shock clouds
-                    if(this.ticksExisted * shockSpeed < 2 * explosionRadius) {
+                    if(ticksExisted2 * shockSpeed < 2 * explosionRadius) {
 
-                        int ticksExisted = Math.max(this.ticksExisted - (int) (Math.min(s, 1.0) * 10), 0);
+                        int ticksExisted = Math.max(ticksExisted2 - (int) (Math.min(s, 1.0) * 10), 0);
                         int cloudCount = (int) Math.min(ticksExisted * shockSpeed, 100);
                         int shockLife = (int) Math.max(s * 300 - ticksExisted * shockSpeed * 10, 60);
 
@@ -241,7 +241,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     }
 
                     // spawn condensation clouds
-                    if(ticksExisted > 130 * s && ticksExisted < 600 * s) {
+                    if(ticksExisted2 > 130 * s && ticksExisted2 < 600 * s) {
 
                         for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
                             for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
@@ -249,14 +249,14 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                                 Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (5 + rand.nextDouble()), 0, 0);
                                 vec.rotateAroundZ((float) (Math.PI / 45 * j));
                                 vec.rotateAroundY(angle);
-                                Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight - 5 + j * s, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+                                Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight - 5 + j * s, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted2 / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
                                 cloud.setScale(0.125F * (float) (cs), 3F * (float) (cs));
                                 cloudlets.add(cloud);
                             }
                         }
                     }
 
-                    if(ticksExisted > 200 * s && ticksExisted < 600 * s) {
+                    if(ticksExisted2 > 200 * s && ticksExisted2 < 600 * s) {
 
                         for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
                             for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
@@ -264,7 +264,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                                 Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (3 + rand.nextDouble() * 0.5), 0, 0);
                                 vec.rotateAroundZ((float) (Math.PI / 45 * j));
                                 vec.rotateAroundY(angle);
-                                Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight + 25 * Math.min(s, 1.0) + j * cs, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
+                                Cloudlet cloud = new Cloudlet(posX + vec.xCoord, posY + coreHeight + 25 * Math.min(s, 1.0) + j * cs, posZ + vec.zCoord, angle, 0, (int) ((20 + ticksExisted2 / 10) * (1 + rand.nextDouble() * 0.1)), TorexType.CONDENSATION);
                                 cloud.setScale(0.125F * (float) (cs), 3F * (float) (cs));
                                 cloudlets.add(cloud);
                             }
