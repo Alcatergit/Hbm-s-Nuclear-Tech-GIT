@@ -2,6 +2,7 @@ package com.hbm.tileentity.machine.rbmk;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ConcurrentModificationException;
 import java.util.HashSet;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -393,13 +394,17 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			keys.toArray(ents);
 			Arrays.sort(ents);
 
-			for(String key : ents) {
+			try {
+				for(String key : ents) {
 
-				if(exceptions.contains(key))
-					continue;
+					if(exceptions.contains(key))
+						continue;
 
-				mc.fontRenderer.drawString(key + ": " + flush.getTag(key), pX, pZ, 0xFFFFFF);
-				pZ += 10;
+					mc.fontRenderer.drawString(key + ": " + flush.getTag(key), pX, pZ, 0xFFFFFF);
+					pZ += 10;
+				}
+			} catch(ConcurrentModificationException e) {
+				mc.fontRenderer.drawString("§cData busy, retrying...", pX, pZ, 0xFFFFFF);
 			}
 
 			GlStateManager.disableBlend();
