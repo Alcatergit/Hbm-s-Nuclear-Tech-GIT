@@ -199,7 +199,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
 			int ticksExisted2 = this.ticksExisted - this.ticksExistedSaved;
-			boolean isReloadedAccelerated = this.isReloaded && (ticksExisted2 < 200);
+			boolean isReloadedAccelerated = this.isReloaded && ((this.ticksExistedSaved + 200) < (this.maxAge * 3 / 4)) && (ticksExisted2 < 200);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExistedSaved: " + this.ticksExistedSaved);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
