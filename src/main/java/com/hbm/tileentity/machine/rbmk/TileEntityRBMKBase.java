@@ -70,6 +70,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public float downwardSpeed = 0.0F;
 	public boolean falling = false;
 	public static final byte gravity = 1; //in blocks per s^2
+	public int damage = 0;
+	public double lastHeat = 20;
 	
 	public int water;
 	public static final int maxWater = 16000*20;
@@ -95,7 +97,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	 * @return
 	 */
 	public double maxHeat() {
-		return 1500D;
+		return MachineConfig.rbmkMeltdownTemp;
 	}
 	
 	/**
@@ -124,6 +126,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			moveHeat();
 			if(RBMKDials.getReasimBoilers(world)) 
 				boilWater();
+			
+			if(heat > maxHeat()) {
+				if(heat >= lastHeat || heat >= 2000)
+					damage += 2 + (int)(Math.max(0, heat-3000)/2000);
+			} else
+				damage = Math.max(damage-1, 0);
+			lastHeat = heat;
+			
 			jump();
 			
 			NBTTagCompound data = new NBTTagCompound();
@@ -134,13 +144,15 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 
 	private void jump(){
-		if(this.heat <= MachineConfig.rbmkJumpTemp && !falling)
+		if(damage <= 0 && !falling && jumpheight <= 0)
 			return;
 
 		if(!falling){ // linear rise
-			if(this.heat > MachineConfig.rbmkJumpTemp){
-				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-MachineConfig.rbmkJumpTemp+200D))+1) == 0){
-					double change = (this.heat-MachineConfig.rbmkJumpTemp)*0.0005D;
+			if(damage > 0){
+				int rand = world.rand.nextInt(Math.max(1, (1200-damage)/3+5));
+				if(this.jumpheight > 0 || rand == 0){
+					int dmg = (int)(Math.pow(damage/1200.0, 0.5)*100);
+					double change = dmg*0.0005D;
 					double heightLimit = Math.min((this.heat-MachineConfig.rbmkJumpTemp)*0.005D, 1.0D);
 
 					this.jumpheight = this.jumpheight + change;
@@ -165,6 +177,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			}
 		}
 	}
+
+
 
 	
 	/**
@@ -285,6 +299,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 		this.heat = nbt.getDouble("heat");
 		this.jumpheight = nbt.getDouble("jumpheight");
+		this.damage = nbt.getInteger("damage");
 		this.water = nbt.getInteger("realSimWater");
 		this.steam = nbt.getInteger("realSimSteam");
 	}
@@ -298,6 +313,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		
 		nbt.setDouble("heat", this.heat);
 		nbt.setDouble("jumpheight", this.jumpheight);
+		nbt.setInteger("damage", this.damage);
 		nbt.setInteger("realSimWater", this.water);
 		nbt.setInteger("realSimSteam", this.steam);
 		return nbt;
