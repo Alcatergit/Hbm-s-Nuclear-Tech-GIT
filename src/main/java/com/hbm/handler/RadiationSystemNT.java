@@ -442,7 +442,6 @@ public class RadiationSystemNT {
 
 								if(sheep.getHealth() > 0) {
 									sheep.setHealth(0);
-									sheep.onDeath(ModDamageSource.radiation);
 								}
 							}
 
@@ -659,7 +658,6 @@ public class RadiationSystemNT {
 
 							if(entity.getHealth() > 0) {
 								entity.setHealth(0);
-								entity.onDeath(ModDamageSource.radiation);
 							}
 
 							if(entity instanceof EntityPlayerMP)
