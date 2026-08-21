@@ -12,8 +12,8 @@ import java.util.Random;
 import java.util.Set;
 
 import com.hbm.interfaces.IFluidPipeMk2;
-import com.hbm.tileentity.TileEntityProxyBase;
-import com.hbm.tileentity.machine.TileEntityDummy;
+import com.hbm.tileentity.TileEntityProxyCombo;
+import com.hbm.tileentity.machine.TileEntityDummyFluidPort;
 
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +36,6 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 	protected long lastUpdateWorldTime = -1;
 	protected int recvCursor = 0;
 	protected int provCursor = 0;
-
 	public FFPipeNetworkMk2(IFluidPipeMk2 te) {
 		this.type = te.getType();
 	}
@@ -127,6 +126,14 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		} else{
 			try{
 				if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null) {
+						TileEntity resolved = te.getWorld().getTileEntity(dummy.target);
+						if(resolved != null) te = resolved;
+					}
 					fillables.remove(te.getPos());
 					providers.remove(te.getPos());
 				}
@@ -222,20 +229,21 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 				return;
 			}
 		} else if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
-			if(te instanceof TileEntityProxyBase proxy) {
+			if(te instanceof TileEntityProxyCombo proxy) {
 				TileEntity resolved = proxy.getTE();
 				if(resolved != null) te = resolved;
 			}
-			if(te instanceof TileEntityDummy dummy && dummy.target != null) {
+			if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null) {
 				TileEntity resolved = te.getWorld().getTileEntity(dummy.target);
 				if(resolved != null) te = resolved;
 			}
 			if(!fillables.containsKey(te.getPos())) {
 				fillables.put(te.getPos(), te);
-				return;
+			}
+			if(!providers.containsKey(te.getPos())) {
+				providers.put(te.getPos(), te);
 			}
 		}
-		return;
 	}
 	
 	public static FFPipeNetworkMk2 mergeNetworks(FFPipeNetworkMk2 net1, FFPipeNetworkMk2 net2) {
@@ -317,6 +325,18 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		lastUpdateWorldTime = Math.max(saved, world.getTotalWorldTime());
 	}
 
+	private void cleanupInvalidFillables() {
+		Iterator<Map.Entry<BlockPos, TileEntity>> it = fillables.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<BlockPos, TileEntity> entry = it.next();
+			TileEntity te = entry.getValue();
+			if(te == null || te.isInvalid()) {
+				it.remove();
+				providers.remove(entry.getKey());
+			}
+		}
+	}
+
 	private void doUpdate() {
 
 		if(providers.isEmpty() && fillables.isEmpty()) return;
@@ -347,8 +367,10 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 		}
 
-		if(fluidType == null) return;
-		if(totalAvailable <= 0) return;
+		if(fluidType == null || totalAvailable <= 0) {
+			cleanupInvalidFillables();
+			return;
+		}
 
 		long totalDemand = 0;
 		List<IFluidHandler> recvHandlers = new ArrayList<>();
@@ -373,7 +395,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 		}
 
-		if(totalDemand <= 0) return;
+		if(totalDemand <= 0) {
+			return;
+		}
 
 		long toTransfer = Math.min(totalAvailable, totalDemand);
 		long transferred = 0;
@@ -412,9 +436,28 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 		}
 
+		provHandlers.clear();
+		provSupplies.clear();
+		totalAvailable = 0;
+		Iterator<Map.Entry<BlockPos, TileEntity>> provRebuildItr = providers.entrySet().iterator();
+		while(provRebuildItr.hasNext()) {
+			Map.Entry<BlockPos, TileEntity> entry = provRebuildItr.next();
+			TileEntity te = entry.getValue();
+			if(te.isInvalid()) continue;
+			IFluidHandler handler = te.getCapability(CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY, null);
+			if(handler != null) {
+				FluidStack stack = handler.drain(Integer.MAX_VALUE, false);
+				if(stack != null && stack.amount > 0) {
+					provHandlers.add(handler);
+					provSupplies.add((long)stack.amount);
+					totalAvailable += stack.amount;
+				}
+			}
+		}
+		int provCount = provHandlers.size();
+
 		long debited = 0;
 		long remainingSupply = totalAvailable;
-		int provCount = provHandlers.size();
 
 		int provStart = provCount > 0 ? provCursor % provCount : 0;
 		for(int step = 0; step < provCount && debited < transferred; step++) {
