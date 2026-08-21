@@ -171,6 +171,19 @@
     "weapon.switchmode2": {"category": "player", "sounds": [{"name": "hbm:weapon/switchmode2", "stream": false}]},
     "weapon.nuclearExplosion": {"category": "player", "sounds": [{"name": "hbm:weapon/nuclear_explosion", "stream": true}]},
 
+    "weapon.explosion_large_near": {
+      "category": "player",
+      "sounds": [
+        "hbm:weapon/explosion_large_near"
+      ]
+    },
+    "weapon.explosion_large_far": {
+      "category": "player",
+      "sounds": [
+        "hbm:weapon/explosion_large_far"
+      ]
+    },
+
 	"turret.chekhov_fire": {"category": "block", "sounds": [{"name": "hbm:turret/chekhov_fire", "stream": false}]},
     "turret.jeremy_fire": {"category": "block", "sounds": ["hbm:turret/jeremy_fire1", "hbm:turret/jeremy_fire2", "hbm:turret/jeremy_fire3", "hbm:turret/jeremy_fire4", "hbm:turret/jeremy_fire5"]},
     "turret.jeremy_reload": {"category": "block", "sounds": [{"name": "hbm:turret/jeremy_reload", "stream": false}]},
