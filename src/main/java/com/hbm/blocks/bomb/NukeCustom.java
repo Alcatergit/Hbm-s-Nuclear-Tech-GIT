@@ -5,6 +5,7 @@ import java.util.Random;
 
 import com.hbm.config.GeneralConfig;
 import com.hbm.inventory.RecipesCommon;
+import com.hbm.items.ModItems;
 import com.hbm.util.I18nUtil;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
@@ -246,7 +247,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			// ========== New: Detonation condition check ==========
 			TileEntityNukeCustom entity = (TileEntityNukeCustom) world.getTileEntity(pos);
 			// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
-			if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 || 
+			if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 ||
 				entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
 				this.explode(world, pos);
 			}
@@ -360,9 +361,9 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 		// ========== New: Detonation condition check ==========
 		// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
-		if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 || 
+		if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 ||
 			entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
-			
+
 			if(!entity.isFalling()) {
 				// ========== Modification: Set a detonation flag, then clear the blocks ==========
 				this.isExploding = true;
@@ -544,6 +545,10 @@ public class NukeCustom extends BlockContainer implements IBomb {
 
 		// ========== Display text in different colors based on priority ==========
 		// Priority: tnt < nuke < hydro < bale < schrab < sol < euph
+		if ((tempEntity.tnt>0 || tempEntity.nuke>0 || tempEntity.hydro>0 || tempEntity.bale>0 || tempEntity.schrab>0 || tempEntity.sol>0 || tempEntity.euph>0) && isFalling(stack)) {
+			tooltip.add("[isFalling]");
+
+		}
 		if (tempEntity.euph > 0) {
 			// Pink text: Anti Mass
 			tooltip.add("§d[Anti Mass]§r");
@@ -608,5 +613,34 @@ public class NukeCustom extends BlockContainer implements IBomb {
 				tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)tempEntity.tnt)+"§r");
 			}
 		}
+	}
+
+	private boolean isFalling(ItemStack stack) {
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Check if it contains the Items tag (the serialization format of ItemStackHandler).
+				if (inventoryTag.hasKey("Items")) {
+					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
+
+					boolean hasCustomFall = false;
+
+					for(int i = 0; i < itemsList.tagCount(); i++) {
+						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
+						ItemStack itemStack = new ItemStack(itemTag);
+
+						// Check if it is a custom_fall item.
+						if(itemStack.getItem() == ModItems.custom_fall) {
+							hasCustomFall = true;
+						}
+					}
+					return hasCustomFall;
+				}
+			}
+		}
+		return false;
 	}
 }
