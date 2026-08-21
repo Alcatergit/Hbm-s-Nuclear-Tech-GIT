@@ -75,7 +75,7 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
 		DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(zombie.posX, zombie.posY, zombie.posZ));
 		float f = difficulty.getClampedAdditionalDifficulty();
 
-		glowing.setCanPickUpLoot(zombie.canPickUpLoot() ? zombie.canPickUpLoot() : world.rand.nextFloat() < 1.1F * f);
+        if(!zombie.isDead) glowing.setCanPickUpLoot(zombie.canPickUpLoot() ? zombie.canPickUpLoot() : world.rand.nextFloat() < 1.1F * f);
 		glowing.setChild(zombie.isChild());
 		glowing.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
 		glowing.setRotationYawHead(zombie.rotationYaw);
