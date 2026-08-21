@@ -76,4 +76,6 @@ public class ServerProxy
     public boolean isVanished(Entity e) {
 		return false;
 	}
+	
+	public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) { }
 }
