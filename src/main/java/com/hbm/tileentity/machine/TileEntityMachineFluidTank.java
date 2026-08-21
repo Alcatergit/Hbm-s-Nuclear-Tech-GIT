@@ -451,20 +451,16 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill) {
-		if (this.canFill(resource.getFluid())) {		
-			return tank.fill(resource, doFill);
-		}
-		return 0;
+		if(mode == 2 || mode == 3)
+			return 0;
+		return tank.fill(resource, doFill);
 	}
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
 		if(mode == 0 || mode == 3)
 			return null;
-		if (resource == null || !resource.isFluidEqual(tank.getFluid())) {
-			return null;
-		}
-		return tank.drain(resource.amount, doDrain);
+		return tank.drain(resource, doDrain);
 	}
 
 	@Override
@@ -472,20 +468,6 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		if(mode == 0 || mode == 3)
 			return null;
 		return tank.drain(maxDrain, doDrain);
-	}
-	
-	public boolean canFill(Fluid fluid) {
-		if (!this.world.isRemote) {
-            return mode != 2 && mode != 3 && (tank.getFluid() == null || tank.getFluid().getFluid() == fluid);
-		}
-		return false;
-	}
-
-	public boolean canDrain(Fluid fluid) {
-		if (!this.world.isRemote) {
-			return tank.getFluid() != null;
-		}
-		return false;
 	}
 
 	@Override
