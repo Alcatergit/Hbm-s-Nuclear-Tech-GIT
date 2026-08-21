@@ -248,15 +248,15 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				return;
 
 			} else if(bblock == Blocks.COAL_ORE || isOreDictMatch(bblock, "oreCoal")) {
-			if(l < s6){
-				int ra = rand.nextInt(150);
-				if(ra < 7) {
-					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
-				} else if(ra < 10) {
-					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+				if(l < s6){
+					int ra = rand.nextInt(150);
+					if(ra < 7) {
+						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+					} else if(ra < 10) {
+						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+					}
 				}
-			}
-			return;
+				return;
 
 			} else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
 				if(l < s0){
@@ -283,31 +283,31 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				continue;
 
 			} else if(bblock == ModBlocks.ore_uranium || isOreDictMatch(bblock, "oreUranium")) {
-			if(l <= s6){
-				if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0 || l < s7)
-					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
-			}
-			return;
+				if(l <= s6){
+					if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0 || l < s7)
+						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+				}
+				return;
 
-		} else if(bblock == ModBlocks.ore_nether_uranium || isOreDictMatch(bblock, "oreUranium")) {
-			if(l <= s5){
-				if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0)
-					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
-			}
-			return;
+		} else if(bblock == ModBlocks.ore_nether_uranium || isOreDictMatch(bblock, "oreNetherUranium")) {
+				if(l <= s5){
+					if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0)
+						world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+				}
+				return;
 
-		} else if(bblock == ModBlocks.ore_gneiss_uranium || isOreDictMatch(bblock, "oreUranium")) {
-			if(l <= s4){
-				if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance()/2)) == 0)
-					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-				else
-					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
-			}
-			return;
+		} else if(bblock == ModBlocks.ore_gneiss_uranium || isOreDictMatch(bblock, "oreNetherUranium")) {
+				if(l <= s4){
+					if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance()/2)) == 0)
+						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+					else
+						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+				}
+				return;
 
 			} else if(bblock == ModBlocks.brick_concrete) {
 				if(rand.nextInt(60) == 0)
