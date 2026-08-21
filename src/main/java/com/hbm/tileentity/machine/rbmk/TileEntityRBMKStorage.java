@@ -3,6 +3,7 @@ package com.hbm.tileentity.machine.rbmk;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
 
 public class TileEntityRBMKStorage extends TileEntityRBMKSlottedBase implements IRBMKLoadable {
 
@@ -14,6 +15,12 @@ public class TileEntityRBMKStorage extends TileEntityRBMKSlottedBase implements 
 	@Override
 	public String getName() {
 		return "container.rbmkStorage";
+	}
+
+	public void getDiagData(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
 	}
 	
 	@Override
