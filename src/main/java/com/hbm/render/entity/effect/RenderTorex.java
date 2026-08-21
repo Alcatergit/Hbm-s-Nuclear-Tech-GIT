@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
+import com.hbm.main.ModEventHandlerClient;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityNukeTorex;
@@ -51,8 +52,6 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		float scale = (float)cloud.getScale();
 		float flashDuration = scale * flashBaseDuration;
 		float flareDuration = scale * flareBaseDuration;
-
-		doScreenShake(cloud, x, y, z, scale * 100);
 		
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
@@ -63,38 +62,26 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		cloudletWrapper(cloud, partialTicks);
 
-		if(cloud.ticksExisted < flareDuration+1)
+		if(cloud.timeExisted < flareDuration+1)
 			flareWrapper(cloud, partialTicks, flareDuration);
 		
-		if(cloud.ticksExisted < flashDuration+1)
+		if(cloud.timeExisted < flashDuration+1)
 			flashWrapper(cloud, partialTicks, flashDuration);
+		if(cloud.timeExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
+		if(cloud.didPlaySound && !cloud.didShake && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
+			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
+			cloud.didShake = true;
+			EntityPlayer player = MainRegistry.proxy.me();
+			float dist = player.getDistance(cloud);
+			player.hurtTime = (100 - (int) dist) > 0 ? (int) ((float) (100 - (int) dist) * 1.5F) : 0;
+			player.maxHurtTime = (100 - (int) dist) > 0 ? (100 - (int) dist) : 0;
+			player.attackedAtYaw = 0F;
+		}
 
 		if(fog)
 			GL11.glEnable(GL11.GL_FOG);
 
 		GL11.glPopMatrix();
-	}
-
-	private void doScreenShake(EntityNukeTorex cloud, double x, double y, double z, float amplitude){
-		if(cloud.ticksExisted > 300) return;
-		EntityPlayer player = MainRegistry.proxy.me();
-
-		double dist = player.getDistance(cloud);
-		double shockwaveDistance = dist - cloud.ticksExisted * shockSpeed;
-		if(shockwaveDistance > shockSpeed * 2 || shockwaveDistance < 0) return;
-		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude, 0.8F + cloud.world.rand.nextFloat() * 0.2F);
-		int duration = (int)(40 * Math.min(1.5, (amplitude * amplitude)/(dist * dist)));
-		if(duration < 15) return;
-		int swingTimer = duration<<1;
-
-		if(player.getDisplayName().toString().equals("Vic4Games")) {
-			player.hurtTime = swingTimer<<1;
-			player.maxHurtTime = duration<<1;
-		} else {
-			player.hurtTime = swingTimer;
-			player.maxHurtTime = duration;
-		}
-		player.attackedAtYaw = 0F;
 	}
 	
 	private final Comparator cloudSorter = (arg0, arg1) -> {
@@ -144,25 +131,25 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 	
 	private void flareWrapper(EntityNukeTorex cloud, float partialTicks, float flareDuration) {
 
-		GL11.glPushMatrix();
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0);
-		GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GlStateManager.pushMatrix();
+		GlStateManager.enableBlend();
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0);
+		GlStateManager.disableAlpha();
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-			
+
 		bindTexture(flare);
 
 		Tessellator tess = Tessellator.getInstance();
-        BufferBuilder buf = tess.getBuffer();
+		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
-		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
+
+		double age = Math.min(cloud.timeExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
-		
+
 		Random rand = new Random(cloud.getEntityId());
-		
+
 		for(int i = 0; i < 3; i++) {
 			float x = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
 			float y = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
@@ -173,11 +160,11 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		tess.draw();
 
 		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
+		GlStateManager.enableAlpha();
 		RenderHelper.enableStandardItemLighting();
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-		GL11.glDisable(GL11.GL_BLEND);
-		GL11.glPopMatrix();
+		GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+		GlStateManager.disableBlend();
+		GlStateManager.popMatrix();
 	}
 
 	private void tessellateCloudlet(BufferBuilder buf, double posX, double posY, double posZ, Cloudlet cloud, float partialTicks) {
@@ -226,11 +213,11 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 	private void flashWrapper(EntityNukeTorex cloud, float interp, float flashDuration) {
 
-        if(cloud.ticksExisted < flashDuration) {
+        if(cloud.timeExisted < flashDuration) {
 
     		GL11.glPushMatrix();
     		//Function [0, 1] that determines the scale and intensity (inverse!) of the flash
-        	double intensity = (cloud.ticksExisted + interp) / flashDuration;
+        	double intensity = (cloud.timeExisted + interp) / flashDuration;
         	GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 
         	//Euler function to slow down the scale as it progresses
