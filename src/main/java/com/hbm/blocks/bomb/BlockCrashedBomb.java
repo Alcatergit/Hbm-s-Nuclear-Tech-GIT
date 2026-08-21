@@ -213,15 +213,15 @@ public class BlockCrashedBomb extends BlockContainer implements IBomb, IToolable
             tooltip.add("§a[" + I18nUtil.resolveKey("trait.nuclearbomb") + "]" + "§r");
             tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", 35) + "§r");
             if(!BombConfig.disableNuclear){
-                tooltip.add("§2[Fallout]§r");
-                tooltip.add(" §aRadius: "+70+"m§r");
+                tooltip.add("§a["+ I18nUtil.resolveKey("trait.fallout")+"]"+" §r");
+                tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius",(int)35*(1+BombConfig.falloutRange/100))+"§r");
             }
         } else if(stack.getItemDamage() == 3) {
             tooltip.add("§a[" + I18nUtil.resolveKey("trait.nuclearbomb") + "]" + "§r");
             tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", 25) + "§r");
             if(!BombConfig.disableNuclear){
-                tooltip.add("§2[Fallout]§r");
-                tooltip.add(" §aRadius: "+75+"m§r");
+                tooltip.add("§a["+ I18nUtil.resolveKey("trait.fallout")+"]"+" §r");
+                tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius",(int)25*(1+BombConfig.falloutRange/100))+"§r");
             }
         }
 	}
