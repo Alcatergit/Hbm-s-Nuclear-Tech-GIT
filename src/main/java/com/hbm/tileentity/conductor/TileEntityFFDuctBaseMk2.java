@@ -17,6 +17,7 @@ import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.server.management.PlayerChunkMapEntry;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.ITickable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -30,13 +31,14 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 
-public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2, IFluidHandler {
+public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2, IFluidHandler, ITickable {
 
 	public EnumFacing[] connections = new EnumFacing[6];
 	protected Fluid type;
 	protected FFPipeNetworkMk2 network = null;
 	public TileEntity[] tileentityCache = new TileEntity[6];
 	public boolean isBeingDestroyed = false;
+	private int prevChunkLoadMask = 0;
 
 	public TileEntityFFDuctBaseMk2() {
 	}
@@ -108,6 +110,22 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 				((TileEntityFFDuctBaseMk2) te).onNeighborChange();
 		}
 		this.onNeighborChange();
+	}
+
+	@Override
+	public void update() {
+		if(!world.isRemote) {
+			int mask = 0;
+			for(EnumFacing dir : EnumFacing.VALUES) {
+				if(world.isBlockLoaded(pos.offset(dir))) {
+					mask |= (1 << dir.getIndex());
+				}
+			}
+			if((mask & ~prevChunkLoadMask) != 0) {
+				prevChunkLoadMask = mask;
+				onNeighborChange();
+			}
+		}
 	}
 
 	// Probably called before neighbor changed
