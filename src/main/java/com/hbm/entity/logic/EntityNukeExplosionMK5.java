@@ -1,11 +1,29 @@
-
 package com.hbm.entity.logic;
 
+import com.google.common.base.Predicate;
+import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.grenade.EntityGrenadeASchrab;
+import com.hbm.entity.grenade.EntityGrenadeNuclear;
+import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.entity.mob.EntityThermonuclearCat;
+import com.hbm.entity.projectile.EntityBulletBase;
+import com.hbm.entity.projectile.EntityExplosiveBeam;
+import com.hbm.entity.projectile.EntityMiniMIRV;
+import com.hbm.entity.projectile.EntityMiniNuke;
+import com.hbm.handler.ArmorUtil;
+import com.hbm.items.ModItems;
+import com.hbm.lib.Library;
+import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 
+import com.hbm.render.amlfrom1710.Vec3;
+import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumHand;
+import net.minecraft.world.WorldServer;
 import net.minecraft.world.biome.*;
 
 import org.apache.logging.log4j.Level;
@@ -25,13 +43,21 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.world.World;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class EntityNukeExplosionMK5 extends EntityChunky {
 	//Strength of the blast
 	public int strength;
 	//Radius
 	public int radius;
-	
+
 	public boolean mute = false;
 	public boolean spawnFire = false;
 
@@ -58,28 +84,37 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			this.setDead();
 			return;
 		}
-		
-		float rads, fire, blast;
-		rads = 0;
-		//radiate until there is fallout rain
-		if(fallout && falloutRain == null) {
-			rads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double) 2 * this.ticksExisted / radius) + strength);
-			if(ticksExisted == 1){
-				EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
-                if(radius > 120) EntityThermonuclearCat.convertInRadiusToThermo(world, this.posX, this.posY, this.posZ, radius);
-                if(radius > 60){
-                    for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ).grow(radius * 2, radius * 2, radius * 2))) {
-                        AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
-                    }
+
+		// Community-based radiation damage concept: Radiation is only applied in the initial stages of the explosion, using ray tracing calculations.
+		List<Entity> list = getEntitiesInRadius(world, this.posX, this.posY, this.posZ, this.radius * 2.0D);
+		if (fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
+			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
+			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
+			radiate(livingList, 2_500_000F / (this.ticksExisted * 5 + 1));
+		}
+
+		fireDamage(world, list, this.posX, this.posY, this.posZ, this.radius * 2.0D);
+
+		// Removes the ticksExisted restriction that reduces shockwave damage.
+		float blast = (float)Math.pow(radius + 10, 3) * 0.1F;
+
+		// The continuous application of shockwave damage is no longer limited by 2400 ticks.
+		ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ,
+				Math.min(1000, radius * 2), 0F, 0F, 0F, blast, this.ticksExisted * shockSpeed);
+
+		// Community Edition Biological Conversion Timing
+		if(fallout && ticksExisted == 42){
+			EntityGlowingOne.convertInRadiusToGlow(world, this.posX, this.posY, this.posZ, radius * 1.5);
+            if(radius > 120) EntityThermonuclearCat.convertInRadiusToThermo(world, this.posX, this.posY, this.posZ, radius);
+            if(radius > 60){
+                for(EntityPlayer player : world.getEntitiesWithinAABB(EntityPlayer.class,
+					new AxisAlignedBB(this.posX, this.posY, this.posZ, this.posX, this.posY, this.posZ)
+						.grow(radius * 2, radius * 2, radius * 2))) {
+                    AdvancementManager.grantAchievement(player, AdvancementManager.progress_nuke);
                 }
             }
-		}
-		
-		if(ticksExisted < 2400){
-			fire = (float)(fallout ? 10F: 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius));
-			blast = (float)Math.pow(radius + 10, 3) * 0.1F;
-			ContaminationUtil.radiate(world, this.posX, this.posY, this.posZ, Math.min(1000, radius * 2), rads, 0F, fire, blast, this.ticksExisted * shockSpeed);
-		}
+        }
+
 		//make some noise
 		if(!mute) {
 			if(this.radius > 30){
@@ -101,7 +136,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		//Excecuting destruction
 		} else if(!explosion.perChunk.isEmpty()) {
 			explosion.processChunk(BombConfig.mk5);
-		
+
 		} else {
 			if(!fallingStarted) {
 				if (fallout) {
@@ -130,6 +165,90 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			} else if (this.ticksExisted * shockSpeed > 160){ //wait for shockwave to complete
 				this.setDead();
 			}
+		}
+	}
+
+	private static boolean isExplosionExempt(Entity e) {
+
+		if (e instanceof EntityOcelot ||
+				e instanceof EntityNukeTorex ||
+				e instanceof EntityNukeExplosionMK5 ||
+				e instanceof EntityMIRV ||
+				e instanceof EntityMiniNuke ||
+				e instanceof EntityMiniMIRV ||
+				e instanceof EntityGrenadeASchrab ||
+				e instanceof EntityGrenadeNuclear ||
+				e instanceof EntityExplosiveBeam ||
+				e instanceof EntityBulletBase ||
+				(e instanceof EntityPlayer &&
+						ArmorUtil.checkArmor((EntityPlayer) e, ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))) {
+			return true;
+		}
+
+		return e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator());
+	}
+
+	public void fireDamage(World world, List<Entity> list, double x, double y, double z, double radius) {
+		for (Entity e : list) {
+			double dist = e.getDistance(x, y, z);
+
+			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
+			double len = vec.length();
+
+			if (dist <= radius) {
+
+				double entX = e.posX;
+				double entY = e.posY + e.getEyeHeight();
+				double entZ = e.posZ;
+
+				if (!isExplosionExempt(e) && !Library.isObstructed(world, x, y, z, entX, entY, entZ)) {
+
+					double fireDamage = (float)(fallout ? 10F: 0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, dist * this.ticksExisted / radius));
+					if(fireDamage > 0.025) {
+						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+
+							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+								p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
+							}
+
+							if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+								p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
+							}
+						}
+						e.attackEntityFrom(ModDamageSource.IN_FIRE, (float)fireDamage);
+						e.setFire(5);
+					}
+				}
+			}
+		}
+	}
+
+	// Community-based method for calculating radiation damage from ray tracing
+	private void radiate(List<EntityLivingBase> entities, float rads) {
+		for (EntityLivingBase e : entities) {
+			double dx = e.posX - posX;
+			double dy = (e.posY + e.getEyeHeight()) - posY;
+			double dz = e.posZ - posZ;
+			double len = Math.sqrt(dx * dx + dy * dy + dz * dz);
+			if (len <= 0.0001D) continue;
+
+			// Ray tracing calculation of obstacle blocking
+			double res = 0F;
+			int steps = MathHelper.floor(len);
+			for (int i = 1; i < steps; i++) {
+				int ix = MathHelper.floor(posX + dx * i / len);
+				int iy = MathHelper.floor(posY + dy * i / len);
+				int iz = MathHelper.floor(posZ + dz * i / len);
+				float blockRes = world.getBlockState(new BlockPos(ix, iy, iz)).getBlock().getExplosionResistance(null);
+				res += blockRes;
+			}
+
+			if (res < 1.0) res = 1.0;
+			double eRads = rads;
+			eRads /= res;  // Obstacle attenuation
+			eRads /= len * len;  // Distance squared decay
+			ContaminationUtil.contaminate(e, ContaminationUtil.HazardType.RADIATION, 
+				ContaminationUtil.ContaminationType.RAD_BYPASS, (float)eRads);
 		}
 	}
 
@@ -211,5 +330,29 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 	public EntityNukeExplosionMK5 mute() {
 		this.mute = true;
 		return this;
+	}
+
+	// must be called server-side
+	public static @NotNull List<Entity> getEntitiesInRadius(World world, double x, double y, double z, double radius) {
+		AxisAlignedBB aabb = new AxisAlignedBB(x, y, z, x, y, z).grow(radius);
+		return getEntitiesWithinAABBExcludingEntity((WorldServer) world, null, aabb);
+	}
+
+	public static List<Entity> getEntitiesWithinAABBExcludingEntity(WorldServer world, @Nullable Entity entityIn, AxisAlignedBB bb) {
+		return getEntitiesInAABBexcluding(world, entityIn, bb, EntitySelectors.NOT_SPECTATING);
+	}
+
+	public static List<Entity> getEntitiesInAABBexcluding(WorldServer world, @Nullable Entity entityIn, AxisAlignedBB boundingBox, @Nullable Predicate<? super Entity> predicate) {
+		List<Entity> list = new ArrayList<>();
+		int j2 = MathHelper.floor((boundingBox.minX - World.MAX_ENTITY_RADIUS) / 16.0D);
+		int k2 = MathHelper.floor((boundingBox.maxX + World.MAX_ENTITY_RADIUS) / 16.0D);
+		int l2 = MathHelper.floor((boundingBox.minZ - World.MAX_ENTITY_RADIUS) / 16.0D);
+		int i3 = MathHelper.floor((boundingBox.maxZ + World.MAX_ENTITY_RADIUS) / 16.0D);
+		for (int j3 = j2; j3 <= k2; ++j3) for (int k3 = l2; k3 <= i3; ++k3) {
+			if (world.getChunkProvider().chunkExists(j3, k3)) {
+				world.getChunk(j3, k3).getEntitiesWithinAABBForEntity(entityIn, boundingBox, list, predicate);
+			}
+		}
+		return list;
 	}
 }
