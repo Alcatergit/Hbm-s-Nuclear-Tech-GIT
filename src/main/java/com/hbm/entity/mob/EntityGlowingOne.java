@@ -73,6 +73,14 @@ public class EntityGlowingOne extends EntityZombie implements IRadiationImmune {
     	glowing.setChild(zombie.isChild());
 		glowing.setLocationAndAngles(zombie.posX, zombie.posY, zombie.posZ, zombie.rotationYaw, zombie.rotationPitch);
 
+		// Inherit the original zombie's equipment and items
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
+		glowing.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, zombie.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
+
 		DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(zombie.posX, zombie.posY, zombie.posZ));
 		float f = difficulty.getClampedAdditionalDifficulty();
 		glowing.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
