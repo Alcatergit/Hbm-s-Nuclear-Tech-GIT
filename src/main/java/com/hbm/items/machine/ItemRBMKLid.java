@@ -3,6 +3,7 @@ package com.hbm.items.machine;
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.machine.rbmk.RBMKBase;
 import com.hbm.items.ModItems;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 
 import net.minecraft.block.Block;
@@ -58,9 +59,11 @@ public class ItemRBMKLid extends Item {
 				world.playSound(null, bpos.getX() + 0.5, bpos.getY() + 0.5, bpos.getZ() + 0.5, SoundEvents.BLOCK_STONE_PLACE, SoundCategory.BLOCKS, 1, 0.8F);
 			}
 			
+			if(RBMKDials.getMeltdownOverpressure(world)) TileEntityRBMKBase.explodeOnBroken = false;
 			world.setBlockState(new BlockPos(pos[0], pos[1], pos[2]), world.getBlockState(new BlockPos(pos[0], pos[1], pos[2])).withProperty(BlockDummyable.META, meta + RBMKBase.offset), 3);
 			NBTTagCompound nbt = tile.writeToNBT(new NBTTagCompound());
 			world.getTileEntity(new BlockPos(pos[0], pos[1], pos[2])).readFromNBT(nbt);
+			if(RBMKDials.getMeltdownOverpressure(world)) TileEntityRBMKBase.explodeOnBroken = true;
 			
 			player.getHeldItem(hand).shrink(1);
 			
