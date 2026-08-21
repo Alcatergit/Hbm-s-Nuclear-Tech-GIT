@@ -379,7 +379,7 @@ public class RadiationSystemNT {
 							entity.setDead();
 							continue;
 
-						} else if(entity instanceof EntitySheep sheep && (eRad >= 250 || sheep.getEntityData().getBoolean("isPermanent"))) {
+						} else if(entity instanceof EntitySheep sheep && (eRad >= 250 || sheep.getEntityData().getBoolean("isBalding") || sheep.getEntityData().getBoolean("isPermanent"))) {
 							if(!sheep.getSheared() && sheep.getEntityData().getBoolean("isPermanent")) {
 								sheep.setSheared(true);
 							}
