@@ -85,7 +85,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			}
 		}
 
-		dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F);
+		double weatherFactor = getWeatherAttenuationFactor(world, this.posX, this.posY, this.posZ);
+		dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F, weatherFactor);
 
 		//make some noise
 		if(!mute) {
@@ -140,7 +141,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		}
 	}
 
-	public void dealDamage(World world, double x, double y, double z, double radius) {
+	public void dealDamage(World world, double x, double y, double z, double radius, double weatherFactor) {
 		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
 		for(Entity e : entities) {
@@ -179,7 +180,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 
 				if(!isExplosionExempt && isLiving && fallout && this.ticksExisted <= Math.max((int)Math.ceil(this.radius * 0.02), 1)){
 					float eRads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double)2 * this.ticksExisted / radius) + strength);
-					eRads /= (float)(dmgLen * dmgLen * res);
+					eRads *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
+					eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
 
 					ContaminationUtil.contaminate((EntityLivingBase)e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, eRads);
 					if (eRads >= 100 && e instanceof EntityZombie) {
@@ -195,8 +197,8 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				int thermalDuration = this.radius * 3;
 				double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
-				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
-					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (float) (dmgLen * dmgLen * res));
+				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.radius > 25 && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
+					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius) * Math.exp(-dmgLen * weatherFactor / 80.0D)) / (float) (dmgLen * dmgLen * res));
 					if (fireDamage > 0.025) {
 						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
 							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
@@ -218,7 +220,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				double currentBlastRadius = this.ticksExisted * Math.max(2D, shockSpeed);
 
 				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
-					float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.5F) / (float)(dmgLen * dmgLen * dmgLen * res);
+					float blastDamage = (float)(Math.pow(radius + 10, 3) * (this.radius > 25 ? 0.5F : 0.85F)) / (float)(dmgLen * dmgLen * dmgLen * res);
 					if(blastDamage > 0.025){
 						if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
 						else e.attackEntityFrom(ModDamageSource.blast, blastDamage);
@@ -229,6 +231,21 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				}
 			}
 		}
+	}
+
+	private static double getWeatherAttenuationFactor(World world, double x, double y, double z) {
+		BlockPos pos = new BlockPos(x, y, z);
+		float rainfall = world.getBiome(pos).getRainfall();
+		double factor = 0.6D + 0.9D * (double)rainfall;
+
+		if(world.isRaining()) {
+			if(world.isThundering())
+				factor *= 1.8D;
+			else
+				factor *= 1.4D;
+		}
+
+		return Math.max(0.3D, Math.min(factor, 3.0D));
 	}
 
 	public static boolean isWet(World world, BlockPos pos){
