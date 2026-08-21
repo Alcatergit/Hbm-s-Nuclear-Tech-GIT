@@ -116,6 +116,7 @@ public class BlockTaint extends Block {
     	
     	if(entity instanceof EntityCreeper creeper) {
     		EntityTaintedCreeper creep = new EntityTaintedCreeper(world);
+            creep.setCreeperState(creeper.getCreeperState());
 			creep.setPowered(creeper.getPowered());
 			if (creeper.hasIgnited()) creep.ignite();
     		creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
