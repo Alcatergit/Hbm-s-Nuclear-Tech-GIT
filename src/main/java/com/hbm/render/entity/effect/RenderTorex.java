@@ -62,12 +62,12 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		cloudletWrapper(cloud, partialTicks);
 
-		if(cloud.timeExisted < flareDuration+1)
+		if(cloud.ticksExisted < flareDuration+1)
 			flareWrapper(cloud, partialTicks, flareDuration);
 		
-		if(cloud.timeExisted < flashDuration+1)
+		if(cloud.ticksExisted < flashDuration+1)
 			flashWrapper(cloud, partialTicks, flashDuration);
-		if(cloud.timeExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
+		if(cloud.ticksExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
 		if(cloud.didPlaySound && !cloud.didShake && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
 			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
 			cloud.didShake = true;
@@ -145,7 +145,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
 
-		double age = Math.min(cloud.timeExisted + partialTicks, flareDuration);
+		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
 
 		Random rand = new Random(cloud.getEntityId());
@@ -213,11 +213,11 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 	private void flashWrapper(EntityNukeTorex cloud, float interp, float flashDuration) {
 
-        if(cloud.timeExisted < flashDuration) {
+        if(cloud.ticksExisted < flashDuration) {
 
     		GL11.glPushMatrix();
     		//Function [0, 1] that determines the scale and intensity (inverse!) of the flash
-        	double intensity = (cloud.timeExisted + interp) / flashDuration;
+        	double intensity = (cloud.ticksExisted + interp) / flashDuration;
         	GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
 
         	//Euler function to slow down the scale as it progresses
