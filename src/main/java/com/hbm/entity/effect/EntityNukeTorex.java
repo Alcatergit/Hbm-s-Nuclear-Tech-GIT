@@ -31,10 +31,10 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.FLOAT);
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	public static final DataParameter<Integer> MAX_AGE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
-	public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
-	public static final DataParameter<Boolean> IS_INITIALIZED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 	public static final DataParameter<Integer> TICKS_EXISTED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Integer> TICKS_EXISTED_SAVED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
+    public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
+    public static final DataParameter<Boolean> IS_INITIALIZED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 
 	public static final int firstCondenseHeight = 130;
 	public static final int secondCondenseHeight = 170;
