@@ -281,7 +281,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             if(ticksExisted > (int) (1.625 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
 
                 for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
-                    for(int j = 0; j < 4; j++) {
+                    for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
                         float angle = (float) (Math.PI * 2 * rand.nextDouble());
                         Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (5 + rand.nextDouble()), 0, 0);
                         vec.rotateAroundZ((float) (Math.PI / 45 * j));
@@ -296,7 +296,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             if(ticksExisted > (int) (2.125 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
 
                 for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
-                    for(int j = 0; j < 4; j++) {
+                    for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
                         float angle = (float) (Math.PI * 2 * rand.nextDouble());
                         Vec3 vec = Vec3.createVectorHelper(torusWidth + rollerSize * (3 + rand.nextDouble() * 0.5), 0, 0);
                         vec.rotateAroundZ((float) (Math.PI / 45 * j));
