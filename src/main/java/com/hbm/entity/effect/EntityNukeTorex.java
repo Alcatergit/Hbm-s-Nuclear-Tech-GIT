@@ -68,9 +68,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public boolean didPlaySound = false;
     public boolean didShake = false;
     public int ticksExistedSaved = 0;
-    public int ticksExistedSaved2 = 0;
     public boolean dataReady = false;
     public boolean isReloaded = false;
+    public boolean isReloaded2 = false;
     public boolean isScaled = false;
     public boolean isInitialized = false;
 
@@ -95,12 +95,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public void notifyDataManagerChange(DataParameter<?> key) {
         super.notifyDataManagerChange(key);
         // When the client receives the DataParameter data synchronization, it updates the instance variables.
-        if (key == TICKS_EXISTED && !this.world.isRemote) {
-            this.ticksExistedSaved2 ++;
-            if (this.ticksExisted != this.ticksExistedSaved2) {
-                this.ticksExisted = this.ticksExistedSaved2;
-            }
-        }
         if (key == TICKS_EXISTED && this.world.isRemote) {
             // Some client instance variables can only be updated once after the entity is initialized.
             if (!this.dataReady && !this.dataManager.get(IS_INITIALIZED)) this.dataReady = true;
@@ -109,11 +103,14 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.maxAge = this.dataManager.get(MAX_AGE);
                 this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
                 this.isReloaded = this.dataManager.get(IS_RELOADED);
+                this.isReloaded2 = this.isReloaded;
                 this.isInitialized = this.dataManager.get(IS_INITIALIZED);
                 this.dataReady = true;
             }
-            if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
-                this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
+            if (this.isReloaded2) {
+                if (this.ticksExisted < this.dataManager.get(TICKS_EXISTED)) {
+                    this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
+                }
             }
         }
     }
@@ -136,7 +133,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             int ticksExistedTemp = nbt.getInteger("ticksExisted");
             this.ticksExisted = ticksExistedTemp;
             this.dataManager.set(TICKS_EXISTED, ticksExistedTemp);
-            this.ticksExistedSaved2 = ticksExistedTemp;
         }
         this.isReloaded = true;
         this.dataManager.set(IS_RELOADED, true);
@@ -169,19 +165,20 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             double cs = 1.5;
             if(this.ticksExisted == 1 || (!this.isInitialized && !this.isScaled)){
                 this.setScale((float) s);
+                this.isScaled = true;
             }else if(!this.isScaled){
+                this.ticksExistedSaved = this.ticksExisted;
                 this.coreHeight = this.coreHeight * this.scale;
                 this.torusWidth = this.torusWidth * this.scale;
-            }
-
-            boolean needReload = cloudlets.isEmpty() && (this.coreHeight == 3.0 * this.scale && this.convectionHeight == 3.0 && this.torusWidth == 3.0 * this.scale && this.rollerSize == 1.0) && this.isInitialized;
-            //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] cloudlets.isEmpty: {};\n[Client] this.coreHeight == 3.0 * this.scale: {};\n[Client] this.convectionHeight == 3.0: {};\n[Client] this.torusWidth == 3.0 * this.scale: {};\n[Client] this.rollerSize == 1.0: {};\n[Client] isInitialized: {}\n[Client] needReload: {}", this.posX, this.posY, this.posZ, cloudlets.isEmpty(), this.coreHeight == 3.0 * this.scale, this.convectionHeight == 3.0, this.torusWidth == 3.0 * this.scale, this.rollerSize == 1.0, this.isInitialized, needReload);
-            if (needReload) {
-                this.ticksExistedSaved = this.ticksExisted;
-                this.convectionHeight = this.convectionHeight * this.scale;
-                this.rollerSize = this.rollerSize * this.scale;
+                for(int i = 0; i < this.ticksExistedSaved; i++) {
+                    coreHeight += 0.15;
+                    torusWidth += 0.05;
+                }
+                this.rollerSize = this.torusWidth * 0.35;
+                this.convectionHeight = this.coreHeight + this.rollerSize;
                 this.isReloaded = true;
-                //MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client re-enters rendering distance");
+                this.isReloaded2 = true;
+                this.isScaled = true;
             }
 
             if(humidity == -1) humidity = world.getBiome(this.getPosition()).getRainfall();
@@ -223,9 +220,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 speedMultiplier = Math.max(1.0D, isMiddleStage ? (160 - (3 * (ticksExisted2 - 50))) / 40.0D : (40 - (ticksExisted2 - 75)) / 20.0D);
                 // Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
                 double progress = Math.min(1.0D, isMiddleStage ? (ticksExisted2 - 50) / 40.0D : (ticksExisted2 - 75) / 20.0D);
-                double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
-                double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
-                simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
+                if (this.ticksExisted > this.maxAge / 4) {
+                    double accelSimSpeed = 1.0D;
+                    double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
+                    simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
+                }
                 double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
                 double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
                 lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
@@ -315,13 +314,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             // Edit: Adjust the growth rate based on whether it is accelerated.
             double coreHeightIncrement = 0.15;
             double torusWidthIncrement = 0.05;
-            if (!this.isScaled) {
-                for(int i = 0; i < (this.ticksExistedSaved > 0 ? this.ticksExistedSaved : this.ticksExisted); i++) {
-                    coreHeight += coreHeightIncrement;
-                    torusWidth += torusWidthIncrement;
-                }
-                this.isScaled = true;
-            } else if (isAccelReload) {
+            if (isAccelReload) {
                 coreHeightIncrement *= speedMultiplier;
                 torusWidthIncrement *= speedMultiplier;
                 coreHeight += coreHeightIncrement;
