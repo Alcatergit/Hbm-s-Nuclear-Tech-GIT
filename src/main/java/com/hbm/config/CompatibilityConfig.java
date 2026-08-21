@@ -275,7 +275,7 @@ public class CompatibilityConfig {
         pyramidStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.27_pyramidSpawn", "Spawn pyramid on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:4000" }, ":");
 		
 		meteorStrikeChance = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.01_meteorStrikeChance", "The probability of a meteor spawning per tick (an average of once every nTH ticks) - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ 
-			"0:"+20 * 10 * 60 * 5, //Earth
+			"0:"+20 * 60 * 60 * 3, //Earth
 			"-28:"+20 * 10 * 5, //Moon
 			"-29:"+20 * 10 * 13, //Mars
 			"-31:"+20 * 10 * 60 * 15,  //Venus
@@ -293,7 +293,7 @@ public class CompatibilityConfig {
 			"-1504:"+20 * 10 * 60 * 20 //Triton
 		}, ":");
 		meteorShowerChance = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.02_meteorShowerChance", "The probability of a meteor spawning during meteor shower per tick (an average of once every nTH ticks) - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ 
-			"0:"+20 * 60 * 60 * 5, //Earth
+			"0:"+20 * 60, //Earth
 			"-28:"+20 * 60 * 5, //Moon
 			"-29:"+20 * 60 * 13, //Mars
 			"-31:"+20 * 60 * 60 * 15,  //Venus
