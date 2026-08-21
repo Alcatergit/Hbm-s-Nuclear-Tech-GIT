@@ -3,7 +3,6 @@ package com.hbm.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.hbm.energy.IBatteryItem;
 import com.hbm.blocks.bomb.Balefire;
 import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.blocks.bomb.BlockCrashedBomb;
@@ -111,7 +110,6 @@ import com.hbm.tileentity.machine.TileEntityWatzStruct;
 import net.minecraft.block.*;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -705,7 +703,7 @@ public class ModBlocks {
 	public static final int guiID_nuke_n2 = 61;
 	
 	public static final int guiID_nuke_n45 = 77; //unused
-	
+
 	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_fstbmb = 97;
 	
@@ -1536,73 +1534,28 @@ public class ModBlocks {
         ntmLeavesOld.setRegistryName("minecraft:leaves");
         ModBlocks.ALL_BLOCKS.add(ntmLeavesOld);
 
-        // Use multiple possible field names
-        Library.safeSetFinalField(Blocks.class, null, ntmLeavesOld,
-                "LEAVES", "field_150362_t", "leaves");
+        Library.setFinalStatic(Blocks.class, "LEAVES", "field_150362_t", ntmLeavesOld);
 
-        // Provide possible field name combinations for each class
-        Library.safeSetFinalField(WorldGenTrees.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK),
-                "DEFAULT_LEAF", "field_181654_b");
-
-        Library.safeSetFinalField(BiomeJungle.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.JUNGLE),
-                "JUNGLE_LEAF", "field_181621_aF");
-
-        Library.safeSetFinalField(BiomeJungle.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK),
-                "OAK_LEAF", "field_181622_aG");
-
-        // For common field names, provide more possibilities
-        String[] leafFieldNames = {"LEAF", "field_181630_b", "field_181634_f",
-                "field_181649_b", "field_181637_b", "field_181646_b"};
-
-        Library.safeSetFinalField(WorldGenBirchTree.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.BIRCH),
-                leafFieldNames);
-
-        Library.safeSetFinalField(WorldGenMegaPineTree.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE),
-                leafFieldNames);
-
-        Library.safeSetFinalField(WorldGenSwamp.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK),
-                leafFieldNames);
-
-        Library.safeSetFinalField(WorldGenTaiga1.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE),
-                leafFieldNames);
-
-        Library.safeSetFinalField(WorldGenTaiga2.class, null,
-                getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE),
-                leafFieldNames);
-
-        Library.safeSetFinalField(BiomeTaiga.class, null,
-                new WorldGenMegaPineTree(false, false),
-                "MEGA_PINE_GENERATOR", "field_150641_aE");
-
-        Library.safeSetFinalField(BiomeTaiga.class, null,
-                new WorldGenMegaPineTree(false, true),
-                "MEGA_SPRUCE_GENERATOR", "field_150642_aF");
-
-        Library.safeSetFinalField(Biome.class, null,
-                new WorldGenTrees(false),
-                "TREE_FEATURE", "field_76757_N");
+        Library.setPrivateFinalStatic(WorldGenTrees.class, "DEFAULT_LEAF", "field_181654_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK));
+        Library.setPrivateFinalStatic(BiomeJungle.class, "JUNGLE_LEAF", "field_181621_aF", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.JUNGLE));
+        Library.setPrivateFinalStatic(BiomeJungle.class, "OAK_LEAF", "field_181622_aG", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK));
+        Library.setPrivateFinalStatic(WorldGenBirchTree.class, "LEAF", "field_181630_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.BIRCH));
+        Library.setPrivateFinalStatic(WorldGenMegaPineTree.class, "LEAF", "field_181634_f", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE));
+        Library.setPrivateFinalStatic(WorldGenSwamp.class, "LEAF", "field_181649_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK));
+        Library.setPrivateFinalStatic(WorldGenTaiga1.class, "LEAF", "field_181637_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE));
+        Library.setPrivateFinalStatic(WorldGenTaiga2.class, "LEAF", "field_181646_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.SPRUCE));
+        Library.setPrivateFinalStatic(BiomeTaiga.class, "MEGA_PINE_GENERATOR", "field_150641_aE", new WorldGenMegaPineTree(false, false));
+        Library.setPrivateFinalStatic(BiomeTaiga.class, "MEGA_SPRUCE_GENERATOR", "field_150642_aF", new WorldGenMegaPineTree(false, true));
+        Library.setPrivateFinalStatic(Biome.class, "TREE_FEATURE", "field_76757_N", new WorldGenTrees(false));
 
         ntmLeavesNew.setTranslationKey("leaves");
         ntmLeavesNew.setRegistryName("minecraft:leaves2");
         ModBlocks.ALL_BLOCKS.add(ntmLeavesNew);
 
-        Library.safeSetFinalField(Blocks.class, null, ntmLeavesNew,
-                "LEAVES2", "field_150361_u", "leaves2");
+        Library.setFinalStatic(Blocks.class, "LEAVES2", "field_150361_u", ntmLeavesNew);
 
-        Library.safeSetFinalField(WorldGenCanopyTree.class, null,
-                getTreeLeaf(ntmLeavesNew, BlockPlanks.EnumType.DARK_OAK),
-                "DARK_OAK_LEAVES", "field_181641_b");
-
-        Library.safeSetFinalField(WorldGenSavannaTree.class, null,
-                getTreeLeaf(ntmLeavesNew, BlockPlanks.EnumType.ACACIA),
-                "LEAF", "field_181644_b");
+        Library.setPrivateFinalStatic(WorldGenCanopyTree.class, "DARK_OAK_LEAVES", "field_181641_b", getTreeLeaf(ntmLeavesNew, BlockPlanks.EnumType.DARK_OAK));
+        Library.setPrivateFinalStatic(WorldGenSavannaTree.class, "LEAF", "field_181644_b", getTreeLeaf(ntmLeavesNew, BlockPlanks.EnumType.ACACIA));
     }
 
 	public static void preInit(){
