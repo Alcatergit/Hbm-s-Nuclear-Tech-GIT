@@ -171,7 +171,7 @@ public class LoopedSoundPacket implements IMessage {
                             }
                         }
                     }
-                    // ===================
+                    // ============================================
 				} else
 				
 				if (te instanceof TileEntityMachineCentrifuge || te instanceof TileEntityMachineGasCent) {
