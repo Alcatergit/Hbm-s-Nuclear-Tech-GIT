@@ -1,18 +1,14 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.interfaces.ITankPacketAcceptor;
-import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
 import api.hbm.energy.IEnergyUser;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -48,23 +44,6 @@ public class TileEntityDeuteriumExtractor extends TileEntityLoadedBase implement
 
 			if(age == 9 || age == 19)
 				fillFluidInit(tanks[1]);
-
-			int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
-			if(feedSpace > 0) {
-				for(EnumFacing dir : EnumFacing.VALUES) {
-					BlockPos neighborPos = pos.offset(dir);
-					TileEntity te = world.getTileEntity(neighborPos);
-					if(te instanceof IFluidPipeMk2) {
-						FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-						if(network != null && network.getType() == FluidRegistry.WATER) {
-							FluidStack pulled = network.drain(new FluidStack(FluidRegistry.WATER, feedSpace), true);
-							if(pulled != null)
-								tanks[0].fill(pulled, true);
-							break;
-						}
-					}
-				}
-			}
 			
 			if(hasPower() && hasEnoughWater() && tanks[1].getCapacity() > tanks[1].getFluidAmount()) {
 				int convert = Math.min(tanks[1].getCapacity(), tanks[0].getFluidAmount()) / 50;
