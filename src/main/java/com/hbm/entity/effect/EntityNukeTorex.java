@@ -59,13 +59,14 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public double lastSpawnY = -1;
     public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
     public int maxAge = 1000;
+    public float humidity = -1;
     public float scale = 1.0F;
     public boolean didPlaySound = false;
     public boolean didShake = false;
     public int ticksExistedSaved = 0;
-    public boolean dataReady = false;
+    public boolean isDataReady = false;
     public boolean isReloaded = false;
-    public boolean isReloaded2 = false;
+    public boolean wasReloaded = false;
     public boolean isScaled = false;
     public boolean isInitialized = false;
 
@@ -92,17 +93,17 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
         // When the client receives the DataParameter data synchronization, it updates the instance variables.
         if (key == TICKS_EXISTED && this.world.isRemote) {
             // Some client instance variables can only be updated once after the entity is initialized.
-            if (!this.dataReady && !this.dataManager.get(IS_INITIALIZED)) this.dataReady = true;
-            if (!this.dataReady) {
+            if (!this.isDataReady && !this.dataManager.get(IS_INITIALIZED)) this.isDataReady = true;
+            if (!this.isDataReady) {
                 this.scale = this.dataManager.get(SCALE);
                 this.maxAge = this.dataManager.get(MAX_AGE);
                 this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
                 this.isReloaded = this.dataManager.get(IS_RELOADED);
-                this.isReloaded2 = this.isReloaded;
+                this.wasReloaded = this.isReloaded;
                 this.isInitialized = this.dataManager.get(IS_INITIALIZED);
-                this.dataReady = true;
+                this.isDataReady = true;
             }
-            if (this.isReloaded2) {
+            if (this.wasReloaded) {
                 if (this.ticksExisted < this.dataManager.get(TICKS_EXISTED)) {
                     this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
                 }
@@ -177,9 +178,11 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.rollerSize = this.torusWidth * 0.35;
                 this.convectionHeight = this.coreHeight + this.rollerSize;
                 this.isReloaded = true;
-                this.isReloaded2 = true;
+                this.wasReloaded = true;
                 this.isScaled = true;
             }
+
+            if(humidity == -1) humidity = world.getBiome(this.getPosition()).getRainfall();
 
             if(lastSpawnY == -1) {
                 lastSpawnY = posY - 3;
@@ -265,7 +268,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             }
 
             // spawn ring clouds
-            if ((int) s > 0 && ticksExisted2 < 150 * s) {
+            if ((int) s > 0 && ticksExisted2 < 130 * s) {
                 lifetime *= (int) s;
                 for(int i = 0; i < 2; i++) {
                     Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
@@ -278,7 +281,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             }
 
             // spawn condensation clouds
-            if(ticksExisted > (int) (1.625 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
+            if(ticksExisted > 130 * s && ticksExisted < 600 * s) {
 
                 for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
                     for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
@@ -293,7 +296,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 }
             }
 
-            if(ticksExisted > (int) (2.125 * explosionRadius) && ticksExisted < (int) (3.75 * explosionRadius)) {
+            if(ticksExisted > 200 * s && ticksExisted < 600 * s) {
 
                 for(int i = 0; i < 20 * Math.min(s, 1.0); i++) {
                     for(int j = 0; j < 4 * Math.min(s, 1.0); j++) {
