@@ -152,7 +152,9 @@ public class LoopedSoundPacket implements IMessage {
                         default -> HBMSoundHandler.broadcast1;
                     };
 
-                    // ===== Fix begins: Add distance check =====
+                    // ===== START FIX: Add distance check =====
+					// Problem: The network packet transmission range is 500 squares, but the effective sound effect range is only 25 squares
+					// This causes the sound effect to play even when a player receives a network packet outside the 25-square range.
                     if(flag && te.getWorld().isRemote) {
                         EntityPlayerSP player = Minecraft.getMinecraft().player;
                         if(player != null) {
@@ -169,7 +171,7 @@ public class LoopedSoundPacket implements IMessage {
                             }
                         }
                     }
-                    // ===== Fix complete =====
+                    // ===== END FIX =====
 				} else
 				
 				if (te instanceof TileEntityMachineCentrifuge || te instanceof TileEntityMachineGasCent) {
