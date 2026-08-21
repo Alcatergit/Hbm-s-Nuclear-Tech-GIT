@@ -1191,9 +1191,9 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
      */
     private static Unsafe getUnsafe() {
         try {
-            Field theUnsafe = sun.misc.Unsafe.class.getDeclaredField("theUnsafe");
+            Field theUnsafe = Unsafe.class.getDeclaredField("theUnsafe");
             theUnsafe.setAccessible(true);
-            return (sun.misc.Unsafe) theUnsafe.get(null);
+            return (Unsafe) theUnsafe.get(null);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -1203,7 +1203,7 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
      * Safely set the value of a final field (including static final)
      */
     public static void safeSetFinalField(Class<?> clazz, Object instance, Object newValue, String... possibleFieldNames) {
-        sun.misc.Unsafe unsafe = getUnsafe();
+        Unsafe unsafe = getUnsafe();
 
         for (String fieldName : possibleFieldNames) {
             try {
