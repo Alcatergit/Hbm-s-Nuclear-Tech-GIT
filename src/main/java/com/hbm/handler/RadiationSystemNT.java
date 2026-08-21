@@ -1,6 +1,5 @@
 package com.hbm.handler;
 
-import java.lang.reflect.Field;
 import java.nio.ByteBuffer;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -535,35 +534,19 @@ public class RadiationSystemNT {
 								skehorse.setRenderYawOffset(entity.rotationYaw);
 
 								if(!horsie.isDead) {
-									try {
-										Field[] fields = AbstractHorse.class.getDeclaredFields();
-										Field horseChestField = null;
+									ContainerHorseChest chest = horsie.horseChest;
 
-										for(Field field : fields) {
-											if(field.getType() == ContainerHorseChest.class) {
-												horseChestField = field;
-												break;
-											}
+									ItemStack armorStack = chest.getStackInSlot(1);
+									if(!armorStack.isEmpty()) {
+										horsie.entityDropItem(armorStack.copy(), 0.0F);
+										chest.setInventorySlotContents(1, ItemStack.EMPTY);
+									}
+									if(isTrap) {
+										ItemStack saddleStack = chest.getStackInSlot(0);
+										if(!saddleStack.isEmpty()) {
+											horsie.entityDropItem(saddleStack.copy(), 0.0F);
+											chest.setInventorySlotContents(0, ItemStack.EMPTY);
 										}
-
-										if(horseChestField != null) {
-											horseChestField.setAccessible(true);
-											ContainerHorseChest chest = (ContainerHorseChest) horseChestField.get(horsie);
-
-											ItemStack armorStack = chest.getStackInSlot(1);
-											if(!armorStack.isEmpty()) {
-												horsie.entityDropItem(armorStack.copy(), 0.0F);
-												chest.setInventorySlotContents(1, ItemStack.EMPTY);
-											}
-											if(isTrap) {
-												ItemStack saddleStack = chest.getStackInSlot(0);
-												if(!saddleStack.isEmpty()) {
-													horsie.entityDropItem(saddleStack.copy(), 0.0F);
-													chest.setInventorySlotContents(0, ItemStack.EMPTY);
-												}
-											}
-										}
-									} catch (Exception ignored) {
 									}
 								}
 
@@ -612,28 +595,12 @@ public class RadiationSystemNT {
 								zomhorsie.setRenderYawOffset(entity.rotationYaw);
 
 								if(!horsie.isDead) {
-									try {
-										Field[] fields = AbstractHorse.class.getDeclaredFields();
-										Field horseChestField = null;
+									ContainerHorseChest chest = horsie.horseChest;
 
-										for(Field field : fields) {
-											if(field.getType() == ContainerHorseChest.class) {
-												horseChestField = field;
-												break;
-											}
-										}
-
-										if(horseChestField != null) {
-											horseChestField.setAccessible(true);
-											ContainerHorseChest chest = (ContainerHorseChest) horseChestField.get(horsie);
-
-											ItemStack armorStack = chest.getStackInSlot(1);
-											if(!armorStack.isEmpty()) {
-												horsie.entityDropItem(armorStack.copy(), 0.0F);
-												chest.setInventorySlotContents(1, ItemStack.EMPTY);
-											}
-										}
-									} catch (Exception ignored) {
+									ItemStack armorStack = chest.getStackInSlot(1);
+									if(!armorStack.isEmpty()) {
+										horsie.entityDropItem(armorStack.copy(), 0.0F);
+										chest.setInventorySlotContents(1, ItemStack.EMPTY);
 									}
 								}
 
