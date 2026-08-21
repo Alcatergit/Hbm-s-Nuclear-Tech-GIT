@@ -32,7 +32,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	public static final DataParameter<Integer> MAX_AGE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Integer> TICKS_EXISTED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
-	public static final DataParameter<Integer> TICKS_EXISTED_SAVED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
     public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
     public static final DataParameter<Boolean> IS_INITIALIZED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 
@@ -71,7 +70,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public int ticksExistedSaved = 0;
     public int ticksExistedSaved2 = 0;
 	public boolean dataReady = false;
-    public boolean isFirstEqual = true;
 	public boolean isReloaded = false;
     public boolean isReloaded2 = false;
     public boolean isScaled = false;
@@ -90,7 +88,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.dataManager.register(TYPE, (byte) 0);
 		this.dataManager.register(MAX_AGE, 1000);
 		this.dataManager.register(TICKS_EXISTED, 0);
-		this.dataManager.register(TICKS_EXISTED_SAVED, 0);
 		this.dataManager.register(IS_RELOADED, false);
 		this.dataManager.register(IS_INITIALIZED, false);
 	}
@@ -115,21 +112,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 				this.scale = this.dataManager.get(SCALE);
 				this.maxAge = this.dataManager.get(MAX_AGE);
 				this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
-				this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED_SAVED);
 				this.isReloaded = this.dataManager.get(IS_RELOADED);
                 this.isReloaded2 = this.isReloaded;
 				this.isInitialized = this.dataManager.get(IS_INITIALIZED);
-                if (this.isReloaded) {
-                    this.convectionHeight = this.convectionHeight * this.scale;
-                    this.rollerSize = this.rollerSize * this.scale;
-                }
 				this.dataReady = true;
 			} else if (this.isReloaded2) {
                 if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
                     this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
-                } else if (this.isFirstEqual) {
-                    this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED);
-                    this.isFirstEqual = false;
                 }
             }
 		}
@@ -153,9 +142,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			int ticksExistedTemp = nbt.getInteger("ticksExisted");
 			this.ticksExisted = ticksExistedTemp;
 			this.dataManager.set(TICKS_EXISTED, ticksExistedTemp);
-			this.ticksExistedSaved = ticksExistedTemp;
-			this.dataManager.set(TICKS_EXISTED_SAVED, ticksExistedTemp);
-            this.ticksExistedSaved2 = this.ticksExistedSaved;
+            this.ticksExistedSaved2 = ticksExistedTemp;
 		}
         this.isReloaded = true;
         this.dataManager.set(IS_RELOADED, true);
@@ -391,14 +378,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	}
 
 	public EntityNukeTorex setScale(float scale) {
-		if(!world.isRemote)
-			this.dataManager.set(SCALE, scale);
+		if(!world.isRemote) this.dataManager.set(SCALE, scale);
 		this.coreHeight = this.coreHeight * scale;
 		this.convectionHeight = this.convectionHeight * scale;
 		this.torusWidth = this.torusWidth * scale;
 		this.rollerSize = this.rollerSize * scale;
 		this.maxAge = (int) (45 * 20 * scale);
-		this.dataManager.set(MAX_AGE, this.maxAge);
+        if(!world.isRemote) this.dataManager.set(MAX_AGE, this.maxAge);
 		return this;
 	}
 
