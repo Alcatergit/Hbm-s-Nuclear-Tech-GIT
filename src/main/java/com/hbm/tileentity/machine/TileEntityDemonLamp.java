@@ -62,6 +62,7 @@ public class TileEntityDemonLamp extends TileEntity implements ITickable {
 
 			ContaminationUtil.contaminate(e, HazardType.RADIATION, ContaminationType.CREATIVE, eRads);
 			if(len < 2) {
+				e.setFire(5);
 				e.attackEntityFrom(DamageSource.IN_FIRE, 100);
 			}
 		}
