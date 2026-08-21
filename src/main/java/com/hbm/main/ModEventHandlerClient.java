@@ -1421,8 +1421,7 @@ public class ModEventHandlerClient {
 				p.renderParticle(null, Minecraft.getMinecraft().getRenderViewEntity(), MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
 		}*/
 		//HbmShaderManager2.doPostProcess();
-		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)){
-			if(GeneralConfig.nukeWarpShockwave) RenderTorex.renderWarp(evt.getPartialTicks());
+		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)
 			HbmShaderManager2.postProcess();
 		}
 	}
