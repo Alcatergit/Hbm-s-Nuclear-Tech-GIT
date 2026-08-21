@@ -452,7 +452,7 @@ public class RadiationSystemNT {
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
 
-							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+                            if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							if (entity.isChild()) creep.setChild(true);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							creep.setRotationYawHead(entity.rotationYaw);
@@ -477,7 +477,7 @@ public class RadiationSystemNT {
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
 
-							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+                            if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
