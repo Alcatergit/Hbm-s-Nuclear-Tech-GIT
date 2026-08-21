@@ -1,12 +1,10 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
 
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -29,20 +27,15 @@ public class TileEntityMachineBAT9000 extends TileEntityBarrel {
 		}
 	}
 
-	public void fillFluid(BlockPos pos1, FluidTank tank) {
-		FFUtils.fillFluid(this, tank, world, pos1, 512000);
-	}
-
 	@Override
-	public void fillFluidInit(FluidTank type) {
-		fillFluid(new BlockPos(this.pos.getX() + 1, this.pos.getY(), this.pos.getZ() + 3), type);
-		fillFluid(new BlockPos(this.pos.getX() - 1, this.pos.getY(), this.pos.getZ() + 3), type);
-		fillFluid(new BlockPos(this.pos.getX() + 1, this.pos.getY(), this.pos.getZ() - 3), type);
-		fillFluid(new BlockPos(this.pos.getX() - 1, this.pos.getY(), this.pos.getZ() - 3), type);
-		fillFluid(new BlockPos(this.pos.getX() + 3, this.pos.getY(), this.pos.getZ() + 1), type);
-		fillFluid(new BlockPos(this.pos.getX() - 3, this.pos.getY(), this.pos.getZ() + 1), type);
-		fillFluid(new BlockPos(this.pos.getX() + 3, this.pos.getY(), this.pos.getZ() - 1), type);
-		fillFluid(new BlockPos(this.pos.getX() - 3, this.pos.getY(), this.pos.getZ() - 1), type);
+	public BlockPos[] getConnectionPositions() {
+		BlockPos[] ports = { pos };
+		return new BlockPos[] {
+				ports[0].east(5), ports[0].east(3).south(1), ports[0].east(3).north(1),
+				ports[0].west(5), ports[0].west(3).south(1), ports[0].west(3).north(1),
+				ports[0].south(5), ports[0].east(1).south(3), ports[0].west(1).south(3),
+				ports[0].north(5), ports[0].east(1).north(3), ports[0].west(1).north(3),
+		};
 	}
 	
 	AxisAlignedBB bb = null;
