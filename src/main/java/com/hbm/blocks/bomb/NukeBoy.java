@@ -81,7 +81,7 @@ public class NukeBoy extends BlockContainer implements IBomb {
         return Item.getItemFromBlock(ModBlocks.nuke_boy);
     }
 
-    // ========== 新增：重写removedByPlayer方法获取破坏玩家 ==========
+    // ========== Added: Override the removedByPlayer method to get the destroyed player ==========
     @Override
     public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
         // Recording and destroying player information
