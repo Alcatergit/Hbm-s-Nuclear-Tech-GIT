@@ -170,7 +170,7 @@ public class NukeGadget extends BlockContainer implements IBomb {
 	}
 	// ========== Modification complete ==========
 
-	// ========== Modification begins: onBlockPlacedBy method - Support for data recovery from simplified NBT ==========
+	// ========== Modification: onBlockPlacedBy method - Support for data recovery from simplified NBT ==========
 	@Override
 	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		world.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
