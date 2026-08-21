@@ -25,7 +25,7 @@ import net.minecraft.world.World;
 
 public class DemonLamp extends BlockContainer {
 
-	// ==================== New: Direction attribute ====================
+	// ==================== NEW: Direction attribute ====================
 	public static PropertyDirection FACING = BlockHorizontal.FACING;
 
 	public DemonLamp(SoundType st, String s) {
@@ -47,37 +47,38 @@ public class DemonLamp extends BlockContainer {
 		return new TileEntityDemonLamp();
 	}
 
-	// ==================== New: Set direction when placing block ====================
+	// ==================== NEW: Set direction when placing block ====================
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing()));
 	}
 
-	// ==================== New: Get block status ====================
+	// ==================== NEW: Get block status ====================
 	@Override
 	protected BlockStateContainer createBlockState() {
 		return new BlockStateContainer(this, new IProperty[]{FACING});
 	}
 
-	// ==================== New: Get the metadata corresponding to the block state ====================
+	// ==================== NEW: Get the metadata corresponding to the block state ====================
 	@Override
 	public int getMetaFromState(IBlockState state) {
 		return ((EnumFacing)state.getValue(FACING)).getHorizontalIndex();
 	}
 
-	// ==================== New: Get the block state corresponding to the metadata ====================
+	// ==================== NEW: Get the block state corresponding to the metadata ====================
 	@Override
 	public IBlockState getStateFromMeta(int meta) {
 		EnumFacing enumfacing = EnumFacing.byHorizontalIndex(meta);
 		return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 
-	// ==================== New: Block rotation and mirroring support ====================
+	// ==================== NEW: Block rotation support ====================
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
 	}
 
+	// ==================== NEW: Block mirroring support ====================
 	@Override
 	public IBlockState withMirror(IBlockState state, Mirror mirrorIn)
 	{
