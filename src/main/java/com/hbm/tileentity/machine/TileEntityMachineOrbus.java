@@ -1,12 +1,7 @@
 package com.hbm.tileentity.machine;
 
-import com.hbm.forgefluid.FFUtils;
-import com.hbm.blocks.BlockDummyable;
-import com.hbm.lib.ForgeDirection;
-
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -24,21 +19,13 @@ public class TileEntityMachineOrbus extends TileEntityBarrel {
 	@Override
 	public void checkFluidInteraction() { } //NO!
 
-	public void fillFluid(BlockPos pos1, FluidTank tank) {
-		FFUtils.fillFluid(this, tank, world, pos1, 64000);
-	}
-
 	@Override
-	public void fillFluidInit(FluidTank type) {
-		ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset).getOpposite();
-		ForgeDirection d2 = dir.getRotation(ForgeDirection.DOWN);
-
-		for(int i = -1; i < 7; i += 7) {
-			this.fillFluid(new BlockPos(pos.getX(), pos.getY() + i, pos.getZ()), this.tank);
-			this.fillFluid(new BlockPos(pos.getX() + dir.offsetX, pos.getY() + i, pos.getZ() + dir.offsetZ), this.tank);
-			this.fillFluid(new BlockPos(pos.getX() + d2.offsetX, pos.getY() + i, pos.getZ() + d2.offsetZ), this.tank);
-			this.fillFluid(new BlockPos(pos.getX() + dir.offsetX + d2.offsetX, pos.getY() + i, pos.getZ() + dir.offsetZ + d2.offsetZ), this.tank);
-		}
+	public BlockPos[] getConnectionPositions() {
+		BlockPos[] ports = { pos, pos.add(1, 0, 0), pos.add(0, 0, 1), pos.add(1, 0, 1) };
+		return new BlockPos[] {
+				ports[0].down(), ports[1].down(), ports[2].down(), ports[3].down(),
+				ports[0].up(5), ports[1].up(5), ports[2].up(5), ports[3].up(5),
+		};
 	}
 	
 	AxisAlignedBB bb = null;
