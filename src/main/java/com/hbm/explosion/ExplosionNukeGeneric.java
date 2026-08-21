@@ -352,7 +352,7 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.SPONGE) {
 				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
-					world.setBlockState(pos, Blocks.SPONGE.getDefaultState());
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 			}
 		}
@@ -491,7 +491,7 @@ public class ExplosionNukeGeneric {
 
 			else if (b == Blocks.SPONGE) {
 				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
-					world.setBlockState(pos, Blocks.SPONGE.getDefaultState());
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 			}
 		}
