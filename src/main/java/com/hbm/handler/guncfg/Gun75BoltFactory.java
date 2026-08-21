@@ -10,7 +10,6 @@ import com.hbm.interfaces.IBulletHurtBehavior;
 import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -110,9 +109,6 @@ public class Gun75BoltFactory {
 					float f = living.getHealth();
 					f = Math.max(0, f - 2);
 					living.setHealth(f);
-
-					if(f == 0)
-						living.onDeath(ModDamageSource.lead);
 				}
 			}
 		};
@@ -173,5 +169,4 @@ public class Gun75BoltFactory {
 
 		return bullet;
 	}
-
 }
