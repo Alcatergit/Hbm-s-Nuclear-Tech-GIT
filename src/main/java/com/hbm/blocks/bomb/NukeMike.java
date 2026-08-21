@@ -46,9 +46,9 @@ public class NukeMike extends BlockContainer implements IBomb {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 
-	// ========== Added: Field for storing information about players who have been vandalized ==========
+	// ========== Added: Field for storing information about the player who last broke the block ==========
 	private EntityPlayer lastBreaker = null;
-	// ========== Added: Mark whether the destruction was caused by an explosion ==========
+	// ========== Added: Flag to mark if the destruction was caused by an explosion ==========
 	private boolean isExploding = false;
 
 	public NukeMike(Material materialIn, String s) {
@@ -67,40 +67,40 @@ public class NukeMike extends BlockContainer implements IBomb {
 
 	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
-		// ========== Modification: Adding drop control logic upon detonation ==========
-		// If the destruction is caused by an explosion, no items will be dropped.
+		// ========== Modified: Added drop control logic for detonation ==========
+		// If the block is destroyed by an explosion, drop nothing.
 		if (isExploding) {
 			return null;
 		}
 
-		// When NBT saving is enabled, the drop is completely controlled by breakBlock.
+		// When NBT saving is enabled, drops are handled entirely by breakBlock.
 		if (GeneralConfig.enableBlockItemNBTSaving) {
-			return null; // Returning null, the fall is controlled by breakBlock.
+			return null; // Return null, drops are handled by breakBlock.
 		}
-		// ========== Modification complete ==========
+		// ========== End of modification ==========
 
 		return Item.getItemFromBlock(ModBlocks.nuke_mike);
 	}
 
-	// ========== Added: Override the removedByPlayer method to get the destroyed player ==========
+	// ========== Added: Override removedByPlayer to capture the player who broke the block ==========
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
-		// Recording and destroying player information
+		// Store the player who is breaking the block
 		this.lastBreaker = player;
 
-		// Calling the parent class method to continue executing the disruptive logic
+		// Call the super method to continue with the breaking logic
 		boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
 
-		// Clean up player information
+		// Clear the stored player information
 		this.lastBreaker = null;
 
 		return result;
 	}
 
-	// ========== Modification: Using player information recorded by removedByPlayer ==========
+	// ========== Modified: Use player information captured by removedByPlayer ==========
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		// ========== If the destruction is caused by an explosion, the entire block will be cleared, and no items will be dropped. ==========
+		// ========== If destroyed by an explosion, clear the tile entity and drop nothing ==========
 		if (isExploding) {
 			TileEntity tileentity = world.getTileEntity(pos);
 			if (tileentity != null) {
@@ -111,34 +111,34 @@ public class NukeMike extends BlockContainer implements IBomb {
 
 		TileEntity tileentity = world.getTileEntity(pos);
 
-		// ========== New Logic: Configuration File Controls NBT Saving ==========
+		// ========== New: NBT saving controlled by configuration file ==========
 		if (!GeneralConfig.enableBlockItemNBTSaving) {
-			// Configure NBT saving is disabled; use the original logic.
+			// NBT saving is disabled, use original logic.
 			InventoryHelper.dropInventoryItems(world, pos, (TileEntityNukeMike)tileentity);
 		} else {
 			if (tileentity instanceof TileEntityNukeMike) {
 				TileEntityNukeMike nukeMike = (TileEntityNukeMike)tileentity;
 
-				// Create NBT tags to store block entity data
+				// Create NBT tag to store tile entity data
 				NBTTagCompound tileData = new NBTTagCompound();
 				nukeMike.writeToNBT(tileData);
 
-				// ========== Check for any items inside ==========
+				// ========== Check if there are any items inside ==========
 				boolean hasItems = false;
 				if (tileData.hasKey("inventory") && tileData.getCompoundTag("inventory").hasKey("Items")) {
 					NBTTagList itemsList = tileData.getCompoundTag("inventory").getTagList("Items", 10);
 					hasItems = itemsList.tagCount() > 0;
 				}
 
-				// ========== Player information recorded using removedByPlayer ==========
+				// ========== Use player information captured by removedByPlayer ==========
 				boolean isCreativeMode = (lastBreaker != null && lastBreaker.capabilities.isCreativeMode);
 
 				if (hasItems) {
-					// ========== Internal Items Found: Drops a nuclear bomb containing NBT ==========
+					// ========== Has items inside: Drop a nuke block with NBT data ==========
 					ItemStack itemstack = new ItemStack(Item.getItemFromBlock(this), 1);
 					NBTTagCompound nbttagcompound = new NBTTagCompound();
 
-					// ========== Simplify NBT data: Only keep BlockEntityTag->inventory->Items ==========
+					// ========== Simplify NBT data: Only keep BlockEntityTag -> inventory -> Items ==========
 					NBTTagCompound blockEntityTag = new NBTTagCompound();
 					NBTTagCompound inventoryTag = new NBTTagCompound();
 
@@ -150,33 +150,33 @@ public class NukeMike extends BlockContainer implements IBomb {
 
 					blockEntityTag.setTag("inventory", inventoryTag);
 
-					// Write the BlockEntityTag to the item NBT
+					// Write the BlockEntityTag to the item's NBT
 					nbttagcompound.setTag("BlockEntityTag", blockEntityTag);
 					itemstack.setTagCompound(nbttagcompound);
 
-					// Generate drops
+					// Spawn the item drop
 					spawnAsEntity(world, pos, itemstack);
 
-					// Empty the contents
+					// Clear the inventory contents
 					nukeMike.clearSlots();
 				} else if (!isCreativeMode) {
-					// ========== Survival Mode Empty bomb: Drops a regular bomb =========
+					// ========== Survival mode, empty nuke: Drop a regular nuke block =========
 					spawnAsEntity(world, pos, new ItemStack(Item.getItemFromBlock(this), 1));
 				}
-				// Creative Mode Empty Bomb: Nothing drops
+				// Creative mode, empty nuke: Drop nothing
 			}
 		}
-		// Call the parent class's breakBlock but don't let it handle the falling object.
+		// Call super.breakBlock but prevent it from handling drops
 		super.breakBlock(world, pos, state);
 	}
-	// ========== Modification complete ==========
+	// ========== End of modification ==========
 
-	// ========== Modification: Restoring from simplified NBT data ==========
+	// ========== Modified: onBlockPlacedBy method - Support data recovery from simplified NBT ==========
 	@Override
 	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
 		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 
-		// ========== Edit: Recovering from Simplified NBT Data ==========
+		// ========== Modified: Recover data from simplified NBT ==========
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			TileEntity tileentity = worldIn.getTileEntity(pos);
 			if (tileentity instanceof TileEntityNukeMike) {
@@ -185,13 +185,13 @@ public class NukeMike extends BlockContainer implements IBomb {
 				if (blockEntityTag.hasKey("inventory")) {
 					NBTTagCompound savedInventory = blockEntityTag.getCompoundTag("inventory");
 
-					// Create complete TileEntity NBT data
+					// Create complete tile entity NBT data
 					NBTTagCompound tileData = new NBTTagCompound();
 					tileData.setInteger("x", pos.getX());
 					tileData.setInteger("y", pos.getY());
 					tileData.setInteger("z", pos.getZ());
 
-					// ========== Restore only Items data in inventory ==========
+					// ========== Restore only the Items data in inventory ==========
 					NBTTagCompound newInventory = new NBTTagCompound();
 					if (savedInventory.hasKey("Items")) {
 						newInventory.setTag("Items", savedInventory.getTagList("Items", 10).copy());
@@ -199,18 +199,19 @@ public class NukeMike extends BlockContainer implements IBomb {
 
 					tileData.setTag("inventory", newInventory);
 
-					// Loading data from NBT to block entities
+					// Load data from NBT into the tile entity
 					((TileEntityNukeMike) tileentity).readFromNBT(tileData);
 
-					// The marker blocks need to be updated.
+					// Mark the block for update
 					worldIn.notifyBlockUpdate(pos, state, state, 3);
 
-					// Important: Mark block entities as dirty data to ensure data preservation.
+					// Mark tile entity as dirty to ensure data is saved
 					tileentity.markDirty();
 				}
 			}
 		}
 	}
+	// ========== End of modification ==========
 
 	@Override
 	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ) {
@@ -232,7 +233,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 		TileEntityNukeMike entity = (TileEntityNukeMike) worldIn.getTileEntity(pos);
 		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			if(entity.isReady() && !entity.isFilled()) {
-				// ========== Modification: Set a detonation flag, then clear the blocks ==========
+				// ========== Modified: Set detonation flag, then clear the block ==========
 				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
@@ -241,7 +242,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 			}
 
 			if(entity.isFilled()) {
-				// ========== Modification: Set a detonation flag, then clear the blocks ==========
+				// ========== Modified: Set detonation flag, then clear the block ==========
 				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
@@ -268,7 +269,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 	public void explode(World world, BlockPos pos) {
 		TileEntityNukeMike entity = (TileEntityNukeMike) world.getTileEntity(pos);
 		if(entity.isReady() && !entity.isFilled()) {
-			// ========== Modification: Set a detonation flag, then clear the blocks ==========
+			// ========== Modified: Set detonation flag, then clear the block ==========
 			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
@@ -277,7 +278,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 		}
 
 		if(entity.isFilled()) {
-			// ========== Modification: Set a detonation flag, then clear the blocks ==========
+			// ========== Modified: Set detonation flag, then clear the block ==========
 			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
@@ -358,24 +359,24 @@ public class NukeMike extends BlockContainer implements IBomb {
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(BombConfig.mikeRadius*(1+BombConfig.falloutRange/100.0)))+"§r");
 		}
 
-		// ========== Modification: Adjusted the display logic of the prompt text as required ==========
-		// Displayed in priority order: isItemReady < isItemFilled
+		// ========== Modified: Adjusted tooltip display logic as required ==========
+		// Display in priority order: isItemReady < isItemFilled
 		if (isItemFilled(stack)) {
-			tooltip.add("§c[Is ready]§r"); // Red is displayed when the isItemFilled condition is true.
+			tooltip.add("§c[Is ready]§r"); // Red when isItemFilled condition is true
 		} else if (isItemReady(stack)) {
-			tooltip.add("§2[Is ready]§r"); // Dark green is displayed when the isItemReady condition is true.
+			tooltip.add("§2[Is ready]§r"); // Dark green when isItemReady condition is true
 		}
 	}
 
-	// ========== Modification: Correctly parsing the NBT format of ItemStackHandler ==========
+	// ========== Modified: Correctly parse the NBT format of ItemStackHandler ==========
 	private boolean isItemReady(ItemStack stack) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
 			
 			if (blockEntityTag.hasKey("inventory")) {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
-				
-				// Use the conditional statement corresponding to isReady directly.
+
+				// Use the condition matching isReady directly
 				return checkSlotItem(inventoryTag, 0, ModItems.man_explosive8) &&
 					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) &&
 					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) &&
@@ -387,15 +388,15 @@ public class NukeMike extends BlockContainer implements IBomb {
 		return false;
 	}
 
-	// ========== Modification: Correctly parsing the NBT format of ItemStackHandler ==========
+	// ========== Modified: Correctly parse the NBT format of ItemStackHandler ==========
 	private boolean isItemFilled(ItemStack stack) {
 		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
 			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
 			
 			if (blockEntityTag.hasKey("inventory")) {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
-				
-				// Use the conditional statement corresponding to isFilled directly.
+
+				// Use the condition matching isFilled directly
 				return checkSlotItem(inventoryTag, 0, ModItems.man_explosive8) &&
 					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) &&
 					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) &&
@@ -410,7 +411,7 @@ public class NukeMike extends BlockContainer implements IBomb {
 		return false;
 	}
 
-	// ========== Modification: Improved NBT parsing method ==========
+	// ========== Modified: Improved NBT parsing method ==========
 	private boolean checkSlotItem(NBTTagCompound inventoryTag, int slot, Item expectedItem) {
 		if (inventoryTag.hasKey("Items")) {
 			NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
@@ -418,9 +419,9 @@ public class NukeMike extends BlockContainer implements IBomb {
 			for (int i = 0; i < itemsList.tagCount(); i++) {
 				NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
 				if (itemTag.getByte("Slot") == slot) {
-					// Use a string username instead of a numeric ID.
+					// Use string registry name instead of numeric ID
 					String itemId = itemTag.getString("id");
-					
+
 					// Check if items match
 					return itemId.equals(expectedItem.getRegistryName().toString());
 				}
