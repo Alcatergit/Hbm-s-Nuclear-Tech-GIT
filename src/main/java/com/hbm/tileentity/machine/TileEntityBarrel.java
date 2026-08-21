@@ -93,12 +93,12 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 					for(BlockPos conPos : conPositions) {
 						if(!world.isBlockLoaded(conPos)) continue;
 						TileEntity te = world.getTileEntity(conPos);
-						if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
-							te = world.getTileEntity(dummy.target);
-						}
 						if(te instanceof TileEntityProxyCombo proxy) {
 							TileEntity resolved = proxy.getTE();
 							if(resolved != null) te = resolved;
+						}
+						if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+							te = world.getTileEntity(dummy.target);
 						}
 						if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
 							fluid = barrel.tank.getFluid().getFluid();
