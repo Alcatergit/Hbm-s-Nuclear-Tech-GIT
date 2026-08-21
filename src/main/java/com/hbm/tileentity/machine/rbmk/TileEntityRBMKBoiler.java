@@ -4,9 +4,11 @@ import java.util.Map;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.entity.projectile.EntityRBMKDebris.DebrisType;
+import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
@@ -18,6 +20,7 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -71,6 +74,19 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			} else {
 				timer = 0;
 				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
+			}
+
+			int feedSpace = waterCapacity - feed.getFluidAmount();
+			if(feedSpace > 0){
+				TileEntity te = world.getTileEntity(pos.down());
+				if(te instanceof IFluidPipeMk2){
+					FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
+					if(network != null && network.getType() == FluidRegistry.WATER){
+						FluidStack pulled = network.drain(new FluidStack(FluidRegistry.WATER, feedSpace), true);
+						if(pulled != null)
+							feed.fill(pulled, true);
+					}
+				}
 			}
 
 			if(feed.getFluidAmount() < waterCapacity || steam.getFluidAmount() > 0)
@@ -268,6 +284,19 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			spawnDebris(DebrisType.BLANK);
 		}
 		
+		if(RBMKDials.getMeltdownOverpressure(world)) {
+			for(EnumFacing dir : EnumFacing.VALUES) {
+				BlockPos neighborPos = pos.offset(dir);
+				TileEntity te = world.getTileEntity(neighborPos);
+				if(te instanceof IFluidPipeMk2) {
+					FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
+					if(network != null && network.getType() == steamType) {
+						pipes.add(network);
+					}
+				}
+			}
+		}
+		
 		super.onMelt(reduce);
 	}
 
@@ -302,9 +331,6 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
-		if(resource != null && resource.getFluid() == FluidRegistry.WATER){
-			return feed.fill(resource, doFill);
-		}
 		return 0;
 	}
 
