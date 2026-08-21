@@ -1,9 +1,13 @@
 package com.hbm.tileentity.machine;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
+import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
+import com.hbm.entity.logic.EntityNukeExplosionMK3.ATEntry;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.handler.ArmorUtil;
@@ -11,7 +15,7 @@ import com.hbm.items.machine.ItemCatalyst;
 import com.hbm.items.special.ItemAMSCore;
 import com.hbm.lib.Library;
 import com.hbm.lib.ModDamageSource;
-import com.hbm.main.AdvancementManager;
+import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import net.minecraft.entity.Entity;
@@ -22,6 +26,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.world.gen.ChunkProviderServer;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -37,7 +42,8 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	public int heat;
 	public int color;
 	public FluidTank[] tanks;
-	public int safeTimer = 0;
+	public boolean meltdownTick = false;
+	private boolean lastTickValid = false;
 	
 	public TileEntityCore() {
 		super(3);
@@ -54,41 +60,65 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	@Override
 	public void update() {
 		if(!world.isRemote) {
-			if(heat > 0 && heat >= field) {
-				if(safeTimer > 20){
-					int fill = tanks[0].getFluidAmount() + tanks[1].getFluidAmount();
-					int max = tanks[0].getCapacity() + tanks[1].getCapacity();
-					int mod = heat * 10;
-					
-					int size = Math.max(Math.min(fill * mod / max, 1000), 50);
-					
-					//System.out.println(fill + " * " + mod + " / " + max + " = " + size);
+			int chunkX = pos.getX() >> 4;
+			int chunkZ = pos.getZ() >> 4;
 
-		    		world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 100000.0F, 1.0F);
+			meltdownTick = false;
+
+			ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
+			lastTickValid =
+					provider.chunkExists(chunkX, chunkZ) &&
+					provider.chunkExists(chunkX + 1, chunkZ + 1) &&
+					provider.chunkExists(chunkX + 1, chunkZ - 1) &&
+					provider.chunkExists(chunkX - 1, chunkZ + 1) &&
+					provider.chunkExists(chunkX - 1, chunkZ - 1);
+
+			if(lastTickValid && heat > 0 && heat >= field) {
+				int fill = tanks[0].getFluidAmount() + tanks[1].getFluidAmount();
+				int max = tanks[0].getCapacity() + tanks[1].getCapacity();
+				int mod = heat * 10;
+				int size = Math.max(Math.min(fill * mod / max, 1000), 50);
+
+				boolean canExplode = true;
+				Iterator<Map.Entry<ATEntry, Long>> it = EntityNukeExplosionMK3.at.entrySet().iterator();
+				while(it.hasNext()) {
+					Map.Entry<ATEntry, Long> next = it.next();
+					if(next.getValue() < world.getTotalWorldTime()) {
+						it.remove();
+						continue;
+					}
+					ATEntry entry = next.getKey();
+					if(entry.dim != world.provider.getDimension()) continue;
+					double distance = Math.sqrt(Math.pow(pos.getX() + 0.5 - entry.x, 2) + Math.pow(pos.getY() + 0.5 - entry.y, 2) + Math.pow(pos.getZ() + 0.5 - entry.z, 2));
+					if(distance < 300) {
+						canExplode = false;
+						break;
+					}
+				}
+
+				if(canExplode) {
+					world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.BLOCKS, 100000.0F, 1.0F);
 
 					EntityNukeExplosionMK3 exp = new EntityNukeExplosionMK3(world);
 					exp.posX = pos.getX();
 					exp.posY = pos.getY();
 					exp.posZ = pos.getZ();
 					exp.destructionRange = size;
-					exp.speed = 25;
+					exp.speed = BombConfig.blastSpeed;
 					exp.coefficient = 1.0F;
 					exp.waste = false;
-				
-					if(safeTimer > 1200 || !EntityNukeExplosionMK3.isJammed(this.world, exp)){
-						world.spawnEntity(exp);
-			    		
-			    		EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, size);
-			    		cloud.posX = pos.getX();
-			    		cloud.posY = pos.getY();
-			    		cloud.posZ = pos.getZ();
-			    		world.spawnEntity(cloud);
-			    		world.setBlockToAir(pos);
-			    	}
-		    	}
-		    	safeTimer++;
-			} else {
-				if(safeTimer > 0) safeTimer--;
+					world.spawnEntity(exp);
+
+					EntityCloudFleijaRainbow cloud = new EntityCloudFleijaRainbow(world, size);
+					cloud.posX = pos.getX();
+					cloud.posY = pos.getY();
+					cloud.posZ = pos.getZ();
+					world.spawnEntity(cloud);
+					world.setBlockToAir(pos);
+				} else {
+					meltdownTick = true;
+					RadiationSavedData.incrementRad(world, pos, 100, Float.MAX_VALUE);
+				}
 			}
 			
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst){
@@ -117,10 +147,12 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			data.setBoolean("hasCore", hasCore);
 			networkPack(data, 250);
 			
-			//PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tanks), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 10));
-			
 			heat = 0;
-			field = 0;
+
+			if(lastTickValid && field > 0) {
+				field -= 1;
+			}
+
 			this.markDirty();
 		} else {
 			
@@ -149,35 +181,24 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	}
 	
 	private void radiation() {
-		
-		double scale = (int)Math.log(heat) * 1.25 + 0.5;
-		
-		int range = (int)(scale * 4);
+		double scale = this.meltdownTick ? 5 : 3;
+		double range = this.meltdownTick ? 50 : 10;
+
 		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - range + 0.5, pos.getY() - range + 0.5, pos.getZ() - range + 0.5, pos.getX() + range + 0.5, pos.getY() + range + 0.5, pos.getZ() + range + 0.5));
-		
+
 		for(Entity e : list) {
-			boolean isPlayer = e instanceof EntityPlayer;
-			if(!(isPlayer && ArmorUtil.checkForHazmat((EntityPlayer)e))){
-				if(!(Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ))){
-					if(!isPlayer || !((EntityPlayer) e).capabilities.isCreativeMode)
-						e.attackEntityFrom(ModDamageSource.ams, this.heat * 100);
+			if(!(e instanceof EntityPlayer player && (ArmorUtil.checkForHazmat(player) || player.capabilities.isCreativeMode || player.isSpectator())))
+				if(!Library.isObstructed(world, pos.getX() + 0.5, pos.getY() + 0.5 + 6, pos.getZ() + 0.5, e.posX, e.posY + e.getEyeHeight(), e.posZ)) {
 					e.setFire(3);
+					e.attackEntityFrom(ModDamageSource.ams, 1000);
 				}
-			}
-			if(isPlayer){
-				AdvancementManager.grantAchievement(((EntityPlayer) e), AdvancementManager.progress_dfc);
-			}
 		}
 
 		List<Entity> list2 = world.getEntitiesWithinAABBExcludingEntity(null, new AxisAlignedBB(pos.getX() - scale + 0.5, pos.getY() - scale + 0.5, pos.getZ() - scale + 0.5, pos.getX() + scale + 0.5, pos.getY() + scale + 0.5, pos.getZ() + scale + 0.5));
-		
+
 		for(Entity e : list2) {
-			boolean isPlayer = e instanceof EntityPlayer;
-			if(!(isPlayer && ArmorUtil.checkForHaz2((EntityPlayer)e))){
-				if(!isPlayer || (isPlayer && !((EntityPlayer)e).capabilities.isCreativeMode))
-					e.attackEntityFrom(ModDamageSource.amsCore, this.heat * 1000);
-				e.setFire(3);
-			}
+			if(!(e instanceof EntityPlayer player && (ArmorUtil.checkForHaz2(player) || player.capabilities.isCreativeMode || player.isSpectator())))
+				e.attackEntityFrom(ModDamageSource.amsCore, 10000);
 		}
 	}
 	
