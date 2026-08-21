@@ -103,7 +103,6 @@ import com.hbm.render.misc.SoyuzPronter;
 import com.hbm.render.modelrenderer.EgonBackpackRenderer;
 import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
-import com.hbm.render.entity.effect.RenderTorex;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.world.RenderNTMSkybox;
