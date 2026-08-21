@@ -230,8 +230,6 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 			((EntityPlayerMP)attacker).inventory.addItemStackToInventory(new ItemStack(ModItems.coin_creeper));
 		}
 
-		super.onDeath(p_70645_1_);
-
 		if(p_70645_1_.getTrueSource() instanceof EntitySkeleton || (p_70645_1_.isProjectile() && p_70645_1_.getImmediateSource() instanceof EntityArrow && ((EntityArrow)(p_70645_1_.getImmediateSource())).shootingEntity == null)) {
 			int i = rand.nextInt(11);
 			int j = rand.nextInt(3);
@@ -275,6 +273,8 @@ public class EntityNuclearCreeper extends EntityMob implements IRadiationImmune 
 			if(i == 10)
 				this.dropItem(ModItems.ammo_nuke, 1);
 		}
+
+		super.onDeath(p_70645_1_);
 	}
 
 	@Override
