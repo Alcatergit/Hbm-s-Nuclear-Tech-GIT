@@ -66,7 +66,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public static boolean explodeOnBroken = true;
 
 	public double heat = 20.0D;
-	public double jumpheight = 0.0D;
+	public double jumpHeight = 0.0D;
 	public float downwardSpeed = 0.0F;
 	public boolean falling = false;
 	public static final byte gravity = 1; //in blocks per s^2
@@ -155,21 +155,21 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 
 	private void jump(){
-		if((damage <= 0 || this.heat <= maxHeat()) && !falling && jumpheight <= 0)
+		if((damage <= 0 || this.heat <= maxHeat()) && !falling && jumpHeight <= 0)
 			return;
 
 		if(!falling){ // linear rise
 			if(damage > 0){
 				int rand = world.rand.nextInt((int)((MachineConfig.rbmkMeltdownDamage-damage)/3+5));
-				if(this.jumpheight > 0 || rand == 0){
+				if(this.jumpHeight > 0 || rand == 0){
 					int dmg = (int)(Math.pow(damage/MachineConfig.rbmkMeltdownDamage, 0.5)*100);
 					double change = dmg*0.0005D;
 					double heightLimit = Math.min(Math.max(this.heat-MachineConfig.rbmkJumpTemp, 0)*0.005D, 1.0D);
 
-					this.jumpheight = this.jumpheight + change;
+					this.jumpHeight = this.jumpHeight + change;
 
-					if(this.jumpheight > heightLimit){
-						this.jumpheight = heightLimit;
+					if(this.jumpHeight > heightLimit){
+						this.jumpHeight = heightLimit;
 						this.falling = true;
 					}
 				}
@@ -177,11 +177,11 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 				this.falling = true;
 			}
 		} else{ // gravity fall
-			if(this.jumpheight > 0){
+			if(this.jumpHeight > 0){
 				this.downwardSpeed = this.downwardSpeed + gravity * 0.05F;
-				this.jumpheight = Math.max(this.jumpheight - this.downwardSpeed, 0);
+				this.jumpHeight = Math.max(this.jumpHeight - this.downwardSpeed, 0);
 			} else {
-				this.jumpheight = 0;
+				this.jumpHeight = 0;
 				this.downwardSpeed = 0;
 				this.falling = false;
 				world.playSound(null, pos.getX(),  pos.getY()+RBMKDials.getColumnHeight(world)+1,  pos.getZ(), HBMSoundHandler.rbmkLid, SoundCategory.BLOCKS, 2.0F, 1.0F);
@@ -307,7 +307,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		}
 
 		this.heat = nbt.getDouble("heat");
-		this.jumpheight = nbt.getDouble("jumpheight");
+		this.jumpHeight = nbt.getDouble("jumpHeight");
 		this.damage = nbt.getDouble("damage");
 		this.water = nbt.getInteger("realSimWater");
 		this.steam = nbt.getInteger("realSimSteam");
@@ -322,7 +322,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		}
 
 		nbt.setDouble("heat", this.heat);
-		nbt.setDouble("jumpheight", this.jumpheight);
+		nbt.setDouble("jumpHeight", this.jumpHeight);
 		nbt.setDouble("damage", this.damage);
 		nbt.setInteger("realSimWater", this.water);
 		nbt.setInteger("realSimSteam", this.steam);
@@ -359,7 +359,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		diag = true;
 		this.writeToNBT(nbt);
 		diag = false;
-		nbt.removeTag("jumpheight");
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
 	}
 
 	@SideOnly(Side.CLIENT)
