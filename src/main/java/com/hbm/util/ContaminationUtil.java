@@ -577,8 +577,10 @@ public class ContaminationUtil {
 							p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
 						}
 					}
-					e.setFire(5);
-					e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
+                    if (!e.isImmuneToFire) {
+                        e.setFire(5);
+                        e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
+                    }
 				}
 			}
 
