@@ -1,9 +1,14 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.tileentity.TileEntityProxyCombo;
+
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileEntityMachineOrbus extends TileEntityBarrel {
 
@@ -21,11 +26,19 @@ public class TileEntityMachineOrbus extends TileEntityBarrel {
 
 	@Override
 	public BlockPos[] getConnectionPositions() {
-		BlockPos[] ports = { pos, pos.add(1, 0, 0), pos.add(0, 0, 1), pos.add(1, 0, 1) };
-		return new BlockPos[] {
-				ports[0].down(), ports[1].down(), ports[2].down(), ports[3].down(),
-				ports[0].up(5), ports[1].up(5), ports[2].up(5), ports[3].up(5),
-		};
+		List<BlockPos> positions = new ArrayList<>();
+		for(int y = 0; y <= 4; y += 4) {
+			for(int x = -1; x <= 1; x++) {
+				for(int z = -1; z <= 1; z++) {
+					if(x == 0 && z == 0 && y == 0) continue;
+					BlockPos checkPos = pos.add(x, y, z);
+					if(world.getTileEntity(checkPos) instanceof TileEntityProxyCombo) {
+						positions.add(checkPos.add(0, y == 0 ? -1 : 1, 0));
+					}
+				}
+			}
+		}
+		return positions.toArray(new BlockPos[0]);
 	}
 	
 	AxisAlignedBB bb = null;
