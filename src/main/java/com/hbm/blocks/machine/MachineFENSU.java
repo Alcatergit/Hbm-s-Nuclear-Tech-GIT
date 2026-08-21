@@ -218,7 +218,6 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 
 	@Override
 	public void printHook(Pre event, World world, int x, int y, int z) {
-			
 		// Attempt to get the TileEntity of the current block
 		TileEntity te = world.getTileEntity(new BlockPos(x, y, z));
 
@@ -230,7 +229,8 @@ public class MachineFENSU extends BlockDummyableMBB implements ILookOverlay {
 			}
 		}
 
-		TileEntityMachineFENSU battery = (TileEntityMachineFENSU) te;
+		if(!(te instanceof TileEntityMachineFENSU battery))
+			return;
 		List<String> text = new ArrayList();
 		text.add("§6<> §rStored Energy: " + Library.getShortNumber(battery.power) + "/9.22EHE");
 		if(battery.powerDelta == 0)
