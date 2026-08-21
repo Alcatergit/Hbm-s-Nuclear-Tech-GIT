@@ -546,7 +546,7 @@ public class NukeCustom extends BlockContainer implements IBomb {
 		// ========== Display text in different colors based on priority ==========
 		// Priority: tnt < nuke < hydro < bale < schrab < sol < euph
 		if ((tempEntity.tnt>0 || tempEntity.nuke>0 || tempEntity.hydro>0 || tempEntity.bale>0 || tempEntity.schrab>0 || tempEntity.sol>0 || tempEntity.euph>0) && isFalling(stack)) {
-			tooltip.add("[isFalling]");
+			tooltip.add("[Is falling]");
 
 		}
 		if (tempEntity.euph > 0) {
@@ -576,32 +576,24 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			// Blue text: Thermonuclear
 			tooltip.add("§9[Thermonuclear]§r");
 			float hydroAdj = tempEntity.getHydroAdj();
+			boolean isSalted = tempEntity.dirty > 0;
 			float moreFallout = tempEntity.dirty;
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)hydroAdj)+"§r");
 			if(!BombConfig.disableNuclear){
-				if (tempEntity.dirty > 0) {
-                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"(+Salted)"+"]"+"§r");
-					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(hydroAdj*(1+BombConfig.falloutRange/100)+(moreFallout*0.25F)))+"§r");
-				} else {
-                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(hydroAdj*(1+BombConfig.falloutRange/100)))+"§r");
-				}
+				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"§r"+(isSalted ? "§a(+Salted)§r" : "")+"§2]§r");
+				tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(hydroAdj*(1+BombConfig.falloutRange/100.0)+(isSalted ? moreFallout*0.25F : 0)))+"§r");
 			}
 
 		} else if (tempEntity.nuke > 0) {
 			// Yellow text: Nuclear
 			tooltip.add("§e[Nuclear]§r");
 			float nukeAdj = tempEntity.getNukeAdj();
+			boolean isSalted = tempEntity.dirty > 0;
 			float moreFallout = tempEntity.dirty;
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)nukeAdj)+"§r");
 			if(!BombConfig.disableNuclear){
-				if (tempEntity.dirty > 0) {
-                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"(+Salted)"+"]"+"§r");
-                    tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(nukeAdj*(1+BombConfig.falloutRange/100)+moreFallout))+"§r");
-				} else {
-                    tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-					tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(nukeAdj*(1+BombConfig.falloutRange/100)))+"§r");
-				}
+				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"§r"+(isSalted ? "§a(+Salted)§r" : "")+"§2]§r");
+				tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(nukeAdj*(1+BombConfig.falloutRange/100.0)+(isSalted ? moreFallout : 0)))+"§r");
 			}
 
 		} else if (tempEntity.tnt > 0) {
