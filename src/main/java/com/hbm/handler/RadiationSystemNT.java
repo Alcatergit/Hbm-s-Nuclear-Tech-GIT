@@ -351,7 +351,7 @@ public class RadiationSystemNT {
 							}
 						}
 
-						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper) {
+						if(eRad >= 200 && entity.getHealth() > 0 && entity instanceof EntityCreeper creeper) {
 
 							if(world.rand.nextInt(3) == 0) {
 								EntityNuclearCreeper creep = new EntityNuclearCreeper(world);
