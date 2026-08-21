@@ -93,7 +93,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		if (fallout && explosion != null && this.ticksExisted < 10 && strength >= 75) {
 			List<EntityLivingBase> livingList = new ArrayList<>(list.size());
 			for (Entity e : list) if (e instanceof EntityLivingBase livingBase) livingList.add(livingBase);
-			radiate(livingList, (2_500_000F * radius) / (this.ticksExisted * 5 + 1));
+			radiate(livingList, (2_500_000F * radius * 0.02F) / (this.ticksExisted * 5 + 1));
 		}
 
 		// Community Edition Biological Conversion Timing
@@ -208,7 +208,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
             if(res < 1)
                 res = 1;
 
-            if(this.ticksExisted < 10 && res < 2) {
+            if(this.ticksExisted < 60 && res < 2) {
                 float fireDamage = (float)((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
                 if(fireDamage > 0.025){
                     if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
