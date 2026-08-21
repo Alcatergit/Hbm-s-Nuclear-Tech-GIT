@@ -199,22 +199,38 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
 			int ticksExisted2 = this.ticksExisted - this.ticksExistedSaved;
-			boolean isReloadedAccelerated = this.isReloaded && ((this.ticksExistedSaved + 200) < (this.maxAge * 3 / 4)) && (ticksExisted2 < 200);
+			boolean isReloadedAccelerated = this.isReloaded && ticksExisted2 < 200;
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExistedSaved: " + this.ticksExistedSaved);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
-
-			if(this.isReloaded && (ticksExisted2 < 100)){
-				this.speedMultiplier = 2.0D;
-			} else if(this.isReloaded){
-				this.speedMultiplier = Math.max(1.0D, this.speedMultiplier - 0.05D);
-			}
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
 
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
 			double simSpeed = getSimulationSpeed();
 			int lifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
+
+			if(this.isReloaded && ticksExisted2 < 100){
+				this.speedMultiplier = 2.0D;
+				if (this.ticksExistedSaved + 200 > this.maxAge * 2 / 3) {
+					simSpeed = 1.0D;
+					lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
+				}
+			} else if(this.isReloaded){
+				this.speedMultiplier = Math.max(1.0D, this.speedMultiplier - 0.05D);
+				if (this.ticksExistedSaved + 200 > this.maxAge * 2 / 3) {
+					// Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
+					double progress = Math.min(1.0D, (ticksExisted2 - 100) / 20.0D);
+					double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
+					double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
+					double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
+					double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
+					simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
+					lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
+				}
+			}
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate simSpeed: " + simSpeed);
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate lifetime: " + lifetime);
 
 			int toSpawn;
 			if (isReloadedAccelerated) {
@@ -266,7 +282,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 
 			// spawn ring clouds
-			if (ticksExisted2 < 200 && (int)(this.getScale()) > 0) {
+			if (ticksExisted2 < 200 && (int)this.getScale() > 0) {
 				lifetime *= (int) s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
