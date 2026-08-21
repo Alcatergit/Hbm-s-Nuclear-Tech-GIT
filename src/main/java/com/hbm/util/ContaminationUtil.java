@@ -593,9 +593,9 @@ public class ContaminationUtil {
 					if(rad3d > 0) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDmg);
 					else e.attackEntityFrom(ModDamageSource.blast, blastDmg);
 				}
-				e.motionX += vec.xCoord * 0.05D * blastDmg;
-				e.motionY += vec.yCoord * 0.05D * blastDmg;
-				e.motionZ += vec.zCoord * 0.05D * blastDmg;
+				e.motionX += vec.xCoord * 0.075D * blastDmg;
+				e.motionY += vec.yCoord * 0.075D * blastDmg;
+				e.motionZ += vec.zCoord * 0.075D * blastDmg;
 			}
 		}
 	}
