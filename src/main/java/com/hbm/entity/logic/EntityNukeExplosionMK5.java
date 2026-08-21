@@ -202,7 +202,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				res = 1;
 
 			int thermalDuration = this.radius * 3;
-			double currentThermalRadius = this.ticksExisted <= this.radius * 0.3 ? radius * (this.ticksExisted / (this.radius * 0.3)) : radius * (1.0 - Math.pow((this.ticksExisted - this.radius * 0.3) / (this.radius * 2.7), 0.5));
+			double currentThermalRadius = this.ticksExisted - 1 <= this.radius * 0.3 ? radius * Math.min(1D, (this.ticksExisted / (this.radius * 0.3))) : radius * (1D - Math.pow(((this.ticksExisted - 1) - this.radius * 0.3) / (this.radius * 2.7), 0.5));
 
 			if (this.ticksExisted <= thermalDuration && len <= currentThermalRadius && res < 2) {
 				float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
