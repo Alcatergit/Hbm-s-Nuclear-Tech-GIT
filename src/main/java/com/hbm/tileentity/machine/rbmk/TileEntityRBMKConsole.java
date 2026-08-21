@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.lib.Library;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual.RBMKColor;
 import com.hbm.util.I18nUtil;
@@ -486,6 +487,14 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		this.targetX = x;
 		this.targetY = y;
 		this.targetZ = z;
+		int meta = world.getBlockState(pos).getValue(BlockDummyable.META) - BlockDummyable.offset;
+		switch(meta) {
+			case 2: this.rotation = 2; break; // Core NORTH, reactor SOUTH
+			case 5: this.rotation = 3; break; // Core EAST,  reactor WEST
+			case 3: this.rotation = 0; break; // Core SOUTH, reactor NORTH
+			case 4: this.rotation = 1; break; // Core WEST,  reactor EAST
+			default: this.rotation = 0;
+		}
 		this.markDirty();
 	}
 
