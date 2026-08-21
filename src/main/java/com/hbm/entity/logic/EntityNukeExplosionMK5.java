@@ -155,7 +155,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					this.world.spawnEntity(falloutRain);
 				}
 				fallingStarted = true;
-			} else if ((int)(radius * 3.0) > 160 ? this.ticksExisted > (int)(radius * 3.0) : this.ticksExisted * shockSpeed > 160){ //wait for fire damage or shockwave to complete
+			} else if ((int)(this.radius * 3.0) > 160 ? this.ticksExisted > (int)(this.radius * 3.0) : this.ticksExisted * shockSpeed > 160){ //wait for fire damage or shockwave to complete
 				this.setDead();
 			}
 		}
@@ -184,8 +184,6 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 	public void dealDamage(World world, double x, double y, double z, double radius) {
         List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
-        int thermalDuration = (int)(radius * 3.0);
-
         for(Entity e : entities) {
             if(isExplosionExempt(e)) continue;
 
@@ -209,23 +207,23 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
             if(res < 1)
                 res = 1;
 
-            if (this.ticksExisted <= thermalDuration && res < 2) {
-                double currentFireRadius = radius * (1.0 - (double) this.ticksExisted / thermalDuration);
-                if (len <= currentFireRadius) {
-                    float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
-                    if (fireDamage > 0.025) {
-                        if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
-                            if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-                                p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
-                            }
-                            if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
-                                p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
-                            }
+            int thermalDuration = (int)(this.radius * 3.0);
+            double currentFireRadius = radius * (1.0 - (double) (this.ticksExisted - 1) / thermalDuration);
+
+            if (this.ticksExisted <= thermalDuration && len <= currentFireRadius && res < 2) {
+                float fireDamage = (float) ((0.5F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius)) / (dmgLen * dmgLen * dmgLen));
+                if (fireDamage > 0.025) {
+                    if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
+                        if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                            p.setHeldItem(EnumHand.MAIN_HAND, new ItemStack(ModItems.marshmallow_roasted));
                         }
-                        if (!e.isImmuneToFire()) {
-                            e.setFire(5);
-                            e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
+                        if (p.getHeldItemOffhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
+                            p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
                         }
+                    }
+                    if (!e.isImmuneToFire()) {
+                        e.setFire(5);
+                        e.attackEntityFrom(ModDamageSource.IN_FIRE, fireDamage);
                     }
                 }
             }
