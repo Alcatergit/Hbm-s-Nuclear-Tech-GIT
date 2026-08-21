@@ -384,7 +384,9 @@ public class RadiationSystemNT {
 								sheep.setSheared(true);
 							}
 
-							if(eRad < 500) {
+							if (eRad < 250){
+								sheep.getEntityData().setBoolean("isBalding", false);
+							} else if(eRad < 500) {
 								if(!sheep.getEntityData().getBoolean("isBalding")) {
 									if(!sheep.getSheared()) {
 										sheep.setSheared(true);
@@ -421,9 +423,9 @@ public class RadiationSystemNT {
 											world.spawnEntity(entityitem);
 										}
 									}
-								}
 
-								sheep.getEntityData().setBoolean("isPermanent", true);
+									sheep.getEntityData().setBoolean("isPermanent", true);
+								}
 							} else {
 								sheep.attackEntityFrom(ModDamageSource.radiation, 1000F);
 								HbmLivingProps.setRadiation(sheep, 0);
