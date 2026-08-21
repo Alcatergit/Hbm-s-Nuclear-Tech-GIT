@@ -30,6 +30,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static final DataParameter<Float> SCALE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.FLOAT);
 	public static final DataParameter<Byte> TYPE = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BYTE);
 	public static final DataParameter<Integer> TIME_EXISTED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
+    public static final DataParameter<Integer> TIME_EXISTED_SAVED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.VARINT);
 	public static final DataParameter<Boolean> IS_RELOADED = EntityDataManager.createKey(EntityNukeTorex.class, DataSerializers.BOOLEAN);
 
 	public static final int firstCondenseHeight = 130;
@@ -83,6 +84,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		this.dataManager.register(SCALE, 1.0F);
 		this.dataManager.register(TYPE, (byte) 0);
 		this.dataManager.register(TIME_EXISTED, 0);
+        this.dataManager.register(TIME_EXISTED_SAVED, 0);
 		this.dataManager.register(IS_RELOADED, false);
 	}
 
@@ -107,6 +109,9 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			this.timeExisted = this.dataManager.get(TIME_EXISTED);
             this.timeExistedSaved = this.dataManager.get(TIME_EXISTED);
 		}
+        if (key == TIME_EXISTED_SAVED && this.world.isRemote) {
+            this.timeExistedSaved = this.dataManager.get(TIME_EXISTED_SAVED);
+        }
 	}
 
 	@Override
@@ -126,6 +131,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			int timeExistedTemp = nbt.getInteger("timeExisted");
 			this.timeExisted = timeExistedTemp;
 			this.dataManager.set(TIME_EXISTED, timeExistedTemp);
+            this.timeExistedSaved = timeExistedTemp;
+            this.dataManager.set(TIME_EXISTED_SAVED, timeExistedTemp);
 		}
         //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExisted: " + this.dataManager.get(TIME_EXISTED));
         //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" readEntityFromNBT timeExistedSaved: " + this.dataManager.get(TIME_EXISTED_SAVED));
