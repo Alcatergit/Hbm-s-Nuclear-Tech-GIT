@@ -541,6 +541,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			for(FFPipeNetworkMk2 net : pipes) {
 				pipeBlocks.addAll(net.getPipePositions().keySet());
 				pipeReceivers.addAll(net.getFillableTiles().values());
+				pipeReceivers.addAll(net.getProviderTiles().values());
 			}
 
 			int count = 0;
