@@ -236,7 +236,6 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 		}
 
 		int bottomHeight = lastGapHeight;
-		float totalDamage = 0F;
 
 		for (int y = lastGapHeight; y <= contactHeight; y++) {
 			pos.setY(y);
