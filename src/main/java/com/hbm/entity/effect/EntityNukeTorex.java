@@ -155,7 +155,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			
 			// spawn ring clouds
 			if(this.ticksExisted < 200) {
-				lifetime *= s;
+				lifetime *= (int) s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
 					cloud.setScale((float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * s), (float) (Math.sqrt(s) * cs + this.ticksExisted * 0.0015 * 6 * cs * s));
