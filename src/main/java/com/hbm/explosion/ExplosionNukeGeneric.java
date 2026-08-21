@@ -537,14 +537,17 @@ public class ExplosionNukeGeneric {
 		}
 	}
 	
+	public static final String SOLINIUM_CONFIG_HEADER =
+			"# Format: modid:blockName|modid:blockName\n" + 
+			"# Left blocks are transformed to right, one per line\n";
+
 	public static void loadSoliniumFromFile(){
 		File config = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/solinium.cfg");
 		if (!config.exists())
 			try {
 				config.getParentFile().mkdirs();
 				FileWriter write = new FileWriter(config);
-				write.write("# Format: modid:blockName|modid:blockName\n" + 
-							"# Left blocks are transformed to right, one per line\n");
+				write.write(SOLINIUM_CONFIG_HEADER);
 				write.close();
 				
 			} catch (IOException e) {
@@ -558,16 +561,19 @@ public class ExplosionNukeGeneric {
 			try {
 				read = new BufferedReader(new FileReader(config));
 				String currentLine = null;
+				soliniumConfig.clear();
 				
 				while((currentLine = read.readLine()) != null){
 					lineCount ++;
 					if(currentLine.startsWith("#") || currentLine.isEmpty())
 						continue;
-					String[] blocks = currentLine.trim().split("|");
+					String[] blocks = currentLine.trim().split("\\|");
 					if(blocks.length != 2)
 						continue;
 					String[] modidBlock1 = blocks[0].split(":");
 					String[] modidBlock2 = blocks[1].split(":");
+					if(modidBlock1.length != 2 || modidBlock2.length != 2)
+						continue;
 					Block b1 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock1[0], modidBlock1[1]));
 					Block b2 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock2[0], modidBlock2[1]));
 					if(b1 == null || b2 == null){
