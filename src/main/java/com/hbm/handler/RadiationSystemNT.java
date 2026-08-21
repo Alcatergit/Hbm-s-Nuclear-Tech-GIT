@@ -344,7 +344,7 @@ public class RadiationSystemNT {
 								animal.resetInLove();
 								animal.setGrowingAge(2147483647);
 							}
-						} else if((eRad > 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && !(entity instanceof EntityPlayerMP))) {
+						} else if((eRad > 500 || entity.getEntityData().getBoolean("isPermanent")) && (!ContaminationUtil.checkConfigEntityImmunity(entity) && (!(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && !(entity instanceof EntityPlayerMP)))) {
 							if(!entity.getEntityData().hasKey("isPermanent")) {
 								entity.getEntityData().setBoolean("isPermanent", true);
 							}
@@ -452,7 +452,7 @@ public class RadiationSystemNT {
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
 
-                            if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+							if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							if (entity.isChild()) creep.setChild(true);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 							creep.setRotationYawHead(entity.rotationYaw);
@@ -477,7 +477,7 @@ public class RadiationSystemNT {
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
 
-                            if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
+							if(!entity.isDead) creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
@@ -559,6 +559,7 @@ public class RadiationSystemNT {
 								NBTTagCompound horseNBT = new NBTTagCompound();
 								horsie.writeEntityToNBT(horseNBT);
 								skehorse.readEntityFromNBT(horseNBT);
+								skehorse.setHealth(skehorse.getMaxHealth());
 								HbmLivingProps.setRadiation(skehorse, 0);
 								skehorse.clearActivePotions();
 
@@ -627,6 +628,7 @@ public class RadiationSystemNT {
 								NBTTagCompound horseNBT = new NBTTagCompound();
 								horsie.writeEntityToNBT(horseNBT);
 								zomhorsie.readEntityFromNBT(horseNBT);
+								zomhorsie.setHealth(zomhorsie.getMaxHealth());
 								HbmLivingProps.setRadiation(zomhorsie, 0);
 								zomhorsie.clearActivePotions();
 
