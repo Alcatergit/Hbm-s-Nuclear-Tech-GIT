@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.ISound;
 import net.minecraft.client.audio.MovingSound;
 import net.minecraft.client.entity.EntityPlayerSP;
+import net.minecraft.entity.Entity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.SoundEvent;
 import net.minecraftforge.fml.relauncher.Side;
@@ -13,12 +14,30 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class AudioDynamic extends MovingSound {
 
 	public float intendedVolume;
+	public float maxVolume;
+	public float range;
+	public int keepAlive;
+	public int timeSinceKA;
+	public boolean shouldExpire = false;
+	private boolean nonLegacy;
+	public Entity parentEntity = null;
 
 	protected AudioDynamic(SoundEvent loc, SoundCategory cat) {
 		super(loc, cat);
 		this.repeat = true;
 		this.attenuationType = ISound.AttenuationType.NONE;
 		this.intendedVolume = 10;
+		this.maxVolume = 10;
+	}
+
+	protected AudioDynamic(SoundEvent loc, SoundCategory cat, boolean useNewSystem, float maxVolume, float range, float intendedVolume) {
+		super(loc, cat);
+		this.repeat = true;
+		this.attenuationType = ISound.AttenuationType.NONE;
+		this.maxVolume = maxVolume;
+		this.range = range;
+		this.intendedVolume = intendedVolume;
+		this.nonLegacy = useNewSystem;
 	}
 	
 	public void setPosition(float x, float y, float z) {
@@ -36,6 +55,11 @@ public class AudioDynamic extends MovingSound {
 	public void update() {
 		EntityPlayerSP player = Minecraft.getMinecraft().player;
 		float f = 0;
+
+		if (parentEntity != null && player != parentEntity) {
+			this.setPosition((float) parentEntity.posX, (float) parentEntity.posY, (float) parentEntity.posZ);
+		}
+
 		if(player != null) {
 			if(attenuationType == ISound.AttenuationType.LINEAR){
 				/*float f3 = intendedVolume;
@@ -49,8 +73,38 @@ public class AudioDynamic extends MovingSound {
                 volume = 1-f2/f;
                 System.out.println(volume);*/
 			} else {
-				f = (float)Math.sqrt(Math.pow(xPosF - player.posX, 2) + Math.pow(yPosF - player.posY, 2) + Math.pow(zPosF - player.posZ, 2));
-				volume = func(f, intendedVolume);
+				if (nonLegacy) {
+					if (player != parentEntity) {
+						f = (float) Math.sqrt(Math.pow(xPosF - player.posX, 2)
+								+ Math.pow(yPosF - player.posY, 2)
+								+ Math.pow(zPosF - player.posZ, 2));
+						volume = func(f, intendedVolume);
+					} else {
+						if (player == parentEntity) {
+							this.setPosition((float) parentEntity.posX, (float) parentEntity.posY + 10, (float) parentEntity.posZ);
+						}
+						volume = maxVolume;
+					}
+
+					if (this.shouldExpire) {
+						if (this.timeSinceKA > this.keepAlive) {
+							this.stop();
+						}
+						this.timeSinceKA++;
+					}
+				} else {
+					if (player != parentEntity) {
+						f = (float) Math.sqrt(Math.pow(xPosF - player.posX, 2)
+								+ Math.pow(yPosF - player.posY, 2)
+								+ Math.pow(zPosF - player.posZ, 2));
+						volume = func(f, intendedVolume);
+					} else {
+						if (player == parentEntity) {
+							this.setPosition((float) parentEntity.posX, (float) parentEntity.posY + 10, (float) parentEntity.posZ);
+						}
+						volume = intendedVolume;
+					}
+				}
 			}
 		} else {
 			volume = intendedVolume;
@@ -72,8 +126,25 @@ public class AudioDynamic extends MovingSound {
 	public void setPitch(float pitch) {
 		this.pitch = pitch;
 	}
+
+	public void setRange(float range) {
+		this.range = range;
+	}
+
+	public void setKeepAlive(int keepAlive) {
+		this.keepAlive = keepAlive;
+		this.shouldExpire = true;
+	}
+
+	public void keepAlive() {
+		this.timeSinceKA = 0;
+	}
 	
 	public float func(float f, float v) {
 		return (f / v) * -2 + 2;
+	}
+
+	public boolean isPlaying() {
+		return Minecraft.getMinecraft().getSoundHandler().isSoundPlaying(this);
 	}
 }
