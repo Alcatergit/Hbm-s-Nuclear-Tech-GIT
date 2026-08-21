@@ -44,6 +44,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	public FluidTank[] tanks;
 	public boolean meltdownTick = false;
 	private boolean lastTickValid = false;
+	private boolean chunkJustLoaded = false;
 	
 	public TileEntityCore() {
 		super(3);
@@ -66,14 +67,19 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			meltdownTick = false;
 
 			ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
-			lastTickValid =
+			boolean currentTickValid =
 					provider.chunkExists(chunkX, chunkZ) &&
 					provider.chunkExists(chunkX + 1, chunkZ + 1) &&
 					provider.chunkExists(chunkX + 1, chunkZ - 1) &&
 					provider.chunkExists(chunkX - 1, chunkZ + 1) &&
 					provider.chunkExists(chunkX - 1, chunkZ - 1);
 
-			if(lastTickValid && heat > 0 && heat >= field) {
+			if(!lastTickValid && currentTickValid) {
+				chunkJustLoaded = true;
+			}
+			lastTickValid = currentTickValid;
+
+			if(lastTickValid && heat > 0 && heat >= field && !chunkJustLoaded) {
 				int fill = tanks[0].getFluidAmount() + tanks[1].getFluidAmount();
 				int max = tanks[0].getCapacity() + tanks[1].getCapacity();
 				int mod = heat * 10;
@@ -152,6 +158,8 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			if(lastTickValid && field > 0) {
 				field -= 1;
 			}
+
+			chunkJustLoaded = false;
 
 			this.markDirty();
 		} else {
