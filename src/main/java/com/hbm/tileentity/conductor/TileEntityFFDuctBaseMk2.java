@@ -82,13 +82,8 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 	private void removeFromNetwork() {
 		if(network == null) return;
 		FFPipeNetworkMk2 oldNet = network;
-		oldNet.removePipe(pos);
 		network = null;
-		if(!oldNet.getPipePositions().isEmpty()) {
-			oldNet.splitIfDisconnected(world);
-		} else {
-			oldNet.destroy();
-		}
+		oldNet.leaveLink(world, this);
 	}
 
 	public Fluid getType() {
@@ -213,13 +208,7 @@ public class TileEntityFFDuctBaseMk2 extends TileEntity implements IFluidPipeMk2
 		if(te instanceof IFluidPipeMk2 pipe) {
 			FFPipeNetworkMk2 net = pipe.getNetwork();
 			if(net != null) {
-				net.removePipe(pos);
-				pipe.setNetwork(null);
-				if(!net.getPipePositions().isEmpty()) {
-					net.splitIfDisconnected(world);
-				} else {
-					net.destroy();
-				}
+				net.leaveLink(world, pipe);
 			}
 		}
 	}
