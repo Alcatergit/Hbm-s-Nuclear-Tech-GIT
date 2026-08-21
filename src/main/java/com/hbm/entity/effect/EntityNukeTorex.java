@@ -575,6 +575,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public static void statFacBale(World world, double x, double y, double z, float scale) {
 		EntityNukeTorex torex = new EntityNukeTorex(world).setScale(MathHelper.clamp(scale * 0.01F, 0.25F, 5F)).setType(1);
 		torex.setPosition(x, y, z);
+        torex.startTime = world.getTotalWorldTime();
 		world.spawnEntity(torex);
 	}
 }
