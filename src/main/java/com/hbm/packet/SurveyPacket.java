@@ -1,6 +1,6 @@
 package com.hbm.packet;
 
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
@@ -39,7 +39,7 @@ public class SurveyPacket implements IMessage {
 
 			Minecraft.getMinecraft().addScheduledTask(() -> {
 				try {
-					TileEntityRBMKBase.rbmkHeight = m.rbmkHeight;
+					RBMKDials.clientColumnHeight = m.rbmkHeight;
 				} catch(Exception x) {
 				}
 			});
