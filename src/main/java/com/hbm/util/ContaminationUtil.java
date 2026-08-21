@@ -313,7 +313,7 @@ public class ContaminationUtil {
 	}
 
 	public static void neutronActivateItem(ItemStack stack, float rad, float decay){
-		if(stack != null && !stack.isEmpty() && stack.getCount() == 1 && !isRadItem(stack)){
+		if(stack != null && !stack.isEmpty() && !isRadItem(stack)){
 
 			NBTTagCompound nbt;
 			if(stack.hasTagCompound()){
@@ -576,8 +576,8 @@ public class ContaminationUtil {
 							p.setHeldItem(EnumHand.OFF_HAND, new ItemStack(ModItems.marshmallow_roasted));
 						}
 					}
-					e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
 					e.setFire(5);
+					e.attackEntityFrom(DamageSource.IN_FIRE, fireDmg);
 				}
 			}
 
