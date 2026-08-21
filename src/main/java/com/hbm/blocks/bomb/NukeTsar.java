@@ -387,9 +387,9 @@ public class NukeTsar extends BlockContainer implements IBomb {
 		// ========== Modified: Adjusted tooltip display logic as required ==========
 		// Display in priority order: isItemReady < isItemStage1Filled / isItemStage2Filled < isItemStage3Filled
 		if (isItemStage3Filled(stack)) {
-			tooltip.add("§5[Is ready]§r"); // Purple when isItemStage3Filled condition is true
+			tooltip.add("§c[Is ready]§r"); // Red when isItemStage3Filled condition is true
 		} else if (isItemStage1Filled(stack) || isItemStage2Filled(stack)) {
-			tooltip.add("§c[Is ready]§r"); // Red when isItemStage1Filled or isItemStage2Filled condition is true
+			tooltip.add("§6[Is ready]§r"); // Gold when isItemStage1Filled or isItemStage2Filled condition is true
 		} else if (isItemReady(stack)) {
 			tooltip.add("§2[Is ready]§r"); // Dark green when isItemReady condition is true
 		}
