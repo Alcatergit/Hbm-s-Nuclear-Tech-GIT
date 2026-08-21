@@ -1,7 +1,9 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.tileentity.INBTPacketReceiver;
 
@@ -62,7 +64,24 @@ public class TileEntitySolarBoiler extends TileEntity implements INBTPacketRecei
     public void update() {
 
         if(!world.isRemote) {
-            
+
+            int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
+            if(feedSpace > 0 && types[0] != null) {
+                for(EnumFacing dir : EnumFacing.VALUES) {
+                    BlockPos neighborPos = pos.offset(dir);
+                    TileEntity te = world.getTileEntity(neighborPos);
+                    if(te instanceof IFluidPipeMk2) {
+                        FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
+                        if(network != null && network.getType() == types[0]) {
+                            FluidStack pulled = network.drain(new FluidStack(types[0], feedSpace), true);
+                            if(pulled != null)
+                                tanks[0].fill(pulled, true);
+                            break;
+                        }
+                    }
+                }
+            }
+
             setupTanks();
             tryConvert();
             
