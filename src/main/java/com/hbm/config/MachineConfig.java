@@ -46,6 +46,7 @@ public class MachineConfig {
 	public static int crateByteSize = 8;
 
 	public static int rbmkJumpTemp = 1250;
+	public static int rbmkMeltdownTemp = 1500;
 
 	public static boolean chemplantKeepOilProcessing = false;
 	
@@ -103,6 +104,7 @@ public class MachineConfig {
 		
 		crateByteSize = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(27, "crateMaxByteSize"), "Controls how big the maximum storage size of mined crates can be. Warning going beond 32kb can cause freezing/crashes. - <kb> (int)", 8);
 		rbmkJumpTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(28, "rbmkJumpTemp"), "Controls at which rbmk column temperature the lid jumping begins. Can not be < 20°C. Set to > 1500°C to turn off. Default is 1250°C - <temp> (int)", 1250);
+		rbmkMeltdownTemp = CommonConfig.createConfigInt(config, CATEGORY_MACHINE, generateConfigName(30, "rbmkMeltdownTemp"), "Controls the temperature at which RBMK columns begin to melt. Default is 1500°C - <temp> (int)", 1500);
 		
 		chemplantKeepOilProcessing = CommonConfig.createConfigBool(config, CATEGORY_MACHINE, generateConfigName(29, "chemplantKeepOilProcessing"), "If false then the chemplant recipes processing Heavyoil, Industrial Oil, Naphtha, Light Oil will be removed. Otherwise not", false);
 	}
