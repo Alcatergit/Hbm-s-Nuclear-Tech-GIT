@@ -71,6 +71,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public int ticksExistedSaved = 0;
     public int ticksExistedSaved2 = 0;
 	public boolean dataReady = false;
+    public boolean isFirstEqual = true;
     public boolean needScale = false;
 	public boolean isReloaded = false;
     public boolean isReloaded2 = false;
@@ -123,12 +124,14 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 if (this.needScale) {
                     this.convectionHeight = this.convectionHeight * this.scale;
                     this.rollerSize = this.rollerSize * this.scale;
-                    this.needScale = false;
                 }
 				this.dataReady = true;
 			} else if (this.isReloaded2) {
                 if (this.ticksExisted != this.dataManager.get(TICKS_EXISTED)) {
                     this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
+                } else if (this.isFirstEqual) {
+                    this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED);
+                    this.isFirstEqual = false;
                 }
             }
 		}
