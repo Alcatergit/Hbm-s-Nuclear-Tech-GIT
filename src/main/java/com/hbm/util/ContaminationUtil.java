@@ -436,7 +436,7 @@ public class ContaminationUtil {
 		if(!(e instanceof EntityLivingBase entity))
 			return;
 
-		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+		if(e instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 
 		if(e instanceof EntityPlayer && e.ticksExisted < 20)
@@ -458,7 +458,7 @@ public class ContaminationUtil {
 		if(!(e instanceof EntityLivingBase entity))
 			return;
 
-		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+		if(e instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 
 		if(e instanceof EntityPlayer && e.ticksExisted < 20)
@@ -480,7 +480,7 @@ public class ContaminationUtil {
 		if(e instanceof EntityQuackos || e instanceof EntityOcelot)
 			return;
 
-		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+		if(e instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 
 		if(e instanceof EntityPlayer && e.ticksExisted < 200)
@@ -501,7 +501,7 @@ public class ContaminationUtil {
 		if(e instanceof IRadiationImmune)
 			return;
 
-		if(e instanceof EntityPlayer && ((EntityPlayer)e).capabilities.isCreativeMode)
+		if(e instanceof EntityPlayer p && (p.capabilities.isCreativeMode || p.isSpectator()))
 			return;
 
 		HbmLivingProps.incrementDigamma(entity, f);
@@ -683,7 +683,7 @@ public class ContaminationUtil {
 				case DIGAMMA2: break;
 			}
 
-			if(player.capabilities.isCreativeMode && cont != ContaminationType.NONE){
+			if((player.capabilities.isCreativeMode || player.isSpectator()) && cont != ContaminationType.NONE){
 				if(hazard == HazardType.NEUTRON)
 					HbmLivingProps.setNeutron(entity, amount);
 				return false;
