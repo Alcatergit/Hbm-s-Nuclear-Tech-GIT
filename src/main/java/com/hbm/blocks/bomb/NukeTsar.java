@@ -404,11 +404,11 @@ public class NukeTsar extends BlockContainer implements IBomb {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 				
 				// Use the conditional statement corresponding to isReady directly: core and four lens slots.
-				return checkSlotItem(inventoryTag, 0, ModItems.man_core) && // 核心槽位
-					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) && // 左上镜片槽位
-					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) && // 右上镜片槽位
-					   checkSlotItem(inventoryTag, 3, ModItems.man_explosive8) && // 左下镜片槽位
-					   checkSlotItem(inventoryTag, 4, ModItems.man_explosive8); // 右下镜片槽位
+				return checkSlotItem(inventoryTag, 0, ModItems.man_core) && // Core slot
+					   checkSlotItem(inventoryTag, 1, ModItems.man_explosive8) && // upper left lens slot
+					   checkSlotItem(inventoryTag, 2, ModItems.man_explosive8) && // upper right lens slot
+					   checkSlotItem(inventoryTag, 3, ModItems.man_explosive8) && // lower left lens slot
+					   checkSlotItem(inventoryTag, 4, ModItems.man_explosive8); // lower right lens slot
 			}
 		}
 		
@@ -423,7 +423,7 @@ public class NukeTsar extends BlockContainer implements IBomb {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 				
 				// Use the conditional statement corresponding to isStage1Filled directly: isReady + first stage slot
-				return isItemReady(stack) && // 基础条件
+				return isItemReady(stack) && // Basic conditions
 					   checkSlotItem(inventoryTag, 5, ModItems.mike_core) && // First stage slot placement
 					   checkSlotItem(inventoryTag, 6, ModItems.mike_deut); // First stage slot placement
 			}
@@ -440,7 +440,7 @@ public class NukeTsar extends BlockContainer implements IBomb {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 				
 				// Use the conditional statement corresponding to isStage2Filled directly: isReady + second stage slot
-				return isItemReady(stack) && // 基础条件
+				return isItemReady(stack) && // Basic conditions
 					   checkSlotItem(inventoryTag, 7, ModItems.mike_core) && // Second stage slot placement
 					   checkSlotItem(inventoryTag, 8, ModItems.mike_deut); // Second stage slot placement
 			}
@@ -457,7 +457,7 @@ public class NukeTsar extends BlockContainer implements IBomb {
 				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
 				
 				// Use the conditional statement corresponding to isStage3Filled directly: isStage1Filled + second stage slot
-				return isItemStage1Filled(stack) && // 第一阶段条件
+				return isItemStage1Filled(stack) && // First stage conditions
 					   checkSlotItem(inventoryTag, 7, ModItems.mike_core) && // Second stage slot placement
 					   checkSlotItem(inventoryTag, 8, ModItems.mike_deut); // Second stage slot placement
 			}
