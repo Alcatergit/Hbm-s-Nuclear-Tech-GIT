@@ -514,10 +514,16 @@ public class RadiationSystemNT {
 								DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
 								double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
 								isSkeletonHorse = r < f * 0.04D;
-								isTrap = r < f * 0.02D;
 							}
 
 							if(isSkeletonHorse) {
+                                if(!horsie.isDead) {
+                                    double r = world.rand.nextDouble();
+                                    DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
+                                    double f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() && world.isRainingAt(new BlockPos(horsie.posX, horsie.posY, horsie.posZ)) ? 2.0 : 1.0);
+                                    isTrap = r < f * 0.02D;
+                                }
+
 								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
 								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 								skehorse.setRotationYawHead(entity.rotationYaw);
