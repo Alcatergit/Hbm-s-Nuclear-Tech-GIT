@@ -1,13 +1,12 @@
 package com.hbm.render.entity.layers;
 
+import com.hbm.main.ResourceManager;
 import net.minecraft.client.renderer.entity.layers.LayerRenderer;
-import com.hbm.lib.RefStrings;
 import com.hbm.render.entity.RenderNuclearCreeper;
 import com.hbm.entity.mob.EntityNuclearCreeper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelCreeper;
 import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
