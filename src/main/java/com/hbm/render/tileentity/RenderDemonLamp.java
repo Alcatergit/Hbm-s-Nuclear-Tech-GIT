@@ -31,7 +31,7 @@ public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLa
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 
-		// ==================== Modification: Rotate rendering based on the block's orientation ====================
+		// ==================== MODIFICATION: Rotate rendering based on the block's orientation ====================
 		// According to the orientation rotation model and rays
 		te.getWorld().getBlockState(te.getPos()).getBlock();
 
@@ -61,7 +61,7 @@ public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLa
 		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
 
-		// ==================== Modification: Change the initial direction of the rays from east to north ====================
+		// ==================== MODIFICATION: Change the initial direction of the rays from east to north ====================
 		Vec3 vec = Vec3.createVectorHelper(0, 0, -1); // Change to face north (negative Z direction)
 
 		GlStateManager.depthMask(false);
