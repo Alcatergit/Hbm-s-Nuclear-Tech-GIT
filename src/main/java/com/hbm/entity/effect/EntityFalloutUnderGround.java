@@ -276,7 +276,7 @@ public class EntityFalloutUnderGround extends EntityChunky {
 
 			} else if(bblock instanceof BlockSponge) {
 				if (b.getValue(BlockSponge.WET)) {
-					world.setBlockState(pos, Blocks.SPONGE.getDefaultState());
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 				return;
 
