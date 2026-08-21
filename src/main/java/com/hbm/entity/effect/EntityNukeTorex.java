@@ -59,7 +59,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     public double lastSpawnY = -1;
     public ArrayList<Cloudlet> cloudlets = new ArrayList<>();
     public int maxAge = 1000;
-    public float humidity = -1;
     public float scale = 1.0F;
     public boolean didPlaySound = false;
     public boolean didShake = false;
@@ -181,8 +180,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.isReloaded2 = true;
                 this.isScaled = true;
             }
-
-            if(humidity == -1) humidity = world.getBiome(this.getPosition()).getRainfall();
 
             if(lastSpawnY == -1) {
                 lastSpawnY = posY - 3;
