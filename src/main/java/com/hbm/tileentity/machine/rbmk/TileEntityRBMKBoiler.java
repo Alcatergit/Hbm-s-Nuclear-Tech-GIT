@@ -10,6 +10,8 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -22,6 +24,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -43,6 +46,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 	public byte timer = 0;
 	public static final byte gamerulePollTime = 100;
     public static final int waterCapacity = 100000;
+    private int ventDelay = 0;
 
     public TileEntityRBMKBoiler() {
 		super(0);
@@ -76,18 +80,7 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 				gameruleBoilerHeatConsumption = RBMKDials.getBoilerHeatConsumption(world);
 			}
 
-			int feedSpace = waterCapacity - feed.getFluidAmount();
-			if(feedSpace > 0){
-				TileEntity te = world.getTileEntity(pos.down());
-				if(te instanceof IFluidPipeMk2){
-					FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-					if(network != null && network.getType() == FluidRegistry.WATER){
-						FluidStack pulled = network.drain(new FluidStack(FluidRegistry.WATER, feedSpace), true);
-						if(pulled != null)
-							feed.fill(pulled, true);
-					}
-				}
-			}
+			if(this.ventDelay > 0) this.ventDelay--;
 
 			if(feed.getFluidAmount() < waterCapacity || steam.getFluidAmount() > 0)
 				PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, feed, steam), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
@@ -111,6 +104,15 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 			}
 			if(steam.getFluidAmount() > 0)
 				fillFluidInit(steam);
+
+			if(steam.getFluidAmount() >= steam.getCapacity() && this.ventDelay <= 0) {
+				double ventY = pos.getY() - 0.5 + RBMKDials.getColumnHeight(world) + this.jumpheight;
+				NBTTagCompound ventData = new NBTTagCompound();
+				ventData.setString("type", "rbmkSteam");
+				PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(ventData, pos.getX() + 0.25 + world.rand.nextInt(2) * 0.5, ventY, pos.getZ() + 0.25 + world.rand.nextInt(2) * 0.5), new TargetPoint(world.provider.getDimension(), pos.getX() + 0.5, ventY, pos.getZ() + 0.5, 100));
+				world.playSound(null, pos.getX() + 0.5, ventY, pos.getZ() + 0.5, HBMSoundHandler.steamEngineOperate, SoundCategory.BLOCKS, 2.0F, 1.0F + world.rand.nextFloat() * 0.25F);
+				this.ventDelay = 20 + world.rand.nextInt(10);
+			}
 		}
 		
 		super.update();
@@ -366,6 +368,9 @@ public class TileEntityRBMKBoiler extends TileEntityRBMKSlottedBase implements I
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
+		if(resource != null && resource.getFluid() == FluidRegistry.WATER){
+			return feed.fill(resource, doFill);
+		}
 		return 0;
 	}
 
