@@ -332,7 +332,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if (b == ModBlocks.ore_nether_uranium || isOreDictMatch(b, "oreUranium")) {
+			else if (b == ModBlocks.ore_nether_uranium || isOreDictMatch(b, "oreNetherUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
@@ -341,7 +341,7 @@ public class ExplosionNukeGeneric {
 				}
 			}
 			
-			else if (b == ModBlocks.ore_gneiss_uranium || isOreDictMatch(b, "oreUranium")) {
+			else if (b == ModBlocks.ore_gneiss_uranium || isOreDictMatch(b, "oreNetherUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
