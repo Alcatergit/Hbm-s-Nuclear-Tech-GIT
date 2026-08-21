@@ -1,5 +1,6 @@
 package com.hbm.render.entity;
 
+import com.hbm.render.entity.layers.LayerTaintedCreeperCharge;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.mob.EntityTaintedCreeper;
@@ -17,6 +18,7 @@ public class RenderTaintedCreeper extends RenderLiving<EntityTaintedCreeper> {
 	
 	public RenderTaintedCreeper(RenderManager rendermanagerIn) {
 		super(rendermanagerIn, new ModelCreeper(), 0.5F);
+        this.addLayer(new LayerTaintedCreeperCharge(this));
 	}
 
 	@Override
