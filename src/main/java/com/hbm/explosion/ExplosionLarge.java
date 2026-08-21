@@ -9,7 +9,10 @@ import com.hbm.entity.particle.EntityGasFlameFX;
 import com.hbm.entity.projectile.EntityOilSpill;
 import com.hbm.entity.projectile.EntityRubble;
 import com.hbm.entity.projectile.EntityShrapnel;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.ModDamageSource;
+import com.hbm.main.MainRegistry;
+import com.hbm.main.ModEventHandlerClient;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
@@ -19,16 +22,17 @@ import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.lwjgl.Sys;
 
 public class ExplosionLarge {
 
