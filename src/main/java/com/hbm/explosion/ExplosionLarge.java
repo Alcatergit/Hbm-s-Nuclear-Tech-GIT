@@ -236,7 +236,7 @@ public class ExplosionLarge {
 		if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 5 * strength) {
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = (float) player.getDistance(x, y, z);
-			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeNear, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * (dist < 2F * strength ? 1F : ((strength * 15F) - dist) / (strength * 15F))), 0.9F + rand.nextFloat() * 0.2F);
+			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeNear, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * (dist < 2F * strength ? 1F : ((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F))), 0.9F + rand.nextFloat() * 0.2F);
 			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
 			ModEventHandlerClient.shakeMultiplier = Math.max(((strength * 2D) - (double) dist) / (strength * 2D), 0D);
 			player.hurtTime = Math.max((int) (((((strength * 2F) - dist)) / (strength * 2F)) * 150F), 0);
@@ -245,7 +245,7 @@ public class ExplosionLarge {
 		} else if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(x, y, z) < 15 * strength) {
 			EntityPlayer player = MainRegistry.proxy.me();
 			float dist = (float) player.getDistance(x, y, z);
-			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeFar, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * Math.max(((strength * 15F) - dist) / (strength * 15F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
+			MainRegistry.proxy.playSoundClient(x, y, z, HBMSoundHandler.explosionLargeFar, SoundCategory.PLAYERS, (float) Math.cbrt(10_000F * Math.max(((strength * 13F) - (dist - (strength * 2F))) / (strength * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
 		}
 	}
 
