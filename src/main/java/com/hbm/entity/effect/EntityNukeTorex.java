@@ -162,7 +162,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
             int explosionRadius = (int)(s * 100.0);
             int blastDuration = (int)Math.ceil(80 * Math.cbrt(explosionRadius / 100.0));
-            double shockSpeed = 2 * explosionRadius / (double)blastDuration;
+            double shockSpeed = Math.max(2D, 2D * explosionRadius / (double)blastDuration);
 
             if(this.ticksExisted == 1 || (!this.isInitialized && !this.isScaled)){
                 this.setScale((float) s);
