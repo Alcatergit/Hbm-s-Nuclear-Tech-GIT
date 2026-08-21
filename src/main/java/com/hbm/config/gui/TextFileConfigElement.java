@@ -53,7 +53,7 @@ public class TextFileConfigElement extends AbstractConfigElement {
 		}
 	}
 
-	private void saveToFile() {
+	public void saveToFile() {
 		try (FileWriter writer = new FileWriter(file)) {
 			writer.write(header);
 			for (String line : lines) {
