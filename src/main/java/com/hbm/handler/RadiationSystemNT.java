@@ -324,7 +324,7 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
-						if(e instanceof EntityAnimal animal && (eRad >= 500 || animal.getEntityData().getBoolean("isPermanent")) && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse)) {
+						if(e instanceof EntityAnimal animal && (eRad > 500 || animal.getEntityData().getBoolean("isPermanent")) && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse)) {
 							if(!animal.getEntityData().hasKey("isPermanent")) {
 								animal.getEntityData().setBoolean("isPermanent", true);
 							}
@@ -344,7 +344,7 @@ public class RadiationSystemNT {
 								animal.setGrowingAge(2147483647);
 								animal.getEntityData().setInteger("InLove", 0);
 							}
-						} else if(e instanceof AbstractIllager illager && (eRad >= 500 || illager.getEntityData().getBoolean("isPermanent"))) {
+						} else if(e instanceof AbstractIllager illager && (eRad > 500 || illager.getEntityData().getBoolean("isPermanent"))) {
 							if(!illager.getEntityData().hasKey("isPermanent")) {
 								illager.getEntityData().setBoolean("isPermanent", true);
 							}
