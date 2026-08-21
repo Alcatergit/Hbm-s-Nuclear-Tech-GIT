@@ -52,9 +52,6 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.hbm.entity.mob.EntityGlowingOne.convertToGlow;
-import static com.hbm.entity.mob.EntityThermonuclearCat.convertToThermo;
-
 public class EntityNukeExplosionMK5 extends EntityChunky {
 	//Strength of the blast
 	public int strength;
@@ -257,13 +254,11 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			double eRads = rads;
 			eRads /= res;  // Obstacle attenuation
 			eRads /= len * len;  // Distance squared decay
-			if (eRads >= 100 && e instanceof EntityZombie) {
-				if(e instanceof EntityGlowingOne) continue;
-				convertToGlow(world, (EntityZombie) e);
+			if (eRads >= 100 && (!(e instanceof EntityGlowingOne) && e instanceof EntityZombie)) {
+                EntityGlowingOne.convertToGlow(world, (EntityZombie) e);
 			}
-			if (eRads >= 100 && e instanceof EntityOcelot && this.radius > 120) {
-				if(e instanceof EntityThermonuclearCat) continue;
-				convertToThermo(world, (EntityOcelot) e);
+			if (eRads >= 100 && (!(e instanceof EntityThermonuclearCat) && e instanceof EntityOcelot) && this.radius > 120) {
+                EntityThermonuclearCat.convertToThermo(world, (EntityOcelot) e);
 			}
             ContaminationUtil.contaminate(e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, (float)eRads);
 		}
