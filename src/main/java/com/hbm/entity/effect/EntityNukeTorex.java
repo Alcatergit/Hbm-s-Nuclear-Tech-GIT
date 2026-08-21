@@ -211,22 +211,18 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			if(this.isReloaded && ticksExisted2 < 100){
 				this.speedMultiplier = 2.0D;
-				if (this.ticksExistedSaved + 200 > this.maxAge * 2 / 3) {
-					simSpeed = 1.0D;
-					lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
-				}
+                simSpeed = 1.0D;
+                lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
 			} else if(this.isReloaded){
 				this.speedMultiplier = Math.max(1.0D, this.speedMultiplier - 0.05D);
-				if (this.ticksExistedSaved + 200 > this.maxAge * 2 / 3) {
-					// Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
-					double progress = Math.min(1.0D, (ticksExisted2 - 100) / 20.0D);
-					double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
-					double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
-					double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
-					double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
-					simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
-					lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
-				}
+                // Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
+                double progress = Math.min(1.0D, (ticksExisted2 - 100) / 20.0D);
+                double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
+                double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
+                double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
+                double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
+                simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
+                lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
 			}
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate simSpeed: " + simSpeed);
