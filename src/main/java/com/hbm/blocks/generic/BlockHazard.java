@@ -1,29 +1,33 @@
 package com.hbm.blocks.generic;
 
+import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.BlockBase;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.hazard.HazardEntry;
+import com.hbm.hazard.HazardSystem;
+import com.hbm.hazard.type.HazardTypeRadiation;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.potion.HbmPotion;
-import com.hbm.hazard.HazardSystem;
 
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -33,12 +37,9 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public class BlockHazard extends BlockBase {
 	
 	private float radIn = 0.0F;
-	private float radMax = 0.0F;
-	private float rad3d = 0.0F;
 	private ExtDisplayEffect extEffect = null;
 	
 	private boolean beaconable = false;
-	
 	
 	public BlockHazard(Material mat, String s) {
 		super(mat, s);
@@ -131,17 +132,11 @@ public class BlockHazard extends BlockBase {
 
 	public BlockHazard addRadiation(float radiation) {
 		this.radIn = radiation * 0.1F;
-		this.radMax = radiation;
 		return this;
 	}
 
 	public BlockHazard makeBeaconable() {
 		this.beaconable = true;
-		return this;
-	}
-
-	public BlockHazard addRad3d(int rad3d) {
-		this.rad3d = rad3d;
 		return this;
 	}
 
@@ -152,11 +147,24 @@ public class BlockHazard extends BlockBase {
 	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
-
-		if(this.rad3d > 0){
-			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d, 0, 0, 0, 0);
-			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		float radLevel = HazardSystem.getRawRadsFromBlock(this);
+		if(radLevel > 0) {
+			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, radLevel, 0, 1.0D, null);
 		}
+
+		if(!worldIn.isRemote) {
+			List<EntityLivingBase> entities = worldIn.getEntitiesWithinAABB(EntityLivingBase.class,
+					new AxisAlignedBB(pos).grow(0.001));
+			for(EntityLivingBase e : entities) {
+				applyNonRadHazards(e);
+				if(this == ModBlocks.brick_jungle_mystic) {
+					e.addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
+				}
+			}
+		}
+
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+
 		if(this == ModBlocks.block_meteor_molten) {
         	if(!worldIn.isRemote)
         		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
@@ -171,7 +179,7 @@ public class BlockHazard extends BlockBase {
 	
 	@Override
 	public int tickRate(World world) {
-		if(this.rad3d > 0)
+		if(HazardSystem.getRawRadsFromBlock(this) > 0)
 			return 20;
 		if(this.radIn > 0)
 			return 60+world.rand.nextInt(500);
@@ -181,10 +189,8 @@ public class BlockHazard extends BlockBase {
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state){
 		super.onBlockAdded(worldIn, pos, state);
-		if(this.radIn > 0 || this.rad3d > 0){
-			this.setTickRandomly(true);
-			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-		}
+		this.setTickRandomly(true);
+		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 	}
 
 	@Override
@@ -203,27 +209,14 @@ public class BlockHazard extends BlockBase {
 		LAVAPOP
 	}
 
-	@Override
-	public void onEntityWalk(World worldIn, BlockPos pos, Entity entity) {
-		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
-
-		
-    	if(entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic) {
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
-        }
-	}
-
-	@Override
-	public void onEntityCollision(World worldIn, BlockPos pos, IBlockState state, Entity entity){
-		if(entity instanceof EntityLivingBase)
-			HazardSystem.applyHazards(this, (EntityLivingBase)entity);
-
-		
-    	if(entity instanceof EntityLivingBase && this == ModBlocks.brick_jungle_mystic) {
-    		((EntityLivingBase) entity).addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
-    		return;
-    	}
+	public void applyNonRadHazards(EntityLivingBase entity) {
+		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
+		List<HazardEntry> hazards = HazardSystem.getHazardsFromStack(stack);
+		for(HazardEntry entry : hazards) {
+			if(!(entry.getType() instanceof HazardTypeRadiation)) {
+				entry.applyHazard(stack, entity);
+			}
+		}
 	}
 
 	@Override
