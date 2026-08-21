@@ -563,6 +563,7 @@ public class RadiationSystemNT {
 								skehorse.clearActivePotions();
 
 								skehorse.setGrowingAge(horsie.getGrowingAge());
+								skehorse.resetInLove();
 								if(isTrap) {
 									skehorse.setTrap(true);
 									skehorse.setTemper(0);
@@ -629,6 +630,7 @@ public class RadiationSystemNT {
 								zomhorsie.clearActivePotions();
 
 								zomhorsie.setGrowingAge(horsie.getGrowingAge());
+								zomhorsie.resetInLove();
 								zomhorsie.setTemper(horsie.getTemper());
 								zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
 								zomhorsie.setHorseTamed(horsie.isTame());
