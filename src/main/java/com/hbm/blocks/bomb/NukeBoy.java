@@ -45,10 +45,10 @@ import net.minecraft.world.World;
 public class NukeBoy extends BlockContainer implements IBomb {
 
     public static final PropertyDirection FACING = BlockHorizontal.FACING;
-    
-    // ========== Added: Mark whether the destruction was caused by an explosion ==========
-    private boolean isExploding = false;
+
     // ========== Added: Field for storing information about players who have been vandalized ==========
+    private boolean isExploding = false;
+    // ========== Added: Mark whether the destruction was caused by an explosion ==========
     private EntityPlayer lastBreaker = null;
 
     public NukeBoy(Material materialIn, String s) {
@@ -115,7 +115,6 @@ public class NukeBoy extends BlockContainer implements IBomb {
             // Configure NBT saving is disabled; use the original logic.
             InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
         } else {
-            // ========== New Logic: Using player information recorded by removedByPlayer ==========
             if (tileentity instanceof TileEntityNukeBoy) {
                 TileEntityNukeBoy nukeBoy = (TileEntityNukeBoy)tileentity;
 
