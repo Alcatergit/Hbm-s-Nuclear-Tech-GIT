@@ -78,6 +78,7 @@ import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
 import net.minecraftforge.oredict.OreDictionary;
 import sun.misc.Unsafe;
+import static sun.misc.Unsafe.getUnsafe;
 
 @Spaghetti("this whole class")
 public class Library {
