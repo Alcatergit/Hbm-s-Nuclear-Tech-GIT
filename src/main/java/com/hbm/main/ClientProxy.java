@@ -2388,5 +2388,10 @@ public class ClientProxy extends ServerProxy {
 		}
 		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
+
+    @Override
+    public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+        Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(sound, category, volume, pitch, (float) x, (float) y, (float) z));
+    }
 	
 }
