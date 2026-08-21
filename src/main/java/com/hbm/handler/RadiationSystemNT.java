@@ -16,10 +16,7 @@ import java.util.Set;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.GeneralConfig;
 import com.hbm.config.RadiationConfig;
-import com.hbm.entity.mob.EntityDuck;
-import com.hbm.entity.mob.EntityNuclearCreeper;
-import com.hbm.entity.mob.EntityQuackos;
-import com.hbm.entity.mob.EntityRADBeast;
+import com.hbm.entity.mob.*;
 import com.hbm.interfaces.IRadResistantBlock;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.lib.RefStrings;
@@ -44,7 +41,6 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionEffect;
@@ -324,8 +320,8 @@ public class RadiationSystemNT {
 
 						float eRad = HbmLivingProps.getRadiation(entity);
 
-						if(e instanceof EntityAnimal animal && (eRad > 500 || animal.getEntityData().getBoolean("isPermanent")) && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse)) {
-							if(!animal.getEntityData().hasKey("isPermanent")) {
+						if(entity instanceof EntityAnimal animal && !(entity instanceof EntityCow) && !(entity instanceof EntityHorse) && (eRad >= 500 || animal.getEntityData().getBoolean("isPermanent"))) {
+							if(!(entity instanceof EntitySheep) && !animal.getEntityData().hasKey("isPermanent")) {
 								animal.getEntityData().setBoolean("isPermanent", true);
 							}
 
@@ -344,14 +340,14 @@ public class RadiationSystemNT {
 								animal.resetInLove();
 								animal.setGrowingAge(2147483647);
 							}
-						} else if(e instanceof AbstractIllager illager && (eRad > 500 || illager.getEntityData().getBoolean("isPermanent"))) {
-							if(!illager.getEntityData().hasKey("isPermanent")) {
-								illager.getEntityData().setBoolean("isPermanent", true);
+						} else if((entity instanceof AbstractIllager || entity instanceof EntityFBI || entity instanceof EntityGuardian || ContaminationUtil.getConfigEntityRadResistance(entity) > 0) && (eRad > 500 || entity.getEntityData().getBoolean("isPermanent"))) {
+							if(!entity.getEntityData().hasKey("isPermanent")) {
+								entity.getEntityData().setBoolean("isPermanent", true);
 							}
 
 							// Simulated hematopoietic stem cell death: Vital value cannot be restored
-							if(illager.getHealth() < illager.getMaxHealth()) {
-								illager.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(illager.getHealth());
+							if(entity.getHealth() < entity.getMaxHealth()) {
+								entity.getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(entity.getHealth());
 							}
 						}
 
@@ -384,7 +380,7 @@ public class RadiationSystemNT {
 								sheep.setSheared(true);
 							}
 
-							if (eRad < 250){
+							if(eRad < 250) {
 								if(sheep.getEntityData().getBoolean("isBalding") && !sheep.getEntityData().getBoolean("isPermanent")) {
 									sheep.getEntityData().removeTag("isBalding");
 								}
@@ -412,9 +408,9 @@ public class RadiationSystemNT {
 								if(!sheep.getEntityData().getBoolean("isPermanent")) {
 									if (!sheep.getSheared()){
 										sheep.setSheared(true);
-										int h = 1 + world.rand.nextInt(3);
+										int i = 1 + world.rand.nextInt(3);
 
-										for (int j = 0; j < h; ++j) {
+										for (int j = 0; j < i; ++j) {
 											EntityItem entityitem = new EntityItem(world, sheep.posX, sheep.posY, sheep.posZ,
 													new ItemStack(Blocks.WOOL, 1, sheep.getFleeceColor().getMetadata()));
 
@@ -480,11 +476,10 @@ public class RadiationSystemNT {
 							entity.setDead();
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
-							// Horses transformed into immortal horses: 75% zombie horses, 25% skeleton horses
-							// There is a 1/4 chance that a Skeleton Horse trap will spawn on the Skeleton Horse.
+							// Horses transformed into immortal horses: 75% zombie horses, 25% skeleton horses.
 
 							if(world.rand.nextFloat() < 0.25F) {
-								// 25% chance of spawning a skeleton horses
+								// 18.75% chance of spawning a skeleton horses.
 								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
 								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 								skehorse.setGrowingAge(horsie.getGrowingAge());
@@ -493,7 +488,7 @@ public class RadiationSystemNT {
 								skehorse.setHorseTamed(horsie.isTame());
 								skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
 
-								// There is a 1/4 chance of generating a skeleton horse trap.
+								// 6.25% chance of spawning a skeleton horses trap.
 								if(world.rand.nextFloat() < 0.25F) {
 									skehorse.setTrap(true);
 									skehorse.setHorseTamed(false);
