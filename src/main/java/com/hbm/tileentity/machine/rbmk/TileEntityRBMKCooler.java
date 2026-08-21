@@ -38,7 +38,8 @@ public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHa
 
 	public void getDiagData(NBTTagCompound nbt) {
 		this.writeToNBT(nbt);
-		nbt.removeTag("jumpheight");
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
 	}
 
 	@Override
