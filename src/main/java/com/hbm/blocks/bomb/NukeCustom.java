@@ -555,14 +555,14 @@ public class NukeCustom extends BlockContainer implements IBomb {
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)tempEntity.euph)+"§r");
 
 		} else if (tempEntity.sol > 0) {
-			// Cyan text: Solinium
-			tooltip.add("§3[Solinium]§r");
+			// Light blue text: Solinium
+			tooltip.add("§b[Solinium]§r");
 			float solAdj = tempEntity.getSolAdj();
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)solAdj)+"§r");
 
 		} else if (tempEntity.schrab > 0) {
-			// Light blue text: Schradibium
-			tooltip.add("§b[Schrabidium]§r");
+			// Cyan text: Schradibium
+			tooltip.add("§3[Schrabidium]§r");
 			float schrabAdj = tempEntity.getSchrabAdj();
 			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)schrabAdj)+"§r");
 
