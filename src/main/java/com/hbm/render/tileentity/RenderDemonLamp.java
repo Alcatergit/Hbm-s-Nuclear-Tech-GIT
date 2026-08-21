@@ -1,6 +1,4 @@
 package com.hbm.render.tileentity;
-
-import net.minecraft.block.state.IBlockState;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
@@ -16,7 +14,6 @@ import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 
 public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLamp> {
@@ -35,21 +32,22 @@ public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLa
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
 
 		// ==================== Modification: Rotate rendering based on the block's orientation ====================
-		EnumFacing facing = EnumFacing.NORTH; // Default facing north
-		if(te != null && te.getWorld() != null && te.getPos() != null) {
-			IBlockState state = te.getWorld().getBlockState(te.getPos());
-			if(state.getBlock() instanceof com.hbm.blocks.machine.DemonLamp) {
-				facing = state.getValue(com.hbm.blocks.machine.DemonLamp.FACING);
-			}
-		}
-
 		// According to the orientation rotation model and rays
-		switch(facing) {
-			case SOUTH: GL11.glRotatef(180F, 0F, 1F, 0F); break;
-			case WEST: GL11.glRotatef(90F, 0F, 1F, 0F); break;
-			case EAST: GL11.glRotatef(270F, 0F, 1F, 0F); break;
-			case NORTH:
-			default: break; // The north does not need to rotate.
+		te.getWorld().getBlockState(te.getPos()).getBlock();
+
+		switch(te.getBlockMetadata()) {
+			case 0: // South
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 1: // West
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2: // North
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			case 3: // East
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
 		}
 
 		GlStateManager.enableLighting();
