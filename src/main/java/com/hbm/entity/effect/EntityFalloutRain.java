@@ -543,8 +543,10 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
-				if(dist < s1)
+				if(dist < s1) {
+					world.removeTileEntity(pos);
 					world.setBlockState(pos,ModBlocks.waste_planks.getDefaultState(), 2);
+				}
 				continue;
 			}
 			else if(b.getBlock() == ModBlocks.sellafield_4) {
