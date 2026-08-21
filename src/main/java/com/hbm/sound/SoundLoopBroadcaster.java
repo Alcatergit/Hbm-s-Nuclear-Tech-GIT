@@ -37,7 +37,7 @@ public class SoundLoopBroadcaster extends SoundLoopMachine {
 			// Problem: The volume suddenly jumps from 0 to 0.008 at the 25-unit boundary, causing popping sounds.
 			// New function: Uses a smooth transition to avoid boundary discontinuities.
             volume = smoothVolumeFunc(f, intendedVolume);
-            // ===================
+            // ==============================================================
 
             if(!(player.world.getTileEntity(new BlockPos((int)xPosF, (int)yPosF, (int)zPosF)) instanceof TileEntityBroadcaster)) {
                 this.donePlaying = true;
