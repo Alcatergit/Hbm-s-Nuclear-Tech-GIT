@@ -31,10 +31,14 @@ import net.minecraft.network.datasync.EntityDataManager;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFalloutRain extends EntityChunky implements IConstantRenderer {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FADE_IN_TICKS = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FADE_OUT_TICKS = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final int FADE_DURATION = 100;
 	public boolean done = false;
 	public boolean doFallout = false;
 	public boolean doFlood = false;
@@ -113,6 +117,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(SCALE, 0);
+		this.dataManager.register(FADE_IN_TICKS, FADE_DURATION);
+		this.dataManager.register(FADE_OUT_TICKS, 0);
 	}
 
 	private void gatherChunks() {
@@ -165,16 +171,18 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 			
 		} else {
-			setDead();
+			if (this.dataManager.get(FADE_IN_TICKS) == 0 && this.dataManager.get(FADE_OUT_TICKS) == 0) {
+				this.dataManager.set(FADE_OUT_TICKS, FADE_DURATION);
+			}
 		}
 	}
 
 	@Override
 	public void onUpdate() {
-
 		if(!world.isRemote) {
 			if(!CompatibilityConfig.isWarDim(world)){
 				this.setDead();
+				return;
 			} else if(firstTick) {
 				if(chunksToProcess.isEmpty() && outerChunksToProcess.isEmpty()) gatherChunks();
 				firstTick = false;
@@ -190,17 +198,27 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 			falloutTickNumber++;
 
-			if(this.isDead) {
-				this.done = true;
-				if(RadiationConfig.rain > 0 && doFlood) {
-                    int scale = getScale();
-					if((doFallout && scale > 160) || scale > 200){
-                        world.getWorldInfo().setThundering(true);
-                        world.getWorldInfo().setThunderTime(RadiationConfig.rain);
-                        AuxSavedData.setThunder(world, RadiationConfig.rain);
-					} else if((doFallout && scale > 80) || scale > 100){
-                        world.getWorldInfo().setRaining(true);
-                        world.getWorldInfo().setRainTime(RadiationConfig.rain);
+			int fadeIn = this.dataManager.get(FADE_IN_TICKS);
+			if (fadeIn > 0) {
+				this.dataManager.set(FADE_IN_TICKS, fadeIn - 1);
+			}
+
+			int fadeOut = this.dataManager.get(FADE_OUT_TICKS);
+			if (fadeOut > 0) {
+				this.dataManager.set(FADE_OUT_TICKS, fadeOut - 1);
+				if (fadeOut == 1) {
+					this.setDead();
+					this.done = true;
+					if (RadiationConfig.rain > 0 && doFlood) {
+						int scale = getScale();
+						if ((doFallout && scale > 160) || scale > 200) {
+							world.getWorldInfo().setThundering(true);
+							world.getWorldInfo().setThunderTime(RadiationConfig.rain);
+							AuxSavedData.setThunder(world, RadiationConfig.rain);
+						} else if ((doFallout && scale > 80) || scale > 100) {
+							world.getWorldInfo().setRaining(true);
+							world.getWorldInfo().setRainTime(RadiationConfig.rain);
+						}
 					}
 				}
 			}
@@ -670,7 +688,18 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 		}
 	}
 
-	
+	public float getCurrentAlpha() {
+		int fadeIn = this.dataManager.get(FADE_IN_TICKS);
+		int fadeOut = this.dataManager.get(FADE_OUT_TICKS);
+		float alpha = 1.0F;
+		if (fadeIn > 0) {
+			alpha *= (float)(FADE_DURATION - fadeIn) / FADE_DURATION;
+		}
+		if (fadeOut > 0) {
+			alpha *= (float)(fadeOut - 1) / (FADE_DURATION - 1);
+		}
+		return MathHelper.clamp(alpha, 0.0F, 1.0F);
+	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -681,6 +710,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			outerChunksToProcess.addAll(readChunksFromIntArray(nbt.getIntArray("outerChunks")));
 		doFallout = nbt.getBoolean("doFallout");
 		doFlood = nbt.getBoolean("doFlood");
+		if (nbt.hasKey("fadeIn")) this.dataManager.set(FADE_IN_TICKS, nbt.getInteger("fadeIn"));
+		if (nbt.hasKey("fadeOut")) this.dataManager.set(FADE_OUT_TICKS, nbt.getInteger("fadeOut"));
 	}
 
 	private Collection<Long> readChunksFromIntArray(int[] data) {
@@ -706,6 +737,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 
 		nbt.setIntArray("chunks", writeChunksToIntArray(chunksToProcess));
 		nbt.setIntArray("outerChunks", writeChunksToIntArray(outerChunksToProcess));
+		nbt.setInteger("fadeIn", this.dataManager.get(FADE_IN_TICKS));
+		nbt.setInteger("fadeOut", this.dataManager.get(FADE_OUT_TICKS));
 	}
 
 	private int[] writeChunksToIntArray(List<Long> coords) {
