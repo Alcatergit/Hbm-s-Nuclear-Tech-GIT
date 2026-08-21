@@ -345,7 +345,7 @@ public class NukeGadget extends BlockContainer implements IBomb {
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.gadgetRadius)+"§r");
 		if(!BombConfig.disableNuclear){
 			tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+"§r");
-			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)BombConfig.gadgetRadius*(1+BombConfig.falloutRange/100))+"§r");
+			tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", (int)(BombConfig.gadgetRadius*(1+BombConfig.falloutRange/100.0)))+"§r");
 		}
 
 		// ========== Modification: Use the condition corresponding to entity.isReady for judgment ==========
