@@ -69,7 +69,8 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 	public boolean didPlaySound = false;
 	public boolean didShake = false;
 	public int ticksExistedSaved = 0;
-	public boolean isNotifyDataManagerChanged = false;
+	public boolean isNotified = false;
+    public boolean isRead = false;
 	public boolean isReloaded = false;
 	public boolean isInitialized = false;
 	public boolean isScaled = false;
@@ -98,24 +99,26 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 		// When the client receives the DataParameter data synchronization, it updates the instance variables.
 		if (key == TICKS_EXISTED && this.world.isRemote) {
 			// Some client instance variables can only be updated once after the entity is initialized.
-			if (!isNotifyDataManagerChanged) {
+			if (!this.isNotified) {
 				this.scale = this.dataManager.get(SCALE);
 				this.maxAge = this.dataManager.get(MAX_AGE);
 				this.ticksExisted = this.dataManager.get(TICKS_EXISTED);
 				this.ticksExistedSaved = this.dataManager.get(TICKS_EXISTED_SAVED);
 				this.isReloaded = this.dataManager.get(IS_RELOADED);
+                this.isRead = this.isReloaded;
 				this.isInitialized = this.dataManager.get(IS_INITIALIZED);
-				this.isNotifyDataManagerChanged = true;
+                if (this.isRead) {
+                    this.convectionHeight = this.convectionHeight * this.scale;
+                    this.rollerSize = this.rollerSize * this.scale;
+                    this.isRead = false;
+                }
+				this.isNotified = true;
 			}
 		}
 	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
-		this.isReloaded = true;
-		this.dataManager.set(IS_RELOADED, true);
-		this.isInitialized = true;
-		this.dataManager.set(IS_INITIALIZED, true);
 		if(nbt.hasKey("scale")){
 			float scaleTemp = nbt.getFloat("scale");
 			this.scale = scaleTemp;
@@ -135,6 +138,10 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			this.ticksExistedSaved = ticksExistedTemp;
 			this.dataManager.set(TICKS_EXISTED_SAVED, ticksExistedTemp);
 		}
+        this.isReloaded = true;
+        this.dataManager.set(IS_RELOADED, true);
+        this.isInitialized = true;
+        this.dataManager.set(IS_INITIALIZED, true);
 	}
 
 	@Override
@@ -153,33 +160,29 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 	@Override
 	public void onUpdate() {
+        super.onUpdate();
 		this.dataManager.set(TICKS_EXISTED, this.ticksExisted);
 
 		if(world.isRemote){
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExisted: " + this.dataManager.get(TICKS_EXISTED));
+			//MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExisted: " + this.ticksExisted);
+            //MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExistedSaved: " + this.ticksExistedSaved);
 			double s = this.getScale();
 			double cs = 1.5;
 			if(this.ticksExisted == 1 || (!this.isInitialized && !this.isScaled)){
 				this.setScale((float) s);
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is set scale");
 			}else if(!this.isScaled){
 				this.coreHeight = this.coreHeight * this.scale;
 				this.torusWidth = this.torusWidth * this.scale;
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is reloaded");
 			}
 
-			boolean hasReloaded = cloudlets.isEmpty() && (this.coreHeight == 3 * this.scale && this.convectionHeight == 3 && this.torusWidth == 3 * this.scale && this.rollerSize == 1) && this.isInitialized;
-			if (hasReloaded && !(this.isReloaded && this.ticksExistedSaved > 0)) {
-				this.isReloaded = true;
-				this.ticksExistedSaved = this.ticksExisted;
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client re-enters rendering distance");
+			boolean isRerendering = cloudlets.isEmpty() && (this.coreHeight == 3 * this.scale && this.convectionHeight == 3 && this.torusWidth == 3 * this.scale && this.rollerSize == 1) && this.isInitialized;
+			if (isRerendering) {
+                this.isReloaded = true;
+                this.ticksExistedSaved = this.ticksExisted;
+                this.convectionHeight = this.convectionHeight * this.scale;
+                this.rollerSize = this.rollerSize * this.scale;
+				//MainRegistry.logger.info("[NTM] Nuke Block: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client re-enters rendering distance");
 			}
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate scale: " + this.scale);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate coreHeight: " + this.coreHeight);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate convectionHeight: " + this.convectionHeight);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate torusWidth: " + this.torusWidth);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate rollerSize: " + this.rollerSize);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate maxAge: " + this.maxAge);
 
 			if(humidity == -1) humidity = world.getBiome(this.getPosition()).getRainfall();
 
@@ -204,9 +207,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			if (this.isReloaded && !isAccelReload) {
 				this.isReloaded = false;
 			}
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExistedSaved: " + this.ticksExistedSaved);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isAccelReload: " + isAccelReload);
 
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
@@ -214,30 +214,25 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			double speedMultiplier = 1.0D;
 			double simSpeed = getSimulationSpeed();
 			int lifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + speedMultiplier);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate simSpeed: " + simSpeed);
-			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate lifetime: " + lifetime);
+			//MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] speedMultiplier: {} [Client];\n[Client] simSpeed: {} [Client];\n[Client] lifetime: {} [Client]", this.posX, this.posY, this.posZ, speedMultiplier, simSpeed, lifetime);
 
 			if(this.isReloaded && ticksExisted2 <= (isLateStage ? 50 : 75)){
 				speedMultiplier = isLateStage ? 4.0D : 2.0D;
 				simSpeed = 1.0D;
 				lifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate surge speedMultiplier: " + speedMultiplier);
 			} else if(this.isReloaded){
 				speedMultiplier = Math.max(1.0D, isLateStage ? (160 - (3 * (ticksExisted2 - 50))) / 40.0D : (40 - (ticksExisted2 - 75)) / 20.0D);
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate decay speedMultiplier: " + speedMultiplier);
 				// Linear interpolation was used to smoothly transition simSpeed and lifetime to normal values.
 				double progress = Math.min(1.0D, isLateStage ? (ticksExisted2 - 50) / 40.0D : (ticksExisted2 - 75) / 20.0D);
 				if (this.ticksExisted > maxAge / 4) {
 					double accelSimSpeed = 1.0D - ((double)(ticksExisted2 - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
 					double normalSimSpeed = 1.0D - ((double)(this.ticksExisted - (maxAge / 4)) / (double)(maxAge - (maxAge / 4)));
 					simSpeed = accelSimSpeed * (1 - progress) + normalSimSpeed * progress;
-					//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate decay simSpeed: " + simSpeed);
 				}
 				double accelLifetime = Math.min((ticksExisted2 * ticksExisted2) + 200, maxAge - ticksExisted2 + 200);
 				double normalLifetime = Math.min((this.ticksExisted * this.ticksExisted) + 200, maxAge - this.ticksExisted + 200);
 				lifetime = (int)(accelLifetime * (1 - progress) + normalLifetime * progress);
-				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate decay lifetime: " + lifetime);
+                //MainRegistry.logger.info("[NTM] Nuke Block: ({}, {}, {}) Client onUpdate:\n[Client] decay speedMultiplier: {} [Client];\n[Client] decay simSpeed: {} [Client];\n[Client] decay lifetime: {} [Client]", this.posX, this.posY, this.posZ, speedMultiplier, simSpeed, lifetime);
 			}
 
 			int toSpawn;
@@ -345,13 +340,13 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			int maxHeat = (int) (50 * s * s);
 			heat = maxHeat - Math.pow((double) (maxHeat * this.ticksExisted) / maxAge, 0.6);
-		}
+		}else if(this.ticksExisted == 1){
+            this.isInitialized = true;
+            this.dataManager.set(IS_INITIALIZED, true);
+        }
 
 		if(!world.isRemote && this.ticksExisted > maxAge) {
 			this.setDead();
-		}else if(this.ticksExisted == 1) {
-			this.isInitialized = true;
-			this.dataManager.set(IS_INITIALIZED, this.isInitialized);
 		}
 	}
 
