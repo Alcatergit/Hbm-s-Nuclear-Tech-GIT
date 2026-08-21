@@ -235,6 +235,8 @@ public final class HBMSoundHandler {
 	public static SoundEvent sliding_seal_open;
 	public static SoundEvent sliding_seal_stop;
 	public static SoundEvent nuclearExplosion;
+	public static SoundEvent explosionLargeNear;
+	public static SoundEvent explosionLargeFar;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -499,6 +501,8 @@ public final class HBMSoundHandler {
 		sliding_seal_open = register("block.door.sliding_seal_open");
 		sliding_seal_stop = register("block.door.sliding_seal_stop");
 		nuclearExplosion = register("weapon.nuclearExplosion");
+		explosionLargeNear = register("weapon.explosion_large_near");
+		explosionLargeFar = register("weapon.explosion_large_far");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6, geiger7, geiger8};
 		voiceSounds = new SoundEvent[]{voices1, voices2, voices3, voices4, voices5, voices6, voices7, voices8};
