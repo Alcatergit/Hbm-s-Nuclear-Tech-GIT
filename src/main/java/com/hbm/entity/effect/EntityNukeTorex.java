@@ -243,7 +243,6 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 toSpawn = (int) (0.6 * Math.min(Math.max(0, maxCloudlets-cloudlets.size()), Math.ceil(10 * simSpeed * simSpeed * Math.min(1, 1200/(double)lifetime))));
             }
 
-
             for(int i = 0; i < toSpawn; i++) {
                 double x = posX + rand.nextGaussian() * range;
                 double z = posZ + rand.nextGaussian() * range;
@@ -346,7 +345,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
             this.dataManager.set(IS_INITIALIZED, true);
         }
 
-        if(!world.isRemote && this.ticksExisted > maxAge) {
+        if(!world.isRemote && this.ticksExisted > maxAge){
             this.setDead();
         }
     }
