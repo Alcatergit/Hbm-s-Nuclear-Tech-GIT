@@ -1,17 +1,13 @@
 package com.hbm.blocks.generic;
 
-import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.BlockBase;
 import com.hbm.blocks.ModBlocks;
-import com.hbm.hazard.HazardEntry;
 import com.hbm.hazard.HazardSystem;
-import com.hbm.hazard.type.HazardTypeRadiation;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
-import com.hbm.util.ContaminationUtil;
 import com.hbm.potion.HbmPotion;
 
 import net.minecraft.potion.PotionEffect;
@@ -20,27 +16,65 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.init.Items;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.util.SoundCategory;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class BlockHazard extends BlockBase {
 	
-	private float radIn = 0.0F;
-	private ExtDisplayEffect extEffect = null;
+	public float radIn = 0.0F;
+	public ExtDisplayEffect extEffect = null;
 	
-	private boolean beaconable = false;
-	
+	public boolean beaconable = false;
+
+	private static final HazardBlockHandler HANDLER = new HazardBlockHandler();
+
+	static {
+		MinecraftForge.EVENT_BUS.register(HANDLER);
+	}
+
+	public static class HazardBlockHandler {
+		@SubscribeEvent
+		public void onLivingUpdate(LivingEvent.LivingUpdateEvent event) {
+			EntityLivingBase e = event.getEntityLiving();
+			if(e.world.isRemote) return;
+			World world = e.world;
+			BlockPos feet = e.getPosition();
+			BlockPos head = feet.up();
+			for(EnumFacing dir : EnumFacing.VALUES) {
+				checkAndApply(world, feet.offset(dir), e);
+				checkAndApply(world, head.offset(dir), e);
+			}
+			checkAndApply(world, feet, e);
+			checkAndApply(world, head, e);
+		}
+
+		private void checkAndApply(World world, BlockPos pos, EntityLivingBase e) {
+			IBlockState state = world.getBlockState(pos);
+			if(state.getBlock() instanceof BlockHazard) {
+				if(e.getEntityBoundingBox().intersects(new AxisAlignedBB(pos).grow(0.001))) {
+					HazardSystem.applyHazards(state.getBlock(), e);
+					if(state.getBlock() == ModBlocks.brick_jungle_mystic) {
+						e.addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
+					}
+				}
+			}
+		}
+	}
+
 	public BlockHazard(Material mat, String s) {
 		super(mat, s);
 	}
@@ -90,7 +124,7 @@ public class BlockHazard extends BlockBase {
 		}
 	}
 	
-	private void sPart(World world, int x, int y, int z, Random rand) {
+	public void sPart(World world, int x, int y, int z, Random rand) {
 
 		for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 
@@ -147,48 +181,33 @@ public class BlockHazard extends BlockBase {
 	
 	@Override
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
-		float radLevel = HazardSystem.getRawRadsFromBlock(this);
-		ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, radLevel, 0, 1.0D, null);
-
 		if(!worldIn.isRemote) {
-			List<EntityLivingBase> entities = worldIn.getEntitiesWithinAABB(EntityLivingBase.class,
-					new AxisAlignedBB(pos).grow(0.001));
-			for(EntityLivingBase e : entities) {
-				applyNonRadHazards(e);
-				if(this == ModBlocks.brick_jungle_mystic) {
-					e.addPotionEffect(new PotionEffect(HbmPotion.taint, 15 * 20, 2));
-				}
+			if(this == ModBlocks.block_meteor_molten) {
+				worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
+				worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
+				return;
 			}
-		}
-
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
-
-		if(this == ModBlocks.block_meteor_molten) {
-        	if(!worldIn.isRemote)
-        		worldIn.setBlockState(pos, ModBlocks.block_meteor_cobble.getDefaultState());
-        	worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
-        	return;
-        }
-		if(this.radIn > 0) {
-			RadiationSavedData.incrementRad(worldIn, pos, radIn, radIn*10F);
+			if(this.radIn > 0) {
+				RadiationSavedData.incrementRad(worldIn, pos, radIn, radIn*10F);
+			}
 		}
 	}
 
 	
 	@Override
 	public int tickRate(World world) {
-		if(HazardSystem.getRawRadsFromBlock(this) > 0)
-			return 20;
 		if(this.radIn > 0)
-			return 60+world.rand.nextInt(500);
+			return 60 + world.rand.nextInt(500);
 		return super.tickRate(world);
 	}
 
 	@Override
 	public void onBlockAdded(World worldIn, BlockPos pos, IBlockState state){
 		super.onBlockAdded(worldIn, pos, state);
-		this.setTickRandomly(true);
-		worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		if(this.radIn > 0){
+			this.setTickRandomly(true);
+			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
+		}
 	}
 
 	@Override
@@ -205,16 +224,6 @@ public class BlockHazard extends BlockBase {
 		SCHRAB,
 		FLAMES,
 		LAVAPOP
-	}
-
-	public void applyNonRadHazards(EntityLivingBase entity) {
-		ItemStack stack = new ItemStack(Item.getItemFromBlock(this));
-		List<HazardEntry> hazards = HazardSystem.getHazardsFromStack(stack);
-		for(HazardEntry entry : hazards) {
-			if(!(entry.getType() instanceof HazardTypeRadiation)) {
-				entry.applyHazard(stack, entity);
-			}
-		}
 	}
 
 	@Override
