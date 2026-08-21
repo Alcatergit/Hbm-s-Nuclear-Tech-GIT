@@ -10,10 +10,8 @@ import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.HeatRecipes;
-import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
-import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.inventory.control_panel.DataValue;
 import com.hbm.inventory.control_panel.DataValueFloat;
 import com.hbm.inventory.control_panel.DataValueString;
@@ -21,7 +19,6 @@ import com.hbm.tileentity.machine.rbmk.TileEntityRBMKConsole.ColumnType;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.item.ItemStack;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -60,20 +57,6 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 	public void update() {
 		
 		if(!world.isRemote) {
-
-			int feedSpace = tanks[0].getCapacity() - tanks[0].getFluidAmount();
-			if(feedSpace > 0){
-				TileEntity te = world.getTileEntity(pos.down());
-				if(te instanceof IFluidPipeMk2){
-					FFPipeNetworkMk2 network = ((IFluidPipeMk2) te).getNetwork();
-					if(network != null && network.getType() == tankTypes[0]){
-						FluidStack pulled = network.drain(new FluidStack(tankTypes[0], feedSpace), true);
-						if(pulled != null)
-							tanks[0].fill(pulled, true);
-					}
-				}
-			}
-
 			setFluidType();
             PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, new FluidTank[] { tanks[0], tanks[1] }), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 
@@ -241,6 +224,9 @@ public class TileEntityRBMKHeater extends TileEntityRBMKSlottedBase implements I
 
 	@Override
 	public int fill(FluidStack resource, boolean doFill){
+		if(resource != null && resource.amount > 0 && resource.getFluid() == tankTypes[0] && HeatRecipes.hasBoilRecipe(resource.getFluid())){
+			return tanks[0].fill(resource, doFill);
+		}
 		return 0;
 	}
 
