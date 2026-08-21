@@ -223,10 +223,10 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			}
 
             int blastDuration = (int)Math.ceil(80 * Math.cbrt(this.radius / 100.0));
-            double shockSpeed = 2 * this.radius / (double)blastDuration;
+            double shockSpeed = Math.max(2D, 2D * this.radius / (double)blastDuration);
             double currentBlastRadius = this.ticksExisted * shockSpeed;
 
-			if(this.ticksExisted <= blastDuration && res < 10000 && len < currentBlastRadius) {
+			if(this.ticksExisted <= (2D * this.radius / (double)blastDuration < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
 				float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.1F) / (float)(dmgLen * dmgLen * res);
 				if(blastDamage > 0.025){
 					if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
