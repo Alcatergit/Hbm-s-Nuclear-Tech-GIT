@@ -206,7 +206,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			} else if(this.isReloaded){
 				this.speedMultiplier = Math.max(1.0D, this.speedMultiplier - 0.05D);
 			}
-			MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
+			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate speedMultiplier: " + this.speedMultiplier);
 
 			// spawn mush clouds
 			double range = (torusWidth - rollerSize) * 0.5;
