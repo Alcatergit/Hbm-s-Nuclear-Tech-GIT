@@ -224,8 +224,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
                 // spawn shock clouds
                 if(currentTick * shockSpeed < 2 * explosionRadius) {
-
-                    int ticksExisted = Math.max((int)(currentTick - Math.min(s, 1.0) * 5), 0);
+                    int ticksExisted = Math.max((int)(currentTick - (s * 2.5)), 0);
                     int cloudCount = (int) Math.min(ticksExisted * shockSpeed, 100);
                     int shockLife = (int) Math.max(s * 300 - ticksExisted * shockSpeed * 10, 60);
 
@@ -247,7 +246,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     if(!didPlaySound) {
                         if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < currentTick * shockSpeed + shockSpeed) {
                             float dist = MainRegistry.proxy.me().getDistance(this);
-                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * (((explosionRadius * 13F) - dist) / (explosionRadius * 13F))), 0.9F + rand.nextFloat() * 0.2F);
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * (((explosionRadius * 15F) - dist) / (explosionRadius * 15F))), 0.9F + rand.nextFloat() * 0.2F);
                             didPlaySound = true;
                             didShake = true;
                         }
@@ -256,7 +255,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     if(!didPlaySound) {
                         if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < currentTick * shockSpeed + shockSpeed) {
                             float dist = MainRegistry.proxy.me().getDistance(this);
-                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * Math.max(((explosionRadius * 13F) - dist) / (explosionRadius * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * Math.max(((explosionRadius * 15F) - dist) / (explosionRadius * 15F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
                             didPlaySound = true;
                             didShake = true;
                         }
