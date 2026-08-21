@@ -246,7 +246,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     if(!didPlaySound) {
                         if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < currentTick * shockSpeed + shockSpeed) {
                             float dist = MainRegistry.proxy.me().getDistance(this);
-                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * (((explosionRadius * 15F) - dist) / (explosionRadius * 15F))), 0.9F + rand.nextFloat() * 0.2F);
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * (((explosionRadius * 13F) - (dist - (explosionRadius * 2F))) / (explosionRadius * 13F))), 0.9F + rand.nextFloat() * 0.2F);
                             didPlaySound = true;
                             didShake = true;
                         }
@@ -255,7 +255,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     if(!didPlaySound) {
                         if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < currentTick * shockSpeed + shockSpeed) {
                             float dist = MainRegistry.proxy.me().getDistance(this);
-                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * Math.max(((explosionRadius * 15F) - dist) / (explosionRadius * 15F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, (float) Math.cbrt(10_000F * Math.max(((explosionRadius * 13F) - (dist - (explosionRadius * 2F))) / (explosionRadius * 13F), 0F)), 0.9F + rand.nextFloat() * 0.2F);
                             didPlaySound = true;
                             didShake = true;
                         }
