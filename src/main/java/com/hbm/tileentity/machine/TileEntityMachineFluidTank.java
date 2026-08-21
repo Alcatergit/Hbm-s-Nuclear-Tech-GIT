@@ -1,12 +1,15 @@
 package com.hbm.tileentity.machine;
 
+import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.control_panel.*;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.tileentity.TileEntityProxyBase;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
@@ -37,6 +40,8 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	public static final short modes = 4;
 	public int age = 0;
 	public static int[] slots = { 2 };
+	public FFPipeNetworkMk2 network;
+	private boolean updatingNetwork = false;
 	
 	public TileEntityMachineFluidTank() {
 		super(6);
@@ -74,8 +79,7 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 				age = 0;
 			}
 
-			if ((mode == 1 || mode == 2) && (age == 9 || age == 19))
-				fillFluidInit();
+			updateFluidNetwork();
 			
 			FFUtils.fillFromFluidContainer(inventory, tank, 2, 3);
 			FFUtils.fillFluidContainer(inventory, tank, 4, 5);
@@ -108,17 +112,192 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 		markDirty();
 	}
 
-	private void fillFluidInit() {
-		if (tank.getFluid() != null) {
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, -1), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(2, 0, 1), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, -1), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-2, 0, 1), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, 2), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, 2), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(-1, 0, -2), 64000);
-			FFUtils.fillFluid(this, tank, world, pos.add(1, 0, -2), 64000);
+	private BlockPos[] getConnectionPositions() {
+		BlockPos[] ports = { pos.add(1, 0, 1), pos.add(1, 0, -1), pos.add(-1, 0, 1), pos.add(-1, 0, -1) };
+		return new BlockPos[] {
+				ports[0].east(), ports[0].south(),
+				ports[1].east(), ports[1].north(),
+				ports[2].west(), ports[2].south(),
+				ports[3].west(), ports[3].north(),
+		};
+	}
+
+	protected void updateFluidNetwork() {
+		if(updatingNetwork) return;
+		updatingNetwork = true;
+
+		Fluid tankFluid = tank.getFluid() != null ? tank.getFluid().getFluid() : null;
+
+		if(mode == 1) {
+			if(network != null && network.getType() != tankFluid && tankFluid != null) {
+				network.removeProvider(this);
+				network.removeReceiver(this);
+				network = null;
+			}
+
+			if(network == null && tankFluid != null) {
+				network = new FFPipeNetworkMk2(tankFluid);
+			}
+
+			BlockPos[] conPositions = getConnectionPositions();
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityMachineFluidTank tank) {
+					if(tank.mode == 1) {
+						if(tank.network != null && tank.network != this.network) {
+							if(this.network == null) {
+								this.network = tank.network;
+							} else {
+								this.network = FFPipeNetworkMk2.mergeNetworks(this.network, tank.network);
+							}
+							tank.network = this.network;
+						} else if(tank.network == null && this.network != null) {
+							tank.network = this.network;
+							this.network.addProvider(tank);
+							this.network.addReceiver(tank);
+						}
+					} else if(tank.network == null && this.network != null && tank.mode != 3) {
+						tank.network = this.network;
+						if(tank.mode == 0) {
+							this.network.addReceiver(tank);
+						} else if(tank.mode == 2) {
+							this.network.addProvider(tank);
+						}
+					}
+				} else if(te instanceof TileEntityBarrel barrel) {
+					if(barrel.mode == 1) {
+						if(barrel.network != null && barrel.network != this.network) {
+							if(this.network == null) {
+								this.network = barrel.network;
+							} else {
+								this.network = FFPipeNetworkMk2.mergeNetworks(this.network, barrel.network);
+							}
+							barrel.network = this.network;
+						} else if(barrel.network == null && this.network != null) {
+							barrel.network = this.network;
+							this.network.addProvider(barrel);
+							this.network.addReceiver(barrel);
+						}
+					} else if(barrel.network == null && this.network != null && barrel.mode != 3) {
+						barrel.network = this.network;
+						if(barrel.mode == 0) {
+							this.network.addReceiver(barrel);
+						} else if(barrel.mode == 2) {
+							this.network.addProvider(barrel);
+						}
+					}
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					if(pipe.getNetwork() != null && pipe.getNetwork() != this.network
+							&& (this.network == null || this.network.getType() == null || pipe.getType() == this.network.getType())) {
+						if(this.network == null) {
+							this.network = pipe.getNetwork();
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, pipe.getNetwork());
+						}
+					}
+				}
+			}
+
+			if(this.network != null) {
+				this.network.addProvider(this);
+				this.network.addReceiver(this);
+
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					} else if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					}
+				}
+
+				this.network.update(world);
+			}
+		} else if(mode == 0) {
+			BlockPos[] conPositions = getConnectionPositions();
+			boolean found = false;
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyBase proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
+				}
+				if(te instanceof TileEntityMachineFluidTank tank && tank.mode == 1) {
+					foundNet = tank.network;
+				} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+					foundNet = barrel.network;
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					foundNet = pipe.getNetwork();
+				}
+				if(foundNet != null) {
+					foundNet.addReceiver(this);
+					if(this.network != foundNet) {
+						if(this.network != null) this.network.removeReceiver(this);
+						this.network = foundNet;
+					}
+					found = true;
+				}
+			}
+			if(!found && this.network != null) {
+				this.network.removeReceiver(this);
+				this.network = null;
+			}
+		} else if(mode == 2) {
+			BlockPos[] conPositions = getConnectionPositions();
+			boolean found = false;
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityDummy dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyBase proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
+				}
+				if(te instanceof TileEntityMachineFluidTank tank && tank.mode == 1) {
+					foundNet = tank.network;
+				} else if(te instanceof TileEntityBarrel barrel && barrel.mode == 1) {
+					foundNet = barrel.network;
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					foundNet = pipe.getNetwork();
+				}
+				if(foundNet != null) {
+					foundNet.addProvider(this);
+					if(this.network != foundNet) {
+						if(this.network != null) this.network.removeProvider(this);
+						this.network = foundNet;
+					}
+					found = true;
+				}
+			}
+			if(!found && this.network != null) {
+				this.network.removeProvider(this);
+				this.network = null;
+			}
+		} else {
+			if(this.network != null) {
+				this.network.removeProvider(this);
+				this.network.removeReceiver(this);
+				this.network = null;
+			}
 		}
+
+		updatingNetwork = false;
 	}
 
 	@Override
@@ -159,21 +338,19 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 
 	@Override
 	public FluidStack drain(FluidStack resource, boolean doDrain) {
+		if(mode == 0 || mode == 3)
+			return null;
 		if (resource == null || !resource.isFluidEqual(tank.getFluid())) {
 			return null;
 		}
-		if (this.canDrain(resource.getFluid())) {
-			return tank.drain(resource.amount, doDrain);
-		}
-		return null;
+		return tank.drain(resource.amount, doDrain);
 	}
 
 	@Override
 	public FluidStack drain(int maxDrain, boolean doDrain) {
-		if (this.canDrain(null)) {
-			return tank.drain(maxDrain, doDrain);
-		}
-		return null;
+		if(mode == 0 || mode == 3)
+			return null;
+		return tank.drain(maxDrain, doDrain);
 	}
 	
 	public boolean canFill(Fluid fluid) {
@@ -264,6 +441,20 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	public void invalidate() {
 		super.invalidate();
 		ControlEventSystem.get(world).removeControllable(this);
+		if(!world.isRemote && network != null) {
+			network.removeProvider(this);
+			network.removeReceiver(this);
+			network = null;
+		}
+	}
+
+	@Override
+	public void onChunkUnload() {
+		if(!world.isRemote && network != null) {
+			network.removeProvider(this);
+			network.removeReceiver(this);
+		}
+		super.onChunkUnload();
 	}
 
 	@Override
@@ -275,5 +466,4 @@ public class TileEntityMachineFluidTank extends TileEntityMachineBase implements
 	public World getControlWorld() {
 		return getWorld();
 	}
-
 }
