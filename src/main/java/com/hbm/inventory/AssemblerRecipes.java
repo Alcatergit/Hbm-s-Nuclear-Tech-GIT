@@ -105,7 +105,6 @@ public class AssemblerRecipes {
 	}
 
 	public static void loadRecipes() {
-		registerDefaults();
 		loadRecipesFromConfig();
 		generateList();
 	}
@@ -1128,6 +1127,11 @@ public class AssemblerRecipes {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
 		blockRegistry = GameRegistry.findRegistry(Block.class);
 		
+		recipes.clear();
+		time.clear();
+		recipeList.clear();
+		registerDefaults();
+		
 		File recipeConfig = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/assemblerConfig.cfg");
 		if (!recipeConfig.exists())
 			try {
@@ -1150,9 +1154,6 @@ public class AssemblerRecipes {
 			read = new BufferedReader(new FileReader(recipeConfig));
 			String currentLine = null;
 			int lineCount = 0;
-			recipes.clear();
-			time.clear();
-			recipeList.clear();
 			
 			while((currentLine = read.readLine()) != null){
 				lineCount ++;
