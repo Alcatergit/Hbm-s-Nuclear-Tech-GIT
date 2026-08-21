@@ -37,10 +37,9 @@ public class ItemDiscord extends Item {
 
 		if(pos.typeOfHit == Type.BLOCK) {
 
-			// ========== Add animation call ==========
+			// ========== NEW: Add animation calls and custom sound effect calls ==========
 			// Call the original Minecraft attack animation before teleporting (client-side execution)
 			player.swingArm(hand); // Play arm swing animation
-			// ====================================
 
 			if(!world.isRemote) {
 
@@ -64,6 +63,7 @@ public class ItemDiscord extends Item {
 		}
 
 		return super.onItemRightClick(world, player, hand);
+		// ====================================
 	}
 	
 	@Override
