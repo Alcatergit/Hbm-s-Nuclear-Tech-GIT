@@ -160,7 +160,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate ticksExisted: " + this.dataManager.get(TICKS_EXISTED));
 			double s = this.getScale();
 			double cs = 1.5;
-			if((this.ticksExisted == 1) || (!this.isScaled && !this.isInitialized)){
+			if(this.ticksExisted == 1 || (!this.isScaled && !this.isInitialized)){
 				this.setScale((float) s);
 				//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Entity is set scale");
 			}else if(!this.isInitialized){
@@ -282,7 +282,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 
 			// spawn ring clouds
-			if (ticksExisted2 < 200 && (int)this.getScale() > 0) {
+			if (ticksExisted2 < 200 && (int)(this.getScale()) > 0) {
 				lifetime *= (int) s;
 				for(int i = 0; i < 2; i++) {
 					Cloudlet cloud = new Cloudlet(posX, posY + coreHeight, posZ, (float)(rand.nextDouble() * 2D * Math.PI), 0, lifetime, TorexType.RING);
