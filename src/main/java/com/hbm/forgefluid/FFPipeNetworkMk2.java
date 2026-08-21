@@ -139,11 +139,55 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		return type;
 	}
 
-	public void destroy() {
+	public void destroy(World world) {
+		if(world != null) {
+			for(TileEntity te : new ArrayList<>(fillables.values())) {
+				moveToNeighbor(te, world);
+			}
+			for(TileEntity te : new ArrayList<>(providers.values())) {
+				if(!fillables.containsKey(te.getPos())) {
+					moveToNeighbor(te, world);
+				}
+			}
+		}
 		pipes.values().forEach(pipe -> pipe.setNetwork(null));
 		pipes.clear();
 		fillables.clear();
 		providers.clear();
+	}
+
+	private void moveToNeighbor(TileEntity te, World world) {
+		if(te == null || te.isInvalid()) return;
+		for(EnumFacing e : EnumFacing.VALUES) {
+			TileEntity adj = world.getTileEntity(te.getPos().offset(e));
+			if(adj instanceof IFluidPipeMk2) {
+				FFPipeNetworkMk2 adjNet = ((IFluidPipeMk2) adj).getNetwork();
+				if(adjNet != null && adjNet != this && adjNet.getType() == this.type) {
+					adjNet.tryAdd(te);
+					if(te instanceof TileEntityBarrel) {
+						((TileEntityBarrel) te).network = adjNet;
+					} else if(te instanceof TileEntityMachineFluidTank) {
+						((TileEntityMachineFluidTank) te).network = adjNet;
+					}
+					return;
+				}
+			}
+		}
+		if(te instanceof TileEntityBarrel) {
+			((TileEntityBarrel) te).network = null;
+		} else if(te instanceof TileEntityMachineFluidTank) {
+			((TileEntityMachineFluidTank) te).network = null;
+		}
+	}
+
+	public void leaveLink(World world, IFluidPipeMk2 pipe) {
+		checkForRemoval((TileEntity) pipe);
+		pipe.setNetwork(null);
+		if(!pipes.isEmpty()) {
+			trySplit(world);
+		} else {
+			destroy(world);
+		}
 	}
 
 	public void checkForRemoval(TileEntity te) {
@@ -170,13 +214,9 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		}
 	}
 
-	public void removePipe(BlockPos pos) {
-		pipes.remove(pos);
-	}
-
-	public void splitIfDisconnected(World world) {
+	public void trySplit(World world) {
 		if(pipes.isEmpty()) {
-			destroy();
+			destroy(world);
 			return;
 		}
 
@@ -199,7 +239,7 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		}
 
 		if(connected.size() == pipes.size()) {
-			cleanupOrphanedContainers(world);
+			syncContainers(null, world);
 			return;
 		}
 
@@ -216,47 +256,64 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 			}
 		}
 
-		moveContainersToNetwork(newNet, providers);
-		moveContainersToNetwork(newNet, fillables);
-		cleanupOrphanedContainers(world);
-		newNet.cleanupOrphanedContainers(world);
+		syncContainers(newNet, world);
+		syncContainers(null, world);
+		newNet.syncContainers(null, world);
 	}
 
-	private void moveContainersToNetwork(FFPipeNetworkMk2 newNet, Map<BlockPos, TileEntity> containerMap) {
-		Iterator<Map.Entry<BlockPos, TileEntity>> it = containerMap.entrySet().iterator();
-		Set<BlockPos> pipesInThisNet = new HashSet<>(pipes.keySet());
+	private void syncContainers(FFPipeNetworkMk2 targetNet, World world) {
+		if(world == null) return;
+		Set<BlockPos> connectedContainers = getConnected(world);
+
+		Iterator<Map.Entry<BlockPos, TileEntity>> it = providers.entrySet().iterator();
 		while(it.hasNext()) {
 			Map.Entry<BlockPos, TileEntity> entry = it.next();
-			TileEntity te = entry.getValue();
-			if(te == null || te.isInvalid()) {
-				it.remove();
-				continue;
-			}
-			boolean adjacentToThisNet = false;
-			for(EnumFacing e : EnumFacing.VALUES) {
-				BlockPos adjPos = te.getPos().offset(e);
-				if(pipesInThisNet.contains(adjPos)) {
-					adjacentToThisNet = true;
-					break;
-				}
-			}
-			if(!adjacentToThisNet) {
-				if(containerMap == providers) {
-					newNet.providers.put(entry.getKey(), te);
+			if(!connectedContainers.contains(entry.getKey())) {
+				TileEntity te = entry.getValue();
+				if(targetNet != null) {
+					targetNet.providers.put(entry.getKey(), te);
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.network = targetNet;
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.network = targetNet;
+					}
 				} else {
-					newNet.fillables.put(entry.getKey(), te);
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.network = null;
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.network = null;
+					}
+					fillables.remove(entry.getKey());
 				}
-				if(te instanceof TileEntityBarrel barrel) {
-					barrel.network = newNet;
-				} else if(te instanceof TileEntityMachineFluidTank tank) {
-					tank.network = newNet;
+				it.remove();
+			}
+		}
+
+		it = fillables.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<BlockPos, TileEntity> entry = it.next();
+			if(!connectedContainers.contains(entry.getKey())) {
+				TileEntity te = entry.getValue();
+				if(targetNet != null) {
+					targetNet.fillables.put(entry.getKey(), te);
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.network = targetNet;
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.network = targetNet;
+					}
+				} else {
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.network = null;
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.network = null;
+					}
 				}
 				it.remove();
 			}
 		}
 	}
 
-	private Set<BlockPos> buildConnectedContainerSet(World world) {
+	private Set<BlockPos> getConnected(World world) {
 		Set<BlockPos> pipesInThisNet = new HashSet<>(pipes.keySet());
 		Set<BlockPos> connectedContainers = new HashSet<>();
 
@@ -282,48 +339,12 @@ public class FFPipeNetworkMk2 implements IFluidHandler {
 		return connectedContainers;
 	}
 
-	private void cleanupOrphanedContainers(World world) {
-		if(world == null) return;
-
-		Set<BlockPos> connectedContainers = buildConnectedContainerSet(world);
-
-		Iterator<Map.Entry<BlockPos, TileEntity>> it = providers.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<BlockPos, TileEntity> entry = it.next();
-			if(!connectedContainers.contains(entry.getKey())) {
-				TileEntity te = entry.getValue();
-				if(te instanceof TileEntityBarrel barrel) {
-					barrel.network = null;
-				} else if(te instanceof TileEntityMachineFluidTank tank) {
-					tank.network = null;
-				}
-				it.remove();
-				fillables.remove(entry.getKey());
-			}
-		}
-
-		it = fillables.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<BlockPos, TileEntity> entry = it.next();
-			if(!connectedContainers.contains(entry.getKey())) {
-				TileEntity te = entry.getValue();
-				if(te instanceof TileEntityBarrel barrel) {
-					barrel.network = null;
-				} else if(te instanceof TileEntityMachineFluidTank tank) {
-					tank.network = null;
-				}
-				it.remove();
-			}
-		}
-	}
-
 	public void tryAdd(TileEntity te) {
 		if(te == null)
 			return;
 		if(te instanceof IFluidPipeMk2) {
 			if(!pipes.containsKey(te.getPos()) && ((IFluidPipeMk2) te).getType() == this.type) {
 				pipes.put(te.getPos(), (IFluidPipeMk2) te);
-				return;
 			}
 		} else if(FFUtils.safeCheckCapa(te, CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY)) {
 			if(te instanceof TileEntityProxyCombo proxy) {
