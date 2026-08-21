@@ -36,10 +36,7 @@ public class ItemDiscord extends Item {
 		RayTraceResult pos = Library.rayTrace(player, 100, 1);
 
 		if(pos.typeOfHit == Type.BLOCK) {
-
-			// ========== NEW: Add animation calls and custom sound effect calls ==========
-			// Call the original Minecraft attack animation before teleporting (client-side execution)
-			player.swingArm(hand); // Play arm swing animation
+			player.swingArm(hand);
 
 			if(!world.isRemote) {
 
@@ -48,19 +45,16 @@ public class ItemDiscord extends Item {
 
 	            ForgeDirection dir = ForgeDirection.getOrientation(pos.sideHit.ordinal());
 
-	            // Play pre-teleport sound - change to custom sound
 	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discord_teleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	            
 	            player.setPositionAndUpdate(pos.hitVec.x + dir.offsetX, pos.hitVec.y + dir.offsetY - 1, pos.hitVec.z + dir.offsetZ);
 
-	            // Play post-teleport sound effect - change to custom sound effect
 	            world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.discord_teleport, SoundCategory.PLAYERS, 1.0F, 1.0F);
 	            player.fallDistance = 0.0F;
 			}
 
 	        for (int i = 0; i < 32; ++i)
 	        	world.spawnParticle(EnumParticleTypes.PORTAL, player.posX, player.posY + player.getRNG().nextDouble() * 2.0D, player.posZ, player.getRNG().nextGaussian(), 0.0D, player.getRNG().nextGaussian());
-			// ============================================================================
 		}
 
 		return super.onItemRightClick(world, player, hand);
