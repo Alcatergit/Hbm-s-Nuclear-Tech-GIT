@@ -63,7 +63,7 @@ public class ItemDiscord extends Item {
 		}
 
 		return super.onItemRightClick(world, player, hand);
-		// ====================================
+		// ============================================================================
 	}
 	
 	@Override
