@@ -134,7 +134,7 @@ public class GUIRBMKConsole extends GuiScreen {
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 39, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select blue group" } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 50, guiTop + 70, 10, 10, mouseX, mouseY, new String[]{ "Select purple group" } );
 
-		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 72, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Mode: Control Rod" : "Mode: Steam Pipe" } );
+		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 72, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Mode: Control Rod" : "Mode: Boiler" } );
 		this.drawCustomInfoStat(mouseX, mouseY, guiLeft + 62, guiTop + 136, 10, 10, mouseX, mouseY, new String[]{ mode == 0 ? "Color Group: " + getColorGroupName() : "Steam Type: " + getSteamTypeName() } );
 	}
 	
