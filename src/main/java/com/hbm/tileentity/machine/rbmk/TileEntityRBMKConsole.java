@@ -50,6 +50,12 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 
 	public RBMKGraph graph;
 
+	public byte mode = 0;
+	public byte steamSelect = 0;
+	public byte colorSelect = 0;
+	public byte[] selection = new byte[15 * 15];
+	public String fieldText = "";
+
 	public TileEntityRBMKConsole() {
 		super(0);
 		graph = new RBMKGraph();
@@ -298,6 +304,11 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			data.setByte("s" + i, (byte) screen.type.ordinal());
 		}
 		data.setByte("g", (byte) graph.type.ordinal());
+			data.setByte("mode", this.mode);
+		data.setByte("steamSelect", this.steamSelect);
+		data.setByte("colorSelect", this.colorSelect);
+		data.setByteArray("sel", this.selection);
+		data.setString("fieldText", this.fieldText);
 		
 		this.networkPack(data, 50);
 	}
@@ -328,6 +339,16 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			screen.type = ScreenType.values()[data.getByte("s" + i)];
 		}
 		graph.type = ScreenType.values()[data.getByte("g")];
+		if(data.hasKey("mode"))
+			this.mode = data.getByte("mode");
+		if(data.hasKey("steamSelect"))
+			this.steamSelect = data.getByte("steamSelect");
+		if(data.hasKey("colorSelect"))
+			this.colorSelect = data.getByte("colorSelect");
+		if(data.hasKey("sel"))
+			this.selection = data.getByteArray("sel");
+		if(data.hasKey("fieldText"))
+			this.fieldText = data.getString("fieldText");
 	}
 
 	@Override
@@ -391,6 +412,62 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				this.screens[slot].columns = cols;
 			}
 		}
+
+		if(data.hasKey("compressor")) {
+			int[] cols = data.getIntArray("cols");
+			byte type = data.getByte("steamType");
+			for(int i : cols) {
+				int x = i % 15 - 7;
+				int z = i / 15 - 7;
+				TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+				if(te instanceof TileEntityRBMKBoiler) {
+					NBTTagCompound control = new NBTTagCompound();
+					control.setByte("steamType", type);
+					((TileEntityRBMKBoiler) te).receiveControl(control);
+				}
+			}
+		}
+
+		if(data.hasKey("setMode")) {
+			this.mode = data.getByte("setMode");
+			this.markDirty();
+		}
+
+		if(data.hasKey("setSteamSelect")) {
+			this.steamSelect = data.getByte("setSteamSelect");
+			this.markDirty();
+		}
+
+		if(data.hasKey("saveSel")) {
+			this.selection = data.getByteArray("saveSel");
+			this.markDirty();
+		}
+
+		if(data.hasKey("setColor")) {
+			byte color = data.getByte("setColor");
+			for(int i = 0; i < 15 * 15; i++) {
+				if(data.getBoolean("sc_" + i)) {
+					int x = i % 15 - 7;
+					int z = i / 15 - 7;
+					TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+					if(te instanceof TileEntityRBMKControlManual) {
+						NBTTagCompound control = new NBTTagCompound();
+						control.setInteger("color", (int)color);
+						((TileEntityRBMKControlManual) te).receiveControl(control);
+					}
+				}
+			}
+		}
+
+		if(data.hasKey("setColorSelect")) {
+			this.colorSelect = data.getByte("setColorSelect");
+			this.markDirty();
+		}
+
+		if(data.hasKey("saveFieldText")) {
+			this.fieldText = data.getString("saveFieldText");
+			this.markDirty();
+		}
 	}
 	
 	@Override
@@ -425,6 +502,13 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 		this.graph.type = ScreenType.values()[nbt.getByte("g")];
 		this.graph.columns = Arrays.stream(nbt.getIntArray("gc")).boxed().toArray(Integer[]::new);
+		this.mode = nbt.getByte("mode");
+		this.steamSelect = nbt.getByte("steamSelect");
+		this.colorSelect = nbt.getByte("colorSelect");
+		this.selection = nbt.getByteArray("sel");
+		if(this.selection.length != 15 * 15) this.selection = new byte[15 * 15];
+		if(nbt.hasKey("fieldText"))
+			this.fieldText = nbt.getString("fieldText");
 	}
 	
 	@Override
@@ -441,6 +525,11 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 		nbt.setByte("g", (byte) this.graph.type.ordinal());
 		nbt.setIntArray("gc", Arrays.stream(this.graph.columns).mapToInt(Integer::intValue).toArray());
+		nbt.setByte("mode", this.mode);
+		nbt.setByte("steamSelect", this.steamSelect);
+		nbt.setByte("colorSelect", this.colorSelect);
+		nbt.setByteArray("sel", this.selection);
+		nbt.setString("fieldText", this.fieldText);
 		
 		return nbt;
 	}
