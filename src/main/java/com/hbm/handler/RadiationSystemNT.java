@@ -443,6 +443,13 @@ public class RadiationSystemNT {
 								creep.setChild(true);
 							}
 
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
+
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
 							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
@@ -458,6 +465,13 @@ public class RadiationSystemNT {
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.MAINHAND));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.OFFHAND));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.HEAD));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
+                            creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
 
 							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
 							float f = difficulty.getClampedAdditionalDifficulty();
