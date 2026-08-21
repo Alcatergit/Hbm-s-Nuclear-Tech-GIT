@@ -82,25 +82,25 @@ public class NukeTsar extends BlockContainer implements IBomb {
 		return Item.getItemFromBlock(ModBlocks.nuke_tsar);
 	}
 
-	// ========== Added: Override removedByPlayer to get the player who broke the block ==========
+	// ========== Added: Override the removedByPlayer method to get the destroyed player ==========
 	@Override
 	public boolean removedByPlayer(IBlockState state, World world, BlockPos pos, EntityPlayer player, boolean willHarvest) {
 		// Recording and destroying player information
 		this.lastBreaker = player;
 
-		// Calling the parent class method to continue the destruction logic
+		// Calling the parent class method to continue executing the disruptive logic
 		boolean result = super.removedByPlayer(state, world, pos, player, willHarvest);
 
-		// Cleaning up player information
+		// Clean up player information
 		this.lastBreaker = null;
 
 		return result;
 	}
 
-	// ========== Modification: Using the player information recorded by removedByPlayer ==========
+	// ========== Modification: Using player information recorded by removedByPlayer ==========
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-		// ========== Modification: If it is destroyed by an explosion, clear the block directly without generating drops ==========
+		// ========== If the destruction is caused by an explosion, the entire block will be cleared, and no items will be dropped. ==========
 		if (isExploding) {
 			TileEntity tileentity = world.getTileEntity(pos);
 			if (tileentity != null) {
