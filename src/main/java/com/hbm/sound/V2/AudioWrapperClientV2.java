@@ -10,9 +10,9 @@ public class AudioWrapperClientV2 extends AudioWrapperV2 {
 
 	AudioDynamicV2 sound;
 	// Th3_Sl1ze: this boolean is a temporary solution, should just move all sounds to PROPER getLoopedSound immediately
-	public AudioWrapperClientV2(SoundEvent source, SoundCategory cat, boolean useNewSystem) {
+	public AudioWrapperClientV2(SoundEvent source, SoundCategory cat, boolean useNewSystem, float maxVolume, float range, float intendedVolume) {
 		if(source != null)
-			sound = new AudioDynamicV2(source, cat, useNewSystem);
+			sound = new AudioDynamicV2(source, cat, useNewSystem, maxVolume, range, intendedVolume);
 	}
 
 	@Override
