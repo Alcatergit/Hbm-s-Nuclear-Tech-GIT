@@ -17,6 +17,8 @@ import com.hbm.render.entity.item.RenderMovingPackage;
 import com.hbm.render.entity.mob.*;
 import com.hbm.render.item.*;
 import com.hbm.render.util.RenderOverhead;
+import com.hbm.sound.V2.AudioWrapperV2;
+import com.hbm.sound.V2.AudioWrapperClientV2;
 import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
