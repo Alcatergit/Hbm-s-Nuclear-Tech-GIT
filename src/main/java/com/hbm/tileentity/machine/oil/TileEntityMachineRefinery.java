@@ -5,6 +5,9 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.inventory.RefineryRecipes;
 import com.hbm.lib.Library;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.FluidTankPacket;
@@ -17,6 +20,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fluids.Fluid;
@@ -42,6 +46,9 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 	public boolean needsUpdate = false;
 	public FluidTank[] tanks;
 	public Fluid[] tankTypes;
+	public boolean isOn;
+	private AudioWrapper audio;
+	private int audioTime;
 
 	//private static final int[] slots_top = new int[] { 1 };
 	//private static final int[] slots_bottom = new int[] { 0, 2, 4, 6, 8, 10, 11};
@@ -122,6 +129,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 			if(this.inputValidForTank(0, 1)) //checking if the containers fluid has a recipe
 				FFUtils.fillFromFluidContainer(inventory, tanks[0], 1, 2);
 			
+			this.isOn = false;
 			refine();
 			
 			FFUtils.fillFluidContainer(inventory, tanks[1], 3, 4);
@@ -130,6 +138,55 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 			FFUtils.fillFluidContainer(inventory, tanks[4], 9, 10);
 
 			detectAndSendChanges();
+
+			NBTTagCompound data = new NBTTagCompound();
+			data.setBoolean("isOn", isOn);
+			this.networkPack(data, 25);
+		} else {
+			if(this.isOn) audioTime = 20;
+
+			if(audioTime > 0) {
+				audioTime--;
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.boiler, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.25F, 15F, 1.0F, 20);
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio.stopSound();
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.boiler, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.25F, 15F, 1.0F, 20);
+					audio.startSound();
+				}
+				audio.updateVolume(1F);
+				audio.keepAlive();
+			} else {
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
+		}
+	}
+
+	@Override
+	public void networkUnpack(NBTTagCompound nbt) {
+		super.networkUnpack(nbt);
+		if(nbt.hasKey("isOn")) this.isOn = nbt.getBoolean("isOn");
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
 		}
 	}
 
@@ -184,6 +241,7 @@ public class TileEntityMachineRefinery extends TileEntityMachineBase implements 
 			itemOutputTimer += 1;
 			power -= 5;
 			needsUpdate = true;
+			this.isOn = true;
 		}
 
 		if(itemOutputTimer >= totalItemTime) {
