@@ -715,6 +715,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
     }
 
     public static void statFacBale(World world, double x, double y, double z, float scale) {
+        y = world.getHeight((int) x, (int) z);
         if (scale < 25) {
             ExplosionLarge.explode(world, x, y, z, scale, true, true, true);
         } else {
