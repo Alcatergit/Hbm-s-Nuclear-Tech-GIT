@@ -47,7 +47,6 @@ public class GeneralConfig {
 	public static boolean callListModels = true;
 	public static boolean useShaders = false;
 	public static boolean useShaders2 = false;
-	public static boolean nukeWarpShockwave = true;
 	public static boolean bloom = true;
 	public static boolean heatDistortion = true;
 	public static boolean enableBabyMode = false;
@@ -121,7 +120,6 @@ public class GeneralConfig {
 			}
 		useShaders = false;
 		useShaders2 = config.get(CATEGORY_GENERAL, "1.23_enableShaders2", false).getBoolean(false);
-		nukeWarpShockwave = config.get(CATEGORY_GENERAL, "1.23_nukeWarpShockwave", true, "Enables the warp_world shader shockwave that follows nuclear shock fronts.").getBoolean(true);
 		Property ssg_anim = config.get(CATEGORY_GENERAL, "1.24_ssgAnimType", true);
 		ssg_anim.setComment("Which supershotgun reload animation to use. True is Drillgon's animation, false is Bob's animation");
 		ssgAnim = ssg_anim.getBoolean();
