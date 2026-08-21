@@ -206,7 +206,7 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
         cat.setLocationAndAngles(ocel.posX, ocel.posY, ocel.posZ, ocel.rotationYaw, ocel.rotationPitch);
         cat.setRotationYawHead(ocel.rotationYaw);
         cat.setRenderYawOffset(ocel.rotationYaw);
-        cat.setCustomNameTag(ocel.getCustomNameTag());
+        if (ocel.hasCustomName()) cat.setCustomNameTag(ocel.getCustomNameTag());
         cat.setGrowingAge(ocel.getGrowingAge());
         cat.setScaleForAge(ocel.isChild());
         cat.setTamed(ocel.isTamed());
