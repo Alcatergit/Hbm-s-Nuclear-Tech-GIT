@@ -202,23 +202,47 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			if(chance < fallChance)
 				return;
 		}
-		
-		int bottomHeight = lastGapHeight;
-		MutableBlockPos gapPos = new MutableBlockPos(pos.getX(), 0, pos.getZ());
-		
+
+		// Maintain bottom-to-top traversal direction, but fix fall logic
 		for(int i = lastGapHeight; i <= contactHeight; i++) {
 			pos.setY(i);
 			Block b = world.getBlockState(pos).getBlock();
-			if(!b.isReplaceable(world, pos)){
 
+			// Only process non-air blocks that are not replaceable
+			if(!b.isReplaceable(world, pos) && b != Blocks.AIR){
 				float hardness = b.getExplosionResistance(null);
-				if(hardness >= 0 && hardness < 50 && i != bottomHeight){
-					gapPos.setY(bottomHeight);
-					world.setBlockState(gapPos, world.getBlockState(pos));
-					world.setBlockToAir(pos);
+
+				// Only process blocks with low blast resistance
+				if(hardness >= 0 && hardness < 50){
+					// Find a suitable fall position for each block
+					int fallToHeight = lastGapHeight;
+
+					// Search downward from one block below the current position to find support
+					for(int y = i - 1; y >= lastGapHeight; y--) {
+						MutableBlockPos checkPos = new MutableBlockPos(pos.getX(), y, pos.getZ());
+						Block checkBlock = world.getBlockState(checkPos).getBlock();
+
+						// If a solid block is encountered (whether high or low blast resistance)
+						if(!checkBlock.isReplaceable(world, checkPos) && checkBlock != Blocks.AIR){
+							// Regardless of blast resistance, as long as it is solid, it can support the block above
+							// Return the position above this supporting block
+							fallToHeight = y + 1;
+							break;
+						}
+					}
+
+					// If a suitable fall position is found and it's not the current position
+					if(fallToHeight != i && fallToHeight >= lastGapHeight){
+						MutableBlockPos fallPos = new MutableBlockPos(pos.getX(), fallToHeight, pos.getZ());
+
+						// Ensure the target position is air or replaceable
+						if(world.getBlockState(fallPos).getBlock().isReplaceable(world, fallPos)){
+							world.setBlockState(fallPos, world.getBlockState(pos));
+							world.setBlockToAir(pos);
+						}
+					}
 				}
-				bottomHeight++;
-			}	
+			}
 		}
 	}
 
