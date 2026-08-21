@@ -177,7 +177,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			}
 
 			// Modified: Determine if the system is in the reloading acceleration phase.
-			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted <= (this.maxAge / 4)) && (this.timeExisted <= (this.timeExistedTemp + 80));
+			boolean isReloadedAccelerated = (this.isReloaded) && (this.timeExisted <= (this.maxAge / 4)) && (this.timeExisted <= (this.timeExistedTemp + 100));
             //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloaded: " + this.isReloaded);
             //MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate timeExistedTemp: " + this.timeExistedTemp);
 			//MainRegistry.logger.info("[NTM] NukeBlock: "+"(" + this.posX + ", " + this.posY + ", " + this.posZ + ")"+" Client onUpdate isReloadedAccelerated: " + isReloadedAccelerated);
@@ -246,7 +246,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 
 			// spawn ring clouds
 			boolean shouldSpawnRingClouds = false;
-			if (((this.isReloaded) && (this.timeExisted <= (this.timeExistedTemp + 80))) && this.getScale() > 0) {
+			if (((this.isReloaded) && (this.timeExisted < (this.timeExistedTemp + 200))) && this.getScale() > 0) {
 				shouldSpawnRingClouds = true;
 			} else if (this.timeExisted < 200) {
 				shouldSpawnRingClouds = true;
@@ -299,7 +299,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
 			int maxHeat = (int) (50 * s * s);
 			heat = maxHeat - Math.pow((double) (maxHeat * this.timeExisted) / maxAge, 0.6);
 
-			if (this.isReloaded && !isReloadedAccelerated) {
+			if ((this.isReloaded) && (this.timeExisted > (this.timeExistedTemp + 200))) {
 				this.isReloaded = false;
 			}
 		}
