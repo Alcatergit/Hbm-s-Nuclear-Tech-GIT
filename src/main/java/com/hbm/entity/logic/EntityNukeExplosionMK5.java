@@ -1,16 +1,7 @@
 package com.hbm.entity.logic;
 
-import com.hbm.entity.effect.EntityNukeTorex;
-import com.hbm.entity.grenade.EntityGrenadeASchrab;
-import com.hbm.entity.grenade.EntityGrenadeNuclear;
-import com.hbm.entity.missile.EntityMIRV;
 import com.hbm.entity.mob.EntityGlowingOne;
 import com.hbm.entity.mob.EntityThermonuclearCat;
-import com.hbm.entity.projectile.EntityBulletBase;
-import com.hbm.entity.projectile.EntityExplosiveBeam;
-import com.hbm.entity.projectile.EntityMiniMIRV;
-import com.hbm.entity.projectile.EntityMiniNuke;
-import com.hbm.handler.ArmorUtil;
 import com.hbm.items.ModItems;
 import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
@@ -85,7 +76,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 			}
 		}
 
-		double weatherFactor = getWeatherAttenuationFactor(world, this.posX, this.posY, this.posZ);
+		double weatherFactor = ContaminationUtil.getWeatherAttenuationFactor(world, this.posX, this.posY, this.posZ);
 		dealDamage(world, this.posX, this.posY, this.posZ, this.radius * 2.0F, weatherFactor);
 
 		//make some noise
@@ -145,22 +136,15 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
 		for(Entity e : entities) {
-			Vec3 vec = Vec3.createVectorHelper(e.posX - x, (e.posY + e.getEyeHeight()) - y, e.posZ - z);
+			AxisAlignedBB box = e.getEntityBoundingBox();
+			double closestX = Math.max(box.minX, Math.min(x, box.maxX));
+			double closestY = Math.max(box.minY, Math.min(y, box.maxY));
+			double closestZ = Math.max(box.minZ, Math.min(z, box.maxZ));
+			Vec3 vec = Vec3.createVectorHelper(closestX - x, closestY - y, closestZ - z);
 			double len = vec.length();
 
 			if(len <= radius) {
-				boolean isExplosionExempt =
-						e instanceof EntityNukeTorex ||
-								e instanceof EntityNukeExplosionMK5 ||
-								e instanceof EntityMIRV ||
-								e instanceof EntityMiniNuke ||
-								e instanceof EntityMiniMIRV ||
-								e instanceof EntityGrenadeASchrab ||
-								e instanceof EntityGrenadeNuclear ||
-								e instanceof EntityExplosiveBeam ||
-								e instanceof EntityBulletBase;
-				boolean isOcelot = e instanceof EntityOcelot;
-				boolean isPlayerImmune = e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots));
+				if(ContaminationUtil.isExplosionExempt(e)) continue;
 
 				vec = vec.normalize();
 				double dmgLen = Math.max(len, radius * 0.05D);
@@ -178,17 +162,17 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				if(res < 1)
 					res = 1;
 
-				if(!isExplosionExempt && isLiving && fallout && this.ticksExisted <= Math.max((int)Math.ceil(this.radius * 0.02), 1)){
+				if(isLiving && fallout && this.ticksExisted <= Math.max((int)Math.ceil(this.radius * 0.02), 1)){
 					float eRads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double)2 * this.ticksExisted / radius) + strength);
 					eRads *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
 					eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
 
 					ContaminationUtil.contaminate((EntityLivingBase)e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, eRads);
-					if (eRads >= 100 && e instanceof EntityZombie) {
+					if (eRads >= 100 && ContaminationUtil.getEntityConversionType(e) == 1) {
 						if(e instanceof EntityGlowingOne) continue;
 						convertToGlow(world, (EntityZombie) e);
 					}
-					if (eRads >= 100 && e instanceof EntityOcelot && this.radius > 120) {
+					if (eRads >= 100 && ContaminationUtil.getEntityConversionType(e) == 0 && this.radius > 120) {
 						if(e instanceof EntityThermonuclearCat) continue;
 						convertToThermo(world, (EntityOcelot) e);
 					}
@@ -197,7 +181,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				int thermalDuration = this.radius * 3;
 				double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
-				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.radius > 25 && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
+				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.radius > 25 && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
 					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius) * Math.exp(-dmgLen * weatherFactor / 80.0D)) / (float) (dmgLen * dmgLen * res));
 					if (fireDamage > 0.025) {
 						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
@@ -219,7 +203,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				double shockSpeed = 2D * this.radius / (double)blastDuration;
 				double currentBlastRadius = this.ticksExisted * Math.max(2D, shockSpeed);
 
-				if ((!isExplosionExempt && !isOcelot && !isPlayerImmune) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
+				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
 					float blastDamage = (float)(Math.pow(radius + 10, 3) * (this.radius > 25 ? 0.5F : 0.85F)) / (float)(dmgLen * dmgLen * dmgLen * res);
 					if(blastDamage > 0.025){
 						if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
@@ -231,21 +215,6 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				}
 			}
 		}
-	}
-
-	private static double getWeatherAttenuationFactor(World world, double x, double y, double z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		float rainfall = world.getBiome(pos).getRainfall();
-		double factor = 0.6D + 0.9D * (double)rainfall;
-
-		if(world.isRaining()) {
-			if(world.isThundering())
-				factor *= 1.8D;
-			else
-				factor *= 1.4D;
-		}
-
-		return Math.max(0.3D, Math.min(factor, 3.0D));
 	}
 
 	public static boolean isWet(World world, BlockPos pos){
