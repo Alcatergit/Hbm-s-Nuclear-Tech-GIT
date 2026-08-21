@@ -159,7 +159,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 								e instanceof EntityExplosiveBeam ||
 								e instanceof EntityBulletBase;
 				boolean isOcelot = e instanceof EntityOcelot;
-				boolean isPlayerImmune = e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots))
+				boolean isPlayerImmune = e instanceof EntityPlayer && (((EntityPlayer) e).isCreative() || ((EntityPlayer) e).isSpectator() || ArmorUtil.checkArmor(((EntityPlayer) e), ModItems.euphemium_helmet, ModItems.euphemium_plate, ModItems.euphemium_legs, ModItems.euphemium_boots));
 
 				vec = vec.normalize();
 				double dmgLen = Math.max(len, radius * 0.05D);
