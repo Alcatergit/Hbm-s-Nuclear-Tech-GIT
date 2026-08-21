@@ -2,6 +2,8 @@ package com.hbm.hazard.type;
 
 import java.util.List;
 
+import com.hbm.config.RadiationConfig;
+import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.config.GeneralConfig;
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.items.ModItems;
@@ -15,6 +17,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -39,7 +42,17 @@ public class HazardTypeRadiation extends HazardTypeBase {
 	}
 
 	@Override
-	public void updateEntity(EntityItem item, float level) { }
+	public void updateEntity(EntityItem item, float level) {
+		if(!RadiationConfig.enableItemRadiation || item.world.isRemote || level <= 0)
+			return;
+
+		ItemStack stack = item.getItem();
+		float rads = level * stack.getCount();
+		float radPerTick = rads / 20F;
+		double range = Math.min(128, Math.sqrt(rads));
+		ContaminationUtil.radiate(item.world, item.posX, item.posY, item.posZ, range, radPerTick, 0, 1.0D, null);
+		RadiationSavedData.incrementRad(item.world, new BlockPos(item.posX, item.posY, item.posZ), radPerTick, rads);
+	}
 
 	@Override
 	@SideOnly(Side.CLIENT)
