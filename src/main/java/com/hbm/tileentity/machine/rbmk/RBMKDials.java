@@ -33,6 +33,7 @@ public class RBMKDials {
 	public static final String KEY_DISABLE_XENON = "dialDisableXenon";
 	public static final String KEY_ABSORBER_HEAT_CONVERSION = "dialAbsorberHeatConversion";
 	public static final String KEY_PASSIVE_COOLING_INNER = "dialPassiveCoolingInner";
+	public static final String KEY_ENABLE_MELTDOWN_FLAME_EFFECT = "dialEnableMeltdownFlameEffect";
 	
 	public static void createDials(World world) {
 		GameRules rules = world.getGameRules();
@@ -63,6 +64,7 @@ public class RBMKDials {
 		rules.addGameRule(KEY_DISABLE_XENON, rules.hasRule(KEY_DISABLE_XENON) ? rules.getString(KEY_DISABLE_XENON) : "false", GameRules.ValueType.BOOLEAN_VALUE);
 		rules.addGameRule(KEY_ABSORBER_HEAT_CONVERSION, rules.hasRule(KEY_ABSORBER_HEAT_CONVERSION) ? rules.getString(KEY_ABSORBER_HEAT_CONVERSION) : "0.0", GameRules.ValueType.NUMERICAL_VALUE);
 		rules.addGameRule(KEY_PASSIVE_COOLING_INNER, rules.hasRule(KEY_PASSIVE_COOLING_INNER) ? rules.getString(KEY_PASSIVE_COOLING_INNER) : "0.1", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_ENABLE_MELTDOWN_FLAME_EFFECT, rules.hasRule(KEY_ENABLE_MELTDOWN_FLAME_EFFECT) ? rules.getString(KEY_ENABLE_MELTDOWN_FLAME_EFFECT) : "true", GameRules.ValueType.BOOLEAN_VALUE);
 	}
 	
 	/**
@@ -266,6 +268,10 @@ public class RBMKDials {
 
 	public static double getPassiveCoolingInner(World world) {
 		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_PASSIVE_COOLING_INNER), 0.1D), 0.0D, 1.0D);
+	}
+
+	public static boolean getMeltdownFlameEffect(World world) {
+		return world.getGameRules().getBoolean(KEY_ENABLE_MELTDOWN_FLAME_EFFECT);
 	}
 
 }
