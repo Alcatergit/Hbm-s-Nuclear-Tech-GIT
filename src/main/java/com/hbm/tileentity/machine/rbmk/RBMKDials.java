@@ -7,8 +7,6 @@ import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 
 public class RBMKDials {
-public static final String KEY_SAVE_DIALS = "dialSaveDials";
-	
 	public static final String KEY_PASSIVE_COOLING = "dialPassiveCooling";
 	public static final String KEY_COLUMN_HEAT_FLOW = "dialColumnHeatFlow";
 	public static final String KEY_FUEL_DIFFUSION_MOD = "dialDiffusionMod";
@@ -26,30 +24,45 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 	public static final String KEY_REASIM_MOD = "dialReasimOutputMod";
 	public static final String KEY_REASIM_BOILERS = "dialReasimBoilers";
 	public static final String KEY_REASIM_BOILER_SPEED = "dialReasimBoilerSpeed";
+	public static final String KEY_DISABLE_MELTDOWNS = "dialDisableMeltdowns";
+	public static final String KEY_ENABLE_MELTDOWN_OVERPRESSURE = "dialEnableMeltdownOverpressure";
+	public static final String KEY_MODERATOR_EFFICIENCY = "dialModeratorEfficiency";
+	public static final String KEY_ABSORBER_EFFICIENCY = "dialAbsorberEfficiency";
+	public static final String KEY_REFLECTOR_EFFICIENCY = "dialReflectorEfficiency";
+	public static final String KEY_DISABLE_DEPLETION = "dialDisableDepletion";
+	public static final String KEY_DISABLE_XENON = "dialDisableXenon";
+	public static final String KEY_ABSORBER_HEAT_CONVERSION = "dialAbsorberHeatConversion";
+	public static final String KEY_PASSIVE_COOLING_INNER = "dialPassiveCoolingInner";
 	
 	public static void createDials(World world) {
 		GameRules rules = world.getGameRules();
-		
-		if(!rules.getBoolean(KEY_SAVE_DIALS)) {
-			rules.setOrCreateGameRule(KEY_PASSIVE_COOLING, "1.0");
-			rules.setOrCreateGameRule(KEY_COLUMN_HEAT_FLOW, "0.2");
-			rules.setOrCreateGameRule(KEY_FUEL_DIFFUSION_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_HEAT_PROVISION, "0.2");
-			rules.setOrCreateGameRule(KEY_COLUMN_HEIGHT, "4");
-			rules.setOrCreateGameRule(KEY_PERMANENT_SCRAP, "true");
-			rules.setOrCreateGameRule(KEY_BOILER_HEAT_CONSUMPTION, "0.1");
-			rules.setOrCreateGameRule(KEY_CONTROL_SPEED_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_REACTIVITY_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_SAVE_DIALS, "true");
-			rules.setOrCreateGameRule(KEY_OUTGASSER_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_SURGE_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_FLUX_RANGE, "5");
-			rules.setOrCreateGameRule(KEY_REASIM_RANGE, "10");
-			rules.setOrCreateGameRule(KEY_REASIM_COUNT, "6");
-			rules.setOrCreateGameRule(KEY_REASIM_MOD, "1.0");
-			rules.setOrCreateGameRule(KEY_REASIM_BOILERS, "false");
-			rules.setOrCreateGameRule(KEY_REASIM_BOILER_SPEED, "0.05");
-		}
+
+		rules.addGameRule(KEY_PASSIVE_COOLING, rules.hasRule(KEY_PASSIVE_COOLING) ? rules.getString(KEY_PASSIVE_COOLING) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_COLUMN_HEAT_FLOW, rules.hasRule(KEY_COLUMN_HEAT_FLOW) ? rules.getString(KEY_COLUMN_HEAT_FLOW) : "0.2", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_FUEL_DIFFUSION_MOD, rules.hasRule(KEY_FUEL_DIFFUSION_MOD) ? rules.getString(KEY_FUEL_DIFFUSION_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_HEAT_PROVISION, rules.hasRule(KEY_HEAT_PROVISION) ? rules.getString(KEY_HEAT_PROVISION) : "0.2", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_COLUMN_HEIGHT, rules.hasRule(KEY_COLUMN_HEIGHT) ? rules.getString(KEY_COLUMN_HEIGHT) : "4", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_PERMANENT_SCRAP, rules.hasRule(KEY_PERMANENT_SCRAP) ? rules.getString(KEY_PERMANENT_SCRAP) : "true", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_BOILER_HEAT_CONSUMPTION, rules.hasRule(KEY_BOILER_HEAT_CONSUMPTION) ? rules.getString(KEY_BOILER_HEAT_CONSUMPTION) : "0.1", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_CONTROL_SPEED_MOD, rules.hasRule(KEY_CONTROL_SPEED_MOD) ? rules.getString(KEY_CONTROL_SPEED_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REACTIVITY_MOD, rules.hasRule(KEY_REACTIVITY_MOD) ? rules.getString(KEY_REACTIVITY_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_OUTGASSER_MOD, rules.hasRule(KEY_OUTGASSER_MOD) ? rules.getString(KEY_OUTGASSER_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_SURGE_MOD, rules.hasRule(KEY_SURGE_MOD) ? rules.getString(KEY_SURGE_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_FLUX_RANGE, rules.hasRule(KEY_FLUX_RANGE) ? rules.getString(KEY_FLUX_RANGE) : "5", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REASIM_RANGE, rules.hasRule(KEY_REASIM_RANGE) ? rules.getString(KEY_REASIM_RANGE) : "10", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REASIM_COUNT, rules.hasRule(KEY_REASIM_COUNT) ? rules.getString(KEY_REASIM_COUNT) : "6", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REASIM_MOD, rules.hasRule(KEY_REASIM_MOD) ? rules.getString(KEY_REASIM_MOD) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REASIM_BOILERS, rules.hasRule(KEY_REASIM_BOILERS) ? rules.getString(KEY_REASIM_BOILERS) : "false", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_REASIM_BOILER_SPEED, rules.hasRule(KEY_REASIM_BOILER_SPEED) ? rules.getString(KEY_REASIM_BOILER_SPEED) : "0.05", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_DISABLE_MELTDOWNS, rules.hasRule(KEY_DISABLE_MELTDOWNS) ? rules.getString(KEY_DISABLE_MELTDOWNS) : "false", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_ENABLE_MELTDOWN_OVERPRESSURE, rules.hasRule(KEY_ENABLE_MELTDOWN_OVERPRESSURE) ? rules.getString(KEY_ENABLE_MELTDOWN_OVERPRESSURE) : "false", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_MODERATOR_EFFICIENCY, rules.hasRule(KEY_MODERATOR_EFFICIENCY) ? rules.getString(KEY_MODERATOR_EFFICIENCY) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_ABSORBER_EFFICIENCY, rules.hasRule(KEY_ABSORBER_EFFICIENCY) ? rules.getString(KEY_ABSORBER_EFFICIENCY) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_REFLECTOR_EFFICIENCY, rules.hasRule(KEY_REFLECTOR_EFFICIENCY) ? rules.getString(KEY_REFLECTOR_EFFICIENCY) : "1.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_DISABLE_DEPLETION, rules.hasRule(KEY_DISABLE_DEPLETION) ? rules.getString(KEY_DISABLE_DEPLETION) : "false", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_DISABLE_XENON, rules.hasRule(KEY_DISABLE_XENON) ? rules.getString(KEY_DISABLE_XENON) : "false", GameRules.ValueType.BOOLEAN_VALUE);
+		rules.addGameRule(KEY_ABSORBER_HEAT_CONVERSION, rules.hasRule(KEY_ABSORBER_HEAT_CONVERSION) ? rules.getString(KEY_ABSORBER_HEAT_CONVERSION) : "0.0", GameRules.ValueType.NUMERICAL_VALUE);
+		rules.addGameRule(KEY_PASSIVE_COOLING_INNER, rules.hasRule(KEY_PASSIVE_COOLING_INNER) ? rules.getString(KEY_PASSIVE_COOLING_INNER) : "0.1", GameRules.ValueType.NUMERICAL_VALUE);
 	}
 	
 	/**
@@ -218,4 +231,41 @@ public static final String KEY_SAVE_DIALS = "dialSaveDials";
 		} catch(Exception ignored) { }
 		return def;
 	}
+
+	public static boolean getMeltdownsDisabled(World world) {
+		return world.getGameRules().getBoolean(KEY_DISABLE_MELTDOWNS);
+	}
+
+	public static boolean getMeltdownOverpressure(World world) {
+		return world.getGameRules().getBoolean(KEY_ENABLE_MELTDOWN_OVERPRESSURE);
+	}
+
+	public static double getModeratorEfficiency(World world) {
+		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_MODERATOR_EFFICIENCY), 1.0D), 0.0D, 1.0D);
+	}
+
+	public static double getAbsorberEfficiency(World world) {
+		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_ABSORBER_EFFICIENCY), 1.0D), 0.0D, 1.0D);
+	}
+
+	public static double getReflectorEfficiency(World world) {
+		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_REFLECTOR_EFFICIENCY), 1.0D), 0.0D, 1.0D);
+	}
+
+	public static boolean getDepletion(World world) {
+		return !world.getGameRules().getBoolean(KEY_DISABLE_DEPLETION);
+	}
+
+	public static boolean getXenon(World world) {
+		return !world.getGameRules().getBoolean(KEY_DISABLE_XENON);
+	}
+
+	public static double getAbsorberHeatConversion(World world) {
+		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_ABSORBER_HEAT_CONVERSION), 0.05D), 0.0D, 1.0D);
+	}
+
+	public static double getPassiveCoolingInner(World world) {
+		return MathHelper.clamp(shittyWorkaroundParseDouble(world.getGameRules().getString(KEY_PASSIVE_COOLING_INNER), 0.1D), 0.0D, 1.0D);
+	}
+
 }
