@@ -459,7 +459,6 @@ public class RadiationSystemNT {
                                 world.spawnEntity(creep);
 							entity.setDead();
 							continue;
-
 						} else if(eRad >= 600 && entity instanceof EntityVillager vil) {
 							EntityZombieVillager creep = new EntityZombieVillager(world);
 
