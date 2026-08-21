@@ -3,7 +3,6 @@ package com.hbm.main;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -58,6 +57,7 @@ import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityQuasar;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.effect.EntityVortex;
@@ -806,6 +806,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fallout_rain"), EntityFalloutRain.class, "entity_fallout_rain", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fallout_flare"), EntityFalloutUnderGround.class, "entity_fallout_flare", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_effect_torex"), EntityNukeTorex.class, "entity_effect_torex", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_shockwave"), ExplosionLarge.EntityShockwave.class, "entity_shockwave", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_smoke_fx"), EntitySmokeFX.class, "entity_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_b_smoke_fx"), EntityBSmokeFX.class, "entity_b_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_shrapnel"), EntityShrapnel.class, "enity_shrapnel", i++, MainRegistry.instance, 1000, 1, true);
