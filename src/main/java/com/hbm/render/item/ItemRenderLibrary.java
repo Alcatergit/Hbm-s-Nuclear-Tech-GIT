@@ -338,8 +338,8 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.tank_tex); ResourceManager.fluidtank.renderPart("Frame");
-				GlStateManager.shadeModel(GL11.GL_FLAT);
 				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Tank");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_catalytic_reformer), new ItemRenderBase() {
