@@ -227,12 +227,16 @@ public class ExplosionLarge {
 	}
 
 	public static void explode(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
-		if(CompatibilityConfig.isWarDim(world)){
+		explode(world, x, y, z, strength, cloud, rubble, shrapnel, true);
+	}
+
+	public static void explode(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel, boolean nuke) {
+		if (nuke && CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)strength, x, y, z));
-		
+
 			ContaminationUtil.radiate(world, x, y, z, strength, 0, 0, 0, strength*30F);
 		}
+		world.spawnEntity(createShockwave(world, (int)strength, x, y, z));
 		if (cloud)
 			spawnParticles(world, x, y+2, z, cloudFunction((int) strength));
 		if (rubble)
@@ -242,8 +246,7 @@ public class ExplosionLarge {
 	}
 
     public static void explodeArea(World world, double x, double y, double z, float radius, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-		world.spawnEntity(createShockwave(world, (int) radius, x, y, z));
-        if(CompatibilityConfig.isWarDim(world)){
+        if (CompatibilityConfig.isWarDim(world)){
             List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
             for(Entity e : entities) {
@@ -254,6 +257,7 @@ public class ExplosionLarge {
                 e.attackEntityFrom(ModDamageSource.blast, (float) (strength / (len/radius)));
             }
         }
+		world.spawnEntity(createShockwave(world, (int)radius, x, y, z));
         if (cloud)
             spawnParticles(world, x, y+2, z, cloudFunction((int) strength));
         if (rubble)
@@ -276,12 +280,12 @@ public class ExplosionLarge {
 	}
 
 	public static void explodeFire(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
-		if(CompatibilityConfig.isWarDim(world)){
+		if (CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRadFire(world, (int)strength, x, y, z));
 
 			ContaminationUtil.radiate(world, x, y, z, strength, 0, 0, strength*20F, strength*5F);
 		}
+		world.spawnEntity(createShockwave(world, (int)strength, x, y, z));
 		if(cloud)
 			spawnParticles(world, x, y+2, z, cloudFunction((int)strength));
 		if(rubble)
@@ -305,16 +309,15 @@ public class ExplosionLarge {
 	}
 	
 	public static void buster(World world, double x, double y, double z, Vec3 vector, float strength, float depth) {
-		world.spawnEntity(createShockwave(world, (int) strength, x, y, z));
-		
 		vector = vector.normalize();
-		if(CompatibilityConfig.isWarDim(world)){
+		if (CompatibilityConfig.isWarDim(world)){
 			for(int i = 0; i <= depth; i += 3) {
 				
 				ContaminationUtil.radiate(world, x + vector.xCoord * i, y + vector.yCoord * i, z + vector.zCoord * i, strength, 0, 0, 0, strength*10F);
 				world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)strength, x + vector.xCoord * i, y + vector.yCoord * i, z + vector.zCoord * i));
 			}
 		}
+		world.spawnEntity(createShockwave(world, (int)strength, x, y, z));
 		spawnParticles(world, x, y+2, z, cloudFunction((int)strength));
 		spawnRubble(world, x, y+2, z, rubbleFunction((int)strength));
 		spawnShrapnels(world, x, y+2, z, shrapnelFunction((int)strength));
