@@ -653,17 +653,30 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	private void drain(MutableBlockPos pos){
 		if(waterLevel <= 0) return;
 
-		// Save the original coordinates of the current column
-		int originalX = pos.getX();
-		int originalZ = pos.getZ();
+		// Key: Only process the 18x18 range when at the first column of each chunk (x%16==0 and z%16==0)
+		int x = pos.getX();
+		int z = pos.getZ();
 
-		// ========== Key modification: expand to 18x18 range only inside drain() ==========
-		// Expand one block in each direction (from -1 to 16, total 18 blocks)
+		// If not at chunk start coordinates, skip to avoid duplicate processing
+		if(x % 16 != 0 || z % 16 != 0) {
+			// Only process this single column (same as original code)
+			for(int y = 2; y <= 255; y++) {
+				pos.setY(y);
+				Block block = world.getBlockState(pos).getBlock();
+				if(block == Blocks.WATER || block == Blocks.FLOWING_WATER){
+					world.setBlockToAir(pos);
+				}
+			}
+			return;
+		}
+
+		// If at chunk start coordinates, process the 18x18 range (current chunk + surrounding 1-block border)
+		// From -1 to 16, total 18 blocks (covers current chunk + surrounding border)
 		for(int dx = -1; dx <= 16; dx++) {
 			for(int dz = -1; dz <= 16; dz++) {
-				// Process from bottom to top (your core fix remains unchanged)
+				// Process from bottom to top
 				for(int y = 2; y <= 255; y++) {
-					pos.setPos(originalX + dx, y, originalZ + dz);
+					pos.setPos(x + dx, y, z + dz);
 					Block block = world.getBlockState(pos).getBlock();
 					if(block == Blocks.WATER || block == Blocks.FLOWING_WATER){
 						world.setBlockToAir(pos);
@@ -672,8 +685,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 		}
 
-		// Restore the original coordinates of pos to avoid affecting subsequent logic
-		pos.setPos(originalX, 0, originalZ);
+		// Restore the original coordinates of pos
+		pos.setPos(x, 0, z);
 	}
 
 	private void stomp(MutableBlockPos pos, double dist) {
