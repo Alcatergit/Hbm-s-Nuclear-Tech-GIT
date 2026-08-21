@@ -355,6 +355,7 @@ public class RadiationSystemNT {
 
 							if(world.rand.nextInt(3) == 0) {
 								EntityNuclearCreeper creep = new EntityNuclearCreeper(world);
+                                creep.setCreeperState(creeper.getCreeperState());
 								creep.setPowered(creeper.getPowered());
 								if (creeper.hasIgnited()) creep.ignite();
 								creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
