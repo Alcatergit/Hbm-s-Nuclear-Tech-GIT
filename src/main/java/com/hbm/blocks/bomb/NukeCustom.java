@@ -91,8 +91,9 @@ public class NukeCustom extends BlockContainer implements IBomb {
 	
 	@Override
 	public void neighborChanged(IBlockState state, World world, BlockPos pos, Block blockIn, BlockPos fromPos) {
-			// ========== NEW: Detonation condition check ==========
 		if (world.getRedstonePowerFromNeighbors(pos) > 0 && !world.isRemote) {
+			// ========== NEW: Detonation condition check ==========
+			TileEntityNukeCustom entity = (TileEntityNukeCustom) world.getTileEntity(pos);
 			// Check whether at least one type of explosive is present in greater than zero quantity (TNT, nuclear materials, hydrogen bomb materials, etc.).
 			if(entity != null && (entity.tnt > 0 || entity.nuke > 0 || entity.hydro > 0 || 
 				entity.bale > 0 || entity.schrab > 0 || entity.sol > 0 || entity.euph > 0)) {
