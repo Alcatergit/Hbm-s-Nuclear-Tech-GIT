@@ -17,7 +17,6 @@ import com.hbm.lib.ModDamageSource;
 import com.hbm.main.AdvancementManager;
 
 import com.hbm.render.amlfrom1710.Vec3;
-import net.minecraft.entity.monster.EntityPolarBear;
 import net.minecraft.entity.passive.EntityOcelot;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
