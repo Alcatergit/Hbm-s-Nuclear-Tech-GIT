@@ -60,8 +60,10 @@ public class TileEntityRBMKCooler extends TileEntityRBMKBase implements IFluidHa
 					List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(pos.getX(), pos.getY()+rbmkHeight, pos.getZ(), pos.getX()+1, pos.getY()+rbmkHeight+6, pos.getZ()+1));
 
 					for(Entity e : entities) {
-						e.setFire(5);
-						e.attackEntityFrom(DamageSource.IN_FIRE, 10);
+                        if (!e.isImmuneToFire) {
+                            e.setFire(5);
+                            e.attackEntityFrom(DamageSource.IN_FIRE, 10);
+                        }
 					}
 				}
 			} else {
