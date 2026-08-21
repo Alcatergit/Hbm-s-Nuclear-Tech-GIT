@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 import java.util.Map;
+
+import com.hbm.forgefluid.FFPipeNetworkMk2;
+import com.hbm.tileentity.IOverpressurable;
 
 import org.lwjgl.opengl.GL11;
 
@@ -40,6 +44,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.network.NetworkManager;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -56,7 +62,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 
 public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacketReceiver, ITickable, IControllable {
 
-	public static int rbmkHeight = 4;
+	public static boolean explodeOnBroken = true;
+	public static int rbmkHeight = 3;
 	
 	public double heat = 20.0D;
 	public double jumpheight = 0.0D;
@@ -95,8 +102,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	 * Around the same for every component except boilers which do not have passive cooling
 	 * @return
 	 */
-	public double passiveCooling() {
-		return RBMKDials.getPassiveCooling(world); //default: 5.0D
+	public double passiveCooling(int neighbors) {
+		double min = RBMKDials.getPassiveCoolingInner(world);
+		double max = RBMKDials.getPassiveCooling(world);
+		return min + (max - min) * ((4 - MathHelper.clamp(neighbors, 0, 4)) / 4D);
 	}
 	
 	//necessary checks to figure out whether players are close enough to ensure that the reactor can be safely used
@@ -115,7 +124,6 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			moveHeat();
 			if(RBMKDials.getReasimBoilers(world)) 
 				boilWater();
-			coolPassively();
 			jump();
 			
 			NBTTagCompound data = new NBTTagCompound();
@@ -133,7 +141,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			if(this.heat > MachineConfig.rbmkJumpTemp){
 				if(this.jumpheight > 0 || world.rand.nextInt((int)(25D*maxHeat()/(this.heat-MachineConfig.rbmkJumpTemp+200D))+1) == 0){
 					double change = (this.heat-MachineConfig.rbmkJumpTemp)*0.0002D;
-					double heightLimit = (this.heat-MachineConfig.rbmkJumpTemp)*0.002D;
+					double heightLimit = Math.min((this.heat-MachineConfig.rbmkJumpTemp)*0.002D, 1.0D);
 
 					this.jumpheight = this.jumpheight + change;
 					
@@ -148,7 +156,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		} else{ // gravity fall
 			if(this.jumpheight > 0){
 				this.downwardSpeed = this.downwardSpeed + gravity * 0.05F;
-				this.jumpheight = this.jumpheight - this.downwardSpeed;
+				this.jumpheight = Math.max(this.jumpheight - this.downwardSpeed, 0);
 			} else {
 				this.jumpheight = 0;
 				this.downwardSpeed = 0;
@@ -254,11 +262,13 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			
 			this.markDirty();
 		}
+		
+		coolPassively(members - 1);
 	}
 	
-	protected void coolPassively() {
+	protected void coolPassively(int neighbors) {
 		
-		this.heat -= this.passiveCooling();
+		this.heat -= this.passiveCooling(neighbors);
 		
 		if(heat < 20)
 			heat = 20D;
@@ -306,6 +316,16 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		diag = true;
 		this.readFromNBT(nbt);
 		diag = false;
+	}
+	
+	@Override
+	public void onDataPacket(NetworkManager net, SPacketUpdateTileEntity pkt) {
+		this.handleUpdateTag(pkt.getNbtCompound());
+	}
+
+	@Override
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newState) {
+		return oldState.getBlock() != newState.getBlock();
 	}
 	
 	public void getDiagData(NBTTagCompound nbt) {
@@ -432,6 +452,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	}
 	
 	public static HashSet<TileEntityRBMKBase> columns = new HashSet<>();
+	public static Set<FFPipeNetworkMk2> pipes = new HashSet<>();
 	
 	//assumes that !world.isRemote
 	public void meltdown() {
@@ -439,8 +460,9 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		RBMKBase.dropLids = false;
 		
 		columns.clear();
+		pipes.clear();
 		getFF(pos.getX(), pos.getY(), pos.getZ());
-		
+
 		int minX = pos.getX();
 		int maxX = pos.getX();
 		int minZ = pos.getZ();
@@ -492,6 +514,38 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 							}
 						}
 					}
+				}
+			}
+		}
+		
+		// Handle overpressure event
+		if(RBMKDials.getMeltdownOverpressure(world) && !pipes.isEmpty()) {
+			Set<BlockPos> pipeBlocks = new HashSet<>();
+			Set<TileEntity> pipeReceivers = new HashSet<>();
+			
+			for(FFPipeNetworkMk2 net : pipes) {
+				pipeBlocks.addAll(net.getPipePositions().keySet());
+				pipeReceivers.addAll(net.getFillableTiles().values());
+			}
+			
+			int count = 0;
+			int max = Math.min(pipeBlocks.size() / 5, 100);
+			Iterator<BlockPos> itPipes = pipeBlocks.iterator();
+			
+			while(itPipes.hasNext() && count < max) {
+				BlockPos pos = itPipes.next();
+				if(world.getTileEntity(pos) != null) {
+					world.setBlockToAir(pos);
+				}
+				count++;
+			}
+			
+			for(TileEntity receiver : pipeReceivers) {
+				if(receiver instanceof IOverpressurable) {
+					((IOverpressurable) receiver).explode(world, receiver.getPos().getX(), receiver.getPos().getY(), receiver.getPos().getZ());
+				} else {
+					world.setBlockToAir(receiver.getPos());
+					world.newExplosion(null, receiver.getPos().getX() + 0.5, receiver.getPos().getY() + 0.5, receiver.getPos().getZ() + 0.5, 5F, false, false);
 				}
 			}
 		}
