@@ -7,6 +7,7 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControl;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -48,7 +49,24 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		double level = control.lastLevel + (control.level - control.lastLevel) * partialTicks;
 		
 		GL11.glTranslated(0, TileEntityRBMKBase.rbmkHeight + control.jumpheight + level, 0);
-		ResourceManager.rbmk_rods.renderPart("Lid");
+		
+		tes.startDrawing(GL11.GL_TRIANGLES);
+		ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
+		tes.draw();
+		
+		if(control instanceof TileEntityRBMKControlManual crm && crm.color != null) {
+			switch(crm.color) {
+			case RED:    GlStateManager.color(1.0F, 0.0F, 0.0F); break;
+			case YELLOW: GlStateManager.color(1.0F, 0.847F, 0.0F); break;
+			case GREEN:  GlStateManager.color(0.298F, 1.0F, 0.0F); break;
+			case BLUE:   GlStateManager.color(0.0F, 0.149F, 1.0F); break;
+			case PURPLE: GlStateManager.color(0.698F, 0.0F, 1.0F); break;
+			}
+			tes.startDrawing(GL11.GL_TRIANGLES);
+			ResourceManager.rbmk_rods.tessellatePartAbove(tes, "Lid", 1.125F);
+			tes.draw();
+			GlStateManager.color(1.0F, 1.0F, 1.0F);
+		}
 
 		GL11.glPopMatrix();
 	}
