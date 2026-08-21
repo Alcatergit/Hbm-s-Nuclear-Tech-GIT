@@ -32,7 +32,7 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
 
-		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpheight + RBMKDials.getColumnHeight(control.getWorld()));
+		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpHeight + RBMKDials.getColumnHeight(control.getWorld()));
 		
 		tes.draw();
 		
@@ -48,7 +48,7 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		
 		double level = control.lastLevel + (control.level - control.lastLevel) * partialTicks;
 		
-		GL11.glTranslated(0, RBMKDials.getColumnHeight(control.getWorld()) + control.jumpheight + level, 0);
+		GL11.glTranslated(0, RBMKDials.getColumnHeight(control.getWorld()) + control.jumpHeight + level, 0);
 		
 		tes.startDrawing(GL11.GL_TRIANGLES);
 		ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
