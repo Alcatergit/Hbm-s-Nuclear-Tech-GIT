@@ -171,7 +171,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 this.rollerSize = this.rollerSize * this.scale;
                 this.isReloaded = true;
                 this.isScaled = true;
-                if (MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < Math.min(2 * explosionRadius, this.ticksExisted * shockSpeed + shockSpeed)) {
+                if (MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < Math.min(15 * explosionRadius, this.ticksExisted * shockSpeed + shockSpeed)) {
                     this.didPlaySound = true;
                     this.didShake = true;
                 }
@@ -210,7 +210,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     // spawn shock clouds
                     if(ticksExisted2 * shockSpeed < 2 * explosionRadius) {
 
-                        int ticksExisted = Math.max(ticksExisted2 - (int) (Math.min(s, 1.0) * 10), 0);
+                        int ticksExisted = Math.max(ticksExisted2 - (int) (Math.min(s, 1.0) * 5), 0);
                         int cloudCount = (int) Math.min(ticksExisted * shockSpeed, 100);
                         int shockLife = (int) Math.max(s * 300 - ticksExisted * shockSpeed * 10, 60);
 
@@ -226,6 +226,22 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                             if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
                                 MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.nuclearExplosion, SoundCategory.HOSTILE, 10_000F, 1F);
                                 didPlaySound = true;
+                            }
+                        }
+                    } else if(ticksExisted2 * shockSpeed < 5 * explosionRadius) {
+                        if(!didPlaySound) {
+                            if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
+                                MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+                                didPlaySound = true;
+                                didShake = true;
+                            }
+                        }
+                    } else if(ticksExisted2 * shockSpeed < 15 * explosionRadius) {
+                        if(!didPlaySound) {
+                            if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
+                                MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+                                didPlaySound = true;
+                                didShake = true;
                             }
                         }
                     }
@@ -271,22 +287,20 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                         }
                     }
 
-                    cloudlets.removeIf(x -> x.isDead);
                     for(Cloudlet cloud : cloudlets) {
                         cloud.update(ticksExisted2);
                     }
 
-                    double coreHeightIncrement = 0.15;
-                    double torusWidthIncrement = 0.05;
-
-                    coreHeight += coreHeightIncrement;
-                    torusWidth += torusWidthIncrement;
+                    coreHeight += 0.15;
+                    torusWidth += 0.05;
 
                     rollerSize = torusWidth * 0.35;
                     convectionHeight = coreHeight + rollerSize;
 
                     int maxHeat = (int) (50 * s * s);
                     heat = maxHeat - Math.pow((double) (maxHeat * ticksExisted2) / maxAge, 0.6);
+
+                    cloudlets.removeIf(x -> x.isDead);
                 }
             }
 
@@ -331,7 +345,7 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                 // spawn shock clouds
                 if(this.ticksExisted * shockSpeed < 2 * explosionRadius) {
 
-                    int ticksExisted = Math.max(this.ticksExisted - (int) (Math.min(s, 1.0) * 10), 0);
+                    int ticksExisted = Math.max(this.ticksExisted - (int) (Math.min(s, 1.0) * 5), 0);
                     int cloudCount = (int) Math.min(ticksExisted * shockSpeed, 100);
                     int shockLife = (int) Math.max(s * 300 - ticksExisted * shockSpeed * 10, 60);
 
@@ -347,6 +361,22 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                         if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
                             MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.nuclearExplosion, SoundCategory.HOSTILE, 10_000F, 1F);
                             didPlaySound = true;
+                        }
+                    }
+                } else if(ticksExisted * shockSpeed < 5 * explosionRadius) {
+                    if(!didPlaySound) {
+                        if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeNear, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+                            didPlaySound = true;
+                            didShake = true;
+                        }
+                    }
+                } else if(ticksExisted * shockSpeed < 15 * explosionRadius) {
+                    if(!didPlaySound) {
+                        if(MainRegistry.proxy.me() != null && MainRegistry.proxy.me().getDistance(this) < ticksExisted * shockSpeed + shockSpeed) {
+                            MainRegistry.proxy.playSoundClient(posX, posY, posZ, HBMSoundHandler.explosionLargeFar, SoundCategory.HOSTILE, 10_000F, 0.9F + rand.nextFloat() * 0.2F);
+                            didPlaySound = true;
+                            didShake = true;
                         }
                     }
                 }
@@ -392,22 +422,20 @@ public class EntityNukeTorex extends Entity implements IConstantRenderer {
                     }
                 }
 
-                cloudlets.removeIf(x -> x.isDead);
                 for(Cloudlet cloud : cloudlets) {
                     cloud.update();
                 }
 
-                double coreHeightIncrement = 0.15;
-                double torusWidthIncrement = 0.05;
-
-                coreHeight += coreHeightIncrement;
-                torusWidth += torusWidthIncrement;
+                coreHeight += 0.15;
+                torusWidth += 0.05;
 
                 rollerSize = torusWidth * 0.35;
                 convectionHeight = coreHeight + rollerSize;
 
                 int maxHeat = (int) (50 * s * s);
                 heat = maxHeat - Math.pow((double) (maxHeat * this.ticksExisted) / maxAge, 0.6);
+
+                cloudlets.removeIf(x -> x.isDead);
             }
 
             this.ticksExistedTemp = this.ticksExisted;
