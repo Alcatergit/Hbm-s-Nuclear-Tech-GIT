@@ -440,6 +440,11 @@ public class RadiationSystemNT {
 							continue;
 						} else if(eRad >= 500 && entity instanceof EntityPig) {
 							EntityPigZombie creep = new EntityPigZombie(world);
+
+                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+                            float f = difficulty.getClampedAdditionalDifficulty();
+
+                            creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							if (entity.isChild()) creep.setChild(true);
 							creep.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
 
@@ -450,10 +455,6 @@ public class RadiationSystemNT {
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, entity.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
 
-							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
-							float f = difficulty.getClampedAdditionalDifficulty();
-							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
-
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
 							entity.setDead();
@@ -461,6 +462,11 @@ public class RadiationSystemNT {
 
 						} else if(eRad >= 600 && entity instanceof EntityVillager vil) {
 							EntityZombieVillager creep = new EntityZombieVillager(world);
+
+                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
+                            float f = difficulty.getClampedAdditionalDifficulty();
+
+                            creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 							creep.setProfession(vil.getProfession());
 							creep.setForgeProfession(vil.getProfessionForge());
 							creep.setChild(vil.isChild());
@@ -472,10 +478,6 @@ public class RadiationSystemNT {
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.CHEST));
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.LEGS));
                             creep.setItemStackToSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET, vil.getItemStackFromSlot(net.minecraft.inventory.EntityEquipmentSlot.FEET));
-
-							DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(entity.posX, entity.posY, entity.posZ));
-							float f = difficulty.getClampedAdditionalDifficulty();
-							creep.setCanPickUpLoot(world.rand.nextFloat() < 1.1F * f);
 
 							if(!entity.isDead)
                                 world.spawnEntity(creep);
@@ -490,44 +492,41 @@ public class RadiationSystemNT {
 							entity.setDead();
 							continue;
 						} else if(eRad >= 800 && entity instanceof EntityHorse horsie) {
-							// Horses transformed into immortal horses: 75% zombie horses, 25% skeleton horses.
+                            DifficultyInstance difficulty = world.getDifficultyForLocation(new BlockPos(horsie.posX, horsie.posY, horsie.posZ));
+                            float f = difficulty.getAdditionalDifficulty() * (world.isRaining() && world.isThundering() ? 2F : 1F);
 
-							if(world.rand.nextFloat() < 0.25F) {
-								// 18.75% chance of spawning a skeleton horses.
-								EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
-								skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-								skehorse.setGrowingAge(horsie.getGrowingAge());
-								skehorse.setTemper(horsie.getTemper());
-								skehorse.setHorseSaddled(horsie.isHorseSaddled());
-								skehorse.setHorseTamed(horsie.isTame());
-								skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
+                            if(world.rand.nextDouble() < (double)f * 0.04D) {
+                                EntitySkeletonHorse skehorse = new EntitySkeletonHorse(world);
+                                skehorse.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+                                skehorse.setGrowingAge(horsie.getGrowingAge());
+                                if(world.rand.nextDouble() < (double)f * 0.02D) {
+                                    skehorse.setTrap(true);
+                                }else {
+                                    skehorse.setTemper(horsie.getTemper());
+                                    skehorse.setHorseSaddled(horsie.isHorseSaddled());
+                                    skehorse.setHorseTamed(horsie.isTame());
+                                    skehorse.setOwnerUniqueId(horsie.getOwnerUniqueId());
+                                }
 
-								// 6.25% chance of spawning a skeleton horses trap.
-								if(world.rand.nextFloat() < 0.25F) {
-									skehorse.setTrap(true);
-									skehorse.setHorseTamed(false);
-								}
+                                if(!entity.isDead)
+                                    world.spawnEntity(skehorse);
+                                entity.setDead();
+                                continue;
+                            }else {
+                                EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
+                                zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
+                                zomhorsie.setGrowingAge(horsie.getGrowingAge());
+                                zomhorsie.setTemper(horsie.getTemper());
+                                zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
+                                zomhorsie.setHorseTamed(horsie.isTame());
+                                zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
+                                zomhorsie.makeMad();
 
-								if(!entity.isDead)
-									world.spawnEntity(skehorse);
-								entity.setDead();
-								continue;
-							} else {
-								// 75% chance of generating a zombie horse
-								EntityZombieHorse zomhorsie = new EntityZombieHorse(world);
-								zomhorsie.setLocationAndAngles(entity.posX, entity.posY, entity.posZ, entity.rotationYaw, entity.rotationPitch);
-								zomhorsie.setGrowingAge(horsie.getGrowingAge());
-								zomhorsie.setTemper(horsie.getTemper());
-								zomhorsie.setHorseSaddled(horsie.isHorseSaddled());
-								zomhorsie.setHorseTamed(horsie.isTame());
-								zomhorsie.setOwnerUniqueId(horsie.getOwnerUniqueId());
-								zomhorsie.makeMad();
-
-								if(!entity.isDead)
-									world.spawnEntity(zomhorsie);
-								entity.setDead();
-								continue;
-							}
+                                if(!entity.isDead)
+                                    world.spawnEntity(zomhorsie);
+                                entity.setDead();
+                                continue;
+                            }
 						} else if(eRad >= 900 && entity.getClass().equals(EntityDuck.class)) {
 
 							EntityQuackos quacc = new EntityQuackos(world);
