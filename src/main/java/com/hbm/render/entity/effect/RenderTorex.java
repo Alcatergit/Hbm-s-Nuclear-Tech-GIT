@@ -10,6 +10,7 @@ import org.lwjgl.opengl.GL11;
 
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityNukeTorex.Cloudlet;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -122,16 +123,16 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-		
+
 		bindTexture(cloudlet);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		ArrayList<Cloudlet> cloudlets = new ArrayList<>(cloud.cloudlets);
 		cloudlets.sort(cloudSorter);
-		
+
 		for(Cloudlet cloudlet : cloudlets) {
 			Vec3 vec = cloudlet.getInterpPos(partialTicks);
 			tessellateCloudlet(buf, vec.xCoord - cloud.posX, vec.yCoord - cloud.posY, vec.zCoord - cloud.posZ, cloudlet, partialTicks);
@@ -146,7 +147,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_BLEND);
 		GL11.glPopMatrix();
 	}
-	
+
 	private void flareWrapper(EntityNukeTorex cloud, float partialTicks, float flareDuration) {
 
 		GL11.glPushAttrib(GL11.GL_ALL_ATTRIB_BITS);
@@ -157,18 +158,18 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-			
+
 		bindTexture(flare);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
-		
+
 		Random rand = new Random(cloud.getEntityId());
-		
+
 		for(int i = 0; i < 3; i++) {
 			float x = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
 			float y = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
@@ -270,7 +271,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
         GlStateManager.enableCull();
         GlStateManager.depthMask(false);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		
+
         GL11.glPushMatrix();
 
         for(int i = 0; i < 300; i++) {
@@ -335,6 +336,24 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		}
 
 		warpActive.add(new Shockwave(entity.posX, entity.posY, entity.posZ, maxRadius, lifetime, (float) s, entity, spawnTick));
+	}
+
+	public static void spawnWarpForExplosion(ExplosionLarge.EntityShockwave entity) {
+		if (entity == null || entity.isDead || entity.explosionRadius <= 0) return;
+		for (Shockwave sw : warpActive) {
+			if (sw.entity == entity) return;
+		}
+
+		int explosionRadius = entity.explosionRadius;
+		int blastDuration = (int) Math.ceil(80 * Math.cbrt(explosionRadius / 100.0));
+		double shockSpeed = Math.max(2.0, 2.0 * explosionRadius / (double) blastDuration);
+		float maxRadius = (float) (2.0 * explosionRadius);
+		float lifetime = (float) (maxRadius / shockSpeed);
+
+		if (entity.ticksExisted >= lifetime) return;
+
+		float scale = explosionRadius / 100.0F;
+		warpActive.add(new Shockwave(entity.posX, entity.posY, entity.posZ, maxRadius, lifetime, scale, entity, 0));
 	}
 
 	public static void renderWarp(float partialTicks) {
@@ -404,14 +423,18 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 			GlStateManager.translate(sw.x - viewX, sw.y - viewY, sw.z - viewZ);
 			GlStateManager.scale(radius, radius, radius);
 
-			renderWarpSphere(16, 32);
+			renderWarpSphere(16, 48);
 
 			GlStateManager.popMatrix();
 		}
 
 		OpenGlHelper.glUseProgram(0);
-		GL13.glActiveTexture(GL13.GL_TEXTURE0);
-		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
+
+		GlStateManager.setActiveTexture(GL13.GL_TEXTURE0);
+		GlStateManager.bindTexture(0);
+
+		GlStateManager.popAttrib();
+		GlStateManager.popMatrix();
 
 		GlStateManager.enableTexture2D();
 		GlStateManager.enableDepth();
@@ -421,9 +444,7 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GlStateManager.enableLighting();
 		GlStateManager.enableAlpha();
 		GlStateManager.colorMask(true, true, true, true);
-
-		GlStateManager.popAttrib();
-		GlStateManager.popMatrix();
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		mc.getFramebuffer().bindFramebuffer(true);
 	}
@@ -522,16 +543,16 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 	private static class Shockwave {
 		final double x, y, z;
 		final float maxRadius, lifetime, intensityScale;
-		final EntityNukeTorex entity;
+		final Entity entity;
 		final float spawnTick;
 
-		Shockwave(double x, double y, double z, float maxRadius, float lifetime, float scale, EntityNukeTorex entity, float spawnTick) {
+		Shockwave(double x, double y, double z, float maxRadius, float lifetime, float scale, Entity entity, float spawnTick) {
 			this.x = x;
 			this.y = y;
 			this.z = z;
 			this.maxRadius = maxRadius;
 			this.lifetime = lifetime;
-			this.intensityScale = Math.min(scale * 0.5F, 1.5F);
+			this.intensityScale = 1F;
 			this.entity = entity;
 			this.spawnTick = spawnTick;
 		}
