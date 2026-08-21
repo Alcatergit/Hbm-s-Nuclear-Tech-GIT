@@ -64,7 +64,6 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacketReceiver, ITickable, IControllable {
 
 	public static boolean explodeOnBroken = true;
-	public static int rbmkHeight = 3;
 
 	public double heat = 20.0D;
 	public double jumpheight = 0.0D;
@@ -78,6 +77,8 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public static final int maxWater = 16000*20;
 	public int steam;
 	public static final int maxSteam = 16000*20;
+
+	private int lastColumnHeight = -1;
 
 
 	public boolean hasLid() {
@@ -124,6 +125,14 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 	public void update() {
 
 		if(!world.isRemote) {
+			int currentHeight = RBMKDials.getColumnHeight(world);
+			if(lastColumnHeight >= 0 && currentHeight != lastColumnHeight) {
+				if(this.getBlockType() instanceof RBMKBase) {
+					((RBMKBase)this.getBlockType()).rebuildColumn(world, pos, lastColumnHeight);
+				}
+			}
+			lastColumnHeight = currentHeight;
+
 			moveHeat();
 			if(RBMKDials.getReasimBoilers(world))
 				boilWater();
@@ -175,7 +184,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 				this.jumpheight = 0;
 				this.downwardSpeed = 0;
 				this.falling = false;
-				world.playSound(null, pos.getX(),  pos.getY()+rbmkHeight+1,  pos.getZ(), HBMSoundHandler.rbmkLid, SoundCategory.BLOCKS, 2.0F, 1.0F);
+				world.playSound(null, pos.getX(),  pos.getY()+RBMKDials.getColumnHeight(world)+1,  pos.getZ(), HBMSoundHandler.rbmkLid, SoundCategory.BLOCKS, 2.0F, 1.0F);
 			}
 		}
 	}
@@ -302,6 +311,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		this.damage = nbt.getDouble("damage");
 		this.water = nbt.getInteger("realSimWater");
 		this.steam = nbt.getInteger("realSimSteam");
+		this.lastColumnHeight = nbt.getInteger("lastColumnHeight");
 	}
 
 	@Override
@@ -316,6 +326,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		nbt.setDouble("damage", this.damage);
 		nbt.setInteger("realSimWater", this.water);
 		nbt.setInteger("realSimSteam", this.steam);
+		nbt.setInteger("lastColumnHeight", this.lastColumnHeight);
 		return nbt;
 	}
 
@@ -457,7 +468,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 	protected void spawnDebris(DebrisType type) {
 
-		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + TileEntityRBMKBase.rbmkHeight, pos.getZ() + 0.5D, type);
+		EntityRBMKDebris debris = new EntityRBMKDebris(world, pos.getX() + 0.5D, pos.getY() + RBMKDials.getColumnHeight(world), pos.getZ() + 0.5D, type);
 		debris.motionX = world.rand.nextGaussian() * 0.25D;
 		debris.motionZ = world.rand.nextGaussian() * 0.25D;
 		debris.motionY = 0.5D + world.rand.nextDouble() * 1.5D;
@@ -578,10 +589,10 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 		NBTTagCompound data = new NBTTagCompound();
 		data.setString("type", "rbmkmush");
 		data.setFloat("scale", smallDim);
-		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight, avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight, avgZ + 0.5, 250));
+		PacketDispatcher.wrapper.sendToAllAround(new AuxParticlePacketNT(data, avgX + 0.5, pos.getY() + RBMKDials.getColumnHeight(world), avgZ + 0.5), new TargetPoint(world.provider.getDimension(), avgX + 0.5, pos.getY() + RBMKDials.getColumnHeight(world), avgZ + 0.5, 250));
 		MainRegistry.proxy.effectNT(data);
 
-		world.playSound(null, avgX + 0.5, pos.getY() + TileEntityRBMKBase.rbmkHeight>>1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
+		world.playSound(null, avgX + 0.5, pos.getY() + RBMKDials.getColumnHeight(world)>>1, avgZ + 0.5, HBMSoundHandler.rbmk_explosion, SoundCategory.BLOCKS, 50.0F, 1.0F);
 
 		List<EntityPlayer> list = world.getEntitiesWithinAABB(EntityPlayer.class, new AxisAlignedBB(pos.getX() - 50 + 0.5, pos.getY() - 50 + 0.5, pos.getZ() - 50 + 0.5, pos.getX() + 50 + 0.5, pos.getY() + 50 + 0.5, pos.getZ() + 50 + 0.5));
 
@@ -593,7 +604,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 			EntitySpear spear = new EntitySpear(world);
 			spear.posX = avgX + 0.5;
 			spear.posZ = avgZ + 0.5;
-			spear.posY = pos.getY() + TileEntityRBMKBase.rbmkHeight + 100;
+			spear.posY = pos.getY() + RBMKDials.getColumnHeight(world) + 100;
 			world.spawnEntity(spear);
 		}
 
@@ -638,7 +649,7 @@ public abstract class TileEntityRBMKBase extends TileEntity implements INBTPacke
 
 	@Override
 	public AxisAlignedBB getRenderBoundingBox() {
-		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + TileEntityRBMKBase.rbmkHeight + 10, pos.getZ() + 1);
+		return new AxisAlignedBB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + RBMKDials.getColumnHeight(world) + 10, pos.getZ() + 1);
 	}
 
 	@Override
