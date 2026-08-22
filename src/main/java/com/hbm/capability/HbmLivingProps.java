@@ -87,7 +87,7 @@ public class HbmLivingProps {
 
 		getData(entity).setDigamma(digamma);
 
-		float healthMod = (float)Math.pow(0.5, digamma) - 1F;
+		float healthMod = digamma >= 10.0F ? -1.0F : (float)Math.pow(0.5, digamma) - 1F;
 
 		IAttributeInstance attributeinstance = entity.getAttributeMap().getAttributeInstance(SharedMonsterAttributes.MAX_HEALTH);
 
@@ -102,7 +102,7 @@ public class HbmLivingProps {
             entity.setHealth(entity.getMaxHealth());
         }
 
-		if((entity.getMaxHealth() <= 0 || digamma >= 10.0F) && entity.isEntityAlive()) {
+		if(digamma >= 10.0F && entity.isEntityAlive()) {
 			entity.setAbsorptionAmount(0);
 			entity.attackEntityFrom(ModDamageSource.digamma, 5000000F);
 			entity.setHealth(0);
