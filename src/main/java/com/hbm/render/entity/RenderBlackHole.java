@@ -46,6 +46,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	@Override
 	public void doRender(EntityBlackHole entity, double x, double y, double z, float entityYaw, float partialTicks){
+		if(!ClientProxy.renderingConstant) return;
 		int type;
 
 		if(entity instanceof EntityVortex vor) {
