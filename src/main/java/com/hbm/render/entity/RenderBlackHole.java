@@ -1,19 +1,20 @@
 package com.hbm.render.entity;
 
 import com.hbm.entity.effect.EntityQuasar;
-import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.*;
 
 import com.hbm.entity.effect.EntityBlackHole;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntityVortex;
 import com.hbm.lib.RefStrings;
-import com.hbm.main.ClientProxy;
 import com.hbm.render.amlfrom1710.AdvancedModelLoader;
 import com.hbm.render.amlfrom1710.IModelCustom;
 import com.hbm.render.amlfrom1710.Vec3;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
+import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.GlStateManager.DestFactor;
 import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.Tessellator;
@@ -23,15 +24,20 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
 
+
 public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	public static final IRenderFactory<EntityBlackHole> FACTORY = RenderBlackHole::new;
 
 	protected static final ResourceLocation objTesterModelRL = new ResourceLocation(RefStrings.MODID, "models/Sphere.obj");
-	protected IModelCustom blastModel;
-	protected ResourceLocation hole = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlackHole.png");
-	protected ResourceLocation swirl = new ResourceLocation(RefStrings.MODID, "textures/entity/bhole.png");
-	protected ResourceLocation disc = new ResourceLocation(RefStrings.MODID, "textures/entity/bholeDisc.png");
+	public static IModelCustom blastModel;
+	public static ResourceLocation hole = new ResourceLocation(RefStrings.MODID, "textures/models/explosion/BlackHole.png");
+	public static ResourceLocation swirl = new ResourceLocation(RefStrings.MODID, "textures/entity/bhole.png");
+	public static ResourceLocation disc = new ResourceLocation(RefStrings.MODID, "textures/entity/bholeDisc.png");
+
+	public static ResourceLocation quasarDisc = new ResourceLocation(RefStrings.MODID, "textures/entity/bholeD.png");
+
+	private static final float DEG_TO_RAD = (float) (Math.PI / 180.0D);
 
 	protected RenderBlackHole(RenderManager renderManager){
 		super(renderManager);
@@ -40,60 +46,63 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 	@Override
 	public void doRender(EntityBlackHole entity, double x, double y, double z, float entityYaw, float partialTicks){
-        int type;
+		int type;
 
 		if(entity instanceof EntityVortex vor) {
-            type = vor.getType();
+			type = vor.getType();
 		} else if(entity instanceof EntityRagingVortex) {
-            type = 5;
-        } else if(entity instanceof EntityQuasar) {
-            type = 6;
+			type = 5;
+		} else if(entity instanceof EntityQuasar) {
+			type = 6;
 		} else {
-            type = 4;
+			type = 4;
 		}
-        doRender(type, entity.getEntityId(), entity.ticksExisted, entity.getDataManager().get(EntityBlackHole.SIZE), x, y, z, partialTicks);
-    }
-
-    public void doRender(int type, int rand, int age, float size, double x, double y, double z, float partialTicks){
-        if(!ClientProxy.renderingConstant)
-            return;
-        GL11.glPushMatrix();
-        GL11.glTranslatef((float)x, (float)y, (float)z);
-        GlStateManager.disableLighting();
-        GlStateManager.disableCull();
-
-        GL11.glScalef(size, size, size);
-
-        bindTexture(hole);
-        blastModel.renderAll();
-
-        if(type == 4 || type == 6) {
-            renderDisc(rand, age, partialTicks);
-            renderJets(rand);
-
-        } else if(type == 5) {
-            renderSwirl(5, rand, age, partialTicks);
-            renderJets(rand);
-
-        } else {
-            renderSwirl(type, rand, age, partialTicks);
-        }
-
-        GlStateManager.enableCull();
-        GlStateManager.enableLighting();
-
-        GL11.glPopMatrix();
-    }
-
-	protected ResourceLocation discTex(){
-		return this.disc;
+		doRender(type, entity.getEntityId(), entity.ticksExisted, entity.getDataManager().get(EntityBlackHole.SIZE), x, y, z, partialTicks);
 	}
 
-	protected void renderDisc(int rand, int age, float interp){
+	public static void doRender(int type, int rand, int age, float size, double x, double y, double z, float partialTicks){
+		if(blastModel == null){
+			blastModel = AdvancedModelLoader.loadModel(objTesterModelRL);
+		}
+		GL11.glPushMatrix();
+		GL11.glTranslatef((float)x, (float)y, (float)z);
+		GlStateManager.disableLighting();
+		GlStateManager.disableCull();
+
+		GL11.glScalef(size, size, size);
+
+		Minecraft.getMinecraft().getTextureManager().bindTexture(hole);
+		blastModel.renderAll();
+
+		OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
+
+		if(type == 4 || type == 6) {
+			renderDisc(type, rand, age, partialTicks);
+			renderJets(rand);
+
+		} else if(type == 5) {
+			renderSwirl(5, rand, age, partialTicks);
+			renderJets(rand);
+
+		} else {
+			renderSwirl(type, rand, age, partialTicks);
+		}
+
+		GlStateManager.enableCull();
+		GlStateManager.enableLighting();
+
+		GL11.glPopMatrix();
+	}
+
+	public static ResourceLocation discTex(int type){
+		return type == 6 ? quasarDisc : disc;
+	}
+
+	public static void renderDisc(int type, int rand, int age, float interp){
 
 		float glow = 0.75F;
 
-		bindTexture(discTex());
+		Minecraft.getMinecraft().getTextureManager().bindTexture(discTex(type));
 
 		GL11.glPushMatrix();
 		GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
@@ -126,7 +135,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 				for(int i = 0; i < count; i++) {
 
 					if(j == 0){
-						this.setColorFromIteration(k, 1F, color);
+						setColorFromIteration(type, k, 1F, color);
 					} else {
 						color[0] = 1;
 						color[1] = 1;
@@ -134,15 +143,15 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 						color[3] = glow;
 					}
 					buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
-					this.setColorFromIteration(k, 0F, color);
+					setColorFromIteration(type, k, 0F, color);
 					buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
-					vec.rotateAroundY((float)(Math.PI * 2 / count));
-					this.setColorFromIteration(k, 0F, color);
+					rotateY(vec, (float)(Math.PI * 2 / count));
+					setColorFromIteration(type, k, 0F, color);
 					buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
 					if(j == 0){
-						this.setColorFromIteration(k, 1F, color);
+						setColorFromIteration(type, k, 1F, color);
 					} else {
 						color[0] = 1;
 						color[1] = 1;
@@ -167,11 +176,22 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPopMatrix();
 	}
 
-	protected int steps(){
+	public static int steps(){
 		return 15;
 	}
 
-	protected void setColorFromIteration(int iteration, float alpha, float[] col){
+	public static void setColorFromIteration(int type, int iteration, float alpha, float[] col){
+
+		if(type == 6) {
+			float r = 1.0F;
+			float g = (float) Math.pow(iteration / 15F, 2);
+			float b = (float) Math.pow(iteration / 15F, 2);
+			col[0] = r;
+			col[1] = g;
+			col[2] = b;
+			col[3] = alpha;
+			return;
+		}
 
 		if(iteration < 5) {
 			float g = 0.125F + iteration * (1F / 10F);
@@ -190,24 +210,24 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 			return;
 		}
 
-        int i = iteration - 6;
-        float r = 1.0F - i * (1F / 9F);
-        float g = 1F - i * (1F / 9F);
-        float b = i * (1F / 5F);
-        col[0] = r;
-        col[1] = g;
-        col[2] = b;
-        col[3] = alpha;
-    }
+		int i = iteration - 6;
+		float r = 1.0F - i * (1F / 9F);
+		float g = 1F - i * (1F / 9F);
+		float b = i * (1F / 5F);
+		col[0] = r;
+		col[1] = g;
+		col[2] = b;
+		col[3] = alpha;
+	}
 
-	protected void renderSwirl(int type, int rand, int age, float interp){
+	public static void renderSwirl(int type, int rand, int age, float interp){
 
 		float glow = 0.75F;
 
 		if(type == 6)
 			glow = 0.25F;
 
-		bindTexture(swirl);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(swirl);
 
 		GL11.glPushMatrix();
 		GL11.glRotatef(rand % 90 - 45, 1, 0, 0);
@@ -228,7 +248,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		int count = 16;
 
 		float[] color = {0, 0, 0, 0};
-		
+
 		//swirl, inner part (solid)
 		for(int j = 0; j < 2; j++) {
 			buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -240,7 +260,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 				buf.pos(vec.xCoord * 0.9, 0, vec.zCoord * 0.9).tex(0.5 + vec.xCoord * 0.25 / s * 0.9, 0.5 + vec.zCoord * 0.25 / s * 0.9).color(color[0], color[1], color[2], color[3]).endVertex();
 
 				if(j == 0){
-					this.setColorFull(type, color);
+					setColorFull(type, color);
 				} else {
 					color[0] = 1;
 					color[1] = 1;
@@ -250,17 +270,17 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 				buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
 
-				vec.rotateAroundY((float)(Math.PI * 2 / count));
+				rotateY(vec, (float)(Math.PI * 2 / count));
 
 				if(j == 0){
-					this.setColorFull(type, color);
+					setColorFull(type, color);
 				} else {
 					color[0] = 1;
 					color[1] = 1;
 					color[2] = 1;
 					color[3] = glow;
 				}
-				
+
 				buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
 				color[0] = 0;
 				color[1] = 0;
@@ -283,7 +303,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 			for(int i = 0; i < count; i++) {
 
 				if(j == 0){
-					this.setColorFull(type, color);
+					setColorFull(type, color);
 				}else {
 					color[0] = 1;
 					color[1] = 1;
@@ -291,15 +311,16 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 					color[3] = glow;
 				}
 				buf.pos(vec.xCoord * s, 0, vec.zCoord * s).tex(0.5 + vec.xCoord * 0.25, 0.5 + vec.zCoord * 0.25).color(color[0], color[1], color[2], color[3]).endVertex();
-				this.setColorNone(type, color);
+
+				setColorNone(type, color);
 				buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
-				vec.rotateAroundY((float)(Math.PI * 2 / count));
-				this.setColorNone(type, color);
+				rotateY(vec, (float)(Math.PI * 2 / count));
+				setColorNone(type, color);
 				buf.pos(vec.xCoord * s * 2, 0, vec.zCoord * s * 2).tex(0.5 + vec.xCoord * 0.5, 0.5 + vec.zCoord * 0.5).color(color[0], color[1], color[2], color[3]).endVertex();
 
 				if(j == 0)
-					this.setColorFull(type, color);
+					setColorFull(type, color);
 				else {
 					color[0] = 1;
 					color[1] = 1;
@@ -322,7 +343,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPopMatrix();
 	}
 
-	protected void renderJets(int rand){
+	public static void renderJets(int rand){
 
 		Tessellator tes = Tessellator.getInstance();
 		BufferBuilder buf = tes.getBuffer();
@@ -348,7 +369,7 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 
 			for(int i = 0; i <= 12; i++) {
 				buf.pos(jet.xCoord, 10 * j, jet.zCoord).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
-				jet.rotateAroundY((float)(Math.PI / 6 * -j));
+				rotateY(jet, (float)(Math.PI / 6 * -j));
 			}
 
 			tes.draw();
@@ -362,34 +383,43 @@ public class RenderBlackHole extends Render<EntityBlackHole> {
 		GL11.glPopMatrix();
 	}
 
-	protected void setColorFull(int type, float[] color){
-        if(type == 4) {
-            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
-        } else if(type == 5) {
-            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
-        } else if(type == 3) {
-            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
-        } else if(type == 1) {
-            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
-        } else {
-            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
-        }
+	public static void setColorFull(int type, float[] color){
+		if(type == 4) {
+			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+		} else if(type == 5) {
+			com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+		} else if(type == 3) {
+			com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+		} else if(type == 1) {
+			com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+		} else {
+			com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+		}
 		color[3] = 1;
 	}
 
-	protected void setColorNone(int type, float[] color){
-        if(type == 4) {
-            com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
-        } else if(type == 5) {
-            com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
-        } else if(type == 3) {
-            com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
-        } else if(type == 1) {
-            com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
-        } else {
-            com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
-        }
+	public static void setColorNone(int type, float[] color){
+		if(type == 4) {
+			com.hbm.render.RenderHelper.unpackColor(0xFFB900, color);//blackhole
+		} else if(type == 5) {
+			com.hbm.render.RenderHelper.unpackColor(0xCB00FF, color);//quasar
+		} else if(type == 3) {
+			com.hbm.render.RenderHelper.unpackColor(0xFF5000, color);//super
+		} else if(type == 1) {
+			com.hbm.render.RenderHelper.unpackColor(0x0065FF, color);//resonant
+		} else {
+			com.hbm.render.RenderHelper.unpackColor(0xFF8469, color);//normal
+		}
 		color[3] = 0;
+	}
+
+	public static void rotateY(Vec3 vec, float angle) {
+		float cos = (float) Math.cos(angle);
+		float sin = (float) Math.sin(angle);
+		double x = vec.xCoord;
+		double z = vec.zCoord;
+		vec.xCoord = x * cos + z * sin;
+		vec.zCoord = z * cos - x * sin;
 	}
 
 	@Override
