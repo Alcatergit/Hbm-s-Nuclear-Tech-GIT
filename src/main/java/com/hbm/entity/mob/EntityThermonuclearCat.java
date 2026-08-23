@@ -11,6 +11,7 @@ import com.hbm.render.amlfrom1710.Vec3;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
+import net.minecraft.entity.IEntityLivingData;
 import net.minecraft.entity.ai.*;
 import net.minecraft.entity.monster.EntityMob;
 import net.minecraft.entity.passive.EntityAnimal;
@@ -24,8 +25,11 @@ import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.World;
 import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 
 public class EntityThermonuclearCat extends EntityOcelot implements IRadiationImmune {
 
@@ -232,6 +236,21 @@ public class EntityThermonuclearCat extends EntityOcelot implements IRadiationIm
     @Override
     protected boolean canDespawn() {
     	return !this.isTamed() && this.ticksExisted > 24000;
+    }
+
+    @Override
+    @Nullable
+    public IEntityLivingData onInitialSpawn(DifficultyInstance difficulty, @Nullable IEntityLivingData livingdata) {
+        if (this.getTameSkin() == 0 && this.world.rand.nextInt(7) == 0) {
+            for (int i = 0; i < 2; ++i) {
+                EntityThermonuclearCat entitycat = new EntityThermonuclearCat(this.world);
+                entitycat.setLocationAndAngles(this.posX, this.posY, this.posZ, this.rotationYaw, 0.0F);
+                entitycat.setGrowingAge(-24000);
+                this.world.spawnEntity(entitycat);
+            }
+        }
+
+        return livingdata;
     }
 
     @Override
