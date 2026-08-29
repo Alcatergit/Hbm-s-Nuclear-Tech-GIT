@@ -77,10 +77,8 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 					BlockPos des = new BlockPos(x0, y0, z0);
 					IBlockState state = world.getBlockState(des);
 					if(state.getMaterial().isLiquid()) {
-						world.setBlockState(des, Blocks.AIR.getDefaultState());
-					}
-					
-					if(state.getBlock() != Blocks.AIR) {
+						world.setBlockState(des, Blocks.AIR.getDefaultState(), 3);
+					}else if(state.getBlock() != Blocks.AIR) {
 						EntityRubble rubble = new EntityRubble(world);
 						rubble.posX = x0 + 0.5F;
 						rubble.posY = y0;
@@ -147,7 +145,7 @@ public class EntityBlackHole extends Entity implements IConstantRenderer {
 			
 			if(dist < size * 1.5) {
 				e.attackEntityFrom(ModDamageSource.blackhole, 1000);
-				
+
 				if(!(e instanceof EntityLivingBase))
 					e.setDead();
 				
