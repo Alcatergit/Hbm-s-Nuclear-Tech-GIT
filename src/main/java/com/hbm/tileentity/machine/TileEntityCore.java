@@ -1,9 +1,12 @@
 package com.hbm.tileentity.machine;
 
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import com.hbm.blocks.machine.MachineFieldDisturber;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityCloudFleijaRainbow;
 import com.hbm.entity.logic.EntityNukeExplosionMK3;
@@ -22,11 +25,12 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.world.gen.ChunkProviderServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
 import net.minecraftforge.fluids.FluidStack;
@@ -43,8 +47,8 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	public int color;
 	public FluidTank[] tanks;
 	public boolean meltdownTick = false;
-	private boolean lastTickValid = false;
-	private boolean chunkJustLoaded = false;
+	public boolean chunkJustLoaded = false;
+	public Set<BlockPos> trackedDisturbers = new HashSet<>();
 	
 	public TileEntityCore() {
 		super(3);
@@ -59,33 +63,33 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	}
 
 	@Override
+	public void onLoad() {
+		super.onLoad();
+		if(!trackedDisturbers.isEmpty()) {
+			chunkJustLoaded = true;
+		}
+	}
+
+	@Override
 	public void update() {
 		if(!world.isRemote) {
-			int chunkX = pos.getX() >> 4;
-			int chunkZ = pos.getZ() >> 4;
-
 			meltdownTick = false;
 
-			ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
-			boolean currentTickValid =
-					provider.chunkExists(chunkX, chunkZ) &&
-					provider.chunkExists(chunkX + 1, chunkZ + 1) &&
-					provider.chunkExists(chunkX + 1, chunkZ - 1) &&
-					provider.chunkExists(chunkX - 1, chunkZ + 1) &&
-					provider.chunkExists(chunkX - 1, chunkZ - 1);
-
-			if(!lastTickValid && currentTickValid) {
-				chunkJustLoaded = true;
+			if(chunkJustLoaded) {
+				if(areDisturberChunksLoaded()) {
+					chunkJustLoaded = false;
+					validateDisturbers();
+				}
 			}
-			lastTickValid = currentTickValid;
 
-			if(lastTickValid && heat > 0 && heat >= field && !chunkJustLoaded) {
+			if(heat > 0 && heat >= field && !chunkJustLoaded) {
 				int fill = tanks[0].getFluidAmount() + tanks[1].getFluidAmount();
 				int max = tanks[0].getCapacity() + tanks[1].getCapacity();
 				int mod = heat * 10;
 				int size = Math.max(Math.min(fill * mod / max, 1000), 50);
 
 				boolean canExplode = true;
+				trackedDisturbers.clear();
 				Iterator<Map.Entry<ATEntry, Long>> it = EntityNukeExplosionMK3.at.entrySet().iterator();
 				while(it.hasNext()) {
 					Map.Entry<ATEntry, Long> next = it.next();
@@ -98,7 +102,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 					double distance = Math.sqrt(Math.pow(pos.getX() + 0.5 - entry.x, 2) + Math.pow(pos.getY() + 0.5 - entry.y, 2) + Math.pow(pos.getZ() + 0.5 - entry.z, 2));
 					if(distance < 300) {
 						canExplode = false;
-						break;
+						trackedDisturbers.add(new BlockPos(entry.x, entry.y, entry.z));
 					}
 				}
 
@@ -126,7 +130,7 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 					RadiationSavedData.incrementRad(world, pos, 100, Float.MAX_VALUE);
 				}
 			}
-			
+
 			if(inventory.getStackInSlot(0).getItem() instanceof ItemCatalyst && inventory.getStackInSlot(2).getItem() instanceof ItemCatalyst){
 				color = calcAvgHex(
 						((ItemCatalyst)inventory.getStackInSlot(0).getItem()).getColor(),
@@ -155,11 +159,9 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 			
 			heat = 0;
 
-			if(lastTickValid && field > 0) {
+			if(field > 0) {
 				field -= 1;
 			}
-
-			chunkJustLoaded = false;
 
 			this.markDirty();
 		} else {
@@ -219,7 +221,6 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 	}
 	
 	public boolean isReady() {
-		
 		if(getCorePower() == 0)
 			return false;
 		
@@ -309,16 +310,52 @@ public class TileEntityCore extends TileEntityMachineBase implements ITickable {
 		return 65536.0D;
 	}
 	
+	private boolean areDisturberChunksLoaded() {
+		for(BlockPos pos : trackedDisturbers) {
+			if(!world.isBlockLoaded(pos)) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private void validateDisturbers() {
+        trackedDisturbers.removeIf(pos -> world.isBlockLoaded(pos) && !(world.getBlockState(pos).getBlock() instanceof MachineFieldDisturber));
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound compound) {
 		if(compound.hasKey("tanks"))
 			FFUtils.deserializeTankArray(compound.getTagList("tanks", 10), tanks);
+		field = compound.getInteger("field");
+		heat = compound.getInteger("heat");
+		chunkJustLoaded = compound.getBoolean("chunkJustLoaded");
+		trackedDisturbers.clear();
+		if(compound.hasKey("disturbers")) {
+			NBTTagList list = (NBTTagList) compound.getTag("disturbers");
+			for(int i = 0; i < list.tagCount(); i++) {
+				NBTTagCompound tag = list.getCompoundTagAt(i);
+				trackedDisturbers.add(new BlockPos(tag.getInteger("x"), tag.getInteger("y"), tag.getInteger("z")));
+			}
+		}
 		super.readFromNBT(compound);
 	}
-	
+
 	@Override
 	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		compound.setInteger("field", field);
+		compound.setInteger("heat", heat);
+		compound.setBoolean("chunkJustLoaded", chunkJustLoaded);
+		NBTTagList disturberList = new NBTTagList();
+		for(BlockPos pos : trackedDisturbers) {
+			NBTTagCompound tag = new NBTTagCompound();
+			tag.setInteger("x", pos.getX());
+			tag.setInteger("y", pos.getY());
+			tag.setInteger("z", pos.getZ());
+			disturberList.appendTag(tag);
+		}
+		compound.setTag("disturbers", disturberList);
 		return super.writeToNBT(compound);
 	}
 }
