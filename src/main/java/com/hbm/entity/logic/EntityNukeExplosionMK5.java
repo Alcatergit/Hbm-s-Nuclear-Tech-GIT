@@ -135,6 +135,10 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 	public void dealDamage(World world, double x, double y, double z, double radius, double weatherFactor) {
 		List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
+		float dmgScale = 1.0F;
+		if (this.radius <= 25) dmgScale /= 0.65F;
+		if (!this.fallout) dmgScale /= 0.85F;
+
 		for(Entity e : entities) {
 			AxisAlignedBB box = e.getEntityBoundingBox();
 			double closestX = Math.max(box.minX, Math.min(x, box.maxX));
@@ -166,6 +170,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 					float eRads = (float)Math.min(10_000_000, Math.pow(radius, 3) * (float)Math.pow(0.5, (double)2 * this.ticksExisted / radius) + strength);
 					eRads *= (float)Math.exp(-dmgLen * weatherFactor / 150.0D);
 					eRads /= (float)(dmgLen * dmgLen * Math.sqrt(res));
+					eRads *= dmgScale;
 
 					ContaminationUtil.contaminate((EntityLivingBase)e, ContaminationUtil.HazardType.RADIATION, ContaminationUtil.ContaminationType.CREATIVE, eRads);
 					if (eRads >= 100 && ContaminationUtil.getEntityConversionType(e) == 1) {
@@ -182,7 +187,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				double currentThermalRadius = radius * (1.0 - Math.pow((double)(this.ticksExisted - 1) / thermalDuration, 0.5));
 
 				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.radius > 25 && this.ticksExisted <= thermalDuration && res < 2000 && len <= currentThermalRadius) {
-					float fireDamage = (float) ((0.35F * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius) * Math.exp(-dmgLen * weatherFactor / 80.0D)) / (float) (dmgLen * dmgLen * res));
+					float fireDamage = (float) ((0.35F * dmgScale * Math.pow(radius + 10, 3) * Math.pow(0.5, 0.5 * this.ticksExisted / radius) * Math.exp(-dmgLen * weatherFactor / 80.0D)) / (float) (dmgLen * dmgLen * res));
 					if (fireDamage > 0.025) {
 						if (fireDamage > 0.1 && e instanceof EntityPlayer p) {
 							if (p.getHeldItemMainhand().getItem() == ModItems.marshmallow && p.getRNG().nextInt((int) len) == 0) {
@@ -204,7 +209,7 @@ public class EntityNukeExplosionMK5 extends EntityChunky {
 				double currentBlastRadius = this.ticksExisted * Math.max(2D, shockSpeed);
 
 				if ((!(ContaminationUtil.getEntityConversionType(e) == 0) && !ContaminationUtil.isPlayerExempt(e)) && this.ticksExisted <= (shockSpeed < 2D ? this.radius : blastDuration) && res < 10000 && len < currentBlastRadius) {
-					float blastDamage = (float)(Math.pow(radius + 10, 3) * (this.radius > 25 ? 0.5F : 0.85F)) / (float)(dmgLen * dmgLen * dmgLen * res);
+					float blastDamage = (float)(Math.pow(radius + 10, 3) * 0.5F * dmgScale) / (float)(dmgLen * dmgLen * dmgLen * res);
 					if(blastDamage > 0.025){
 						if(fallout) e.attackEntityFrom(ModDamageSource.nuclearBlast, blastDamage);
 						else e.attackEntityFrom(ModDamageSource.blast, blastDamage);
