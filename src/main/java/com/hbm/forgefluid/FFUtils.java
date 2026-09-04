@@ -343,7 +343,7 @@ public class FFUtils {
 		if(te instanceof IFluidPipeMk2 pipe) {
 			FFPipeNetworkMk2 net = pipe.getNetwork();
 			if(net != null && (net.getType() == null || net.getType() == tank.getFluid().getFluid())) {
-				net.addProvider(tileEntity);
+				net.tryAdd(tileEntity);
 				net.forceUpdate(world);
 				return true;
 			}
