@@ -35,8 +35,10 @@ public class RenderBombMulti extends TileEntitySpecialRenderer<TileEntityBombMul
 			GL11.glRotatef(270, 0F, 1F, 0F); break;
 		}
 
+		GL11.glShadeModel(GL11.GL_SMOOTH);
 		bindTexture(ResourceManager.bomb_multi_tex);
         ResourceManager.bomb_multi.renderAll();
+		GL11.glShadeModel(GL11.GL_FLAT);
 
         GlStateManager.enableCull();
         GL11.glPopMatrix();

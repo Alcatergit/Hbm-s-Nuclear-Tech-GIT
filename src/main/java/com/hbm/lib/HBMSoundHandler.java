@@ -104,6 +104,12 @@ public final class HBMSoundHandler {
 	public static SoundEvent railgunOrientation;
 	public static SoundEvent railgunCharge;
 	public static SoundEvent shutdown;
+	public static SoundEvent iterReactorRunning;
+	public static SoundEvent chemicalPlant;
+	public static SoundEvent boiler;
+	public static SoundEvent steamEngineOperate;
+	public static SoundEvent electricHum;
+	public static SoundEvent engine;
 	public static SoundEvent broadcast1;
 	public static SoundEvent broadcast2;
 	public static SoundEvent broadcast3;
@@ -203,6 +209,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent hit_metal;
 	public static SoundEvent hit_flesh;
 	public static SoundEvent vomit;
+	public static SoundEvent discord_teleport;
 	public static SoundEvent chekhov_fire;
 	public static SoundEvent jeremy_fire;
 	public static SoundEvent jeremy_reload;
@@ -212,6 +219,7 @@ public final class HBMSoundHandler {
 	public static SoundEvent rbmk_explosion;
 	public static SoundEvent rbmk_az5_cover;
 	public static SoundEvent chungus_lever;
+	public static SoundEvent chungusOperate;
 	public static SoundEvent dflash;
 	public static SoundEvent cough;
 	public static SoundEvent ufoBeam;
@@ -232,6 +240,9 @@ public final class HBMSoundHandler {
 	public static SoundEvent hatch_open;
 	public static SoundEvent sliding_seal_open;
 	public static SoundEvent sliding_seal_stop;
+	public static SoundEvent nuclearExplosion;
+	public static SoundEvent explosionLargeNear;
+	public static SoundEvent explosionLargeFar;
 	
 	public static SoundEvent alarmHatch = registerBypass("alarm.hatch");
 	public static SoundEvent alarmAutopilot = registerBypass("alarm.autopilot");
@@ -365,6 +376,12 @@ public final class HBMSoundHandler {
 		railgunOrientation = register("block.railgunOrientation");
 		railgunCharge = register("block.railgunCharge");
 		shutdown = register("block.shutdown");
+		iterReactorRunning = register("block.iterReactorRunning");
+		chemicalPlant = register("block.chemicalPlant");
+		boiler = register("block.boiler");
+		steamEngineOperate = register("block.steamEngineOperate");
+		electricHum = register("block.electricHum");
+		engine = register("block.engine");
 		broadcast1 = register("block.broadcast1");
 		broadcast2 = register("block.broadcast2");
 		broadcast3 = register("block.broadcast3");
@@ -463,6 +480,7 @@ public final class HBMSoundHandler {
 		hit_metal = register("weapon.hit_metal");
 		hit_flesh = register("weapon.hit_flesh");
 		vomit = register("entity.vomit");
+		discord_teleport = register("item.discord_teleport");
 		chekhov_fire = register("turret.chekhov_fire");
 		jeremy_fire = register("turret.jeremy_fire");
 		jeremy_reload = register("turret.jeremy_reload");
@@ -472,6 +490,7 @@ public final class HBMSoundHandler {
 		rbmk_explosion = register("block.rbmk_explosion");
 		rbmk_az5_cover = register("block.rbmk_az5_cover");
 		chungus_lever = register("block.chungusLever");
+		chungusOperate = register("block.chungusTurbineRunning");
 		dflash = register("weapon.dFlash");
 		cough = register("player.cough");
 		ufoBeam = register("entity.ufoBeam");
@@ -493,6 +512,9 @@ public final class HBMSoundHandler {
 		hatch_open = register("block.door.hatch_open");
 		sliding_seal_open = register("block.door.sliding_seal_open");
 		sliding_seal_stop = register("block.door.sliding_seal_stop");
+		nuclearExplosion = register("weapon.nuclearExplosion");
+		explosionLargeNear = register("weapon.explosion_large_near");
+		explosionLargeFar = register("weapon.explosion_large_far");
 		
 		geigerSounds = new SoundEvent[]{geiger1, geiger2, geiger3, geiger4, geiger5, geiger6, geiger7, geiger8};
 		voiceSounds = new SoundEvent[]{voices1, voices2, voices3, voices4, voices5, voices6, voices7, voices8};

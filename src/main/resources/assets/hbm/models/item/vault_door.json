@@ -1,6 +1,9 @@
 {
 	"parent": "item/generated",
 	"textures": {
-		"layer0": "hbm:blocks/vault_door"
+		"layer0": "hbm:models/doors/vault/vault_cog_1",
+		"layer1": "hbm:models/doors/vault/vault_cog_2",
+		"layer2": "hbm:models/doors/vault/vault_cog_3",
+		"layer3": "hbm:models/doors/vault/vault_cog_4"
 	}
 }

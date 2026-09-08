@@ -18,8 +18,6 @@ import com.hbm.items.machine.*;
 import com.hbm.render.tileentity.RenderWatzMultiblock;
 import net.minecraft.block.*;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemLeaves;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -209,6 +207,11 @@ public class ModEventHandlerClient {
 	public static float deltaMouseY;
 	
 	public static float currentFOV = 70;
+	public static final int flashDuration = 5_000;
+	public static final int shakeDuration = 1_500;
+	public static long flashTimestamp;
+	public static long shakeTimestamp;
+	public static double shakeMultiplier;
 	
 	public static void updateMouseDelta() {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -1417,7 +1420,7 @@ public class ModEventHandlerClient {
 				p.renderParticle(null, Minecraft.getMinecraft().getRenderViewEntity(), MainRegistry.proxy.partialTicks(), 0, 0, 0, 0, 0);
 		}*/
 		//HbmShaderManager2.doPostProcess();
-		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)){
+		if(!(Minecraft.getMinecraft().player.getHeldItemMainhand().getItem() instanceof IPostRender || Minecraft.getMinecraft().player.getHeldItemOffhand().getItem() instanceof IPostRender)) {
 			HbmShaderManager2.postProcess();
 		}
 	}
@@ -1485,7 +1488,29 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
+		/// NUKE FLASH ///
+		if (event.getType() == ElementType.CROSSHAIRS && (flashTimestamp + flashDuration - System.currentTimeMillis()) > 0) {
+			int width = event.getResolution().getScaledWidth();
+			int height = event.getResolution().getScaledHeight();
+			GlStateManager.disableTexture2D();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			GlStateManager.depthMask(false);
+			net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
+			net.minecraft.client.renderer.BufferBuilder buffer = tess.getBuffer();
+			float brightness = (flashTimestamp + flashDuration - System.currentTimeMillis()) / (float) flashDuration;
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			buffer.pos(0, 0, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(0, height, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(width, height, 0).color(1F, 1F, 1F, brightness).endVertex();
+			buffer.pos(width, 0, 0).color(1F, 1F, 1F, brightness).endVertex();
+			tess.draw();
+			GlStateManager.depthMask(true);
+			GlStateManager.disableBlend();
+			GlStateManager.enableTexture2D();
+			return;
+		}
+		if (event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			float x1 = ItemGunShotty.prevScreenPos.x + (ItemGunShotty.screenPos.x - ItemGunShotty.prevScreenPos.x) * event.getPartialTicks();
 			float y1 = ItemGunShotty.prevScreenPos.y + (ItemGunShotty.screenPos.y - ItemGunShotty.prevScreenPos.y) * event.getPartialTicks();
 			float x = BobMathUtil.remap(x1, 0, Minecraft.getMinecraft().displayWidth, 0, event.getResolution().getScaledWidth());
@@ -1580,6 +1605,13 @@ public class ModEventHandlerClient {
 
 		if(helmet.getItem() instanceof ArmorFSB) {
 			((ArmorFSB)helmet.getItem()).handleOverlay(event, player);
+		}
+		// NUKE GUI SHAKE //
+		if (event.getType() == ElementType.HOTBAR && (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) > 0) {
+			double mult = (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) / (double) ModEventHandlerClient.shakeDuration * 2;
+			double horizontal = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 15 * ModEventHandlerClient.shakeMultiplier;
+			double vertical = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 3 * ModEventHandlerClient.shakeMultiplier;
+			GlStateManager.translate(horizontal * mult, vertical * mult, 0);
 		}
 	}
 	

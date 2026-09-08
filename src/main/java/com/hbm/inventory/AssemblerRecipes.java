@@ -19,7 +19,6 @@ import static com.hbm.inventory.material.Mats.*;
 
 
 import com.hbm.items.tool.ItemGasCanister;
-import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
@@ -52,6 +51,20 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class AssemblerRecipes {
+
+	public static final String ASSEMBLER_CONFIG_HEADER =
+			"# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
+			+ "# One line per recipe.\n"
+			+ "# For an oredict input item, replace the mod id with oredict, like oredict:plateSteel. These do not require metatdata\n"
+			+ "# Example for iron plates: 30;minecraft:iron_ingot,0,3;oredict:plateIron,2\n"
+			+ "# For an NBT item, use a 4th item parameter with the nbt string of the tag.\n"
+			+ "# The NBT string format is the same as used in commands\n"
+			+ "# Example for turning kerosene canisters into steel plates:\n"
+			+ "# 20;hbm:canister_fuel,0,2,{HbmFluidKey:{FluidName:\"kerosene\",Amount:1000}};hbm:plate_steel,0,32\n"
+			+ "#\n"
+			+ "# To remove a recipe, use the format: \n"
+			+ "# remove hbm:plate_iron,0,2\n"
+			+ "# This will remove any recipe with the output of two iron plates\n";
 
 	public static File config;
 	public static File template;
@@ -92,7 +105,6 @@ public class AssemblerRecipes {
 	}
 
 	public static void loadRecipes() {
-		registerDefaults();
 		loadRecipesFromConfig();
 		generateList();
 	}
@@ -1115,23 +1127,17 @@ public class AssemblerRecipes {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
 		blockRegistry = GameRegistry.findRegistry(Block.class);
 		
+		recipes.clear();
+		time.clear();
+		recipeList.clear();
+		registerDefaults();
+		
 		File recipeConfig = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/assemblerConfig.cfg");
 		if (!recipeConfig.exists())
 			try {
 				recipeConfig.getParentFile().mkdirs();
 				FileWriter write = new FileWriter(recipeConfig);
-				write.write("# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
-						  + "# One line per recipe.\n"
-						  + "# For an oredict input item, replace the mod id with oredict, like oredict:plateSteel. These do not require metatdata\n"
-						  + "# Example for iron plates: 30;minecraft:iron_ingot,0,3;oredict:plateIron,2\n"
-						  + "# For an NBT item, use a 4th item parameter with the nbt string of the tag.\n"
-						  + "# The NBT string format is the same as used in commands\n"
-						  + "# Example for turning kerosene canisters into steel plates:\n"
-						  + "# 20;hbm:canister_fuel,0,2,{HbmFluidKey:{FluidName:\"kerosene\",Amount:1000}};hbm:plate_steel,0,32\n"
-						  + "#\n"
-						  + "# To remove a recipe, use the format: \n"
-						  + "# remove hbm:plate_iron,0,2\n"
-						  + "# This will remove any recipe with the output of two iron plates");
+				write.write(ASSEMBLER_CONFIG_HEADER);
 				addConfigRecipes(write);
 				write.close();
 				

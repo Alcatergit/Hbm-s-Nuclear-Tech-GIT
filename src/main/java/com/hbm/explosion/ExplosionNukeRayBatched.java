@@ -1,17 +1,14 @@
 package com.hbm.explosion;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.BitSet;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.List;
 
 import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.effect.EntityFalloutRain;
 import com.hbm.render.amlfrom1710.Vec3;
 
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -29,6 +26,7 @@ public class ExplosionNukeRayBatched {
 	public HashMap<ChunkPos, BitSet> perChunk = new HashMap<ChunkPos, BitSet>();
 	public List<ChunkPos> orderedChunks = new ArrayList<>();
 	private final CoordComparator comparator = new CoordComparator();
+	private final Set<ChunkPos> lightUpdatedChunks = new HashSet<>();
 	public boolean isContained = true;
 	double posX;
 	double posY;
@@ -248,15 +246,36 @@ public class ExplosionNukeRayBatched {
 		int blocksRemoved = 0;
 		while(index > -1) {
 			pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
-			world.setBlockToAir(pos);
-			index = hitArray.nextSetBit(index+1);
+			Block blockBelow = world.getBlockState(pos).getBlock();
+
+			world.removeTileEntity(pos);
+			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
+
+			for (EnumFacing facing : EnumFacing.values()) {
+				BlockPos neighborPos = pos.offset(facing);
+				if (world.isBlockLoaded(neighborPos)) {
+					IBlockState stateNeighbor = world.getBlockState(neighborPos);
+					Block blockNeighbor = stateNeighbor.getBlock();
+
+					if (blockNeighbor != Blocks.WATER && blockNeighbor != Blocks.FLOWING_WATER) {
+						world.neighborChanged(neighborPos, blockBelow, pos);
+					}
+				}
+			}
+
+			index = hitArray.nextSetBit(index + 1);
 			blocksRemoved++;
-			if(blocksRemoved % 256 == 0 && System.currentTimeMillis()+1 > start + time){
+			if (blocksRemoved % 256 == 0 && System.currentTimeMillis() + 1 > start + time) {
 				break;
 			}
 		}
 
 		if(index < 0){
+			ChunkPos cp = new ChunkPos(chunkX, chunkZ);
+			if (!lightUpdatedChunks.contains(cp)) {
+				world.getChunk(chunkX, chunkZ).enqueueRelightChecks();
+				lightUpdatedChunks.add(cp);
+			}
 			perChunk.remove(chunk);
 			orderedChunks.remove(0);
 			needsNewHitArray = true;

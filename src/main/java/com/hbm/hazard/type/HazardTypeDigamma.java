@@ -2,6 +2,7 @@ package com.hbm.hazard.type;
 
 import java.util.List;
 
+import com.hbm.config.RadiationConfig;
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.I18nUtil;
@@ -21,7 +22,16 @@ public class HazardTypeDigamma extends HazardTypeBase {
 	}
 
 	@Override
-	public void updateEntity(EntityItem item, float level) { }
+	public void updateEntity(EntityItem item, float level) {
+		if(!RadiationConfig.enableItemRadiation|| item.world.isRemote || level <= 0)
+			return;
+
+		ItemStack stack = item.getItem();
+		float digs = level * stack.getCount();
+		float digPerTick = digs / 20F;
+		double range = Math.min(128, Math.sqrt(digs));
+		ContaminationUtil.radiate(item.world, item.posX, item.posY, item.posZ, range, 0, digPerTick, 1.0D, null);
+	}
 
 	@Override
 	public void addHazardInformation(EntityPlayer player, List<String> list, float level, ItemStack stack, List<HazardModifier> modifiers) {

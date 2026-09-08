@@ -5,6 +5,9 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.HeatRecipes;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.INBTPacketReceiver;
 
 import api.hbm.tile.IHeatSource;
@@ -12,6 +15,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -32,6 +36,9 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
     public int heat;
     public static int maxHeat = 12_800_000; //the heat required to turn 64k of water into steam
     public static final double diffusion = 0.1D;
+    public boolean isOn;
+    private AudioWrapper audio;
+    private int audioTime;
 
     public TileEntityHeatBoiler() {
         super();
@@ -62,11 +69,51 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
         if(!world.isRemote) {
             setupTanks();
             tryPullHeat();
+            this.isOn = false;
             tryConvert();
             
             fillFluidInit(tanks[1]);
 
             networkPack();
+        } else {
+            if(this.isOn) audioTime = 20;
+
+            if(audioTime > 0) {
+                audioTime--;
+                if(audio == null) {
+                    audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.boiler, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.125F, 10F, 1.0F, 20);
+                    audio.startSound();
+                } else if(!audio.isPlaying()) {
+                    audio.stopSound();
+                    audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.boiler, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.125F, 10F, 1.0F, 20);
+                    audio.startSound();
+                }
+                audio.updateVolume(1F);
+                audio.keepAlive();
+            } else {
+                if(audio != null) {
+                    audio.stopSound();
+                    audio = null;
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onChunkUnload() {
+        super.onChunkUnload();
+        if(audio != null) {
+            audio.stopSound();
+            audio = null;
+        }
+    }
+
+    @Override
+    public void invalidate() {
+        super.invalidate();
+        if(audio != null) {
+            audio.stopSound();
+            audio = null;
         }
     }
 
@@ -159,6 +206,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
         }
         data.setTag("tanks", FFUtils.serializeTankArray(tanks));
         data.setInteger("heat", heat);
+        data.setBoolean("isOn", isOn);
         INBTPacketReceiver.networkPack(this, data, 25);
     }
 
@@ -173,6 +221,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             }
         }
         this.heat = nbt.getInteger("heat");
+        this.isOn = nbt.getBoolean("isOn");
     }
 
     private void setupTanks() {
@@ -201,6 +250,7 @@ public class TileEntityHeatBoiler extends TileEntity implements INBTPacketReceiv
             tanks[0].drain(inputAmount * ops, true);
             tanks[1].fill(new FluidStack(types[1], outputAmount * ops), true);
             this.heat -= heatReq * ops;
+            if(ops > 0) this.isOn = true;
         }
     }
     

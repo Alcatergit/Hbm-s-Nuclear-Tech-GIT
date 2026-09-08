@@ -1,18 +1,22 @@
 package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.forgefluid.FFPipeNetworkMk2;
 import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.FluidTypeHandler;
 import com.hbm.forgefluid.FluidTypeHandler.FluidTrait;
+import com.hbm.interfaces.IFluidPipeMk2;
 import com.hbm.interfaces.ITankPacketAcceptor;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.tileentity.TileEntityMachineBase;
+import com.hbm.tileentity.TileEntityProxyCombo;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.SoundEvents;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.SoundCategory;
@@ -30,10 +34,10 @@ import org.jetbrains.annotations.NotNull;
 public class TileEntityBarrel extends TileEntityMachineBase implements ITickable, IFluidHandler, ITankPacketAcceptor {
 
 	public FluidTank tank;
-	//Drillgon200: I think this would be much easier to read as an enum.
 	public short mode = 0;
 	public static final short modes = 4;
-	private int age = 0;
+	public FFPipeNetworkMk2 network;
+	private boolean updatingNetwork = false;
 
 	private static final int[] slots_top = new int[] {0};
 	private static final int[] slots_bottom = new int[] {1, 3};
@@ -57,12 +61,7 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 			FFUtils.fillFromFluidContainer(inventory, tank, 0, 1);
 			FFUtils.fillFluidContainer(inventory, tank, 2, 3);
 
-			age++;
-			if(age >= 20)
-				age = 0;
-			
-			if((mode == 1 || mode == 2) && (age == 9 || age == 19))
-				fillFluidInit(tank);
+			updateFluidNetwork();
 			
 			if(tank.getFluid() != null && tank.getFluidAmount() > 0) {
 				checkFluidInteraction();
@@ -72,6 +71,326 @@ public class TileEntityBarrel extends TileEntityMachineBase implements ITickable
 			if(!FFUtils.areTanksEqual(tank, compareTank))
 				markDirty();
 		}
+	}
+
+	protected void updateFluidNetwork() {
+		if(updatingNetwork) return;
+		updatingNetwork = true;
+
+		Fluid tankFluid = tank.getFluid() != null ? tank.getFluid().getFluid() : null;
+
+		if(mode == 1) {
+			if(network != null && (network.getType() == null || network.getType() != tankFluid) && tankFluid != null) {
+				network.removeProvider(this);
+				network.removeReceiver(this);
+				network = null;
+			}
+
+			if(network == null) {
+				Fluid fluid = tankFluid;
+				if(fluid == null) {
+					BlockPos[] conPositions = getConnectionPositions();
+					for(BlockPos conPos : conPositions) {
+						if(!world.isBlockLoaded(conPos)) continue;
+						TileEntity te = world.getTileEntity(conPos);
+						if(te instanceof TileEntityProxyCombo proxy) {
+							TileEntity resolved = proxy.getTE();
+							if(resolved != null) te = resolved;
+						}
+						if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+							te = world.getTileEntity(dummy.target);
+						}
+						if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+							fluid = barrel.tank.getFluid().getFluid();
+							break;
+						} else if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+							fluid = tank.tank.getFluid().getFluid();
+							break;
+						} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+							fluid = pipe.getType();
+							break;
+						}
+					}
+				}
+				if(fluid != null) {
+					network = new FFPipeNetworkMk2(fluid);
+				}
+			}
+
+			BlockPos[] conPositions = getConnectionPositions();
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyCombo proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
+				}
+				if(te instanceof TileEntityBarrel barrel) {
+					if(barrel.mode == 1) {
+						if(barrel.network != null && barrel.network != this.network) {
+							if(this.network == null) {
+								this.network = barrel.network;
+							} else {
+								this.network = FFPipeNetworkMk2.mergeNetworks(this.network, barrel.network);
+							}
+							barrel.network = this.network;
+						} else if(barrel.network == null && this.network != null) {
+							barrel.network = this.network;
+							this.network.addProvider(barrel);
+							this.network.addReceiver(barrel);
+						}
+					} else if(barrel.network != null && barrel.network != this.network && barrel.mode != 3) {
+						if(this.network == null) {
+							this.network = barrel.network;
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, barrel.network);
+						}
+						barrel.network = this.network;
+					} else if(barrel.network == null && this.network != null && barrel.mode != 3) {
+						barrel.network = this.network;
+						if(barrel.mode == 0) {
+							this.network.addReceiver(barrel);
+						} else if(barrel.mode == 2) {
+							this.network.addProvider(barrel);
+						}
+					}
+				} else if(te instanceof TileEntityMachineFluidTank tank) {
+					if(tank.mode == 1) {
+						if(tank.network != null && tank.network != this.network) {
+							if(this.network == null) {
+								this.network = tank.network;
+							} else {
+								this.network = FFPipeNetworkMk2.mergeNetworks(this.network, tank.network);
+							}
+							tank.network = this.network;
+						} else if(tank.network == null && this.network != null) {
+							tank.network = this.network;
+							this.network.addProvider(tank);
+							this.network.addReceiver(tank);
+						}
+					} else if(tank.network != null && tank.network != this.network && tank.mode != 3) {
+						if(this.network == null) {
+							this.network = tank.network;
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, tank.network);
+						}
+						tank.network = this.network;
+					} else if(tank.network == null && this.network != null && tank.mode != 3) {
+						tank.network = this.network;
+						if(tank.mode == 0) {
+							this.network.addReceiver(tank);
+						} else if(tank.mode == 2) {
+							this.network.addProvider(tank);
+						}
+					}
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					if(pipe.getNetwork() != null && pipe.getNetwork() != this.network
+							&& (this.network == null || this.network.getType() == null || pipe.getType() == this.network.getType())) {
+						if(this.network == null) {
+							this.network = pipe.getNetwork();
+						} else {
+							this.network = FFPipeNetworkMk2.mergeNetworks(this.network, pipe.getNetwork());
+						}
+					}
+				} else if(this.network != null) {
+					this.network.tryAdd(te);
+				}
+			}
+
+			if(this.network != null) {
+				this.network.addProvider(this);
+				this.network.addReceiver(this);
+
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					}
+				}
+
+				this.network.update(world);
+			}
+		} else if(mode == 0) {
+			BlockPos[] conPositions = getConnectionPositions();
+			boolean found = false;
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyCombo proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
+				}
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityBarrel barrel) {
+					foundNet = barrel.network;
+				} else if(te instanceof TileEntityMachineFluidTank tank) {
+					foundNet = tank.network;
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					foundNet = pipe.getNetwork();
+				}
+				if(foundNet != null) {
+					foundNet.addReceiver(this);
+					if(this.network != foundNet) {
+						if(this.network != null) this.network.removeReceiver(this);
+						this.network = foundNet;
+					}
+					found = true;
+				} else if(!found && this.network == null) {
+					Fluid fluid = null;
+					if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+						fluid = barrel.tank.getFluid().getFluid();
+					} else if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+						fluid = tank.tank.getFluid().getFluid();
+					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+						fluid = pipe.getType();
+					}
+					if(fluid != null) {
+						this.network = new FFPipeNetworkMk2(fluid);
+						this.network.addReceiver(this);
+						found = true;
+					}
+				}
+			}
+			if(!found && this.network != null) {
+				this.network.removeReceiver(this);
+				this.network = null;
+			}
+			if(this.network != null) {
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					}
+				}
+				this.network.update(world);
+			}
+		} else if(mode == 2) {
+			BlockPos[] conPositions = getConnectionPositions();
+			boolean found = false;
+			for(BlockPos conPos : conPositions) {
+				if(!world.isBlockLoaded(conPos)) continue;
+				TileEntity te = world.getTileEntity(conPos);
+				if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+					te = world.getTileEntity(dummy.target);
+				}
+				if(te instanceof TileEntityProxyCombo proxy) {
+					TileEntity resolved = proxy.getTE();
+					if(resolved != null) te = resolved;
+				}
+				FFPipeNetworkMk2 foundNet = null;
+				if(te instanceof TileEntityBarrel barrel) {
+					foundNet = barrel.network;
+				} else if(te instanceof TileEntityMachineFluidTank tank) {
+					foundNet = tank.network;
+				} else if(te instanceof IFluidPipeMk2 pipe) {
+					foundNet = pipe.getNetwork();
+				}
+				if(foundNet != null) {
+					foundNet.addProvider(this);
+					if(this.network != foundNet) {
+						if(this.network != null) this.network.removeProvider(this);
+						this.network = foundNet;
+					}
+					found = true;
+				} else if(!found && this.network == null) {
+					Fluid fluid = null;
+					if(te instanceof TileEntityBarrel barrel && barrel.tank.getFluid() != null) {
+						fluid = barrel.tank.getFluid().getFluid();
+					} else if(te instanceof TileEntityMachineFluidTank tank && tank.tank.getFluid() != null) {
+						fluid = tank.tank.getFluid().getFluid();
+					} else if(te instanceof IFluidPipeMk2 pipe && pipe.getType() != null) {
+						fluid = pipe.getType();
+					}
+					if(fluid != null) {
+						this.network = new FFPipeNetworkMk2(fluid);
+						this.network.addProvider(this);
+						found = true;
+					}
+				}
+			}
+			if(!found && this.network != null) {
+				this.network.removeProvider(this);
+				this.network = null;
+			}
+			if(this.network != null) {
+				for(BlockPos conPos : conPositions) {
+					if(!world.isBlockLoaded(conPos)) continue;
+					TileEntity te = world.getTileEntity(conPos);
+					if(te instanceof TileEntityDummyFluidPort dummy && dummy.target != null && !dummy.target.equals(pos)) {
+						te = world.getTileEntity(dummy.target);
+					}
+					if(te instanceof TileEntityProxyCombo proxy) {
+						TileEntity resolved = proxy.getTE();
+						if(resolved != null) te = resolved;
+					}
+					if(te instanceof TileEntityBarrel barrel) {
+						barrel.updateFluidNetwork();
+					} else if(te instanceof TileEntityMachineFluidTank tank) {
+						tank.updateFluidNetwork();
+					}
+				}
+				this.network.update(world);
+			}
+		} else {
+			if(this.network != null) {
+				this.network.removeProvider(this);
+				this.network.removeReceiver(this);
+				this.network = null;
+			}
+		}
+
+		updatingNetwork = false;
+	}
+
+	public BlockPos[] getConnectionPositions() {
+		return new BlockPos[] {
+				pos.up(), pos.down(), pos.north(), pos.south(), pos.east(), pos.west()
+		};
+	}
+	
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(!world.isRemote && network != null) {
+			network.removeProvider(this);
+			network.removeReceiver(this);
+			network = null;
+		}
+	}
+	
+	@Override
+	public void onChunkUnload() {
+		if(!world.isRemote && network != null) {
+			network.removeProvider(this);
+			network.removeReceiver(this);
+		}
+		super.onChunkUnload();
 	}
 	
 	public void checkFluidInteraction(){

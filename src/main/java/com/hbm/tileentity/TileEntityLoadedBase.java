@@ -1,6 +1,7 @@
 package com.hbm.tileentity;
 
 import api.hbm.energy.ILoadedTile;
+import com.hbm.sound.AudioWrapper;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityLoadedBase extends TileEntity implements ILoadedTile {
@@ -23,4 +24,13 @@ public class TileEntityLoadedBase extends TileEntity implements ILoadedTile {
         super.onLoad();
         this.isLoaded = true;
     }
+
+	public AudioWrapper createAudioLoop() { return null; }
+
+	public AudioWrapper rebootAudio(AudioWrapper wrapper) {
+		wrapper.stopSound();
+		AudioWrapper audio = createAudioLoop();
+		audio.startSound();
+		return audio;
+	}
 }

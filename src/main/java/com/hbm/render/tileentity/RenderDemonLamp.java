@@ -1,5 +1,4 @@
 package com.hbm.render.tileentity;
-
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.hfr.render.loader.HFRWavefrontObject;
@@ -21,27 +20,49 @@ public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLa
 
 	public static final IModelCustom demon_lamp = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/blocks/demon_lamp.obj"));
 	public static final ResourceLocation tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/demon_lamp.png");
-	
+
 	@Override
 	public boolean isGlobalRenderer(TileEntityDemonLamp te){
 		return true;
 	}
-	
+
 	@Override
 	public void render(TileEntityDemonLamp te, double x, double y, double z, float partialTicks, int destroyStage, float alpha){
 		GL11.glPushMatrix();
 		GL11.glTranslated(x + 0.5D, y, z + 0.5D);
+
+		// ==================== MODIFICATION: Rotate rendering based on the block's orientation ====================
+		// According to the orientation rotation model and rays
+		te.getWorld().getBlockState(te.getPos()).getBlock();
+
+		switch(te.getBlockMetadata()) {
+			case 0: // South
+				GL11.glRotatef(180, 0F, 1F, 0F);
+				break;
+			case 1: // West
+				GL11.glRotatef(90, 0F, 1F, 0F);
+				break;
+			case 2: // North
+				GL11.glRotatef(0, 0F, 1F, 0F);
+				break;
+			case 3: // East
+				GL11.glRotatef(270, 0F, 1F, 0F);
+				break;
+		}
+
 		GlStateManager.enableLighting();
 		GlStateManager.enableCull();
 
 		GlStateManager.shadeModel(GL11.GL_SMOOTH);
 		bindTexture(tex);
 		demon_lamp.renderAll();
-		
+
 		Tessellator tess = Tessellator.getInstance();
 		BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
-		Vec3 vec = Vec3.createVectorHelper(1, 0, 0);
+
+		// ==================== MODIFICATION: Change the initial direction of the rays from east to north ====================
+		Vec3 vec = Vec3.createVectorHelper(0, 0, -1); // Change to face north (negative Z direction)
 
 		GlStateManager.depthMask(false);
 		GlStateManager.disableTexture2D();
@@ -54,19 +75,19 @@ public class RenderDemonLamp extends TileEntitySpecialRenderer<TileEntityDemonLa
 		double near = 0.375D;
 		double far = 15D;
 		//whereeeeeeever you are
-		
+
 		for(int j = 0; j < 2; j++) {
-			
+
 			double h = 0.5;
 			double height = j == 0 ? -h : h;
-			
+
 			for(int i = 0; i < 16; i++) {
-				
+
 				buf.pos(vec.xCoord * near, 0.5D + j * 0.125D, vec.zCoord * near).color(0F, 0.75F, 1F, 0.25F).endVertex();
 				buf.pos(vec.xCoord * far, 0.5D + j * 0.125D + height, vec.zCoord * far).color(0F, 0.75F, 1F, 0F).endVertex();
-				
+
 				vec.rotateAroundY((float)Math.PI * 2F / 16F);
-	
+
 				buf.pos(vec.xCoord * far, 0.5D + j * 0.125D + height, vec.zCoord * far).color(0F, 0.75F, 1F, 0F).endVertex();
 				buf.pos(vec.xCoord * near, 0.5D + j * 0.125D, vec.zCoord * near).color(0F, 0.75F, 1F, 0.25F).endVertex();
 			}

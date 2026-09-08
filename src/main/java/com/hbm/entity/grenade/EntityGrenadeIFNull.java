@@ -39,8 +39,10 @@ public class EntityGrenadeIFNull extends EntityGrenadeBouncyBase {
             MutableBlockPos pos = new BlockPos.MutableBlockPos();
     		for(int a = -3; a <= 3; a++)
         		for(int b = -3; b <= 3; b++)
-            		for(int c = -3; c <= 3; c++)
+            		for(int c = -3; c <= 3; c++) {
+            			world.removeTileEntity(pos.setPos((int)posX + a, (int)posY + b, (int)posZ + c));
             			world.setBlockToAir(pos.setPos((int)posX + a, (int)posY + b, (int)posZ + c));
+					}
             		
     		
     		List<Entity> list = world.getEntitiesWithinAABBExcludingEntity(this, new AxisAlignedBB((int)posX + 0.5 - 3, (int)posY + 0.5 - 3, (int)posZ + 0.5 - 3, (int)posX + 0.5 + 3, (int)posY + 0.5 + 3, (int)posZ + 0.5 + 3));

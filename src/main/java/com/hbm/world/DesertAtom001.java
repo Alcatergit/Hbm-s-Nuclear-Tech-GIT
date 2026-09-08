@@ -110,6 +110,7 @@ public class DesertAtom001 extends WorldGenerator
 		{
 			return false;
 		}
+		y = Library.getBedrockAdjustedY(world, x, y, z, 5, 9, 11, 21, -5);
 		MutableBlockPos pos = new BlockPos.MutableBlockPos();
 		
 		world.setBlockState(pos.setPos(x + 6, y + -5, z + 9), Library.getRandomConcrete().getDefaultState(), 3);

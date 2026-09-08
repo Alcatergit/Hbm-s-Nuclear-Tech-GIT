@@ -3,7 +3,6 @@ package com.hbm.main;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -340,7 +339,7 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
+@Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME, guiFactory = "com.hbm.config.gui.HbmGuiFactory")
 public class MainRegistry {
 
 	static {
@@ -1006,6 +1005,7 @@ public class MainRegistry {
 		reloadCompatConfig();
 		WorldConfig.loadFromCompatibilityConfig();
 		BedrockOreJsonConfig.init();
+		ExplosionNukeGeneric.loadSoliniumFromFile();
 	}
 
 	public static void reloadCompatConfig() {
@@ -1477,5 +1477,4 @@ public class MainRegistry {
             }
         });
 	}
-
 }

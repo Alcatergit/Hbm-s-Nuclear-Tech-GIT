@@ -28,7 +28,6 @@ import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
-import org.lwjgl.Sys;
 
 public class ExplosionLarge {
 
@@ -156,7 +155,7 @@ public class ExplosionLarge {
 						rubble.motionZ = vec4.z * vel;
 						
 						world.spawnEntity(rubble);
-					
+						world.removeTileEntity(pos);
 						world.setBlockToAir(pos);
 						break;
 					}
@@ -218,9 +217,13 @@ public class ExplosionLarge {
 	}
 
 	public static void explode(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-		if(CompatibilityConfig.isWarDim(world)){
+		explode(world, x, y, z, strength, cloud, rubble, shrapnel, true);
+	}
+
+	public static void explode(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel, boolean nuke) {
+		if (nuke && CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)strength, x, y, z));
-		
+
 			ContaminationUtil.radiate(world, x, y, z, strength, 0, 0, 0, strength*30F);
 		}
 		if (cloud)
@@ -232,7 +235,7 @@ public class ExplosionLarge {
 	}
 
     public static void explodeArea(World world, double x, double y, double z, float radius, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-        if(CompatibilityConfig.isWarDim(world)){
+        if (CompatibilityConfig.isWarDim(world)){
             List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, new AxisAlignedBB(x-radius, y-radius, z-radius, x+radius, y+radius, z+radius));
 
             for(Entity e : entities) {
@@ -265,7 +268,7 @@ public class ExplosionLarge {
 	}
 
 	public static void explodeFire(World world, double x, double y, double z, float strength, boolean cloud, boolean rubble, boolean shrapnel) {
-		if(CompatibilityConfig.isWarDim(world)){
+		if (CompatibilityConfig.isWarDim(world)){
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRadFire(world, (int)strength, x, y, z));
 
 			ContaminationUtil.radiate(world, x, y, z, strength, 0, 0, strength*20F, strength*5F);
@@ -293,9 +296,8 @@ public class ExplosionLarge {
 	}
 	
 	public static void buster(World world, double x, double y, double z, Vec3 vector, float strength, float depth) {
-		
 		vector = vector.normalize();
-		if(CompatibilityConfig.isWarDim(world)){
+		if (CompatibilityConfig.isWarDim(world)){
 			for(int i = 0; i <= depth; i += 3) {
 				
 				ContaminationUtil.radiate(world, x + vector.xCoord * i, y + vector.yCoord * i, z + vector.zCoord * i, strength, 0, 0, 0, strength*10F);

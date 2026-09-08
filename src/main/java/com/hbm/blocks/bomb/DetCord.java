@@ -11,6 +11,7 @@ import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.interfaces.IBomb;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
@@ -90,20 +91,20 @@ public class DetCord extends Block implements IBomb {
 	@Override
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		if(this == ModBlocks.det_n2){
-			tooltip.add("§c[Extreme Bomb]§r");
-			tooltip.add(" §eRadius: "+((int)(BombConfig.n2Radius/12) * 5)+"m§r");
+			tooltip.add("§c["+ I18nUtil.resolveKey("trait.extremebomb")+"]§r");
+			tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", (int)((BombConfig.n2Radius/12.0) * 5)) + "§r");
 		}
 		if(this == ModBlocks.det_nuke){
-			tooltip.add("§2[Nuclear Bomb]§r");
-			tooltip.add(" §eRadius: "+BombConfig.missileRadius+"m§r");
+			tooltip.add("§2["+ I18nUtil.resolveKey("trait.nuclearbomb")+"]"+"§r");
+			tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", BombConfig.missileRadius) + "§r");
 			if(!BombConfig.disableNuclear){
-				tooltip.add("§2[Fallout]§r");
-				tooltip.add(" §aRadius: "+(int)BombConfig.missileRadius*(1+BombConfig.falloutRange/100)+"m§r");
+				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+" §r");
+				tooltip.add(" §a" + I18nUtil.resolveKey("desc.radius", (int)(BombConfig.missileRadius*(1+BombConfig.falloutRange/100.0))) + "§r");
 			}
 		}
 		if(this == ModBlocks.det_bale){
-			tooltip.add("§a[Balefire Bomb]§r");
-			tooltip.add(" §eRadius: 130m§r");
+			tooltip.add("§a[" + I18nUtil.resolveKey("trait.balefirebomb") + "]" + "§r");
+			tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", 130) + "§r");
 		}
 	}
 }

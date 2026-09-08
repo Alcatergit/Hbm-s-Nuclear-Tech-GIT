@@ -49,6 +49,15 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	public String getName() {
 		return "container.rbmkOutgasser";
 	}
+
+	public void getDiagData(NBTTagCompound nbt) {
+		this.writeToNBT(nbt);
+		nbt.removeTag("jumpHeight");
+		nbt.removeTag("lastColumnHeight");
+		nbt.setInteger("gas", gas.getFluidAmount());
+		nbt.setString("gasType", gasType.getName());
+		nbt.setDouble("progress", progress);
+	}
 	
 	@Override
 	public void update() {
@@ -56,7 +65,7 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 		if(!world.isRemote) {
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, gas), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 50));
 			NBTTagCompound type = new NBTTagCompound();
-			type.setString("gasType", gasType.getName());
+			type.setString("gasType2", gasType.getName());
 			networkPack(type, 50);
 			
 			if(world.getTotalWorldTime() % 10 == 0)
@@ -72,8 +81,8 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	
 	@Override
 	public void networkUnpack(NBTTagCompound nbt){
-		if(nbt.hasKey("steamType")){
-			this.gasType = FluidRegistry.getFluid(nbt.getString("gasType"));
+		if(nbt.hasKey("gasType2")){
+			this.gasType = FluidRegistry.getFluid(nbt.getString("gasType2"));
 		} else {
 			super.networkUnpack(nbt);
 		}
@@ -203,7 +212,11 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		
+
+		if (nbt.hasKey("gasType")) {
+			this.gasType = FluidRegistry.getFluid(nbt.getString("gasType"));
+		}
+
 		this.progress = nbt.getDouble("progress");
 		this.duration = nbt.getInteger("duration");
 		this.gas.readFromNBT(nbt.getCompoundTag("gas"));
@@ -212,11 +225,12 @@ public class TileEntityRBMKOutgasser extends TileEntityRBMKSlottedBase implement
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
+
 		nbt.setDouble("progress", this.progress);
 		nbt.setInteger("duration", this.duration);
+		nbt.setString("gasType", gasType.getName());
 		nbt.setTag("gas", gas.writeToNBT(new NBTTagCompound()));
-		
+
 		return nbt;
 	}
 

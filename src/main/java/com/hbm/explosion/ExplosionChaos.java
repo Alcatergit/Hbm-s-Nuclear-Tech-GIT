@@ -83,6 +83,7 @@ public class ExplosionChaos {
 		if(b == Blocks.BEDROCK || b == ModBlocks.reinforced_brick || b == ModBlocks.reinforced_sand || b == ModBlocks.reinforced_glass || b == ModBlocks.reinforced_lamp_on || b == ModBlocks.reinforced_lamp_off) {
 
 		} else {
+			world.removeTileEntity(pos);
 			world.setBlockToAir(pos);
 		}
 	}
@@ -568,8 +569,10 @@ public class ExplosionChaos {
 					int ZZ = YY + zz * zz;
 					if(ZZ < r22) {
 						pos.setPos(X, Y, Z);
-						if(!(world.getBlockState(pos).getBlock() == Blocks.BEDROCK && Y <= 0))
+						if(!(world.getBlockState(pos).getBlock() == Blocks.BEDROCK && Y <= 0)) {
+							world.removeTileEntity(pos);
 							world.setBlockToAir(pos);
+						}
 					}
 				}
 			}
@@ -827,6 +830,7 @@ public class ExplosionChaos {
 					if(ZZ < r22) {
 						pos.setPos(X, Y, Z);
 						save = world.getBlockState(pos);
+						world.removeTileEntity(pos);
 						world.setBlockState(pos, Blocks.AIR.getDefaultState());
 						if(save.getBlock() != Blocks.AIR) {
 							world.setBlockState(pos.setPos(X, Y + height, Z), save);
@@ -915,7 +919,7 @@ public class ExplosionChaos {
 						rubble.setMetaBasedOnBlock(b.getBlock(), b.getBlock().getMetaFromState(b));
 
 						world.spawnEntity(rubble);
-
+						world.removeTileEntity(pos.setPos(i, y, j));
 						world.setBlockState(pos.setPos(i, y, j), Blocks.AIR.getDefaultState());
 					}
 				}

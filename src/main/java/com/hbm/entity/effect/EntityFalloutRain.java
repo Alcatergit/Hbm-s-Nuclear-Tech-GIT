@@ -1,5 +1,6 @@
 package com.hbm.entity.effect;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 import com.hbm.blocks.ModBlocks;
@@ -12,26 +13,35 @@ import com.hbm.entity.logic.EntityChunky;
 import com.hbm.interfaces.IConstantRenderer;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
-
 import com.hbm.blocks.generic.WasteLog;
+
 import net.minecraft.block.*;
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.item.EntityFallingBlock;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.math.ChunkPos;
-
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.init.Blocks;
 import net.minecraft.block.material.Material;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EntityFalloutRain extends EntityChunky implements IConstantRenderer {
 	private static final DataParameter<Integer> SCALE = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FADE_IN_TICKS = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final DataParameter<Integer> FADE_OUT_TICKS = EntityDataManager.createKey(EntityFalloutRain.class, DataSerializers.VARINT);
+	private static final int FADE_DURATION = 100;
 	public boolean done = false;
 	public boolean doFallout = false;
 	public boolean doFlood = false;
@@ -51,8 +61,19 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	private boolean firstTick = true;
 	private final List<Long> chunksToProcess = new ArrayList<>();
 	private final List<Long> outerChunksToProcess = new ArrayList<>();
+	private final Set<ChunkPos> lightUpdatedChunks = new HashSet<>();
 	private int falloutTickNumber = 0;
 
+	private static Field field_fallHurtAmount;
+	static {
+		for (Field field : EntityFallingBlock.class.getDeclaredFields()) {
+			if (field.getType() == float.class) {
+				field_fallHurtAmount = field;
+				break;
+			}
+		}
+		if (field_fallHurtAmount != null) field_fallHurtAmount.setAccessible(true);
+	}
 
 	public EntityFalloutRain(World world) {
 		super(world);
@@ -99,6 +120,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	protected void entityInit() {
 		super.entityInit();
 		this.dataManager.register(SCALE, 0);
+		this.dataManager.register(FADE_IN_TICKS, FADE_DURATION);
+		this.dataManager.register(FADE_OUT_TICKS, 0);
 	}
 
 	private void gatherChunks() {
@@ -151,16 +174,18 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 			
 		} else {
-			setDead();
+			if (this.dataManager.get(FADE_IN_TICKS) == 0 && this.dataManager.get(FADE_OUT_TICKS) == 0) {
+				this.dataManager.set(FADE_OUT_TICKS, FADE_DURATION);
+			}
 		}
 	}
 
 	@Override
 	public void onUpdate() {
-
 		if(!world.isRemote) {
 			if(!CompatibilityConfig.isWarDim(world)){
 				this.setDead();
+				return;
 			} else if(firstTick) {
 				if(chunksToProcess.isEmpty() && outerChunksToProcess.isEmpty()) gatherChunks();
 				firstTick = false;
@@ -176,17 +201,27 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 			falloutTickNumber++;
 
-			if(this.isDead) {
-				this.done = true;
-				if(RadiationConfig.rain > 0 && doFlood) {
-                    int scale = getScale();
-					if((doFallout && scale > 160) || scale > 200){
-                        world.getWorldInfo().setThundering(true);
-                        world.getWorldInfo().setThunderTime(RadiationConfig.rain);
-                        AuxSavedData.setThunder(world, RadiationConfig.rain);
-					} else if((doFallout && scale > 80) || scale > 100){
-                        world.getWorldInfo().setRaining(true);
-                        world.getWorldInfo().setRainTime(RadiationConfig.rain);
+			int fadeIn = this.dataManager.get(FADE_IN_TICKS);
+			if (fadeIn > 0) {
+				this.dataManager.set(FADE_IN_TICKS, fadeIn - 1);
+			}
+
+			int fadeOut = this.dataManager.get(FADE_OUT_TICKS);
+			if (fadeOut > 0) {
+				this.dataManager.set(FADE_OUT_TICKS, fadeOut - 1);
+				if (fadeOut == 1) {
+					this.setDead();
+					this.done = true;
+					if (RadiationConfig.rain > 0 && doFlood) {
+						int scale = getScale();
+						if ((doFallout && scale > 160) || scale > 200) {
+							world.getWorldInfo().setThundering(true);
+							world.getWorldInfo().setThunderTime(RadiationConfig.rain);
+							AuxSavedData.setThunder(world, RadiationConfig.rain);
+						} else if ((doFallout && scale > 80) || scale > 100) {
+							world.getWorldInfo().setRaining(true);
+							world.getWorldInfo().setRainTime(RadiationConfig.rain);
+						}
 					}
 				}
 			}
@@ -195,30 +230,75 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 
 	private void letFall(World world, MutableBlockPos pos, int lastGapHeight, int contactHeight){
 		int fallChance = RadiationConfig.blocksFallCh;
-		if(fallChance < 1)
-			return;
+		if(fallChance < 1) return;
 		if(fallChance < 100){
 			int chance = world.rand.nextInt(100);
-			if(chance < fallChance)
-				return;
+			if(chance < fallChance) return;
 		}
-		
-		int bottomHeight = lastGapHeight;
-		MutableBlockPos gapPos = new MutableBlockPos(pos.getX(), 0, pos.getZ());
-		
-		for(int i = lastGapHeight; i <= contactHeight; i++) {
-			pos.setY(i);
-			Block b = world.getBlockState(pos).getBlock();
-			if(!b.isReplaceable(world, pos)){
 
-				float hardness = b.getExplosionResistance(null);
-				if(hardness >= 0 && hardness < 50 && i != bottomHeight){
-					gapPos.setY(bottomHeight);
-					world.setBlockState(gapPos, world.getBlockState(pos));
-					world.setBlockToAir(pos);
+		int bottomHeight = lastGapHeight;
+
+		for (int y = lastGapHeight; y <= contactHeight; y++) {
+			pos.setY(y);
+			IBlockState state = world.getBlockState(pos);
+			Block b = state.getBlock();
+
+			if (b.isReplaceable(world, pos)) continue;
+
+			float hardness = b.getExplosionResistance(null);
+
+			if (hardness > 15) {
+				bottomHeight = y + 1;
+				continue;
+			}
+
+			if (hardness >= 0 && y != bottomHeight) {
+				BlockPos target = new BlockPos(pos.getX(), bottomHeight, pos.getZ());
+				IBlockState targetState = world.getBlockState(target);
+
+				if (targetState.getBlock().isReplaceable(world, target)) {
+					TileEntity te = world.getTileEntity(pos);
+					NBTTagCompound teNBT = null;
+					if (te != null) {
+						teNBT = new NBTTagCompound();
+						te.writeToNBT(teNBT);
+						teNBT.setInteger("x", target.getX());
+						teNBT.setInteger("y", target.getY());
+						teNBT.setInteger("z", target.getZ());
+						world.removeTileEntity(pos);
+					}
+
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+					world.setBlockState(target, state);
+
+					if (teNBT != null) {
+						TileEntity newTE = world.getTileEntity(target);
+						if (newTE != null) {
+							newTE.readFromNBT(teNBT);
+							newTE.validate();
+							world.markBlockRangeForRenderUpdate(target, target);
+							world.notifyBlockUpdate(target, state, state, 3);
+						}
+					}
+
+					if (!(b.getCollisionBoundingBox(state, world, pos) == Block.NULL_AABB)) {
+						float distance = y - bottomHeight;
+						int i = MathHelper.ceil(distance - 1.0F);
+						if (i > 0) {
+							float fallHurtAmount = 2.0F * (hardness / 15F);
+							float damage = Math.min(MathHelper.floor((float) i * fallHurtAmount), 40.0F);
+							AxisAlignedBB blockBox = state.getCollisionBoundingBox(world, target);
+							if (blockBox != Block.NULL_AABB) {
+								List<Entity> entities = world.getEntitiesWithinAABB(Entity.class, blockBox.offset(target));
+								for (Entity entity : entities) {
+									entity.attackEntityFrom(DamageSource.FALLING_BLOCK, damage);
+								}
+							}
+						}
+					}
 				}
-				bottomHeight++;
-			}	
+			}
+			bottomHeight++;
 		}
 	}
 
@@ -281,7 +361,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
-				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(), ModBlocks.toxic_block.getDefaultState());
+				if(world.isAirBlock(pos.up())) world.setBlockState(pos.up(),ModBlocks.toxic_block.getDefaultState(), 3);
 				break;
 			}
 
@@ -291,7 +371,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 
 			if(bblock == ModBlocks.waste_leaves){
 				if(!(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F))))){
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				}
 				continue;
 			}
@@ -305,25 +385,25 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
                         //TK bag programming catch
                     }
                     if(type == null) type = BlockPlanks.EnumType.OAK;
-                    world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
+                    world.setBlockState(pos,ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 				} else {
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				}
 				continue;
 			}
 
 			if(bblock == Blocks.BROWN_MUSHROOM || bblock == Blocks.RED_MUSHROOM){
 				if(dist < s0)
-					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
+					world.setBlockState(pos,ModBlocks.mush.getDefaultState(), 2);
 				continue;
 			}
 
 			// if(b.getBlock() == Blocks.WATER) {
-			// 	world.setBlockState(pos, ModBlocks.radwater_block.getDefaultState());
+			// 	world.setBlockState(pos,ModBlocks.radwater_block.getDefaultState(), 2);
 			// }
 
 			if(bblock instanceof BlockOre && reachedStone && !lastReachedStone && dist < s1){
-				world.setBlockState(pos, ModBlocks.toxic_block.getDefaultState());
+				world.setBlockState(pos,ModBlocks.toxic_block.getDefaultState(), 3);
 				continue;
 			}
 
@@ -376,19 +456,19 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 
 			} else if(bblock instanceof BlockIce) {
-				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
+				world.setBlockState(pos,ModBlocks.waste_ice.getDefaultState(), 2);
 				continue;
 
 			} else if(bblock instanceof BlockBush) {
 				if(world.getBlockState(pos.down()).getBlock() == Blocks.FARMLAND){
 					placeBlockFromDist(dist, ModBlocks.waste_dirt, pos.down());
-					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
+					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos, 3);
 				} else if(world.getBlockState(pos.down()).getBlock() instanceof BlockGrass){
 					placeBlockFromDist(dist, ModBlocks.waste_earth, pos.down());
-					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
+					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos, 3);
 				} else if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM){
 					placeBlockFromDist(dist, ModBlocks.waste_mycelium, pos.down());
-					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
+					world.setBlockState(pos,ModBlocks.mush.getDefaultState(), 3);
 				}
 				continue;
 
@@ -416,22 +496,22 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			else if(bblock == Blocks.CLAY) {
-				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
+				world.setBlockState(pos,Blocks.HARDENED_CLAY.getDefaultState(), 2);
 				continue;
 			}
 
 			else if(bblock == Blocks.MOSSY_COBBLESTONE) {
-				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
+				world.setBlockState(pos,Blocks.COAL_ORE.getDefaultState(), 2);
 				continue;
 			}
 
-			else if(bblock == Blocks.COAL_ORE) {
+			else if(bblock == Blocks.COAL_ORE || isOreDictMatch(bblock, "oreCoal")) {
 				if(dist < s5){
 					int ra = rand.nextInt(150);
 					if(ra < 7) {
-						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+						world.setBlockState(pos,Blocks.DIAMOND_ORE.getDefaultState(), 2);
 					} else if(ra < 10) {
-						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+						world.setBlockState(pos,Blocks.EMERALD_ORE.getDefaultState(), 2);
 					}
 				}
 				continue;
@@ -441,9 +521,9 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				if(dist < s0){
 					BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
 					if(meta == BlockHugeMushroom.EnumType.STEM) {
-						world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
+						world.setBlockState(pos,ModBlocks.mush_block_stem.getDefaultState(), 2);
 					} else {
-						world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
+						world.setBlockState(pos,ModBlocks.mush_block.getDefaultState(), 2);
 					}
 				}
 				continue;
@@ -455,9 +535,18 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 			}
 
+			else if (bblock == Blocks.SPONGE) {
+				if (b.getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
+				}
+				continue;
+			}
+
 			else if(bmaterial == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
-				if(dist < s1)
-					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				if(dist < s1) {
+					world.removeTileEntity(pos);
+					world.setBlockState(pos,ModBlocks.waste_planks.getDefaultState(), 2);
+				}
 				continue;
 			}
 			else if(b.getBlock() == ModBlocks.sellafield_4) {
@@ -485,43 +574,42 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 			}
 			else if(b.getBlock() == Blocks.VINE) {
-				world.setBlockToAir(pos);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				continue;
 			}
-			else if(bblock == ModBlocks.ore_uranium) {
+			else if(bblock == ModBlocks.ore_uranium || isOreDictMatch(bblock, "oreUranium")) {
 				if(dist <= s5){
 					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s7)
-						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_schrabidium.getDefaultState(), 2);
 					else
-						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_uranium_scorched.getDefaultState(), 2);
 				}
 				break;
 			}
 
-			else if(bblock == ModBlocks.ore_nether_uranium) {
+			else if(bblock == ModBlocks.ore_nether_uranium || isOreDictMatch(bblock, "oreNetherUranium")) {
 				if(dist <= s5){
 					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_nether_schrabidium.getDefaultState(), 2);
 					else
-						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_nether_uranium_scorched.getDefaultState(), 2);
 				}
 				break;
-
 			}
 
-			else if(bblock == ModBlocks.ore_gneiss_uranium) {
+			else if(bblock == ModBlocks.ore_gneiss_uranium || isOreDictMatch(bblock, "oreNetherUranium")) {
 				if(dist <= s4){
 					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_gneiss_schrabidium.getDefaultState(), 2);
 					else
-						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+						world.setBlockState(pos,ModBlocks.ore_gneiss_uranium_scorched.getDefaultState(), 2);
 				}
 				break;
 				// this piece stops the "stomp" from reaching below ground
 			}
 			else if(bblock == ModBlocks.brick_concrete) {
 				if(rand.nextInt(80) == 0)
-					world.setBlockState(pos, ModBlocks.brick_concrete_broken.getDefaultState());
+					world.setBlockState(pos,ModBlocks.brick_concrete_broken.getDefaultState(), 2);
 				break;
 				// this piece stops the "stomp" from reaching below ground
 			} 
@@ -572,21 +660,25 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 	}
 
 	public void placeBlockFromDist(double dist, Block b, BlockPos pos){
+		placeBlockFromDist(dist, b, pos, 2);
+	}
+
+	public void placeBlockFromDist(double dist, Block b, BlockPos pos, int flags){
 		double ranDist = dist * (1D + world.rand.nextDouble()*0.2);
 		if(ranDist > s1)
-			world.setBlockState(pos, b.getStateFromMeta(0));
+			world.setBlockState(pos,b.getStateFromMeta(0), flags);
 		else if(ranDist > s2)
-			world.setBlockState(pos, b.getStateFromMeta(1));
+			world.setBlockState(pos,b.getStateFromMeta(1), flags);
 		else if(ranDist > s3)
-			world.setBlockState(pos, b.getStateFromMeta(2));
+			world.setBlockState(pos,b.getStateFromMeta(2), flags);
 		else if(ranDist > s4)
-			world.setBlockState(pos, b.getStateFromMeta(3));
+			world.setBlockState(pos,b.getStateFromMeta(3), flags);
 		else if(ranDist > s5)
-			world.setBlockState(pos, b.getStateFromMeta(4));
+			world.setBlockState(pos,b.getStateFromMeta(4), flags);
 		else if(ranDist > s6)
-			world.setBlockState(pos, b.getStateFromMeta(5));
+			world.setBlockState(pos,b.getStateFromMeta(5), flags);
 		else if(ranDist <= s6)
-			world.setBlockState(pos, b.getStateFromMeta(6));
+			world.setBlockState(pos,b.getStateFromMeta(6), flags);
 	}
 
 	private void flood(MutableBlockPos pos){
@@ -595,7 +687,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				pos.setY(y);
                 Block b = world.getBlockState(pos).getBlock();
                 if(world.isAirBlock(pos) || b == Blocks.FLOWING_WATER){
-                    world.setBlockState(pos, Blocks.WATER.getDefaultState());
+                    world.setBlockState(pos,Blocks.WATER.getDefaultState(), 2);
                 } else if(b.getExplosionResistance(null) > 600_000){
                     return;
                 }
@@ -607,7 +699,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 		for(int y = 255; y > 1; y--) {
 			pos.setY(y);
 			if(!world.isAirBlock(pos) && (world.getBlockState(pos).getBlock() == Blocks.WATER || world.getBlockState(pos).getBlock() == Blocks.FLOWING_WATER)){
-				world.setBlockToAir(pos);
+				world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 			}
 		}
 	}
@@ -632,9 +724,34 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			else
 				drain(pos);
 		}
+		ChunkPos cp = new ChunkPos(pos.getX() >> 4, pos.getZ() >> 4);
+		if (!lightUpdatedChunks.contains(cp)) {
+			world.getChunk(cp.x, cp.z).enqueueRelightChecks();
+			lightUpdatedChunks.add(cp);
+		}
 	}
 
-	
+	private static boolean isOreDictMatch(Block block, String oreDictName) {
+		for (ItemStack stack : OreDictionary.getOres(oreDictName)) {
+			if (!stack.isEmpty() && stack.getItem() == Item.getItemFromBlock(block)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public float getCurrentAlpha() {
+		int fadeIn = this.dataManager.get(FADE_IN_TICKS);
+		int fadeOut = this.dataManager.get(FADE_OUT_TICKS);
+		float alpha = 1.0F;
+		if (fadeIn > 0) {
+			alpha = (float)(FADE_DURATION - fadeIn) / FADE_DURATION;
+		}
+		if (fadeOut > 0) {
+			alpha = (float)(fadeOut - 1) / FADE_DURATION;
+		}
+		return MathHelper.clamp(alpha, 0.0F, 1.0F);
+	}
 
 	@Override
 	protected void readEntityFromNBT(NBTTagCompound nbt) {
@@ -645,6 +762,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			outerChunksToProcess.addAll(readChunksFromIntArray(nbt.getIntArray("outerChunks")));
 		doFallout = nbt.getBoolean("doFallout");
 		doFlood = nbt.getBoolean("doFlood");
+		if (nbt.hasKey("fadeIn")) this.dataManager.set(FADE_IN_TICKS, nbt.getInteger("fadeIn"));
+		if (nbt.hasKey("fadeOut")) this.dataManager.set(FADE_OUT_TICKS, nbt.getInteger("fadeOut"));
 	}
 
 	private Collection<Long> readChunksFromIntArray(int[] data) {
@@ -670,6 +789,8 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 
 		nbt.setIntArray("chunks", writeChunksToIntArray(chunksToProcess));
 		nbt.setIntArray("outerChunks", writeChunksToIntArray(outerChunksToProcess));
+		nbt.setInteger("fadeIn", this.dataManager.get(FADE_IN_TICKS));
+		nbt.setInteger("fadeOut", this.dataManager.get(FADE_OUT_TICKS));
 	}
 
 	private int[] writeChunksToIntArray(List<Long> coords) {

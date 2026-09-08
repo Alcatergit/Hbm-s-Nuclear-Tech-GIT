@@ -47,6 +47,7 @@ import com.hbm.entity.grenade.EntityGrenadeZOMG;
 import com.hbm.items.ModItems;
 import com.hbm.config.BombConfig;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
@@ -307,13 +308,15 @@ public class ItemGrenade extends Item {
 		}
 		if (this == ModItems.grenade_solinium) {
 			list.add("§3[Solinium Grenade]§r");
-			list.add(" §eRadius: "+(int)BombConfig.soliniumRadius/10+"m§r");
+			list.add(" §e"+I18nUtil.resolveKey("desc.radius",BombConfig.soliniumRadius/10)+"§r");
 		}
 		if (this == ModItems.grenade_nuclear) {
 			list.add("§2[Nuclear Grenade]§r");
-			list.add(" §eRadius: "+(int)BombConfig.fatmanRadius/2+"m§r");
-			list.add("§2[Fallout]§r");
-			list.add(" §aRadius: "+(int)(BombConfig.fatmanRadius/2*(1+BombConfig.falloutRange/100))+"m§r");
+			list.add(" §e"+I18nUtil.resolveKey("desc.radius",BombConfig.fatmanRadius/2)+"§r");
+			if(!BombConfig.disableNuclear){
+				list.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+" §r");
+				list.add(" §a"+I18nUtil.resolveKey("desc.radius",(int)(BombConfig.fatmanRadius/2.0*(1+BombConfig.falloutRange/100.0)))+"§r");
+			}
 		}
 	}
 	

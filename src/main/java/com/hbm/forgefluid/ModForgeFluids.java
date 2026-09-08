@@ -154,7 +154,7 @@ public class ModForgeFluids {
 
 	public static Fluid IONGEL =				createFluid("iongel");
 
-	public static Fluid UU_MATTER = 			createFluid("ic2uu_matter").setTemperature(1000000 + 273);
+	public static Fluid UU_MATTER = 			createFluid("uu_matter").setTemperature(1000000 + 273);
 
 	public static Fluid PAIN = 					createFluid("pain");
 	public static Fluid WASTEFLUID = 			createFluid("wastefluid");
@@ -294,7 +294,7 @@ public class ModForgeFluids {
 
 
 		IONGEL = 					registerOrGet(IONGEL, "iongel");
-		UU_MATTER = 				registerOrGet(UU_MATTER, "ic2uu_matter");
+		UU_MATTER = 				registerOrGet(UU_MATTER, "uu_matter");
 
 		PAIN = 						registerOrGet(PAIN,"pain");
 		WASTEFLUID = 				registerOrGet(WASTEFLUID,"wastefluid");
@@ -456,7 +456,7 @@ public class ModForgeFluids {
 
 
 		IONGEL = 				loadFluid("iongel");
-		UU_MATTER = 			loadFluid("ic2uu_matter");
+		UU_MATTER = 			loadFluid("uu_matter");
 
 		PAIN = 					loadFluid("pain");
 		WASTEFLUID = 			loadFluid("wastefluid");

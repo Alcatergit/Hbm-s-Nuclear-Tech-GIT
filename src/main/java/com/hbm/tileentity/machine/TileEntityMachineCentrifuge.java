@@ -2,11 +2,14 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.items.ModItems;
 import com.hbm.inventory.CentrifugeRecipes;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.AuxElectricityPacket;
 import com.hbm.packet.AuxGaugePacket;
 import com.hbm.packet.LoopedSoundPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
@@ -16,11 +19,15 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Random;
 
 public class TileEntityMachineCentrifuge extends TileEntityMachineBase implements ITickable, IEnergyUser {
 
@@ -30,8 +37,14 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 	public static final int maxPower = 1000000;
 	public static final int processingSpeed = 200;
 	
+	private int audioDuration = 0;
+	private AudioWrapper audio;
+	private final float audioDesync;
+	
 	public TileEntityMachineCentrifuge() {
 		super(8);
+		Random rand = new Random();
+		audioDesync = rand.nextFloat() * 0.05F;
 	}
 	
 	@Override
@@ -278,9 +291,60 @@ public class TileEntityMachineCentrifuge extends TileEntityMachineBase implement
 
 			PacketDispatcher.wrapper.sendToAllAround(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()), new TargetPoint(world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ(), 200));
 			detectAndSendChanges();
+		} else {
+
+			if(isProgressing) {
+				audioDuration += 2;
+			} else {
+				audioDuration -= 3;
+			}
+
+			audioDuration = MathHelper.clamp(audioDuration, 0, 60);
+
+			if(audioDuration > 10 && MainRegistry.proxy.me().getDistance(pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5) < 25) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.centrifugeOperate, SoundCategory.BLOCKS, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 1.0F, 10F, 1.0F, 20);
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.centrifugeOperate, SoundCategory.BLOCKS, pos.getX() + 0.5F, pos.getY() + 0.5F, pos.getZ() + 0.5F, 1.0F, 10F, 1.0F, 20);
+					audio.startSound();
+				}
+
+				audio.updateVolume(1.0F);
+				audio.updatePitch((audioDuration - 10) / 100F + 0.5F + audioDesync);
+				audio.keepAlive();
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
 	}
-	
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
 	private long detectPower;
 	private int detectCookTime;
 	private boolean detectIsProgressing;

@@ -117,6 +117,19 @@ public class TileEntityFWatzCore extends TileEntityMachineBase implements IContr
 	}
 
 	@Override
+	public NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setTag("inventory", inventory.serializeNBT());
+		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(NBTTagCompound nbt) {
+		super.handleUpdateTag(nbt);
+		inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
+	}
+
+	@Override
 	public void update() {
         if(inventory.getStackInSlot(2).getItem() instanceof ItemFWatzCore core) {
             doGravityStuff(world, isOk ? 6 : 30, 1, pos.getX()+0.5F, pos.getY()+2.5F, pos.getZ()+0.5F, (core.type / 2D + 2) * (core.isBaby ? 0.2 : 1));

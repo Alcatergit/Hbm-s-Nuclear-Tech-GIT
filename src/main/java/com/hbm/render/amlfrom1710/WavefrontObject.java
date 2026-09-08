@@ -250,6 +250,16 @@ public class WavefrontObject implements IModelCustom
         }
     }
 
+    public void tessellatePartAbove(Tessellator tessellator, String partName, float yThreshold) {
+        for (GroupObject groupObject : groupObjects)
+        {
+            if (partName.equalsIgnoreCase(groupObject.name))
+            {
+                groupObject.renderAbove(tessellator, yThreshold);
+            }
+        }
+    }
+
     @Override
     @SideOnly(Side.CLIENT)
     public void tessellatePart(Tessellator tessellator, String partName) {
