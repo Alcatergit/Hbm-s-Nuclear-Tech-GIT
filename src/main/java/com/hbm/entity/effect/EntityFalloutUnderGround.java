@@ -2,6 +2,7 @@ package com.hbm.entity.effect;
 
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.BlockMushHuge;
+import com.hbm.blocks.generic.WasteDirt;
 import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.config.BombConfig;
 import com.hbm.config.VersatileConfig;
@@ -147,7 +148,9 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				return;
 			} else if(META_TIERED.contains(bblock)) {
 				int m = tierIndex(l, false, 0, -1);
-				if(m > b.getBlock().getMetaFromState(b)) world.setBlockState(pos, bblock.getStateFromMeta(m));
+				boolean podzol = bblock == ModBlocks.waste_dirt && b.getValue(WasteDirt.VARIANT) == WasteDirt.Variant.PODZOL;
+				int current = podzol ? b.getValue(WasteDirt.META) : b.getBlock().getMetaFromState(b);
+				if(m > current) world.setBlockState(pos, podzol ? WasteDirt.podzolState(m) : bblock.getStateFromMeta(m));
 				return;
 
 			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
@@ -185,20 +188,13 @@ public class EntityFalloutUnderGround extends EntityChunky {
 					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
 				} else if(dblock instanceof BlockDirt){
 					BlockDirt.DirtType meta = d.getValue(BlockDirt.VARIANT);
-					placeBlockFromDist(l, meta == BlockDirt.DirtType.PODZOL ? ModBlocks.waste_mycelium : ModBlocks.waste_dirt, pos.down());
+					if(meta == BlockDirt.DirtType.PODZOL) placeBlockFromDist(l, WasteDirt.podzolState(tierIndex(l, false, 0, -1)), pos.down());
+					else placeBlockFromDist(l, ModBlocks.waste_dirt, pos.down());
 					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
 				} else if(dblock == Blocks.MYCELIUM){
 					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos.down());
 					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				}
-				continue;
-
-			} else if(bblock instanceof BlockCactus) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState());
-				continue;
-
-			} else if(bblock instanceof BlockReed) {
-				world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				continue;
 
 			} else if(bblock instanceof BlockGrass) {
@@ -211,7 +207,7 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
 					placeBlockFromDist(l, ModBlocks.waste_gravel, pos);
 				else if(meta == BlockDirt.DirtType.PODZOL)
-					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos);
+					placeBlockFromDist(l, WasteDirt.podzolState(tierIndex(l, false, 0, -1)), pos);
 				return;
 			} else if(bblock == Blocks.FARMLAND) {
 				placeBlockFromDist(l, ModBlocks.waste_dirt, pos);
@@ -312,6 +308,14 @@ public class EntityFalloutUnderGround extends EntityChunky {
 					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 				}
 				return;
+			} else if(b.getBlock() == Blocks.CACTUS) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				continue;
+
+			} else if(b.getBlock() == Blocks.REEDS) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				continue;
+
 			} else if(b.getBlock() == Blocks.VINE) {
 				world.setBlockToAir(pos);
 				continue;
@@ -383,6 +387,10 @@ public class EntityFalloutUnderGround extends EntityChunky {
 		world.setBlockState(pos, b.getStateFromMeta(tierIndex(dist, false, 0, -1)));
 	}
 
+	public void placeBlockFromDist(double dist, IBlockState state, BlockPos pos){
+		world.setBlockState(pos, state);
+	}
+
 	private static boolean matchesOre(Block block, String oreDictName) {
 		return OreDictionary.containsMatch(false, OreDictionary.getOres(oreDictName), new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
 	}
@@ -428,3 +436,4 @@ public class EntityFalloutUnderGround extends EntityChunky {
 		return scale == 0 ? 1 : scale;
 	}
 }
+
