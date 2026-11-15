@@ -1,4 +1,4 @@
 {
 	"parent": "hbm:block/tinted_cube",
-	"textures": { "all": "hbm:blocks/contamination/fallout/fallout_gen" }
+	"textures": { "all": "hbm:blocks/ash" }
 }
