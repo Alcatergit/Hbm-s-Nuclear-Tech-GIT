@@ -7,6 +7,7 @@
 		"meta=3": { "model": "hbm:waste_mycelium_3" },
 		"meta=4": { "model": "hbm:waste_mycelium_4" },
 		"meta=5": { "model": "hbm:waste_mycelium_5" },
-		"meta=6": { "model": "hbm:waste_mycelium_6" }
+		"meta=6": { "model": "hbm:waste_mycelium_6" },
+		"meta=7": { "model": "hbm:waste_mycelium_0" }
 	}
 }

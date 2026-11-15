@@ -1,13 +1,20 @@
 {
-    "variants": {
-        "normal": { "model": "hbm:waste_dirt" },
-        "meta=0": { "model": "hbm:waste_dirt" },
-        "meta=1": { "model": "hbm:waste_dirt" },
-        "meta=2": { "model": "hbm:waste_dirt" },
-        "meta=3": { "model": "hbm:waste_dirt" },
-        "meta=4": { "model": "hbm:waste_dirt" },
-        "meta=5": { "model": "hbm:waste_dirt" },
-        "meta=6": { "model": "hbm:waste_dirt" },
-        "meta=7": { "model": "hbm:waste_dirt" }
-    }
+	"variants": {
+		"meta=0,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=1,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=2,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=3,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=4,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=5,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=6,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=7,variant=dirt": { "model": "hbm:waste_dirt" },
+		"meta=0,variant=podzol": { "model": "hbm:waste_podzol_0" },
+		"meta=1,variant=podzol": { "model": "hbm:waste_podzol_1" },
+		"meta=2,variant=podzol": { "model": "hbm:waste_podzol_2" },
+		"meta=3,variant=podzol": { "model": "hbm:waste_podzol_3" },
+		"meta=4,variant=podzol": { "model": "hbm:waste_podzol_4" },
+		"meta=5,variant=podzol": { "model": "hbm:waste_podzol_5" },
+		"meta=6,variant=podzol": { "model": "hbm:waste_podzol_6" },
+		"meta=7,variant=podzol": { "model": "hbm:waste_podzol_0" }
+	}
 }
