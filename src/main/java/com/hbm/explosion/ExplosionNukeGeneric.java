@@ -19,6 +19,7 @@ import org.apache.logging.log4j.Level;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.blocks.generic.WasteDirt;
 import com.hbm.config.VersatileConfig;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.entity.effect.EntityBlackHole;
@@ -302,7 +303,7 @@ public class ExplosionNukeGeneric {
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
 					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 				else if(meta == BlockDirt.DirtType.PODZOL)
-					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+					world.setBlockState(pos, WasteDirt.podzolState(0));
 			}
 
 			else if(b == Blocks.FARMLAND) {
@@ -457,7 +458,7 @@ public class ExplosionNukeGeneric {
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
 					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
 				else if(meta == BlockDirt.DirtType.PODZOL)
-					world.setBlockState(pos, ModBlocks.waste_mycelium.getDefaultState());
+					world.setBlockState(pos, WasteDirt.podzolState(0));
 			}
 
 			else if(b instanceof BlockSnow) {

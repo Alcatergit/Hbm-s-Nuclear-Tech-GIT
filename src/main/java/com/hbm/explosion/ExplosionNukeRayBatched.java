@@ -2,6 +2,8 @@ package com.hbm.explosion;
 
 import java.util.*;
 import java.util.Map.Entry;
+import net.minecraft.world.chunk.Chunk;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 
 import com.hbm.config.BombConfig;
 import com.hbm.config.CompatibilityConfig;
@@ -12,6 +14,9 @@ import com.hbm.render.amlfrom1710.Vec3;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.WorldServer;
+import net.minecraft.server.management.PlayerChunkMapEntry;
+import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 
 import net.minecraft.block.Block;
@@ -27,7 +32,6 @@ public class ExplosionNukeRayBatched implements IExplosionRay {
 	public HashMap<ChunkPos, BitSet> perChunk = new HashMap<ChunkPos, BitSet>();
 	public List<ChunkPos> orderedChunks = new ArrayList<>();
 	private final CoordComparator comparator = new CoordComparator();
-	private final Set<ChunkPos> lightUpdatedChunks = new HashSet<>();
 	public boolean isContained = true;
 	double posX;
 	double posY;
@@ -228,6 +232,139 @@ public class ExplosionNukeRayBatched implements IExplosionRay {
 	boolean needsNewHitArray = true;
 	int index = 0;
 
+	// Changed-section tracking for client light sync.
+	private static final class LightSnapshot {
+		final byte[] sky;
+		final byte[] block;
+		final boolean wasNull;
+
+		LightSnapshot(boolean wasNull, byte[] sky, byte[] block) {
+			this.wasNull = wasNull;
+			this.sky = sky;
+			this.block = block;
+		}
+	}
+
+	private final Map<Long, Map<Integer, LightSnapshot>> lightSnapshots = new HashMap<>();
+
+	private void snapshotForLight(BlockPos pos, IBlockState oldState, IBlockState newState) {
+		if (oldState.getLightValue() == newState.getLightValue()
+				&& oldState.getLightOpacity() == newState.getLightOpacity()) return;
+		if (!(world instanceof WorldServer)) return;
+		WorldServer ws = (WorldServer) world;
+		int cx = pos.getX() >> 4;
+		int cz = pos.getZ() >> 4;
+		int sy = pos.getY() >> 4;
+		snapshotChunk(ws, cx, cz, sy);
+		snapshotChunk(ws, cx - 1, cz, sy);
+		snapshotChunk(ws, cx + 1, cz, sy);
+		snapshotChunk(ws, cx, cz - 1, sy);
+		snapshotChunk(ws, cx, cz + 1, sy);
+		snapshotChunk(ws, cx - 1, cz - 1, sy);
+		snapshotChunk(ws, cx - 1, cz + 1, sy);
+		snapshotChunk(ws, cx + 1, cz - 1, sy);
+		snapshotChunk(ws, cx + 1, cz + 1, sy);
+	}
+
+	private void snapshotChunk(WorldServer ws, int cx, int cz, int sy) {
+		Chunk chunk = ws.getChunkProvider().loadedChunks.get(ChunkPos.asLong(cx, cz));
+		if (chunk == null) return;
+		long cp = ChunkPos.asLong(cx, cz);
+		Map<Integer, LightSnapshot> map = lightSnapshots.computeIfAbsent(cp, k -> new HashMap<>());
+		for (int s = Math.max(0, sy - 1); s <= Math.min(15, sy + 1); s++) {
+			if (map.containsKey(s)) continue;
+			ExtendedBlockStorage ebs = chunk.getBlockStorageArray()[s];
+			if (ebs == null || ebs == Chunk.NULL_BLOCK_STORAGE) {
+				map.put(s, new LightSnapshot(true, null, null));
+			} else {
+				map.put(s, new LightSnapshot(false,
+						ebs.getSkyLight() == null ? null : ebs.getSkyLight().getData().clone(),
+						ebs.getBlockLight() == null ? null : ebs.getBlockLight().getData().clone()));
+			}
+		}
+	}
+
+	private static void mergeMask(Map<Long, Integer> map, long cp, int mask) {
+		map.merge(cp, mask, (a, b) -> a | b);
+	}
+
+	private void flushSectionMasks() {
+		if (lightSnapshots.isEmpty()) return;
+		if (!(world instanceof WorldServer)) { lightSnapshots.clear(); return; }
+		WorldServer ws = (WorldServer) world;
+		Map<Long, Integer> diff = new HashMap<>();
+		for (Map.Entry<Long, Map<Integer, LightSnapshot>> ce : lightSnapshots.entrySet()) {
+			long cp = ce.getKey().longValue();
+			Chunk chunk = ws.getChunkProvider().loadedChunks.get(cp);
+			if (chunk == null) continue;
+			for (Map.Entry<Integer, LightSnapshot> se : ce.getValue().entrySet()) {
+				int s = se.getKey().intValue();
+				LightSnapshot snap = se.getValue();
+				ExtendedBlockStorage ebs = chunk.getBlockStorageArray()[s];
+				boolean changed;
+				if (snap.wasNull) {
+					changed = ebs != Chunk.NULL_BLOCK_STORAGE;
+				} else if (ebs == null || ebs == Chunk.NULL_BLOCK_STORAGE) {
+					changed = true;
+				} else {
+					byte[] sky = ebs.getSkyLight() == null ? null : ebs.getSkyLight().getData();
+					byte[] block = ebs.getBlockLight() == null ? null : ebs.getBlockLight().getData();
+					changed = !Arrays.equals(snap.sky, sky) || !Arrays.equals(snap.block, block);
+				}
+				if (changed) mergeMask(diff, cp, 1 << s);
+			}
+		}
+		lightSnapshots.clear();
+		for (Map.Entry<Long, Integer> e : diff.entrySet()) sendOneChunk(e.getKey().longValue(), e.getValue().intValue());
+	}
+
+	private void sendOneChunk(long cp, int mask) {
+		if (!(world instanceof WorldServer)) return;
+		WorldServer ws = (WorldServer) world;
+		Chunk chunk = ws.getChunkProvider().loadedChunks.get(cp);
+		if (chunk == null) return;
+		PlayerChunkMapEntry entry = ws.getPlayerChunkMap().getEntry(chunk.x, chunk.z);
+		if (entry == null) return;
+		ExtendedBlockStorage[] storages = chunk.getBlockStorageArray();
+		ExtendedBlockStorage[] fabricated = null;
+		for (int s = 0; s < 16; s++) {
+			if ((mask & (1 << s)) == 0) continue;
+			if (storages[s] != Chunk.NULL_BLOCK_STORAGE) continue;
+			ExtendedBlockStorage ebs = new ExtendedBlockStorage(s << 4, ws.provider.hasSkyLight());
+			if (ws.provider.hasSkyLight()) {
+				int base = s << 4;
+				int maxHeight = 0;
+				for (int x = 0; x < 16; x++) {
+					for (int z = 0; z < 16; z++) {
+						maxHeight = Math.max(maxHeight, chunk.getHeightValue(x, z));
+					}
+				}
+				if (base >= maxHeight) {
+					java.util.Arrays.fill(ebs.getSkyLight().getData(), (byte) 0xFF);
+				} else {
+					for (int x = 0; x < 16; x++) {
+						for (int z = 0; z < 16; z++) {
+							int height = chunk.getHeightValue(x, z);
+							for (int y = 0; y < 16; y++) {
+								if (base + y >= height) ebs.setSkyLight(x, y, z, 15);
+							}
+						}
+					}
+				}
+			}
+			storages[s] = ebs;
+			if (fabricated == null) fabricated = new ExtendedBlockStorage[16];
+			fabricated[s] = ebs;
+		}
+		try {
+			entry.sendPacket(new SPacketChunkData(chunk, mask));
+		} finally {
+			if (fabricated != null) {
+				for (int s = 0; s < 16; s++) if (fabricated[s] != null) storages[s] = Chunk.NULL_BLOCK_STORAGE;
+			}
+		}
+	}
+
 	public void processChunkBlocks(long start, int time){
 		if(!CompatibilityConfig.isWarDim(world)){
 			this.perChunk.clear();
@@ -247,9 +384,11 @@ public class ExplosionNukeRayBatched implements IExplosionRay {
 		int blocksRemoved = 0;
 		while(index > -1) {
 			pos.setPos(((index >> 4) % 16) + chunkX, 255 - (index >> 8), (index % 16) + chunkZ);
-			Block blockBelow = world.getBlockState(pos).getBlock();
+			IBlockState oldState = world.getBlockState(pos);
+			Block blockBelow = oldState.getBlock();
 
 			world.removeTileEntity(pos);
+			snapshotForLight(pos, oldState, Blocks.AIR.getDefaultState());
 			world.setBlockState(pos, Blocks.AIR.getDefaultState(), 2);
 
 			for (EnumFacing facing : EnumFacing.values()) {
@@ -257,7 +396,6 @@ public class ExplosionNukeRayBatched implements IExplosionRay {
 				if (world.isBlockLoaded(neighborPos)) {
 					IBlockState stateNeighbor = world.getBlockState(neighborPos);
 					Block blockNeighbor = stateNeighbor.getBlock();
-
 					if (blockNeighbor != Blocks.WATER && blockNeighbor != Blocks.FLOWING_WATER && !hasWaterNeighbor(neighborPos)) {
 						world.neighborChanged(neighborPos, blockBelow, pos);
 					}
@@ -272,11 +410,7 @@ public class ExplosionNukeRayBatched implements IExplosionRay {
 		}
 
 		if(index < 0){
-			ChunkPos cp = new ChunkPos(chunkX, chunkZ);
-			if (!lightUpdatedChunks.contains(cp)) {
-				world.getChunk(chunkX, chunkZ).enqueueRelightChecks();
-				lightUpdatedChunks.add(cp);
-			}
+			flushSectionMasks();
 			perChunk.remove(chunk);
 			orderedChunks.remove(0);
 			needsNewHitArray = true;

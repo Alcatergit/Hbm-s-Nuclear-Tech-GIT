@@ -10,6 +10,9 @@ import com.hbm.config.WorldConfig;
 import com.hbm.util.ChunkUtil;
 import com.hbm.world.WorldUtil;
 import com.hbm.world.biome.BiomeGenDustWastes;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
 import net.minecraft.world.biome.Biome;
 
 import it.unimi.dsi.fastutil.ints.Int2ObjectOpenHashMap;
@@ -24,7 +27,6 @@ import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagLongArray;
-import net.minecraft.network.play.server.SPacketChunkData;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
@@ -53,43 +55,36 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-/**
- * Streaming parallel version of {@link ExplosionTom} (the "Gerald" molten-meteorite generator).
- *
- * <p>This is a direct port of {@link com.hbm.entity.effect.EntityFalloutRainParallelized}'s execution
- * model — the entity starts loading, computing and applying chunks incrementally from the moment it
- * appears, under the mk5 budget, not "compute everything then apply once". Block placement is
- * byte-for-byte the 1.7.10 {@code ExplosionTom.breakColumn} (terrain = 63, {@code distance < 500}
- * wraps only the surface clearing, no basalt_smooth, 1/200 osmiridium chance).</p>
- */
+/** Streaming parallel version of ExplosionTom: loads, converts and applies chunks incrementally, with the same block placement rules as the original. */
 public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool.IJobCancellable {
 
-	private final WorldServer world;
-	private final int originX, originY, originZ;
-	private final int radius, radius2;
-
-	private final List<Long> chunksToProcess = new ArrayList<>();
-	private final ConcurrentLinkedQueue<Long> chunkLoadQueue = new ConcurrentLinkedQueue<>();
-	private final PriorityBlockingQueue<Long> applyQueue = new PriorityBlockingQueue<>(64, (a, b) ->
+    private final WorldServer worldServer;
+    private final int originX, originY, originZ;
+    private final int radius, radius2;
+    private final List<Long> chunksToProcess = new ArrayList<>();
+    private final ConcurrentLinkedQueue<Long> chunkLoadQueue = new ConcurrentLinkedQueue<>();
+    private final PriorityBlockingQueue<Long> applyQueue = new PriorityBlockingQueue<>(64, (a, b) ->
 			Double.compare(chunkDistSq(a.longValue()), chunkDistSq(b.longValue())));
-	private final ConcurrentHashMap<Long, ConcurrentMap<Long, IBlockState>> replacements = new ConcurrentHashMap<>();
-	private final ConcurrentHashMap<Long, Set<Long>> notifyPositions = new ConcurrentHashMap<>();
-	private final Set<Long> conversionChunks = ConcurrentHashMap.newKeySet();
-	private final Set<Long> scannedChunks = ConcurrentHashMap.newKeySet();
-	private final Set<Long> populatedChunks = ConcurrentHashMap.newKeySet();
-	private final Long2IntOpenHashMap sectionMaskByChunk = new Long2IntOpenHashMap();
+    private final ConcurrentHashMap<Long, ConcurrentMap<Long, IBlockState>> replacements = new ConcurrentHashMap<>();
+    private final ConcurrentHashMap<Long, Set<Long>> notifyPositions = new ConcurrentHashMap<>();
+    private final Set<Long> conversionChunks = ConcurrentHashMap.newKeySet();
+    private final Set<Long> scannedChunks = ConcurrentHashMap.newKeySet();
+    private final Set<Long> populatedChunks = ConcurrentHashMap.newKeySet();
+    private final Set<Long> reloadQueued = ConcurrentHashMap.newKeySet();
+    private final Long2IntOpenHashMap sectionMaskByChunk = new Long2IntOpenHashMap();
+    private final LinkedHashMap<Long, Integer> pendingSend = new LinkedHashMap<>();
+    private final AtomicInteger activeWorkerTasks = new AtomicInteger();
+    private final AtomicInteger pendingChunks = new AtomicInteger();
+    private volatile boolean poolAcquired, jobRegistered, mapAcquired;
+    private volatile boolean collectFinished, destroyFinished, finishQueued, cancelCleanup, cancelling;
+    private volatile Throwable failure;
+    private int jobDimension = Integer.MIN_VALUE;
+    private final ThreadLocal<Long> scanTarget = ThreadLocal.withInitial(() -> Long.MIN_VALUE);
+    private ForkJoinPool pool;
+    private ConcurrentHashMap<Long, Chunk> mirror;
 
-	private ForkJoinPool pool;
-	private ConcurrentHashMap<Long, Chunk> mirror;
-	private final AtomicInteger activeWorkerTasks = new AtomicInteger();
-	private final AtomicInteger pendingChunks = new AtomicInteger();
-	private volatile boolean poolAcquired, jobRegistered, mapAcquired;
-	private volatile boolean collectFinished, destroyFinished, finishQueued, cancelCleanup, cancelling;
-	private volatile Throwable failure;
-	private int jobDimension = Integer.MIN_VALUE;
-
-	public ExplosionTomParallelized(World world, int x, int y, int z, int rad) {
-		this.world = (WorldServer) world;
+    public ExplosionTomParallelized(World worldIn, int x, int y, int z, int rad) {
+		this.worldServer = (WorldServer) worldIn;
 		this.originX = x;
 		this.originY = y;
 		this.originZ = z;
@@ -97,9 +92,7 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		this.radius2 = rad * rad;
 	}
 
-	// ===== IExplosionRay =====
-
-	@Override
+    @Override
 	public void update(int processTimeMs) {
 		if (failure != null) {
 			cancel();
@@ -107,40 +100,65 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		}
 		if (destroyFinished) return;
 		if (!collectFinished && mirror == null) startWorkers();
-		if (!collectFinished && (world.getWorldTime() & 3) == 0) submitRetry();
+		if (!collectFinished && (worldServer.getWorldTime() & 3) == 0) submitRetry();
 		long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(processTimeMs);
 		while (System.nanoTime() < deadline) {
 			Long cp = chunkLoadQueue.poll();
-			if (cp != null) loadChunk(cp.longValue());
+			if (cp != null) {
+				loadChunk(cp.longValue());
+			}
 			Long apply = applyQueue.poll();
-			if (apply != null) applyChunk(apply.longValue());
+			if (apply != null) {
+				applyChunk(apply.longValue());
+			}
 			if (cp == null && apply == null) break;
 		}
+		drainSendQueue();
 		maybeFinish();
 	}
 
-	@Override
+    @Override
 	public boolean isComplete() {
 		return destroyFinished;
 	}
 
-	@Override
+    @Override
 	public boolean hasFailed() {
 		return failure != null;
 	}
 
-	@Override
+    @Override
 	public boolean isContained() {
 		return true;
 	}
 
-	@Override
+    @Override
 	public void setDetonator(UUID detonator) {
 	}
 
-	// ===== start =====
+    public void cancel() {
+		cancelling = true;
+		collectFinished = true;
+		destroyFinished = true;
+		if (activeWorkerTasks.get() == 0) {
+			finishCancellation();
+		} else {
+			worldServer.addScheduledTask(this::pollCancelCleanup);
+		}
+	}
 
-	@ServerThread
+    @Override
+	public void cancelJob() {
+		cancel();
+	}
+
+    synchronized void fail(Throwable cause) {
+		if (failure != null) return;
+		failure = cause;
+		MainRegistry.logger.error("Parallel TOM explosion work failed", cause);
+	}
+
+    @ServerThread
 	private void startWorkers() {
 		if (chunksToProcess.isEmpty()) gatherChunks();
 		if (!poolAcquired) {
@@ -148,19 +166,27 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 			poolAcquired = true;
 		}
 		registerJobIfNeeded();
-		mirror = ChunkUtil.acquireMirrorMap(world);
+		mirror = ChunkUtil.acquireMirrorMap(worldServer);
 		mapAcquired = true;
 
 		prepareResumeState();
 
-		// Enqueue the not-yet-populated chunks of the radius + 2-chunk margin so the vanilla decoration
-		// cascade (a tree whose body crosses into this chunk) finishes before the column scan runs.
-		int cr = (radius + 15) >> 4;
-		int minCX = (originX >> 4) - cr, maxCX = (originX >> 4) + cr;
-		int minCZ = (originZ >> 4) - cr, maxCZ = (originZ >> 4) + cr;
-		for (int cx = maxCX + 2; cx >= minCX - 2; cx--) {
-			for (int cz = maxCZ + 2; cz >= minCZ - 2; cz--) {
-				chunkLoadQueue.offer(ChunkPos.asLong(cx, cz));
+		Set<Long> enqueued = new HashSet<>(chunksToProcess.size() * 3);
+		for (long cp : chunksToProcess) {
+			int cx = Library.getChunkPosX(cp);
+			int cz = Library.getChunkPosZ(cp);
+			for (int dx = -1; dx <= 1; dx++) {
+				for (int dz = -1; dz <= 1; dz++) {
+					long ncp = ChunkPos.asLong(cx + dx, cz + dz);
+					if (!enqueued.add(ncp)) continue;
+					Chunk loadedChunk = worldServer.getChunkProvider().loadedChunks.get(ncp);
+					if (loadedChunk != null && loadedChunk.isTerrainPopulated()) {
+						populatedChunks.add(ncp);
+						mirror.put(ncp, loadedChunk);
+						continue;
+					}
+					chunkLoadQueue.offer(ncp);
+				}
 			}
 		}
 
@@ -173,18 +199,27 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		pool.submit(new ColumnTask(chunksToProcess, 0, chunksToProcess.size(), grain));
 	}
 
-	private void gatherChunks() {
-		int cr = (radius + 15) >> 4;
+    private void gatherChunks() {
+		double range = radius + 12.0;
+		double rangeSq = range * range;
 		int cx0 = originX >> 4, cz0 = originZ >> 4;
+		int cr = (int) Math.ceil(range / 16.0) + 1;
 		for (int cx = cx0 - cr; cx <= cx0 + cr; cx++) {
-			for (int cz = cz0 - cr; cz <= cz0 + cr; cz++) {
+			double dcx = (cx << 4) + 8 - originX;
+			if (dcx * dcx > rangeSq) continue;
+			int maxDcz = (int) Math.floor(Math.sqrt(rangeSq - dcx * dcx));
+			int czOff = (maxDcz + 8) >> 4;
+			for (int cz = cz0 - czOff; cz <= cz0 + czOff; cz++) {
+				double dcz = (cz << 4) + 8 - originZ;
+				if (dcx * dcx + dcz * dcz > rangeSq) continue;
 				chunksToProcess.add(ChunkPos.asLong(cx, cz));
 			}
 		}
 	}
 
+    @ServerThread
 	private void prepareResumeState() {
-		for (Chunk c : world.getChunkProvider().loadedChunks.values()) {
+		for (Chunk c : worldServer.getChunkProvider().loadedChunks.values()) {
 			if (c.isTerrainPopulated()) populatedChunks.add(ChunkPos.asLong(c.x, c.z));
 		}
 		int preScanned = 0;
@@ -196,15 +231,15 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		conversionChunks.addAll(chunksToProcess);
 	}
 
-	private void registerJobIfNeeded() {
+    private void registerJobIfNeeded() {
 		if (!jobRegistered) {
 			jobRegistered = true;
-			jobDimension = world.provider.getDimension();
+			jobDimension = worldServer.provider.getDimension();
 			BombForkJoinPool.register(jobDimension, this);
 		}
 	}
 
-	private void unregisterJobIfNeeded() {
+    private void unregisterJobIfNeeded() {
 		if (jobRegistered) {
 			jobRegistered = false;
 			BombForkJoinPool.unregister(jobDimension, this);
@@ -212,7 +247,7 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		}
 	}
 
-	private void releasePoolIfHeld() {
+    private void releasePoolIfHeld() {
 		unregisterJobIfNeeded();
 		if (poolAcquired) {
 			poolAcquired = false;
@@ -221,20 +256,18 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		}
 	}
 
-	// ===== chunk loading =====
-
-	@ServerThread
+    @ServerThread
 	private void loadChunk(long chunkPos) {
+		reloadQueued.remove(chunkPos);
 		int cx = Library.getChunkPosX(chunkPos);
 		int cz = Library.getChunkPosZ(chunkPos);
-		Chunk chunk = world.getChunk(cx, cz);
+		Chunk chunk = worldServer.getChunk(cx, cz);
 		if (chunk != null) {
-			boolean wasPopulated = chunk.isTerrainPopulated();
-			if (!wasPopulated) {
-				world.getChunk(cx + 1, cz);
-				world.getChunk(cx, cz + 1);
-				world.getChunk(cx + 1, cz + 1);
-				ChunkProviderServer provider = (ChunkProviderServer) world.getChunkProvider();
+			if (!chunk.isTerrainPopulated()) {
+				worldServer.getChunk(cx + 1, cz);
+				worldServer.getChunk(cx, cz + 1);
+				worldServer.getChunk(cx + 1, cz + 1);
+				ChunkProviderServer provider = (ChunkProviderServer) worldServer.getChunkProvider();
 				chunk.populate(provider, provider.chunkGenerator);
 				chunk.generateSkylightMap();
 			}
@@ -250,13 +283,13 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 				} catch (Exception e) {
 					fail(e);
 				} finally {
-					workerFinished();
+					activeWorkerTasks.decrementAndGet();
 				}
 			});
 		}
 	}
 
-	private boolean isNeighborhoodPopulated(long cp) {
+    private boolean isNeighborhoodPopulated(long cp) {
 		int cx = Library.getChunkPosX(cp);
 		int cz = Library.getChunkPosZ(cp);
 		for (int dx = -1; dx <= 1; dx++) {
@@ -268,21 +301,30 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		return true;
 	}
 
-	private void retryChunk(long cp) {
+    private void retryChunk(long cp) {
 		if (!conversionChunks.contains(cp)) {
 			return; // margin chunk, loaded only to satisfy the neighbour gate, not converted
 		}
 		int cx = Library.getChunkPosX(cp);
 		int cz = Library.getChunkPosZ(cp);
 		Chunk chunk = ChunkUtil.getLoadedChunk(mirror, cp);
-		if (chunk == null || !isNeighborhoodPopulated(cp) || !chunk.isTerrainPopulated()) {
+		if (chunk == null || !chunk.isTerrainPopulated()) {
+			requeueUnloaded(cp);
+			return;
+		}
+		if (!isNeighborhoodPopulated(cp)) {
 			return; // not ready yet; submitRetry re-scans via the mirror
 		}
 		ColumnWorker worker = new ColumnWorker();
 		worker.processChunk(cp, cx, cz, chunk.getBlockStorageArray());
 	}
 
-	private void submitRetry() {
+    private void requeueUnloaded(long cp) {
+		if (!conversionChunks.contains(cp)) return;
+		if (reloadQueued.add(cp)) chunkLoadQueue.offer(cp);
+	}
+
+    private void submitRetry() {
 		if (destroyFinished || failure != null) return;
 		ForkJoinPool p = pool;
 		if (p == null || p.isShutdown()) return;
@@ -297,169 +339,22 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		p.submit(new RetryTask(arr, 0, arr.length, grain));
 	}
 
-	private void workerFinished() {
-		activeWorkerTasks.decrementAndGet();
-	}
-
-	private void maybeFinish() {
-		if (!collectFinished) {
-			if (activeWorkerTasks.get() == 0 && pendingChunks.get() == 0) {
-				collectFinished = true;
-			} else {
-				return;
-			}
-		}
-		if (destroyFinished) return;
-		if (activeWorkerTasks.get() != 0 || pendingChunks.get() != 0) return;
-		if (!applyQueue.isEmpty() || !chunkLoadQueue.isEmpty()) return;
-		if (finishQueued) return;
-		finishQueued = true;
-		world.addScheduledTask(() -> {
-			secondPass();
-			destroyFinished = true;
-			releasePoolIfHeld();
-			if (mapAcquired) {
-				mapAcquired = false;
-				ChunkUtil.releaseMirrorMap(world);
-			}
-		});
-	}
-
-	/** Sets the Dust Wastes biome for the chunk's columns inside the crater circle, then syncs to clients. */
-	private void applyBiomeToChunk(Chunk chunk, int cx, int cz) {
-		if (!WorldConfig.enableDustWastesBiome) return;
-		byte[] arr = chunk.getBiomeArray();
-		if (arr.length != 256) return;
-		int biomeId = Biome.getIdForBiome(BiomeGenDustWastes.dustWastes);
-		for (int x = 0; x < 16; x++) {
-			for (int z = 0; z < 16; z++) {
-				int wx = (cx << 4) + x;
-				int wz = (cz << 4) + z;
-				int dx = wx - originX;
-				int dz = wz - originZ;
-				if (dx * dx + dz * dz <= radius2) {
-					arr[((z & 15) << 4) | (x & 15)] = (byte) (biomeId & 0xFF);
-				}
-			}
-		}
-		chunk.markDirty();
-		WorldUtil.syncBiomeChange(world, cx, cz);
-	}
-
-	@ServerThread
-	private void secondPass() {
-		net.minecraft.server.management.PlayerChunkMap playerChunkMap = world.getPlayerChunkMap();
-		Long2ObjectMap<Chunk> loaded = world.getChunkProvider().loadedChunks;
-		ObjectIterator<Long2IntOpenHashMap.Entry> iterator = sectionMaskByChunk.long2IntEntrySet().fastIterator();
-		while (iterator.hasNext()) {
-			Long2IntOpenHashMap.Entry e = iterator.next();
-			int changedMask = e.getIntValue();
-			if (changedMask == 0) continue;
-			long cp = e.getLongKey();
-			Chunk chunk = loaded.get(cp);
-			if (chunk == null) continue;
-			net.minecraft.server.management.PlayerChunkMapEntry entry = playerChunkMap.getEntry(Library.getChunkPosX(cp), Library.getChunkPosZ(cp));
-			if (entry != null) {
-				entry.sendPacket(new SPacketChunkData(chunk, changedMask));
-			}
-		}
-		sectionMaskByChunk.clear();
-	}
-
-	// ===== worker tasks =====
-
-	final class ColumnTask extends RecursiveAction {
-		final List<Long> chunks;
-		final int start, end, threshold;
-
-		ColumnTask(List<Long> chunks, int start, int end, int threshold) {
-			this.chunks = chunks;
-			this.start = start;
-			this.end = end;
-			this.threshold = Math.max(1, threshold);
-		}
-
-		@Override
-		protected void compute() {
-			int len = end - start;
-			if (len <= threshold) {
-				activeWorkerTasks.incrementAndGet();
-				try {
-					ColumnWorker worker = new ColumnWorker();
-					for (int i = start; i < end; i++) {
-						if (Thread.currentThread().isInterrupted() || destroyFinished) break;
-						long cp = chunks.get(i).longValue();
-						int cx = Library.getChunkPosX(cp);
-						int cz = Library.getChunkPosZ(cp);
-						Chunk chunk = ChunkUtil.getLoadedChunk(mirror, cp);
-						if (chunk == null || !isNeighborhoodPopulated(cp) || !chunk.isTerrainPopulated()) continue;
-						worker.processChunk(cp, cx, cz, chunk.getBlockStorageArray());
-					}
-				} catch (Exception e) {
-					fail(e);
-				} finally {
-					workerFinished();
-				}
-			} else {
-				int mid = start + (len >>> 1);
-				invokeAll(new ColumnTask(chunks, start, mid, threshold), new ColumnTask(chunks, mid, end, threshold));
-			}
-		}
-	}
-
-	final class RetryTask extends RecursiveAction {
-		final long[] chunks;
-		final int start, end, threshold;
-
-		RetryTask(long[] chunks, int start, int end, int threshold) {
-			this.chunks = chunks;
-			this.start = start;
-			this.end = end;
-			this.threshold = Math.max(1, threshold);
-		}
-
-		@Override
-		protected void compute() {
-			int len = end - start;
-			if (len <= threshold) {
-				activeWorkerTasks.incrementAndGet();
-				try {
-					ColumnWorker worker = new ColumnWorker();
-					for (int i = start; i < end; i++) {
-						if (Thread.currentThread().isInterrupted() || destroyFinished) break;
-						long cp = chunks[i];
-						if (scannedChunks.contains(cp)) continue;
-						int cx = Library.getChunkPosX(cp);
-						int cz = Library.getChunkPosZ(cp);
-						Chunk chunk = ChunkUtil.getLoadedChunk(mirror, cp);
-						if (chunk == null || !isNeighborhoodPopulated(cp) || !chunk.isTerrainPopulated()) continue;
-						worker.processChunk(cp, cx, cz, chunk.getBlockStorageArray());
-					}
-				} catch (Exception e) {
-					fail(e);
-				} finally {
-					workerFinished();
-				}
-			} else {
-				int mid = start + (len >>> 1);
-				invokeAll(new RetryTask(chunks, start, mid, threshold), new RetryTask(chunks, mid, end, threshold));
-			}
-		}
-	}
-
-	// ===== column conversion (mirrors the 1.7.10 ExplosionTom.breakColumn) =====
-
-	final class ColumnWorker {
+    final class ColumnWorker {
 		private final Random rnd = new Random(ThreadLocalRandom.current().nextLong());
 
 		void processChunk(long cp, int cx, int cz, ExtendedBlockStorage[] ebs) {
 			if (scannedChunks.add(cp)) {
-				int xBase = cx << 4;
-				int zBase = cz << 4;
-				for (int x = xBase; x < xBase + 16; x++) {
-					for (int z = zBase; z < zBase + 16; z++) {
-						breakColumn(x - originX, z - originZ, rnd);
+				scanTarget.set(cp);
+				try {
+					int xBase = cx << 4;
+					int zBase = cz << 4;
+					for (int x = xBase - 2; x < xBase + 18; x++) {
+						for (int z = zBase - 2; z < zBase + 18; z++) {
+							breakColumn(x - originX, z - originZ, rnd);
+						}
 					}
+				} finally {
+					scanTarget.set(Long.MIN_VALUE);
 				}
 				pendingChunks.decrementAndGet();
 				ConcurrentMap<Long, IBlockState> own = replacements.get(cp);
@@ -475,7 +370,7 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 			}
 		}
 
-		/** 1.7.10 breakColumn, reading from the mirror snapshot and recording replacements (routed per chunk). */
+/** Convert one column and record the replacements, routed to the owning chunk. */
 		private void breakColumn(int xOff, int zOff, Random rnd) {
 			int dist = radius2 - (xOff * xOff + zOff * zOff);
 			if (dist <= 0) return;
@@ -548,19 +443,21 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		}
 	}
 
-	private void putReplacement(int x, int y, int z, IBlockState state) {
-		ConcurrentMap<Long, IBlockState> out = replacements.computeIfAbsent(ChunkPos.asLong(x >> 4, z >> 4),
+    private void putReplacement(int x, int y, int z, IBlockState state) {
+		long owner = ChunkPos.asLong(x >> 4, z >> 4);
+		if (owner != scanTarget.get().longValue()) return;
+		ConcurrentMap<Long, IBlockState> out = replacements.computeIfAbsent(owner,
 				k -> new ConcurrentHashMap<>());
 		out.put(Library.blockPosToLong(x, y, z), state);
 		markNotify(x, y, z);
 	}
 
-	private void markNotify(int x, int y, int z) {
+    private void markNotify(int x, int y, int z) {
 		notifyPositions.computeIfAbsent(ChunkPos.asLong(x >> 4, z >> 4), k -> ConcurrentHashMap.newKeySet())
 				.add(Library.blockPosToLong(x, y, z));
 	}
 
-	private IBlockState readState(int x, int y, int z) {
+    private IBlockState readState(int x, int y, int z) {
 		if (y < 0 || y > 255) return Blocks.AIR.getDefaultState();
 		Chunk chunk = mirror.get(ChunkPos.asLong(x >> 4, z >> 4));
 		if (chunk == null) return Blocks.AIR.getDefaultState();
@@ -572,15 +469,13 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		return s.get(x & 15, y & 15, z & 15);
 	}
 
-	// ===== apply =====
-
-	@ServerThread
+    @ServerThread
 	private void applyChunk(long cpLong) {
 		ConcurrentMap<Long, IBlockState> changes = replacements.remove(cpLong);
 		if (changes == null || changes.isEmpty()) return;
 		int cx = Library.getChunkPosX(cpLong);
 		int cz = Library.getChunkPosZ(cpLong);
-		Chunk chunk = world.getChunkProvider().loadedChunks.get(cpLong);
+		Chunk chunk = worldServer.getChunkProvider().loadedChunks.get(cpLong);
 		if (chunk == null) {
 			replacements.put(cpLong, changes);
 			chunkLoadQueue.offer(cpLong);
@@ -604,17 +499,20 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 			Int2ObjectOpenHashMap<IBlockState> bucket = buckets[subY];
 			if (bucket == null || bucket.isEmpty()) continue;
 			ExtendedBlockStorage src = storages[subY];
-			Optional<ExtendedBlockStorage> changed = ChunkUtil.copyAndModify(cx, cz, subY, world.provider.hasSkyLight(), src, bucket, oldStates);
+			Optional<ExtendedBlockStorage> changed = ChunkUtil.copyAndModify(cx, cz, subY, worldServer.provider.hasSkyLight(), src, bucket, oldStates);
 			if (changed == null) continue;
 			storages[subY] = changed.orElse(Chunk.NULL_BLOCK_STORAGE);
 			selfMask |= 1 << subY;
+		}
+		for (int s = 0; s < 16; s++) {
+			if ((selfMask & (1 << s)) != 0) ChunkUtil.rebuildHeightMap(chunk, s);
 		}
 		MutableBlockPos p = new MutableBlockPos();
 		for (Long2ObjectMap.Entry<IBlockState> e : oldStates.long2ObjectEntrySet()) {
 			IBlockState oldState = e.getValue();
 			if (oldState.getBlock().hasTileEntity(oldState)) {
 				Library.fromLong(p, e.getLongKey());
-				world.removeTileEntity(p);
+				worldServer.removeTileEntity(p);
 			}
 		}
 		Set<Long> notify = notifyPositions.remove(cpLong);
@@ -625,11 +523,11 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 				Library.fromLong(p, packed);
 				for (EnumFacing facing : EnumFacing.values()) {
 					BlockPos neighborPos = p.offset(facing);
-					if (world.isBlockLoaded(neighborPos)) {
-						IBlockState neighborState = world.getBlockState(neighborPos);
+					if (worldServer.isBlockLoaded(neighborPos)) {
+						IBlockState neighborState = worldServer.getBlockState(neighborPos);
 						Block neighborBlock = neighborState.getBlock();
 						if (neighborBlock != Blocks.WATER && neighborBlock != Blocks.FLOWING_WATER && !hasWaterNeighbor(neighborPos)) {
-							world.neighborChanged(neighborPos, oldState.getBlock(), p);
+							worldServer.neighborChanged(neighborPos, oldState.getBlock(), p);
 						}
 					}
 				}
@@ -638,20 +536,39 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		applyBiomeToChunk(chunk, cx, cz);
 		if (selfMask != 0) {
 			sectionMaskByChunk.put(cpLong, sectionMaskByChunk.get(cpLong) | selfMask);
-			ChunkUtil.relightChunk(chunk);
-			chunk.markDirty();
-			net.minecraft.server.management.PlayerChunkMapEntry entry = world.getPlayerChunkMap().getEntry(cx, cz);
-			if (entry != null) {
-				entry.sendPacket(new SPacketChunkData(chunk, selfMask));
-			}
+			ChunkUtil.markBlocksChanged(chunk);
+			ChunkUtil.requestLight(chunk, selfMask);
+			pendingSend.merge(cpLong, selfMask, (a, b) -> a | b);
 		}
 	}
 
-	private boolean hasWaterNeighbor(BlockPos pos) {
+    /** Sets the Dust Wastes biome for the chunk's columns inside the crater circle, then syncs to clients. */
+
+    private void applyBiomeToChunk(Chunk chunk, int cx, int cz) {
+		if (!WorldConfig.enableDustWastesBiome) return;
+		byte[] arr = chunk.getBiomeArray();
+		if (arr.length != 256) return;
+		int biomeId = Biome.getIdForBiome(BiomeGenDustWastes.dustWastes);
+		for (int x = 0; x < 16; x++) {
+			for (int z = 0; z < 16; z++) {
+				int wx = (cx << 4) + x;
+				int wz = (cz << 4) + z;
+				int dx = wx - originX;
+				int dz = wz - originZ;
+				if (dx * dx + dz * dz <= radius2) {
+					arr[((z & 15) << 4) | (x & 15)] = (byte) (biomeId & 0xFF);
+				}
+			}
+		}
+		chunk.markDirty();
+		WorldUtil.syncBiomeChange(worldServer, cx, cz);
+	}
+
+    private boolean hasWaterNeighbor(BlockPos pos) {
 		for (EnumFacing facing : EnumFacing.values()) {
 			BlockPos np = pos.offset(facing);
-			if (world.isBlockLoaded(np)) {
-				Block b = world.getBlockState(np).getBlock();
+			if (worldServer.isBlockLoaded(np)) {
+				Block b = worldServer.getBlockState(np).getBlock();
 				if (b == Blocks.WATER || b == Blocks.FLOWING_WATER) {
 					return true;
 				}
@@ -660,42 +577,71 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		return false;
 	}
 
-	private double chunkDistSq(long cp) {
-		int cx = Library.getChunkPosX(cp);
-		int cz = Library.getChunkPosZ(cp);
-		double dx = (cx << 4) + 8.0 - originX;
-		double dz = (cz << 4) + 8.0 - originZ;
-		return dx * dx + dz * dz;
+    @ServerThread
+	private void secondPass() {
+		Long2ObjectMap<Chunk> loaded = worldServer.getChunkProvider().loadedChunks;
+		for (Map.Entry<Long, Integer> e : pendingSend.entrySet()) {
+			long cp = e.getKey().longValue();
+			Chunk chunk = loaded.get(cp);
+			if (chunk == null) continue;
+			int lightMask = ChunkUtil.takeLightMask(worldServer, cp);
+			int mask = e.getValue().intValue() | lightMask;
+			if (mask == 0) continue;
+			chunk.markDirty();
+			ChunkUtil.sendChunk(worldServer, chunk, mask);
+		}
+		pendingSend.clear();
+		ChunkUtil.drainRemaining(worldServer);
+		sectionMaskByChunk.clear();
 	}
 
-	// ===== lifecycle =====
-
-	public void cancel() {
-		cancelling = true;
-		collectFinished = true;
-		destroyFinished = true;
-		if (activeWorkerTasks.get() == 0) {
-			finishCancellation();
-		} else {
-			world.addScheduledTask(this::pollCancelCleanup);
+    private void drainSendQueue() {
+		if (pendingSend.isEmpty()) return;
+		Long2ObjectMap<Chunk> loaded = worldServer.getChunkProvider().loadedChunks;
+		Iterator<Map.Entry<Long, Integer>> it = pendingSend.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry<Long, Integer> e = it.next();
+			long cp = e.getKey().longValue();
+			if (ChunkUtil.hasPendingLight(worldServer, cp)) continue;
+			int lightMask = ChunkUtil.takeLightMask(worldServer, cp);
+			int mask = e.getValue().intValue() | lightMask;
+			Chunk chunk = loaded.get(cp);
+			if (chunk != null && mask != 0) {
+				chunk.markDirty();
+				ChunkUtil.sendChunk(worldServer, chunk, mask);
+			}
+			it.remove();
 		}
 	}
 
-	@ServerThread
-	private void pollCancelCleanup() {
-		if (activeWorkerTasks.get() == 0) {
-			finishCancellation();
-		} else {
-			world.addScheduledTask(this::pollCancelCleanup);
+    private void maybeFinish() {
+		if (!collectFinished) {
+			if (activeWorkerTasks.get() == 0 && pendingChunks.get() == 0) {
+				collectFinished = true;
+			} else {
+				return;
+			}
 		}
+		if (destroyFinished) return;
+		if (activeWorkerTasks.get() != 0 || pendingChunks.get() != 0) return;
+		if (!applyQueue.isEmpty() || !chunkLoadQueue.isEmpty()) return;
+		if (ChunkUtil.anyPendingLight(worldServer)) {
+			return;
+		}
+		if (finishQueued) return;
+		finishQueued = true;
+		worldServer.addScheduledTask(() -> {
+			secondPass();
+			destroyFinished = true;
+			releasePoolIfHeld();
+			if (mapAcquired) {
+				mapAcquired = false;
+				ChunkUtil.releaseMirrorMap(worldServer);
+			}
+		});
 	}
 
-	@Override
-	public void cancelJob() {
-		cancel();
-	}
-
-	@ServerThread
+    @ServerThread
 	private void finishCancellation() {
 		if (activeWorkerTasks.get() != 0 || cancelCleanup) return;
 		cancelCleanup = true;
@@ -704,22 +650,24 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		chunkLoadQueue.clear();
 		applyQueue.clear();
 		sectionMaskByChunk.clear();
+		pendingSend.clear();
 		releasePoolIfHeld();
 		if (mapAcquired) {
 			mapAcquired = false;
-			ChunkUtil.releaseMirrorMap(world);
+			ChunkUtil.releaseMirrorMap(worldServer);
 		}
 	}
 
-	synchronized void fail(Throwable cause) {
-		if (failure != null) return;
-		failure = cause;
-		MainRegistry.logger.error("Parallel TOM explosion work failed", cause);
+    @ServerThread
+	private void pollCancelCleanup() {
+		if (activeWorkerTasks.get() == 0) {
+			finishCancellation();
+		} else {
+			worldServer.addScheduledTask(this::pollCancelCleanup);
+		}
 	}
 
-	// ===== NBT =====
-
-	@Override
+    @Override
 	public void readEntityFromNBT(NBTTagCompound nbt) {
 		if (nbt.getBoolean("collectDone")) collectFinished = true;
 		if (nbt.getBoolean("destroyDone")) destroyFinished = true;
@@ -737,7 +685,7 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 			}
 		}
 		if (collectFinished && !destroyFinished) {
-			world.addScheduledTask(() -> {
+			worldServer.addScheduledTask(() -> {
 				secondPass();
 				destroyFinished = true;
 			});
@@ -745,7 +693,7 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 		// else: collectFinished == false → update() re-gathers chunks and calls startWorkers().
 	}
 
-	@Override
+    @Override
 	public void writeEntityToNBT(NBTTagCompound nbt) {
 		nbt.setBoolean("collectDone", collectFinished);
 		nbt.setBoolean("destroyDone", destroyFinished);
@@ -767,6 +715,101 @@ public class ExplosionTomParallelized implements IExplosionRay, BombForkJoinPool
 			int i = 0;
 			for (long cp : populatedChunks) arr[i++] = cp;
 			nbt.setTag("populatedChunks", new NBTTagLongArray(arr));
+		}
+	}
+
+    private double chunkDistSq(long cp) {
+		int cx = Library.getChunkPosX(cp);
+		int cz = Library.getChunkPosZ(cp);
+		double dx = (cx << 4) + 8.0 - originX;
+		double dz = (cz << 4) + 8.0 - originZ;
+		return dx * dx + dz * dz;
+	}
+
+    final class ColumnTask extends RecursiveAction {
+		final List<Long> chunks;
+		final int start, end, threshold;
+
+		ColumnTask(List<Long> chunks, int start, int end, int threshold) {
+			this.chunks = chunks;
+			this.start = start;
+			this.end = end;
+			this.threshold = Math.max(1, threshold);
+		}
+
+		@Override
+		protected void compute() {
+			int len = end - start;
+			if (len <= threshold) {
+				activeWorkerTasks.incrementAndGet();
+				try {
+					ColumnWorker worker = new ColumnWorker();
+					for (int i = start; i < end; i++) {
+						if (Thread.currentThread().isInterrupted() || destroyFinished) break;
+						long cp = chunks.get(i).longValue();
+						int cx = Library.getChunkPosX(cp);
+						int cz = Library.getChunkPosZ(cp);
+						Chunk chunk = ChunkUtil.getLoadedChunk(mirror, cp);
+						if (chunk == null || !chunk.isTerrainPopulated()) {
+							requeueUnloaded(cp);
+							continue;
+						}
+						if (!isNeighborhoodPopulated(cp)) continue;
+						worker.processChunk(cp, cx, cz, chunk.getBlockStorageArray());
+					}
+				} catch (Exception e) {
+					fail(e);
+				} finally {
+					activeWorkerTasks.decrementAndGet();
+				}
+			} else {
+				int mid = start + (len >>> 1);
+				invokeAll(new ColumnTask(chunks, start, mid, threshold), new ColumnTask(chunks, mid, end, threshold));
+			}
+		}
+	}
+
+    final class RetryTask extends RecursiveAction {
+		final long[] chunks;
+		final int start, end, threshold;
+
+		RetryTask(long[] chunks, int start, int end, int threshold) {
+			this.chunks = chunks;
+			this.start = start;
+			this.end = end;
+			this.threshold = Math.max(1, threshold);
+		}
+
+		@Override
+		protected void compute() {
+			int len = end - start;
+			if (len <= threshold) {
+				activeWorkerTasks.incrementAndGet();
+				try {
+					ColumnWorker worker = new ColumnWorker();
+					for (int i = start; i < end; i++) {
+						if (Thread.currentThread().isInterrupted() || destroyFinished) break;
+						long cp = chunks[i];
+						if (scannedChunks.contains(cp)) continue;
+						int cx = Library.getChunkPosX(cp);
+						int cz = Library.getChunkPosZ(cp);
+						Chunk chunk = ChunkUtil.getLoadedChunk(mirror, cp);
+						if (chunk == null || !chunk.isTerrainPopulated()) {
+							requeueUnloaded(cp);
+							continue;
+						}
+						if (!isNeighborhoodPopulated(cp)) continue;
+						worker.processChunk(cp, cx, cz, chunk.getBlockStorageArray());
+					}
+				} catch (Exception e) {
+					fail(e);
+				} finally {
+					activeWorkerTasks.decrementAndGet();
+				}
+			} else {
+				int mid = start + (len >>> 1);
+				invokeAll(new RetryTask(chunks, start, mid, threshold), new RetryTask(chunks, mid, end, threshold));
+			}
 		}
 	}
 }
