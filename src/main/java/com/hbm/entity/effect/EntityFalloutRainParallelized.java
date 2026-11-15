@@ -1911,5 +1911,3 @@ public class EntityFalloutRainParallelized extends EntityChunky implements BombF
         }
     }
 }
-
-

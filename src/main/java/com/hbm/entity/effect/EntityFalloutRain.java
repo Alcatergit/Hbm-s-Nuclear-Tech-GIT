@@ -1,6 +1,5 @@
 package com.hbm.entity.effect;
 
-import java.lang.reflect.Field;
 import java.util.*;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
@@ -21,7 +20,6 @@ import com.hbm.blocks.generic.WasteLog;
 
 import net.minecraft.block.*;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumFacing;
@@ -991,5 +989,3 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 		return scale == 0 ? 1 : scale;
 	}
 }
-
-
