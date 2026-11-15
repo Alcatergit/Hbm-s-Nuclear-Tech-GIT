@@ -27,7 +27,6 @@ import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.capability.HbmCapability.IHBMData;
 import com.hbm.config.GeneralConfig;
-import com.hbm.config.WorldConfig;
 import com.hbm.world.biome.BiomeGenDustWastes;
 import net.minecraft.world.biome.Biome;
 import com.hbm.config.CompatibilityConfig;
