@@ -1,16 +1,9 @@
 package com.hbm.render.item.weapon;
 
-import java.awt.Color;
-import java.awt.image.BufferedImage;
-import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
+import com.hbm.dynamic_texture.DynamicTextureRegistry;
 import com.hbm.items.weapon.ItemGunBase;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
@@ -20,103 +13,46 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.client.renderer.block.model.ItemCameraTransforms.TransformType;
-import net.minecraft.client.renderer.texture.DynamicTexture;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.EnumHand;
 import net.minecraft.util.ResourceLocation;
 
 public class ItemRenderFatMan extends ItemRenderWeaponBase {
 
-	private static final Map<Integer, Integer> NUKE_TINT_CACHE = new HashMap<>();
-	private static final Map<Integer, Integer> MIRV_TINT_CACHE = new HashMap<>();
-
-	/** Binds the (possibly tinted) mini-nuke texture for the given bullet config id. */
 	public static void bindNuke(int config) {
-		float hue = nukeHueOf(config);
-		if(Float.isNaN(hue)) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_mininuke_tex);
-			return;
-		}
-		Integer gl = NUKE_TINT_CACHE.get(config);
-		if(gl == null) {
-			gl = createTint(ResourceManager.fatman_mininuke_tex, 0, 20, 96, 4, hue, 0.73F);
-			NUKE_TINT_CACHE.put(config, gl == null ? -1 : gl);
-		}
-		if(gl == null || gl < 0) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_mininuke_tex);
-		} else {
+		String variant = nukeVariantOf(config);
+		int gl = variant == null ? -1 : DynamicTextureRegistry.getTexture(ResourceManager.fatman_mininuke_tex, variant);
+		if(gl >= 0) {
 			GlStateManager.bindTexture(gl);
+		} else {
+			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_mininuke_tex);
 		}
 	}
 
-	/** Binds the (possibly tinted) mini-MIRV texture for the given bullet config id. */
 	public static void bindMirv(int config) {
-		float hue = mirvHueOf(config);
-		if(Float.isNaN(hue)) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_minimirv_tex);
-			return;
-		}
-		Integer gl = MIRV_TINT_CACHE.get(config);
-		if(gl == null) {
-			gl = createTint(ResourceManager.fatman_minimirv_tex, 0, 12, 32, 2, hue, 0.82F);
-			MIRV_TINT_CACHE.put(config, gl == null ? -1 : gl);
-		}
-		if(gl == null || gl < 0) {
-			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_minimirv_tex);
-		} else {
+		String variant = mirvVariantOf(config);
+		int gl = variant == null ? -1 : DynamicTextureRegistry.getTexture(ResourceManager.fatman_minimirv_tex, variant);
+		if(gl >= 0) {
 			GlStateManager.bindTexture(gl);
+		} else {
+			Minecraft.getMinecraft().getTextureManager().bindTexture(ResourceManager.fatman_minimirv_tex);
 		}
 	}
 
-	private static float nukeHueOf(int config) {
-		if(config == BulletConfigSyncingUtil.NUKE_SAFE || config == BulletConfigSyncingUtil.NUKE_PROTO_SAFE) return 0.2614F;
-		if(config == BulletConfigSyncingUtil.NUKE_LOW || config == BulletConfigSyncingUtil.NUKE_PROTO_LOW) return 0.5401F;
-		if(config == BulletConfigSyncingUtil.NUKE_HIGH || config == BulletConfigSyncingUtil.NUKE_PROTO_HIGH) return 0.0219F;
-		if(config == BulletConfigSyncingUtil.NUKE_PUMPKIN || config == BulletConfigSyncingUtil.NUKE_PROTO_PUMPKIN) return 0.0865F;
-		return Float.NaN;
+	private static String nukeVariantOf(int config) {
+		if(config == BulletConfigSyncingUtil.NUKE_SAFE || config == BulletConfigSyncingUtil.NUKE_PROTO_SAFE) return "NUKE_SAFE";
+		if(config == BulletConfigSyncingUtil.NUKE_LOW || config == BulletConfigSyncingUtil.NUKE_PROTO_LOW) return "NUKE_LOW";
+		if(config == BulletConfigSyncingUtil.NUKE_HIGH || config == BulletConfigSyncingUtil.NUKE_PROTO_HIGH) return "NUKE_HIGH";
+		if(config == BulletConfigSyncingUtil.NUKE_PUMPKIN || config == BulletConfigSyncingUtil.NUKE_PROTO_PUMPKIN) return "NUKE_PUMPKIN";
+		return null;
 	}
 
-	private static float mirvHueOf(int config) {
-		if(config == BulletConfigSyncingUtil.NUKE_MIRV_SAFE) return 0.2793F;
-		if(config == BulletConfigSyncingUtil.NUKE_MIRV_LOW) return 0.5575F;
-		if(config == BulletConfigSyncingUtil.NUKE_MIRV_HIGH) return 0.0368F;
-		if(config == BulletConfigSyncingUtil.NUKE_MIRV_SPECIAL) return 0.8621F;
-		return Float.NaN;
-	}
-
-	private static Integer createTint(ResourceLocation base, int x0, int y0, int w, int h, float hue, float saturation) {
-		BufferedImage img;
-		try(InputStream is = Minecraft.getMinecraft().getResourceManager().getResource(base).getInputStream()) {
-			img = ImageIO.read(is);
-		} catch(Exception e) {
-			return null;
-		}
-		if(img == null) return null;
-		int iw = img.getWidth();
-		int ih = img.getHeight();
-		int[] pixels = img.getRGB(0, 0, iw, ih, null, 0, iw);
-		int xe = Math.min(x0 + w, iw);
-		int ye = Math.min(y0 + h, ih);
-		for(int y = y0; y < ye; y++) {
-			for(int x = x0; x < xe; x++) {
-				int p = pixels[y * iw + x];
-				int a = (p >> 24) & 0xFF;
-				float[] hsb = new float[3];
-				Color.RGBtoHSB((p >> 16) & 0xFF, (p >> 8) & 0xFF, p & 0xFF, hsb);
-				hsb[0] = hue;
-				hsb[1] = Math.max(hsb[1], saturation);
-				int rgb = Color.HSBtoRGB(hsb[0], hsb[1], hsb[2]);
-				pixels[y * iw + x] = (a << 24) | (rgb & 0xFFFFFF);
-			}
-		}
-		DynamicTexture dt = new DynamicTexture(iw, ih);
-		int[] data = dt.getTextureData();
-		System.arraycopy(pixels, 0, data, 0, iw * ih);
-		dt.updateDynamicTexture();
-		GlStateManager.bindTexture(dt.getGlTextureId());
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST);
-		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_NEAREST);
-		return dt.getGlTextureId();
+	private static String mirvVariantOf(int config) {
+		if(config == BulletConfigSyncingUtil.NUKE_MIRV_SAFE) return "MIRV_SAFE";
+		if(config == BulletConfigSyncingUtil.NUKE_MIRV_LOW) return "MIRV_LOW";
+		if(config == BulletConfigSyncingUtil.NUKE_MIRV_HIGH) return "MIRV_HIGH";
+		if(config == BulletConfigSyncingUtil.NUKE_MIRV_SPECIAL) return "MIRV_SPECIAL";
+		return null;
 	}
 
 	@Override
