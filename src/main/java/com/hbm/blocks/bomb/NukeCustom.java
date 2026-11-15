@@ -168,7 +168,7 @@ public class NukeCustom extends BlockNukeBase {
 			bf.destructionRange = (int) bale;
 			world.spawnEntity(bf);
 			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFacBale(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, bale);
+				EntityNukeTorex.statFacBale(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, bale);
 			}
 
 		/// HYDROGEN ///
@@ -180,7 +180,7 @@ public class NukeCustom extends BlockNukeBase {
 
 			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)hydro, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
 			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, hydro);
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, hydro);
 			}
 
 		/// NUCLEAR ///
@@ -189,9 +189,9 @@ public class NukeCustom extends BlockNukeBase {
 			nuke += tnt / 2;
 			nuke = Math.min(nuke, BombConfig.maxCustomNukeRadius);
 
-			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)nuke, xCoord + 0.5, yCoord + 5, zCoord + 0.5).moreFallout((int)dirty));
+			world.spawnEntity(EntityNukeExplosionMK5.statFac(world, (int)nuke, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5).moreFallout((int)dirty));
 			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, nuke);
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, nuke);
 			}
 
 		/// NON-NUCLEAR ///
@@ -201,7 +201,7 @@ public class NukeCustom extends BlockNukeBase {
 
 			world.spawnEntity(EntityNukeExplosionMK5.statFacNoRad(world, (int)tnt, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5));
 			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 5, zCoord + 0.5, tnt);
+				EntityNukeTorex.statFac(world, xCoord + 0.5, yCoord + 0.5, zCoord + 0.5, tnt);
 			}
 		} else if(tnt > 0) {
 
