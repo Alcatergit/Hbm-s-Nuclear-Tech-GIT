@@ -83,7 +83,6 @@ public class BiomeGenDustWastes extends Biome {
 	}
 
 	// ==== Fog blending, kept together with the darkened sky above ====
-
 	private static boolean fogInit = false;
 	private static int fogX;
 	private static int fogZ;
@@ -164,7 +163,6 @@ public class BiomeGenDustWastes extends Biome {
 	}
 
 	// ==== Entities burn in the crater's eternal fire ====
-
 	@SubscribeEvent
 	public static void dustWastesEntityFire(TickEvent.WorldTickEvent event) {
 		if (!WorldConfig.enableDustWastesBiome) return;
@@ -174,7 +172,7 @@ public class BiomeGenDustWastes extends Biome {
 			if (!(o instanceof EntityLivingBase)) continue;
 			EntityLivingBase entity = (EntityLivingBase) o;
 			BlockPos pos = new BlockPos(entity.posX, entity.getEntityBoundingBox().maxY, entity.posZ);
-			if (event.world.getBiome(pos) instanceof BiomeGenDustWastes && event.world.getLightFor(EnumSkyBlock.SKY, pos) > 7) {
+			if (event.world.getBiome(pos) instanceof BiomeGenDustWastes && event.world.getLightFor(EnumSkyBlock.SKY, pos) > 7 && !entity.isImmuneToFire()) {
 				entity.setFire(5);
 				entity.attackEntityFrom(DamageSource.ON_FIRE, 2);
 			}
