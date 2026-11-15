@@ -5138,6 +5138,7 @@ tile.vitrified_barrel.name=Forglasset atomavfallstrommel
 tile.volcanic_lava_block.name=Vulkan lava
 tile.volcano_core.name=Vulkankjerne
 tile.waste_dirt.name=Forurenset skitt
+tile.waste_podzol.name=Forurenset podsol
 tile.waste_earth.name=Dødt gress
 tile.waste_grass_tall.name=Avfall gress
 tile.waste_gravel.name=Forurenset grus

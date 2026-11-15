@@ -5138,6 +5138,7 @@ tile.vitrified_barrel.name=Vitrifiye Nükleer Atık Varil
 tile.volcanic_lava_block.name=volkanik lav
 tile.volcano_core.name=Volkan Çekirdeği
 tile.waste_dirt.name=Kirlenmiş Kir
+tile.waste_podzol.name=Kirlenmiş Podzol
 tile.waste_earth.name=ölü çimen
 tile.waste_grass_tall.name=Atık Çim
 tile.waste_gravel.name=Kirlenmiş Çakıl

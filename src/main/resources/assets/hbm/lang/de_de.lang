@@ -5137,6 +5137,7 @@ tile.vitrified_barrel.name=Fass voll vitrifiziertem Atommüll
 tile.volcanic_lava_block.name=Vulkanische Lava
 tile.volcano_core.name=Vulkankern
 tile.waste_dirt.name=Kontaminierter Schmutz
+tile.waste_podzol.name=Kontaminierter Podsol
 tile.waste_earth.name=Totes Gras
 tile.waste_grass_tall.name=Abfallgras
 tile.waste_gravel.name=Kontaminierter Kies

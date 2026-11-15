@@ -5138,6 +5138,7 @@ tile.vitrified_barrel.name=玻璃化核废料桶
 tile.volcanic_lava_block.name=火山熔岩
 tile.volcano_core.name=火山核心
 tile.waste_dirt.name=污染土
+tile.waste_podzol.name=污染灰化土
 tile.waste_earth.name=死亡草地
 tile.waste_grass_tall.name=枯草
 tile.waste_gravel.name=受污染的砂砾

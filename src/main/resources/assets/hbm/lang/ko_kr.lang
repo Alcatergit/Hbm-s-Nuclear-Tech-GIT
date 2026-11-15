@@ -5138,6 +5138,7 @@ tile.vitrified_barrel.name=유리화된 핵 폐기물 드럼
 tile.volcanic_lava_block.name=화산 용암
 tile.volcano_core.name=화산 코어
 tile.waste_dirt.name=오염된 흙
+tile.waste_podzol.name=오염된 회백토
 tile.waste_earth.name=죽은 풀
 tile.waste_grass_tall.name=오염된 잔디
 tile.waste_gravel.name=오염된 자갈
