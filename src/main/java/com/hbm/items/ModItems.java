@@ -16,7 +16,6 @@ import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.handler.ToolAbility;
 import com.hbm.handler.ToolAbility.LuckAbility;
 import com.hbm.handler.WeaponAbility;
-import static com.hbm.items.ItemEnums.EnumAmmo;
 import com.hbm.handler.guncfg.Gun12GaugeFactory;
 import com.hbm.handler.guncfg.Gun20GaugeFactory;
 import com.hbm.handler.guncfg.Gun22LRFactory;
@@ -134,6 +133,7 @@ import net.minecraftforge.common.util.EnumHelper;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 
 import static com.hbm.inventory.OreDictManager.*;
+import static com.hbm.items.ItemEnums.EnumAmmo;
 
 public class ModItems {
 	
@@ -2251,22 +2251,6 @@ public class ModItems {
 	public static final Item gun_euthanasia_ammo = new ItemBase("gun_euthanasia_ammo").setCreativeTab(MainRegistry.weaponTab);
 	
 	//Drillgon200: screw organization, porting takes less time if I don't have to search for each individual spot.
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	public static final Item gun_b92_ammo = new GunB92Cell("gun_b92_ammo").setMaxStackSize(1).setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_stinger_ammo = new ItemBase("gun_stinger_ammo").setCreativeTab(MainRegistry.weaponTab);
 	public static final Item gun_xvl1456_ammo = new ItemCustomLore("gun_xvl1456_ammo").setCreativeTab(MainRegistry.weaponTab);
@@ -3311,6 +3295,22 @@ public class ModItems {
             } else if(block instanceof BlockLeaves bLeaf){
                 if(block instanceof WasteLeaves wLeaf) ForgeRegistries.ITEMS.register(new ItemNTMLeaves(wLeaf).setRegistryName(block.getRegistryName()));
                 else ForgeRegistries.ITEMS.register(new ItemLeaves(bLeaf).setRegistryName(block.getRegistryName()).setTranslationKey("leaves"));
+			} else if(block == ModBlocks.waste_dirt){
+				ForgeRegistries.ITEMS.register(new ItemBlock(block){
+					@Override
+					public int getMetadata(int damage){
+						return damage == 1 ? 8 : 0;
+					}
+					@Override
+					public boolean getHasSubtypes(){
+						return true;
+					}
+					@Override
+					public String getTranslationKey(ItemStack stack){
+						if(stack.getMetadata() == 1) return "tile.waste_podzol";
+						return super.getTranslationKey(stack);
+					}
+				}.setRegistryName(block.getRegistryName()));
 			} else if(!(block instanceof BlockModDoor)){
 				ForgeRegistries.ITEMS.register(new ItemBlock(block).setRegistryName(block.getRegistryName()));
 			}
@@ -3322,5 +3322,4 @@ public class ModItems {
 	
 	public static void postInit(){
 	}
-
 }
