@@ -30,7 +30,6 @@ import net.minecraft.world.gen.ChunkProviderServer;
 
 public class ExplosionTom
 {
-
 	public int posX;
 	public int posY;
 	public int posZ;
