@@ -13,10 +13,7 @@ import com.hbm.render.item.*;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
-import com.hbm.render.icon.TextureAtlasSpriteSourceTransform;
-import com.hbm.blocks.generic.WasteLeaves;
-import net.minecraft.client.renderer.color.BlockColors;
-import net.minecraft.client.renderer.color.ItemColors;
+import com.hbm.dynamic_texture.DynamicTextureRegistry;
 import com.hbm.items.IModelRegister;
 import com.hbm.items.machine.*;
 import com.hbm.render.tileentity.RenderWatzMultiblock;
@@ -95,7 +92,6 @@ import com.hbm.render.anim.HbmAnimations;
 import com.hbm.render.anim.HbmAnimations.Animation;
 import com.hbm.render.anim.HbmAnimations.BlenderAnimation;
 import com.hbm.render.entity.DSmokeRenderer;
-import com.hbm.render.entity.RenderBlackHole;
 import com.hbm.render.item.weapon.B92BakedModel;
 import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
@@ -109,7 +105,6 @@ import com.hbm.render.misc.SoyuzPronter;
 import com.hbm.render.modelrenderer.EgonBackpackRenderer;
 import com.hbm.render.tileentity.RenderMultiblock;
 import com.hbm.render.tileentity.RenderSoyuzMultiblock;
-import com.hbm.render.entity.effect.RenderTorex;
 import com.hbm.render.tileentity.RenderStructureMarker;
 import com.hbm.render.util.RenderOverhead;
 import com.hbm.render.world.RenderNTMSkybox;
@@ -267,6 +262,8 @@ public class ModEventHandlerClient {
 		for(Block block : ModBlocks.ALL_BLOCKS) {
 			registerBlockModel(block, 0);
 		}
+
+		DynamicTextureRegistry.registerItemModels();
 
 		IDynamicModels.registerModels();
 
@@ -635,139 +632,12 @@ public class ModEventHandlerClient {
 			return 0xFFFFFF;
 		}, ModItems.siren_track);
 
-		registerContaminationItemColors(evt);
+		DynamicTextureRegistry.registerItemColors(evt);
 	}
 
 	@SubscribeEvent
 	public void blockColorsEvent(ColorHandlerEvent.Block evt) {
-		registerContaminationBlockColors(evt);
-	}
-
-	private static int mulColor(int a, int b) {
-		int r = ((a >> 16) & 0xFF) * ((b >> 16) & 0xFF) / 255;
-		int g = ((a >> 8) & 0xFF) * ((b >> 8) & 0xFF) / 255;
-		int bl = (a & 0xFF) * (b & 0xFF) / 255;
-		return (r << 16) | (g << 8) | bl;
-	}
-
-	private static int lerpColor(int a, int b, double t) {
-		int r = (int) Math.round(((a >> 16) & 0xFF) + (((b >> 16) & 0xFF) - ((a >> 16) & 0xFF)) * t);
-		int g = (int) Math.round(((a >> 8) & 0xFF) + (((b >> 8) & 0xFF) - ((a >> 8) & 0xFF)) * t);
-		int bl = (int) Math.round((a & 0xFF) + ((b & 0xFF) - (a & 0xFF)) * t);
-		return (r << 16) | (g << 8) | bl;
-	}
-
-	private static int[] directCurve(int meta0, int meta6) {
-		int[] curve = new int[7];
-		for(int m = 0; m <= 6; m++) curve[m] = lerpColor(meta0, meta6, m / 6.0);
-		return curve;
-	}
-
-	private static int[] ratioCurve(int meta0, int meta6) {
-		int m6r = ((meta6 >> 16) & 0xFF) * 255 / ((meta0 >> 16) & 0xFF);
-		int m6g = ((meta6 >> 8) & 0xFF) * 255 / ((meta0 >> 8) & 0xFF);
-		int m6b = (meta6 & 0xFF) * 255 / (meta0 & 0xFF);
-		return directCurve(0xFFFFFF, (m6r << 16) | (m6g << 8) | m6b);
-	}
-
-	private static final Map<Block, int[]> BLOCK_CURVES = new HashMap<>();
-	private static final Map<Item, int[]> ITEM_CURVES = new HashMap<>();
-
-	private static final int[] LEAF_COLORS = { 0xE69160, 0xB37F5A, 0xE6A860, 0xE37B65, 0xF28D54, 0xE6A04E };
-
-	private static final int[] GRASS_CURVE = directCurve(0x6F6752, 0x303030);
-	private static final int[] DIRT_CURVE = ratioCurve(0x866043, 0x2E2723);
-
-	private static void recomputeContaminationCurves() {
-		BLOCK_CURVES.clear();
-		ITEM_CURVES.clear();
-		putBlock(ModBlocks.waste_dirt, ratioCurve(0x866043, 0x2E2723));
-		putBlock(ModBlocks.waste_gravel, ratioCurve(0x7F7C7B, 0x323231));
-		putBlock(ModBlocks.waste_sand, ratioCurve(0xC5BE90, 0x484740));
-		putBlock(ModBlocks.waste_sand_red, ratioCurve(0xC5BE90, 0x484740));
-		putBlock(ModBlocks.waste_snow_block, ratioCurve(0xE4EEEE, 0x6F7070));
-		putBlock(ModBlocks.waste_terracotta, ratioCurve(0xA25426, 0x32251E));
-		putBlock(ModBlocks.waste_sandstone, ratioCurve(0xC3BD8E, 0x48473F));
-		putBlock(ModBlocks.waste_sandstone_red, ratioCurve(0x954C1B, 0x2D2119));
-		putBlock(ModBlocks.waste_trinitite, ratioCurve(0xC5BE90, 0x484740));
-		putBlock(ModBlocks.waste_trinitite_red, ratioCurve(0xC5BE90, 0x484740));
-		putBlock(ModBlocks.fallout, directCurve(0x777777, 0x3A3A3A));
-		putBlock(ModBlocks.waste_grass_tall, ratioCurve(0x8C7A53, 0x5C5340));
-	}
-
-	private static void putBlock(Block block, int[] curve) {
-		BLOCK_CURVES.put(block, curve);
-		ITEM_CURVES.put(Item.getItemFromBlock(block), curve);
-	}
-
-	private static void registerContaminationSprites(TextureStitchEvent.Pre evt) {
-		recomputeContaminationCurves();
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.grayscale(RefStrings.MODID + ":blocks/contamination/fallout/fallout_gen", "minecraft:blocks/snow"));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.multipass(RefStrings.MODID + ":blocks/contamination/trinitite/trinitite_gen", "minecraft:blocks/sand", RefStrings.MODID + ":blocks/trinitite_overlay"));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.multipass(RefStrings.MODID + ":blocks/contamination/red_trinitite/trinitite_red_gen", "minecraft:blocks/red_sand", RefStrings.MODID + ":blocks/trinitite_overlay"));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.grayscale(RefStrings.MODID + ":blocks/waste_ice_gen", "minecraft:blocks/ice"));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.hueShift(RefStrings.MODID + ":blocks/mush_block_skin_gen", "minecraft:blocks/mushroom_block_skin_brown", 85f / 360f, 1.0f));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.hueShift(RefStrings.MODID + ":blocks/mush_block_stem_gen", "minecraft:blocks/mushroom_block_skin_stem", 85f / 360f, 1.0f));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.hueShift(RefStrings.MODID + ":blocks/mush_block_inside_gen", "minecraft:blocks/mushroom_block_inside", 85f / 360f, 1.0f));
-		evt.getMap().setTextureEntry(TextureAtlasSpriteSourceTransform.hueShift(RefStrings.MODID + ":blocks/mush_block_red_skin_gen", "minecraft:blocks/mushroom_block_skin_red", 85f / 360f, 1.0f));
-	}
-
-	private static void registerContaminationBlockColors(ColorHandlerEvent.Block evt) {
-		BlockColors colors = evt.getBlockColors();
-		Block[] metaBlocks = { ModBlocks.waste_dirt, ModBlocks.waste_gravel, ModBlocks.waste_sand, ModBlocks.waste_sand_red, ModBlocks.waste_sandstone, ModBlocks.waste_sandstone_red, ModBlocks.waste_snow_block, ModBlocks.waste_terracotta, ModBlocks.waste_trinitite, ModBlocks.waste_trinitite_red, ModBlocks.fallout };
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> {
-			int[] curve = BLOCK_CURVES.get(state.getBlock());
-			if(curve == null) return 0xFFFFFF;
-			int meta = Math.min(state.getBlock().getMetaFromState(state), 6);
-			return curve[meta];
-		}, metaBlocks);
-
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> 0x777777, ModBlocks.block_fallout);
-
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> {
-			int meta = Math.min(state.getBlock().getMetaFromState(state), 6);
-			if (tintIndex == 0) return GRASS_CURVE[meta];
-			return DIRT_CURVE[meta];
-		}, ModBlocks.waste_earth);
-
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> {
-			int[] curve = BLOCK_CURVES.get(state.getBlock());
-			if(curve == null) return 0xFFFFFF;
-			int meta = Math.min(state.getBlock().getMetaFromState(state), 6);
-			if (tintIndex == 0) return mulColor(curve[meta], 0xFFE59B);
-			return curve[meta];
-		}, ModBlocks.waste_grass_tall);
-
-		colors.registerBlockColorHandler((state, world, pos, tintIndex) -> LEAF_COLORS[state.getValue(WasteLeaves.VARIANT).getMetadata()], ModBlocks.waste_leaves);
-	}
-
-	private static void registerContaminationItemColors(ColorHandlerEvent.Item evt) {
-		ItemColors colors = evt.getItemColors();
-		Item[] metaItems = { Item.getItemFromBlock(ModBlocks.waste_dirt), Item.getItemFromBlock(ModBlocks.waste_gravel), Item.getItemFromBlock(ModBlocks.waste_sand), Item.getItemFromBlock(ModBlocks.waste_sand_red), Item.getItemFromBlock(ModBlocks.waste_sandstone), Item.getItemFromBlock(ModBlocks.waste_sandstone_red), Item.getItemFromBlock(ModBlocks.waste_snow_block), Item.getItemFromBlock(ModBlocks.waste_terracotta), Item.getItemFromBlock(ModBlocks.waste_trinitite), Item.getItemFromBlock(ModBlocks.waste_trinitite_red), Item.getItemFromBlock(ModBlocks.fallout) };
-		colors.registerItemColorHandler((stack, tintIndex) -> {
-			int[] curve = ITEM_CURVES.get(stack.getItem());
-			if(curve == null) return 0xFFFFFF;
-			int meta = Math.min(stack.getMetadata(), 6);
-			return curve[meta];
-		}, metaItems);
-
-		colors.registerItemColorHandler((stack, tintIndex) -> 0x777777, Item.getItemFromBlock(ModBlocks.block_fallout));
-
-		colors.registerItemColorHandler((stack, tintIndex) -> {
-			int meta = Math.min(stack.getMetadata(), 6);
-			if (tintIndex == 0) return GRASS_CURVE[meta];
-			return DIRT_CURVE[meta];
-		}, Item.getItemFromBlock(ModBlocks.waste_earth));
-
-		colors.registerItemColorHandler((stack, tintIndex) -> {
-			int[] curve = ITEM_CURVES.get(stack.getItem());
-			if(curve == null) return 0xFFFFFF;
-			int meta = Math.min(stack.getMetadata(), 6);
-			if (tintIndex == 0) return mulColor(curve[meta], 0xFFE59B);
-			return curve[meta];
-		}, Item.getItemFromBlock(ModBlocks.waste_grass_tall));
-
-		colors.registerItemColorHandler((stack, tintIndex) -> LEAF_COLORS[Math.min(stack.getMetadata(), 5)], Item.getItemFromBlock(ModBlocks.waste_leaves));
+		DynamicTextureRegistry.registerBlockColors(evt);
 	}
 
 	public static void registerSpriteFluid(TextureStitchEvent.Pre evt, String name){
@@ -779,7 +649,7 @@ public class ModEventHandlerClient {
 
 		IDynamicModels.registerSprites(evt.getMap());
 
-		registerContaminationSprites(evt);
+		DynamicTextureRegistry.registerSprites(evt);
 
 		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
 		DSmokeRenderer.sprites[1] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke2"));
@@ -1617,10 +1487,6 @@ public class ModEventHandlerClient {
 		ClientProxy.deferredRenderers.clear();
 
 		HbmShaderManager2.blitDepth();
-
-		RenderTorex.render(evt.getPartialTicks());
-
-		RenderBlackHole.render(evt.getPartialTicks());
 		
 		ParticleBatchRenderer.renderLast(evt);
 		
