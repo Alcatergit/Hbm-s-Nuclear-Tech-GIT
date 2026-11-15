@@ -3,6 +3,7 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.machine.rbmk.RBMKBase;
+import com.hbm.dynamic_texture.DynamicTextureRegistry;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControl;
@@ -41,7 +42,17 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 
 		
 		if(control.getBlockType() instanceof RBMKBase) {
-			bindTexture(((RBMKBase)control.getBlockType()).coverTexture);
+			ResourceLocation cover = ((RBMKBase) control.getBlockType()).coverTexture;
+			String variant = "NONE";
+			if(control instanceof TileEntityRBMKControlManual manual && manual.color != null) {
+				variant = manual.color.name();
+			}
+			int gl = DynamicTextureRegistry.getTexture(cover, variant);
+			if(gl >= 0) {
+				GlStateManager.bindTexture(gl);
+			} else {
+				bindTexture(cover);
+			}
 		} else {
 			bindTexture(texture);
 		}
@@ -53,20 +64,6 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		tes.startDrawing(GL11.GL_TRIANGLES);
 		ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
 		tes.draw();
-		
-		if(control instanceof TileEntityRBMKControlManual crm && crm.color != null) {
-			switch(crm.color) {
-			case RED:    GlStateManager.color(1.0F, 0.0F, 0.0F); break;
-			case YELLOW: GlStateManager.color(1.0F, 0.847F, 0.0F); break;
-			case GREEN:  GlStateManager.color(0.298F, 1.0F, 0.0F); break;
-			case BLUE:   GlStateManager.color(0.0F, 0.149F, 1.0F); break;
-			case PURPLE: GlStateManager.color(0.698F, 0.0F, 1.0F); break;
-			}
-			tes.startDrawing(GL11.GL_TRIANGLES);
-			ResourceManager.rbmk_rods.tessellatePartAbove(tes, "Lid", 1.125F);
-			tes.draw();
-			GlStateManager.color(1.0F, 1.0F, 1.0F);
-		}
 
 		GL11.glPopMatrix();
 	}
