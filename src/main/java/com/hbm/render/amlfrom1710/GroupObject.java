@@ -1,4 +1,5 @@
 package com.hbm.render.amlfrom1710;
+
 import java.util.ArrayList;
 
 import net.minecraftforge.fml.relauncher.Side;
@@ -72,18 +73,6 @@ public class GroupObject
             for (Face face : faces)
             {
                 face.addFaceForRenderSplit(tessellator, 0F, splitHeight, scale);
-            }
-        }
-    }
-
-    @SideOnly(Side.CLIENT)
-    public void renderAbove(Tessellator tessellator, float yThreshold)
-    {
-        if (!faces.isEmpty())
-        {
-            for (Face face : faces)
-            {
-                face.addFaceForRenderAbove(tessellator, yThreshold);
             }
         }
     }
