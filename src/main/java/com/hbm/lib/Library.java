@@ -1291,4 +1291,9 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 	public static int getLocalZ(int packed) {
 		return (packed >>> 4) & 0xF;
 	}
+
+	/** Random transition used by fallout block conversion; caller keeps its own distance structure. */
+	public static boolean rollChance(double dist, double threshold, Random rand) {
+		return rand.nextFloat() < 5.0F * (1.0F - threshold / dist);
+	}
 }
