@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Vervuilde zandsteen
 tile.waste_sandstone_red.name=Vervuilde rode zandsteen
 tile.waste_snow.name=Vervuilde sneeuw
 tile.waste_snow_block.name=Vervuild blok sneeuw
+tile.waste_clay.name=Verontreinigde klei
 tile.waste_terracotta.name=Vervuild terracotta
 tile.waste_trinitite.name=Trinitiet erts
 tile.waste_trinitite_red.name=Rood Trinitiet-erts

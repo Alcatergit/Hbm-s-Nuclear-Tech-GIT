@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Förorenad sandsten
 tile.waste_sandstone_red.name=Förorenad röd sandsten
 tile.waste_snow.name=Förorenad snö
 tile.waste_snow_block.name=Förorenat block av snö
+tile.waste_clay.name=Förorenad lera
 tile.waste_terracotta.name=Förorenad terrakotta
 tile.waste_trinitite.name=Trenitmalm
 tile.waste_trinitite_red.name=Röd Trinititmalm

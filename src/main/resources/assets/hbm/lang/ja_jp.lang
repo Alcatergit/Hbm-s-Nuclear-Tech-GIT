@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=汚染された砂岩
 tile.waste_sandstone_red.name=汚染された赤砂岩
 tile.waste_snow.name=汚染された雪
 tile.waste_snow_block.name=汚染された雪の塊
+tile.waste_clay.name=汚染された粘土
 tile.waste_terracotta.name=汚染されたテラコッタ
 tile.waste_trinitite.name=トリニタイト鉱石
 tile.waste_trinitite_red.name=トリニタイト鉱石

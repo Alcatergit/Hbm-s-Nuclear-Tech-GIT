@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=오염된 사암
 tile.waste_sandstone_red.name=오염된 붉은 사암
 tile.waste_snow.name=오염된 눈
 tile.waste_snow_block.name=오염된 눈 블록
+tile.waste_clay.name=오염된 점토
 tile.waste_terracotta.name=오염된 테라코타
 tile.waste_trinitite.name=삼위일체 광석
 tile.waste_trinitite_red.name=붉은 삼위일체 광석

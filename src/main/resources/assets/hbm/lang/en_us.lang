@@ -5166,6 +5166,7 @@ tile.waste_sandstone.name=Contaminated Sandstone
 tile.waste_sandstone_red.name=Contaminated Red Sandstone
 tile.waste_snow.name=Contaminated Snow
 tile.waste_snow_block.name=Contaminated Block of Snow
+tile.waste_clay.name=Contaminated Clay
 tile.waste_terracotta.name=Contaminated Terracotta
 tile.waste_trinitite.name=Trinitite Ore
 tile.waste_trinitite_red.name=Red Trinitite Ore

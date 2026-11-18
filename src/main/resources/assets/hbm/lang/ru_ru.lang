@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Заражённый песчаник
 tile.waste_sandstone_red.name=Заражённый красный песчаник
 tile.waste_snow.name=Заражённый снег
 tile.waste_snow_block.name=Заражённый блок снега
+tile.waste_clay.name=Заражённая глина
 tile.waste_terracotta.name=Заражённая терракота
 tile.waste_trinitite.name=Тринититовая руда
 tile.waste_trinitite_red.name=Красная тринититовая руда

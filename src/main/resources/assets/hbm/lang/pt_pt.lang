@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Arenito contaminado
 tile.waste_sandstone_red.name=Arenito Vermelho Contaminado
 tile.waste_snow.name=Neve contaminada
 tile.waste_snow_block.name=Bloco de neve contaminado
+tile.waste_clay.name=Argila contaminada
 tile.waste_terracotta.name=Terracota contaminada
 tile.waste_trinitite.name=Minério de Trinitita
 tile.waste_trinitite_red.name=Minério de Trinitita Vermelha

@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Saastunut hiekkakivi
 tile.waste_sandstone_red.name=Saastunut punainen hiekkakivi
 tile.waste_snow.name=Saastunut lumi
 tile.waste_snow_block.name=Saastunut lumilohko
+tile.waste_clay.name=Saastunut savi
 tile.waste_terracotta.name=Saastunut terrakotta
 tile.waste_trinitite.name=Kolminaisuusmalmi
 tile.waste_trinitite_red.name=Punainen kolminaisuusmalmi

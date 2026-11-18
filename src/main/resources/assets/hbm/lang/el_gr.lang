@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Μολυσμένος ψαμμίτης
 tile.waste_sandstone_red.name=Μολυσμένος κόκκινος ψαμμίτης
 tile.waste_snow.name=Μολυσμένο χιόνι
 tile.waste_snow_block.name=Μολυσμένο μπλοκ του χιονιού
+tile.waste_clay.name=Μολυσμένος πηλός
 tile.waste_terracotta.name=Μολυσμένη τερακότα
 tile.waste_trinitite.name=Τρινιτικό μετάλλευμα
 tile.waste_trinitite_red.name=Κόκκινο μετάλλευμα τρινίτη

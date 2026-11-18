@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Arenaria contaminata
 tile.waste_sandstone_red.name=Arenaria rossa contaminata
 tile.waste_snow.name=Neve contaminata
 tile.waste_snow_block.name=Blocco di neve contaminato
+tile.waste_clay.name=Argilla contaminata
 tile.waste_terracotta.name=Terracotta contaminata
 tile.waste_trinitite.name=Trinitite Ore
 tile.waste_trinitite_red.name=Red Trinitite Ore

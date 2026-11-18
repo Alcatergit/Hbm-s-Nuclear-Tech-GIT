@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=หินทรายที่ปนเปื้อน
 tile.waste_sandstone_red.name=หินทรายสีแดงที่ปนเปื้อน
 tile.waste_snow.name=หิมะที่ปนเปื้อน
 tile.waste_snow_block.name=บล็อกหิมะที่ปนเปื้อน
+tile.waste_clay.name=ดินเหนียวที่ปนเปื้อน
 tile.waste_terracotta.name=ดินเผาที่ปนเปื้อน
 tile.waste_trinitite.name=แร่ทรินิไทต์
 tile.waste_trinitite_red.name=แร่ทรินิไทต์สีแดง

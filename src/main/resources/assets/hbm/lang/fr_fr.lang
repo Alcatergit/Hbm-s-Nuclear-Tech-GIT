@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Grès contaminé
 tile.waste_sandstone_red.name=Grès rouge contaminé
 tile.waste_snow.name=Neige contaminée
 tile.waste_snow_block.name=Bloc de neige contaminé
+tile.waste_clay.name=Argile contaminée
 tile.waste_terracotta.name=Terre cuite contaminée
 tile.waste_trinitite.name=Minerai de Trinitite
 tile.waste_trinitite_red.name=Minerai de Trinitite rouge

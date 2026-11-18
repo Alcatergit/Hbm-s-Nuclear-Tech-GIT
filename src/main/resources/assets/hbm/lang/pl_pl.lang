@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=Zanieczyszczony piaskowiec
 tile.waste_sandstone_red.name=Zanieczyszczony czerwony piaskowiec
 tile.waste_snow.name=Zanieczyszczony śnieg
 tile.waste_snow_block.name=Zanieczyszczony blok śniegu
+tile.waste_clay.name=Skażona glina
 tile.waste_terracotta.name=Zanieczyszczona terakota
 tile.waste_trinitite.name=Ruda Trynitytu
 tile.waste_trinitite_red.name=Ruda Czerwonego Trynitytu

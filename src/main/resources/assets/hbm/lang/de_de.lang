@@ -5157,6 +5157,7 @@ tile.waste_sandstone.name=Kontaminierter Sandstein
 tile.waste_sandstone_red.name=Kontaminierter roter Sandstein
 tile.waste_snow.name=Kontaminierter Schnee
 tile.waste_snow_block.name=Kontaminierter Schneeblock
+tile.waste_clay.name=Kontaminierter Ton
 tile.waste_terracotta.name=Kontaminierte Terrakotta
 tile.waste_trinitite.name=Trinititerz
 tile.waste_trinitite_red.name=Rotes Trinititerz

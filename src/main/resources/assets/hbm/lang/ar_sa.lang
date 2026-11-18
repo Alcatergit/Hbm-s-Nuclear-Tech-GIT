@@ -5158,6 +5158,7 @@ tile.waste_sandstone.name=الحجر الرملي الملوث
 tile.waste_sandstone_red.name=الحجر الرملي الأحمر الملوث
 tile.waste_snow.name=الثلج الملوث
 tile.waste_snow_block.name=كتلة ملوثة من الثلج
+tile.waste_clay.name=طين ملوث
 tile.waste_terracotta.name=الطين الملوث
 tile.waste_trinitite.name=خام الترينيتيت
 tile.waste_trinitite_red.name=خام الترينيتيت الأحمر
