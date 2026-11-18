@@ -351,12 +351,12 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (b == ModBlocks.ore_uranium || matchesOre(b, "oreUranium")) {
+			else if (b == ModBlocks.ore_gneiss_uranium || b == ModBlocks.ore_gneiss_uranium_scorched) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+				} else if (b != ModBlocks.ore_gneiss_uranium_scorched) {
+					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				}
 			}
 
@@ -364,17 +364,17 @@ public class ExplosionNukeGeneric {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-				} else {
+				} else if (b != ModBlocks.ore_nether_uranium_scorched) {
 					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				}
 			}
-			
-			else if (b == ModBlocks.ore_gneiss_uranium || matchesOre(b, "oreNetherUranium")) {
+
+			else if (b == ModBlocks.ore_uranium || matchesOre(b, "oreUranium")) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+				} else if (b != ModBlocks.ore_uranium_scorched) {
+					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
 				}
 			}
 
