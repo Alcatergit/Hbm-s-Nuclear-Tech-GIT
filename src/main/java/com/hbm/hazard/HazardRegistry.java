@@ -419,6 +419,7 @@ public class HazardRegistry {
 			registerHazItem(new ItemStack(waste_sandstone_red, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_sand_red, 1, i), (i+1) * 5);
 			registerHazItem(new ItemStack(waste_trinitite_red, 1, i), (i+1) * 10);
+			registerHazItem(new ItemStack(waste_clay, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_terracotta, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_grass_tall, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_snow, 1, i), (i+1) * 0.15F);
