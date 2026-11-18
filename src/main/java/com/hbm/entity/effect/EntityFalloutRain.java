@@ -14,6 +14,7 @@ import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.entity.logic.EntityChunky;
 import com.hbm.interfaces.IConstantRenderer;
+import com.hbm.lib.Library;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.saveddata.AuxSavedData;
 import com.hbm.blocks.generic.WasteLog;
@@ -327,7 +328,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			ModBlocks.waste_mycelium, ModBlocks.waste_sand, ModBlocks.waste_sand_red,
 			ModBlocks.waste_trinitite, ModBlocks.waste_trinitite_red,
 			ModBlocks.waste_sandstone, ModBlocks.waste_sandstone_red,
-			ModBlocks.waste_terracotta, ModBlocks.waste_grass_tall));
+			ModBlocks.waste_clay, ModBlocks.waste_terracotta, ModBlocks.waste_grass_tall));
 
 		/** Maps a distance to a 0..6 tier index. sellafield=true uses the 0.1 jitter (meta uses 0.2); stoneDepth=0 with maxStoneDepth=-1 disables the depth term. */
 	private int tierIndex(double dist, boolean sellafield, int stoneDepth, int maxStoneDepth){
@@ -392,14 +393,14 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			if(bblock == ModBlocks.waste_leaves){
-				if(!(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F))))){
+				if(!(dist > s1 || (dist > fallingRadius && (Library.rollChance(dist, fallingRadius, world.rand))))){
 					setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
 				}
 				continue;
 			}
 
 			if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-				if(dist > s1 || (dist > fallingRadius && (world.rand.nextFloat() < (-5F*(fallingRadius/dist)+5F)))){
+				if(dist > s1 || (dist > fallingRadius && (Library.rollChance(dist, fallingRadius, world.rand)))){
                     BlockPlanks.EnumType type = null;
                     try {
                         type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
@@ -415,12 +416,37 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			if(bblock == Blocks.BROWN_MUSHROOM || bblock == Blocks.RED_MUSHROOM){
-				if(dist < s0)
-					setBlockAndNotify(pos,ModBlocks.mush.getDefaultState());
+				if(dist >= s0) {
+					continue;
+				} else if(dist > s1 || (dist > fallingRadius && Library.rollChance(dist, fallingRadius, world.rand))) {
+					setBlockAndNotify(pos, ModBlocks.mush.getDefaultState());
+				} else {
+					setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				}
 				continue;
 			}
 
 			if(META_TIERED.contains(bblock)) {
+				if(dist < fallingRadius) {
+					if(bblock == ModBlocks.waste_grass_tall || bblock == ModBlocks.waste_snow || bblock == ModBlocks.waste_snow_block) {
+						setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+						continue;
+					}
+					if(bblock == ModBlocks.waste_clay) {
+						placeBlockFromDist(dist, ModBlocks.waste_terracotta, pos);
+						continue;
+					}
+					if((bblock == ModBlocks.waste_sand || bblock == ModBlocks.waste_sand_red) && rand.nextInt(60) == 0) {
+						placeBlockFromDist(dist, bblock == ModBlocks.waste_sand ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red, pos);
+						continue;
+					}
+				}
+				if(dist < s1 && !Library.rollChance(dist, fallingRadius, rand)) {
+					if (bblock == ModBlocks.waste_grass_tall) {
+						setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+						continue;
+					}
+				}
 				int m = tierIndex(dist, false, 0, -1);
 				boolean podzol = bblock == ModBlocks.waste_dirt && b.getValue(WasteDirt.VARIANT) == WasteDirt.Variant.PODZOL;
 				int current = podzol ? b.getValue(WasteDirt.META) : b.getBlock().getMetaFromState(b);
@@ -464,26 +490,28 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				placeBlockFromDist(dist, ModBlocks.waste_dirt, pos);
 				continue;
 			} else if(bblock instanceof BlockSnow) {
-				placeBlockFromDist(dist, ModBlocks.waste_snow, pos);
+				if(dist < fallingRadius) setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				else placeBlockFromDist(dist, ModBlocks.waste_snow, pos);
 				continue;
 
 			} else if(bblock instanceof BlockSnowBlock) {
-				placeBlockFromDist(dist, ModBlocks.waste_snow_block, pos);
+				if(dist < fallingRadius) setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				else placeBlockFromDist(dist, ModBlocks.waste_snow_block, pos);
 				continue;
 
 			} else if(bblock instanceof BlockIce) {
-				setBlockAndNotify(pos,ModBlocks.waste_ice.getDefaultState());
+				if(dist < fallingRadius) setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				else setBlockAndNotify(pos, ModBlocks.waste_ice.getDefaultState());
 				continue;
 
 			} else if(bblock instanceof BlockBush) {
 				IBlockState d = world.getBlockState(pos.down());
 				Block dblock = d.getBlock();
 				boolean canStay = dblock.canSustainPlant(d, world, pos.down(), EnumFacing.UP, (IPlantable) bblock);
-				if(!canStay || bblock instanceof BlockLilyPad){
+				if(!canStay || !(dist > s1 || (dist > fallingRadius && Library.rollChance(dist, fallingRadius, world.rand))) || bblock instanceof BlockLilyPad) {
 					setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
 					continue;
-				}
-				if(dblock == Blocks.FARMLAND){
+				} else if(dblock == Blocks.FARMLAND){
 					placeBlockFromDist(dist, ModBlocks.waste_dirt, pos.down());
 					placeBlockFromDist(dist, ModBlocks.waste_grass_tall, pos);
 				} else if(dblock instanceof BlockGrass){
@@ -514,7 +542,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 			} else if(bblock instanceof BlockSand) {
 				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-				if(rand.nextInt(60) == 0) {
+				if(dist < fallingRadius && rand.nextInt(60) == 0) {
 					placeBlockFromDist(dist, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red, pos);
 				} else {
 					placeBlockFromDist(dist, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand : ModBlocks.waste_sand_red, pos);
@@ -523,12 +551,13 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			else if(bblock == Blocks.CLAY) {
-				setBlockAndNotify(pos,Blocks.HARDENED_CLAY.getDefaultState());
+				placeBlockFromDist(dist, dist >= fallingRadius ? ModBlocks.waste_clay : ModBlocks.waste_terracotta, pos);
 				continue;
 			}
 
 			else if(bblock == Blocks.MOSSY_COBBLESTONE) {
-				setBlockAndNotify(pos,Blocks.COAL_ORE.getDefaultState());
+				if(dist > s1 || (dist > fallingRadius && Library.rollChance(dist, fallingRadius, world.rand))) setBlockAndTrack(pos, Blocks.COAL_ORE.getDefaultState(), 3);
+				else setBlockAndTrack(pos, SELLAFIELD[tierIndex(dist, true, stoneDepth, maxStoneDepth)].getStateFromMeta(world.rand.nextInt(4)), 3);
 				continue;
 			}
 
@@ -575,7 +604,7 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 			}
 
 			else if (bblock == Blocks.SPONGE) {
-				if (b.getValue(BlockSponge.WET)) {
+				if (b.getValue(BlockSponge.WET) && dist < fallingRadius) {
 					setBlockAndNotify(pos, Blocks.SPONGE.getDefaultState());
 				}
 				continue;
@@ -596,7 +625,13 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				continue;
 			}
 			else if(b.getBlock() == Blocks.CACTUS) {
-				setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				if(!(dist > s1 || (dist > fallingRadius && Library.rollChance(dist, fallingRadius, world.rand)))) setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				continue;
+			}
+			else if(bblock == Blocks.MELON_BLOCK || bblock == Blocks.PUMPKIN) {
+				if(!(dist > s1 || (dist > fallingRadius && Library.rollChance(dist, fallingRadius, world.rand)))) {
+					setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
+				}
 				continue;
 			}
 			else if(b.getBlock() == Blocks.REEDS) {
@@ -607,12 +642,12 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				setBlockAndTrack(pos, Blocks.AIR.getDefaultState(), 3);
 				continue;
 			}
-			else if(bblock == ModBlocks.ore_uranium || matchesOre(bblock, "oreUranium")) {
-				if(dist <= s5){
-					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s7)
-						setBlockAndNotify(pos,ModBlocks.ore_schrabidium.getDefaultState());
-					else
-						setBlockAndNotify(pos,ModBlocks.ore_uranium_scorched.getDefaultState());
+			else if(bblock == ModBlocks.ore_gneiss_uranium || bblock == ModBlocks.ore_gneiss_uranium_scorched) {
+				if(dist <= s4){
+					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
+						setBlockAndNotify(pos,ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+					else if(bblock != ModBlocks.ore_gneiss_uranium_scorched)
+						setBlockAndNotify(pos,ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				}
 				break;
 			}
@@ -621,21 +656,20 @@ public class EntityFalloutRain extends EntityChunky implements IConstantRenderer
 				if(dist <= s5){
 					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
 						setBlockAndNotify(pos,ModBlocks.ore_nether_schrabidium.getDefaultState());
-					else
+					else if(bblock != ModBlocks.ore_nether_uranium_scorched)
 						setBlockAndNotify(pos,ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				}
 				break;
 			}
 
-			else if(bblock == ModBlocks.ore_gneiss_uranium || matchesOre(bblock, "oreNetherUranium")) {
-				if(dist <= s4){
-					if(rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0)
-						setBlockAndNotify(pos,ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-					else
-						setBlockAndNotify(pos,ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+			else if(bblock == ModBlocks.ore_uranium || matchesOre(bblock, "oreUranium")) {
+				if(dist <= s5){
+					if (rand.nextInt(VersatileConfig.getSchrabOreChance()) == 0 || dist < s7)
+						setBlockAndNotify(pos,ModBlocks.ore_schrabidium.getDefaultState());
+					else if(bblock != ModBlocks.ore_uranium_scorched)
+						setBlockAndNotify(pos,ModBlocks.ore_uranium_scorched.getDefaultState());
 				}
 				break;
-				// this piece stops the "stomp" from reaching below ground
 			}
 			else if(bblock == ModBlocks.brick_concrete) {
 				if(rand.nextInt(80) == 0)
