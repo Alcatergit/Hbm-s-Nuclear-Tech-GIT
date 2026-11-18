@@ -102,6 +102,7 @@ public final class DynamicTextureRegistry {
 		addMetaBlock(ModBlocks.waste_sand, DynamicTextureData.ratioCurve(0xC5BE90, 0x484740));
 		addMetaBlock(ModBlocks.waste_sand_red, DynamicTextureData.ratioCurve(0xC5BE90, 0x484740));
 		addMetaBlock(ModBlocks.waste_snow_block, DynamicTextureData.ratioCurve(0xE4EEEE, 0x6F7070));
+		addMetaBlock(ModBlocks.waste_clay, DynamicTextureData.luminanceCurve(0xA25426, 0x32251E));
 		addMetaBlock(ModBlocks.waste_terracotta, DynamicTextureData.ratioCurve(0xA25426, 0x32251E));
 		addMetaBlock(ModBlocks.waste_sandstone, DynamicTextureData.ratioCurve(0xC3BD8E, 0x48473F));
 		addMetaBlock(ModBlocks.waste_sandstone_red, DynamicTextureData.ratioCurve(0x954C1B, 0x2D2119));

@@ -80,6 +80,24 @@ public final class DynamicTextureData {
 		return curve;
 	}
 
+	/** Keeps the brightness progression of the source colors but removes their channel hue. */
+	public static int[] luminanceCurve(int meta0, int meta6) {
+		int[] base = ratioCurve(meta0, meta6);
+		int[] curve = new int[7];
+		for(int m = 0; m < 7; m++) {
+			int l = luminance(base[m]);
+			curve[m] = (l << 16) | (l << 8) | l;
+		}
+		return curve;
+	}
+
+	private static int luminance(int color) {
+		int r = (color >> 16) & 0xFF;
+		int g = (color >> 8) & 0xFF;
+		int b = color & 0xFF;
+		return (int) Math.round(0.2126D * r + 0.7152D * g + 0.0722D * b);
+	}
+
 	public static int[] of(int... values) {
 		if(values.length != 7) throw new IllegalArgumentException("tint curve needs 7 values");
 		return values;
