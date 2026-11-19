@@ -1,6 +1,9 @@
 package com.hbm.hazard.type;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import com.hbm.config.RadiationConfig;
 import com.hbm.saveddata.RadiationSavedData;
@@ -18,10 +21,19 @@ import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class HazardTypeRadiation extends HazardTypeBase {
+
+	private static final Map<World, ChunkSources> chunkSources = new WeakHashMap<>();
+
+	private static final class ChunkSources {
+		private long lastTick = Long.MIN_VALUE;
+		private final Map<Long, Map<Long, Float>> chunks = new HashMap<>();
+	}
 
 	@Override
 	public void onUpdate(EntityLivingBase target, float level, ItemStack stack) {
@@ -50,11 +62,43 @@ public class HazardTypeRadiation extends HazardTypeBase {
 		float rads = level * stack.getCount();
 		float radPerTick = rads / 20F;
 		double range = Math.min(Math.sqrt(rads), 1000);
+		ContaminationUtil.radiate(item.world, item.posX, item.posY, item.posZ, range, radPerTick, 0, 1.0D, null);
+		addChunkSource(item.world, new BlockPos(item.posX, item.posY, item.posZ), rads);
+	}
+
+	private static void addChunkSource(World world, BlockPos pos, float rads) {
+		long now = world.getTotalWorldTime();
+		ChunkSources sources = chunkSources.get(world);
+		if(sources == null) {
+			sources = new ChunkSources();
+			chunkSources.put(world, sources);
+		}
+		if(sources.lastTick != now) {
+			incrementChunkRad(world, sources);
+			sources.lastTick = now;
+			sources.chunks.clear();
+		}
+		Map<Long, Float> chunk = sources.chunks.computeIfAbsent(ChunkPos.asLong(pos.getX() >> 4, pos.getZ() >> 4), k -> new HashMap<>());
+		chunk.merge(pos.toLong(), rads, Float::sum);
+	}
+
+	private static void incrementChunkRad(World world, ChunkSources sources) {
 		float envFactor = 0.00004F;
 		float envThreshold = RadiationConfig.neutronActivationThreshold;
-		float envRadPerTick = rads * envFactor - envThreshold * envFactor;
-		ContaminationUtil.radiate(item.world, item.posX, item.posY, item.posZ, range, radPerTick, 0, 1.0D, null);
-		if(envRadPerTick > 0) RadiationSavedData.incrementRad(item.world, new BlockPos(item.posX, item.posY, item.posZ), envRadPerTick, rads);
+
+		for(Map<Long, Float> chunk : sources.chunks.values()) {
+			float chunkRads = 0F;
+			for(float rad : chunk.values()) {
+				chunkRads += rad;
+			}
+			float envRadPerTick = chunkRads * envFactor - envThreshold * envFactor;
+			if(envRadPerTick <= 0F) {
+				continue;
+			}
+			for(Map.Entry<Long, Float> e : chunk.entrySet()) {
+				RadiationSavedData.incrementRad(world, BlockPos.fromLong(e.getKey()), envRadPerTick * e.getValue() / chunkRads, chunkRads);
+			}
+		}
 	}
 
 	@Override
