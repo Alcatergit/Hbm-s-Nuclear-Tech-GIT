@@ -1,5 +1,8 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:lamp_demon" }
+		"facing=north": { "model": "hbm:lamp_demon" },
+     	   	"facing=south": { "model": "hbm:lamp_demon", "y": 180 },
+      	  	"facing=west":  { "model": "hbm:lamp_demon", "y": 270 },
+      		"facing=east":  { "model": "hbm:lamp_demon", "y": 90 }
 	}
 }

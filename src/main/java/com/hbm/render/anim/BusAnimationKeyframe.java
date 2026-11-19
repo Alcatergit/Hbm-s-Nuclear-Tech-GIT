@@ -7,7 +7,10 @@ public class BusAnimationKeyframe {
 	// it's an enum so stuff like accelerated animations between just
 	// two frames could be implemented
 	public enum InterpolationType {
-		NONE, SMOOTH
+		NONE, SMOOTH,
+		SIN_UP,
+		SIN_DOWN,
+		SIN_FULL
 	}
 
 	// unimplemented, all current animations are absolute

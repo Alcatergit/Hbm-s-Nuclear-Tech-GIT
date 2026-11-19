@@ -21,6 +21,7 @@ public class RadiationConfig {
 	public static int fireDuration = 4 * 20;
 	public static boolean neutronActivation = true;
 	public static int neutronActivationThreshold = 15;
+	public static boolean enableItemRadiation = true;
 
 	public static int geigerX = 16;
 	public static int geigerY = 2;
@@ -68,11 +69,11 @@ public class RadiationConfig {
 
 		neutronActivation = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.01_itemContamination", "Whether high radiation levels should radiate items in inventory", true);
 		neutronActivationThreshold = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.01_itemContaminationThreshold", "Minimum recieved Rads/s threshold at which items get irradiated", 15);
+		enableItemRadiation = CommonConfig.createConfigBool(config, CATEGORY_RAD, "7.02_itemRadiation", "Whether radioactive items in entity inventories and as dropped items should emit radiation", true);
 		
-		geigerX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.02_geigerX", "X Coordinate of the geiger counter gui (x=0 is on the right)", 16);
-		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
-		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
-		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic gui (y=0 is on the bottom)", 18);
+		geigerX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerX", "X Coordinate of the geiger counter gui (x=0 is on the right)", 16);
+		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
+		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
+		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.06_digammaY", "Y Coordinate of the digamma diagnostic gui (y=0 is on the bottom)", 18);
 	}
-
 }

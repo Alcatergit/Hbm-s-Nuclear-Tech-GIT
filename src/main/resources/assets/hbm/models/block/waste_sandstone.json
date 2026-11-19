@@ -1,8 +1,1 @@
-{
-    "parent": "block/cube_bottom_top",
-    "textures": {
-        "bottom": "hbm:blocks/waste_sandstone_bottom",
-        "top": "hbm:blocks/waste_sandstone_top",
-        "side": "hbm:blocks/waste_sandstone_normal"
-    }
-}
+{ "parent": "hbm:block/tinted_cube_bottom_top", "textures": { "top": "minecraft:blocks/sandstone_top", "bottom": "minecraft:blocks/sandstone_bottom", "side": "minecraft:blocks/sandstone_normal" } }

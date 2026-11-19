@@ -9,12 +9,9 @@ import com.hbm.handler.BulletConfiguration;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
 import com.hbm.render.RenderSparks;
-import com.hbm.render.model.ModelBaleflare;
+import com.hbm.render.item.weapon.ItemRenderFatMan;
 import com.hbm.render.model.ModelBuckshot;
 import com.hbm.render.model.ModelBullet;
-import com.hbm.render.model.ModelGrenade;
-import com.hbm.render.model.ModelMIRV;
-import com.hbm.render.model.ModelMiniNuke;
 import com.hbm.render.model.ModelRocket;
 
 import net.minecraft.client.Minecraft;
@@ -42,10 +39,6 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ModelBullet bullet;
 	private ModelBuckshot buckshot;
 	private ModelRocket rocket;
-	private ModelGrenade grenade;
-	private ModelMiniNuke nuke;
-	private ModelMIRV mirv;
-	private ModelBaleflare bf;
 
 	private ResourceLocation bullet_rl = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/bullet.png");
 	private ResourceLocation emplacer = new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/emplacer.png");
@@ -61,23 +54,12 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private ResourceLocation rocket_nu = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketNuclear.png");
 	private ResourceLocation rocket_phos = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketPhosphorus.png");
 	private ResourceLocation rocket_can = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelRocketCanister.png");
-	private ResourceLocation grenade_rl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenade.png");
-	private ResourceLocation grenade_he = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeHE.png");
-	private ResourceLocation grenade_in = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeIncendiary.png");
-	private ResourceLocation grenade_to = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeToxic.png");
-	private ResourceLocation grenade_sl = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeSleek.png");
-	private ResourceLocation grenade_tr = new ResourceLocation(RefStrings.MODID + ":textures/entity/ModelGrenadeTraining.png");
-	
 
 	protected RenderBulletMk2(RenderManager renderManager) {
 		super(renderManager);
 		bullet = new ModelBullet();
 		buckshot = new ModelBuckshot();
 		rocket = new ModelRocket();
-		grenade = new ModelGrenade();
-		nuke = new ModelMiniNuke();
-		mirv = new ModelMIRV();
-		bf = new ModelBaleflare();
 	}
 
 	@Override
@@ -121,13 +103,13 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 			renderGrenade(trail);
 			break;
 		case BulletConfiguration.STYLE_NUKE: 
-			renderNuke(0); 
+			renderNuke(0, bullet.getDataManager().get(EntityBulletBase.BULLETCONFIG)); 
 			break;
 		case BulletConfiguration.STYLE_MIRV: 
-			renderNuke(1); 
+			renderNuke(1, bullet.getDataManager().get(EntityBulletBase.BULLETCONFIG)); 
 			break;
 		case BulletConfiguration.STYLE_BF: 
-			renderNuke(2); 
+			renderNuke(2, bullet.getDataManager().get(EntityBulletBase.BULLETCONFIG)); 
 			break;
 		case BulletConfiguration.STYLE_ORB:
 			renderOrb(trail);
@@ -218,47 +200,105 @@ public class RenderBulletMk2 extends Render<EntityBulletBase> {
 	private void renderGrenade(int type) {
 
 		GL11.glScalef(0.25F, 0.25F, 0.25F);
-
-		switch (type) {
-		case 0:
-			bindTexture(grenade_rl);
-			break;
-		case 1:
-			bindTexture(grenade_he);
-			break;
-		case 2:
-			bindTexture(grenade_in);
-			break;
-		case 3:
-			bindTexture(grenade_to);
-			break;
-		case 4:
-			bindTexture(grenade_sl);
-			break;
-		case 5:
-			bindTexture(grenade_tr);
-			break;
-		}
-
-		grenade.renderAll(0.0625F);
+		GL11.glRotatef(90, 0, 0, 1);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+		bindTexture(ResourceManager.grenade_tex);
+		ResourceManager.projectiles.renderPart("Grenade");
+		GlStateManager.shadeModel(GL11.GL_FLAT);
 	}
 	
-	private void renderNuke(int type) {
+	private void renderNuke(int type, int config) {
 
-        GL11.glScalef(1.5F, 1.5F, 1.5F);
-		
+		GL11.glScalef(0.0833F, 0.0833F, 0.0833F);
+		GL11.glRotatef(180, 1, 0, -1);
+		GL11.glTranslatef(0, -1, 1);
+		GlStateManager.shadeModel(GL11.GL_SMOOTH);
+
 		switch(type) {
 		case 0:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/MiniNuke.png"));
-			nuke.renderAll(0.0625F); break;
+			ItemRenderFatMan.bindNuke(config);
+			ResourceManager.fatman.renderPart("MiniNuke");
+			ResourceManager.fatman.renderPart("MiniNukeFins");
+			break;
 		case 1:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/Mirv.png"));
-			mirv.renderAll(0.0625F); break;
+			ItemRenderFatMan.bindMirv(config);
+			ResourceManager.fatman.renderPart("MiniMIRV");
+			break;
 		case 2:
-			bindTexture(new ResourceLocation(RefStrings.MODID + ":textures/models/projectiles/BaleFlare.png"));
-			bf.renderAll(0.0625F); break;
+			bindTexture(ResourceManager.fatman_balefire_tex);
+			ResourceManager.fatman.renderPart("MiniNuke");
+			ResourceManager.fatman.renderPart("MiniNukeFins");
+			renderBalefireGlint();
+			break;
 		}
 
+		GlStateManager.shadeModel(GL11.GL_FLAT);
+	}
+
+	private void renderBalefireGlint() {
+		Minecraft mc = Minecraft.getMinecraft();
+
+		// Preserve original state
+		boolean wasLighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+		boolean wasBlend = GL11.glIsEnabled(GL11.GL_BLEND);
+		boolean wasDepthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+		int prevDepthFunc = GL11.glGetInteger(GL11.GL_DEPTH_FUNC);
+		int prevBlendSrc = GL11.glGetInteger(GL11.GL_BLEND_SRC);
+		int prevBlendDst = GL11.glGetInteger(GL11.GL_BLEND_DST);
+
+		// Kill the lightmap multiply; only the enable flag is touched, unlike disableLightmap/enableLightmap
+		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		boolean wasLightmapOn = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+		GlStateManager.disableTexture2D();
+		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
+
+		mc.renderEngine.bindTexture(new ResourceLocation(RefStrings.MODID, "textures/misc/glintBF.png"));
+
+		float scale = 2F;
+		float r = 0F, g = 0.8F, b = 0.15F;
+		float speed = -6F;
+		float glintColor = 0.76F;
+		int layers = 3;
+		float interp = mc.getRenderPartialTicks();
+
+		float offset = mc.player.ticksExisted + interp;
+
+		GlStateManager.disableLighting();
+		GlStateManager.enableBlend();
+		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.depthFunc(GL11.GL_EQUAL);
+		GlStateManager.depthMask(false);
+		GlStateManager.blendFunc(GL11.GL_SRC_COLOR, GL11.GL_ONE);
+
+		GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		GlStateManager.pushMatrix();
+
+		for(int k = 0; k < layers; ++k) {
+			GlStateManager.loadIdentity();
+			float movement = offset * (0.001F + k * 0.003F) * speed;
+			GlStateManager.scale(scale, scale, scale);
+			GlStateManager.rotate(30.0F - k * 60.0F, 0, 0, 1);
+			GlStateManager.translate(0F, movement, 0F);
+			GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+			GlStateManager.color(r * glintColor, g * glintColor, b * glintColor, 1.0F);
+			ResourceManager.fatman.renderPart("MiniNuke");
+			GlStateManager.matrixMode(GL11.GL_TEXTURE);
+		}
+
+		GlStateManager.popMatrix();
+		GlStateManager.matrixMode(GL11.GL_MODELVIEW);
+
+		// Restore to original state
+		GlStateManager.color(1F, 1F, 1F, 1F);
+		GlStateManager.depthMask(wasDepthMask);
+		GlStateManager.depthFunc(prevDepthFunc);
+		GlStateManager.tryBlendFuncSeparate(prevBlendSrc, prevBlendDst, prevBlendSrc, prevBlendDst);
+		if(wasBlend) GlStateManager.enableBlend(); else GlStateManager.disableBlend();
+		if(wasLighting) GlStateManager.enableLighting(); else GlStateManager.disableLighting();
+
+		GlStateManager.setActiveTexture(OpenGlHelper.lightmapTexUnit);
+		if(wasLightmapOn) GlStateManager.enableTexture2D();
+		GlStateManager.setActiveTexture(OpenGlHelper.defaultTexUnit);
 	}
 	
 	private void renderFlechette() {

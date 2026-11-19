@@ -1,5 +1,6 @@
 package com.hbm.entity.projectile;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 
 import com.hbm.config.CompatibilityConfig;
@@ -524,7 +525,7 @@ public class EntityDischarge extends Entity implements IProjectile {
         {
             boolean flag = this.canBePickedUp == 1 || this.canBePickedUp == 2 && p_70100_1_.capabilities.isCreativeMode;
 
-            if (this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_rocket, 1)))
+            if (this.canBePickedUp == 1 && !p_70100_1_.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET.ordinal())))
             {
                 flag = false;
             }

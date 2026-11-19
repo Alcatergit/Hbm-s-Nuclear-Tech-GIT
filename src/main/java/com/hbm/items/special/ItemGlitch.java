@@ -1,5 +1,7 @@
 package com.hbm.items.special;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+import static com.hbm.items.ItemEnums.EnumClip;
 import java.util.List;
 
 import com.hbm.util.I18nUtil;
@@ -72,7 +74,7 @@ public class ItemGlitch extends Item {
 					player.inventory.addItemStackToInventory(new ItemStack(ModBlocks.block_meteor_treasure.getItemDropped(ModBlocks.block_meteor_treasure.getDefaultState(), itemRand, 0)));
 				break;
 			case 8:
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_container, 10));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.clip_standard, 10, EnumClip.CONTAINER.ordinal()));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.8"));
 				break;
 			case 9:
@@ -120,7 +122,7 @@ public class ItemGlitch extends Item {
 				break;
 			case 18:
 				player.inventory.addItemStackToInventory(new ItemStack(ModItems.gun_lever_action));
-				player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_20gauge, 12));
+				player.inventory.addItemStackToInventory(new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G20.ordinal()));
 				player.sendMessage(new TextComponentTranslation("chat.glitch.18"));
 				break;
 			case 19:

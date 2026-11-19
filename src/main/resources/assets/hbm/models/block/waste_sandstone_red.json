@@ -1,0 +1,1 @@
+{ "parent": "hbm:block/tinted_cube_bottom_top", "textures": { "top": "minecraft:blocks/red_sandstone_top", "bottom": "minecraft:blocks/red_sandstone_bottom", "side": "minecraft:blocks/red_sandstone_normal" } }

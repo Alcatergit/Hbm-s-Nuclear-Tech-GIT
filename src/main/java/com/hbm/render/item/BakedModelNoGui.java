@@ -28,6 +28,7 @@ public class BakedModelNoGui implements IBakedModel {
 	
 	@Override
 	public List<BakedQuad> getQuads(IBlockState state, EnumFacing side, long rand) {
+		if(renderer.useIdentityTransform()) return Collections.emptyList();
 		return renderer.type != TransformType.GUI ? Collections.emptyList() : renderer.itemModel.getQuads(state, side, rand);
 	}
 
@@ -38,11 +39,13 @@ public class BakedModelNoGui implements IBakedModel {
 
 	@Override
 	public boolean isGui3d() {
+		if(renderer.useIdentityTransform()) return true;
 		return renderer.type == TransformType.GUI && renderer.itemModel.isGui3d();
 	}
 
 	@Override
 	public boolean isBuiltInRenderer() {
+		if(renderer.useIdentityTransform()) return true;
 		return renderer.type != TransformType.GUI || renderer.itemModel.isBuiltInRenderer();
 	}
 
@@ -66,6 +69,11 @@ public class BakedModelNoGui implements IBakedModel {
 	@Override
 	public Pair<? extends IBakedModel, Matrix4f> handlePerspective(TransformType cameraTransformType) {
 		renderer.type = cameraTransformType;
+		if(renderer.useIdentityTransform()) {
+			Matrix4f identity = new Matrix4f();
+			identity.setIdentity();
+			return Pair.of(this, identity);
+		}
 		return Pair.of(this, renderer.itemModel.handlePerspective(cameraTransformType).getRight());
 	}
 }

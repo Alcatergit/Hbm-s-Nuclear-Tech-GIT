@@ -102,8 +102,10 @@ public class ExplosionFleija
 			for (int y = (int)(dist / this.explosionCoefficient2); y > -dist / this.explosionCoefficient; y--)
 			{
 				pos.setPos(this.posX+x, this.posY+y, this.posZ+z);
-				if(!(this.worldObj.getBlockState(pos).getBlock().getExplosionResistance(null) > 2_000_000 && this.posY+y <= 0) && !(this.worldObj.getBlockState(pos).getBlock() instanceof DecoBlockAlt))
+				if(!(this.worldObj.getBlockState(pos).getBlock().getExplosionResistance(null) > 2_000_000 && this.posY+y <= 0) && !(this.worldObj.getBlockState(pos).getBlock() instanceof DecoBlockAlt)) {
+					this.worldObj.removeTileEntity(pos);
 					this.worldObj.setBlockToAir(pos);
+				}
 			}
 		}
 	}

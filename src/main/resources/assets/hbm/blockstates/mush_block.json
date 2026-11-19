@@ -1,5 +1,6 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:mush_block" }
+		"variant=cap": { "model": "hbm:mush_block" },
+		"variant=stem": { "model": "hbm:mush_block_stem" }
 	}
 }

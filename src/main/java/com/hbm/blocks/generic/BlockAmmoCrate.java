@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import com.hbm.items.ModItems;
 
 import net.minecraft.block.Block;
@@ -36,26 +37,26 @@ public class BlockAmmoCrate extends Block {
 		ret.add(new ItemStack(ModItems.cap_nuka, 12 + rand.nextInt(21)));
         ret.add(new ItemStack(ModItems.syringe_metal_stimpak, 1 + rand.nextInt(3)));
         
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_22lr, 16 + rand.nextInt(17)));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_9mm, 6 + rand.nextInt(13)));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_12gauge, 6 + rand.nextInt(4)));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_20gauge, 3 + rand.nextInt(4)));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 16 + rand.nextInt(17), EnumAmmo.P22.ordinal()));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 6 + rand.nextInt(13), EnumAmmo.P9.ordinal()));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 6 + rand.nextInt(4), EnumAmmo.G12.ordinal()));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 3 + rand.nextInt(4), EnumAmmo.G20.ordinal()));
         if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.gun_revolver_ammo, 10 + rand.nextInt(11)));
         if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.gun_revolver_iron_ammo, 12 + rand.nextInt(15)));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_50bmg, 2 + rand.nextInt(7)));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_rocket, 1));
-        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_grenade, 1 + rand.nextInt(2)));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 2 + rand.nextInt(7), EnumAmmo.BMG50.ordinal()));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET.ordinal()));
+        if(rand.nextBoolean()) ret.add(new ItemStack(ModItems.ammo_standard, 1 + rand.nextInt(2), EnumAmmo.GRENADE.ordinal()));
 
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_12gauge_incendiary, 3));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_20gauge_incendiary, 3));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_20gauge_caustic, 3));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_20gauge_flechette, 3));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_9mm_ap, 7));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_rocket_incendiary, 1));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_rocket_sleek, 1));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_grenade_he, 1));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_grenade_incendiary, 1));
-        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_grenade_sleek, 1));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.G12_INCENDIARY.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.G20_INCENDIARY.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.G20_CAUSTIC.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.G20_FLECHETTE.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 7, EnumAmmo.P9_AP.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET_INCENDIARY.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET_SLEEK.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE_HE.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE_INCENDIARY.ordinal()));
+        if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE_SLEEK.ordinal()));
         if(rand.nextInt(10) == 0) ret.add(new ItemStack(ModItems.syringe_metal_super, 2));
 	}
 

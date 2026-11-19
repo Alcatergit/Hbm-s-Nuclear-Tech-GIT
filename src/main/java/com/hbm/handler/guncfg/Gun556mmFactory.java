@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -152,7 +154,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_556;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 2;
 		bullet.dmgMax = 4;
@@ -174,7 +177,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_PHOSPHORUS.ordinal();
 		bullet.wear = 15;
 		bullet.incendiary = 5;
 		bullet.doesPenetrate = false;
@@ -206,7 +210,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_ap;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_AP.ordinal();
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 6;
 		bullet.wear = 15;
@@ -219,7 +224,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_DU.ordinal();
 		bullet.dmgMin = 8;
 		bullet.dmgMax = 10;
 		bullet.wear = 25;
@@ -232,7 +238,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_star;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_STAR.ordinal();
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 20;
 		bullet.wear = 25;
@@ -245,7 +252,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_tracer;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_TRACER.ordinal();
 		bullet.vPFX = "reddust";
 
 		return bullet;
@@ -255,7 +263,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_SLEEK.ordinal();
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 20;
 		bullet.wear = 10;
@@ -304,7 +313,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556FlechetteConfig();
 
-		bullet.ammo = ModItems.ammo_556_flechette_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_FLECHETTE_SLEEK.ordinal();
 		bullet.dmgMin = 12;
 		bullet.dmgMax = 16;
 		bullet.wear = 10;
@@ -353,7 +363,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556Config();
 
-		bullet.ammo = ModItems.ammo_556_flechette;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_FLECHETTE.ordinal();
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 8;
 		bullet.HBRC = 2;
@@ -369,7 +380,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556FlechetteConfig();
 
-		bullet.ammo = ModItems.ammo_556_flechette_incendiary;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_FLECHETTE_INCENDIARY.ordinal();
 		bullet.incendiary = 5;
 
 		return bullet;
@@ -379,7 +391,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556FlechetteConfig();
 
-		bullet.ammo = ModItems.ammo_556_flechette_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_FLECHETTE_PHOSPHORUS.ordinal();
 		bullet.incendiary = 5;
 
 		PotionEffect eff = new PotionEffect(HbmPotion.phosphorus, 20 * 20, 0, true, false);
@@ -409,7 +422,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = get556FlechetteConfig();
 
-		bullet.ammo = ModItems.ammo_556_flechette_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_FLECHETTE_DU.ordinal();
 		bullet.dmgMin = 12;
 		bullet.dmgMax = 16;
 		bullet.wear = 25;
@@ -423,7 +437,8 @@ public class Gun556mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_556_k;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R556_K.ordinal();
 		bullet.dmgMin = 0;
 		bullet.dmgMax = 0;
 		bullet.maxAge = 0;

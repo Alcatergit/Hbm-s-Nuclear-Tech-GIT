@@ -1,8 +1,8 @@
 {
-	"variants": {
-		"facing=north": { "model": "hbm:crashed_bomb" },
-     	   	"facing=south": { "model": "hbm:crashed_bomb", "y": 180 },
-      	  	"facing=west":  { "model": "hbm:crashed_bomb", "y": 270 },
-      		"facing=east":  { "model": "hbm:crashed_bomb", "y": 90 }
-	}
+  "variants": {
+    "variant=bale": { "model": "hbm:crashed_bomb" },
+    "variant=n2": { "model": "hbm:crashed_bomb" },
+    "variant=nuke": { "model": "hbm:crashed_bomb" },
+    "variant=salt": { "model": "hbm:crashed_bomb" }
+  }
 }

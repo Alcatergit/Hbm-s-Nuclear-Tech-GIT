@@ -356,6 +356,22 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 		
 		this.markDirty();
 	}
+
+	public void conusmeAmmo(Item ammo, int meta) {
+		
+		for(int i = 1; i < 10; i++) {
+			
+			if(inventory.getStackInSlot(i).getItem() == ammo && inventory.getStackInSlot(i).getItemDamage() == meta) {
+				inventory.getStackInSlot(i).shrink(1);
+				if(inventory.getStackInSlot(i).isEmpty()){
+					inventory.setStackInSlot(i, ItemStack.EMPTY);
+				}
+				return;
+			}
+		}
+		
+		this.markDirty();
+	}
 	
 	/**
 	 * Reads the namelist from the AI chip in slot 0
@@ -753,7 +769,7 @@ public abstract class TileEntityTurretBaseNT extends TileEntityMachineBase imple
 			BulletConfiguration config = BulletConfigSyncingUtil.pullConfig(i);
 			
 			if(config != null && config.ammo != null) {
-				ammoStacks.add(new ItemStack(config.ammo));
+				ammoStacks.add(new ItemStack(config.ammo, 1, config.ammoMeta));
 			}
 		}
 		

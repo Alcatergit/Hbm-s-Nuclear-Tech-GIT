@@ -3,8 +3,9 @@ package com.hbm.world;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockMushHuge;
 
-import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -12,77 +13,50 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 
 public class HugeMush extends WorldGenerator {
 
-	Block Block0 = ModBlocks.mush_block;
-	Block Block1 = ModBlocks.mush_block_stem;
-	
-    public HugeMush()
-    {
-        super(false);
-    }
+	private final IBlockState cap;
+	private final IBlockState stem;
 
-    @Override
-	public boolean generate(World world, Random rand, BlockPos pos1)
-    {
-    	MutableBlockPos pos = new BlockPos.MutableBlockPos();
-    	pos.setPos(pos1);
-    	for(int i = -1; i < 2; i++)
-    	{
-        	for(int j = -1; j < 2; j++)
-        	{
-        		pos.setPos(pos1.getX() + i, pos1.getY(), pos1.getZ() + j);
-        		world.setBlockState(pos, Block0.getDefaultState());
-        	}
-    	}
-    	for(int i = -1; i < 2; i++)
-    	{
-        	for(int j = -1; j < 2; j++)
-        	{
-        		pos.setPos(pos1.getX()+i, pos1.getY()+3, pos1.getZ()+j);
-        		world.setBlockState(pos, Block0.getDefaultState());
-        	}
-    	}
-    	for(int i = -2; i < 3; i++)
-    	{
-        	for(int j = -2; j < 3; j++)
-        	{
-        		pos.setPos(pos1.getX()+i, pos1.getY()+5, pos1.getZ()+j);
-        		world.setBlockState(pos, Block0.getDefaultState());
-        	}
-    	}
-    	for(int i = -4; i < 5; i++)
-    	{
-        	for(int j = -4; j < 5; j++)
-        	{
-            	for(int k = 0; k < 3; k++)
-            	{
-            		pos.setPos(pos1.getX()+i, pos1.getY()+6+k, pos1.getZ()+j);
-            		world.setBlockState(pos, Block0.getDefaultState());
-            	}
-        	}
-    	}
-    	for(int i = -3; i < 4; i++)
-    	{
-        	for(int j = -3; j < 4; j++)
-        	{
-        		pos.setPos(pos1.getX()+i, pos1.getY()+9, pos1.getZ()+j);
-        		world.setBlockState(pos, Block0.getDefaultState());
-        	}
-    	}
-    	for(int i = -1; i < 2; i++)
-    	{
-        	for(int j = -1; j < 2; j++)
-        	{
-        		pos.setPos(pos1.getX()+i, pos1.getY()+10, pos1.getZ()+j);
-        		world.setBlockState(pos, Block0.getDefaultState());
-        	}
-    	}
-    	for(int i = 0; i < 8; i++)
-    	{
-    		pos.setPos(pos1.getX(), pos1.getY()+i, pos1.getZ());
-    		world.setBlockState(pos, Block1.getDefaultState());
-    	}
-    	return true;
-    }
+	public HugeMush(boolean red) {
+		super(false);
+		net.minecraft.block.Block b = red ? ModBlocks.mush_block_red : ModBlocks.mush_block;
+		this.cap = b.getDefaultState();
+		this.stem = b.getDefaultState().withProperty(BlockMushHuge.VARIANT, BlockMushHuge.EnumType.STEM);
+	}
 
+	@Override
+	public boolean generate(World world, Random rand, BlockPos pos1) {
+		MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int x0 = pos1.getX();
+		int y0 = pos1.getY();
+		int z0 = pos1.getZ();
+		fillSquare(world, pos, x0, y0, z0, 1, false);
+		fillSquare(world, pos, x0, y0 + 3, z0, 1, false);
+		fillSquare(world, pos, x0, y0 + 5, z0, 2, false);
+		fillSquare(world, pos, x0, y0 + 6, z0, 4, true);
+		fillSquare(world, pos, x0, y0 + 7, z0, 4, false);
+		fillSquare(world, pos, x0, y0 + 8, z0, 4, true);
+		fillSquare(world, pos, x0, y0 + 9, z0, 3, false);
+		fillSquare(world, pos, x0, y0 + 10, z0, 1, false);
+		for(int i = 0; i < 8; i++) {
+			pos.setPos(x0, y0 + i, z0);
+			world.setBlockState(pos, this.stem);
+		}
+		return true;
+	}
 
+	private void fillSquare(World world, MutableBlockPos pos, int x0, int y, int z0, int r, boolean triangle) {
+		for(int i = -r; i <= r; i++) {
+			for(int j = -r; j <= r; j++) {
+				int ai = Math.abs(i);
+				int aj = Math.abs(j);
+				if(triangle) {
+					if((ai == r && aj == r) || (ai == r && aj == r - 1) || (ai == r - 1 && aj == r)) continue;
+				} else {
+					if(ai == r && aj == r) continue;
+				}
+				pos.setPos(x0 + i, y, z0 + j);
+				world.setBlockState(pos, this.cap);
+			}
+		}
+	}
 }

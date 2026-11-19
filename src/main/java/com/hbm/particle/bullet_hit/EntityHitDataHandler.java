@@ -40,7 +40,6 @@ public class EntityHitDataHandler {
 				PacketDispatcher.wrapper.sendToAllTracking(new PacketSpecialDeath(ent, 4), ent);
 				ent.getCombatTracker().trackDamage(source, ent.getHealth(), ent.getHealth());
 				ent.setDead();
-				ent.onDeath(source);
 				//For ender dragon so it spawns a portal and all that
 				ent.onKillCommand();
 				

@@ -45,14 +45,16 @@ public class ItemFoodSoup extends ItemSoup {
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 15 * 60 * 20, 10));
 			player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 15 * 60 * 20, 4));
 
-			EntityBalefire bf = new EntityBalefire(worldIn);
-			bf.posX = player.posX;
-			bf.posY = player.posX;
-			bf.posZ = player.posZ;
-			bf.destructionRange = (int) 25;
-			worldIn.spawnEntity(bf);
-			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, 25);
+			if (!worldIn.isRemote) {
+				EntityBalefire bf = new EntityBalefire(worldIn);
+				bf.posX = player.posX;
+				bf.posY = player.posY;
+				bf.posZ = player.posZ;
+				bf.destructionRange = (int) 25;
+				worldIn.spawnEntity(bf);
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFacBale(worldIn, player.posX, player.posY, player.posZ, 25);
+				}
 			}
 		}
 		if(stack.getItem() == ModItems.balefire_and_ham){
@@ -60,14 +62,16 @@ public class ItemFoodSoup extends ItemSoup {
 			player.addPotionEffect(new PotionEffect(MobEffects.RESISTANCE, 60 * 60 * 20, 10));
 			player.addPotionEffect(new PotionEffect(HbmPotion.radaway, 60 * 60 * 20, 16));
 
-			EntityBalefire bf = new EntityBalefire(worldIn);
-			bf.posX = player.posX;
-			bf.posY = player.posX;
-			bf.posZ = player.posZ;
-			bf.destructionRange = (int) 50;
-			worldIn.spawnEntity(bf);
-			if(BombConfig.enableNukeClouds) {
-				EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, 50);
+			if (!worldIn.isRemote) {
+				EntityBalefire bf = new EntityBalefire(worldIn);
+				bf.posX = player.posX;
+				bf.posY = player.posY;
+				bf.posZ = player.posZ;
+				bf.destructionRange = (int) 50;
+				worldIn.spawnEntity(bf);
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFacBale(worldIn, player.posX, player.posY, player.posZ, 50);
+				}
 			}
 		}
 	}

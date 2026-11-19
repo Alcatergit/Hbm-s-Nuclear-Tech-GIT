@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -172,7 +174,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.explosive = 4F;
@@ -185,7 +188,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_he;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_HE.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.wear = 15;
@@ -199,7 +203,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_incendiary;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_INCENDIARY.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.wear = 15;
@@ -214,7 +219,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_emp;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_EMP.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.explosive = 2.5F;
@@ -228,7 +234,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_SLEEK.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.explosive = 10F;
@@ -243,7 +250,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_shrapnel;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_SHRAPNEL.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.explosive = 4F;
@@ -257,7 +265,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_glare;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_GLARE.ordinal();
 		bullet.velocity = 5.0F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -273,7 +282,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_nuclear;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_NUCLEAR.ordinal();
 		bullet.velocity = 1.5F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -290,7 +300,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_toxic;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_TOXIC.ordinal();
 		bullet.velocity = 1.5F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -306,7 +317,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_rpc;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_RPC.ordinal();
 		bullet.velocity = 3.0F;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 25;
@@ -340,7 +352,8 @@ public class GunRocketFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 		
-		bullet.ammo = ModItems.ammo_rocket_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_PHOSPHORUS.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.wear = 15;
@@ -357,7 +370,8 @@ public class GunRocketFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_rocket_canister;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.ROCKET_CANISTER.ordinal();
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
 		bullet.explosive = 2F;

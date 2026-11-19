@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 import java.util.Random;
 
@@ -59,14 +60,14 @@ public class GunLeverActionS extends Item {
 		EntityPlayer player = (EntityPlayer) entityLiving;
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
 
-		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge));
+		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.G20.ordinal()));
 		MinecraftForge.EVENT_BUS.post(event);
 		j = event.getCharge();
 
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_20gauge)) {
+		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.G20.ordinal())) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -86,7 +87,7 @@ public class GunLeverActionS extends Item {
 			player.motionY += vec.y * 0.75;
 			player.motionZ += vec.z * 0.75;
 			
-			Library.consumeInventoryItem(player.inventory, ModItems.ammo_12gauge);
+			Library.consumeInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.G12.ordinal());
 
 			stack.damageItem(1, player);
 
@@ -128,7 +129,7 @@ public class GunLeverActionS extends Item {
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer playerIn, EnumHand handIn) {
 		ItemStack stack = playerIn.getHeldItem(handIn);
-		ArrowNockEvent event = new ArrowNockEvent(playerIn, stack, handIn, worldIn, Library.hasInventoryItem(playerIn.inventory, ModItems.ammo_12gauge));
+		ArrowNockEvent event = new ArrowNockEvent(playerIn, stack, handIn, worldIn, Library.hasInventoryItem(playerIn.inventory, ModItems.ammo_standard, EnumAmmo.G12.ordinal()));
 		MinecraftForge.EVENT_BUS.post(event);
 
 		if(getAnim(stack) == 0)

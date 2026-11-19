@@ -1,5 +1,7 @@
 package com.hbm.inventory;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+import static com.hbm.items.ItemEnums.EnumClip;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +21,6 @@ import static com.hbm.inventory.material.Mats.*;
 
 
 import com.hbm.items.tool.ItemGasCanister;
-import net.minecraftforge.fml.common.Mod;
 import org.apache.logging.log4j.Level;
 
 import com.google.gson.Gson;
@@ -52,6 +53,20 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.registries.IForgeRegistry;
 
 public class AssemblerRecipes {
+
+	public static final String ASSEMBLER_CONFIG_HEADER =
+			"# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
+			+ "# One line per recipe.\n"
+			+ "# For an oredict input item, replace the mod id with oredict, like oredict:plateSteel. These do not require metatdata\n"
+			+ "# Example for iron plates: 30;minecraft:iron_ingot,0,3;oredict:plateIron,2\n"
+			+ "# For an NBT item, use a 4th item parameter with the nbt string of the tag.\n"
+			+ "# The NBT string format is the same as used in commands\n"
+			+ "# Example for turning kerosene canisters into steel plates:\n"
+			+ "# 20;hbm:canister_fuel,0,2,{HbmFluidKey:{FluidName:\"kerosene\",Amount:1000}};hbm:plate_steel,0,32\n"
+			+ "#\n"
+			+ "# To remove a recipe, use the format: \n"
+			+ "# remove hbm:plate_iron,0,2\n"
+			+ "# This will remove any recipe with the output of two iron plates\n";
 
 	public static File config;
 	public static File template;
@@ -92,7 +107,6 @@ public class AssemblerRecipes {
 	}
 
 	public static void loadRecipes() {
-		registerDefaults();
 		loadRecipesFromConfig();
 		generateList();
 	}
@@ -615,37 +629,37 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModItems.gun_osipr_ammo2, 1), new AStack[] { new OreDictStack(CMB.plate(), 4), new ComparableStack(Items.REDSTONE, 7), new ComparableStack(ModItems.powder_power, 3), }, 200);
 		
 		//AMMO CLIP CRAFTING
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_iron), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_iron_ammo, 24) }, 40);	
-		makeRecipe(new ComparableStack(ModItems.clip_revolver), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_gold), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_gold_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_lead), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_lead_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_schrabidium), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_schrabidium_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_cursed), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_cursed_ammo, 17) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_nightmare), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_nightmare_ammo, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_nightmare2), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_nightmare2_ammo, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_pip), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_44_pip, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_revolver_nopip), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_44, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_rpg), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_rocket, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_stinger), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_stinger_ammo, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_fatman), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_nuke, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_mirv), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_mirv, 3) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_bf), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_bf_ammo, 2) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_mp40), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_9mm, 32) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_uzi), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_22lr, 32) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_uboinik), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_12gauge, 24) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_lever_action), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_20gauge, 24) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_bolt_action), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_20gauge_slug, 24) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_osipr), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_osipr_ammo, 30) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_immolator), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_immolator_ammo, 64) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_cryolator), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_cryolator_ammo, 64) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_mp), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_566_gold, 40) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_xvl1456), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_xvl1456_ammo, 64) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_emp), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_emp_ammo, 6) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_jack), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_jack_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_spark), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_spark_ammo, 4) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_hp), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_hp_ammo, 12) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_euthanasia), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_euthanasia_ammo, 16) }, 40);
-		makeRecipe(new ComparableStack(ModItems.clip_defabricator), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_defabricator_ammo, 16) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_IRON.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_iron_ammo, 24) }, 40);	
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_GOLD.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_gold_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_LEAD.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_lead_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_SCHRABIDIUM.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_schrabidium_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_CURSED.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_cursed_ammo, 17) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_NIGHTMARE.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_nightmare_ammo, 6) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_NIGHTMARE2.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_revolver_nightmare2_ammo, 6) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_PIP.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 6, EnumAmmo.M44_PIP.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_NOPIP.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 12, EnumAmmo.M44.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.RPG.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 6, EnumAmmo.ROCKET.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.STINGER.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_stinger_ammo, 6) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.FATMAN.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 6, EnumAmmo.NUKE_STANDARD.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.MIRV.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 3, EnumAmmo.MIRV_STANDARD.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.BF.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 2, EnumAmmo.NUKE_BALEFIRE.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.MP40.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 32, EnumAmmo.P9.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.UZI.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.UBOINIK.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 24, EnumAmmo.G12.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.LEVER_ACTION.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 24, EnumAmmo.G20.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.BOLT_ACTION.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_standard, 24, EnumAmmo.G20_SLUG.ordinal()) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.OSIPR.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_osipr_ammo, 30) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.IMMOLATOR.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_immolator_ammo, 64) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.CRYOLATOR.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_cryolator_ammo, 64) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.MP.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.ammo_566_gold, 40) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.XVL1456.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_xvl1456_ammo, 64) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.EMP.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_emp_ammo, 6) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.JACK.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_jack_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.SPARK.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_spark_ammo, 4) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.HP.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_hp_ammo, 12) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.EUTHANASIA.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_euthanasia_ammo, 16) }, 40);
+		makeRecipe(new ComparableStack(ModItems.clip_standard, 1, EnumClip.DEFABRICATOR.ordinal()), new AStack[] { new ComparableStack(ModItems.plate_polymer), new ComparableStack(ModItems.gun_defabricator_ammo, 16) }, 40);
 
 		makeRecipe(new ComparableStack(ModItems.grenade_fire, 1), new AStack[] { new ComparableStack(ModItems.grenade_frag, 1), new OreDictStack(P_RED.dust(), 1), new OreDictStack(CU.plate(), 2), }, 150);
 		makeRecipe(new ComparableStack(ModItems.grenade_fire, 1), new AStack[] {new ComparableStack(ModItems.grenade_frag, 1), new OreDictStack(P_RED.dust(), 1), new OreDictStack(CU.plate(), 2), },150);
@@ -867,7 +881,7 @@ public class AssemblerRecipes {
 		makeRecipe(new ComparableStack(ModBlocks.block_cap_sunset, 1), new AStack[] { new ComparableStack(ModItems.cap_sunset, 64), new ComparableStack(ModItems.cap_sunset, 64) }, 10);
 		makeRecipe(new ComparableStack(ModBlocks.block_cap_star, 1), new AStack[] { new ComparableStack(ModItems.cap_star, 64), new ComparableStack(ModItems.cap_star, 64) }, 10);
 		
-		makeRecipe(new ComparableStack(ModItems.ammo_75bolt, 2), new AStack[] {
+		makeRecipe(new ComparableStack(ModItems.ammo_standard, 2, EnumAmmo.B75.ordinal()), new AStack[] {
 				new OreDictStack(STEEL.plate(), 2),
 				new OreDictStack(CU.plate(), 1),
 				new ComparableStack(ModItems.primer_50, 5),
@@ -876,7 +890,7 @@ public class AssemblerRecipes {
 				new ComparableStack(ModItems.cordite, 5),
 				new OreDictStack(REDSTONE.dust(), 3)
 			}, 60);
-		makeRecipe(new ComparableStack(ModItems.ammo_75bolt_incendiary, 2), new AStack[] {
+		makeRecipe(new ComparableStack(ModItems.ammo_standard, 2, EnumAmmo.B75_INCENDIARY.ordinal()), new AStack[] {
 				new OreDictStack(STEEL.plate(), 2),
 				new OreDictStack(CU.plate(), 1),
 				new ComparableStack(ModItems.primer_50, 5),
@@ -886,7 +900,7 @@ public class AssemblerRecipes {
 				new OreDictStack(P_WHITE.ingot(), 3)
 			}, 60);
 
-		makeRecipe(new ComparableStack(ModItems.ammo_75bolt_he, 2), new AStack[] {
+		makeRecipe(new ComparableStack(ModItems.ammo_standard, 2, EnumAmmo.B75_HE.ordinal()), new AStack[] {
 				new OreDictStack(STEEL.plate(), 2),
 				new OreDictStack(CU.plate(), 1),
 				new ComparableStack(ModItems.primer_50, 5),
@@ -1115,23 +1129,17 @@ public class AssemblerRecipes {
 		itemRegistry = GameRegistry.findRegistry(Item.class);
 		blockRegistry = GameRegistry.findRegistry(Block.class);
 		
+		recipes.clear();
+		time.clear();
+		recipeList.clear();
+		registerDefaults();
+		
 		File recipeConfig = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/assemblerConfig.cfg");
 		if (!recipeConfig.exists())
 			try {
 				recipeConfig.getParentFile().mkdirs();
 				FileWriter write = new FileWriter(recipeConfig);
-				write.write("# Format: time;itemName,meta,amount|nextItemName,meta,amount;productName,meta,amount\n"
-						  + "# One line per recipe.\n"
-						  + "# For an oredict input item, replace the mod id with oredict, like oredict:plateSteel. These do not require metatdata\n"
-						  + "# Example for iron plates: 30;minecraft:iron_ingot,0,3;oredict:plateIron,2\n"
-						  + "# For an NBT item, use a 4th item parameter with the nbt string of the tag.\n"
-						  + "# The NBT string format is the same as used in commands\n"
-						  + "# Example for turning kerosene canisters into steel plates:\n"
-						  + "# 20;hbm:canister_fuel,0,2,{HbmFluidKey:{FluidName:\"kerosene\",Amount:1000}};hbm:plate_steel,0,32\n"
-						  + "#\n"
-						  + "# To remove a recipe, use the format: \n"
-						  + "# remove hbm:plate_iron,0,2\n"
-						  + "# This will remove any recipe with the output of two iron plates");
+				write.write(ASSEMBLER_CONFIG_HEADER);
 				addConfigRecipes(write);
 				write.close();
 				

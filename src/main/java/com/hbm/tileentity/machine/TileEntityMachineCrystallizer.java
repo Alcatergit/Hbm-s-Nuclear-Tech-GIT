@@ -9,8 +9,10 @@ import com.hbm.items.machine.ItemMachineUpgrade;
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.PacketDispatcher;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 
 import api.hbm.energy.IEnergyUser;
@@ -46,6 +48,7 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 
 	public float angle;
 	public float prevAngle;
+	private AudioWrapper audio;
 
 	public FluidTank tank;
 
@@ -133,6 +136,30 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 					angle -= 360;
 					prevAngle -= 360;
 				}
+
+				if(MainRegistry.proxy.me().getDistance(pos.getX(), pos.getY(), pos.getZ()) < 25) {
+					if(audio == null) {
+						audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.chemicalPlant, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1F, 15F, 0.75F, 15);
+						audio.startSound();
+					} else if(!audio.isPlaying()) {
+						audio.stopSound();
+						audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.chemicalPlant, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 1F, 15F, 0.75F, 15);
+						audio.startSound();
+					}
+					audio.keepAlive();
+					audio.updateVolume(1F);
+					audio.updatePitch(0.75F);
+				} else {
+					if(audio != null) {
+						audio.stopSound();
+						audio = null;
+					}
+				}
+			} else {
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
 			}
 		}
 	}
@@ -161,6 +188,24 @@ public class TileEntityMachineCrystallizer extends TileEntityMachineBase impleme
 	public void networkUnpack(NBTTagCompound data) {
 		this.power = data.getLong("power");
 		this.progress = data.getShort("progress");
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
 	}
 
 	private void processItem() {

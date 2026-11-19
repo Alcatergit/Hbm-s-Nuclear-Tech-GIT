@@ -1,6 +1,6 @@
 {
 	"parent": "block/leaves",
 	"textures": {
-		"all": "hbm:blocks/waste_leaves_dark_oak"
+		"all": "minecraft:blocks/leaves_big_oak"
 	}
 }

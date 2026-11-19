@@ -1,0 +1,13 @@
+{
+    "variants": {
+        "normal": { "model": "hbm:waste_clay" },
+        "meta=0": { "model": "hbm:waste_clay" },
+        "meta=1": { "model": "hbm:waste_clay" },
+        "meta=2": { "model": "hbm:waste_clay" },
+        "meta=3": { "model": "hbm:waste_clay" },
+        "meta=4": { "model": "hbm:waste_clay" },
+        "meta=5": { "model": "hbm:waste_clay" },
+        "meta=6": { "model": "hbm:waste_clay" },
+        "meta=7": { "model": "hbm:waste_clay" }
+    }
+}

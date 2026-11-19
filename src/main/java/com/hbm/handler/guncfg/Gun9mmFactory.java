@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -91,7 +93,8 @@ public class Gun9mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_9mm;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.P9.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 2;
 		bullet.dmgMax = 4;
@@ -103,7 +106,8 @@ public class Gun9mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_9mm_ap;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.P9_AP.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 8;
@@ -117,7 +121,8 @@ public class Gun9mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_9mm_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.P9_DU.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 8;
@@ -131,7 +136,8 @@ public class Gun9mmFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_9mm_rocket;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.P9_ROCKET.ordinal();
 		bullet.velocity = 5;
 		bullet.explosive = 7.5F;
 		bullet.trail = 5;

@@ -1,12 +1,13 @@
 {
-	"variants": {
-		"normal": { "model": "hbm:waste_earth_0" },
-		"meta=0": { "model": "hbm:waste_earth_0" },
-		"meta=1": { "model": "hbm:waste_earth_1" },
-		"meta=2": { "model": "hbm:waste_earth_2" },
-		"meta=3": { "model": "hbm:waste_earth_3" },
-		"meta=4": { "model": "hbm:waste_earth_4" },
-		"meta=5": { "model": "hbm:waste_earth_5" },
-		"meta=6": { "model": "hbm:waste_earth_6" }
-	}
+    "variants": {
+        "normal": { "model": "hbm:waste_earth" },
+        "meta=0": { "model": "hbm:waste_earth" },
+        "meta=1": { "model": "hbm:waste_earth" },
+        "meta=2": { "model": "hbm:waste_earth" },
+        "meta=3": { "model": "hbm:waste_earth" },
+        "meta=4": { "model": "hbm:waste_earth" },
+        "meta=5": { "model": "hbm:waste_earth" },
+        "meta=6": { "model": "hbm:waste_earth" },
+        "meta=7": { "model": "hbm:waste_earth" }
+    }
 }

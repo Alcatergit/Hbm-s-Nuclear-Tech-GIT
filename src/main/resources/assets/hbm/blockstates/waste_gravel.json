@@ -1,12 +1,13 @@
 {
-	"variants": {
-		"normal": { "model": "hbm:waste_gravel_0" },
-		"meta=0": { "model": "hbm:waste_gravel_0" },
-		"meta=1": { "model": "hbm:waste_gravel_1" },
-		"meta=2": { "model": "hbm:waste_gravel_2" },
-		"meta=3": { "model": "hbm:waste_gravel_3" },
-		"meta=4": { "model": "hbm:waste_gravel_4" },
-		"meta=5": { "model": "hbm:waste_gravel_5" },
-		"meta=6": { "model": "hbm:waste_gravel_6" }
-	}
+    "variants": {
+        "normal": { "model": "hbm:waste_gravel" },
+        "meta=0": { "model": "hbm:waste_gravel" },
+        "meta=1": { "model": "hbm:waste_gravel" },
+        "meta=2": { "model": "hbm:waste_gravel" },
+        "meta=3": { "model": "hbm:waste_gravel" },
+        "meta=4": { "model": "hbm:waste_gravel" },
+        "meta=5": { "model": "hbm:waste_gravel" },
+        "meta=6": { "model": "hbm:waste_gravel" },
+        "meta=7": { "model": "hbm:waste_gravel" }
+    }
 }

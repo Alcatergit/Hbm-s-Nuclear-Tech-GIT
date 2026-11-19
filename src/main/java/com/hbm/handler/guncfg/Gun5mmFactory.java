@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -82,7 +84,8 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R5.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 5;
@@ -94,7 +97,8 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_explosive;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R5_EXPLOSIVE.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 7;
@@ -108,7 +112,8 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R5_DU.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 10;
@@ -122,7 +127,8 @@ public static GunConfiguration getMinigunConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_5mm_star;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.R5_STAR.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 12;
 		bullet.dmgMax = 20;

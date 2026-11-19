@@ -13,11 +13,13 @@ import java.util.Random;
 
 import com.hbm.lib.Library;
 import net.minecraft.block.*;
+import net.minecraftforge.common.IPlantable;
 import org.apache.logging.log4j.Level;
 
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.blocks.generic.WasteDirt;
 import com.hbm.config.VersatileConfig;
 import com.hbm.handler.ArmorUtil;
 import com.hbm.entity.effect.EntityBlackHole;
@@ -35,16 +37,26 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.item.ItemStack;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.oredict.OreDictionary;
 import net.minecraftforge.energy.IEnergyStorage;
 
 public class ExplosionNukeGeneric {
 
+	public static final String SOLINIUM_CONFIG_HEADER =
+			"# Format: modid:blockName|modid:blockName\n" +
+					"# Left blocks are transformed to right, one per line\n";
+
 	private final static Random random = new Random();
+
+	private static boolean matchesOre(Block block, String oreDictName) {
+		return OreDictionary.containsMatch(false, OreDictionary.getOres(oreDictName), new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
+	}
 	
 	public static void empBlast(World world, int x, int y, int z, int bombStartStrength) {
 		if(!CompatibilityConfig.isWarDim(world)){
@@ -153,6 +165,7 @@ public class ExplosionNukeGeneric {
 				}
 				return protection;
 			}else{//otherwise, kill the block!
+				world.removeTileEntity(pos);
 				world.setBlockToAir(pos);
 			}
 		}
@@ -249,11 +262,23 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || matchesOre(b, "oreCoal")) {
 				rand = random.nextInt(10);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
 				}
+				if (rand == 9) {
+					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+				}
+			}
+			else if (b == ModBlocks.ore_lignite || matchesOre(b, "oreLignite")) {
+				rand = random.nextInt(10);
+				if (rand == 1 || rand == 2 || rand == 3) {
+					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+				}
+			}
+			else if (b == ModBlocks.ore_beryllium || matchesOre(b, "oreBeryllium")) {
+				rand = random.nextInt(10);
 				if (rand == 9) {
 					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 				}
@@ -271,7 +296,17 @@ public class ExplosionNukeGeneric {
 				}
 			}
 
-			else if(b == Blocks.DIRT || b == Blocks.FARMLAND) {
+			else if(b == Blocks.DIRT) {
+				BlockDirt.DirtType meta = bs.getValue(BlockDirt.VARIANT);
+				if(meta == BlockDirt.DirtType.DIRT)
+					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
+					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+				else if(meta == BlockDirt.DirtType.PODZOL)
+					world.setBlockState(pos, WasteDirt.podzolState(0));
+			}
+
+			else if(b == Blocks.FARMLAND) {
 				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
 			}
 
@@ -286,9 +321,13 @@ public class ExplosionNukeGeneric {
 			else if(b instanceof BlockIce) {
 				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 			}
-			
-			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {
-				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+
+			else if(b instanceof BlockBush) {
+				IBlockState d = world.getBlockState(pos.down());
+				Block dblock = d.getBlock();
+				boolean canStay = dblock.canSustainPlant(d, world, pos.down(), EnumFacing.UP, (IPlantable) b);
+				if(canStay && !(b instanceof BlockLilyPad)) world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+				else world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			}
 
 			else if(b == Blocks.STONE){
@@ -308,36 +347,42 @@ public class ExplosionNukeGeneric {
 			}
 			
 			else if (bs.getMaterial() == Material.WOOD && bs.isOpaqueCube() && b != ModBlocks.waste_log) {
+				world.removeTileEntity(pos);
 				world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
 			}
 
-			else if (b == ModBlocks.ore_uranium) {
-				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
-				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
-				}
-			}
-
-			else if (b == ModBlocks.ore_nether_uranium) {
-				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
-				if (rand == 1) {
-					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-				} else {
-					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
-				}
-			}
-			
-			else if (b == ModBlocks.ore_gneiss_uranium) {
+			else if (b == ModBlocks.ore_gneiss_uranium || b == ModBlocks.ore_gneiss_uranium_scorched) {
 				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
 				if (rand == 1) {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-				} else {
+				} else if (b != ModBlocks.ore_gneiss_uranium_scorched) {
 					world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
 				}
 			}
 
+			else if (b == ModBlocks.ore_nether_uranium || matchesOre(b, "oreNetherUranium")) {
+				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
+				if (rand == 1) {
+					world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
+				} else if (b != ModBlocks.ore_nether_uranium_scorched) {
+					world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
+				}
+			}
+
+			else if (b == ModBlocks.ore_uranium || matchesOre(b, "oreUranium")) {
+				rand = random.nextInt(VersatileConfig.getSchrabOreChance());
+				if (rand == 1) {
+					world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+				} else if (b != ModBlocks.ore_uranium_scorched) {
+					world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+				}
+			}
+
+			else if (b == Blocks.SPONGE) {
+				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
+				}
+			}
 		}
 	}
 
@@ -407,7 +452,13 @@ public class ExplosionNukeGeneric {
 			}
 
 			else if(b == Blocks.DIRT) {
-				world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				BlockDirt.DirtType meta = world.getBlockState(pos).getValue(BlockDirt.VARIANT);
+				if(meta == BlockDirt.DirtType.DIRT)
+					world.setBlockState(pos, ModBlocks.waste_dirt.getDefaultState());
+				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
+					world.setBlockState(pos, ModBlocks.waste_gravel.getDefaultState());
+				else if(meta == BlockDirt.DirtType.PODZOL)
+					world.setBlockState(pos, WasteDirt.podzolState(0));
 			}
 
 			else if(b instanceof BlockSnow) {
@@ -422,8 +473,12 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 			}
 
-			else if(b instanceof BlockBush || b == Blocks.TALLGRASS) {
-				world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+			else if(b instanceof BlockBush) {
+				IBlockState d = world.getBlockState(pos.down());
+				Block dblock = d.getBlock();
+				boolean canStay = dblock.canSustainPlant(d, world, pos.down(), EnumFacing.UP, (IPlantable) b);
+				if(canStay && !(b instanceof BlockLilyPad)) world.setBlockState(pos, Blocks.DEADBUSH.getDefaultState());
+				else world.setBlockState(pos, Blocks.AIR.getDefaultState());
 			}
 
 			else if(b == Blocks.STONE){
@@ -438,11 +493,23 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
 			}
 
-			else if (b == Blocks.COAL_ORE) {
+			else if (b == Blocks.COAL_ORE || matchesOre(b, "oreCoal")) {
 				rand = random.nextInt(30);
 				if (rand == 1 || rand == 2 || rand == 3) {
 					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
 				}
+				if (rand == 29) {
+					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+				}
+			}
+			else if (b == ModBlocks.ore_lignite || matchesOre(b, "oreLignite")) {
+				rand = random.nextInt(30);
+				if (rand == 1 || rand == 2 || rand == 3) {
+					world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+				}
+			}
+			else if (b == ModBlocks.ore_beryllium || matchesOre(b, "oreBeryllium")) {
+				rand = random.nextInt(30);
 				if (rand == 29) {
 					world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
 				}
@@ -469,6 +536,12 @@ public class ExplosionNukeGeneric {
 					world.setBlockState(pos, ModBlocks.waste_log.getDefaultState());
 				} else {
 					world.setBlockToAir(pos);
+				}
+			}
+
+			else if (b == Blocks.SPONGE) {
+				if (world.getBlockState(pos).getValue(BlockSponge.WET)) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 			}
 		}
@@ -513,15 +586,14 @@ public class ExplosionNukeGeneric {
 				world.setBlockState(pos, ModBlocks.block_electrical_scrap.getDefaultState());
 		}
 	}
-	
+
 	public static void loadSoliniumFromFile(){
 		File config = new File(MainRegistry.proxy.getDataDir().getPath() + "/config/hbm/solinium.cfg");
 		if (!config.exists())
 			try {
 				config.getParentFile().mkdirs();
 				FileWriter write = new FileWriter(config);
-				write.write("# Format: modid:blockName|modid:blockName\n" + 
-							"# Left blocks are transformed to right, one per line\n");
+				write.write(SOLINIUM_CONFIG_HEADER);
 				write.close();
 				
 			} catch (IOException e) {
@@ -535,16 +607,19 @@ public class ExplosionNukeGeneric {
 			try {
 				read = new BufferedReader(new FileReader(config));
 				String currentLine = null;
+				soliniumConfig.clear();
 				
 				while((currentLine = read.readLine()) != null){
 					lineCount ++;
 					if(currentLine.startsWith("#") || currentLine.isEmpty())
 						continue;
-					String[] blocks = currentLine.trim().split("|");
+					String[] blocks = currentLine.trim().split("\\|");
 					if(blocks.length != 2)
 						continue;
 					String[] modidBlock1 = blocks[0].split(":");
 					String[] modidBlock2 = blocks[1].split(":");
+					if(modidBlock1.length != 2 || modidBlock2.length != 2)
+						continue;
 					Block b1 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock1[0], modidBlock1[1]));
 					Block b2 = Block.REGISTRY.getObject(new ResourceLocation(modidBlock2[0], modidBlock2[1]));
 					if(b1 == null || b2 == null){

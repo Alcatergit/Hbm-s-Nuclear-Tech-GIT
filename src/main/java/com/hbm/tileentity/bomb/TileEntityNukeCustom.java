@@ -17,10 +17,13 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.ITickable;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 
 public class TileEntityNukeCustom extends TileEntity implements ITickable {
@@ -258,26 +261,26 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 			if(ent.entry == EnumEntryType.ADD) {
 
 				switch(ent.type) {
-				case TNT: tnt += ent.value; break;
-				case NUKE: nuke += ent.value; break;
-				case HYDRO: hydro += ent.value; break;
-				case BALE: bale += ent.value; break;
-				case DIRTY: dirty += ent.value; break;
-				case SCHRAB: schrab += ent.value; break;
-				case SOL: sol += ent.value; break;
-				case EUPH: euph += ent.value; break;
+				case TNT: tnt += ent.value * stack.getCount(); break;
+				case NUKE: nuke += ent.value * stack.getCount(); break;
+				case HYDRO: hydro += ent.value * stack.getCount(); break;
+				case BALE: bale += ent.value * stack.getCount(); break;
+				case DIRTY: dirty += ent.value * stack.getCount(); break;
+				case SCHRAB: schrab += ent.value * stack.getCount(); break;
+				case SOL: sol += ent.value * stack.getCount(); break;
+				case EUPH: euph += ent.value * stack.getCount(); break;
 				}
 
 			} else if(ent.entry == EnumEntryType.MULT) {
 
 				switch(ent.type) {
-				case TNT: tntMod *= ent.value; break;
-				case NUKE: nukeMod *= ent.value; break;
-				case HYDRO: hydroMod *= ent.value; break;
-				case BALE: baleMod *= ent.value; break;
-				case DIRTY: dirtyMod *= ent.value; break;
-				case SOL: solMod *= ent.value; break;
-				case SCHRAB: schrabMod *= ent.value; break;
+				case TNT: tntMod *= ent.value * stack.getCount(); break;
+				case NUKE: nukeMod *= ent.value * stack.getCount(); break;
+				case HYDRO: hydroMod *= ent.value * stack.getCount(); break;
+				case BALE: baleMod *= ent.value * stack.getCount(); break;
+				case DIRTY: dirtyMod *= ent.value * stack.getCount(); break;
+				case SOL: solMod *= ent.value * stack.getCount(); break;
+				case SCHRAB: schrabMod *= ent.value * stack.getCount(); break;
 				}
 			}
 		}
@@ -425,5 +428,15 @@ public class TileEntityNukeCustom extends TileEntity implements ITickable {
 			this(type, value);
 			this.entry = entry;
 		}
+	}
+	
+	@Override
+	public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY ? CapabilityItemHandler.ITEM_HANDLER_CAPABILITY.cast(inventory) : super.getCapability(capability, facing);
+	}
+
+	@Override
+	public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+		return capability == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY || super.hasCapability(capability, facing);
 	}
 }

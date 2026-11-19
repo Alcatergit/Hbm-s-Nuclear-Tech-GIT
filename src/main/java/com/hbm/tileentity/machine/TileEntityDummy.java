@@ -21,7 +21,7 @@ public class TileEntityDummy extends TileEntity implements ITickable {
 				needsMark = false;
 			}
     		if(target != null && !(this.world.getBlockState(target).getBlock() instanceof IMultiBlock)) {
-    			world.destroyBlock(pos, false);
+    			world.setBlockToAir(pos);
     		}
     	}
 	}

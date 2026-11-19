@@ -449,6 +449,7 @@ public class HbmWorldGen implements IWorldGenerator {
 					int x = i + rand.nextInt(16);
 					int z = j + rand.nextInt(16);
 					int y = world.getHeight(x, z) - 4;
+					y = Library.getBedrockAdjustedY(world, x, y, z, 0, 0, 0, 0, 0);
 					
 					if(world.getBlockState(new BlockPos(x, y + 1, z)).isSideSolid(world, new BlockPos(x, y + 1, z), EnumFacing.UP)) {
 						

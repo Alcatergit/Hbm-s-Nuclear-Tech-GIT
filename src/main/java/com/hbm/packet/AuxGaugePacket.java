@@ -1,6 +1,7 @@
 package com.hbm.packet;
 
 import com.hbm.interfaces.Spaghetti;
+import com.hbm.inventory.gui.GUICoreEmitter;
 import com.hbm.items.weapon.ItemMissile.PartSize;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
@@ -231,8 +232,12 @@ public class AuxGaugePacket implements IMessage {
 					} else if(te instanceof TileEntityCoreEmitter) {
 						if(m.id == 0)
 							((TileEntityCoreEmitter) te).beam = m.value;
-						if(m.id == 1)
+						if(m.id == 1) {
 							((TileEntityCoreEmitter) te).watts = m.value;
+							if(Minecraft.getMinecraft().currentScreen instanceof GUICoreEmitter) {
+								((GUICoreEmitter)Minecraft.getMinecraft().currentScreen).syncTextField(m.value);
+							}
+						}
 					} else if(te instanceof TileEntityCoreInjector) {
 						if(m.id == 0)
 							((TileEntityCoreInjector) te).beam = m.value;

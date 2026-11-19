@@ -1,0 +1,4 @@
+{
+    "parent": "hbm:block/tinted_cube",
+    "textures": { "all": "minecraft:blocks/dirt" }
+}

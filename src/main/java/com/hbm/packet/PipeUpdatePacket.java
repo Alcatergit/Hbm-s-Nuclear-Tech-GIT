@@ -60,7 +60,7 @@ public class PipeUpdatePacket implements IMessage {
 						//((TileEntityFFDuctBaseMk2)te).onNeighborChange();
 						break;
 					case 1:
-						TileEntityFFDuctBaseMk2.rebuildNetworks(Minecraft.getMinecraft().world, message.pos);
+						((TileEntityFFDuctBaseMk2)te).onNeighborChange();
 						break;
 					default:
 						break;

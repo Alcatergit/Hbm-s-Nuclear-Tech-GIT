@@ -326,15 +326,15 @@ public class ArmorUtil {
 		return filter;
 	}
 	
-	public static boolean checkForDigamma(EntityPlayer player) {
+	public static boolean checkForDigamma(EntityLivingBase entity) {
 		
-		if(checkArmor(player, ModItems.fau_helmet, ModItems.fau_plate, ModItems.fau_legs, ModItems.fau_boots))
+		if(checkArmor(entity, ModItems.fau_helmet, ModItems.fau_plate, ModItems.fau_legs, ModItems.fau_boots))
 			return true;
 
-		if(checkArmor(player, ModItems.dns_helmet, ModItems.dns_plate, ModItems.dns_legs, ModItems.dns_boots))
+		if(checkArmor(entity, ModItems.dns_helmet, ModItems.dns_plate, ModItems.dns_legs, ModItems.dns_boots))
 			return true;
 
-        return player.isPotionActive(HbmPotion.stability);
+        return entity.isPotionActive(HbmPotion.stability);
     }
 	
 	public static boolean checkForMonoMask(EntityPlayer player) {

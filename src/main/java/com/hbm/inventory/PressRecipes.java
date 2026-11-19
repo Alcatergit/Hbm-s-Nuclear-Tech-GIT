@@ -1,5 +1,6 @@
 package com.hbm.inventory;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -88,19 +89,19 @@ public class PressRecipes {
 		addRecipe(PressType.THREEFIFESEVEN, new ComparableStack(ModItems.assembly_gold), new ItemStack(ModItems.gun_revolver_gold_ammo));
 		addRecipe(PressType.THREEFIFESEVEN, new ComparableStack(ModItems.assembly_schrabidium), new ItemStack(ModItems.gun_revolver_schrabidium_ammo));
 		addRecipe(PressType.THREEFIFESEVEN, new ComparableStack(ModItems.assembly_nightmare), new ItemStack(ModItems.gun_revolver_nightmare_ammo));
-		addRecipe(PressType.THREEFIFESEVEN, new ComparableStack(ModItems.assembly_desh), new ItemStack(ModItems.ammo_357_desh));
+		addRecipe(PressType.THREEFIFESEVEN, new ComparableStack(ModItems.assembly_desh), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M357_DESH.ordinal()));
 		addRecipe(PressType.THREEFIFESEVEN, new OreDictStack(STEEL.ingot()), new ItemStack(ModItems.gun_revolver_cursed_ammo));
 
-		addRecipe(PressType.FOURFOUR, new ComparableStack(ModItems.assembly_nopip), new ItemStack(ModItems.ammo_44));
+		addRecipe(PressType.FOURFOUR, new ComparableStack(ModItems.assembly_nopip), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44.ordinal()));
 
-		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_smg), new ItemStack(ModItems.ammo_9mm));
-		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_uzi), new ItemStack(ModItems.ammo_22lr));
-		addRecipe(PressType.NINE, new OreDictStack(GOLD.ingot()), new ItemStack(ModItems.ammo_566_gold));
-		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_lacunae), new ItemStack(ModItems.ammo_5mm));
-		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_556), new ItemStack(ModItems.ammo_556));
+		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_smg), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.P9.ordinal()));
+		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_uzi), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.P22.ordinal()));
+		addRecipe(PressType.NINE, new OreDictStack(GOLD.ingot()), new ItemStack(ModItems.ammo_566_gold, 1));
+		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_lacunae), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.R5.ordinal()));
+		addRecipe(PressType.NINE, new ComparableStack(ModItems.assembly_556), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.R556.ordinal()));
 
-		addRecipe(PressType.FIVEZERO, new ComparableStack(ModItems.assembly_calamity), new ItemStack(ModItems.ammo_50bmg));
-		addRecipe(PressType.FIVEZERO, new ComparableStack(ModItems.assembly_actionexpress), new ItemStack(ModItems.ammo_50ae));
+		addRecipe(PressType.FIVEZERO, new ComparableStack(ModItems.assembly_calamity), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.BMG50.ordinal()));
+		addRecipe(PressType.FIVEZERO, new ComparableStack(ModItems.assembly_actionexpress), new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.AE50.ordinal()));
 	}
 
 

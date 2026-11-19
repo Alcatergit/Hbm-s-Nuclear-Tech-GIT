@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -14,7 +16,6 @@ import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
-import com.hbm.lib.ModDamageSource;
 import com.hbm.packet.AuxParticlePacketNT;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.potion.HbmPotion;
@@ -87,7 +88,8 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4.ordinal();
 		bullet.dmgMin = 3;
 		bullet.dmgMax = 6;
 		bullet.bulletsMin *= 2;
@@ -100,7 +102,8 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge_slug;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_SLUG.ordinal();
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 20;
 		bullet.wear = 7;
@@ -113,7 +116,8 @@ public class Gun4GaugeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_4gauge_explosive;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_EXPLOSIVE.ordinal();
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -186,7 +190,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardAirstrikeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_SLEEK.ordinal();
 
 		return bullet;
 	}
@@ -195,7 +200,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_FLECHETTE.ordinal();
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 8;
 		bullet.bulletsMin *= 2;
@@ -212,7 +218,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBuckshotConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_FLECHETTE.ordinal();
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 8;
 		bullet.bulletsMin *= 2;
@@ -222,7 +229,8 @@ public class Gun4GaugeFactory {
 		bullet.HBRC = 2;
 		bullet.LBRC = 95;
 
-		bullet.ammo = ModItems.ammo_4gauge_flechette_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_FLECHETTE_PHOSPHORUS.ordinal();
 		bullet.incendiary = 5;
 
 		PotionEffect eff = new PotionEffect(HbmPotion.phosphorus, 20 * 20, 0, true, false);
@@ -252,7 +260,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_semtex;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_SEMTEX.ordinal();
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -285,7 +294,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_balefire;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_BALEFIRE.ordinal();
 		bullet.velocity *= 2;
 		bullet.gravity *= 2;
 		bullet.dmgMin = 10;
@@ -317,7 +327,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_kampf;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_KAMPF.ordinal();
 		bullet.spread = 0.0F;
 		bullet.gravity = 0.0D;
 		bullet.wear = 15;
@@ -333,7 +344,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_canister;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_CANISTER.ordinal();
 		bullet.spread = 0.0F;
 		bullet.gravity = 0.0D;
 		bullet.wear = 15;
@@ -371,7 +383,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_claw;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_CLAW.ordinal();
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;
@@ -391,9 +404,6 @@ public class Gun4GaugeFactory {
 					float f = living.getHealth();
 					f = Math.max(0, f - 2);
 					living.setHealth(f);
-
-					if(f == 0)
-						living.onDeath(ModDamageSource.lead);
 				}
 			}
 		};
@@ -405,7 +415,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_vampire;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_VAMPIRE.ordinal();
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;
@@ -441,7 +452,8 @@ public class Gun4GaugeFactory {
 
 		BulletConfiguration bullet = get4GaugeConfig();
 
-		bullet.ammo = ModItems.ammo_4gauge_void;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.G4_VOID.ordinal();
 		bullet.dmgMin = 6;
 		bullet.dmgMax = 9;
 		bullet.bulletsMin *= 2;
@@ -463,7 +475,6 @@ public class Gun4GaugeFactory {
 				}
 			}
 		};
-
 		return bullet;
 	}
 }

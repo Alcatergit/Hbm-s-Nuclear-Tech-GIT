@@ -22,6 +22,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.math.BlockPos;
@@ -65,11 +66,25 @@ public class WasteEarth extends Block {
 	}
 	
 	@Override
+	@SideOnly(Side.CLIENT)
+	public net.minecraft.util.BlockRenderLayer getRenderLayer() {
+		return this == ModBlocks.waste_earth || this == ModBlocks.waste_mycelium ? net.minecraft.util.BlockRenderLayer.CUTOUT_MIPPED : net.minecraft.util.BlockRenderLayer.SOLID;
+	}
+	
+	@Override
 	public Item getItemDropped(IBlockState state, Random rand, int fortune) {
+		if(this == ModBlocks.waste_earth){
+			return Item.getItemFromBlock(ModBlocks.waste_dirt);
+		}
 		if(this == ModBlocks.frozen_grass){
 			return Items.SNOWBALL;
 		}
 		return Item.getItemFromBlock(this);
+	}
+
+	@Override
+	protected ItemStack getSilkTouchDrop(IBlockState state) {
+		return new ItemStack(this, 1, 0);
 	}
 	
 	@Override

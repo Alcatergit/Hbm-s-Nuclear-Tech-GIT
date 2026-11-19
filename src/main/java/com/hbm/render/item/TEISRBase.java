@@ -17,4 +17,8 @@ public class TEISRBase extends TileEntityItemStackRenderer {
 	public boolean doNullTransform(){
 		return false;
 	}
+
+	public boolean useIdentityTransform(){
+		return false;
+	}
 }

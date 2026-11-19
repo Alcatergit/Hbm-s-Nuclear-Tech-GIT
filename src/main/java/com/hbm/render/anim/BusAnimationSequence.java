@@ -50,7 +50,14 @@ public class BusAnimationSequence {
 
 		//the time elapsed during the frame is the total current time minus the starting timie of the current frame
 		int frameTime = millis - getStartingTime(frame);
-		double interpolation = (double)frameTime / (double)frame.duration;
+		double linear = (double)frameTime / (double)frame.duration;
+		double interpolation;
+		switch(frame.interpolationType) {
+		case SIN_UP:   interpolation = -Math.sin((linear * Math.PI + Math.PI) / 2D) + 1D; break;
+		case SIN_DOWN: interpolation = Math.sin(linear * Math.PI / 2D); break;
+		case SIN_FULL: interpolation = (-Math.cos(linear * Math.PI) + 1D) / 2D; break;
+		default:       interpolation = linear; break;
+		}
 
 		double interX = (frame.x - previous[0]) * interpolation + previous[0];
 		double interY = (frame.y - previous[1]) * interpolation + previous[1];

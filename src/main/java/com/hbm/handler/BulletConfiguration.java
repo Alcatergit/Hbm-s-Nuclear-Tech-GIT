@@ -16,6 +16,8 @@ public class BulletConfiguration {
 
 	// what item this specific configuration consumes
 	public Item ammo;
+	// damage value for ammo_standard
+	public int ammoMeta = 0;
 	// how many ammo units one item restores
 	public int ammoCount = 1;
 	// how fast the bullet is (in sanics per second, or sps)
@@ -138,8 +140,13 @@ public class BulletConfiguration {
 	}
 	
 	public BulletConfiguration setToHoming(Item ammo) {
+		return setToHoming(ammo, 0);
+	}
+
+	public BulletConfiguration setToHoming(Item ammo, int meta) {
 
 		this.ammo = ammo;
+		this.ammoMeta = meta;
 		this.bUpdate = BulletConfigFactory.getHomingBehavior(200, 45);
 		this.dmgMin *= 1.5F;
 		this.dmgMax *= 1.5F;

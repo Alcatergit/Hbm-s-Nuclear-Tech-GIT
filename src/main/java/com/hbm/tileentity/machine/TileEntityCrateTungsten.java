@@ -1,7 +1,5 @@
 package com.hbm.tileentity.machine;
 
-import java.util.Random;
-
 import com.hbm.items.ModItems;
 import com.hbm.items.tool.ItemKeyPin;
 import com.hbm.lib.HBMSoundHandler;
@@ -31,16 +29,20 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 
 	public ItemStackHandler inventory;
 
-	private final Random rand = new Random();
-
 	public int heatTimer = 0;
 	public int age = 0;
 	public long joules = 0;
+
+	private final boolean[] slotConverted = new boolean[27];
+	private boolean internalModification = false;
 	
 	public TileEntityCrateTungsten() {
 		inventory = new ItemStackHandler(27){
 			@Override
 			protected void onContentsChanged(int slot){
+				if(!internalModification) {
+					slotConverted[slot] = false;
+				}
 				markDirty();
 			}
 		};
@@ -115,30 +117,34 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 		heatTimer = 5;
 		
 		for(int i = 0; i < inventory.getSlots(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
 			
-			if(inventory.getStackInSlot(i).isEmpty())
+			if(stack.isEmpty())
 				continue;
 			
-			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(inventory.getStackInSlot(i));
+			if(stack.getItem() == ModItems.crucible && ItemCrucible.getCharges(stack) < 3 && energy > 10000000)
+				ItemCrucible.charge(stack);
+			
+			if(slotConverted[i])
+				continue;
+			
+			ItemStack result = FurnaceRecipes.instance().getSmeltingResult(stack);
 
-			long requiredEnergy = DFCRecipes.getRequiredFlux(inventory.getStackInSlot(i));
-			int count = inventory.getStackInSlot(i).getCount();
-			requiredEnergy *= 0.9D;
+			long requiredEnergy = DFCRecipes.getRequiredFlux(stack);
 			if(requiredEnergy > -1 && energy > requiredEnergy){
-				if(0.001D > count * rand.nextDouble() * ((double)requiredEnergy/(double)energy)){
-					result = DFCRecipes.getOutput(inventory.getStackInSlot(i));
-				}
+				result = DFCRecipes.getOutput(stack);
 			}
 			
-			if(inventory.getStackInSlot(i).getItem() == ModItems.crucible && ItemCrucible.getCharges(inventory.getStackInSlot(i)) < 3 && energy > 10000000)
-				ItemCrucible.charge(inventory.getStackInSlot(i));
-			
 			if(result != null && !result.isEmpty()){
-				int size = inventory.getStackInSlot(i).getCount();
+				int size = stack.getCount();
 			
 				if(result.getCount() * size <= result.getMaxStackSize()) {
-					inventory.setStackInSlot(i, result.copy());
-					inventory.getStackInSlot(i).setCount(inventory.getStackInSlot(i).getCount()*size);
+					ItemStack newStack = result.copy();
+					newStack.setCount(result.getCount() * size);
+					internalModification = true;
+					inventory.setStackInSlot(i, newStack);
+					internalModification = false;
+					slotConverted[i] = true;
 				}
 			}
 		}
@@ -151,6 +157,11 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 			inventory.deserializeNBT(compound.getCompoundTag("inventory"));
 		if(compound.hasKey("heatTimer"))
 			this.heatTimer = compound.getInteger("heatTimer");
+		if(compound.hasKey("slotConverted")) {
+			byte[] arr = compound.getByteArray("slotConverted");
+			for(int i = 0; i < arr.length && i < slotConverted.length; i++)
+				slotConverted[i] = arr[i] != 0;
+		}
 		super.readFromNBT(compound);
 	}
 	
@@ -158,6 +169,10 @@ public class TileEntityCrateTungsten extends TileEntityLockableBase implements I
 	public NBTTagCompound writeToNBT(NBTTagCompound compound) {
 		compound.setTag("inventory", inventory.serializeNBT());
 		compound.setInteger("heatTimer", this.heatTimer);
+		byte[] arr = new byte[slotConverted.length];
+		for(int i = 0; i < slotConverted.length; i++)
+			arr[i] = (byte) (slotConverted[i] ? 1 : 0);
+		compound.setByteArray("slotConverted", arr);
 		return super.writeToNBT(compound);
 	}
 	

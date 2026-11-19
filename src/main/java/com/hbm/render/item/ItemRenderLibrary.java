@@ -338,8 +338,8 @@ public class ItemRenderLibrary {
 			public void renderCommon() {
 				GlStateManager.shadeModel(GL11.GL_SMOOTH);
 				bindTexture(ResourceManager.tank_tex); ResourceManager.fluidtank.renderPart("Frame");
-				GlStateManager.shadeModel(GL11.GL_FLAT);
 				bindTexture(ResourceManager.tank_label_tex); ResourceManager.fluidtank.renderPart("Tank");
+				GlStateManager.shadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.machine_catalytic_reformer), new ItemRenderBase() {
@@ -936,10 +936,10 @@ public class ItemRenderLibrary {
 				GL11.glTranslated(0, 0.5, 0);
 		        GL11.glRotatef(180, 1F, 0F, 0F);
 		        GL11.glRotatef(90, 0F, 1F, 0F);
-	            GlStateManager.disableCull();
+				GL11.glShadeModel(GL11.GL_SMOOTH);
 		        bindTexture(ResourceManager.bomb_multi_tex);
 		        ResourceManager.bomb_multi.renderAll();
-	            GlStateManager.enableCull();
+				GL11.glShadeModel(GL11.GL_FLAT);
 			}});
 
 		renderers.put(Item.getItemFromBlock(ModBlocks.mine_ap), new ItemRenderBase() {

@@ -294,7 +294,7 @@ public class HazardRegistry {
 		
 		registerHazItem(mush, 1);
 		registerHazItem(mush_block, 4);
-		registerHazItem(mush_block_stem, 4);
+		registerHazItem(mush_block_red, 4);
 		registerHazItem(brick_jungle_ooze, 10);
 		registerHazItem(brick_jungle_ooze, 10);
 		registerHazItem(brick_jungle_ooze, 10);
@@ -419,6 +419,7 @@ public class HazardRegistry {
 			registerHazItem(new ItemStack(waste_sandstone_red, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_sand_red, 1, i), (i+1) * 5);
 			registerHazItem(new ItemStack(waste_trinitite_red, 1, i), (i+1) * 10);
+			registerHazItem(new ItemStack(waste_clay, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_terracotta, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_grass_tall, 1, i), (i+1) * 2.5F);
 			registerHazItem(new ItemStack(waste_snow, 1, i), (i+1) * 0.15F);
@@ -525,6 +526,9 @@ public class HazardRegistry {
 		HazardSystem.register(ash_digamma, makeData(DIGAMMA, 0.001F));
         HazardSystem.register(digamma_matter, makeData(DIGAMMA, 0.2F));
         HazardSystem.register(particle_digamma, makeData(RADIATION, 100F).addEntry(DIGAMMA, 0.3333F));
+		HazardSystem.register(pribris_digamma, makeData(DIGAMMA, 133.33F));
+		HazardSystem.register(pribris_burning, makeData(HOT, 0.45F));
+		HazardSystem.register(pribris_radiating, makeData(RADIATION, 66666.7F).addEntry(HOT, 26666.7F));
 		
 		HazardSystem.register(frozen_grass, makeData(CRYOGENIC, 3));
 		HazardSystem.register(frozen_log, makeData(CRYOGENIC, 2));

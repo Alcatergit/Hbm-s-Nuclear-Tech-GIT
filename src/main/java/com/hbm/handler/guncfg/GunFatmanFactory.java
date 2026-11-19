@@ -1,9 +1,12 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
+import com.hbm.entity.logic.EntityBalefire;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.explosion.ExplosionLarge;
 import com.hbm.explosion.ExplosionNT;
@@ -15,6 +18,11 @@ import com.hbm.interfaces.IBulletImpactBehavior;
 import com.hbm.interfaces.IBulletUpdateBehavior;
 import com.hbm.items.ModItems;
 import com.hbm.lib.HBMSoundHandler;
+import com.hbm.render.anim.BusAnimation;
+import com.hbm.render.anim.BusAnimationKeyframe;
+import com.hbm.render.anim.BusAnimationKeyframe.InterpolationType;
+import com.hbm.render.anim.BusAnimationSequence;
+import com.hbm.render.anim.HbmAnimations.AnimType;
 import com.hbm.render.misc.RenderScreenOverlay.Crosshair;
 
 import net.minecraft.util.SoundCategory;
@@ -29,14 +37,14 @@ public static GunConfiguration getFatmanConfig() {
 		config.roundsPerCycle = 1;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.reloadDuration = 120;
+		config.reloadDuration = 55;
 		config.firingDuration = 0;
 		config.ammoCap = 1;
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCUMFLEX;
-		config.firingSound = HBMSoundHandler.fatmanShoot;
-		config.reloadSound = GunConfiguration.RSOUND_FATMAN;
+		config.firingSound = HBMSoundHandler.fireFatman;
+		config.reloadSound = HBMSoundHandler.fatmanFull;
 		config.reloadSoundEnd = false;
 		
 		config.name = "M-42 Tactical Nuclear Catapult";
@@ -49,7 +57,14 @@ public static GunConfiguration getFatmanConfig() {
 		config.config.add(BulletConfigSyncingUtil.NUKE_TOTS);
 		config.config.add(BulletConfigSyncingUtil.NUKE_SAFE);
 		config.config.add(BulletConfigSyncingUtil.NUKE_PUMPKIN);
+		config.config.add(BulletConfigSyncingUtil.NUKE_AMAT);
+		config.config.add(BulletConfigSyncingUtil.NUKE_MIRV_NORMAL);
+		config.config.add(BulletConfigSyncingUtil.NUKE_MIRV_LOW);
+		config.config.add(BulletConfigSyncingUtil.NUKE_MIRV_HIGH);
+		config.config.add(BulletConfigSyncingUtil.NUKE_MIRV_SAFE);
+		config.config.add(BulletConfigSyncingUtil.NUKE_MIRV_SPECIAL);
 		config.durability = 1000;
+		addFatmanAnims(config);
 		
 		return config;
 	}
@@ -93,14 +108,14 @@ public static GunConfiguration getFatmanConfig() {
 		config.roundsPerCycle = 8;
 		config.gunMode = GunConfiguration.MODE_NORMAL;
 		config.firingMode = GunConfiguration.FIRE_MANUAL;
-		config.reloadDuration = 120;
+		config.reloadDuration = 55;
 		config.firingDuration = 0;
 		config.ammoCap = 8;
 		config.reloadType = GunConfiguration.RELOAD_FULL;
 		config.allowsInfinity = true;
 		config.crosshair = Crosshair.L_CIRCUMFLEX;
-		config.firingSound = HBMSoundHandler.fatmanShoot;
-		config.reloadSound = GunConfiguration.RSOUND_FATMAN;
+		config.firingSound = HBMSoundHandler.fireFatman;
+		config.reloadSound = HBMSoundHandler.fatmanFull;
 		config.reloadSoundEnd = false;
 		
 		config.name = "M-42 Tactical Nuclear Catapult";
@@ -113,15 +128,79 @@ public static GunConfiguration getFatmanConfig() {
 		config.config.add(BulletConfigSyncingUtil.NUKE_PROTO_TOTS);
 		config.config.add(BulletConfigSyncingUtil.NUKE_PROTO_SAFE);
 		config.config.add(BulletConfigSyncingUtil.NUKE_PROTO_PUMPKIN);
+		config.config.add(BulletConfigSyncingUtil.NUKE_PROTO_AMAT);
 		config.durability = 1000;
+		addFatmanAnims(config);
 		
 		return config;
 	}
 	
+	private static void addFatmanAnims(GunConfiguration config) {
+		config.animations.put(AnimType.EQUIP, new BusAnimation()
+				.addBus("EQUIP", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(60, 0, 0, 0, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 1000, InterpolationType.SIN_DOWN))));
+
+		config.animations.put(AnimType.CYCLE, new BusAnimation()
+				.addBus("GAUGE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 135, 100, InterpolationType.SIN_DOWN))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500, InterpolationType.SIN_DOWN)))
+				.addBus("PISTON", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 100, InterpolationType.SIN_UP)))
+				.addBus("NUKE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 100, InterpolationType.SIN_UP))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 0, InterpolationType.SMOOTH))));
+
+		config.animations.put(AnimType.RELOAD, new BusAnimation()
+				.addBus("LID", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -45, 250, InterpolationType.SIN_UP))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -45, 1200, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SIN_UP)))
+				.addBus("HANDLE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -2, 500, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -2, 1700, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 750, InterpolationType.SIN_FULL)))
+				.addBus("NUKE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(5, -4, 3, 0, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(5, -4, 3, 750, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(2, 0.5, 3, 500, InterpolationType.SIN_UP))
+						.addKeyframe(new BusAnimationKeyframe(1, 0.5, 3, 100, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 100, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 750, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 750, InterpolationType.SIN_FULL)))
+				.addBus("PISTON", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 0, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 3, 2200, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 750, InterpolationType.SIN_FULL)))
+				.addBus("EQUIP", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(5, 0, 0, 500, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 450, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(3, 0, 0, 100, InterpolationType.SIN_DOWN))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 100, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 500, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(-10, 0, 0, 375, InterpolationType.SIN_DOWN))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 375, InterpolationType.SIN_UP))));
+
+		config.animations.put(AnimType.INSPECT, new BusAnimation()
+				.addBus("HANDLE", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -2, 250, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, -2, 250, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SIN_FULL)))
+				.addBus("EQUIP", new BusAnimationSequence()
+						.addKeyframe(new BusAnimationKeyframe(-15, 0, 0, 250, InterpolationType.SIN_FULL))
+						.addKeyframe(new BusAnimationKeyframe(-15, 0, 0, 1000, InterpolationType.SMOOTH))
+						.addKeyframe(new BusAnimationKeyframe(0, 0, 0, 250, InterpolationType.SIN_FULL))));
+	}
+
 	public static BulletConfiguration getNukeConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_STANDARD.ordinal();
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 
@@ -137,7 +216,8 @@ public static GunConfiguration getFatmanConfig() {
 	public static BulletConfiguration getNukeLowConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke_low;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_LOW.ordinal();
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 
@@ -153,7 +233,8 @@ public static GunConfiguration getFatmanConfig() {
 	public static BulletConfiguration getNukeHighConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke_high;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_HIGH.ordinal();
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 
@@ -169,7 +250,8 @@ public static GunConfiguration getFatmanConfig() {
 	public static BulletConfiguration getNukeTotsConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke_tots;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_TOTS.ordinal();
 		bullet.bulletsMin = 8;
 		bullet.bulletsMax = 8;
 		bullet.spread = 0.1F;
@@ -189,7 +271,8 @@ public static GunConfiguration getFatmanConfig() {
 	public static BulletConfiguration getNukeSafeConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke_safe;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_SAFE.ordinal();
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 
@@ -205,7 +288,8 @@ public static GunConfiguration getFatmanConfig() {
 	public static BulletConfiguration getNukePumpkinConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
-		bullet.ammo = ModItems.ammo_nuke_pumpkin;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_PUMPKIN.ordinal();
 		bullet.explosive = 10F;
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
@@ -237,7 +321,8 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = getNukeConfig();
 		
-		bullet.ammo = ModItems.ammo_mirv;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.MIRV_STANDARD.ordinal();
 		bullet.style = BulletConfiguration.STYLE_MIRV;
 		bullet.velocity *= 3;
 		
@@ -274,7 +359,8 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = getNukeLowConfig();
 		
-		bullet.ammo = ModItems.ammo_mirv_low;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.MIRV_LOW.ordinal();
 		bullet.style = BulletConfiguration.STYLE_MIRV;
 		bullet.velocity *= 3;
 		
@@ -311,7 +397,8 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = getNukeHighConfig();
 		
-		bullet.ammo = ModItems.ammo_mirv_high;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.MIRV_HIGH.ordinal();
 		bullet.style = BulletConfiguration.STYLE_MIRV;
 		bullet.velocity *= 3;
 		
@@ -348,7 +435,8 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = getNukeSafeConfig();
 		
-		bullet.ammo = ModItems.ammo_mirv_safe;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.MIRV_SAFE.ordinal();
 		bullet.style = BulletConfiguration.STYLE_MIRV;
 		bullet.velocity *= 3;
 		
@@ -385,7 +473,8 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = getNukeConfig();
 		
-		bullet.ammo = ModItems.ammo_mirv_special;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.MIRV_SPECIAL.ordinal();
 		bullet.style = BulletConfiguration.STYLE_MIRV;
 		bullet.velocity *= 3;
 		
@@ -433,14 +522,15 @@ public static GunConfiguration getFatmanConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardNukeConfig();
 		
-		bullet.ammo = ModItems.gun_bf_ammo;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.NUKE_BALEFIRE.ordinal();
 		bullet.style = BulletConfiguration.STYLE_BF;
 		
 		bullet.bImpact = new IBulletImpactBehavior() {
 			public void behaveBlockHit(EntityBulletBase bullet, int x, int y, int z) {
 				
 				if(!bullet.world.isRemote) {
-
+					EntityBalefire bf = new EntityBalefire(bullet.world);
 					double posX = bullet.posX;
 					double posY = bullet.posY + 0.5;
 					double posZ = bullet.posZ;
@@ -454,15 +544,12 @@ public static GunConfiguration getFatmanConfig() {
 					bullet.world.playSound(null, x, y, z, HBMSoundHandler.mukeExplosion, SoundCategory.HOSTILE, 15.0F, 1.0F);
 					
 					ExplosionLarge.spawnShrapnels(bullet.world, posX, posY, posZ, 25);
-					
-					ExplosionNT exp = new ExplosionNT(bullet.world, null, posX, posY, posZ, 15F)
-							.addAttrib(ExAttrib.BALEFIRE)
-							.addAttrib(ExAttrib.NOPARTICLE)
-							.addAttrib(ExAttrib.NOSOUND)
-							.addAttrib(ExAttrib.NODROP)
-							.addAttrib(ExAttrib.NOHURT)
-							.overrideResolution(64);
-					exp.explode();
+
+					bf.posX = posX;
+					bf.posY = posY;
+					bf.posZ = posZ;
+					bf.destructionRange = 15;
+					bullet.world.spawnEntity(bf);
 					
 					if(BombConfig.enableNukeClouds) {
 						EntityNukeTorex.statFacBale(bullet.world, posX, posY, posZ, 15);

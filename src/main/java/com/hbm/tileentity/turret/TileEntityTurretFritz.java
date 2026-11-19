@@ -1,5 +1,6 @@
 package com.hbm.tileentity.turret;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 
 import com.hbm.forgefluid.FFUtils;
@@ -110,7 +111,7 @@ public class TileEntityTurretFritz extends TileEntityTurretBaseNT implements IFl
 			FFUtils.fillFromFluidContainer(inventory, tank, 5, 9);
 			PacketDispatcher.wrapper.sendToAllAround(new FluidTankPacket(pos, tank), new TargetPoint(world.provider.getDimension(), this.pos.getX(), this.pos.getY(), this.pos.getZ(), 10));
 			for(int i = 1; i < 10; i++) {
-				if(inventory.getStackInSlot(i).getItem() == ModItems.ammo_fuel) {
+				if(inventory.getStackInSlot(i).getItem() == ModItems.ammo_standard && inventory.getStackInSlot(i).getItemDamage() == EnumAmmo.FLAME_DIESEL.ordinal()) {
 					if((this.tank.getFluid() == null || tank.getFluid().getFluid() == ModForgeFluids.DIESEL) && this.tank.getFluidAmount() + 1000 <= this.tank.getCapacity()) {
 						this.tank.fill(new FluidStack(ModForgeFluids.DIESEL, 1000), true);
 						inventory.getStackInSlot(i).shrink(1);

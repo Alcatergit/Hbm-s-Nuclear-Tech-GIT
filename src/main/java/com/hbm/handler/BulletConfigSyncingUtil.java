@@ -1,5 +1,6 @@
 package com.hbm.handler;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -215,12 +216,14 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int NUKE_HIGH = i++;
 	public static int NUKE_TOTS = i++;
 	public static int NUKE_SAFE = i++;
+	public static int NUKE_AMAT = i++;
 	public static int NUKE_PUMPKIN = i++;
 	public static int NUKE_PROTO_NORMAL = i++;
 	public static int NUKE_PROTO_LOW = i++;
 	public static int NUKE_PROTO_HIGH = i++;
 	public static int NUKE_PROTO_TOTS = i++;
 	public static int NUKE_PROTO_SAFE = i++;
+	public static int NUKE_PROTO_AMAT = i++;
 	public static int NUKE_PROTO_PUMPKIN = i++;
 	public static int NUKE_MIRV_NORMAL = i++;
 	public static int NUKE_MIRV_LOW = i++;
@@ -228,7 +231,6 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 	public static int NUKE_MIRV_SAFE = i++;
 	public static int NUKE_MIRV_SPECIAL = i++;
 
-	public static int NUKE_AMAT = i++;
 	
 	public static int ZOMG_BOLT = i++;
 
@@ -440,33 +442,34 @@ private static HashMap<Integer, BulletConfiguration> configSet = new HashMap<Int
 		configSet.put(NUKE_HIGH, GunFatmanFactory.getNukeHighConfig());
 		configSet.put(NUKE_TOTS, GunFatmanFactory.getNukeTotsConfig());
 		configSet.put(NUKE_SAFE, GunFatmanFactory.getNukeSafeConfig());
+		configSet.put(NUKE_AMAT, GunFatmanFactory.getBalefireConfig());
 		configSet.put(NUKE_PUMPKIN, GunFatmanFactory.getNukePumpkinConfig());
 		configSet.put(NUKE_PROTO_NORMAL, GunFatmanFactory.getNukeConfig().accuracyMod(20F));
 		configSet.put(NUKE_PROTO_LOW, GunFatmanFactory.getNukeLowConfig().accuracyMod(20F));
 		configSet.put(NUKE_PROTO_HIGH, GunFatmanFactory.getNukeHighConfig().accuracyMod(20F));
 		configSet.put(NUKE_PROTO_TOTS, GunFatmanFactory.getNukeTotsConfig().accuracyMod(20F));
 		configSet.put(NUKE_PROTO_SAFE, GunFatmanFactory.getNukeSafeConfig().accuracyMod(20F));
+		configSet.put(NUKE_PROTO_AMAT, GunFatmanFactory.getBalefireConfig().accuracyMod(20F));
 		configSet.put(NUKE_PROTO_PUMPKIN, GunFatmanFactory.getNukePumpkinConfig().accuracyMod(20F));
 		configSet.put(NUKE_MIRV_NORMAL, GunFatmanFactory.getMirvConfig());
 		configSet.put(NUKE_MIRV_LOW, GunFatmanFactory.getMirvLowConfig());
 		configSet.put(NUKE_MIRV_HIGH, GunFatmanFactory.getMirvHighConfig());
 		configSet.put(NUKE_MIRV_SAFE, GunFatmanFactory.getMirvSafeConfig());
 		configSet.put(NUKE_MIRV_SPECIAL, GunFatmanFactory.getMirvSpecialConfig());
-		
-		configSet.put(NUKE_AMAT, GunFatmanFactory.getBalefireConfig());
+
 		
 		configSet.put(ZOMG_BOLT, GunEnergyFactory.getZOMGBoltConfig());
 
-		configSet.put(CHL_LR22, Gun22LRFactory.get22LRConfig().setToHoming(ModItems.ammo_22lr_chlorophyte));
-		configSet.put(CHL_LR22_FIRE, Gun22LRFactory.get22LRConfig().setToFire(3).setToHoming(ModItems.ammo_22lr_chlorophyte));
-		configSet.put(CHL_M44, Gun44MagnumFactory.getNoPipConfig().setToHoming(ModItems.ammo_44_chlorophyte));
-		configSet.put(CHL_P9, Gun9mmFactory.get9mmConfig().setToHoming(ModItems.ammo_9mm_chlorophyte));
-		configSet.put(CHL_BMG50, Gun50BMGFactory.get50BMGConfig().setToHoming(ModItems.ammo_50bmg_chlorophyte));
-		configSet.put(CHL_R5, Gun5mmFactory.get5mmConfig().setToHoming(ModItems.ammo_5mm_chlorophyte));
-		configSet.put(CHL_R5_BOLT, Gun5mmFactory.get5mmConfig().setToBolt(BulletConfiguration.BOLT_LACUNAE).setToHoming(ModItems.ammo_5mm_chlorophyte));
-		configSet.put(CHL_AE50, Gun50AEFactory.get50AEConfig().setToHoming(ModItems.ammo_50ae_chlorophyte));
-		configSet.put(CHL_R556, Gun556mmFactory.get556Config().setToHoming(ModItems.ammo_556_chlorophyte));
-		configSet.put(CHL_R556_FLECHETTE, Gun556mmFactory.get556FlechetteConfig().setToHoming(ModItems.ammo_556_flechette_chlorophyte));
+		configSet.put(CHL_LR22, Gun22LRFactory.get22LRConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.P22_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_LR22_FIRE, Gun22LRFactory.get22LRConfig().setToFire(3).setToHoming(ModItems.ammo_standard, EnumAmmo.P22_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_M44, Gun44MagnumFactory.getNoPipConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.M44_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_P9, Gun9mmFactory.get9mmConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.P9_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_BMG50, Gun50BMGFactory.get50BMGConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.BMG50_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_R5, Gun5mmFactory.get5mmConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.R5_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_R5_BOLT, Gun5mmFactory.get5mmConfig().setToBolt(BulletConfiguration.BOLT_LACUNAE).setToHoming(ModItems.ammo_standard, EnumAmmo.R5_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_AE50, Gun50AEFactory.get50AEConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.AE50_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_R556, Gun556mmFactory.get556Config().setToHoming(ModItems.ammo_standard, EnumAmmo.R556_CHLOROPHYTE.ordinal()));
+		configSet.put(CHL_R556_FLECHETTE, Gun556mmFactory.get556FlechetteConfig().setToHoming(ModItems.ammo_standard, EnumAmmo.R556_FLECHETTE_CHLOROPHYTE.ordinal()));
 		
 		configSet.put(MASKMAN_BULLET, GunNPCFactory.getMaskmanBullet());
 		configSet.put(MASKMAN_ORB, GunNPCFactory.getMaskmanOrb());

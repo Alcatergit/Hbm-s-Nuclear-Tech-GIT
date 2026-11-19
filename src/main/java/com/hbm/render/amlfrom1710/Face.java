@@ -66,7 +66,7 @@ public class Face {
         }
     }
 
-        @SideOnly(Side.CLIENT)
+    @SideOnly(Side.CLIENT)
     public void addFaceForRenderSplit(Tessellator tessellator, float textureOffset, float splitHeight, float scale) {
         if (faceNormal == null)
         {

@@ -1,5 +1,6 @@
 package com.hbm.blocks.generic;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 import java.util.Random;
 
@@ -121,8 +122,8 @@ public class BlockNTMOre extends BlockOre {
 			case 28: return ModItems.pellet_rtg_weak;
 			case 29: return ModItems.rtg_unit;
 			case 30: return ModItems.gun_spark_ammo;
-			case 31: return ModItems.ammo_nuke;
-			case 32: return ModItems.ammo_mirv;
+			case 31: return ModItems.ammo_standard;
+			case 32: return ModItems.ammo_standard;
 			case 33: return ModItems.gun_defabricator_ammo;
 			case 34: return ModItems.gun_osipr_ammo2;
 			}
@@ -201,6 +202,8 @@ public class BlockNTMOre extends BlockOre {
 	
 	@Override
 	public int damageDropped(IBlockState state) {
+		if(this == ModBlocks.block_meteor_treasure)
+			return RANDOM.nextBoolean() ? EnumAmmo.NUKE_STANDARD.ordinal() : EnumAmmo.MIRV_STANDARD.ordinal();
 		return 0;
 	}
 	

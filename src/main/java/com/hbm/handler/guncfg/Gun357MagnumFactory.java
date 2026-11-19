@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -242,7 +244,8 @@ public static GunConfiguration getBaseConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_357_desh;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M357_DESH.ordinal();
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 17;
 		

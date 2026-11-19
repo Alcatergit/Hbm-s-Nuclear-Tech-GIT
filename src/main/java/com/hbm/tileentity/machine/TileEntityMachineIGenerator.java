@@ -454,7 +454,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
-		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
+		FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
 		for(int i = 0; i < pellets.length; i++) {
 			
 			short s = nbt.getShort("pellet" + i);
@@ -474,7 +474,7 @@ public class TileEntityMachineIGenerator extends TileEntityMachineBase implement
 	
 	@Override
 	public @NotNull NBTTagCompound writeToNBT(NBTTagCompound nbt) {
-		FFUtils.deserializeTankArray(nbt.getTagList("tanks", 10), tanks);
+		nbt.setTag("tanks", FFUtils.serializeTankArray(tanks));
 		for(int i = 0; i < pellets.length; i++) {
 			
 			if(pellets[i] != null) {

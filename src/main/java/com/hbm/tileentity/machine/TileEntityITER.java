@@ -16,10 +16,12 @@ import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.AdvancementManager;
+import com.hbm.main.MainRegistry;
 import com.hbm.packet.FluidTankPacket;
 import com.hbm.packet.FluidTypePacketTest;
 import com.hbm.packet.PacketDispatcher;
 import com.hbm.render.amlfrom1710.Vec3;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.saveddata.RadiationSavedData;
 
@@ -45,6 +47,8 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Random;
+
 public class TileEntityITER extends TileEntityMachineBase implements ITickable, IEnergyUser, IFluidHandler, ITankPacketAcceptor {
 
 	public long power;
@@ -57,6 +61,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	public Fluid plasmaType;
 	
 	public int progress;
+	public int plasmaProgress;
 	public static final int duration = 100;
 
 	@SideOnly(Side.CLIENT)
@@ -65,6 +70,10 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 	public float rotor;
 	public float lastRotor;
 	public boolean isOn;
+
+	public float fanAcceleration = 0F;
+	private AudioWrapper audio;
+	private final float audioDesync;
 
 	public TileEntityITER() {
 		super(5);
@@ -75,6 +84,9 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		tanks[1] = new FluidTank(1280000);
 		types[1] = ModForgeFluids.ULTRAHOTSTEAM;
 		plasma = new FluidTank(16000);
+
+		Random rand = new Random();
+		audioDesync = rand.nextFloat() * 0.05F;
 	}
 
 	@Override
@@ -120,8 +132,11 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 
 					int chance = FusionRecipes.getByproductChance(plasmaType);
 
-					if(chance > 0 && world.rand.nextInt(chance) == 0)
-						produceByproduct();
+					if(chance > 0 && world.rand.nextInt(chance) == 0) {
+						if(produceByproduct()) {
+							plasmaProgress = 10;
+						}
+					}
 				}
 
 				if(plasma.getFluidAmount() > 0 && this.getShield() != 0) {
@@ -153,6 +168,8 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 				}
 			}
 			doBreederStuff();
+			if(plasmaProgress > 0)
+				plasmaProgress--;
 			/// END Processing part ///
 
 			/// START Notif packets ///
@@ -163,6 +180,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 			data.setBoolean("isOn", isOn);
 			data.setLong("power", power);
 			data.setInteger("progress", progress);
+			data.setInteger("plasmaProgress", plasmaProgress);
 
 			if(inventory.getStackInSlot(3).getItem() == ModItems.fusion_shield_tungsten) {
 				data.setInteger("blanket", 1);
@@ -180,16 +198,59 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		} else {
 
 			this.lastRotor = this.rotor;
+			this.rotor += this.fanAcceleration;
+
+			if(this.rotor >= 360) {
+				this.rotor -= 360;
+				this.lastRotor -= 360;
+			}
 
 			if(this.isOn && this.power >= powerReq) {
+				this.fanAcceleration = Math.max(0F, Math.min(15F, this.fanAcceleration + 0.075F + audioDesync));
+			} else {
+				this.fanAcceleration = Math.max(0F, Math.min(15F, this.fanAcceleration - 0.1F));
+			}
 
-				this.rotor += 15F;
+			if(this.fanAcceleration > 0) {
 
-				if(this.rotor >= 360) {
-					this.rotor -= 360;
-					this.lastRotor -= 360;
+				float speed = this.fanAcceleration / 15F;
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.iterReactorRunning, SoundCategory.BLOCKS, pos.getX() + 0.5F, pos.getY() + 2.5F, pos.getZ() + 0.5F, speed, 30F, speed, 20);
+					audio.startSound();
+				} else {
+					audio.updateVolume(speed);
+					audio.updatePitch(speed);
+					audio.keepAlive();
+				}
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
 				}
 			}
+		}
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
 		}
 	}
 
@@ -249,21 +310,24 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		}
 	}
 
-	private void produceByproduct() {
+	private boolean produceByproduct() {
 
 		ItemStack by = FusionRecipes.getByproduct(plasmaType);
 
 		if(by == null)
-			return;
+			return false;
 
 		if(inventory.getStackInSlot(4).isEmpty()) {
 			inventory.setStackInSlot(4, by);
-			return;
+			return true;
 		}
 
 		if(inventory.getStackInSlot(4).getItem() == by.getItem() && inventory.getStackInSlot(4).getItemDamage() == by.getItemDamage() && inventory.getStackInSlot(4).getCount() < inventory.getStackInSlot(4).getMaxStackSize()) {
 			inventory.getStackInSlot(4).grow(1);
+			return true;
 		}
+		
+		return false;
 	}
 
 	public int getShield() {
@@ -280,6 +344,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		this.power = data.getLong("power");
 		this.blanket = data.getInteger("blanket");
 		this.progress = data.getInteger("progress");
+		this.plasmaProgress = data.getInteger("plasmaProgress");
 	}
 
 	@Override
@@ -306,6 +371,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 		plasmaType = FluidRegistry.getFluid(compound.getString("plasma_type"));
 		this.power = compound.getLong("power");
 		this.isOn = compound.getBoolean("isOn");
+		this.plasmaProgress = compound.getInteger("plasmaProgress");
 		super.readFromNBT(compound);
 	}
 
@@ -318,6 +384,7 @@ public class TileEntityITER extends TileEntityMachineBase implements ITickable, 
 			compound.setString("plasma_type", plasmaType.getName());
 		compound.setLong("power", this.power);
 		compound.setBoolean("isOn", isOn);
+		compound.setInteger("plasmaProgress", plasmaProgress);
 		return super.writeToNBT(compound);
 	}
 

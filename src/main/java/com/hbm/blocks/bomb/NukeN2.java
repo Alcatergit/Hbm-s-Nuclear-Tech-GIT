@@ -7,14 +7,12 @@ import com.hbm.blocks.ModBlocks;
 import com.hbm.config.BombConfig;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.logic.EntityNukeExplosionMK5;
-import com.hbm.interfaces.IBomb;
-import com.hbm.lib.InventoryHelper;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityNukeN2;
+import com.hbm.items.ModItems;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
-import net.minecraft.block.BlockContainer;
 import net.minecraft.block.BlockHorizontal;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -24,7 +22,10 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.SoundEvents;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumBlockRenderType;
 import net.minecraft.util.EnumFacing;
@@ -36,7 +37,7 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 
-public class NukeN2 extends BlockContainer implements IBomb {
+public class NukeN2 extends BlockNukeBase {
 
 	public static final PropertyDirection FACING = BlockHorizontal.FACING;
 	
@@ -54,9 +55,18 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void breakBlock(World worldIn, BlockPos pos, IBlockState state) {
-		InventoryHelper.dropInventoryItems(worldIn, pos, worldIn.getTileEntity(pos));
-		super.breakBlock(worldIn, pos, state);
+	protected Item getBlockItem() {
+		return Item.getItemFromBlock(ModBlocks.nuke_n2);
+	}
+
+	@Override
+	protected Class<? extends TileEntity> getTileEntityClass() {
+		return TileEntityNukeN2.class;
+	}
+
+	@Override
+	public IBlockState getStateForPlacement(World world, BlockPos pos, EnumFacing facing, float hitX, float hitY, float hitZ, int meta, EntityLivingBase placer) {
+		return this.getDefaultState().withProperty(FACING, placer.getHorizontalFacing().getOpposite());
 	}
 
 	@Override
@@ -80,17 +90,14 @@ public class NukeN2 extends BlockContainer implements IBomb {
 		if(worldIn.getRedstonePowerFromNeighbors(pos) > 0 && !worldIn.isRemote) {
 			int charges = entity.countCharges();
 			if(charges > 0) {
-				this.onPlayerDestroy(worldIn, pos, worldIn.getBlockState(pos));
+				// ========== Modified: Set detonation flag, then clear the block ==========
+				this.isExploding = true;
 				entity.clearSlots();
 				worldIn.setBlockToAir(pos);
 				igniteTestBomb(worldIn, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
+				this.isExploding = false;
 			}
 		}
-	}
-
-	@Override
-	public void onBlockPlacedBy(World worldIn, BlockPos pos, IBlockState state, EntityLivingBase placer, ItemStack stack) {
-		worldIn.setBlockState(pos, state.withProperty(FACING, placer.getHorizontalFacing().getOpposite()));
 	}
 	
 	public boolean igniteTestBomb(World world, int x, int y, int z, int r)
@@ -113,10 +120,12 @@ public class NukeN2 extends BlockContainer implements IBomb {
 		TileEntityNukeN2 entity = (TileEntityNukeN2) world.getTileEntity(pos);
 		int charges = entity.countCharges();
 		if(charges > 0) {
-			this.onPlayerDestroy(world, pos, world.getBlockState(pos));
+			// ========== Modified: Set detonation flag, then clear the block ==========
+			this.isExploding = true;
 			entity.clearSlots();
 			world.setBlockToAir(pos);
 			igniteTestBomb(world, pos.getX(), pos.getY(), pos.getZ(), (int)(BombConfig.n2Radius*charges/12F));
+			this.isExploding = false;
 		}
 	}
 	
@@ -172,8 +181,6 @@ public class NukeN2 extends BlockContainer implements IBomb {
         return this.getDefaultState().withProperty(FACING, enumfacing);
 	}
 	
-	
-	
 	@Override
 	public IBlockState withRotation(IBlockState state, Rotation rot) {
 		return state.withProperty(FACING, rot.rotate((EnumFacing)state.getValue(FACING)));
@@ -186,11 +193,52 @@ public class NukeN2 extends BlockContainer implements IBomb {
 	}
 
 	@Override
-	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
+	public void addInformation(ItemStack stack, World world, List<String> tooltip, ITooltipFlag advanced) {
 		tooltip.add("§c["+ I18nUtil.resolveKey("trait.extremebomb")+"]§r");
 		tooltip.add(" §e"+I18nUtil.resolveKey("desc.radius", BombConfig.n2Radius)+"§r");
+		// ========== Modified: Calculate and display blast radius based on contained items ==========
+		int charges = countChargesFromItemStack(stack);
+		if (charges > 0) {
+			int explosionRadius = (int)(BombConfig.n2Radius * charges / 12F);
+			tooltip.add(" §e"+("(Current radius: "+explosionRadius+")")+"§r");
+		}
 		tooltip.add("");
 		tooltip.add("§e"+I18nUtil.resolveKey("desc.chargeadds", (int)(BombConfig.n2Radius/12))+"§r");
+
 	}
 
+	// ========== Added: Count n2_charge items from item NBT data ==========
+	private int countChargesFromItemStack(ItemStack stack) {
+		int charges = 0;
+		
+		if (stack.hasTagCompound() && stack.getTagCompound().hasKey("BlockEntityTag")) {
+			NBTTagCompound blockEntityTag = stack.getTagCompound().getCompoundTag("BlockEntityTag");
+			
+			if (blockEntityTag.hasKey("inventory")) {
+				NBTTagCompound inventoryTag = blockEntityTag.getCompoundTag("inventory");
+
+				// Check if it contains the Items tag (the serialization format of ItemStackHandler)
+				if (inventoryTag.hasKey("Items")) {
+					NBTTagList itemsList = inventoryTag.getTagList("Items", 10);
+
+					// Count n2_charge items
+					for (int i = 0; i < itemsList.tagCount(); i++) {
+						NBTTagCompound itemTag = itemsList.getCompoundTagAt(i);
+
+						// Check item ID (using registry name instead of string ID)
+						String itemId = itemTag.getString("id");
+
+						// Check if it is an n2_charge item
+						if (itemId.equals(ModItems.n2_charge.getRegistryName().toString())) {
+							// Get item count
+							int count = itemTag.getByte("Count");
+							charges += count;
+						}
+					}
+				}
+			}
+		}
+		
+		return charges;
+	}
 }

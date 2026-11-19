@@ -11,6 +11,7 @@ import net.minecraftforge.fluids.FluidTank;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
+import org.jetbrains.annotations.NotNull;
 
 public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase {
 
@@ -58,13 +59,26 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 		super.networkUnpack(nbt);
 	}
 
+	@Override
+	public @NotNull NBTTagCompound getUpdateTag() {
+		NBTTagCompound nbt = super.getUpdateTag();
+		nbt.setTag("inventory", inventory.serializeNBT());
+		return nbt;
+	}
+
+	@Override
+	public void handleUpdateTag(@NotNull NBTTagCompound nbt) {
+		super.handleUpdateTag(nbt);
+		inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
+	}
+
 	public void handleButtonPacket(int value, int meta) {
 	}
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);
-		if(!diag) {
+		if(nbt.hasKey("inventory")) {
 			inventory.deserializeNBT(nbt.getCompoundTag("inventory"));
 		}
 	}
@@ -72,7 +86,6 @@ public abstract class TileEntityRBMKSlottedBase extends TileEntityRBMKActiveBase
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		
 		if(!diag) {
 			nbt.setTag("inventory", inventory.serializeNBT());
 		}

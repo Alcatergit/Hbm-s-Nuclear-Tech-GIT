@@ -2,12 +2,10 @@ package com.hbm.packet;
 
 import com.hbm.lib.HBMSoundHandler;
 import com.hbm.sound.SoundLoopAssembler;
-import com.hbm.sound.SoundLoopBroadcaster;
 import com.hbm.sound.SoundLoopCentrifuge;
 import com.hbm.sound.SoundLoopChemplant;
 import com.hbm.sound.SoundLoopTurbofan;
 import com.hbm.sound.SoundLoopFel;
-import com.hbm.tileentity.machine.TileEntityBroadcaster;
 import com.hbm.tileentity.machine.TileEntityMachineAssembler;
 import com.hbm.tileentity.machine.TileEntityMachineCentrifuge;
 import com.hbm.tileentity.machine.TileEntityMachineChemplant;
@@ -20,7 +18,6 @@ import com.hbm.tileentity.machine.TileEntityFEL;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -132,29 +129,6 @@ public class LoopedSoundPacket implements IMessage {
 					if(flag && te.getWorld().isRemote && SoundLoopTurbofan.canPlay(te) && SoundLoopTurbofan.isProcessing(te))
 						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopTurbofan(HBMSoundHandler.turbofanOperate, te));
 				} else
-				
-				if (te instanceof TileEntityBroadcaster) {
-					
-					boolean flag = true;
-					for(int i = 0; i < SoundLoopBroadcaster.list.size(); i++)  {
-                        if (SoundLoopBroadcaster.list.get(i).te == te && !SoundLoopBroadcaster.list.get(i).isDonePlaying()) {
-                            flag = false;
-                            break;
-                        }
-					}
-					
-					int j = te.getPos().getX() + te.getPos().getY() + te.getPos().getZ();
-					int rand = Math.abs(j) % 3 + 1;
-					SoundEvent sound = switch (rand) {
-                        case 2 -> HBMSoundHandler.broadcast2;
-                        case 3 -> HBMSoundHandler.broadcast3;
-                        default -> HBMSoundHandler.broadcast1;
-                    };
-
-                    if(flag && te.getWorld().isRemote)
-						Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopBroadcaster(sound, te));
-				} else
-				
 				if (te instanceof TileEntityMachineCentrifuge || te instanceof TileEntityMachineGasCent) {
 					
 					boolean flag = true;

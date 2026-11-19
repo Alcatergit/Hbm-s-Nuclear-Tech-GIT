@@ -5,6 +5,9 @@ import com.hbm.forgefluid.FFUtils;
 import com.hbm.forgefluid.ModForgeFluids;
 import com.hbm.inventory.MachineRecipes;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
@@ -14,6 +17,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.EnumParticleTypes;
 import net.minecraft.util.ITickable;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.common.capabilities.Capability;
@@ -27,6 +31,8 @@ import net.minecraftforge.fluids.capability.IFluidTankProperties;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
+import java.util.Random;
+
 public class TileEntityChungus extends TileEntityLoadedBase implements ITickable, IFluidHandler, IEnergyGenerator, INBTPacketReceiver {
 
 	public long powerProduction = 0;
@@ -35,6 +41,10 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 	private int turnTimer;
 	public float rotor;
 	public float lastRotor;
+	public float fanAcceleration = 0F;
+
+	private AudioWrapper audio;
+	private final float audioDesync;
 	
 	public FluidTank[] tanks;
 	public Fluid[] types = new Fluid[]{ ModForgeFluids.STEAM, ModForgeFluids.SPENTSTEAM};
@@ -47,6 +57,9 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 		tanks[1] = new FluidTank(2000000000);
 		types[0] = ModForgeFluids.STEAM;
 		types[1] = ModForgeFluids.SPENTSTEAM;
+
+		Random rand = new Random();
+		audioDesync = rand.nextFloat() * 0.05F;
 	}
 
 	@Override
@@ -86,15 +99,15 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 		} else {
 			
 			this.lastRotor = this.rotor;
+			this.rotor += this.fanAcceleration;
+			
+			if(this.rotor >= 360) {
+				this.rotor -= 360;
+				this.lastRotor -= 360;
+			}
 			
 			if(turnTimer > 0) {
-				
-				this.rotor += 25F;
-				
-				if(this.rotor >= 360) {
-					this.rotor -= 360;
-					this.lastRotor -= 360;
-				}
+				this.fanAcceleration = Math.max(0F, Math.min(25F, this.fanAcceleration + (0.075F + audioDesync)));
 				
 				ForgeDirection dir = ForgeDirection.getOrientation(this.getBlockMetadata() - BlockDummyable.offset);
 				ForgeDirection side = dir.getRotation(ForgeDirection.UP);
@@ -105,6 +118,31 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 							pos.getY() + 2.5 + world.rand.nextGaussian() * 0.65,
 							pos.getZ() + 0.5 + dir.offsetZ * (world.rand.nextDouble() + 1.25) + world.rand.nextGaussian() * side.offsetZ * 0.65,
 							-dir.offsetX * 0.2, 0, -dir.offsetZ * 0.2);
+				}
+				
+				float turbineSpeed = this.fanAcceleration / 25F;
+				
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.chungusOperate, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.5F * turbineSpeed, 20F, 0.25F + 0.75F * turbineSpeed);
+					audio.startSound();
+				}
+				
+				audio.updateVolume(0.5F * turbineSpeed);
+				audio.updatePitch(0.25F + 0.75F * turbineSpeed);
+				audio.keepAlive();
+			} else {
+				this.fanAcceleration = Math.max(0F, Math.min(25F, this.fanAcceleration - 0.1F));
+				
+				if(audio != null) {
+					if(this.fanAcceleration > 0) {
+						float turbineSpeed = this.fanAcceleration / 25F;
+						audio.updateVolume(0.5F * turbineSpeed);
+						audio.updatePitch(0.25F + 0.75F * turbineSpeed);
+						audio.keepAlive();
+					} else {
+						audio.stopSound();
+						audio = null;
+					}
 				}
 			}
 		}
@@ -216,6 +254,24 @@ public class TileEntityChungus extends TileEntityLoadedBase implements ITickable
 			return CapabilityFluidHandler.FLUID_HANDLER_CAPABILITY.cast(this);
 		}
 		return super.getCapability(capability, facing);
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
 	}
 
 	@Override

@@ -1,5 +1,10 @@
 {
 	"variants": {
-		"normal": { "model": "hbm:red_connector" }
+		"facing=north": { "model": "hbm:red_connector" },
+		"facing=south": { "model": "hbm:red_connector", "y": 180 },
+		"facing=west":  { "model": "hbm:red_connector", "y": 270 },
+		"facing=east":  { "model": "hbm:red_connector", "y": 90 },
+		"facing=up":  { "model": "hbm:red_connector", "y": 90 },
+		"facing=down":  { "model": "hbm:red_connector", "y": 90 }
 	}
 }

@@ -2,6 +2,7 @@ package com.hbm.render.anim;
 
 import com.hbm.animloader.AnimationWrapper;
 import com.hbm.animloader.AnimationWrapper.EndResult;
+import com.hbm.items.weapon.ItemGunBase;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
@@ -24,7 +25,9 @@ public class HbmAnimations {
 		CYCLE,		//animation for every firing cycle
 		ALT_CYCLE,	//animation for alt fire cycles
 		SPINUP,		//animation for actionstart
-		SPINDOWN	//animation for actionend
+		SPINDOWN,	//animation for actionend
+		EQUIP,		//animation for equip/draw
+		INSPECT		//animation for inspecting when no ammo to reload
 	}
 
 	public static class Animation {
@@ -36,6 +39,8 @@ public class HbmAnimations {
 		public long startMillis;
 		//the animation bus
 		public BusAnimation animation;
+		public ItemStack stack;
+		public String gunId;
 
 		public Animation(String key, long startMillis, BusAnimation animation) {
 			this.key = key;
@@ -78,13 +83,22 @@ public class HbmAnimations {
 		if(hotbar[slot] == null)
 			return null;
 
-		if(hotbar[slot].key.equals(stack.getItem().getTranslationKey())) {
+		if(hotbar[slot].gunId != null && hotbar[slot].gunId.equals(ItemGunBase.getGunId(stack))) {
 			return hotbar[slot];
 		}
 
 		return null;
 	}
 	
+	public static void moveAnimToSlot(EntityPlayer player, ItemStack stack, EnumHand hand) {
+		int currentSlot = hand == EnumHand.OFF_HAND ? 9 : player.inventory.currentItem;
+		int otherSlot = hand == EnumHand.OFF_HAND ? player.inventory.currentItem : 9;
+		Animation anim = hotbar[otherSlot];
+		if(anim != null && !stack.isEmpty() && anim.gunId != null && anim.gunId.equals(ItemGunBase.getGunId(stack))) {
+			hotbar[currentSlot] = anim;
+		}
+	}
+
 	public static double[] getRelevantTransformation(String bus, EnumHand hand) {
 
 		Animation anim = HbmAnimations.getRelevantAnim(hand);

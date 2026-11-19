@@ -1,5 +1,6 @@
 package com.hbm.tileentity.turret;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -117,11 +118,11 @@ public class TileEntityTurretRichard extends TileEntityTurretBaseNT {
 			
 			if(conf != null) {
 				this.spawnBullet(conf);
-				this.conusmeAmmo(conf.ammo);
+				this.conusmeAmmo(conf.ammo, conf.ammoMeta);
 				this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.richard_fire, SoundCategory.BLOCKS, 2.0F, 1.0F);
 				this.loaded--;
 				
-				if(conf.ammo == ModItems.ammo_rocket_nuclear)
+				if(conf.ammoMeta == EnumAmmo.ROCKET_NUCLEAR.ordinal())
 					timer = -50;
 				
 			} else {

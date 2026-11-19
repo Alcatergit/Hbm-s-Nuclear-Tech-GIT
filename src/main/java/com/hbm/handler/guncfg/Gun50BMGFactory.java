@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -103,7 +105,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -115,7 +118,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_incendiary;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_INCENDIARY.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -129,7 +133,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_explosive;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_EXPLOSIVE.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 25;
@@ -143,7 +148,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_DU.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 40;
 		bullet.dmgMax = 45;
@@ -157,7 +163,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_star;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_STAR.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 70;
@@ -171,7 +178,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_PHOSPHORUS.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -206,7 +214,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_ap;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_AP.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 30;
 		bullet.dmgMax = 25;
@@ -220,7 +229,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_SLEEK.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 70;
@@ -308,7 +318,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_FLECHETTE.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 25;
@@ -321,7 +332,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette_am;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_FLECHETTE_AM.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 65;
@@ -348,7 +360,8 @@ public class Gun50BMGFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_50bmg_flechette_po;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.BMG50_FLECHETTE_PO.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 30;
 		bullet.dmgMax = 40;

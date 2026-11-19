@@ -7,14 +7,15 @@ import com.hbm.blocks.BlockDummyable;
 import com.hbm.blocks.ModBlocks;
 import com.hbm.items.machine.ItemFELCrystal;
 import com.hbm.items.machine.ItemFELCrystal.EnumWavelengths;
+import com.hbm.lib.HBMSoundHandler;
 import com.hbm.lib.Library;
+import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.util.ContaminationUtil.ContaminationType;
 import com.hbm.util.ContaminationUtil.HazardType;
-import com.hbm.packet.LoopedSoundPacket;
-import com.hbm.packet.PacketDispatcher;
 
 import api.hbm.energy.IEnergyUser;
 import net.minecraft.util.ITickable;
@@ -33,7 +34,7 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.AxisAlignedBB;
-import com.hbm.lib.ForgeDirection;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.jetbrains.annotations.NotNull;
@@ -48,6 +49,8 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 	public boolean missingValidSilex = true	;
 	public int distance;
 	public List<EntityLivingBase> entities = new ArrayList();
+	private int audioDuration = 0;
+	private AudioWrapper audio;
 	
 	
 	public TileEntityFEL() {
@@ -222,7 +225,6 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 				}
 			}
 			
-			PacketDispatcher.wrapper.sendToAll(new LoopedSoundPacket(pos.getX(), pos.getY(), pos.getZ()));
 			NBTTagCompound data = new NBTTagCompound();
 			data.setLong("power", power);
 			data.setString("mode", mode.toString());
@@ -230,6 +232,38 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 			data.setBoolean("valid", missingValidSilex);
 			data.setInteger("distance", distance);
 			this.networkPack(data, 250);
+		} else {
+
+			if(power > powerReq * Math.pow(2, mode.ordinal()) && isOn && !(mode == EnumWavelengths.NULL) && distance - 3 > 0) {
+				audioDuration += 2;
+			} else {
+				audioDuration -= 3;
+			}
+
+			audioDuration = MathHelper.clamp(audioDuration, 0, 60);
+
+			if(audioDuration > 10) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.fel, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2.0F, 10F, 2.0F, 20);
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio.stopSound();
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.fel, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 2.0F, 10F, 2.0F, 20);
+					audio.startSound();
+				}
+
+				audio.updateVolume(2F);
+				audio.updatePitch((audioDuration - 10) / 100F + 0.5F);
+				audio.keepAlive();
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
 	}
 	
@@ -246,6 +280,24 @@ public class TileEntityFEL extends TileEntityMachineBase implements ITickable, I
 		this.isOn = nbt.getBoolean("isOn");
 		this.distance = nbt.getInteger("distance");
 		this.missingValidSilex = nbt.getBoolean("valid");
+	}
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
 	}
 
 	@Override

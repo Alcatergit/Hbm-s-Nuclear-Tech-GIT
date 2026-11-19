@@ -15,6 +15,8 @@ public class PacketDispatcher {
 	public static void registerPackets(){
 		int i = 0;
 
+		//Biome sync for the Dust Wastes crater
+		wrapper.registerMessage(BiomeSyncPacket.Handler.class, BiomeSyncPacket.class, i++, Side.CLIENT);
 		//PressPacket
 		wrapper.registerMessage(TEPressPacket.Handler.class, TEPressPacket.class, i++, Side.CLIENT);
 		//Send chunk radiation packet to individual players

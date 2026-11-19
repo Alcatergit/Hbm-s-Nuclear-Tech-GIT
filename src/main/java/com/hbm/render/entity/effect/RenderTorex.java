@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Random;
 
-import org.lwjgl.opengl.GL11;
+import com.hbm.main.ModEventHandlerClient;
+import org.lwjgl.opengl.*;
 
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityNukeTorex.Cloudlet;
@@ -12,25 +13,25 @@ import com.hbm.lib.RefStrings;
 import com.hbm.main.MainRegistry;
 import com.hbm.render.amlfrom1710.Vec3;
 
-import net.minecraft.init.SoundEvents;
-import net.minecraft.util.SoundCategory;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.ActiveRenderInfo;
 import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.GlStateManager;
-import net.minecraft.client.renderer.GlStateManager.DestFactor;
-import net.minecraft.client.renderer.GlStateManager.SourceFactor;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.renderer.RenderHelper;
 import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.client.event.EntityViewRenderEvent;
 import net.minecraftforge.fml.client.registry.IRenderFactory;
+import net.minecraftforge.fml.common.eventhandler.EventPriority;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
-import static com.hbm.entity.logic.EntityNukeExplosionMK5.shockSpeed;
-
+import net.minecraft.client.Minecraft;
+import net.minecraft.entity.Entity;
 
 public class RenderTorex extends Render<EntityNukeTorex> {
 
@@ -49,54 +50,107 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 	@Override
 	public void doRender(EntityNukeTorex cloud, double x, double y, double z, float entityYaw, float partialTicks){
 		float scale = (float)cloud.getScale();
-		float flashDuration = scale * flashBaseDuration;
+		float flashDuration = (float)Math.sqrt(scale) * flashBaseDuration;
 		float flareDuration = scale * flareBaseDuration;
 
-		doScreenShake(cloud, x, y, z, scale * 100);
-		
 		GL11.glPushMatrix();
 		GL11.glTranslated(x, y, z);
 
 		boolean fog = GL11.glIsEnabled(GL11.GL_FOG);
-		if(fog)
-			GL11.glDisable(GL11.GL_FOG);
+		if(fog) GL11.glDisable(GL11.GL_FOG);
 
 		cloudletWrapper(cloud, partialTicks);
 
-		if(cloud.ticksExisted < flareDuration+1)
+		if(cloud.ticksExisted < flareDuration + 1)
 			flareWrapper(cloud, partialTicks, flareDuration);
-		
-		if(cloud.ticksExisted < flashDuration+1)
+
+		if(cloud.ticksExisted < flashDuration + 1)
 			flashWrapper(cloud, partialTicks, flashDuration);
 
-		if(fog)
-			GL11.glEnable(GL11.GL_FOG);
+		updateFlashState(cloud, partialTicks);
+
+		if(cloud.ticksExisted < (flashDuration / 10) && System.currentTimeMillis() - ModEventHandlerClient.flashTimestamp > 1_000) {
+			ModEventHandlerClient.flashTimestamp = System.currentTimeMillis();
+			ModEventHandlerClient.flashDuration = (int) (5_000 * Math.sqrt(scale));
+		}
+
+		if(cloud.didPlaySound && !cloud.didShake && System.currentTimeMillis() - ModEventHandlerClient.shakeTimestamp > 1_000) {
+			EntityPlayer player = MainRegistry.proxy.me();
+			float dist = player.getDistance(cloud);
+			ModEventHandlerClient.shakeTimestamp = System.currentTimeMillis();
+			ModEventHandlerClient.shakeDuration = (int) (1_500 * Math.sqrt(scale));
+			ModEventHandlerClient.shakeMultiplier = Math.max(((scale * 200D) - (double) dist) / (scale * 200D), 0D) * Math.sqrt(scale);
+			player.hurtTime = (int) (Math.max((((((scale * 200F) - dist)) / (scale * 200F)) * 150F), 0) * Math.sqrt(scale));
+			player.maxHurtTime = (int) (Math.max((((((scale * 200F) - dist)) / (scale * 200F)) * 100F), 0) * Math.sqrt(scale));
+			player.attackedAtYaw = 0F;
+			cloud.didShake = true;
+		}
+
+		if(fog) GL11.glEnable(GL11.GL_FOG);
 
 		GL11.glPopMatrix();
 	}
 
-	private void doScreenShake(EntityNukeTorex cloud, double x, double y, double z, float amplitude){
-		if(cloud.ticksExisted > 300) return;
-		EntityPlayer player = MainRegistry.proxy.me();
+	private static void updateFlashState(EntityNukeTorex cloud, float partialTicks) {
+		EntityNukeTorex.flashLightTable = cloud.world.provider.getLightBrightnessTable();
+		EntityNukeTorex.flashStamp = System.currentTimeMillis();
 
-		double dist = player.getDistance(cloud);
-		double shockwaveDistance = dist - cloud.ticksExisted * shockSpeed;
-		if(shockwaveDistance > shockSpeed * 2 || shockwaveDistance < 0) return;
-		cloud.world.playSound(player, cloud.posX, cloud.posY, cloud.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.AMBIENT, amplitude, 0.8F + cloud.world.rand.nextFloat() * 0.2F);
-		int duration = (int)(40 * Math.min(1.5, (amplitude * amplitude)/(dist * dist)));
-		if(duration < 15) return;
-		int swingTimer = duration<<1;
+		double scale = cloud.getScale();
+		double u = (cloud.ticksExisted + partialTicks) / (flareBaseDuration * scale);
+		float intensity = 0F;
 
-		if(player.getDisplayName().toString().equals("Vic4Games")) {
-			player.hurtTime = swingTimer<<1;
-			player.maxHurtTime = duration<<1;
-		} else {
-			player.hurtTime = swingTimer;
-			player.maxHurtTime = duration;
+		if(u < 1.0D) {
+			double r = Math.log(0.3472D) / Math.log(0.3D / Math.sqrt(scale));
+			double x = Math.pow(u, r);
+			double i = x * Math.pow(Math.E, -x) * 2.717391304D;
+			intensity = (float) ((1.0D - i) * i * i * 6.75D);
 		}
-		player.attackedAtYaw = 0F;
+
+		if(intensity <= 0F) {
+			EntityNukeTorex.flashI = 0F;
+			EntityNukeTorex.flashW = 0F;
+			return;
+		}
+
+		Vec3 hue = cloud.getInterpColor(intensity, cloud.getType());
+		double max = Math.max(hue.xCoord, Math.max(hue.yCoord, hue.zCoord));
+
+		if(max <= 0.0D) {
+			EntityNukeTorex.flashI = 0F;
+			EntityNukeTorex.flashW = 0F;
+			return;
+		}
+
+		EntityNukeTorex.flashR = (float) (hue.xCoord / max);
+		EntityNukeTorex.flashG = (float) (hue.yCoord / max);
+		EntityNukeTorex.flashB = (float) (hue.zCoord / max);
+		EntityNukeTorex.flashI = intensity;
+		EntityNukeTorex.flashW = 0.45F * intensity;
 	}
-	
+
+	/** Tints the fog with the running flash color, mirroring the sky tint. */
+	@SubscribeEvent(priority = EventPriority.LOW)
+	public static void onTorexFogColors(EntityViewRenderEvent.FogColors event) {
+		float weight = EntityNukeTorex.getFlashWeight();
+
+		if(weight <= 0F)
+			return;
+
+		Entity view = Minecraft.getMinecraft().getRenderViewEntity();
+
+		if(view == null)
+			return;
+
+		IBlockState state = ActiveRenderInfo.getBlockStateAtEntityViewpoint(view.world, view, (float) event.getRenderPartialTicks());
+
+		if(state.getMaterial().isLiquid())
+			return;
+
+		event.setRed(event.getRed() * (1F - weight) + EntityNukeTorex.flashR * weight);
+		event.setGreen(event.getGreen() * (1F - weight) + EntityNukeTorex.flashG * weight);
+		event.setBlue(event.getBlue() * (1F - weight) + EntityNukeTorex.flashB * weight);
+	}
+
 	private final Comparator cloudSorter = (arg0, arg1) -> {
         Cloudlet first = (Cloudlet) arg0;
         Cloudlet second = (Cloudlet) arg1;
@@ -109,6 +163,15 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 	private void cloudletWrapper(EntityNukeTorex cloud, float partialTicks) {
 
+		boolean wasLighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+		boolean wasBlend = GL11.glIsEnabled(GL11.GL_BLEND);
+		boolean wasAlphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
+		boolean wasDepthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+		int prevBlendSrc = GL11.glGetInteger(GL11.GL_BLEND_SRC);
+		int prevBlendDst = GL11.glGetInteger(GL11.GL_BLEND_DST);
+		int prevAlphaFunc = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+		float prevAlphaRef = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
 		OpenGlHelper.glBlendFunc(770, 771, 1, 0);
@@ -117,16 +180,16 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-		
+
 		bindTexture(cloudlet);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		ArrayList<Cloudlet> cloudlets = new ArrayList<>(cloud.cloudlets);
 		cloudlets.sort(cloudSorter);
-		
+
 		for(Cloudlet cloudlet : cloudlets) {
 			Vec3 vec = cloudlet.getInterpPos(partialTicks);
 			tessellateCloudlet(buf, vec.xCoord - cloud.posX, vec.yCoord - cloud.posY, vec.zCoord - cloud.posZ, cloudlet, partialTicks);
@@ -134,15 +197,25 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		tess.draw();
 
-		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glBlendFunc(prevBlendSrc, prevBlendDst);
+		if(wasBlend) GL11.glEnable(GL11.GL_BLEND); else GL11.glDisable(GL11.GL_BLEND);
+		GL11.glAlphaFunc(prevAlphaFunc, prevAlphaRef);
+		if(wasAlphaTest) GL11.glEnable(GL11.GL_ALPHA_TEST); else GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthMask(wasDepthMask);
+		if(wasLighting) RenderHelper.enableStandardItemLighting(); else RenderHelper.disableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
-	
+
 	private void flareWrapper(EntityNukeTorex cloud, float partialTicks, float flareDuration) {
+
+		boolean wasLighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+		boolean wasBlend = GL11.glIsEnabled(GL11.GL_BLEND);
+		boolean wasAlphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
+		boolean wasDepthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+		int prevBlendSrc = GL11.glGetInteger(GL11.GL_BLEND_SRC);
+		int prevBlendDst = GL11.glGetInteger(GL11.GL_BLEND_DST);
+		int prevAlphaFunc = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+		float prevAlphaRef = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
 
 		GL11.glPushMatrix();
 		GL11.glEnable(GL11.GL_BLEND);
@@ -151,18 +224,18 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDepthMask(false);
 		RenderHelper.disableStandardItemLighting();
-			
+
 		bindTexture(flare);
 
 		Tessellator tess = Tessellator.getInstance();
         BufferBuilder buf = tess.getBuffer();
 		buf.begin(GL11.GL_QUADS, DefaultVertexFormats.PARTICLE_POSITION_TEX_COLOR_LMAP);
-		
+
 		double age = Math.min(cloud.ticksExisted + partialTicks, flareDuration);
 		float alpha = (float) Math.min(1, (flareDuration - age) / flareDuration);
-		
+
 		Random rand = new Random(cloud.getEntityId());
-		
+
 		for(int i = 0; i < 3; i++) {
 			float x = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
 			float y = (float) (rand.nextGaussian() * 0.5F * cloud.rollerSize);
@@ -172,11 +245,12 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
 		tess.draw();
 
-		GL11.glDepthMask(true);
-		GL11.glEnable(GL11.GL_ALPHA_TEST);
-		RenderHelper.enableStandardItemLighting();
-		GL11.glAlphaFunc(GL11.GL_GREATER, 0.1F);
-		GL11.glDisable(GL11.GL_BLEND);
+		GL11.glBlendFunc(prevBlendSrc, prevBlendDst);
+		if(wasBlend) GL11.glEnable(GL11.GL_BLEND); else GL11.glDisable(GL11.GL_BLEND);
+		GL11.glAlphaFunc(prevAlphaFunc, prevAlphaRef);
+		if(wasAlphaTest) GL11.glEnable(GL11.GL_ALPHA_TEST); else GL11.glDisable(GL11.GL_ALPHA_TEST);
+		GL11.glDepthMask(wasDepthMask);
+		if(wasLighting) RenderHelper.enableStandardItemLighting(); else RenderHelper.disableStandardItemLighting();
 		GL11.glPopMatrix();
 	}
 
@@ -228,25 +302,38 @@ public class RenderTorex extends Render<EntityNukeTorex> {
 
         if(cloud.ticksExisted < flashDuration) {
 
+    		int prevAlphaFunc = GL11.glGetInteger(GL11.GL_ALPHA_TEST_FUNC);
+    		float prevAlphaRef = GL11.glGetFloat(GL11.GL_ALPHA_TEST_REF);
+
     		GL11.glPushMatrix();
     		//Function [0, 1] that determines the scale and intensity (inverse!) of the flash
         	double intensity = (cloud.ticksExisted + interp) / flashDuration;
-        	GlStateManager.alphaFunc(GL11.GL_GREATER, 0.0F);
+        	GL11.glAlphaFunc(GL11.GL_GREATER, 0.0F);
 
         	//Euler function to slow down the scale as it progresses
         	//Makes it start fast and the fade-out is nice and smooth
         	intensity = intensity * Math.pow(Math.E, -intensity) * 2.717391304D;
 
-        	renderFlash(50F * (float)flashDuration/(float)flashBaseDuration, intensity, cloud.coreHeight);
-            GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+        	renderFlash(0.58F * (float)cloud.torusWidth, intensity, cloud.coreHeight);
+            GL11.glAlphaFunc(prevAlphaFunc, prevAlphaRef);
     		GL11.glPopMatrix();
         }
 	}
 
 	private void renderFlash(float scale, double intensity, double height) {
 
+		boolean wasLighting = GL11.glIsEnabled(GL11.GL_LIGHTING);
+		boolean wasBlend = GL11.glIsEnabled(GL11.GL_BLEND);
+		boolean wasAlphaTest = GL11.glIsEnabled(GL11.GL_ALPHA_TEST);
+		boolean wasTexture = GL11.glIsEnabled(GL11.GL_TEXTURE_2D);
+		boolean wasCull = GL11.glIsEnabled(GL11.GL_CULL_FACE);
+		boolean wasDepthMask = GL11.glGetBoolean(GL11.GL_DEPTH_WRITEMASK);
+		int prevShadeModel = GL11.glGetInteger(GL11.GL_SHADE_MODEL);
+		int prevBlendSrc = GL11.glGetInteger(GL11.GL_BLEND_SRC);
+		int prevBlendDst = GL11.glGetInteger(GL11.GL_BLEND_DST);
+
     	GL11.glScalef(0.2F, 0.2F, 0.2F);
-    	GL11.glTranslated(0, height * 4, 0);
+    	GL11.glTranslated(0, height * 5, 0);
 
     	double inverse = 1.0D - intensity;
 
@@ -254,48 +341,72 @@ public class RenderTorex extends Render<EntityNukeTorex> {
         BufferBuilder buf = tessellator.getBuffer();
 		RenderHelper.disableStandardItemLighting();
 
-        Random random = new Random(432L);
-        GlStateManager.disableTexture2D();
-        GlStateManager.shadeModel(GL11.GL_SMOOTH);
-        GlStateManager.enableBlend();
-        GlStateManager.blendFunc(SourceFactor.SRC_ALPHA, DestFactor.ONE);
-        GlStateManager.disableAlpha();
-        GlStateManager.enableCull();
-        GlStateManager.depthMask(false);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glShadeModel(GL11.GL_SMOOTH);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE);
+        GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        GL11.glDepthMask(false);
         OpenGlHelper.setLightmapTextureCoords(OpenGlHelper.lightmapTexUnit, 240F, 240F);
-		
-        GL11.glPushMatrix();
 
-        for(int i = 0; i < 300; i++) {
+        int count = MathHelper.clamp((int) Math.round(300.0D * (scale / 40.0D) * (scale / 40.0D)), 300, 3000);
+        double golden = Math.PI * (3.0D - Math.sqrt(5.0D));
 
-            GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 0.0F, 1.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 1.0F, 0.0F, 0.0F);
-            GL11.glRotatef(random.nextFloat() * 360.0F, 0.0F, 1.0F, 0.0F);
+        buf.begin(GL11.GL_TRIANGLES, DefaultVertexFormats.POSITION_COLOR);
 
-            float vert1 = (random.nextFloat() * 20.0F + 5.0F + 1 * 10.0F) * (float)(intensity * scale);
-            float vert2 = (random.nextFloat() * 2.0F + 1.0F + 1 * 2.0F) * (float)(intensity * scale);
+        for(int i = 0; i < count; i++) {
 
-            buf.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_COLOR);
-            buf.pos(0D, 0D, 0D).color(1.0F, 1.0F, 1.0F, (float) inverse).endVertex();
-            buf.pos(-0.866D * vert2, vert1, -0.5D * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
-            buf.pos(0.866D * vert2, vert1, -0.5D * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
-            buf.pos(0.0D, vert1, 1.0D * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
-            buf.pos(-0.866D * vert2, vert1, -0.5D * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
-            tessellator.draw();
+            double y = 1.0D - 2.0D * (i + 0.5D) / count;
+            double ring = Math.sqrt(Math.max(0.0D, 1.0D - y * y));
+            double angle = golden * i;
+            double dirX = ring * Math.cos(angle);
+            double dirZ = ring * Math.sin(angle);
+
+            float vert1 = 25.0F * (float)(intensity * scale);
+            float vert2 = vert1 / 2.0F;
+
+            double ux, uy, uz;
+
+            if(Math.abs(y) < 0.9D) {
+                double inv = 1.0D / Math.max(ring, 1.0E-4D);
+                ux = -dirZ * inv; uy = 0.0D; uz = dirX * inv;
+            } else {
+                double inv = 1.0D / Math.sqrt(dirX * dirX + y * y);
+                ux = y * inv; uy = -dirX * inv; uz = 0.0D;
+            }
+
+            double vx = y * uz - dirZ * uy;
+            double vy = dirZ * ux - dirX * uz;
+            double vz = dirX * uy - y * ux;
+
+            double ax = dirX * vert1;
+            double ay = y * vert1;
+            double az = dirZ * vert1;
+
+            for(int k = 0; k < 8; k++) {
+
+                double a0 = k * 0.7853981633974483D;
+                double a1 = (k + 1) * 0.7853981633974483D;
+                double c0 = Math.cos(a0), s0 = Math.sin(a0);
+                double c1 = Math.cos(a1), s1 = Math.sin(a1);
+
+                buf.pos(0.0D, 0.0D, 0.0D).color(1.0F, 1.0F, 1.0F, (float) inverse).endVertex();
+                buf.pos(ax + (ux * c0 + vx * s0) * vert2, ay + (uy * c0 + vy * s0) * vert2, az + (uz * c0 + vz * s0) * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
+                buf.pos(ax + (ux * c1 + vx * s1) * vert2, ay + (uy * c1 + vy * s1) * vert2, az + (uz * c1 + vz * s1) * vert2).color(1.0F, 1.0F, 1.0F, 0.0F).endVertex();
+            }
         }
 
-        GL11.glPopMatrix();
+        tessellator.draw();
 
-        GlStateManager.depthMask(true);
-        GlStateManager.disableCull();
-        GlStateManager.disableBlend();
-        GlStateManager.shadeModel(GL11.GL_FLAT);
-        GlStateManager.color(1, 1, 1, 1);
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableAlpha();
-        RenderHelper.enableStandardItemLighting();
+        GL11.glDepthMask(wasDepthMask);
+        if(wasCull) GL11.glEnable(GL11.GL_CULL_FACE); else GL11.glDisable(GL11.GL_CULL_FACE);
+        if(wasAlphaTest) GL11.glEnable(GL11.GL_ALPHA_TEST); else GL11.glDisable(GL11.GL_ALPHA_TEST);
+        GL11.glBlendFunc(prevBlendSrc, prevBlendDst);
+        if(wasBlend) GL11.glEnable(GL11.GL_BLEND); else GL11.glDisable(GL11.GL_BLEND);
+        GL11.glShadeModel(prevShadeModel);
+        if(wasTexture) GL11.glEnable(GL11.GL_TEXTURE_2D); else GL11.glDisable(GL11.GL_TEXTURE_2D);
+        if(wasLighting) RenderHelper.enableStandardItemLighting(); else RenderHelper.disableStandardItemLighting();
 	}
 
 	@Override

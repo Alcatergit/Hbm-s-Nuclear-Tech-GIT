@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 import java.util.UUID;
 
@@ -54,7 +55,7 @@ public class GunMIRV extends Item {
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_mirv)) {
+		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.MIRV_STANDARD.ordinal())) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -76,7 +77,7 @@ public class GunMIRV extends Item {
 			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 
 			if (!flag) {
-				Library.consumeInventoryItem(player.inventory, ModItems.ammo_mirv);
+				Library.consumeInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.MIRV_STANDARD.ordinal());
 			}
 
 			if (!worldIn.isRemote) {

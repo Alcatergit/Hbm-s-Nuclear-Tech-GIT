@@ -26,6 +26,8 @@ import net.minecraft.util.SoundCategory;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 
+import static com.hbm.handler.HazmatRegistry.getResistance;
+
 public class ItemStarterKit extends Item {
 
 	public ItemStarterKit(String s) {
@@ -37,42 +39,91 @@ public class ItemStarterKit extends Item {
 	}
 	
 	private void giveHaz(World world, EntityPlayer p, int tier) {
-    	
-    	for(int i = 0; i < 4; i++) {
-    		
-    		if(!p.inventory.armorInventory.get(i).isEmpty() && !world.isRemote) {
-    			world.spawnEntity(new EntityItem(world, p.posX, p.posY + p.eyeHeight, p.posZ, p.inventory.armorInventory.get(i)));
-    		}
-    	}
-    	switch(tier) {
-    	case 0:
-    		ItemStack mask1 = new ItemStack(ModItems.hazmat_helmet);
-			ArmorUtil.installGasMaskFilter(mask1, new ItemStack(ModItems.gas_mask_filter));
-			
-	    	p.inventory.armorInventory.set(3, mask1);
-	    	p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate));
-	    	p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs));
-	    	p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots));
-	    	break;
-    	case 1:
-    		ItemStack mask2 = new ItemStack(ModItems.hazmat_helmet_red);
-			ArmorUtil.installGasMaskFilter(mask2, new ItemStack(ModItems.gas_mask_filter));
-			
-	    	p.inventory.armorInventory.set(3, mask2);
-	    	p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate_red));
-	    	p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs_red));
-	    	p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots_red));
-	    	break;
-    	case 2:
-    		ItemStack mask3 = new ItemStack(ModItems.hazmat_helmet_grey);
-			ArmorUtil.installGasMaskFilter(mask3, new ItemStack(ModItems.gas_mask_filter_combo));
-			
-	    	p.inventory.armorInventory.set(3, mask3);
-	    	p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate_grey));
-	    	p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs_grey));
-	    	p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots_grey));
-	    	break;
-    	}
+		float currentResistance = 0.0F;
+		for(ItemStack stack : p.getArmorInventoryList()) {
+			if(!stack.isEmpty()) {
+				currentResistance += getResistance(stack);
+			}
+		}
+		double kitResistance = switch (tier) {
+			case 0 -> getResistance(new ItemStack(ModItems.hazmat_helmet)) +
+					getResistance(new ItemStack(ModItems.hazmat_plate)) +
+					getResistance(new ItemStack(ModItems.hazmat_legs)) +
+					getResistance(new ItemStack(ModItems.hazmat_boots));
+			case 1 -> getResistance(new ItemStack(ModItems.hazmat_helmet_red)) +
+					getResistance(new ItemStack(ModItems.hazmat_plate_red)) +
+					getResistance(new ItemStack(ModItems.hazmat_legs_red)) +
+					getResistance(new ItemStack(ModItems.hazmat_boots_red));
+			case 2 -> getResistance(new ItemStack(ModItems.hazmat_helmet_grey)) +
+					getResistance(new ItemStack(ModItems.hazmat_plate_grey)) +
+					getResistance(new ItemStack(ModItems.hazmat_legs_grey)) +
+					getResistance(new ItemStack(ModItems.hazmat_boots_grey));
+			default -> 0.0F;
+		};
+		if(currentResistance > kitResistance) {
+			switch(tier) {
+				case 0:
+					ItemStack mask1 = new ItemStack(ModItems.hazmat_helmet);
+					ArmorUtil.installGasMaskFilter(mask1, new ItemStack(ModItems.gas_mask_filter));
+					p.inventory.addItemStackToInventory(mask1);
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_plate));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_legs));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_boots));
+					break;
+				case 1:
+					ItemStack mask2 = new ItemStack(ModItems.hazmat_helmet_red);
+					ArmorUtil.installGasMaskFilter(mask2, new ItemStack(ModItems.gas_mask_filter));
+					p.inventory.addItemStackToInventory(mask2);
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_plate_red));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_legs_red));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_boots_red));
+					break;
+				case 2:
+					ItemStack mask3 = new ItemStack(ModItems.hazmat_helmet_grey);
+					ArmorUtil.installGasMaskFilter(mask3, new ItemStack(ModItems.gas_mask_filter_combo));
+					p.inventory.addItemStackToInventory(mask3);
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_plate_grey));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_legs_grey));
+					p.inventory.addItemStackToInventory(new ItemStack(ModItems.hazmat_boots_grey));
+					break;
+			}
+		} else {
+			for(int i = 0; i < 4; i++) {
+
+				if(!p.inventory.armorInventory.get(i).isEmpty() && !world.isRemote) {
+					world.spawnEntity(new EntityItem(world, p.posX, p.posY + p.eyeHeight, p.posZ, p.inventory.armorInventory.get(i)));
+				}
+			}
+			switch(tier) {
+				case 0:
+					ItemStack mask1 = new ItemStack(ModItems.hazmat_helmet);
+					ArmorUtil.installGasMaskFilter(mask1, new ItemStack(ModItems.gas_mask_filter));
+
+					p.inventory.armorInventory.set(3, mask1);
+					p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate));
+					p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs));
+					p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots));
+					break;
+				case 1:
+					ItemStack mask2 = new ItemStack(ModItems.hazmat_helmet_red);
+					ArmorUtil.installGasMaskFilter(mask2, new ItemStack(ModItems.gas_mask_filter));
+
+					p.inventory.armorInventory.set(3, mask2);
+					p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate_red));
+					p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs_red));
+					p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots_red));
+					break;
+				case 2:
+					ItemStack mask3 = new ItemStack(ModItems.hazmat_helmet_grey);
+					ArmorUtil.installGasMaskFilter(mask3, new ItemStack(ModItems.gas_mask_filter_combo));
+
+					p.inventory.armorInventory.set(3, mask3);
+					p.inventory.armorInventory.set(2, new ItemStack(ModItems.hazmat_plate_grey));
+					p.inventory.armorInventory.set(1, new ItemStack(ModItems.hazmat_legs_grey));
+					p.inventory.armorInventory.set(0, new ItemStack(ModItems.hazmat_boots_grey));
+					break;
+			}
+		}
     }
 	
 	@Override

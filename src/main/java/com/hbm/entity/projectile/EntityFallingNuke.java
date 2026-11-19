@@ -104,7 +104,6 @@ public class EntityFallingNuke extends EntityThrowable {
 	@SideOnly(Side.CLIENT)
     public boolean isInRangeToRenderDist(double distance)
     {
-        return distance < 25000;
+		return true;
     }
-
 }

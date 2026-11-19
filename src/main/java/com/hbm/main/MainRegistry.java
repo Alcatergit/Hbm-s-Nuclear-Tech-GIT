@@ -3,15 +3,17 @@ package com.hbm.main;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import com.hbm.blocks.machine.WatzPump;
 import com.hbm.entity.item.EntityMovingPackage;
 import com.hbm.entity.mob.*;
+import com.hbm.render.entity.effect.RenderTorex;
 import com.hbm.handler.*;
+import com.hbm.handler.threading.BombForkJoinPool;
 import com.hbm.inventory.*;
+import com.hbm.util.ChunkUtil;
 import com.hbm.items.armor.ItemModLens;
 import com.hbm.tileentity.network.*;
 import com.hbm.world.feature.OreLayer3D;
@@ -55,6 +57,7 @@ import com.hbm.entity.effect.EntityCloudSolinium;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityFalloutRainParallelized;
 import com.hbm.entity.effect.EntityFalloutUnderGround;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityQuasar;
@@ -301,6 +304,7 @@ import com.hbm.tileentity.turret.TileEntityTurretRocket;
 import com.hbm.tileentity.turret.TileEntityTurretSpitfire;
 import com.hbm.tileentity.turret.TileEntityTurretTau;
 import com.hbm.tileentity.turret.TileEntityTurretTauon;
+import com.hbm.world.biome.BiomeGenDustWastes;
 import com.hbm.world.feature.SchistStratum;
 import com.hbm.world.generator.CellularDungeonFactory;
 
@@ -334,13 +338,14 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.ReflectionHelper;
 import net.minecraftforge.fml.relauncher.Side;
 
-@Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME)
+@Mod(modid = RefStrings.MODID, version = RefStrings.VERSION, name = RefStrings.NAME, guiFactory = "com.hbm.config.gui.HbmGuiFactory")
 public class MainRegistry {
 
 	static {
@@ -479,10 +484,12 @@ public class MainRegistry {
 		MinecraftForge.EVENT_BUS.register(new ModEventHandler());
 		MinecraftForge.TERRAIN_GEN_BUS.register(new ModEventHandler());
 		MinecraftForge.ORE_GEN_BUS.register(new ModEventHandler());
+		MinecraftForge.EVENT_BUS.register(BiomeGenDustWastes.class);
 		
 		if(event.getSide() == Side.CLIENT) {
 			HbmKeybinds keyHandler = new HbmKeybinds();
 			MinecraftForge.EVENT_BUS.register(keyHandler);
+			MinecraftForge.EVENT_BUS.register(RenderTorex.class);
 		}
 		
 		PacketDispatcher.registerPackets();
@@ -805,6 +812,7 @@ public class MainRegistry {
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_d_smoke_fx"), EntityDSmokeFX.class, "entity_d_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fallout_rain"), EntityFalloutRain.class, "entity_fallout_rain", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fallout_flare"), EntityFalloutUnderGround.class, "entity_fallout_flare", i++, MainRegistry.instance, 1000, 1, true);
+		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_fallout_rain_parallelized"), EntityFalloutRainParallelized.class, "entity_fallout_rain_parallelized", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_effect_torex"), EntityNukeTorex.class, "entity_effect_torex", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_smoke_fx"), EntitySmokeFX.class, "entity_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
 		EntityRegistry.registerModEntity(new ResourceLocation(RefStrings.MODID, "entity_b_smoke_fx"), EntityBSmokeFX.class, "entity_b_smoke_fx", i++, MainRegistry.instance, 1000, 1, true);
@@ -1006,6 +1014,7 @@ public class MainRegistry {
 		reloadCompatConfig();
 		WorldConfig.loadFromCompatibilityConfig();
 		BedrockOreJsonConfig.init();
+		ExplosionNukeGeneric.loadSoliniumFromFile();
 	}
 
 	public static void reloadCompatConfig() {
@@ -1123,6 +1132,12 @@ public class MainRegistry {
 		//MUST be initialized AFTER achievements!!
 		BobmazonOfferFactory.reset();
 		BobmazonOfferFactory.init();
+	}
+
+	@EventHandler
+	public void serverStopped(FMLServerStoppedEvent evt) {
+		BombForkJoinPool.onServerStopped();
+		ChunkUtil.onServerStopped();
 	}
 
 	private void registerReactorFuels(){
@@ -1477,5 +1492,4 @@ public class MainRegistry {
             }
         });
 	}
-
 }

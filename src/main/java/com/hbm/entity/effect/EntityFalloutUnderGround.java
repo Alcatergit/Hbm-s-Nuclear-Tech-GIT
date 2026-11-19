@@ -1,35 +1,29 @@
 package com.hbm.entity.effect;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.blocks.generic.BlockMushHuge;
+import com.hbm.blocks.generic.WasteDirt;
 import com.hbm.blocks.generic.WasteLeaves;
 import com.hbm.config.BombConfig;
 import com.hbm.config.VersatileConfig;
 import com.hbm.config.CompatibilityConfig;
-import com.hbm.entity.effect.EntityFalloutRain;
-
-//Chunkloading stuff
-import java.util.ArrayList;
-import java.util.List;
-
 import com.hbm.entity.logic.EntityChunky;
-import com.hbm.entity.logic.IChunkLoader;
-import com.hbm.main.MainRegistry;
 import com.hbm.blocks.generic.WasteLog;
+import com.hbm.lib.Library;
 
+import java.util.*;
 import net.minecraft.block.*;
-import net.minecraftforge.common.ForgeChunkManager;
-import net.minecraftforge.common.ForgeChunkManager.Ticket;
-import net.minecraftforge.common.ForgeChunkManager.Type;
-import net.minecraft.util.math.ChunkPos;
-
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.block.material.Material;
-import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.item.ItemStack;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraftforge.common.IPlantable;
+import net.minecraftforge.oredict.OreDictionary;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.BlockPos.MutableBlockPos;
 import net.minecraft.world.World;
@@ -147,21 +141,37 @@ public class EntityFalloutUnderGround extends EntityChunky {
 			bblock = b.getBlock();
 
 			if(bblock instanceof BlockStone || bblock == Blocks.COBBLESTONE) {
-				double ranDist = l * (1D + world.rand.nextDouble()*0.1D);
-				if(ranDist > s1)
-					world.setBlockState(pos, ModBlocks.sellafield_slaked.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist > s2)
-					world.setBlockState(pos, ModBlocks.sellafield_0.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist > s3)
-					world.setBlockState(pos, ModBlocks.sellafield_1.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist > s4)
-					world.setBlockState(pos, ModBlocks.sellafield_2.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist > s5)
-					world.setBlockState(pos, ModBlocks.sellafield_3.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist > s6)
-					world.setBlockState(pos, ModBlocks.sellafield_4.getStateFromMeta(world.rand.nextInt(4)));
-				else if(ranDist <= s6)
-					world.setBlockState(pos, ModBlocks.sellafield_core.getStateFromMeta(world.rand.nextInt(4)));
+				world.setBlockState(pos, SELLAFIELD[tierIndex(l, true, 0, -1)].getStateFromMeta(world.rand.nextInt(4)));
+				return;
+			} else if(bblock == ModBlocks.sellafield_slaked || bblock == ModBlocks.sellafield_0 || bblock == ModBlocks.sellafield_1 || bblock == ModBlocks.sellafield_2 || bblock == ModBlocks.sellafield_3 || bblock == ModBlocks.sellafield_4 || bblock == ModBlocks.sellafield_core) {
+				int nt = tierIndex(l, true, 0, -1);
+				if(nt > Arrays.asList(SELLAFIELD).indexOf(bblock)) world.setBlockState(pos, SELLAFIELD[nt].getStateFromMeta(world.rand.nextInt(4)));
+				return;
+			} else if(META_TIERED.contains(bblock)) {
+				if(l < radius) {
+					if(bblock == ModBlocks.waste_grass_tall || bblock == ModBlocks.waste_snow || bblock == ModBlocks.waste_snow_block) {
+						world.setBlockState(pos, Blocks.AIR.getDefaultState());
+						return;
+					}
+					if(bblock == ModBlocks.waste_clay) {
+						placeBlockFromDist(l, ModBlocks.waste_terracotta, pos);
+						return;
+					}
+					if((bblock == ModBlocks.waste_sand || bblock == ModBlocks.waste_sand_red) && rand.nextInt(60) == 0) {
+						placeBlockFromDist(l, bblock == ModBlocks.waste_sand ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red, pos);
+						return;
+					}
+				}
+				if(l < s1 && !Library.rollChance(l, radius, rand)) {
+					if (bblock == ModBlocks.waste_grass_tall) {
+						world.setBlockState(pos, Blocks.AIR.getDefaultState());
+						return;
+					}
+				}
+				int m = tierIndex(l, false, 0, -1);
+				boolean podzol = bblock == ModBlocks.waste_dirt && b.getValue(WasteDirt.VARIANT) == WasteDirt.Variant.PODZOL;
+				int current = podzol ? b.getValue(WasteDirt.META) : b.getBlock().getMetaFromState(b);
+				if(m > current) world.setBlockState(pos, podzol ? WasteDirt.podzolState(m) : bblock.getStateFromMeta(m));
 				return;
 
 			} else if(bblock == Blocks.BEDROCK || bblock == ModBlocks.ore_bedrock_oil || bblock == ModBlocks.ore_bedrock_block){
@@ -169,7 +179,7 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				return;
 			
 			} else if(bblock instanceof BlockLeaves bLeaf && !(bblock instanceof WasteLeaves)) {
-				if(l > s1){
+				if(l > s1 || (l > radius && Library.rollChance(l, radius, rand))){
                     BlockPlanks.EnumType type = null;
                     try {
                         type = bLeaf.getWoodType(bLeaf.getMetaFromState(b));
@@ -179,18 +189,40 @@ public class EntityFalloutUnderGround extends EntityChunky {
                     if(type == null) type = BlockPlanks.EnumType.OAK;
                     world.setBlockState(pos, ModBlocks.waste_leaves.getDefaultState().withProperty(WasteLeaves.VARIANT, type));
 				}else{
-					world.setBlockToAir(pos);
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
 				}
 				continue;
 
-			} else if(bblock instanceof BlockBush) {
-				if(world.getBlockState(pos.down()).getBlock() == Blocks.FARMLAND){
+			} else if(bblock == Blocks.BROWN_MUSHROOM || bblock == Blocks.RED_MUSHROOM) {
+				if(l >= s0) {
+					continue;
+				}
+				if(l > s1 || (l > radius && Library.rollChance(l, radius, rand))) {
+					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
+				} else {
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				}
+				continue;
+
+			}  else if(bblock instanceof BlockBush) {
+				IBlockState d = world.getBlockState(pos.down());
+				Block dblock = d.getBlock();
+				boolean canStay = dblock.canSustainPlant(d, world, pos.down(), EnumFacing.UP, (IPlantable) bblock);
+				if(!canStay || !(l > s1 || (l > radius && Library.rollChance(l, radius, rand))) || bblock instanceof BlockLilyPad){
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+					continue;
+				} else if(dblock == Blocks.FARMLAND){
 					placeBlockFromDist(l, ModBlocks.waste_dirt, pos.down());
 					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
-				} else if(world.getBlockState(pos.down()).getBlock() instanceof BlockGrass){
+				} else if(dblock instanceof BlockGrass){
 					placeBlockFromDist(l, ModBlocks.waste_earth, pos.down());
 					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
-				} else if(world.getBlockState(pos.down()).getBlock() == Blocks.MYCELIUM){
+				} else if(dblock instanceof BlockDirt){
+					BlockDirt.DirtType meta = d.getValue(BlockDirt.VARIANT);
+					if(meta == BlockDirt.DirtType.PODZOL) placeBlockFromDist(l, WasteDirt.podzolState(tierIndex(l, false, 0, -1)), pos.down());
+					else placeBlockFromDist(l, ModBlocks.waste_dirt, pos.down());
+					placeBlockFromDist(l, ModBlocks.waste_grass_tall, pos);
+				} else if(dblock == Blocks.MYCELIUM){
 					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos.down());
 					world.setBlockState(pos, ModBlocks.mush.getDefaultState());
 				}
@@ -206,21 +238,24 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				else if(meta == BlockDirt.DirtType.COARSE_DIRT)
 					placeBlockFromDist(l, ModBlocks.waste_gravel, pos);
 				else if(meta == BlockDirt.DirtType.PODZOL)
-					placeBlockFromDist(l, ModBlocks.waste_mycelium, pos);
+					placeBlockFromDist(l, WasteDirt.podzolState(tierIndex(l, false, 0, -1)), pos);
 				return;
 			} else if(bblock == Blocks.FARMLAND) {
 				placeBlockFromDist(l, ModBlocks.waste_dirt, pos);
 				continue;
 			} else if(bblock instanceof BlockSnow) {
-				placeBlockFromDist(l, ModBlocks.waste_snow, pos);
+				if(l < radius) world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				else placeBlockFromDist(l, ModBlocks.waste_snow, pos);
 				continue;
 
 			} else if(bblock instanceof BlockSnowBlock) {
-				placeBlockFromDist(l, ModBlocks.waste_snow_block, pos);
+				if(l < radius) world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				else placeBlockFromDist(l, ModBlocks.waste_snow_block, pos);
 				continue;
 
 			} else if(bblock instanceof BlockIce) {
-				world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
+				if(l < radius) world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				else world.setBlockState(pos, ModBlocks.waste_ice.getDefaultState());
 				continue;
 
 			} else if(bblock == Blocks.MYCELIUM) {
@@ -243,7 +278,7 @@ public class EntityFalloutUnderGround extends EntityChunky {
 
 			} else if(bblock instanceof BlockSand) {
 				BlockSand.EnumType meta = b.getValue(BlockSand.VARIANT);
-				if(rand.nextInt(60) == 0) {
+				if(l < radius && rand.nextInt(60) == 0) {
 					placeBlockFromDist(l, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_trinitite : ModBlocks.waste_trinitite_red, pos);
 				} else {
 					placeBlockFromDist(l, meta == BlockSand.EnumType.SAND ? ModBlocks.waste_sand : ModBlocks.waste_sand_red, pos);
@@ -251,14 +286,15 @@ public class EntityFalloutUnderGround extends EntityChunky {
 				return;
 
 			} else if(bblock == Blocks.CLAY) {
-				world.setBlockState(pos, Blocks.HARDENED_CLAY.getDefaultState());
+				placeBlockFromDist(l, l >= radius ? ModBlocks.waste_clay : ModBlocks.waste_terracotta, pos);
 				return;
 
 			} else if(bblock == Blocks.MOSSY_COBBLESTONE) {
-				world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
+				if(l > s1 || (l > radius && Library.rollChance(l, radius, rand))) world.setBlockState(pos, Blocks.COAL_ORE.getDefaultState());
+				else world.setBlockState(pos, SELLAFIELD[tierIndex(l, true, 0, -1)].getStateFromMeta(rand.nextInt(4)));
 				return;
 
-			} else if(bblock == Blocks.COAL_ORE) {
+			} else if(bblock == Blocks.COAL_ORE || matchesOre(bblock, "oreCoal")) {
 				if(l < s6){
 					int ra = rand.nextInt(150);
 					if(ra < 7) {
@@ -268,15 +304,25 @@ public class EntityFalloutUnderGround extends EntityChunky {
 					}
 				}
 				return;
+			} else if(bblock == ModBlocks.ore_lignite || matchesOre(bblock, "oreLignite")) {
+				if(l < s6){
+					if(rand.nextInt(150) < 7) {
+						world.setBlockState(pos, Blocks.DIAMOND_ORE.getDefaultState());
+					}
+				}
+				return;
+			} else if(bblock == ModBlocks.ore_beryllium || matchesOre(bblock, "oreBeryllium")) {
+				if(l < s6){
+					if(rand.nextInt(150) < 10) {
+						world.setBlockState(pos, Blocks.EMERALD_ORE.getDefaultState());
+					}
+				}
+				return;
 
 			} else if(bblock == Blocks.BROWN_MUSHROOM_BLOCK || bblock == Blocks.RED_MUSHROOM_BLOCK) {
 				if(l < s0){
 					BlockHugeMushroom.EnumType meta = b.getValue(BlockHugeMushroom.VARIANT);
-					if(meta == BlockHugeMushroom.EnumType.STEM) {
-						world.setBlockState(pos, ModBlocks.mush_block_stem.getDefaultState());
-					} else {
-						world.setBlockState(pos, ModBlocks.mush_block.getDefaultState());
-					}
+					world.setBlockState(pos, BlockMushHuge.getState(bblock == Blocks.RED_MUSHROOM_BLOCK, meta == BlockHugeMushroom.EnumType.STEM));
 				}
 				return;
 
@@ -285,38 +331,61 @@ public class EntityFalloutUnderGround extends EntityChunky {
 					world.setBlockState(pos, ((WasteLog)ModBlocks.waste_log).getSameRotationState(b));
 				return;
 
-			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
-				if(l < s0)
-					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
-				return;
-			} else if(b.getBlock() == Blocks.VINE) {
-				world.setBlockToAir(pos);
-				continue;
-
-			} else if(bblock == ModBlocks.ore_uranium) {
-				if(l <= s6){
-					if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0 || l < s7)
-						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
-					else
-						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
+			} else if(bblock instanceof BlockSponge) {
+				if (b.getValue(BlockSponge.WET) && l < radius) {
+					world.setBlockState(pos, Blocks.SPONGE.getDefaultState(), 2);
 				}
 				return;
 
-			} else if(bblock == ModBlocks.ore_nether_uranium) {
+			} else if(b.getMaterial() == Material.WOOD && bblock != ModBlocks.waste_log && bblock != ModBlocks.waste_planks) {
+				if(l < s0) {
+					world.removeTileEntity(pos);
+					world.setBlockState(pos, ModBlocks.waste_planks.getDefaultState());
+				}
+				return;
+			} else if(b.getBlock() == Blocks.CACTUS) {
+				if(!(l > s1 || (l > radius && Library.rollChance(l, radius, rand)))) world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				continue;
+
+			}
+			else if(bblock == Blocks.MELON_BLOCK || bblock == Blocks.PUMPKIN) {
+				if(!(l > s1 || (l > radius && Library.rollChance(l, radius, rand)))) {
+					world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				}
+				continue;
+
+			} else if(b.getBlock() == Blocks.REEDS) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				continue;
+
+			} else if(b.getBlock() == Blocks.VINE) {
+				world.setBlockState(pos, Blocks.AIR.getDefaultState());
+				continue;
+
+		} else if(bblock == ModBlocks.ore_gneiss_uranium || bblock == ModBlocks.ore_gneiss_uranium_scorched) {
+				if(l <= s4){
+					if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance()/2)) == 0)
+						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
+					else if(bblock != ModBlocks.ore_gneiss_uranium_scorched)
+						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+				}
+				return;
+
+		} else if(bblock == ModBlocks.ore_nether_uranium || matchesOre(bblock, "oreNetherUranium")) {
 				if(l <= s5){
 					if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0)
 						world.setBlockState(pos, ModBlocks.ore_nether_schrabidium.getDefaultState());
-					else
+					else if(bblock != ModBlocks.ore_nether_uranium_scorched)
 						world.setBlockState(pos, ModBlocks.ore_nether_uranium_scorched.getDefaultState());
 				}
 				return;
 
-			} else if(bblock == ModBlocks.ore_gneiss_uranium) {
-				if(l <= s4){
-					if(rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance()/2)) == 0)
-						world.setBlockState(pos, ModBlocks.ore_gneiss_schrabidium.getDefaultState());
-					else
-						world.setBlockState(pos, ModBlocks.ore_gneiss_uranium_scorched.getDefaultState());
+			} else if(bblock == ModBlocks.ore_uranium || matchesOre(bblock, "oreUranium")) {
+				if(l <= s6){
+					if (rand.nextInt((int)(1+VersatileConfig.getSchrabOreChance())) == 0 || l < s7)
+						world.setBlockState(pos, ModBlocks.ore_schrabidium.getDefaultState());
+					else if(bblock != ModBlocks.ore_uranium_scorched)
+						world.setBlockState(pos, ModBlocks.ore_uranium_scorched.getDefaultState());
 				}
 				return;
 
@@ -330,22 +399,42 @@ public class EntityFalloutUnderGround extends EntityChunky {
 		}
 	}
 
+	private static final Block[] SELLAFIELD = {
+		ModBlocks.sellafield_slaked, ModBlocks.sellafield_0, ModBlocks.sellafield_1,
+		ModBlocks.sellafield_2, ModBlocks.sellafield_3, ModBlocks.sellafield_4, ModBlocks.sellafield_core
+	};
+
+	private static final Set<Block> META_TIERED = new HashSet<>(Arrays.asList(
+			ModBlocks.fallout, ModBlocks.waste_earth, ModBlocks.waste_dirt,
+			ModBlocks.waste_gravel, ModBlocks.waste_snow, ModBlocks.waste_snow_block,
+			ModBlocks.waste_mycelium, ModBlocks.waste_sand, ModBlocks.waste_sand_red,
+			ModBlocks.waste_trinitite, ModBlocks.waste_trinitite_red,
+			ModBlocks.waste_sandstone, ModBlocks.waste_sandstone_red,
+			ModBlocks.waste_clay, ModBlocks.waste_terracotta, ModBlocks.waste_grass_tall));
+
+		/** Maps a distance to a 0..6 tier index. sellafield=true uses the 0.1 jitter (meta uses 0.2); stoneDepth=0 with maxStoneDepth=-1 disables the depth term. */
+	private int tierIndex(double dist, boolean sellafield, int stoneDepth, int maxStoneDepth){
+		double spread = sellafield ? 0.1D : 0.2D;
+		double ranDist = dist * (1D + world.rand.nextDouble() * spread);
+		if(ranDist > s1 || stoneDepth == maxStoneDepth) return 0;
+		if(ranDist > s2 || stoneDepth == maxStoneDepth - 1) return 1;
+		if(ranDist > s3 || stoneDepth == maxStoneDepth - 2) return 2;
+		if(ranDist > s4 || stoneDepth == maxStoneDepth - 3) return 3;
+		if(ranDist > s5 || stoneDepth == maxStoneDepth - 4) return 4;
+		if(ranDist > s6 || stoneDepth == maxStoneDepth - 5) return 5;
+		return 6;
+	}
+
 	public void placeBlockFromDist(double dist, Block b, BlockPos pos){
-		double ranDist = dist * (1D + world.rand.nextDouble()*0.2);
-		if(ranDist > s1)
-			world.setBlockState(pos, b.getStateFromMeta(0));
-		else if(ranDist > s2)
-			world.setBlockState(pos, b.getStateFromMeta(1));
-		else if(ranDist > s3)
-			world.setBlockState(pos, b.getStateFromMeta(2));
-		else if(ranDist > s4)
-			world.setBlockState(pos, b.getStateFromMeta(3));
-		else if(ranDist > s5)
-			world.setBlockState(pos, b.getStateFromMeta(4));
-		else if(ranDist > s6)
-			world.setBlockState(pos, b.getStateFromMeta(5));
-		else if(ranDist <= s6)
-			world.setBlockState(pos, b.getStateFromMeta(6));
+		world.setBlockState(pos, b.getStateFromMeta(tierIndex(dist, false, 0, -1)));
+	}
+
+	public void placeBlockFromDist(double dist, IBlockState state, BlockPos pos){
+		world.setBlockState(pos, state);
+	}
+
+	private static boolean matchesOre(Block block, String oreDictName) {
+		return OreDictionary.containsMatch(false, OreDictionary.getOres(oreDictName), new ItemStack(block, 1, OreDictionary.WILDCARD_VALUE));
 	}
 
 	@Override

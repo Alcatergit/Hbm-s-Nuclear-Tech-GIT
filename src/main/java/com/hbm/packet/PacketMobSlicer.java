@@ -86,7 +86,6 @@ public class PacketMobSlicer implements IMessage {
 					victim.getCombatTracker().trackDamage(source, victim.getHealth(), victim.getHealth());
 					victim.setDead();
 					victim.setHealth(0);
-					victim.onDeath(source);
 					//For ender dragon so it spawns a portal and all that
 					victim.onKillCommand();
 					
@@ -98,6 +97,5 @@ public class PacketMobSlicer implements IMessage {
 			});
 			return null;
 		}
-		
 	}
 }

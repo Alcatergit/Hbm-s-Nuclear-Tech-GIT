@@ -3,10 +3,12 @@ package com.hbm.render.tileentity;
 import org.lwjgl.opengl.GL11;
 
 import com.hbm.blocks.machine.rbmk.RBMKBase;
+import com.hbm.dynamic_texture.DynamicTextureRegistry;
 import com.hbm.lib.RefStrings;
 import com.hbm.main.ResourceManager;
-import com.hbm.tileentity.machine.rbmk.TileEntityRBMKBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControl;
+import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual;
+import com.hbm.tileentity.machine.rbmk.RBMKDials;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -31,7 +33,7 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 		com.hbm.render.amlfrom1710.Tessellator tes = com.hbm.render.amlfrom1710.Tessellator.instance;
 		tes.startDrawing(GL11.GL_TRIANGLES);
 
-		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, TileEntityRBMKBase.rbmkHeight);
+		ResourceManager.rbmk_rods.tessellatePartSplit(tes, "Column", 0.5F, (float)control.jumpHeight + RBMKDials.getColumnHeight(control.getWorld()));
 		
 		tes.draw();
 		
@@ -40,15 +42,28 @@ public class RenderRBMKControlRod extends TileEntitySpecialRenderer<TileEntityRB
 
 		
 		if(control.getBlockType() instanceof RBMKBase) {
-			bindTexture(((RBMKBase)control.getBlockType()).coverTexture);
+			ResourceLocation cover = ((RBMKBase) control.getBlockType()).coverTexture;
+			String variant = "NONE";
+			if(control instanceof TileEntityRBMKControlManual manual && manual.color != null) {
+				variant = manual.color.name();
+			}
+			int gl = DynamicTextureRegistry.getTexture(cover, variant);
+			if(gl >= 0) {
+				GlStateManager.bindTexture(gl);
+			} else {
+				bindTexture(cover);
+			}
 		} else {
 			bindTexture(texture);
 		}
 		
 		double level = control.lastLevel + (control.level - control.lastLevel) * partialTicks;
 		
-		GL11.glTranslated(0, TileEntityRBMKBase.rbmkHeight+level, 0);
-		ResourceManager.rbmk_rods.renderPart("Lid");
+		GL11.glTranslated(0, RBMKDials.getColumnHeight(control.getWorld()) + control.jumpHeight + level, 0);
+		
+		tes.startDrawing(GL11.GL_TRIANGLES);
+		ResourceManager.rbmk_rods.tessellatePart(tes, "Lid");
+		tes.draw();
 
 		GL11.glPopMatrix();
 	}

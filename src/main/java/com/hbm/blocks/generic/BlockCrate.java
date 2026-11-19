@@ -1,5 +1,7 @@
 package com.hbm.blocks.generic;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+import static com.hbm.items.ItemEnums.EnumClip;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -82,23 +84,23 @@ public class BlockCrate extends BlockFalling {
 		//Supply Crate
     	BlockCrate.addToListWithWeight(crateList, ModItems.syringe_metal_stimpak, 10);
     	BlockCrate.addToListWithWeight(crateList, ModItems.syringe_antidote, 5);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_revolver_iron, 9);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_revolver, 7);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_revolver_gold, 4);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_revolver_lead, 6);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_revolver_cursed, 5);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_rpg, 5);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_fatman, 1);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_mp40, 7);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_uzi, 7);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_uboinik, 7);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_lever_action, 5);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.clip_bolt_action, 5);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_IRON.ordinal()), 9);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.REVOLVER.ordinal()), 7);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_GOLD.ordinal()), 4);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_LEAD.ordinal()), 6);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.REVOLVER_CURSED.ordinal()), 5);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.RPG.ordinal()), 5);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.FATMAN.ordinal()), 1);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.MP40.ordinal()), 7);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.UZI.ordinal()), 7);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.UBOINIK.ordinal()), 7);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.LEVER_ACTION.ordinal()), 5);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.BOLT_ACTION.ordinal()), 5);
     	BlockCrate.addToListWithWeight(crateList, ModItems.grenade_generic, 8);
     	BlockCrate.addToListWithWeight(crateList, ModItems.grenade_strong, 6);
     	BlockCrate.addToListWithWeight(crateList, ModItems.grenade_mk2, 4);
     	BlockCrate.addToListWithWeight(crateList, ModItems.grenade_flare, 4);
-    	BlockCrate.addToListWithWeight(crateList, ModItems.ammo_container, 2);
+    	BlockCrate.addToListWithWeight(crateList, new ItemStack(ModItems.clip_standard, 1, EnumClip.CONTAINER.ordinal()), 2);
     	
     	//Weapon Crate
     	BlockCrate.addToListWithWeight(weaponList, ModItems.gun_revolver_iron, 10);
@@ -177,9 +179,9 @@ public class BlockCrate extends BlockFalling {
     	BlockCrate.addToListWithWeight(redList, ModItems.gun_revolver_pip, 1);
     	BlockCrate.addToListWithWeight(redList, ModItems.gun_revolver_blackjack, 1);
     	BlockCrate.addToListWithWeight(redList, ModItems.gun_revolver_silver, 1);
-    	BlockCrate.addToListWithWeight(redList, ModItems.ammo_44_pip, 1);
-    	BlockCrate.addToListWithWeight(redList, ModItems.ammo_44_bj, 1);
-    	BlockCrate.addToListWithWeight(redList, ModItems.ammo_44_silver, 1);
+    	BlockCrate.addToListWithWeight(redList, new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_PIP.ordinal()), 1);
+    	BlockCrate.addToListWithWeight(redList, new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_BJ.ordinal()), 1);
+    	BlockCrate.addToListWithWeight(redList, new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_SILVER.ordinal()), 1);
     	BlockCrate.addToListWithWeight(redList, ModItems.battery_spark, 1);
     	BlockCrate.addToListWithWeight(redList, ModItems.bottle_sparkle, 1);
     	BlockCrate.addToListWithWeight(redList, ModItems.bottle_rad, 1);

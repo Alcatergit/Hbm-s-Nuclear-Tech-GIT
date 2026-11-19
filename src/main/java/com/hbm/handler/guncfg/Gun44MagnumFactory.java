@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.particle.EntityBSmokeFX;
@@ -173,7 +175,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44.ordinal();
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 7;
 
@@ -184,7 +187,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_ap;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_AP.ordinal();
 		bullet.dmgMin = 7;
 		bullet.dmgMax = 10;
 		bullet.wear = 15;
@@ -197,7 +201,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_DU.ordinal();
 		bullet.dmgMin = 7;
 		bullet.dmgMax = 10;
 		bullet.wear = 25;
@@ -210,7 +215,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_star;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_STAR.ordinal();
 		bullet.dmgMin = 14;
 		bullet.dmgMax = 20;
 		bullet.wear = 25;
@@ -223,7 +229,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_pip;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_PIP.ordinal();
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -258,7 +265,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_bj;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_BJ.ordinal();
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -294,7 +302,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 
-		bullet.ammo = ModItems.ammo_44_silver;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_SILVER.ordinal();
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 5;
 		bullet.wear = 25;
@@ -330,7 +339,8 @@ public class Gun44MagnumFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_44_rocket;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_ROCKET.ordinal();
 		bullet.velocity = 5;
 		bullet.explosive = 15F;
 		bullet.trail = 1;
@@ -342,7 +352,8 @@ public class Gun44MagnumFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_44_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.M44_PHOSPHORUS.ordinal();
 		bullet.dmgMin = 5;
 		bullet.dmgMax = 7;
 		bullet.wear = 15;

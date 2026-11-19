@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import com.hbm.interfaces.IControlReceiver;
 import com.hbm.render.amlfrom1710.Vec3;
 import com.hbm.lib.Library;
+import com.hbm.blocks.BlockDummyable;
 import com.hbm.tileentity.TileEntityMachineBase;
 import com.hbm.tileentity.machine.rbmk.TileEntityRBMKControlManual.RBMKColor;
 import com.hbm.util.I18nUtil;
@@ -50,6 +51,13 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 
 	public RBMKGraph graph;
 
+	public byte mode = 0;
+	public byte steamSelect = 0;
+	public byte colorSelect = 0;
+	public byte rotation = 0;
+	public byte[] selection = new byte[15 * 15];
+	public String fieldText = "";
+
 	public TileEntityRBMKConsole() {
 		super(0);
 		graph = new RBMKGraph();
@@ -79,24 +87,23 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 	
 	private void rescan() {
 		
-		for(int i = -7; i <= 7; i++) {
-			for(int j = -7; j <= 7; j++) {
-				
-				TileEntity te = world.getTileEntity(new BlockPos(targetX + i, targetY, targetZ + j));
-				int index = (i + 7) + (j + 7) * 15;
-				
-				if(te instanceof TileEntityRBMKBase rbmk) {
+		for(int index = 0; index < columns.length; index++) {
+			int rx = getXFromIndex(index);
+			int rz = getZFromIndex(index);
+			
+			TileEntity te = world.getTileEntity(new BlockPos(targetX + rx, targetY, targetZ + rz));
+			
+			if(te instanceof TileEntityRBMKBase rbmk) {
 
-                    columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
-					columns[index].data.setDouble("heat", rbmk.heat);
-					columns[index].data.setDouble("maxHeat", rbmk.maxHeat());
-					columns[index].data.setDouble("realSimWater", rbmk.water);
-					columns[index].data.setDouble("realSimSteam", rbmk.steam);
-					if(rbmk.isModerated()) columns[index].data.setBoolean("moderated", true); //false is the default anyway and not setting it when we don't need to reduces cruft
-					
-				} else {
-					columns[index] = null;
-				}
+				columns[index] = new RBMKColumn(rbmk.getConsoleType(), rbmk.getNBTForConsole());
+				columns[index].data.setDouble("heat", rbmk.heat);
+				columns[index].data.setDouble("maxHeat", rbmk.maxHeat());
+				columns[index].data.setDouble("realSimWater", rbmk.water);
+				columns[index].data.setDouble("realSimSteam", rbmk.steam);
+				if(rbmk.isModerated()) columns[index].data.setBoolean("moderated", true);
+				
+			} else {
+				columns[index] = null;
 			}
 		}
 	}
@@ -298,6 +305,11 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			data.setByte("s" + i, (byte) screen.type.ordinal());
 		}
 		data.setByte("g", (byte) graph.type.ordinal());
+			data.setByte("mode", this.mode);
+		data.setByte("steamSelect", this.steamSelect);
+		data.setByte("colorSelect", this.colorSelect);
+		data.setByteArray("sel", this.selection);
+		data.setString("fieldText", this.fieldText);
 		
 		this.networkPack(data, 50);
 	}
@@ -328,6 +340,16 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 			screen.type = ScreenType.values()[data.getByte("s" + i)];
 		}
 		graph.type = ScreenType.values()[data.getByte("g")];
+		if(data.hasKey("mode"))
+			this.mode = data.getByte("mode");
+		if(data.hasKey("steamSelect"))
+			this.steamSelect = data.getByte("steamSelect");
+		if(data.hasKey("colorSelect"))
+			this.colorSelect = data.getByte("colorSelect");
+		if(data.hasKey("sel"))
+			this.selection = data.getByteArray("sel");
+		if(data.hasKey("fieldText"))
+			this.fieldText = data.getString("fieldText");
 	}
 
 	@Override
@@ -346,8 +368,9 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				
 				if(key.startsWith("sel_")) {
 
-					int x = data.getInteger(key) % 15 - 7;
-					int z = data.getInteger(key) / 15 - 7;
+					int index = data.getInteger(key);
+					int x = getXFromIndex(index);
+					int z = getZFromIndex(index);
 					
 					TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
 					
@@ -391,6 +414,62 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 				this.screens[slot].columns = cols;
 			}
 		}
+
+		if(data.hasKey("compressor")) {
+			int[] cols = data.getIntArray("cols");
+			byte type = data.getByte("steamType");
+			for(int i : cols) {
+				int x = getXFromIndex(i);
+				int z = getZFromIndex(i);
+				TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+				if(te instanceof TileEntityRBMKBoiler) {
+					NBTTagCompound control = new NBTTagCompound();
+					control.setByte("steamType", type);
+					((TileEntityRBMKBoiler) te).receiveControl(control);
+				}
+			}
+		}
+
+		if(data.hasKey("setMode")) {
+			this.mode = data.getByte("setMode");
+			this.markDirty();
+		}
+
+		if(data.hasKey("setSteamSelect")) {
+			this.steamSelect = data.getByte("setSteamSelect");
+			this.markDirty();
+		}
+
+		if(data.hasKey("saveSel")) {
+			this.selection = data.getByteArray("saveSel");
+			this.markDirty();
+		}
+
+		if(data.hasKey("setColor")) {
+			byte color = data.getByte("setColor");
+			for(int i = 0; i < 15 * 15; i++) {
+				if(data.getBoolean("sc_" + i)) {
+					int x = getXFromIndex(i);
+					int z = getZFromIndex(i);
+					TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + z));
+					if(te instanceof TileEntityRBMKControlManual) {
+						NBTTagCompound control = new NBTTagCompound();
+						control.setInteger("color", color);
+						((TileEntityRBMKControlManual) te).receiveControl(control);
+					}
+				}
+			}
+		}
+
+		if(data.hasKey("setColorSelect")) {
+			this.colorSelect = data.getByte("setColorSelect");
+			this.markDirty();
+		}
+
+		if(data.hasKey("saveFieldText")) {
+			this.fieldText = data.getString("saveFieldText");
+			this.markDirty();
+		}
 	}
 	
 	@Override
@@ -408,7 +487,43 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		this.targetX = x;
 		this.targetY = y;
 		this.targetZ = z;
+		int meta = world.getBlockState(pos).getValue(BlockDummyable.META) - BlockDummyable.offset;
+		switch(meta) {
+			case 2: this.rotation = 2; break; // Core NORTH, reactor SOUTH
+			case 5: this.rotation = 3; break; // Core EAST,  reactor WEST
+			case 3: this.rotation = 0; break; // Core SOUTH, reactor NORTH
+			case 4: this.rotation = 1; break; // Core WEST,  reactor EAST
+			default: this.rotation = 0;
+		}
 		this.markDirty();
+	}
+
+	public void rotate() {
+		rotation = (byte) ((rotation + 1) % 4);
+	}
+
+	public int getXFromIndex(int col) {
+		int i = col % 15 - 7;
+		int j = col / 15 - 7;
+		switch(rotation) {
+			case 0: return i;
+			case 1: return -j;
+			case 2: return -i;
+			case 3: return j;
+			default: return i;
+		}
+	}
+
+	public int getZFromIndex(int col) {
+		int i = col % 15 - 7;
+		int j = col / 15 - 7;
+		switch(rotation) {
+			case 0: return j;
+			case 1: return i;
+			case 2: return -j;
+			case 3: return -i;
+			default: return j;
+		}
 	}
 	
 	@Override
@@ -425,6 +540,14 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 		this.graph.type = ScreenType.values()[nbt.getByte("g")];
 		this.graph.columns = Arrays.stream(nbt.getIntArray("gc")).boxed().toArray(Integer[]::new);
+		this.mode = nbt.getByte("mode");
+		this.steamSelect = nbt.getByte("steamSelect");
+		this.colorSelect = nbt.getByte("colorSelect");
+		this.rotation = nbt.getByte("rotation");
+		this.selection = nbt.getByteArray("sel");
+		if(this.selection.length != 15 * 15) this.selection = new byte[15 * 15];
+		if(nbt.hasKey("fieldText"))
+			this.fieldText = nbt.getString("fieldText");
 	}
 	
 	@Override
@@ -441,6 +564,12 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		}
 		nbt.setByte("g", (byte) this.graph.type.ordinal());
 		nbt.setIntArray("gc", Arrays.stream(this.graph.columns).mapToInt(Integer::intValue).toArray());
+		nbt.setByte("mode", this.mode);
+		nbt.setByte("steamSelect", this.steamSelect);
+		nbt.setByte("colorSelect", this.colorSelect);
+		nbt.setByte("rotation", this.rotation);
+		nbt.setByteArray("sel", this.selection);
+		nbt.setString("fieldText", this.fieldText);
 		
 		return nbt;
 	}
@@ -624,13 +753,21 @@ public class TileEntityRBMKConsole extends TileEntityMachineBase implements ICon
 		int x = args.checkInteger(0) - 7;
 		int y = -args.checkInteger(1) + 7;
 
-		int i = (y + 7) * 15 + (x + 7);
+		int i, j;
+		switch(rotation) {
+			case 0: i = x; j = y; break;
+			case 1: i = y; j = -x; break;
+			case 2: i = -x; j = -y; break;
+			case 3: i = -y; j = x; break;
+			default: i = x; j = y;
+		}
+		int index = (j + 7) * 15 + (i + 7);
 
 		TileEntity te = world.getTileEntity(new BlockPos(targetX + x, targetY, targetZ + y));
 		if (te instanceof TileEntityRBMKBase) {
 			TileEntityRBMKBase column = (TileEntityRBMKBase) te;
 
-			NBTTagCompound column_data = columns[i].data;
+			NBTTagCompound column_data = columns[index].data;
 			LinkedHashMap<String, Object> data_table = new LinkedHashMap<>();
 			data_table.put("type", column.getConsoleType().name());
 			data_table.put("hullTemp", column_data.getDouble("heat"));

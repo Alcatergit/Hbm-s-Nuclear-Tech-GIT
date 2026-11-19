@@ -13,13 +13,12 @@ import com.hbm.render.item.*;
 import com.hbm.tileentity.machine.TileEntityMachineReactorSmall;
 import com.hbm.util.*;
 import com.hbm.items.IDynamicModels;
+import com.hbm.dynamic_texture.DynamicTextureRegistry;
 import com.hbm.items.IModelRegister;
 import com.hbm.items.machine.*;
 import com.hbm.render.tileentity.RenderWatzMultiblock;
 import net.minecraft.block.*;
 import net.minecraft.client.renderer.*;
-import net.minecraft.client.renderer.block.statemap.StateMap;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemLeaves;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.FluidUtil;
@@ -98,6 +97,7 @@ import com.hbm.render.item.weapon.ItemRedstoneSwordRender;
 import com.hbm.render.item.weapon.ItemRenderGunAnim;
 import com.hbm.render.item.weapon.ItemRenderGunEgon;
 import com.hbm.render.item.weapon.ItemRenderRedstoneSword;
+import com.hbm.render.item.weapon.ItemRenderWeaponBase;
 import com.hbm.render.misc.BeamPronter;
 import com.hbm.render.misc.RenderAccessoryUtility;
 import com.hbm.render.misc.RenderScreenOverlay;
@@ -209,6 +209,11 @@ public class ModEventHandlerClient {
 	public static float deltaMouseY;
 	
 	public static float currentFOV = 70;
+	public static int flashDuration;
+	public static long flashTimestamp;
+	public static int shakeDuration;
+	public static long shakeTimestamp;
+	public static double shakeMultiplier;
 	
 	public static void updateMouseDelta() {
 		Minecraft mc = Minecraft.getMinecraft();
@@ -257,6 +262,8 @@ public class ModEventHandlerClient {
 		for(Block block : ModBlocks.ALL_BLOCKS) {
 			registerBlockModel(block, 0);
 		}
+
+		DynamicTextureRegistry.registerItemModels();
 
 		IDynamicModels.registerModels();
 
@@ -479,9 +486,6 @@ public class ModEventHandlerClient {
 		swapModelsNoGui(ModItems.gun_deagle, reg);
 		swapModelsNoGui(ModItems.gun_supershotgun, reg);
 		swapModelsNoGui(ModItems.gun_fatman, reg);
-		swapModelsNoGui(ModItems.gun_proto, reg);
-		swapModelsNoGui(ModItems.gun_mirv, reg);
-		swapModelsNoGui(ModItems.gun_bf, reg);
 		swapModelsNoGui(ModItems.gun_zomg, reg);
 		swapModelsNoGui(ModItems.gun_xvl1456, reg);
 		swapModelsNoGui(ModItems.gun_hp, reg);
@@ -627,6 +631,13 @@ public class ModEventHandlerClient {
 			}
 			return 0xFFFFFF;
 		}, ModItems.siren_track);
+
+		DynamicTextureRegistry.registerItemColors(evt);
+	}
+
+	@SubscribeEvent
+	public void blockColorsEvent(ColorHandlerEvent.Block evt) {
+		DynamicTextureRegistry.registerBlockColors(evt);
 	}
 
 	public static void registerSpriteFluid(TextureStitchEvent.Pre evt, String name){
@@ -637,6 +648,8 @@ public class ModEventHandlerClient {
 	public void textureStitch(TextureStitchEvent.Pre evt) {
 
 		IDynamicModels.registerSprites(evt.getMap());
+
+		DynamicTextureRegistry.registerSprites(evt);
 
 		DSmokeRenderer.sprites[0] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke1"));
 		DSmokeRenderer.sprites[1] = evt.getMap().registerSprite(new ResourceLocation(RefStrings.MODID, "particle/d_smoke2"));
@@ -898,6 +911,66 @@ public class ModEventHandlerClient {
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			e.setNewfov(e.getFov()*1.1F);
 		}
+		ItemStack main = player.getHeldItemMainhand();
+		ItemStack off = player.getHeldItemOffhand();
+		boolean mainGun = main.getItem().getTileEntityItemStackRenderer() instanceof ItemRenderWeaponBase;
+		boolean offGun = off.getItem().getTileEntityItemStackRenderer() instanceof ItemRenderWeaponBase;
+		if(mainGun && ItemGunBase.getIsAiming(EnumHand.MAIN_HAND)) {
+			e.setNewfov(((ItemRenderWeaponBase) main.getItem().getTileEntityItemStackRenderer()).getViewFOV(e.getFov(), EnumHand.MAIN_HAND));
+		} else if(offGun && ItemGunBase.getIsAiming(EnumHand.OFF_HAND)) {
+			e.setNewfov(((ItemRenderWeaponBase) off.getItem().getTileEntityItemStackRenderer()).getViewFOV(e.getFov(), EnumHand.OFF_HAND));
+		}
+	}
+
+	private static String lastMainGunId = null;
+	private static String lastOffGunId = null;
+
+	@SubscribeEvent
+	public void onClientTick(ClientTickEvent e) {
+		if(e.phase != Phase.START) return;
+		EntityPlayer p = Minecraft.getMinecraft().player;
+		if(p == null) return;
+
+		ItemStack main = p.getHeldItemMainhand();
+		ItemStack off = p.getHeldItemOffhand();
+
+		String mid = (main.isEmpty() || !(main.getItem() instanceof ItemGunBase)) ? null : ItemGunBase.getGunId(main);
+		String curMainId = (mid == null || mid.isEmpty()) ? null : mid;
+		String oid = (off.isEmpty() || !(off.getItem() instanceof ItemGunBase)) ? null : ItemGunBase.getGunId(off);
+		String curOffId = (oid == null || oid.isEmpty()) ? null : oid;
+
+		if(curMainId != null) {
+			ItemGunBase gun = (ItemGunBase) main.getItem();
+			if(!Objects.equals(curMainId, lastMainGunId)) {
+				if(!Objects.equals(curMainId, lastOffGunId)) {
+					gun.startAnim(p, main, p.inventory.currentItem, HbmAnimations.AnimType.EQUIP);
+				} else {
+					HbmAnimations.moveAnimToSlot(p, main, EnumHand.MAIN_HAND);
+				}
+			}
+		}
+		if(curOffId != null) {
+			ItemGunBase gun = (ItemGunBase) off.getItem();
+			if(!Objects.equals(curOffId, lastOffGunId)) {
+				if(!Objects.equals(curOffId, lastMainGunId)) {
+					gun.startAnim(p, off, 9, HbmAnimations.AnimType.EQUIP);
+				} else {
+					HbmAnimations.moveAnimToSlot(p, off, EnumHand.OFF_HAND);
+				}
+			}
+		}
+
+		if(ItemGunBase.aimingMainId != null && !Objects.equals(ItemGunBase.aimingMainId, curMainId)) {
+			ItemGunBase.aimingMainId = null;
+			ItemGunBase.resetAimingProgress(EnumHand.MAIN_HAND);
+		}
+		if(ItemGunBase.aimingOffId != null && !Objects.equals(ItemGunBase.aimingOffId, curOffId)) {
+			ItemGunBase.aimingOffId = null;
+			ItemGunBase.resetAimingProgress(EnumHand.OFF_HAND);
+		}
+
+		lastMainGunId = curMainId;
+		lastOffGunId = curOffId;
 	}
 	
 	@SubscribeEvent(priority = EventPriority.LOW)
@@ -976,7 +1049,7 @@ public class ModEventHandlerClient {
 				//Drillgon200: If I add more guns like this, I'll abstract it.
 				for(EntityPlayer player : Minecraft.getMinecraft().world.playerEntities){
 					if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && !ItemGunEgon.soundsByPlayer.containsKey(player)){
-						boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
+						boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammo, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammoMeta) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 						if(firing){
 							ItemGunEgon.soundsByPlayer.put(player, new GunEgonSoundHandler(player));
 						}
@@ -1028,6 +1101,16 @@ public class ModEventHandlerClient {
 	
 	@SubscribeEvent
 	public void renderSpecificHand(RenderSpecificHandEvent e){
+		ItemStack mainStack = Minecraft.getMinecraft().player.getHeldItem(EnumHand.MAIN_HAND);
+		ItemStack offStack = Minecraft.getMinecraft().player.getHeldItem(EnumHand.OFF_HAND);
+		if(e.getHand() == EnumHand.MAIN_HAND && offStack.getItem() == ModItems.gun_fatman && mainStack.isEmpty()){
+			e.setCanceled(true);
+			return;
+		}
+		if(e.getHand() == EnumHand.OFF_HAND && mainStack.getItem() == ModItems.gun_fatman && offStack.isEmpty()){
+			e.setCanceled(true);
+			return;
+		}
 		if(Minecraft.getMinecraft().player.getHeldItem(e.getHand()).getItem() == ModItems.crucible){
 			e.setCanceled(true);
 			Minecraft.getMinecraft().getItemRenderer().renderItemInFirstPerson(Minecraft.getMinecraft().player, e.getPartialTicks(), e.getInterpolatedPitch(), EnumHand.MAIN_HAND, 0, Minecraft.getMinecraft().player.getHeldItem(e.getHand()), 0);
@@ -1371,7 +1454,7 @@ public class ModEventHandlerClient {
 				ItemGunEgon.activeTrailParticles.remove(player);
 				continue;
 			}
-			boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
+			boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammo, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammoMeta) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 			if(!firing){
 				ItemGunEgon.activeTrailParticles.remove(player);
 				continue;
@@ -1485,7 +1568,38 @@ public class ModEventHandlerClient {
 	@SubscribeEvent
 	public void onOverlayRender(RenderGameOverlayEvent.Pre event) {
 		EntityPlayer player = Minecraft.getMinecraft().player;
-		if(event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
+		/// NUKE FLASH ///
+		if (event.getType() == ElementType.CROSSHAIRS && (flashTimestamp + flashDuration - System.currentTimeMillis()) > 0) {
+			int width = event.getResolution().getScaledWidth();
+			int height = event.getResolution().getScaledHeight();
+			int buff = -200; // that's for the shake effect - so the flash won't look like offset
+			net.minecraft.client.renderer.Tessellator tess = net.minecraft.client.renderer.Tessellator.getInstance();
+			BufferBuilder buffer = tess.getBuffer();
+			GlStateManager.disableTexture2D();
+			GlStateManager.enableBlend();
+			GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE);
+			GlStateManager.alphaFunc(516, 0.0F);
+			GlStateManager.depthMask(false);
+			buffer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_COLOR);
+			float brightness = (flashTimestamp + flashDuration - System.currentTimeMillis()) / (float) flashDuration;
+			buffer.pos(width - buff, buff, 0).color(1F, 1F, 1F, brightness * 0.875F).endVertex();
+			buffer.pos(buff, buff, 0).color(1F, 1F, 1F, brightness * 0.875F).endVertex();
+			buffer.pos(buff, height - buff, 0).color(1F, 1F, 1F, brightness * 0.875F).endVertex();
+			buffer.pos(width - buff, height - buff, 0).color(1F, 1F, 1F, brightness * 0.875F).endVertex();
+			tess.draw();
+			GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+			GlStateManager.enableTexture2D();
+			GlStateManager.alphaFunc(GL11.GL_GREATER, 0.1F);
+			GlStateManager.depthMask(true);
+		}
+		// NUKE GUI SHAKE //
+		if (event.getType() == ElementType.HOTBAR && (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) > 0) {
+			double mult = (ModEventHandlerClient.shakeTimestamp + ModEventHandlerClient.shakeDuration - System.currentTimeMillis()) / (double) ModEventHandlerClient.shakeDuration * 2;
+			double horizontal = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.02), -0.7, 0.7) * 15 * ModEventHandlerClient.shakeMultiplier;
+			double vertical = MathHelper.clamp(Math.sin(System.currentTimeMillis() * 0.01 + 2), -0.7, 0.7) * 3 * ModEventHandlerClient.shakeMultiplier;
+			GlStateManager.translate(horizontal * mult, vertical * mult, 0);
+		}
+		if (event.getType() == ElementType.CROSSHAIRS && player.getHeldItemMainhand().getItem() == ModItems.gun_supershotgun && !ItemGunShotty.hasHookedEntity(player.world, player.getHeldItemMainhand())) {
 			float x1 = ItemGunShotty.prevScreenPos.x + (ItemGunShotty.screenPos.x - ItemGunShotty.prevScreenPos.x) * event.getPartialTicks();
 			float y1 = ItemGunShotty.prevScreenPos.y + (ItemGunShotty.screenPos.y - ItemGunShotty.prevScreenPos.y) * event.getPartialTicks();
 			float x = BobMathUtil.remap(x1, 0, Minecraft.getMinecraft().displayWidth, 0, event.getResolution().getScaledWidth());
@@ -1637,7 +1751,7 @@ public class ModEventHandlerClient {
 		JetpackHandler.postRenderPlayer(event.getEntityPlayer());
 		EntityPlayer player = event.getEntityPlayer();
 		//GLUON GUN//
-		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true)) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
+		boolean firing = player == Minecraft.getMinecraft().player ? ItemGunEgon.m1 && Library.countInventoryItem(player.inventory, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammo, ItemGunEgon.getBeltType(player, player.getHeldItemMainhand(), true).ammoMeta) >= 2 : ItemGunEgon.getIsFiring(player.getHeldItemMainhand());
 		EgonBackpackRenderer.showBackpack = false;
 		if(player.getHeldItemMainhand().getItem() == ModItems.gun_egon && firing){
 			GL11.glPushMatrix();

@@ -19,7 +19,6 @@ import javax.annotation.Nullable;
 
 import baubles.api.BaublesApi;
 import baubles.api.IBauble;
-import baubles.api.cap.BaublesCapabilities;
 import baubles.api.cap.IBaublesItemHandler;
 import com.hbm.util.I18nUtil;
 import net.minecraft.block.material.Material;
@@ -170,9 +169,13 @@ public class Library {
             Field f = ReflectionHelper.findField(c, variable, variableObf);
             if(isHidden) f.setAccessible(true);
 
-            Field modifiersField = Field.class.getDeclaredField("modifiers");
-            modifiersField.setAccessible(true);
-            modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            try {
+                Field modifiersField = Field.class.getDeclaredField("modifiers");
+                modifiersField.setAccessible(true);
+                modifiersField.setInt(f, f.getModifiers() & ~Modifier.FINAL);
+            } catch(Throwable ignored) {
+                // AT may have already removed final, continue anyway
+            }
 
             f.set(null, newValue);
         } catch(Throwable ignored){
@@ -908,6 +911,16 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 		}
 		return false;
 	}
+
+	public static boolean hasInventoryItem(InventoryPlayer inventory, Item ammo, int meta) {
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo && stack.getItemDamage() == meta) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	public static boolean hasInventoryOreDict(InventoryPlayer inventory, String name) {
 		int oreId = OreDictionary.getOreID(name);
@@ -935,10 +948,32 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 		return count;
 	}
 
+	public static int countInventoryItem(InventoryPlayer inventory, Item ammo, int meta) {
+		int count = 0;
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo && stack.getItemDamage() == meta) {
+				count += stack.getCount();
+			}
+		}
+		return count;
+	}
+
 	public static void consumeInventoryItem(InventoryPlayer inventory, Item ammo) {
 		for(int i = 0; i < inventory.getSizeInventory(); i++) {
 			ItemStack stack = inventory.getStackInSlot(i);
 			if(stack.getItem() == ammo && !stack.isEmpty()) {
+				stack.shrink(1);
+				inventory.setInventorySlotContents(i, stack.copy());
+				return;
+			}
+		}
+	}
+
+	public static void consumeInventoryItem(InventoryPlayer inventory, Item ammo, int meta) {
+		for(int i = 0; i < inventory.getSizeInventory(); i++) {
+			ItemStack stack = inventory.getStackInSlot(i);
+			if(stack.getItem() == ammo && stack.getItemDamage() == meta && !stack.isEmpty()) {
 				stack.shrink(1);
 				inventory.setInventorySlotContents(i, stack.copy());
 				return;
@@ -1183,5 +1218,82 @@ public static boolean canConnect(IBlockAccess world, BlockPos pos, ForgeDirectio
 	
 	public static Explosion explosionDummy(World w, double x, double y, double z){
 		return new Explosion(w, null, x, y, z, 1000, false, false);
+	}
+
+	public static int getBedrockAdjustedY(World world, int x, int y, int z, int minX, int minZ, int maxX, int maxZ, int minOffset) {
+		BlockPos.MutableBlockPos pos = new BlockPos.MutableBlockPos();
+		int maxBedrockTop = 0;
+		for (int cx = x + minX; cx <= x + maxX; cx++) {
+			for (int cz = z + minZ; cz <= z + maxZ; cz++) {
+				for (int cy = 0; cy <= 5; cy++) {
+					pos.setPos(cx, cy, cz);
+					if (world.getBlockState(pos).getBlock() != Blocks.BEDROCK) {
+						if (cy > maxBedrockTop) {
+							maxBedrockTop = cy;
+						}
+						break;
+					}
+				}
+			}
+		}
+		return Math.max(y, maxBedrockTop - minOffset);
+	}
+
+	// ----------------- Vanilla Encoding (added for parallel nuke explosion) -----------------
+
+	/** Identical to {@link BlockPos#toLong()} */
+	public static long blockPosToLong(int x, int y, int z) {
+		return ((long) x & 0x03FF_FFFF) << 38 | ((long) y & 0x0000_0FFF) << 26 | ((long) z & 0x03FF_FFFF);
+	}
+
+	public static int getBlockPosX(long serialized) {
+		return (int) (serialized >> 38);
+	}
+
+	public static int getBlockPosY(long serialized) {
+		return (int) (serialized << 26 >> 52);
+	}
+
+	public static int getBlockPosZ(long serialized) {
+		return (int) (serialized << 38 >> 38);
+	}
+
+	public static BlockPos.MutableBlockPos fromLong(BlockPos.MutableBlockPos pos, long serialized) {
+		pos.setPos(getBlockPosX(serialized), getBlockPosY(serialized), getBlockPosZ(serialized));
+		return pos;
+	}
+
+	public static int getChunkPosX(long ck) {
+		return (int) ck;
+	}
+
+	public static int getChunkPosZ(long ck) {
+		return (int) (ck >>> 32);
+	}
+
+	/** Identical to {@link net.minecraft.world.chunk.BlockStateContainer#getIndex(int, int, int)} */
+	public static int packLocal(int localX, int localY, int localZ) {
+		return (localY << 8) | (localZ << 4) | localX;
+	}
+
+	public static int blockPosToLocal(int x, int y, int z) {
+		return ((y & 0xF) << 8) | ((z & 0xF) << 4) | (x & 0xF);
+	}
+
+	public static int getLocalX(int packed) {
+		return packed & 0xF;
+	}
+
+	public static int getLocalY(int packed) {
+		return (packed >>> 8) & 0xF;
+	}
+
+	public static int getLocalZ(int packed) {
+		return (packed >>> 4) & 0xF;
+	}
+
+	/** Random transition used by fallout block conversion; caller keeps its own distance structure. */
+	public static boolean rollChance(double dist, double threshold, Random rand) {
+		return rand.nextFloat() < 5.0F * (1.0F - threshold / dist);
 	}
 }

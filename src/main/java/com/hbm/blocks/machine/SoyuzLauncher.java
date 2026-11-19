@@ -157,18 +157,11 @@ public class SoyuzLauncher extends BlockDummyable {
 
 	@Override
 	public void breakBlock(World world, BlockPos pos, IBlockState state) {
-        InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
-        int x = pos.getX();
-        int y = pos.getY();
-        int z = pos.getZ();
-        for(int l = 0; l < 10; l++)
-            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_launcher, 38)));
-        for(int l = 0; l < 8; l++)
-            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.concrete_smooth, 41)));
-        for(int l = 0; l < 6; l++)
-            world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 64)));
-        world.spawnEntity(new EntityItem(world, x + 0.5, y + 0.5, z + 0.5, new ItemStack(ModBlocks.struct_scaffold, 53)));
-        world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
+		InventoryHelper.dropInventoryItems(world, pos, world.getTileEntity(pos));
+		if(state.getValue(META) >= 12) {
+			world.spawnEntity(new EntityItem(world, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, new ItemStack(ModBlocks.soyuz_launcher)));
+		}
+		world.notifyNeighborsOfStateChange(pos, state.getBlock(), true);
 		super.breakBlock(world, pos, state);
 	}
 

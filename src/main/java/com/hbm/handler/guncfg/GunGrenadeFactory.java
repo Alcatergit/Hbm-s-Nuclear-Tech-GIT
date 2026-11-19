@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -54,7 +56,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -68,7 +71,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_he;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_HE.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 15;
@@ -83,7 +87,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_incendiary;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_INCENDIARY.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 15;
@@ -98,7 +103,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_toxic;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_TOXIC.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -114,7 +120,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_sleek;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_SLEEK.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 10;
 		bullet.dmgMax = 15;
@@ -130,7 +137,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_concussion;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_CONCUSSION.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 20;
@@ -145,7 +153,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = getGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_finned;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_FINNED.ordinal();
 		bullet.gravity = 0.02;
 		bullet.explosive = 1.5F;
 		bullet.trail = 5;
@@ -157,7 +166,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = getGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_nuclear;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_NUCLEAR.ordinal();
 		bullet.velocity = 4;
 		bullet.explosive = 0.0F;
 		bullet.nuke = 15;
@@ -169,7 +179,8 @@ public class GunGrenadeFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 		
-		bullet.ammo = ModItems.ammo_grenade_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_PHOSPHORUS.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 15;
@@ -186,7 +197,8 @@ public class GunGrenadeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardGrenadeConfig();
 
-		bullet.ammo = ModItems.ammo_grenade_tracer;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_TRACER.ordinal();
 		bullet.velocity = 2.0F;
 		bullet.wear = 10;
 		bullet.explosive = 0F;
@@ -200,7 +212,8 @@ public class GunGrenadeFactory {
 
 		BulletConfiguration bullet = BulletConfigFactory.standardRocketConfig();
 
-		bullet.ammo = ModItems.ammo_grenade_kampf;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.GRENADE_KAMPF.ordinal();
 		bullet.spread = 0.0F;
 		bullet.gravity = 0.0D;
 		bullet.wear = 15;

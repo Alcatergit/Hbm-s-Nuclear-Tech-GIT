@@ -1,200 +1,96 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+import static com.hbm.items.ItemEnums.EnumClip;
 import java.util.List;
 
 import com.hbm.items.special.ItemSimpleConsumable;
+import com.hbm.items.ItemEnumMulti;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
 
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ActionResult;
 import net.minecraft.util.EnumHand;
 import net.minecraft.world.World;
 
-public class ItemClip extends Item {
+public class ItemClip extends ItemEnumMulti {
 
 	public ItemClip(String s) {
-		this.setTranslationKey(s);
-		this.setRegistryName(s);
-		this.setMaxDamage(1);
-		this.setMaxStackSize(32);
-		ModItems.ALL_ITEMS.add(this);
+		super(EnumClip.class, s, ".");
+		this.maxStackSize = 32;
 	}
 	
 	@Override
 	public ActionResult<ItemStack> onItemRightClick(World worldIn, EntityPlayer player, EnumHand handIn) {
 		ItemStack stack = player.getHeldItem(handIn);
-		stack.shrink(1);
-        if(stack.getCount() <= 0)
-			stack.damageItem(5, player);
+		int meta = stack.getItemDamage();
 		
-		//REVOLVERS
-		if(this == ModItems.clip_revolver_iron)
-		{
+		if(meta == EnumClip.REVOLVER_IRON.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_iron_ammo, 24));
-		}
-		
-		if(this == ModItems.clip_revolver)
-		{
+		else if(meta == EnumClip.REVOLVER.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_ammo, 12));
-		}
-		
-		if(this == ModItems.clip_revolver_gold)
-		{
+		else if(meta == EnumClip.REVOLVER_GOLD.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_gold_ammo, 12));
-		}
-
-		if(this == ModItems.clip_revolver_lead)
-		{
+		else if(meta == EnumClip.REVOLVER_LEAD.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_lead_ammo, 12));
-		}
-		
-		if(this == ModItems.clip_revolver_schrabidium)
-		{
+		else if(meta == EnumClip.REVOLVER_SCHRABIDIUM.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_schrabidium_ammo, 12));
-		}
-
-		if(this == ModItems.clip_revolver_cursed)
-		{
+		else if(meta == EnumClip.REVOLVER_CURSED.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_cursed_ammo, 17));
-		}
-
-		if(this == ModItems.clip_revolver_nightmare)
-		{
+		else if(meta == EnumClip.REVOLVER_NIGHTMARE.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_nightmare_ammo, 6));
-		}
-		
-		if(this == ModItems.clip_revolver_nightmare2)
-		{
+		else if(meta == EnumClip.REVOLVER_NIGHTMARE2.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_nightmare2_ammo, 6));
-		}
-
-		if(this == ModItems.clip_revolver_pip)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44_pip, 6));
-		}
-		
-		if(this == ModItems.clip_revolver_nopip)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44, 12));
-		}
-
-
-		//EXPLOSIVES
-		if(this == ModItems.clip_rpg)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_rocket, 6));
-		}
-
-		if(this == ModItems.clip_stinger)
-		{
+		else if(meta == EnumClip.REVOLVER_PIP.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.M44_PIP.ordinal()));
+		else if(meta == EnumClip.REVOLVER_NOPIP.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.M44.ordinal()));
+		else if(meta == EnumClip.RPG.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.ROCKET.ordinal()));
+		else if(meta == EnumClip.STINGER.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_stinger_ammo, 6));
-		}
-
-		if(this == ModItems.clip_fatman)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_nuke, 6));
-		}
-
-		if(this == ModItems.clip_mirv)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_mirv, 3));
-		}
-
-		if(this == ModItems.clip_bf)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_bf_ammo, 2));
-		}
-
-
-		//MAGAZINES
-		if(this == ModItems.clip_mp40)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_9mm, 32));
-		}
-
-		if(this == ModItems.clip_uzi)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_22lr, 32));
-		}
-
-		if(this == ModItems.clip_uboinik)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_12gauge, 24));
-		}
-		
-		if(this == ModItems.clip_lever_action)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge, 24));
-		}
-		
-		if(this == ModItems.clip_bolt_action)
-		{
-			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge_slug, 24));
-		}
-
-
-		
-		if(this == ModItems.clip_osipr)
-		{
+		else if(meta == EnumClip.FATMAN.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.NUKE_STANDARD.ordinal()));
+		else if(meta == EnumClip.MIRV.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.MIRV_STANDARD.ordinal()));
+		else if(meta == EnumClip.BF.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 2, EnumAmmo.NUKE_BALEFIRE.ordinal()));
+		else if(meta == EnumClip.MP40.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P9.ordinal()));
+		else if(meta == EnumClip.UZI.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()));
+		else if(meta == EnumClip.UBOINIK.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 24, EnumAmmo.G12.ordinal()));
+		else if(meta == EnumClip.LEVER_ACTION.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 24, EnumAmmo.G20.ordinal()));
+		else if(meta == EnumClip.BOLT_ACTION.ordinal())
+			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 24, EnumAmmo.G20_SLUG.ordinal()));
+		else if(meta == EnumClip.OSIPR.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_osipr_ammo, 30));
-		}
-
-		if(this == ModItems.clip_immolator)
-		{
+		else if(meta == EnumClip.IMMOLATOR.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_immolator_ammo, 64));
-		}
-		
-		if(this == ModItems.clip_cryolator)
-		{
+		else if(meta == EnumClip.CRYOLATOR.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_cryolator_ammo, 64));
-		}
-
-		if(this == ModItems.clip_mp)
-		{
+		else if(meta == EnumClip.MP.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_566_gold, 40));
-		}
-		
-		if(this == ModItems.clip_xvl1456)
-		{
+		else if(meta == EnumClip.XVL1456.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_xvl1456_ammo, 64));
-		}
-		
-		if(this == ModItems.clip_emp)
-		{
+		else if(meta == EnumClip.EMP.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_emp_ammo, 6));
-		}
-		
-		if(this == ModItems.clip_jack)
-		{
+		else if(meta == EnumClip.JACK.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_jack_ammo, 12));
-		}
-		
-		if(this == ModItems.clip_spark)
-		{
+		else if(meta == EnumClip.SPARK.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_spark_ammo, 4));
-		}
-		
-		if(this == ModItems.clip_hp)
-		{
+		else if(meta == EnumClip.HP.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_hp_ammo, 12));
-		}
-		
-		if(this == ModItems.clip_euthanasia)
-		{
+		else if(meta == EnumClip.EUTHANASIA.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_euthanasia_ammo, 16));
-		}
-		
-		if(this == ModItems.clip_defabricator)
-		{
+		else if(meta == EnumClip.DEFABRICATOR.ordinal())
 			ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_defabricator_ammo, 16));
-		}
-		
-		if(this == ModItems.ammo_container)
-		{
+		else if(meta == EnumClip.CONTAINER.ordinal()) {
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_iron))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_iron_ammo, 24));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver))
@@ -212,68 +108,62 @@ public class ItemClip extends Item {
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_nightmare2))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_revolver_nightmare2_ammo, 3));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_pip))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44_pip, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.M44_PIP.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_nopip))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.M44.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_blackjack))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44_bj, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.M44_BJ.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_revolver_red))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_44, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.M44.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_calamity))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_50bmg, 16));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 16, EnumAmmo.BMG50.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_calamity_dual))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_50bmg, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.BMG50.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_minigun)) {
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
 			}
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_avenger)) {
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
 			}
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_lacunae)) {
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_5mm, 64));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.R5.ordinal()));
 			}
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_rpg))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_rocket, 3));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 3, EnumAmmo.ROCKET.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_stinger))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_stinger_ammo, 2));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_skystinger))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_stinger_ammo, 2));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_fatman))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_nuke, 2));
-			if(Library.hasInventoryItem(player.inventory, ModItems.gun_proto))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_nuke, 8));
-			if(Library.hasInventoryItem(player.inventory, ModItems.gun_mirv))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_mirv, 1));
-			if(Library.hasInventoryItem(player.inventory, ModItems.gun_bf))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_bf_ammo, 1));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 2, EnumAmmo.NUKE_STANDARD.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_mp40))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_9mm, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P9.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_uzi))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_22lr, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_uzi_silencer))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_22lr, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_uzi_saturnite))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_22lr, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_uzi_saturnite_silencer))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_22lr, 32));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_uboinik))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_12gauge, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G12.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_lever_action))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G20.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_lever_action_dark))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G20.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_lever_action_sonata))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge, 1));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.G20.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_bolt_action))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge_flechette, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G20_FLECHETTE.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_bolt_action_green))
-				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_20gauge_flechette, 12));
+				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.ammo_standard, 12, EnumAmmo.G20_FLECHETTE.ordinal()));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_xvl1456))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_xvl1456_ammo, 40));
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_osipr)) {
@@ -305,14 +195,13 @@ public class ItemClip extends Item {
 			if(Library.hasInventoryItem(player.inventory, ModItems.gun_defabricator))
 				ItemSimpleConsumable.tryAddItem(player, new ItemStack(ModItems.gun_defabricator_ammo, 6));
 		}
+		stack.shrink(1);
 		return super.onItemRightClick(worldIn, player, handIn);
 	}
 	
 	@Override
 	public void addInformation(ItemStack stack, World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-		if(this == ModItems.ammo_container)
-		{
+		if(stack.getItemDamage() == EnumClip.CONTAINER.ordinal())
 			tooltip.add("Gives ammo for all held weapons.");
-		}
 	}
 }

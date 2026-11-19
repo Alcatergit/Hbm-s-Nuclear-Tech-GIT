@@ -38,6 +38,8 @@ public class BombConfig {
 	public static int falloutMS = 40;
 	public static int limitExplosionLifespan = 0;
 	public static boolean disableNuclear = false;
+	public static int explosionAlgorithm = 2;
+	public static int maxThreads = -1;
 	public static boolean enableNukeClouds = true;
 	public static boolean enableNukeNBTSaving = true;
 	
@@ -160,5 +162,13 @@ public class BombConfig {
 		Property enableNukeNBTSavingP = config.get(CATEGORY_NUKE, "6.08_enableNukeNBTSaving", true);
 		enableNukeNBTSavingP.setComment("If true then nukes will save the blocks they want to destroy so they can resume work rather then restart after a crash/reload. For big nukes this can take a while tho.");
 		enableNukeNBTSaving = enableNukeNBTSavingP.getBoolean();
+
+		Property explosionAlgorithmP = config.get(CATEGORY_NUKE, "6.09_explosionAlgorithm", 2);
+		explosionAlgorithmP.setComment("Configures the algorithm of mk5 explosion. 0 = Legacy, 1 = Threaded DDA, 2 = Threaded DDA with damage accumulation.");
+		explosionAlgorithm = explosionAlgorithmP.getInt();
+
+		Property maxThreadsP = config.get(CATEGORY_NUKE, "6.10_explosionMaxThreads", -1);
+		maxThreadsP.setComment("Configures the maximum thread count for the threaded DDA explosion algorithm. -N = CPU count - N, 0 = CPU count, N = N");
+		maxThreads = maxThreadsP.getInt();
 	}
 }

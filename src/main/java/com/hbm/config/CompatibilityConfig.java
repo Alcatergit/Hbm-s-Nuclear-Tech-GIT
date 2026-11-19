@@ -108,6 +108,8 @@ public class CompatibilityConfig {
 	public static boolean peaceDimensionsIsWhitelist = true;
 	public static HashSet peaceDimensions;
 
+	public static boolean enableDustWastesBiome = true;
+
     public static boolean overWriteVanillaLeafForBugFix = true;
 
 
@@ -275,7 +277,7 @@ public class CompatibilityConfig {
         pyramidStructure = CommonConfig.createConfigHashMap(config, CATEGORY_DUNGEON, "03.27_pyramidSpawn", "Spawn pyramid on every nTH chunk - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:4000" }, ":");
 		
 		meteorStrikeChance = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.01_meteorStrikeChance", "The probability of a meteor spawning per tick (an average of once every nTH ticks) - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ 
-			"0:"+20 * 10 * 60 * 5, //Earth
+			"0:"+20 * 60 * 60 * 3, //Earth
 			"-28:"+20 * 10 * 5, //Moon
 			"-29:"+20 * 10 * 13, //Mars
 			"-31:"+20 * 10 * 60 * 15,  //Venus
@@ -293,7 +295,7 @@ public class CompatibilityConfig {
 			"-1504:"+20 * 10 * 60 * 20 //Triton
 		}, ":");
 		meteorShowerChance = CommonConfig.createConfigHashMap(config, CATEGORY_METEOR, "05.02_meteorShowerChance", "The probability of a meteor spawning during meteor shower per tick (an average of once every nTH ticks) - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ 
-			"0:"+20 * 60 * 60 * 5, //Earth
+			"0:"+20 * 60, //Earth
 			"-28:"+20 * 60 * 5, //Moon
 			"-29:"+20 * 60 * 13, //Mars
 			"-31:"+20 * 60 * 60 * 15,  //Venus
@@ -387,8 +389,7 @@ public class CompatibilityConfig {
 			"minecraft:slime", 
 			"minecraft:vex", 
 			"minecraft:villager_golem", 
-			"minecraft:snowman", 
-			"minecraft:witch",
+			"minecraft:snowman",
 			"pvj:pvj_icecube",
 			"tconstruct:blueslime",
 			"mutantbeasts:mutant_snow_golem",
@@ -441,6 +442,7 @@ public class CompatibilityConfig {
 
 		doFillCraterWithWater =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.04_doFillCraterWithWater", "If true then nukes will fill the crater with water if it is in a wet place. It creates a bit of lagg but looks better than without it.", true);
 		fillCraterWithWater = CommonConfig.createConfigHashMap(config, CATEGORY_NUKES, "07.04_fillCraterWithWater", "Waterlevel per dimension which the nuke uses to fill the crater. {+n=>waterlevel height, 0=>dimension waterlevel, -n=> n blocks below dimension waterlevel } - <dimID:n> (Int:Int)", "Int", "Int", new String[]{ "0:0" }, ":");
+		enableDustWastesBiome = CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.07_enableDustWastesBiome", "If true then nuclear explosions will turn the terrain they destroy into the Dust Wastes biome", true);
 		
 		peaceDimensionsIsWhitelist =  CommonConfig.createConfigBool(config, CATEGORY_NUKES, "07.05_peaceDimensionsIsWhitelist", "If true then the listed dimensions below are all peacefull. If false then the listed dimensions are the only ones where destruction happens.", true);
 		peaceDimensions = CommonConfig.createConfigHashSet(config, CATEGORY_BORES, "07.06_peaceDimensions", "List of Dimensions where block destruction and damage is disabled (Used for server lobbies/science servers/pvp arenas) - <dimID> (Int)", "Int", new String[]{

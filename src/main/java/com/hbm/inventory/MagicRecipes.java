@@ -1,5 +1,6 @@
 package com.hbm.inventory;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -49,26 +50,21 @@ public class MagicRecipes {
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.mysteryshovel), new ComparableStack(Items.IRON_SHOVEL), new ComparableStack(Items.BONE), new ComparableStack(ModItems.ingot_starmetal), new ComparableStack(ModItems.ducttape)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.ingot_electronium), new ComparableStack(ModItems.pellet_charged), new ComparableStack(ModItems.pellet_charged), new OreDictStack(DNT.ingot()), new OreDictStack(DNT.ingot())));
 
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_44_pip),
-				new ComparableStack(ModItems.ammo_44),
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_PIP.ordinal()),
+				new ComparableStack(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44.ordinal())),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_magic)));
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_44_bj),
-				new ComparableStack(ModItems.ammo_44),
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_BJ.ordinal()),
+				new ComparableStack(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44.ordinal())),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_desh)));
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_44_silver),
-				new ComparableStack(ModItems.ammo_44),
+		recipes.add(new MagicRecipe(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44_SILVER.ordinal()),
+				new ComparableStack(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.M44.ordinal())),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.powder_magic),
 				new ComparableStack(ModItems.ingot_starmetal)));
-		recipes.add(new MagicRecipe(new ItemStack(ModItems.gun_bf),
-				new ComparableStack(ModItems.gun_fatman),
-				new ComparableStack(ModItems.egg_balefire_shard),
-				new ComparableStack(ModItems.powder_magic),
-				new ComparableStack(ModItems.powder_magic)));
 		recipes.add(new MagicRecipe(new ItemStack(ModItems.diamond_gavel),
 				new ComparableStack(ModBlocks.gravel_diamond),
 				new ComparableStack(ModBlocks.gravel_diamond),

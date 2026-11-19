@@ -1,0 +1,4 @@
+{
+    "parent": "hbm:block/tinted_cube",
+    "textures": { "all": "hbm:blocks/contamination/red_trinitite/trinitite_red_gen" }
+}

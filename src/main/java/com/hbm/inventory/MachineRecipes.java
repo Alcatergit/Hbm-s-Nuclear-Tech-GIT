@@ -15,13 +15,13 @@ public class MachineRecipes {
 	public static Object[] getTurbineOutput(Fluid type) {
 
 		if (type == ModForgeFluids.STEAM) {
-			return new Object[] { ModForgeFluids.SPENTSTEAM, 5, 500, 50 };
+			return new Object[] { ModForgeFluids.SPENTSTEAM, 1, 100, 200 };
 		} else if (type == ModForgeFluids.HOTSTEAM) {
-			return new Object[] { ModForgeFluids.STEAM, 50, 5, 100 };
+			return new Object[] { ModForgeFluids.STEAM, 10, 1, 2 };
 		} else if (type == ModForgeFluids.SUPERHOTSTEAM) {
-			return new Object[] { ModForgeFluids.HOTSTEAM, 50, 5, 150 };
+			return new Object[] { ModForgeFluids.HOTSTEAM, 10, 1, 18 };
 		} else if(type == ModForgeFluids.ULTRAHOTSTEAM){
-			return new Object[] { ModForgeFluids.SUPERHOTSTEAM, 50, 5, 250 };
+			return new Object[] { ModForgeFluids.SUPERHOTSTEAM, 10, 1, 120 };
 		}
 
 		return null;

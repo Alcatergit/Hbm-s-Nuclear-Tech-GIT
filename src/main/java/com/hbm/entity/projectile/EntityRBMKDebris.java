@@ -142,8 +142,10 @@ public class EntityRBMKDebris extends Entity {
 
 								int rn = Math.abs(i) + Math.abs(j) + Math.abs(k);
 
-								if(rn <= 1 || rand.nextInt(rn) == 0)
+								if(rn <= 1 || rand.nextInt(rn) == 0) {
+									world.removeTileEntity(new BlockPos(x + i, y + j, z + k));
 									world.setBlockToAir(new BlockPos(x + i, y + j, z + k));
+								}
 							}
 						}
 					}

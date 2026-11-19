@@ -179,7 +179,7 @@ public class RenderScreenOverlay {
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 	}
 	
-	public static void renderAmmo(ScaledResolution resolution, Gui gui, Item ammo, int count, int max, int dura, EnumHand hand, boolean renderCount) {
+	public static void renderAmmo(ScaledResolution resolution, Gui gui, ItemStack ammo, int count, int max, int dura, EnumHand hand, boolean renderCount) {
 		
 		GL11.glPushMatrix();
         
@@ -201,7 +201,7 @@ public class RenderScreenOverlay {
         GlStateManager.disableBlend();
         GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
-        itemRenderer.renderItemAndEffectIntoGUI(null, new ItemStack(ammo), pX, pZ);
+        itemRenderer.renderItemAndEffectIntoGUI(null, ammo, pX, pZ);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
         GlStateManager.enableBlend();
@@ -210,7 +210,7 @@ public class RenderScreenOverlay {
 		Minecraft.getMinecraft().renderEngine.bindTexture(Gui.ICONS);
 	}
 	
-	public static void renderAmmoAlt(ScaledResolution resolution, Gui gui, Item ammo, int count, EnumHand hand) {
+	public static void renderAmmoAlt(ScaledResolution resolution, Gui gui, ItemStack ammo, int count, EnumHand hand) {
 
 		GL11.glPushMatrix();
 
@@ -227,7 +227,7 @@ public class RenderScreenOverlay {
         GlStateManager.disableBlend();
         GlStateManager.enableRescaleNormal();
         RenderHelper.enableGUIStandardItemLighting();
-        	itemRenderer.renderItemAndEffectIntoGUI(null, new ItemStack(ammo), pX, pZ);
+        	itemRenderer.renderItemAndEffectIntoGUI(null, ammo, pX, pZ);
         RenderHelper.disableStandardItemLighting();
         GlStateManager.disableRescaleNormal();
 

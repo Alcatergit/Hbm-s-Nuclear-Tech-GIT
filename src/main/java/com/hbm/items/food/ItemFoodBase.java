@@ -77,8 +77,12 @@ public class ItemFoodBase extends ItemFood {
 			player.addPotionEffect(new PotionEffect(MobEffects.FIRE_RESISTANCE, 60 * 20, 0));
 			player.addPotionEffect(new PotionEffect(MobEffects.HASTE, 60 * 20, 10));
 			player.addPotionEffect(new PotionEffect(MobEffects.SPEED, 60 * 20, 10));
-			worldIn.spawnEntity(EntityNukeExplosionMK5.statFac(worldIn, (int)(BombConfig.fatmanRadius * 1.5), player.posX, player.posY, player.posZ));
-	    	EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, (int)(BombConfig.fatmanRadius * 1.5));
+			if (!worldIn.isRemote) {
+				worldIn.spawnEntity(EntityNukeExplosionMK5.statFac(worldIn, (int)(BombConfig.fatmanRadius * 1.5), player.posX, player.posY, player.posZ));
+				if(BombConfig.enableNukeClouds) {
+					EntityNukeTorex.statFac(worldIn, player.posX, player.posY, player.posZ, (int)(BombConfig.fatmanRadius * 1.5));
+				}
+			}
 		}
 		if(stack.getItem() == ModItems.cotton_candy){
 			player.addPotionEffect(new PotionEffect(MobEffects.WITHER, 5 * 20, 0));

@@ -1,5 +1,6 @@
 package com.hbm.entity.missile;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +56,7 @@ public class EntityMissileMicro extends EntityMissileBaseAdvanced {
 
 	@Override
 	public ItemStack getDebrisRareDrop() {
-		return new ItemStack(ModItems.ammo_nuke, 1);
+		return new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.NUKE_STANDARD.ordinal());
 	}
 
 	@Override

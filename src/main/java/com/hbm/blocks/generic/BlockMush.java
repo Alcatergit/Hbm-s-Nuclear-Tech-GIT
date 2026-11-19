@@ -93,10 +93,9 @@ public class BlockMush extends BlockBush implements IGrowable {
 		worldIn.setBlockToAir(pos);
         HugeMush worldgenbigmushroom = null;
 
-        worldgenbigmushroom = new HugeMush();
+        worldgenbigmushroom = new HugeMush(rand.nextBoolean());
         worldgenbigmushroom.generate(worldIn, rand, pos);
         
         return true;
 	}
-	
 }

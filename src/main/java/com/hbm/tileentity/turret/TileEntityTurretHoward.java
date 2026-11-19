@@ -107,7 +107,7 @@ public class TileEntityTurretHoward extends TileEntityTurretBaseNT {
 				BulletConfiguration conf = this.getFirstConfigLoaded();
 
 				if(conf != null) {
-					this.conusmeAmmo(conf.ammo);
+					this.conusmeAmmo(conf.ammo, conf.ammoMeta);
 					this.world.playSound(null, pos.getX(), pos.getY(), pos.getZ(), HBMSoundHandler.howard_reload, SoundCategory.BLOCKS, 4.0F, 1F);
 					loaded = 200;
 				}

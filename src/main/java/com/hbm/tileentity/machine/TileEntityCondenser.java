@@ -95,7 +95,7 @@ public class TileEntityCondenser extends TileEntity implements ITickable, IFluid
 	@Override
 	public NBTTagCompound writeToNBT(NBTTagCompound nbt) {
 		super.writeToNBT(nbt);
-		nbt.setTag("steam", tanks[1].writeToNBT(new NBTTagCompound()));
+		nbt.setTag("steam", tanks[0].writeToNBT(new NBTTagCompound()));
 		nbt.setTag("water", tanks[1].writeToNBT(new NBTTagCompound()));
 		return nbt;
 	}

@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.entity.projectile.EntityBulletBase;
@@ -268,7 +270,8 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = new BulletConfiguration();
 
-		bullet.ammo = ModItems.ammo_fuel;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.FLAME_DIESEL.ordinal();
 		bullet.ammoCount = 100;
 
 		bullet.velocity = 0.75F;
@@ -328,7 +331,8 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_napalm;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.FLAME_NAPALM.ordinal();
 		bullet.wear = 2;
 		bullet.dmgMin = 4;
 		bullet.dmgMax = 6;
@@ -341,7 +345,8 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_phosphorus;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.FLAME_PHOSPHORUS.ordinal();
 		bullet.wear = 2;
 		bullet.spread = 0.0F;
 		bullet.bulletsMin = 1;
@@ -360,7 +365,8 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_vaporizer;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.FLAME_VAPORIZER.ordinal();
 		bullet.wear = 4;
 		bullet.spread = 0.25F;
 		bullet.bulletsMin = 8;
@@ -383,7 +389,8 @@ public class GunEnergyFactory {
 
 		BulletConfiguration bullet = getFlameConfig();
 
-		bullet.ammo = ModItems.ammo_fuel_gas;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.FLAME_GAS.ordinal();
 		bullet.wear = 1;
 		bullet.spread = 0.05F;
 		bullet.gravity = 0D;

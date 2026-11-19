@@ -8,6 +8,7 @@ import org.apache.logging.log4j.Level;
 import com.hbm.config.GeneralConfig;
 import com.hbm.util.ContaminationUtil;
 import com.hbm.explosion.ExplosionTom;
+import com.hbm.explosion.ExplosionTomParallelized;
 import com.hbm.main.MainRegistry;
 
 import net.minecraft.init.SoundEvents;
@@ -20,6 +21,8 @@ public class EntityTomBlast extends EntityChunky {
 	public int age = 0;
 	public int destructionRange = 0;
 	public ExplosionTom exp;
+	public ExplosionTomParallelized expParallel;
+	public boolean parallel = false;
 	public boolean did = false;
 
 	public EntityTomBlast(World worldIn) {
@@ -29,6 +32,7 @@ public class EntityTomBlast extends EntityChunky {
 	@Override
 	public void onUpdate() {
 		super.onUpdate();
+		if(world.isRemote) return;
     	if(!CompatibilityConfig.isWarDim(world)){
 			this.setDead();
 			return;
@@ -37,34 +41,46 @@ public class EntityTomBlast extends EntityChunky {
         {
     		if(GeneralConfig.enableExtendedLogging && !world.isRemote)
     			MainRegistry.logger.log(Level.INFO, "[NUKE] Initialized TOM explosion at " + posX + " / " + posY + " / " + posZ + " with strength " + destructionRange + "!");
-    		
-        	exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
-        	
+
+        	parallel = BombConfig.explosionAlgorithm >= 1;
+        	if(parallel) {
+        		expParallel = new ExplosionTomParallelized(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, this.destructionRange);
+        	} else {
+        		exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
+        	}
+
         	this.did = true;
         }
-        
-        long start = System.currentTimeMillis();
-		boolean flag = false;
-		int columnsProcessed = 0;
-		while(!(columnsProcessed % 32 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5)) {
-        	flag = exp.update();
-        	
-        	if(flag) {
-        		this.setDead();
-        		break;
-        	}
-        	columnsProcessed++;
+
+        boolean flag;
+        if(parallel) {
+        	expParallel.update(BombConfig.mk5);
+        	flag = expParallel.isComplete();
+        	if(flag) this.setDead();
+        } else {
+        	long start = System.currentTimeMillis();
+        	flag = false;
+        	int columnsProcessed = 0;
+        	while(!(columnsProcessed % 32 == 0 && System.currentTimeMillis()+1 > start + BombConfig.mk5)) {
+            	flag = exp.update();
+
+            	if(flag) {
+            		this.setDead();
+            		break;
+            	}
+            	columnsProcessed++;
+            }
         }
-        
+
     	if(rand.nextInt(5) == 0)
         	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_GENERIC_EXPLODE, SoundCategory.HOSTILE, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
-        	
+
         if(!flag)
         {
         	this.world.playSound(null, this.posX, this.posY, this.posZ, SoundEvents.ENTITY_LIGHTNING_THUNDER, SoundCategory.HOSTILE, 10000.0F, 0.8F + this.rand.nextFloat() * 0.2F);
         	ContaminationUtil.radiate(this.world, this.posX, this.posY, this.posZ, this.destructionRange * 2, 0, 0, this.destructionRange * 2, this.destructionRange * 4);
         }
-        
+
         age++;
 	}
 
@@ -73,10 +89,16 @@ public class EntityTomBlast extends EntityChunky {
 		age = nbt.getInteger("age");
 		destructionRange = nbt.getInteger("destructionRange");
 		did = nbt.getBoolean("did");
-    	
-		exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
-		exp.readFromNbt(nbt, "exp_");
-    	
+		parallel = nbt.getBoolean("tom_parallel");
+
+		if(parallel) {
+			expParallel = new ExplosionTomParallelized(this.world, (int)this.posX, (int)this.posY, (int)this.posZ, this.destructionRange);
+			expParallel.readEntityFromNBT(nbt);
+		} else {
+			exp = new ExplosionTom((int)this.posX, (int)this.posY, (int)this.posZ, this.world, this.destructionRange);
+			exp.readFromNbt(nbt, "exp_");
+		}
+
     	this.did = true;
 	}
 
@@ -85,7 +107,12 @@ public class EntityTomBlast extends EntityChunky {
 		nbt.setInteger("age", age);
 		nbt.setInteger("destructionRange", destructionRange);
 		nbt.setBoolean("did", did);
-    	
-		if(exp != null) exp.saveToNbt(nbt, "exp_");
+		nbt.setBoolean("tom_parallel", parallel);
+
+		if(parallel) {
+			if(expParallel != null) expParallel.writeEntityToNBT(nbt);
+		} else {
+			if(exp != null) exp.saveToNbt(nbt, "exp_");
+		}
 	}
 }

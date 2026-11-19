@@ -1,6 +1,4 @@
 {
-	"parent": "block/cube_all",
-	"textures": {
-		"all": "hbm:blocks/waste_trinitite"
-	}
+    "parent": "hbm:block/tinted_cube",
+    "textures": { "all": "hbm:blocks/contamination/trinitite/trinitite_gen" }
 }

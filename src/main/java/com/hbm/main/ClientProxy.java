@@ -21,6 +21,7 @@ import com.hbm.tileentity.machine.*;
 import com.hbm.tileentity.machine.oil.*;
 import com.hbm.tileentity.network.TileEntityCraneSplitter;
 import com.hbm.tileentity.network.energy.*;
+import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.item.ItemStack;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -46,8 +47,10 @@ import com.hbm.entity.effect.EntityCloudSolinium;
 import com.hbm.entity.effect.EntityCloudTom;
 import com.hbm.entity.effect.EntityEMPBlast;
 import com.hbm.entity.effect.EntityFalloutRain;
+import com.hbm.entity.effect.EntityFalloutRainParallelized;
 import com.hbm.entity.effect.EntityNukeTorex;
 import com.hbm.entity.effect.EntityQuasar;
+import com.hbm.explosion.ExplosionLarge;
 import com.hbm.entity.effect.EntityRagingVortex;
 import com.hbm.entity.effect.EntitySpear;
 import com.hbm.entity.effect.EntityVortex;
@@ -159,6 +162,7 @@ import com.hbm.entity.particle.ParticleContrailKerosene;
 import com.hbm.entity.particle.ParticleContrailSolid;
 import com.hbm.entity.particle.ParticleContrailHydrogen;
 import com.hbm.entity.particle.ParticleContrailBalefire;
+import com.hbm.particle.ParticleRBMKSteam;
 import com.hbm.entity.particle.ParticleContrailDark;
 import com.hbm.entity.projectile.EntityAAShell;
 import com.hbm.entity.projectile.EntityBaleflare;
@@ -772,6 +776,7 @@ public class ClientProxy extends ServerProxy {
 		RenderingRegistry.registerEntityRenderingHandler(EntityTaintedCreeper.class, new RenderTaintedCreeperFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityNuclearCreeper.class, new RenderNuclearCreeperFactory());
 		RenderingRegistry.registerEntityRenderingHandler(EntityFalloutRain.class, new RenderFalloutRainFactory());
+		RenderingRegistry.registerEntityRenderingHandler(EntityFalloutRainParallelized.class, RenderEmpty.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntityNukeTorex.class, RenderTorex.FACTORY);
 		RenderingRegistry.registerEntityRenderingHandler(EntitySmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.smoke1, ModItems.smoke2, ModItems.smoke3, ModItems.smoke4, ModItems.smoke5, ModItems.smoke6, ModItems.smoke7, ModItems.smoke8}));
 		RenderingRegistry.registerEntityRenderingHandler(EntityBSmokeFX.class, new MultiCloudRendererFactory(new Item[] {ModItems.b_smoke1, ModItems.b_smoke2, ModItems.b_smoke3, ModItems.b_smoke4, ModItems.b_smoke5, ModItems.b_smoke6, ModItems.b_smoke7, ModItems.b_smoke8}));
@@ -2068,13 +2073,18 @@ public class ClientProxy extends ServerProxy {
 		
 		if("sound".equals(type)){
 			String mode = data.getString("mode");
-			if("crucible_loop".equals(mode)){
-				int id = data.getInteger("playerId");
-				Entity e = world.getEntityByID(id);
-				if(e instanceof EntityPlayer){
-					Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
+            if("crucible_loop".equals(mode)){
+                int id = data.getInteger("playerId");
+                Entity e = world.getEntityByID(id);
+                if(e instanceof EntityPlayer){
+                    Minecraft.getMinecraft().getSoundHandler().playSound(new SoundLoopCrucible((EntityPlayer) e));
 				}
 			}
+			return;
+		}
+
+		if("rbmkSteam".equals(type)) {
+			Minecraft.getMinecraft().effectRenderer.addEffect(new ParticleRBMKSteam(world, x, y, z));
 			return;
 		}
 		
@@ -2208,9 +2218,6 @@ public class ClientProxy extends ServerProxy {
 		ModItems.gun_deagle.setTileEntityItemStackRenderer(new ItemRenderWeaponObj());
 		ModItems.gun_supershotgun.setTileEntityItemStackRenderer(new ItemRenderWeaponShotty());
 		ModItems.gun_fatman.setTileEntityItemStackRenderer(new ItemRenderFatMan());
-		ModItems.gun_proto.setTileEntityItemStackRenderer(new ItemRenderFatMan());
-		ModItems.gun_mirv.setTileEntityItemStackRenderer(new ItemRenderMIRVLauncher());
-		ModItems.gun_bf.setTileEntityItemStackRenderer(new ItemRenderBFLauncher());
 		ModItems.gun_zomg.setTileEntityItemStackRenderer(new ItemRenderZOMG());
 		ModItems.gun_xvl1456.setTileEntityItemStackRenderer(new ItemRenderXVL1456());
 		ModItems.gun_hp.setTileEntityItemStackRenderer(new ItemRenderGunHP());
@@ -2339,7 +2346,27 @@ public class ClientProxy extends ServerProxy {
 		audio.updatePosition(x, y, z);
 		return audio;
 	}
-	
+
+	@Override
+	public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch) {
+		AudioWrapperClient audio = new AudioWrapperClient(sound, cat, true, volume, range, volume);
+		audio.updatePosition(x, y, z);
+		audio.updateVolume(volume);
+		audio.updateRange(range);
+		audio.updatePitch(pitch);
+		return audio;
+	}
+
+    @Override
+    public AudioWrapper getLoopedSound(SoundEvent sound, SoundCategory cat, float x, float y, float z, float volume, float range, float pitch, int keepAlive) {
+        AudioWrapperClient audio = new AudioWrapperClient(sound, cat, true, volume, range, volume);
+        audio.updatePosition(x, y, z);
+        audio.updateVolume(volume);
+        audio.updateRange(range);
+        audio.setKeepAlive(keepAlive);
+        return audio;
+    }
+
 	@Override
 	public AudioWrapper getLoopedSoundStartStop(World world, SoundEvent sound, SoundEvent start, SoundEvent stop, SoundCategory cat, float x, float y, float z, float volume, float pitch) {
 		AudioWrapperClientStartStop audio = new AudioWrapperClientStartStop(world, sound, start, stop, volume, cat);
@@ -2388,5 +2415,9 @@ public class ClientProxy extends ServerProxy {
 		}
 		return Minecraft.getMinecraft().getRenderPartialTicks();
 	}
-	
+
+    @Override
+    public void playSoundClient(double x, double y, double z, SoundEvent sound, SoundCategory category, float volume, float pitch) {
+        Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(sound, category, volume, pitch, (float) x, (float) y, (float) z));
+    }
 }

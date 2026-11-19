@@ -1,5 +1,6 @@
 package com.hbm.handler;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -123,22 +124,22 @@ public class BobmazonOfferFactory {
 		weapons.add(new Offer(new ItemStack(ModItems.gun_lever_action), Requirement.ASSEMBLY, 60 * inflation));
 		weapons.add(new Offer(new ItemStack(ModItems.gun_bolt_action), Requirement.ASSEMBLY, 35 * inflation));
 		weapons.add(new Offer(new ItemStack(ModItems.gun_revolver_ammo, 6), Requirement.OIL, 12 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_357_desh, 6), Requirement.OIL, 36 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_44, 6), Requirement.OIL, 12 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_44_ap, 6), Requirement.OIL, 18 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_5mm, 50), Requirement.OIL, 50 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_5mm_du, 50), Requirement.OIL, 75 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_rocket), Requirement.OIL, 5 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_rocket_incendiary), Requirement.OIL, 8 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_rocket_sleek), Requirement.OIL, 12 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_grenade), Requirement.OIL, 4 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_grenade_incendiary), Requirement.OIL, 6 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_grenade_sleek), Requirement.OIL, 10 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_22lr, 32), Requirement.OIL, 24 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_22lr_ap, 32), Requirement.OIL, 32 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_20gauge, 6), Requirement.OIL, 18 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_20gauge_slug, 6), Requirement.OIL, 20 * inflation));
-		weapons.add(new Offer(new ItemStack(ModItems.ammo_20gauge_flechette, 6), Requirement.OIL, 22 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.M357_DESH.ordinal()), Requirement.OIL, 36 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.M44.ordinal()), Requirement.OIL, 12 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.M44_AP.ordinal()), Requirement.OIL, 18 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 50, EnumAmmo.R5.ordinal()), Requirement.OIL, 50 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 50, EnumAmmo.R5_DU.ordinal()), Requirement.OIL, 75 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET.ordinal()), Requirement.OIL, 5 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET_INCENDIARY.ordinal()), Requirement.OIL, 8 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.ROCKET_SLEEK.ordinal()), Requirement.OIL, 12 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE.ordinal()), Requirement.OIL, 4 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE_INCENDIARY.ordinal()), Requirement.OIL, 6 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 1, EnumAmmo.GRENADE_SLEEK.ordinal()), Requirement.OIL, 10 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22.ordinal()), Requirement.OIL, 24 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 32, EnumAmmo.P22_AP.ordinal()), Requirement.OIL, 32 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.G20.ordinal()), Requirement.OIL, 18 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.G20_SLUG.ordinal()), Requirement.OIL, 20 * inflation));
+		weapons.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.G20_FLECHETTE.ordinal()), Requirement.OIL, 22 * inflation));
 		weapons.add(new Offer(new ItemStack(ModItems.grenade_if_generic, 3), Requirement.CHEMICS, 15 * inflation));
 		weapons.add(new Offer(new ItemStack(ModItems.grenade_if_he, 3), Requirement.CHEMICS, 25 * inflation));
 
@@ -173,14 +174,14 @@ public class BobmazonOfferFactory {
 		special.add(new Offer(new ItemStack(ModItems.jetpack_vector), Requirement.HIDDEN, 10 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.jetpack_tank), Requirement.HIDDEN, 3 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.gun_lever_action), Requirement.HIDDEN, 5 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_20gauge, 24), Requirement.HIDDEN, 5 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_20gauge_incendiary, 24), Requirement.HIDDEN, 7 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 24, EnumAmmo.G20.ordinal()), Requirement.HIDDEN, 5 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 24, EnumAmmo.G20_INCENDIARY.ordinal()), Requirement.HIDDEN, 7 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.gun_uzi_silencer, 1), Requirement.HIDDEN, 5 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_22lr, 64), Requirement.HIDDEN, 3 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_22lr_ap, 64), Requirement.HIDDEN, 4 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.P22.ordinal()), Requirement.HIDDEN, 3 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 64, EnumAmmo.P22_AP.ordinal()), Requirement.HIDDEN, 4 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.gun_hk69, 24), Requirement.HIDDEN, 8 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_grenade, 6), Requirement.HIDDEN, 4 * inflation));
-		special.add(new Offer(new ItemStack(ModItems.ammo_grenade_sleek, 6), Requirement.HIDDEN, 6 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.GRENADE.ordinal()), Requirement.HIDDEN, 4 * inflation));
+		special.add(new Offer(new ItemStack(ModItems.ammo_standard, 6, EnumAmmo.GRENADE_SLEEK.ordinal()), Requirement.HIDDEN, 6 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.gun_kit_1, 10), Requirement.HIDDEN, 1 * inflation));
 		special.add(new Offer(new ItemStack(ModItems.gun_kit_2, 5), Requirement.HIDDEN, 3 * inflation));
 		special.add(new Offer(new ItemStack(ModBlocks.machine_epress, 2), Requirement.HIDDEN, 5 * inflation));

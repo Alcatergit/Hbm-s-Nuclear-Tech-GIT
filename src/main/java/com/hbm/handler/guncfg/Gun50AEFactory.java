@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import java.util.ArrayList;
 
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -57,7 +59,8 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.AE50.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 15;
 		bullet.dmgMax = 18;
@@ -69,7 +72,8 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_ap;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.AE50_AP.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 20;
 		bullet.dmgMax = 22;
@@ -83,7 +87,8 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.AE50_DU.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 24;
 		bullet.dmgMax = 28;
@@ -97,7 +102,8 @@ public class Gun50AEFactory {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardBulletConfig();
 		
-		bullet.ammo = ModItems.ammo_50ae_star;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.AE50_STAR.ordinal();
 		bullet.spread *= inaccuracy;
 		bullet.dmgMin = 48;
 		bullet.dmgMax = 56;

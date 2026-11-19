@@ -2,6 +2,9 @@ package com.hbm.tileentity.machine;
 
 import com.hbm.blocks.BlockDummyable;
 import com.hbm.lib.ForgeDirection;
+import com.hbm.lib.HBMSoundHandler;
+import com.hbm.main.MainRegistry;
+import com.hbm.sound.AudioWrapper;
 import com.hbm.tileentity.INBTPacketReceiver;
 import com.hbm.tileentity.TileEntityLoadedBase;
 
@@ -10,6 +13,7 @@ import api.hbm.tile.IHeatSource;
 import net.minecraft.util.ITickable;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -22,6 +26,7 @@ public class TileEntityHeaterElectric extends TileEntityLoadedBase implements IH
 	public int heatEnergy;
 	public boolean isOn;
 	protected int setting = 1;
+	private AudioWrapper audio;
 
 	@Override
 	public void update() {
@@ -49,6 +54,29 @@ public class TileEntityHeaterElectric extends TileEntityLoadedBase implements IH
 			data.setInteger("h", this.heatEnergy);
 			data.setBoolean("o", isOn);
 			INBTPacketReceiver.networkPack(this, data, 25);
+		} else {
+
+			if(isOn) {
+
+				if(audio == null) {
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.electricHum, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.25F, 7.5F, 1.0F, 20);
+					audio.startSound();
+				} else if(!audio.isPlaying()) {
+					audio.stopSound();
+					audio = MainRegistry.proxy.getLoopedSound(HBMSoundHandler.electricHum, SoundCategory.BLOCKS, pos.getX(), pos.getY(), pos.getZ(), 0.25F, 7.5F, 1.0F, 20);
+					audio.startSound();
+				}
+
+				audio.updateVolume(1F);
+				audio.keepAlive();
+
+			} else {
+
+				if(audio != null) {
+					audio.stopSound();
+					audio = null;
+				}
+			}
 		}
 	}
 
@@ -58,7 +86,25 @@ public class TileEntityHeaterElectric extends TileEntityLoadedBase implements IH
 		this.heatEnergy = nbt.getInteger("h");
 		this.isOn = nbt.getBoolean("o");
 	}
-	
+
+	@Override
+	public void onChunkUnload() {
+		super.onChunkUnload();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
+	@Override
+	public void invalidate() {
+		super.invalidate();
+		if(audio != null) {
+			audio.stopSound();
+			audio = null;
+		}
+	}
+
 	@Override
 	public void readFromNBT(NBTTagCompound nbt) {
 		super.readFromNBT(nbt);

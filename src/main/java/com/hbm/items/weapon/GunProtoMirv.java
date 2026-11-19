@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,9 +46,6 @@ public class GunProtoMirv extends Item {
 		if(!(entityLiving instanceof EntityPlayer))
 			return;
 		EntityPlayer player = (EntityPlayer) entityLiving;
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_proto) {
-			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
-		}
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
 		
 		ArrowLooseEvent event = new ArrowLooseEvent(player, stack, worldIn, j, false);
@@ -63,7 +61,7 @@ public class GunProtoMirv extends Item {
 		boolean f1 = false;
 				
 		for(int i = 0; i < 8; i++) {
-			if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_nuke)) {
+			if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.NUKE_STANDARD.ordinal())) {
 				
 				f1 = true;
 				
@@ -91,7 +89,7 @@ public class GunProtoMirv extends Item {
 				stack.damageItem(1, player);
 	
 				if (!flag) {
-					Library.consumeInventoryItem(player.inventory, ModItems.ammo_nuke);
+					Library.consumeInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.NUKE_STANDARD.ordinal());
 				}
 	
 				if (!worldIn.isRemote) {

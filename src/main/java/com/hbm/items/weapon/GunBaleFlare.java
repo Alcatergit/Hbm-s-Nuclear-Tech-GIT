@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import java.util.List;
 import java.util.UUID;
 
@@ -45,9 +46,6 @@ public class GunBaleFlare extends Item {
 	public void onPlayerStoppedUsing(ItemStack stack, World worldIn, EntityLivingBase entityLiving, int timeLeft) {
 		if(!(entityLiving instanceof EntityPlayer))
 			return;
-		if (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.MAINHAND) == stack && !entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).isEmpty() && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).getItem() == ModItems.gun_bf) {
-			entityLiving.getItemStackFromSlot(EntityEquipmentSlot.OFFHAND).onPlayerStoppedUsing(worldIn, entityLiving, timeLeft);
-		}
 		EntityPlayer player = (EntityPlayer)entityLiving;
 		int j = this.getMaxItemUseDuration(stack) - timeLeft;
 
@@ -58,7 +56,7 @@ public class GunBaleFlare extends Item {
 		boolean flag = player.capabilities.isCreativeMode
 				|| EnchantmentHelper.getEnchantmentLevel(Enchantments.INFINITY, stack) > 0;
 
-		if (flag || Library.hasInventoryItem(player.inventory, ModItems.gun_bf_ammo)) {
+		if (flag || Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.NUKE_BALEFIRE.ordinal())) {
 			float f = j / 20.0F;
 			f = (f * f + f * 2.0F) / 3.0F;
 
@@ -82,7 +80,7 @@ public class GunBaleFlare extends Item {
 			worldIn.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.fatmanShoot, SoundCategory.PLAYERS, 1.0F, 1F);
 
 			if (!flag) {
-				Library.consumeInventoryItem(player.inventory, ModItems.gun_bf_ammo);
+				Library.consumeInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.NUKE_BALEFIRE.ordinal());
 			}
 
 			if (!worldIn.isRemote) {

@@ -1,5 +1,6 @@
 package com.hbm.items.weapon;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
 import com.hbm.entity.particle.EntitySSmokeFX;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfigSyncingUtil;
@@ -47,10 +48,10 @@ public class GunFolly extends Item implements IHoldableWeapon {
 			
 		} else if(state == 1) {
 			
-			if(Library.hasInventoryItem(player.inventory, ModItems.ammo_folly)) {
+			if(Library.hasInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.FOLLY.ordinal())) {
 
 				world.playSound(null, player.posX, player.posY, player.posZ, HBMSoundHandler.follyReload, SoundCategory.PLAYERS, 1.0F, 1.0F);
-				Library.consumeInventoryItem(player.inventory, ModItems.ammo_folly);
+				Library.consumeInventoryItem(player.inventory, ModItems.ammo_standard, EnumAmmo.FOLLY.ordinal());
 				setState(stack, 2);
 			} else {
 				

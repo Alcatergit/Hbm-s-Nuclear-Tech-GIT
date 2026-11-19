@@ -1,12 +1,13 @@
 {
-	"variants": {
-		"normal": { "model": "hbm:waste_terracotta_0" },
-		"meta=0": { "model": "hbm:waste_terracotta_0" },
-		"meta=1": { "model": "hbm:waste_terracotta_1" },
-		"meta=2": { "model": "hbm:waste_terracotta_2" },
-		"meta=3": { "model": "hbm:waste_terracotta_3" },
-		"meta=4": { "model": "hbm:waste_terracotta_4" },
-		"meta=5": { "model": "hbm:waste_terracotta_5" },
-		"meta=6": { "model": "hbm:waste_terracotta_6" }
-	}
+    "variants": {
+        "normal": { "model": "hbm:waste_terracotta" },
+        "meta=0": { "model": "hbm:waste_terracotta" },
+        "meta=1": { "model": "hbm:waste_terracotta" },
+        "meta=2": { "model": "hbm:waste_terracotta" },
+        "meta=3": { "model": "hbm:waste_terracotta" },
+        "meta=4": { "model": "hbm:waste_terracotta" },
+        "meta=5": { "model": "hbm:waste_terracotta" },
+        "meta=6": { "model": "hbm:waste_terracotta" },
+        "meta=7": { "model": "hbm:waste_terracotta" }
+    }
 }

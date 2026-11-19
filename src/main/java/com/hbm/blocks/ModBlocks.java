@@ -3,7 +3,6 @@ package com.hbm.blocks;
 import java.util.ArrayList;
 import java.util.List;
 
-import api.hbm.energy.IBatteryItem;
 import com.hbm.blocks.bomb.Balefire;
 import com.hbm.blocks.bomb.BlockCloudResidue;
 import com.hbm.blocks.bomb.BlockCrashedBomb;
@@ -111,7 +110,6 @@ import com.hbm.tileentity.machine.TileEntityWatzStruct;
 import net.minecraft.block.*;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
-import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
@@ -533,7 +531,7 @@ public class ModBlocks {
 	//Radiation blocks
 	public static final Block mush = new BlockMush(Material.PLANTS, "mush").setLightLevel(0.5F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block mush_block = new BlockMushHuge(Material.PLANTS, "mush_block").setLightLevel(1.0F).setHardness(0.2F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block mush_block_stem = new BlockMushHuge(Material.PLANTS, "mush_block_stem").setLightLevel(0.25F).setHardness(0.3F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block mush_block_red = new BlockMushHuge(Material.PLANTS, "mush_block_red").setLightLevel(1.0F).setHardness(0.2F).setCreativeTab(MainRegistry.resourceTab);
 	
 	public static final Block block_waste = new BlockNuclearWaste("block_waste").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
 	public static final Block block_waste_painted = new BlockNuclearWaste("block_waste_painted").makeBeaconable().setDisplayEffect(ExtDisplayEffect.RADFOG).setCreativeTab(MainRegistry.blockTab).setHardness(5.0F).setResistance(10.0F);
@@ -541,7 +539,7 @@ public class ModBlocks {
 	
 	public static final Block waste_mycelium = new WasteEarth(Material.GRASS, SoundType.GROUND, true, "waste_mycelium").setLightLevel(0.25F).setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_earth = new WasteEarth(Material.GRASS, SoundType.GROUND, true, "waste_earth").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
-	public static final Block waste_dirt = new WasteEarth(Material.GROUND, SoundType.GROUND, true, "waste_dirt").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_dirt = new WasteDirt(Material.GROUND, SoundType.GROUND, true, "waste_dirt").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_gravel = new WasteSand(Material.GROUND, SoundType.GROUND, "waste_gravel").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_sandstone = new BlockHazardMeta(Material.ROCK, SoundType.STONE, "waste_sandstone").setCreativeTab(MainRegistry.resourceTab).setHardness(3.0F).setResistance(6.0F);
 	public static final Block waste_sand = new WasteSand(Material.SAND, SoundType.SAND, "waste_sand").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
@@ -549,6 +547,7 @@ public class ModBlocks {
 	public static final Block waste_sandstone_red = new BlockHazardMeta(Material.ROCK, SoundType.STONE, "waste_sandstone_red").setCreativeTab(MainRegistry.resourceTab).setHardness(3.0F).setResistance(6.0F);
 	public static final Block waste_sand_red = new WasteSand(Material.SAND, SoundType.SAND, "waste_sand_red").setHardness(0.5F).setResistance(1.0F).setCreativeTab(MainRegistry.resourceTab);
 	public static final Block waste_trinitite_red = new WasteSand(Material.SAND, SoundType.SAND, "waste_trinitite_red").setHardness(0.5F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
+	public static final Block waste_clay = new BlockHazardMeta(Material.ROCK, SoundType.STONE, "waste_clay").setCreativeTab(MainRegistry.resourceTab).setHardness(0.6F).setResistance(1.0F);
 	public static final Block waste_terracotta = new BlockHazardMeta(Material.ROCK, SoundType.STONE, "waste_terracotta").setCreativeTab(MainRegistry.resourceTab).setHardness(4.0F).setResistance(8.0F);
 	
 	public static final Block waste_log = new WasteLog(Material.WOOD, SoundType.WOOD, "waste_log").setHardness(5.0F).setResistance(2.5F).setCreativeTab(MainRegistry.resourceTab);
@@ -705,9 +704,9 @@ public class ModBlocks {
 	public static final int guiID_nuke_n2 = 61;
 	
 	public static final int guiID_nuke_n45 = 77; //unused
-	
+
+	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_fstbmb = 97;
-	public static final Block nuke_fstbmb = new NukeBalefire(Material.IRON, guiID_nuke_fstbmb, "nuke_fstbmb").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	
 	public static final Block nuke_custom = new NukeCustom(Material.IRON, "nuke_custom").setCreativeTab(MainRegistry.nukeTab).setHardness(5.0F).setResistance(6000.0F);
 	public static final int guiID_nuke_custom = 37;
@@ -1027,7 +1026,7 @@ public class ModBlocks {
 	public static final Block pribris_radiating = new RBMKDebrisRadiating("pribris_radiating").setCreativeTab(MainRegistry.machineTab).setHardness(50.0F).setResistance(2000.0F);
 	public static final Block pribris_digamma = new RBMKDebrisDigamma("pribris_digamma").setCreativeTab(MainRegistry.machineTab).setHardness(50.0F).setResistance(6000.0F);
 	
-	public static final Block block_corium = new BlockHazard(Material.IRON, "block_corium").makeBeaconable().addRad3d(150000).setCreativeTab(MainRegistry.resourceTab).setHardness(100.0F).setResistance(9000.0F);
+	public static final Block block_corium = new BlockHazard(Material.IRON, "block_corium").makeBeaconable().setCreativeTab(MainRegistry.resourceTab).setHardness(100.0F).setResistance(9000.0F);
 	public static final Block block_corium_cobble = new BlockOutgas(true, 1, true, true, "block_corium_cobble").setCreativeTab(MainRegistry.resourceTab).setHardness(100.0F).setResistance(6000.0F);
 	
 	public static final Block machine_assembler = new MachineAssembler(Material.IRON, "machine_assembler").setCreativeTab(MainRegistry.machineTab).setHardness(5.0F).setResistance(100.0F);
@@ -1536,7 +1535,6 @@ public class ModBlocks {
         ntmLeavesOld.setRegistryName("minecraft:leaves");
         ModBlocks.ALL_BLOCKS.add(ntmLeavesOld);
 
-
         Library.setFinalStatic(Blocks.class, "LEAVES", "field_150362_t", ntmLeavesOld);
 
         Library.setPrivateFinalStatic(WorldGenTrees.class, "DEFAULT_LEAF", "field_181654_b", getTreeLeaf(ntmLeavesOld, BlockPlanks.EnumType.OAK));
@@ -1551,10 +1549,10 @@ public class ModBlocks {
         Library.setPrivateFinalStatic(BiomeTaiga.class, "MEGA_SPRUCE_GENERATOR", "field_150642_aF", new WorldGenMegaPineTree(false, true));
         Library.setPrivateFinalStatic(Biome.class, "TREE_FEATURE", "field_76757_N", new WorldGenTrees(false));
 
-
         ntmLeavesNew.setTranslationKey("leaves");
         ntmLeavesNew.setRegistryName("minecraft:leaves2");
         ModBlocks.ALL_BLOCKS.add(ntmLeavesNew);
+
         Library.setFinalStatic(Blocks.class, "LEAVES2", "field_150361_u", ntmLeavesNew);
 
         Library.setPrivateFinalStatic(WorldGenCanopyTree.class, "DARK_OAK_LEAVES", "field_181641_b", getTreeLeaf(ntmLeavesNew, BlockPlanks.EnumType.DARK_OAK));

@@ -1,5 +1,7 @@
 package com.hbm.handler.guncfg;
 
+import static com.hbm.items.ItemEnums.EnumAmmo;
+
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.handler.BulletConfiguration;
 import com.hbm.interfaces.IBulletImpactBehavior;
@@ -11,7 +13,8 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.SHELL.ordinal();
 		bullet.dmgMin = 25;
 		bullet.dmgMax = 35;
 		bullet.explosive = 4F;
@@ -24,7 +27,8 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_explosive;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.SHELL_EXPLOSIVE.ordinal();
 		bullet.dmgMin = 35;
 		bullet.dmgMax = 45;
 		bullet.explosive = 4F;
@@ -37,7 +41,8 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_apfsds_t;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.SHELL_APFSDS_T.ordinal();
 		bullet.dmgMin = 50;
 		bullet.dmgMax = 55;
 		bullet.doesPenetrate = true;
@@ -50,7 +55,8 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_apfsds_du;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.SHELL_APFSDS_DU.ordinal();
 		bullet.dmgMin = 70;
 		bullet.dmgMax = 80;
 		bullet.doesPenetrate = true;
@@ -63,7 +69,8 @@ public static BulletConfiguration getShellConfig() {
 		
 		BulletConfiguration bullet = BulletConfigFactory.standardShellConfig();
 		
-		bullet.ammo = ModItems.ammo_shell_w9;
+		bullet.ammo = ModItems.ammo_standard;
+		bullet.ammoMeta = EnumAmmo.SHELL_W9.ordinal();
 		bullet.dmgMin = 100;
 		bullet.dmgMax = 150;
 		

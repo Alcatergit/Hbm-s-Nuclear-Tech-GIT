@@ -13,6 +13,7 @@ import com.hbm.items.ModItems;
 import com.hbm.main.MainRegistry;
 import com.hbm.tileentity.bomb.TileEntityLandmine;
 
+import com.hbm.util.I18nUtil;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
@@ -168,9 +169,11 @@ public class Landmine extends BlockContainer implements IBomb {
 	public void addInformation(ItemStack stack, World player, List<String> tooltip, ITooltipFlag advanced) {
 		if(this == ModBlocks.mine_fat){
 			tooltip.add("§2[Nuclear Mine]§r");
-			tooltip.add(" §eRadius: "+BombConfig.fatmanRadius+"m§r");
-			tooltip.add("§2[Fallout]§r");
-			tooltip.add(" §aRadius: "+(int)BombConfig.fatmanRadius*(1+BombConfig.falloutRange/100)+"m§r");
+			tooltip.add(" §e" + I18nUtil.resolveKey("desc.radius", BombConfig.fatmanRadius) + "§r");
+			if(!BombConfig.disableNuclear){
+				tooltip.add("§2["+ I18nUtil.resolveKey("trait.fallout")+"]"+" §r");
+				tooltip.add(" §a" + I18nUtil.resolveKey("desc.radius", (int)(BombConfig.fatmanRadius*(1+BombConfig.falloutRange/100.0))) + "§r");
+			}
 		}
 	}
 

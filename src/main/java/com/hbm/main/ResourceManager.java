@@ -200,8 +200,14 @@ public class ResourceManager {
 	public static IModelCustom cc_plasma_cannon = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/cc_assault_rifle.obj")).asVBO();
 	public static IModelCustom egon_hose = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/egon_hose.obj")).asVBO();
 	public static IModelCustom egon_backpack = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/egon.obj")).asVBO();
-	
-	public static final IModelCustom lance = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/lance.obj")).asVBO();
+
+	public static IModelCustom lance = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/lance.obj")).asVBO();
+
+	public static final IModelCustom fatman = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/fatman.obj")).asVBO();
+	public static final ResourceLocation fatman_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/fatman.png");
+	public static final ResourceLocation fatman_mininuke_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/fatman_mininuke.png");
+	public static final ResourceLocation fatman_balefire_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/fatman_balefire.png");
+	public static final ResourceLocation fatman_minimirv_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/fatman_minimirv.png");
 	
 	public static final IModelCustom grenade_frag = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/grenade_frag.obj")).asVBO();
 	public static final IModelCustom grenade_aschrab = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/grenade_aschrab.obj")).asVBO();
@@ -473,6 +479,7 @@ public class ResourceManager {
 	public static final ResourceLocation rbmk_crane_console_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/crane_console.png");
 	public static final ResourceLocation rbmk_crane_tex = new ResourceLocation(RefStrings.MODID, "textures/models/machines/rbmk_crane.png");
 	public static final ResourceLocation mini_nuke_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/mini_nuke.png");
+	public static final ResourceLocation grenade_tex = new ResourceLocation(RefStrings.MODID, "textures/models/projectiles/grenade.png");
 	
 	public static final WavefrontObject rbmk_element = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/rbmk/rbmk_element.obj"));
 	public static final WavefrontObject rbmk_reflector = (WavefrontObject) AdvancedModelLoader.loadModel(new ResourceLocation(RefStrings.MODID, "models/rbmk/rbmk_reflector.obj"));
@@ -974,8 +981,22 @@ public class ResourceManager {
 	public static final ResourceLocation grenade_aschrab_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/grenade_aschrab.png");
 	public static final ResourceLocation bolter_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/bolter.png");
 	public static final ResourceLocation ar15_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/carbine.png");
-	
-	public static final ResourceLocation lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lance.png");
+
+	public static ResourceLocation lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lance.png");
+
+	static {
+		loadLance();
+	}
+
+	public static void loadLance() {
+		if (GeneralConfig.evangelion) {
+			lance = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/longinus_spear.obj")).asVBO();
+			lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/longinus_spear.png");
+		} else {
+			lance = new HFRWavefrontObject(new ResourceLocation(RefStrings.MODID, "models/weapons/lance.obj")).asVBO();
+			lance_tex = new ResourceLocation(RefStrings.MODID, "textures/models/weapons/lance.png");
+		}
+	}
 	
 	public static final ResourceLocation bj_eyepatch = new ResourceLocation(RefStrings.MODID, "textures/armor/bj_eyepatch.png");
 	public static final ResourceLocation bj_leg = new ResourceLocation(RefStrings.MODID, "textures/armor/bj_leg.png");
@@ -1421,6 +1442,9 @@ public class ResourceManager {
     public static ResourceLocation cmb_shield_blank_tex = new ResourceLocation(RefStrings.MODID, "textures/items/cmb_shield_blank.png");
     public static ResourceLocation schrabidium_shield_blank_tex = new ResourceLocation(RefStrings.MODID, "textures/items/schrabidium_shield_blank.png");
 
+    public static final ResourceLocation nuclear_creeper_charge = new ResourceLocation(RefStrings.MODID, "textures/entity/creeper_armor.png");
+    public static final ResourceLocation tainted_creeper_charge = new ResourceLocation(RefStrings.MODID, "textures/entity/creeper_armor_taint.png");
+
 
 
     //ANIMATIONS
@@ -1685,5 +1709,4 @@ public class ResourceManager {
 		Minecraft.getMinecraft().getTextureManager().bindTexture(noise_2);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 	}
-
 }
