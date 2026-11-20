@@ -56,10 +56,10 @@ public class RadiationConfig {
 		railgunDamage = railDamage.getInt();
 		Property railBuffer = config.get(CATEGORY_NUKE, "6.12_railgunBuffer", 500000000);
 		railBuffer.setComment("How much RF the railgun can store");
-		railgunDamage = railBuffer.getInt();
+		railgunBuffer = railBuffer.getInt();
 		Property railUse = config.get(CATEGORY_NUKE, "6.13_railgunConsumption", 250000000);
 		railUse.setComment("How much RF the railgun requires per shot");
-		railgunDamage = railUse.getInt();
+		railgunUse = railUse.getInt();
 		Property fireDurationP = config.get(CATEGORY_NUKE, "6.14_fireDuration", 15 * 20);
 		fireDurationP.setComment("How long the fire blast will last in ticks");
 		fireDuration = fireDurationP.getInt();
