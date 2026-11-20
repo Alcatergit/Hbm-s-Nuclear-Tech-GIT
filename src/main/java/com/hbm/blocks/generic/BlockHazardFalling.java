@@ -3,6 +3,7 @@ package com.hbm.blocks.generic;
 import java.util.Random;
 
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.RadiationConfig;
 import com.hbm.saveddata.RadiationSavedData;
 import com.hbm.hazard.HazardSystem;
 
@@ -56,8 +57,9 @@ public class BlockHazardFalling extends BlockFalling {
 
 	@Override
 	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand){
-		if(this.rad > 0) {
-			RadiationSavedData.incrementRad(world, pos, rad*0.01F, rad);
+		if(this.rad > 0 && RadiationConfig.blockRadiationMultiplier > 0) {
+			float r = rad * (float) RadiationConfig.blockRadiationMultiplier;
+			RadiationSavedData.incrementRad(world, pos, r*0.01F, r);
 		}
 		super.updateTick(world, pos, state, rand);
 	}

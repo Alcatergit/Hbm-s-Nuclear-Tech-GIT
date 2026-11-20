@@ -7,6 +7,7 @@ import com.hbm.capability.HbmLivingCapability;
 import com.hbm.capability.HbmLivingProps;
 import com.hbm.config.CompatibilityConfig;
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.RadiationConfig;
 import com.hbm.entity.mob.EntityQuackos;
 import com.hbm.entity.projectile.EntityBulletBase;
 import com.hbm.entity.projectile.EntityExplosiveBeam;
@@ -676,8 +677,8 @@ public class ContaminationUtil {
 		
 		switch(hazard) {
 		case MONOXIDE: entity.attackEntityFrom(ModDamageSource.monoxide, amount); break;
-		case RADIATION: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); break;
-		case NEUTRON: HbmLivingProps.incrementRadiation(entity, amount * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); HbmLivingProps.setNeutron(entity, amount); break;
+		case RADIATION: HbmLivingProps.incrementRadiation(entity, amount * (float) RadiationConfig.radiationMultiplier * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); break;
+		case NEUTRON: HbmLivingProps.incrementRadiation(entity, amount * (float) RadiationConfig.radiationMultiplier * (cont == ContaminationType.RAD_BYPASS ? 1 : calculateRadiationMod(entity))); HbmLivingProps.setNeutron(entity, amount); break;
 		case DIGAMMA: applyDigammaData(entity, amount); break;
 		}
 		

@@ -4,6 +4,7 @@ import java.util.Random;
 
 import com.hbm.blocks.BlockBase;
 import com.hbm.blocks.ModBlocks;
+import com.hbm.config.RadiationConfig;
 import com.hbm.lib.ForgeDirection;
 import com.hbm.main.MainRegistry;
 import com.hbm.saveddata.RadiationSavedData;
@@ -154,7 +155,7 @@ public class BlockHazard extends BlockBase {
 	public void updateTick(World worldIn, BlockPos pos, IBlockState state, Random rand){
 
 		if(this.rad3d > 0){
-			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d, 0, 0, 0, 0);
+			ContaminationUtil.radiate(worldIn, pos.getX() + 0.5, pos.getY() + 0.5, pos.getZ() + 0.5, 32, this.rad3d * (float) RadiationConfig.blockRadiationMultiplier, 0, 0, 0, 0);
 			worldIn.scheduleUpdate(pos, this, this.tickRate(worldIn));
 		}
 		if(this == ModBlocks.block_meteor_molten) {
@@ -163,8 +164,9 @@ public class BlockHazard extends BlockBase {
         	worldIn.playSound(null, pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D, SoundEvents.BLOCK_LAVA_EXTINGUISH, SoundCategory.BLOCKS, 0.5F, 2.6F + (worldIn.rand.nextFloat() - worldIn.rand.nextFloat()) * 0.8F);
         	return;
         }
-		if(this.radIn > 0) {
-			RadiationSavedData.incrementRad(worldIn, pos, radIn, radIn*10F);
+		if(this.radIn > 0 && RadiationConfig.blockRadiationMultiplier > 0) {
+			float r = radIn * (float) RadiationConfig.blockRadiationMultiplier;
+			RadiationSavedData.incrementRad(worldIn, pos, r, r*10F);
 		}
 	}
 
