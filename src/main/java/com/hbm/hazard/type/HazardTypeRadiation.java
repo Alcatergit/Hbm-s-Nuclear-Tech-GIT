@@ -3,6 +3,7 @@ package com.hbm.hazard.type;
 import java.util.List;
 
 import com.hbm.config.GeneralConfig;
+import com.hbm.config.RadiationConfig;
 import com.hbm.hazard.modifier.HazardModifier;
 import com.hbm.items.ModItems;
 import com.hbm.lib.Library;
@@ -29,7 +30,7 @@ public class HazardTypeRadiation extends HazardTypeBase {
             reacher = Library.checkForHeld(player, ModItems.reacher) || Library.checkForBauble(player, ModItems.reacher);
 			
 		if(level > 0) {
-			float rad = level * stack.getCount() / 20F;
+			float rad = level * stack.getCount() / 20F * (float) RadiationConfig.itemRadiationMultiplier;
 			
 			if(reacher)
 				rad = (float) Math.min(Math.sqrt(rad), rad); //to prevent radiation from going up when being <1

@@ -26,6 +26,10 @@ public class RadiationConfig {
 	public static int geigerY = 2;
 	public static int digammaX = 16;
 	public static int digammaY = 18;
+
+	public static double radiationMultiplier = 1.0D;
+	public static double itemRadiationMultiplier = 1.0D;
+	public static double blockRadiationMultiplier = 1.0D;
 	
 	public static void loadFromConfig(Configuration config) {
 		final String CATEGORY_NUKE = "06_explosions";
@@ -73,6 +77,11 @@ public class RadiationConfig {
 		geigerY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.03_geigerY", "Y Coordinate of the geiger counter gui (y=0 is on the bottom)", 2);
 		digammaX = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.04_digammaX", "X Coordinate of the digamma diagnostic gui (x=0 is on the right)", 16);
 		digammaY = CommonConfig.createConfigInt(config, CATEGORY_RAD, "7.05_digammaY", "Y Coordinate of the digamma diagnostic gui (y=0 is on the bottom)", 18);
+
+		// negative values are clamped to 0 so a typo can't turn radiation into a cure
+		radiationMultiplier = Math.max(0D, CommonConfig.createConfigDouble(config, CATEGORY_RAD, "7.06_radiationMultiplier", "Multiplies ALL radiation that players and mobs absorb (chunks, dimensions, items, blocks, fallout). 1.0 = normal, 0.5 = half, 0 = no radiation damage", 1.0D));
+		itemRadiationMultiplier = Math.max(0D, CommonConfig.createConfigDouble(config, CATEGORY_RAD, "7.07_itemRadiationMultiplier", "Multiplies radiation from carrying radioactive items (uranium, waste, ...). 1.0 = normal, 0 = carrying them is safe", 1.0D));
+		blockRadiationMultiplier = Math.max(0D, CommonConfig.createConfigDouble(config, CATEGORY_RAD, "7.08_blockRadiationMultiplier", "Multiplies radiation that placed radioactive blocks (ore/storage blocks, waste) give off. 1.0 = normal, 0 = they give off none", 1.0D));
 	}
 
 }
