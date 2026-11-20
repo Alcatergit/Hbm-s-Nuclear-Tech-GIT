@@ -301,6 +301,7 @@ public class HbmWorldGen implements IWorldGenerator {
 	}
 
 	private void generateSellafieldPool(World world, Random rand, int i, int j, int dimID){
+		if(!GeneralConfig.enableRad) return; // 1.06_enableRadHotspotSpawn was read but never checked
 		int dimRadFreq = parseInt(CompatibilityConfig.radfreq.get(dimID));
 		if (dimRadFreq > 0 && rand.nextInt(dimRadFreq) == 0) {
 			int x = i + rand.nextInt(16);
