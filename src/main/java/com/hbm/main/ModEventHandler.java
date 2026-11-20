@@ -929,7 +929,7 @@ public class ModEventHandler {
 
 		Block block = event.getState().getBlock();
 		
-		if(block == Blocks.COAL_ORE || block == Blocks.COAL_BLOCK || block == ModBlocks.ore_lignite) {
+		if(GeneralConfig.enableCoal && (block == Blocks.COAL_ORE || block == Blocks.COAL_BLOCK || block == ModBlocks.ore_lignite)) {
 			
 			for(ForgeDirection dir : ForgeDirection.VALID_DIRECTIONS) {
 
